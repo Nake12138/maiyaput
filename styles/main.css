@@ -1837,6 +1837,12 @@ body {
   margin-left: auto;
 }
 
+/* 宽抽屉：需要展示长表格字段的抽屉 */
+.drawer-wide .drawer-card {
+  width: min(1080px, calc(100vw - 120px));
+  margin-left: auto;
+}
+
 .drawer-header {
   display: flex;
   align-items: center;
