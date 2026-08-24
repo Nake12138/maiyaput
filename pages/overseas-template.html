@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>模板管理 - 海外投放系统</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../styles/main.css" />
+  </head>
+  <body>
+    <div class="layout">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="logo" style="padding: 16px 20px 12px;">
+          <div class="logo-icon">海</div>
+          <div class="logo-info">
+            <span class="logo-name">海外投放系统</span>
+            <span class="system-switch-trigger" onclick="toggleSystemMenu(event)">切换系统 <span class="system-switch-caret">▾</span></span>
+          </div>
+          <div class="system-switch-menu" id="systemSwitchMenu">
+            <div class="system-switch-item" data-system="cn" onclick="switchSystem('cn')">国内投放系统</div>
+            <div class="system-switch-item active" data-system="overseas" onclick="switchSystem('overseas')">海外投放系统<span class="check">✓</span></div>
+          </div>
+        </div>
+        <nav class="nav">
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">⊟</span>
+              <span>项目管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">📊</span>
+              <span>数据统计</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">▶</span>
+              <span>短剧管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">▣</span>
+              <span>素材管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children expanded">
+              <span class="nav-item-icon">▦</span>
+              <span>批量投放</span>
+              <span class="nav-item-caret">▼</span>
+            </div>
+            <div class="nav-children">
+              <span class="nav-child-item" data-page="overseas-batch-delivery">批量投放</span>
+              <span class="nav-child-item" data-page="overseas-auto-delivery">自动化任务</span>
+              <span class="nav-child-item active" data-page="overseas-template">模板管理</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">👤</span>
+              <span>账号管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">🗂️</span>
+              <span>资产管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">🛡️</span>
+              <span>控损管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">⚙️</span>
+              <span>系统设置</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">🔗</span>
+              <span>关联绑定</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+        </nav>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main">
+        <!-- Top Header -->
+        <header class="top-header">
+          <div class="top-header-left"></div>
+          <div class="top-header-right">
+            <div class="notification">
+              <span>消息</span>
+              <span class="notification-badge">88</span>
+            </div>
+            <div class="avatar">M</div>
+            <div class="user-info">
+              <span>UTC+8</span>
+            </div>
+            <button class="btn btn-outline btn-sm" onclick="alert('打开帮助指南')">帮助指南</button>
+          </div>
+        </header>
+
+        <!-- Content -->
+        <div class="content">
+          
+<div id="page-overseas-template" class="page active">
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a href="#" onclick="showPage('dashboard')">首页</a>
+    <span class="breadcrumb-sep">/</span>
+    <span>批量投放</span>
+    <span class="breadcrumb-sep">/</span>
+    <span>模板管理</span>
+  </div>
+
+  <!-- Page Header -->
+  <div class="page-header" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+    <h2 class="page-title">模板管理</h2>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs" id="template-tabs">
+    <button class="tab active" data-tab="account" onclick="switchTemplateTab('account')">账户包</button>
+    <button class="tab" data-tab="copy" onclick="switchTemplateTab('copy')">文案模板</button>
+    <button class="tab" data-tab="target" onclick="switchTemplateTab('target')">定向包</button>
+  </div>
+
+  <!-- 账户包 -->
+  <div id="template-tab-account" class="template-tab-panel">
+    <div class="filter-bar">
+      <div class="filter-bar-row">
+        <input type="text" class="filter-input" placeholder="请输入账户包名称/ID" />
+        <select class="filter-select"><option>请选择创建人</option><option>听泉</option><option>魔法七</option><option>橙子</option><option>孤树</option></select>
+        <div class="filter-actions">
+          <button class="btn btn-primary btn-sm" onclick="searchTemplate('account')">查询</button>
+          <button class="btn btn-outline btn-sm" onclick="resetTemplateFilter('account')">重置</button>
+        </div>
+        <button class="btn btn-primary btn-sm" style="margin-left:auto;" onclick="openAccountDrawer('add')">新增账户包</button>
+      </div>
+    </div>
+    <div class="table-card">
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th class="checkbox-col"><input type="checkbox" /></th>
+              <th>ID</th>
+              <th>名称</th>
+              <th>备注</th>
+              <th>账户数量</th>
+              <th>创建人</th>
+              <th>创建时间</th>
+              <th>更新时间</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="checkbox-col"><input type="checkbox" /></td><td>72</td><td><a href="#" class="link" onclick="openAccountDrawer('edit','vivi')">vivi</a></td><td>--</td><td>5</td><td>听泉</td><td>2026-08-23 10:14:13</td><td>2026-08-23 16:35:54</td><td><a href="#" class="link" onclick="openAccountDrawer('copy','vivi')">复制</a> <a href="#" class="link" onclick="openAccountDrawer('edit','vivi')">编辑</a> <a href="#" class="link" onclick="deleteTemplateRow(this)">删除</a></td></tr>
+            <tr><td class="checkbox-col"><input type="checkbox" /></td><td>73</td><td><a href="#" class="link" onclick="openAccountDrawer('edit','vivi')">vivi</a></td><td>--</td><td>5</td><td>听泉</td><td>2026-08-23 11:37:30</td><td>2026-08-23 16:35:44</td><td><a href="#" class="link" onclick="openAccountDrawer('copy','vivi')">复制</a> <a href="#" class="link" onclick="openAccountDrawer('edit','vivi')">编辑</a> <a href="#" class="link" onclick="deleteTemplateRow(this)">删除</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pagination">
+        <span class="pagination-total">共 2 条</span>
+        <button class="page-btn" disabled>&lt;</button>
+        <button class="page-btn active">1</button>
+        <button class="page-btn" disabled>&gt;</button>
+        <span class="pagination-size">
+          <select class="form-select form-select-sm"><option>10条/页</option><option>20条/页</option><option>50条/页</option></select>
+        </span>
+        <span class="pagination-jumper">跳至 <input type="text" class="form-input form-input-xs" value="1" /> 页</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 文案模板 -->
+  <div id="template-tab-copy" class="template-tab-panel" style="display:none;">
+    <div class="filter-bar">
+      <div class="filter-bar-row">
+        <input type="text" class="filter-input" placeholder="文案内容" />
+        <select class="filter-select"><option>请选择文案类型</option><option>标题</option><option>产品卖点</option></select>
+        <select class="filter-select"><option>请选择付费类型</option><option>付费</option><option>免费</option></select>
+        <select class="filter-select"><option>请选择语言</option><option>英语</option><option>中文</option></select>
+        <select class="filter-select"><option>请选择创建人</option><option>听泉</option></select>
+        <div class="filter-actions">
+          <button class="btn btn-primary btn-sm" onclick="searchTemplate('copy')">查询</button>
+          <button class="btn btn-outline btn-sm" onclick="resetTemplateFilter('copy')">重置</button>
+        </div>
+        <button class="btn btn-primary btn-sm" style="margin-left:auto;" onclick="openCopyModal('add')">新增文案</button>
+      </div>
+    </div>
+    <div class="table-card">
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th class="checkbox-col"><input type="checkbox" /></th>
+              <th>ID</th>
+              <th>文案内容</th>
+              <th>文案类型</th>
+              <th>付费类型</th>
+              <th>语言</th>
+              <th>创建人</th>
+              <th>创建时间</th>
+              <th>更新时间</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="checkbox-col"><input type="checkbox" /></td><td>1578</td><td>Endless drama, zero cost!</td><td>产品卖点</td><td>免费</td><td>英语</td><td>听泉</td><td>2026-08-23 16:48:59</td><td>2026-08-23 16:48:59</td><td><a href="#" class="link" onclick="openCopyModal('edit','Endless drama, zero cost!')">编辑</a> <a href="#" class="link" onclick="deleteTemplateRow(this)">删除</a></td></tr>
+            <tr><td class="checkbox-col"><input type="checkbox" /></td><td>1577</td><td>Everyone's watching — FREE!</td><td>产品卖点</td><td>免费</td><td>英语</td><td>听泉</td><td>2026-08-23 16:48:59</td><td>2026-08-23 16:48:59</td><td><a href="#" class="link" onclick="openCopyModal('edit','Everyone\'s watching — FREE!')">编辑</a> <a href="#" class="link" onclick="deleteTemplateRow(this)">删除</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pagination">
+        <span class="pagination-total">共 2 条</span>
+        <button class="page-btn" disabled>&lt;</button>
+        <button class="page-btn active">1</button>
+        <button class="page-btn" disabled>&gt;</button>
+        <span class="pagination-size"><select class="form-select form-select-sm"><option>10条/页</option><option>20条/页</option><option>50条/页</option></select></span>
+        <span class="pagination-jumper">跳至 <input type="text" class="form-input form-input-xs" value="1" /> 页</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 定向包 -->
+  <div id="template-tab-target" class="template-tab-panel" style="display:none;">
+    <div class="filter-bar">
+      <div class="filter-bar-row">
+        <input type="text" class="filter-input" placeholder="定向包名称" />
+        <select class="filter-select"><option>请选择语言</option><option>意大利语</option><option>日语</option><option>西班牙语</option><option>泰语</option></select>
+        <select class="filter-select"><option>请选择创建人</option><option>娜可</option></select>
+        <div class="filter-actions">
+          <button class="btn btn-primary btn-sm" onclick="searchTemplate('target')">查询</button>
+          <button class="btn btn-outline btn-sm" onclick="resetTemplateFilter('target')">重置</button>
+        </div>
+        <button class="btn btn-primary btn-sm" style="margin-left:auto;" onclick="openTargetDrawer('add')">新增定向包</button>
+      </div>
+    </div>
+    <div class="table-card">
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th class="checkbox-col"><input type="checkbox" /></th>
+              <th>ID</th>
+              <th>定向包名称</th>
+              <th>语言</th>
+              <th>创建人</th>
+              <th>创建时间</th>
+              <th>更新时间</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="checkbox-col"><input type="checkbox" /></td><td>56</td><td><a href="#" class="link" onclick="openTargetDrawer('edit','意大利')">意大利</a></td><td>意大利语</td><td>娜可</td><td>2026-08-17 11:15:15</td><td>2026-08-17 11:15:15</td><td><a href="#" class="link" onclick="openTargetDrawer('copy','意大利')">复制</a> <a href="#" class="link" onclick="openTargetDrawer('edit','意大利')">编辑</a> <a href="#" class="link" onclick="deleteTemplateRow(this)">删除</a></td></tr>
+            <tr><td class="checkbox-col"><input type="checkbox" /></td><td>49</td><td><a href="#" class="link" onclick="openTargetDrawer('edit','日语')">日语</a></td><td>日语</td><td>娜可</td><td>2026-08-14 22:40:54</td><td>2026-08-14 22:40:54</td><td><a href="#" class="link" onclick="openTargetDrawer('copy','日语')">复制</a> <a href="#" class="link" onclick="openTargetDrawer('edit','日语')">编辑</a> <a href="#" class="link" onclick="deleteTemplateRow(this)">删除</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pagination">
+        <span class="pagination-total">共 2 条</span>
+        <button class="page-btn" disabled>&lt;</button>
+        <button class="page-btn active">1</button>
+        <button class="page-btn" disabled>&gt;</button>
+        <span class="pagination-size"><select class="form-select form-select-sm"><option>10条/页</option></select></span>
+        <span class="pagination-jumper">跳至 <input type="text" class="form-input form-input-xs" value="1" /> 页</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 账户包 新增/编辑/复制 抽屉 -->
+  <div id="template-account-overlay" class="drawer-overlay" onclick="closeAccountDrawer()"></div>
+  <div id="template-account-drawer" class="drawer drawer-narrow">
+    <div class="drawer-card">
+      <div class="drawer-header">
+        <span id="template-account-title">新增账户包</span>
+        <button class="drawer-close" onclick="closeAccountDrawer()">×</button>
+      </div>
+      <div class="drawer-body">
+        <div class="form-section">
+          <div class="form-row">
+            <div class="form-label required">名称：</div>
+            <div class="form-field form-field-inline" style="width:100%;">
+              <input type="text" id="account-name" class="form-input" placeholder="请输入" style="flex:1;" />
+              <span class="form-counter">0 / 50</span>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-label">备注：</div>
+            <div class="form-field form-field-inline" style="width:100%;">
+              <input type="text" id="account-remark" class="form-input" placeholder="请输入" style="flex:1;" />
+              <span class="form-counter">0 / 100</span>
+            </div>
+          </div>
+          <div class="form-row" style="align-items:flex-start;">
+            <div class="form-label required">账户范围：</div>
+            <div class="form-field" style="flex:1;">
+              <div style="display:flex;gap:8px;margin-bottom:12px;">
+                <button type="button" class="btn btn-info btn-sm">批量添加</button>
+                <select class="form-select" style="width:120px;"><option>账户名称</option><option>账户ID</option></select>
+                <input type="text" class="form-input" placeholder="请输入" style="flex:1;" />
+                <button type="button" class="btn btn-outline btn-sm">搜索</button>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                <span style="font-size:13px;color:var(--color-text-secondary);">账户ID</span>
+                <span style="font-size:13px;color:var(--color-text-secondary);">已选：0 <a href="#" class="link">清空</a></span>
+              </div>
+              <div class="table-card" style="border-radius:4px;">
+                <table class="data-table">
+                  <thead><tr><th>账户ID</th><th>账户名称</th><th>时区</th><th>操作</th></tr></thead>
+                  <tbody>
+                    <tr><td>7676009561349996552</td><td>ViviShort-IAA(UTC-5)-058212-MY-听泉-SINO-TT</td><td>UTC-5</td><td><a href="#" class="link" style="color:var(--color-error);">删除</a></td></tr>
+                    <tr><td>7676009929921658887</td><td>ViviShort-IAA(UTC-5)-009512-MY-听泉-SINO-TT</td><td>UTC-5</td><td><a href="#" class="link" style="color:var(--color-error);">删除</a></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="drawer-footer">
+        <button class="btn btn-outline btn-sm" onclick="closeAccountDrawer()">取消</button>
+        <button class="btn btn-primary btn-sm" onclick="closeAccountDrawer()">确定</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 文案 新增/编辑 弹框 -->
+  <div id="template-copy-overlay" class="modal-overlay" onclick="closeCopyModal()"></div>
+  <div id="template-copy-modal" class="modal">
+    <div class="modal-card" style="width:560px;max-height:85vh;">
+      <div class="modal-header">
+        <span id="template-copy-title">新增文案</span>
+        <button class="modal-close" onclick="closeCopyModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-row">
+          <div class="form-label required">文案类型：</div>
+          <div class="form-field">
+            <label class="radio-label"><input type="radio" name="copy-type" checked /> 标题</label>
+            <label class="radio-label"><input type="radio" name="copy-type" /> 产品卖点</label>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-label required">付费类型：</div>
+          <div class="form-field">
+            <label class="radio-label"><input type="radio" name="copy-pay" checked /> 付费</label>
+            <label class="radio-label"><input type="radio" name="copy-pay" /> 免费</label>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-label required">语言：</div>
+          <div class="form-field">
+            <select class="form-select" style="width:100%;"><option>请选择语言</option><option>英语</option><option>中文</option></select>
+          </div>
+        </div>
+        <div class="form-row" style="align-items:flex-start;">
+          <div class="form-label required">文案：</div>
+          <div class="form-field form-field-inline" style="width:100%;">
+            <textarea id="copy-content" rows="6" class="form-textarea" placeholder="请粘贴或者输入文案，回车换行" style="flex:1;"></textarea>
+            <span class="form-counter">0 / 5</span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline btn-sm" onclick="closeCopyModal()">取消</button>
+        <button class="btn btn-primary btn-sm" onclick="closeCopyModal()">确定</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 定向包 新增/编辑/复制 抽屉 -->
+  <div id="template-target-overlay" class="drawer-overlay" onclick="closeTargetDrawer()"></div>
+  <div id="template-target-drawer" class="drawer drawer-narrow">
+    <div class="drawer-card">
+      <div class="drawer-header">
+        <span id="template-target-title">新增定向包</span>
+        <button class="drawer-close" onclick="closeTargetDrawer()">×</button>
+      </div>
+      <div class="drawer-body">
+        <div class="form-section">
+          <div class="form-section-title">定向信息</div>
+          <div class="form-row">
+            <div class="form-label required">定向包名称：</div>
+            <div class="form-field form-field-inline" style="width:100%;">
+              <input type="text" id="target-name" class="form-input" placeholder="定向包名称" style="flex:1;" />
+              <span class="form-counter">0 / 50</span>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-label">性别：</div>
+            <div class="form-field"><select class="form-select form-input-md"><option>不限</option><option>男</option><option>女</option></select></div>
+          </div>
+          <div class="form-row">
+            <div class="form-label required">年龄：</div>
+            <div class="form-field"><select class="form-select form-input-md"><option>请选择</option></select></div>
+          </div>
+          <div class="form-row">
+            <div class="form-label">语言：</div>
+            <div class="form-field"><select class="form-select form-input-md"><option>请选择语言</option></select></div>
+          </div>
+        </div>
+        <div class="form-section">
+          <div class="form-section-title">地区定向信息</div>
+          <div class="drawer-split">
+            <div>
+              <div class="modal-filter" style="margin-bottom:8px;">
+                <input type="text" class="form-input" placeholder="请输入关键字搜索" style="flex:1;" />
+                <button class="btn btn-outline btn-sm">搜索</button>
+              </div>
+              <div class="region-select-box">
+                <div class="region-select-header"><label><input type="checkbox" /> 全选</label><span>名称</span><span>操作</span></div>
+                <div class="region-select-body">
+                  <ul class="region-select-list">
+                    <li><label><input type="checkbox" /> 意大利</label><span class="region-select-action">定向</span></li>
+                    <li><label><input type="checkbox" /> 阿根廷</label><span class="region-select-action">定向</span></li>
+                    <li><label><input type="checkbox" /> 希腊</label><span class="region-select-action">定向</span></li>
+                    <li><label><input type="checkbox" /> 巴西</label><span class="region-select-action">定向</span></li>
+                    <li><label><input type="checkbox" /> 科威特</label><span class="region-select-action">定向</span></li>
+                    <li><label><input type="checkbox" /> 巴拿马</label><span class="region-select-action">定向</span></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="region-select-header" style="border-radius:4px 4px 0 0;"><span>已选</span><span class="region-select-action">批量导入</span><span class="region-select-action">清除</span></div>
+              <div class="region-select-box" style="border-top:none;border-radius:0 0 4px 4px;">
+                <div class="region-select-body">
+                  <div class="empty-state" style="padding:60px 20px;"><div class="empty-state-icon">📍</div><span>暂无数据</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="drawer-footer">
+        <button class="btn btn-outline btn-sm" onclick="closeTargetDrawer()">取消</button>
+        <button class="btn btn-primary btn-sm" onclick="closeTargetDrawer()">确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+        </div>
+      </main>
+    </div>
+
+
+    <script>
+      /* ===== 跨环境页面跳转：兼容本地 / GitHub Pages / htmlpreview.github.io ===== */
+      function navUrl(rootPath) {
+        if (window.location.hostname === 'htmlpreview.github.io') {
+          return 'https://htmlpreview.github.io/?https://github.com/Nake12138/maiyaput/blob/main/' + rootPath;
+        }
+        if (rootPath === 'index.html') return '../index.html';
+        return './' + rootPath.replace(/^pages\//, '');
+      }
+
+      function showPage(pageName) {
+        if (pageName === 'overseas-template') return;
+        if (pageName === 'overseas-batch-delivery') {
+          window.location.href = navUrl('pages/overseas-batch-delivery.html');
+          return;
+        }
+        if (pageName === 'overseas-auto-delivery') {
+          window.location.href = navUrl('pages/overseas-auto-delivery.html');
+          return;
+        }
+        window.location.href = navUrl('index.html') + '#' + pageName;
+      }
+
+      function switchSystem(system) {
+        try { localStorage.setItem('delivery_system', system); } catch (err) {}
+        if (system === 'overseas') {
+          window.location.href = navUrl('pages/overseas-batch-delivery.html');
+        } else {
+          window.location.href = navUrl('index.html');
+        }
+      }
+
+      function toggleSystemMenu(e) {
+        if (e) e.stopPropagation();
+        var menu = document.getElementById('systemSwitchMenu');
+        if (menu) menu.classList.toggle('open');
+      }
+
+      document.addEventListener('click', function (e) {
+        var menu = document.getElementById('systemSwitchMenu');
+        if (!menu || !menu.classList.contains('open')) return;
+        if (menu.contains(e.target)) return;
+        if (e.target.closest && e.target.closest('.system-switch-trigger')) return;
+        menu.classList.remove('open');
+      });
+
+      (function highlightCurrentSystem() {
+        var current = 'overseas';
+        try { current = localStorage.getItem('delivery_system') || 'overseas'; } catch (err) {}
+        document.querySelectorAll('.system-switch-item').forEach(function (item) {
+          item.classList.toggle('active', item.getAttribute('data-system') === current);
+        });
+      })();
+
+      /* ===== 模板管理 Tab 切换 ===== */
+      function switchTemplateTab(tabName) {
+        document.querySelectorAll('#page-overseas-template .template-tab-panel').forEach(function (p) { p.style.display = 'none'; });
+        document.getElementById('template-tab-' + tabName).style.display = 'block';
+        document.querySelectorAll('#template-tabs .tab').forEach(function (t) {
+          t.classList.toggle('active', t.getAttribute('data-tab') === tabName);
+        });
+      }
+
+      function searchTemplate(tab) { alert('查询：' + tab); }
+      function resetTemplateFilter(tab) {
+        var root = document.getElementById('template-tab-' + tab);
+        if (!root) return;
+        root.querySelectorAll('.filter-input').forEach(function (i) { i.value = ''; });
+        root.querySelectorAll('.filter-select').forEach(function (s) { s.selectedIndex = 0; });
+      }
+      function deleteTemplateRow(link) {
+        var tr = link.closest('tr');
+        if (tr && confirm('确定删除？')) tr.remove();
+      }
+
+      /* 账户包抽屉 */
+      function openAccountDrawer(mode, name) {
+        var titles = { add: '新增账户包', edit: '编辑账户包', copy: '复制账户包' };
+        document.getElementById('template-account-title').textContent = titles[mode] || '新增账户包';
+        document.getElementById('account-name').value = (mode === 'edit' || mode === 'copy') ? (name || '') : '';
+        document.getElementById('template-account-overlay').classList.add('open');
+        document.getElementById('template-account-drawer').classList.add('open');
+      }
+      function closeAccountDrawer() {
+        document.getElementById('template-account-overlay').classList.remove('open');
+        document.getElementById('template-account-drawer').classList.remove('open');
+      }
+
+      /* 文案弹框 */
+      function openCopyModal(mode, text) {
+        var titles = { add: '新增文案', edit: '编辑文案' };
+        document.getElementById('template-copy-title').textContent = titles[mode] || '新增文案';
+        document.getElementById('copy-content').value = mode === 'edit' ? (text || '') : '';
+        document.getElementById('template-copy-overlay').classList.add('open');
+        document.getElementById('template-copy-modal').classList.add('open');
+      }
+      function closeCopyModal() {
+        document.getElementById('template-copy-overlay').classList.remove('open');
+        document.getElementById('template-copy-modal').classList.remove('open');
+      }
+
+      /* 定向包抽屉 */
+      function openTargetDrawer(mode, name) {
+        var titles = { add: '新增定向包', edit: '编辑定向包', copy: '复制定向包' };
+        document.getElementById('template-target-title').textContent = titles[mode] || '新增定向包';
+        document.getElementById('target-name').value = (mode === 'edit' || mode === 'copy') ? (name || '') : '';
+        document.getElementById('template-target-overlay').classList.add('open');
+        document.getElementById('template-target-drawer').classList.add('open');
+      }
+      function closeTargetDrawer() {
+        document.getElementById('template-target-overlay').classList.remove('open');
+        document.getElementById('template-target-drawer').classList.remove('open');
+      }
+    </script>
+  </body>
+</html>
