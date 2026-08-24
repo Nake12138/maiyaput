@@ -1317,18 +1317,32 @@
     </div>
 
     <script>
+      /* ===== 跨环境页面跳转：兼容本地 / GitHub Pages / htmlpreview.github.io ===== */
+      /* rootPath 为仓库根相对路径，如 'pages/overseas-batch-delivery.html'、'index.html' */
+      function navUrl(rootPath) {
+        if (window.location.hostname === 'htmlpreview.github.io') {
+          return (
+            'https://htmlpreview.github.io/?' +
+            'https://github.com/Nake12138/maiyaput/blob/main/' +
+            rootPath
+          );
+        }
+        if (rootPath === 'index.html') return '../index.html';
+        return './' + rootPath.replace(/^pages\//, '');
+      }
+
       /* ===== 独立页面导航：本页停留 / 海外页面互跳 / 国内页面跳回 index ===== */
       function showPage(pageName) {
         if (pageName === 'overseas-batch-delivery') return;
         if (pageName === 'overseas-auto-delivery') {
-          window.location.href = './overseas-auto-delivery.html';
+          window.location.href = navUrl('pages/overseas-auto-delivery.html');
           return;
         }
         if (pageName === 'overseas-template') {
           alert('页面开发中：模板管理');
           return;
         }
-        window.location.href = '../index.html#' + pageName;
+        window.location.href = navUrl('index.html') + '#' + pageName;
       }
 
       /* ===== 左上角系统切换器 ===== */
@@ -1343,9 +1357,9 @@
           localStorage.setItem('delivery_system', system);
         } catch (err) {}
         if (system === 'overseas') {
-          window.location.href = './overseas-batch-delivery.html';
+          window.location.href = navUrl('pages/overseas-batch-delivery.html');
         } else {
-          window.location.href = '../index.html';
+          window.location.href = navUrl('index.html');
         }
       }
 

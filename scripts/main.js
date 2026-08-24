@@ -1,5 +1,18 @@
 // Main navigation and interaction logic
 
+/* ===== 跨环境页面跳转：兼容本地 / GitHub Pages / htmlpreview.github.io ===== */
+/* rootPath 为仓库根相对路径，如 'pages/overseas-batch-delivery.html'、'index.html' */
+function navUrl(rootPath) {
+  if (window.location.hostname === 'htmlpreview.github.io') {
+    return (
+      'https://htmlpreview.github.io/?' +
+      'https://github.com/Nake12138/maiyaput/blob/main/' +
+      rootPath
+    );
+  }
+  return rootPath;
+}
+
 document.addEventListener('DOMContentLoaded', function () {
   // Navigation item click handlers
   document.querySelectorAll('.nav-item[data-page]').forEach(function (item) {
@@ -34,11 +47,11 @@ document.addEventListener('DOMContentLoaded', function () {
 function showPage(pageName) {
   // 海外投放系统页面 → 跳转独立页面文件
   if (pageName === 'overseas-batch-delivery') {
-    window.location.href = 'pages/overseas-batch-delivery.html';
+    window.location.href = navUrl('pages/overseas-batch-delivery.html');
     return;
   }
   if (pageName === 'overseas-auto-delivery') {
-    window.location.href = 'pages/overseas-auto-delivery.html';
+    window.location.href = navUrl('pages/overseas-auto-delivery.html');
     return;
   }
 
@@ -103,7 +116,7 @@ function switchSystem(system) {
     localStorage.setItem('delivery_system', system);
   } catch (err) {}
   if (system === 'overseas') {
-    window.location.href = 'pages/overseas-batch-delivery.html';
+    window.location.href = navUrl('pages/overseas-batch-delivery.html');
   }
   // 国内投放系统：停留在当前 index.html
 }
