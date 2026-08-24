@@ -143,3 +143,20 @@ document.addEventListener('click', function (e) {
     }
   });
 })();
+
+/* ===== 遮罩点击关闭弹框（全系统统一） ===== */
+document.addEventListener('click', function (e) {
+  var t = e.target;
+  if (!t || !t.classList) return;
+  if (t.classList.contains('drawer') || t.classList.contains('modal') || t.classList.contains('config-modal')) {
+    if (t.classList.contains('open')) {
+      t.classList.remove('open');
+      document.querySelectorAll('.drawer-overlay.open, .modal-overlay.open, .config-modal-overlay.open').forEach(function (o) { o.classList.remove('open'); });
+    }
+    return;
+  }
+  if (t.classList.contains('drawer-overlay') || t.classList.contains('modal-overlay') || t.classList.contains('config-modal-overlay')) {
+    t.classList.remove('open');
+    document.querySelectorAll('.drawer.open, .modal.open, .config-modal.open').forEach(function (m) { m.classList.remove('open'); });
+  }
+});

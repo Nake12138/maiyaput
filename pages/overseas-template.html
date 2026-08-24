@@ -529,6 +529,40 @@
         });
       })();
 
+      /* ===== 侧边栏展开/收起 ===== */
+      document.querySelectorAll('.nav-item.has-children').forEach(function (item) {
+        item.addEventListener('click', function (e) {
+          e.stopPropagation();
+          this.classList.toggle('expanded');
+          var caret = this.querySelector('.nav-item-caret');
+          if (caret) caret.textContent = this.classList.contains('expanded') ? '▼' : '▶';
+        });
+      });
+
+      /* ===== 子菜单项跳转 ===== */
+      document.querySelectorAll('.nav-child-item[data-page], .nav-item[data-page]').forEach(function (item) {
+        item.addEventListener('click', function () {
+          showPage(this.getAttribute('data-page'));
+        });
+      });
+
+      /* ===== 遮罩点击关闭弹框（全系统统一） ===== */
+      document.addEventListener('click', function (e) {
+        var t = e.target;
+        if (!t || !t.classList) return;
+        if (t.classList.contains('drawer') || t.classList.contains('modal') || t.classList.contains('config-modal')) {
+          if (t.classList.contains('open')) {
+            t.classList.remove('open');
+            document.querySelectorAll('.drawer-overlay.open, .modal-overlay.open, .config-modal-overlay.open').forEach(function (o) { o.classList.remove('open'); });
+          }
+          return;
+        }
+        if (t.classList.contains('drawer-overlay') || t.classList.contains('modal-overlay') || t.classList.contains('config-modal-overlay')) {
+          t.classList.remove('open');
+          document.querySelectorAll('.drawer.open, .modal.open, .config-modal.open').forEach(function (m) { m.classList.remove('open'); });
+        }
+      });
+
       /* ===== 模板管理 Tab 切换 ===== */
       function switchTemplateTab(tabName) {
         document.querySelectorAll('#page-overseas-template .template-tab-panel').forEach(function (p) { p.style.display = 'none'; });
