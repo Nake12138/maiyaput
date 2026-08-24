@@ -1,0 +1,1562 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>自动化任务 - 海外投放系统</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../styles/main.css" />
+  </head>
+  <body>
+    <div class="layout">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="logo" style="padding: 16px 20px 12px;">
+          <div class="logo-icon">海</div>
+          <div class="logo-info">
+            <span class="logo-name">海外投放系统</span>
+            <span class="system-switch-trigger" onclick="toggleSystemMenu(event)">切换系统 <span class="system-switch-caret">▾</span></span>
+          </div>
+          <div class="system-switch-menu" id="systemSwitchMenu">
+            <div class="system-switch-item" data-system="cn" onclick="switchSystem('cn')">国内投放系统</div>
+            <div class="system-switch-item active" data-system="overseas" onclick="switchSystem('overseas')">海外投放系统<span class="check">✓</span></div>
+          </div>
+        </div>
+        <nav class="nav">
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">⊟</span>
+              <span>项目管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">📊</span>
+              <span>数据统计</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">▶</span>
+              <span>短剧管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">▣</span>
+              <span>素材管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children expanded">
+              <span class="nav-item-icon">▦</span>
+              <span>批量投放</span>
+              <span class="nav-item-caret">▼</span>
+            </div>
+            <div class="nav-children">
+              <span class="nav-child-item" data-page="overseas-batch-delivery">批量投放</span>
+              <span class="nav-child-item active" data-page="overseas-auto-delivery">自动化任务</span>
+              <span class="nav-child-item" data-page="overseas-template">模板管理</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">👤</span>
+              <span>账号管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">🗂️</span>
+              <span>资产管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">🛡️</span>
+              <span>控损管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">⚙️</span>
+              <span>系统设置</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">🔗</span>
+              <span>关联绑定</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+        </nav>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main">
+        <!-- Top Header -->
+        <header class="top-header">
+          <div class="top-header-left"></div>
+          <div class="top-header-right">
+            <div class="notification">
+              <span>消息</span>
+              <span class="notification-badge">88</span>
+            </div>
+            <div class="avatar">M</div>
+            <div class="user-info">
+              <span>UTC+8</span>
+            </div>
+            <button class="btn btn-outline btn-sm" onclick="alert('打开帮助指南')">帮助指南</button>
+          </div>
+        </header>
+
+        <!-- Content -->
+        <div class="content">
+          <div id="page-overseas-auto-delivery" class="page active">
+            <!-- Breadcrumb -->
+            <div class="breadcrumb">
+              <a href="#" onclick="showPage('dashboard')">首页</a>
+              <span class="breadcrumb-sep">/</span>
+              <span>批量投放</span>
+              <span class="breadcrumb-sep">/</span>
+              <span>自动化任务</span>
+            </div>
+
+            <!-- Page Title and Manual -->
+            <div class="page-header">
+              <h2 class="page-title">自动化任务</h2>
+              <div class="page-header-right">
+                <a class="page-manual-link" href="#" onclick="alert('跳转至：自动化任务用户使用手册')">自动化任务用户使用手册</a>
+              </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs" id="overseas-auto-delivery-tabs">
+              <button class="tab active" onclick="switchOverseasTab('task')">任务</button>
+              <button class="tab" onclick="switchOverseasTab('account')">账户</button>
+              <button class="tab" onclick="switchOverseasTab('campaign')">推广系列</button>
+              <button class="tab" onclick="switchOverseasTab('adgroup')">广告组</button>
+              <button class="tab" onclick="switchOverseasTab('ad')">广告</button>
+            </div>
+
+            <!-- Tab Content: Task -->
+            <div id="overseas-auto-delivery-task" class="tab-content">
+              <!-- Filter Bar -->
+              <div class="filter-bar">
+                <div class="filter-combo" data-filter-type="task-name">
+                  <select class="filter-combo-select" onchange="updateTaskSearchPlaceholder(this)">
+                    <option value="name">任务名称</option>
+                    <option value="id">任务ID</option>
+                  </select>
+                  <input type="text" class="filter-combo-input" placeholder="请输入任务名称" />
+                </div>
+                <select class="filter-select">
+                  <option value="">请选择状态</option>
+                  <option value="active">生效</option>
+                  <option value="inactive">停用</option>
+                </select>
+                <select class="filter-select">
+                  <option value="">请选择预算分配策略</option>
+                  <option value="campaign">推广系列预算</option>
+                </select>
+                <select class="filter-select">
+                  <option value="">是否使用商品库</option>
+                  <option value="yes">是</option>
+                  <option value="no">否</option>
+                </select>
+                <select class="filter-select">
+                  <option value="">请选择竞价策略</option>
+                  <option value="target-roas">目标ROAS</option>
+                </select>
+                <select class="filter-select">
+                  <option value="">请选择创建人</option>
+                  <option value="tw">TW</option>
+                </select>
+                <div class="filter-actions">
+                  <button class="btn btn-info btn-sm" onclick="searchOverseasAutoDelivery('task')">查询</button>
+                  <button class="btn btn-outline btn-sm" onclick="resetOverseasFilters('task')">重置</button>
+                  <button class="btn btn-primary btn-sm" onclick="openOverseasNewTaskModal()">新建任务</button>
+                </div>
+              </div>
+
+              <div class="filter-status">已选择0个任务 任务状态</div>
+
+              <!-- Data Table -->
+              <div class="table-card">
+                <div class="table-wrapper">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th class="checkbox-col"><input type="checkbox" id="selectAllOverseasTasks" onclick="toggleSelectAllOverseasTasks()" /></th>
+                        <th>ID</th>
+                        <th>任务名称</th>
+                        <th>状态</th>
+                        <th>间隔(分钟)</th>
+                        <th>上次执行完成时间</th>
+                        <th>预算分配策略</th>
+                        <th>推广系列预算(USD)</th>
+                        <th>是否使用商品库</th>
+                        <th>竞价策略</th>
+                        <th>目标ROAS</th>
+                        <th>广告组日预算(USD)</th>
+                        <th>创建人</th>
+                        <th>操作</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><input type="checkbox" class="overseas-task-checkbox" /></td>
+                        <td>295</td>
+                        <td><span class="link" onclick="drillTaskToAccount(295)">TW:自动复制:测试</span></td>
+                        <td><span class="tag tag-success">生效</span></td>
+                        <td>60</td>
+                        <td>2026-08-20 11:20:15</td>
+                        <td>推广系列预算</td>
+                        <td>1000</td>
+                        <td>否</td>
+                        <td>目标ROAS</td>
+                        <td>1.12</td>
+                        <td>--</td>
+                        <td>挪可</td>
+                        <td>
+                          <div class="row-actions">
+                            <button class="row-action-btn" onclick="editOverseasTask(295)">编辑</button>
+                            <button class="row-action-btn" onclick="copyOverseasTask(295)">复制</button>
+                            <button class="row-action-btn" onclick="showOverseasTaskLog(295)">日志</button>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td><input type="checkbox" class="overseas-task-checkbox" /></td>
+                        <td>294</td>
+                        <td><span class="link" onclick="drillTaskToAccount(294)">复制:复制:复制-...</span></td>
+                        <td><span class="tag tag-error">停用</span></td>
+                        <td>10</td>
+                        <td>2026-08-17 15:55:00</td>
+                        <td>推广系列预算</td>
+                        <td>20</td>
+                        <td>是</td>
+                        <td>目标ROAS</td>
+                        <td>1</td>
+                        <td>--</td>
+                        <td>卡豆</td>
+                        <td>
+                          <div class="row-actions">
+                            <button class="row-action-btn" onclick="editOverseasTask(294)">编辑</button>
+                            <button class="row-action-btn" onclick="copyOverseasTask(294)">复制</button>
+                            <button class="row-action-btn" onclick="showOverseasTaskLog(294)">日志</button>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination">
+                  <span class="pagination-info">共 13 条</span>
+                  <div class="pagination-pages">
+                    <button class="page-btn" onclick="changeOverseasPage('prev')">&lt;</button>
+                    <button class="page-btn active" onclick="changeOverseasPage(1)">1</button>
+                    <button class="page-btn" onclick="changeOverseasPage(2)">2</button>
+                    <button class="page-btn" onclick="changeOverseasPage('next')">&gt;</button>
+                  </div>
+                  <select class="page-size-select">
+                    <option value="20">20 条/页</option>
+                    <option value="50">50 条/页</option>
+                    <option value="100">100 条/页</option>
+                  </select>
+                  <span>跳至</span>
+                  <input type="text" class="jump-input" value="1" />
+                  <span>页</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tab Content: Account -->
+            <div id="overseas-auto-delivery-account" class="tab-content" style="display: none;">
+              <!-- Filter Bar -->
+              <div class="filter-bar">
+                <div class="filter-range">
+                  <span class="filter-range-label">创建时间</span>
+                  <input type="text" placeholder="开始时间" />
+                  <span class="filter-range-tilde">-</span>
+                  <input type="text" placeholder="结束时间" />
+                  <button type="button" class="filter-range-pick" title="选择日期">📅</button>
+                  <span class="filter-range-unit">月</span>
+                </div>
+                <div class="filter-combo" data-filter-type="task-name">
+                  <select class="filter-combo-select">
+                    <option>任务名称</option>
+                    <option>任务ID</option>
+                  </select>
+                  <input type="text" class="filter-combo-input" placeholder="请输入" />
+                </div>
+                <div class="filter-combo" data-filter-type="account-name">
+                  <select class="filter-combo-select">
+                    <option>账户名称</option>
+                    <option>账户ID</option>
+                    <option>账户列表ID</option>
+                  </select>
+                  <input type="text" class="filter-combo-input" placeholder="请输入" />
+                </div>
+                <div class="filter-combo">
+                  <select class="filter-combo-select">
+                    <option>剧本名称</option>
+                    <option>剧本ID</option>
+                  </select>
+                  <input type="text" class="filter-combo-input" placeholder="请选择剧本名称" />
+                </div>
+                <div class="filter-combo">
+                  <select class="filter-combo-select">
+                    <option>短剧名称</option>
+                    <option>短剧ID</option>
+                  </select>
+                  <input type="text" class="filter-combo-input" placeholder="请选择短剧名称" />
+                </div>
+                <select class="filter-select">
+                  <option>请选择语言</option>
+                  <option>西班牙语</option>
+                  <option>泰语</option>
+                </select>
+                <select class="filter-select">
+                  <option>请选择创建人</option>
+                  <option>碟可</option>
+                </select>
+                <div class="filter-actions">
+                  <button class="btn btn-info btn-sm" onclick="searchOverseasAutoDelivery('account')">查询</button>
+                  <button class="btn btn-outline btn-sm" onclick="resetOverseasFilters('account')">重置</button>
+                </div>
+              </div>
+
+              <div class="filter-status">已选择0个  重试</div>
+
+              <div class="table-card">
+                <div class="table-wrapper">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th rowspan="2" class="checkbox-col"><input type="checkbox" id="selectAllOverseasAccounts" onclick="toggleSelectAllOverseasRows('selectAllOverseasAccounts','overseas-account-checkbox')" /></th>
+                        <th rowspan="2">ID</th>
+                        <th rowspan="2">账户信息</th>
+                        <th rowspan="2">任务信息</th>
+                        <th colspan="2">资产创建进度</th>
+                        <th rowspan="2">推广系列数</th>
+                        <th rowspan="2">广告组数</th>
+                        <th rowspan="2">广告数</th>
+                        <th rowspan="2">操作</th>
+                        <th rowspan="2">投放剧本</th>
+                        <th rowspan="2">语言</th>
+                        <th rowspan="2">投放短剧</th>
+                        <th rowspan="2">创建人</th>
+                        <th rowspan="2">创建时间</th>
+                      </tr>
+                      <tr>
+                        <th>商品</th>
+                        <th>推广链接</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><input type="checkbox" class="overseas-account-checkbox" /></td>
+                        <td>5167</td>
+                        <td>
+                          <span class="link" onclick="drillAccountToCampaign(5167)">TT-MAD-IAA-二组-京服..</span>
+                          <div style="font-size: 11px; color: var(--color-text-tertiary);">ID:7648215203578101780</div>
+                        </td>
+                        <td>
+                          <span class="link">复制: 复制: 复制: 复制..</span>
+                          <div style="font-size: 11px; color: var(--color-text-tertiary);">ID:293</div>
+                        </td>
+                        <td><span class="link">2</span></td>
+                        <td><span class="link">2</span></td>
+                        <td><span class="link">2</span><div style="font-size:11px;"><span class="stat-success-text">成功2</span> <span class="stat-row-empty">失败0</span></div></td>
+                        <td><span class="link">2</span><div style="font-size:11px;"><span class="stat-success-text">成功2</span> <span class="stat-row-empty">失败0</span></div></td>
+                        <td><span class="link">4</span><div style="font-size:11px;"><span class="stat-success-text">成功2</span> <span class="stat-row-empty">失败2</span></div></td>
+                        <td><button class="row-action-btn danger">刷新</button> <button class="row-action-btn">重试</button></td>
+                        <td>卸甲布衣镇山河<br /><span style="color:var(--color-text-tertiary);">IDNA1679</span></td>
+                        <td>西班牙语</td>
+                        <td>El general que nadie ..<br /><span style="color:var(--color-text-tertiary);">ID:2082784916603748334</span></td>
+                        <td>碟可</td>
+                        <td>2026-08-14 08:30:01</td>
+                      </tr>
+                      <tr>
+                        <td><input type="checkbox" class="overseas-account-checkbox" /></td>
+                        <td>5166</td>
+                        <td>
+                          <span class="link" onclick="drillAccountToCampaign(5166)">TT-MAD-IAA-二组-京服..</span>
+                          <div style="font-size: 11px; color: var(--color-text-tertiary);">ID:7648215203578101780</div>
+                        </td>
+                        <td>
+                          <span class="link">复制: 复制: 复制: 复制..</span>
+                          <div style="font-size: 11px; color: var(--color-text-tertiary);">ID:293</div>
+                        </td>
+                        <td><span class="link">1</span></td>
+                        <td><span class="link">4</span></td>
+                        <td><span class="link">2</span><div style="font-size:11px;"><span class="stat-success-text">成功2</span> <span class="stat-row-empty">失败0</span></div></td>
+                        <td><span class="link">2</span><div style="font-size:11px;"><span class="stat-success-text">成功2</span> <span class="stat-row-empty">失败0</span></div></td>
+                        <td><span class="link">4</span><div style="font-size:11px;"><span style="color:var(--color-error);">失败1</span> <span class="stat-row-empty">失败0</span></div></td>
+                        <td><button class="row-action-btn danger">刷新</button> <button class="row-action-btn">重试</button></td>
+                        <td>卸甲布衣镇山河<br /><span style="color:var(--color-text-tertiary);">IDNA1679</span></td>
+                        <td>西班牙语</td>
+                        <td>El general que nadie ..<br /><span style="color:var(--color-text-tertiary);">ID:2082784916603748334</span></td>
+                        <td>碟可</td>
+                        <td>2026-08-14 08:30:01</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="pagination">
+                  <span class="pagination-info">共 21 条</span>
+                  <div class="pagination-pages">
+                    <button class="page-btn active" onclick="changeOverseasPage(1)">1</button>
+                    <button class="page-btn" onclick="changeOverseasPage(2)">2</button>
+                    <button class="page-btn" onclick="changeOverseasPage('next')">&gt;</button>
+                  </div>
+                  <select class="page-size-select">
+                    <option>20 条/页</option>
+                    <option>50 条/页</option>
+                  </select>
+                  <span>跳至</span>
+                  <input type="text" class="jump-input" value="1" />
+                  <span>页</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tab Content: Campaign -->
+            <div id="overseas-auto-delivery-campaign" class="tab-content" style="display: none;">
+              <!-- Filter Bar -->
+              <div class="filter-bar">
+                <div class="filter-range">
+                  <span class="filter-range-label">创建时间</span>
+                  <input type="text" placeholder="开始时间" />
+                  <span class="filter-range-tilde">-</span>
+                  <input type="text" placeholder="结束时间" />
+                  <button type="button" class="filter-range-pick" title="选择日期">📅</button>
+                  <span class="filter-range-unit">月</span>
+                </div>
+                <div class="filter-combo" data-filter-type="task-name">
+                  <select class="filter-combo-select">
+                    <option>任务名称</option>
+                    <option>任务ID</option>
+                  </select>
+                  <input type="text" class="filter-combo-input" placeholder="请输入" />
+                </div>
+                <div class="filter-combo" data-filter-type="account-name">
+                  <select class="filter-combo-select">
+                    <option>账户名称</option>
+                    <option>账户ID</option>
+                    <option>账户列表ID</option>
+                  </select>
+                  <input type="text" class="filter-combo-input" placeholder="请输入" />
+                </div>
+                <div class="filter-combo" data-filter-type="campaign-name">
+                  <select class="filter-combo-select">
+                    <option>推广系列名称</option>
+                    <option>推广系列ID</option>
+                    <option>推广系列列表ID</option>
+                  </select>
+                  <input type="text" class="filter-combo-input" placeholder="请输入" />
+                </div>
+                <select class="filter-select">
+                  <option>请选择上传状态</option>
+                  <option>上传成功</option>
+                  <option>上传失败</option>
+                </select>
+                <select class="filter-select">
+                  <option>请选择预算分配策略</option>
+                  <option>推广系列预算</option>
+                </select>
+                <div class="filter-combo">
+                  <select class="filter-combo-select">
+                    <option>剧本名称</option>
+                    <option>剧本ID</option>
+                  </select>
+                  <input type="text" class="filter-combo-input" placeholder="请输入剧本..." />
+                </div>
+                <div class="filter-combo">
+                  <select class="filter-combo-select">
+                    <option>短剧名称</option>
+                    <option>短剧ID</option>
+                  </select>
+                  <input type="text" class="filter-combo-input" placeholder="请选择短剧名称" />
+                </div>
+                <select class="filter-select">
+                  <option>请选择语言</option>
+                  <option>西班牙语</option>
+                  <option>泰语</option>
+                </select>
+                <select class="filter-select">
+                  <option>请选择创建人</option>
+                  <option>碟可</option>
+                </select>
+                <div class="filter-actions">
+                  <button class="btn btn-info btn-sm" onclick="searchOverseasAutoDelivery('campaign')">查询</button>
+                  <button class="btn btn-outline btn-sm" onclick="resetOverseasFilters('campaign')">重置</button>
+                </div>
+              </div>
+
+              <div class="filter-status">已选择0个  重试</div>
+
+              <div class="table-card">
+                <div class="table-wrapper">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th class="checkbox-col"><input type="checkbox" id="selectAllOverseasCampaigns" onclick="toggleSelectAllOverseasRows('selectAllOverseasCampaigns','overseas-campaign-checkbox')" /></th>
+                        <th>ID</th>
+                        <th>推广系列信息</th>
+                        <th>上传状态</th>
+                        <th>广告组数</th>
+                        <th>广告数</th>
+                        <th>操作</th>
+                        <th>预算分配策略</th>
+                        <th>日预算</th>
+                        <th>账户信息</th>
+                        <th>任务信息</th>
+                        <th>投放剧本</th>
+                        <th>语言</th>
+                        <th>投放短剧</th>
+                        <th>创建人</th>
+                        <th>创建时间</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><input type="checkbox" class="overseas-campaign-checkbox" /></td>
+                        <td>13532</td>
+                        <td>
+                          <span class="link" onclick="drillCampaignToAdgroup(13532)">娜可推广瓶广告系列_使用商品库..</span>
+                          <div style="font-size: 11px; color: var(--color-text-tertiary);">ID:1873745963104514</div>
+                        </td>
+                        <td><span class="tag tag-success">上传成功</span></td>
+                        <td><span class="link">1</span><div style="font-size:11px;"><span class="stat-success-text">成功1</span> <span style="color:var(--color-error);">失败0</span></div></td>
+                        <td><span class="link">2</span><div style="font-size:11px;"><span class="stat-success-text">成功2</span> <span class="stat-row-empty">失败0</span></div></td>
+                        <td><button class="row-action-btn danger">刷新</button> <button class="row-action-btn">重试</button></td>
+                        <td>推广系列预算</td>
+                        <td><span class="link">20</span></td>
+                        <td>TT-MAD-IAA-二组-京服..<br /><span style="color:var(--color-text-tertiary);">ID:7648215203578101780</span></td>
+                        <td>复制: 复制: 复制: 复制..<br /><span style="color:var(--color-text-tertiary);">ID:293</span></td>
+                        <td>卸甲布衣镇山河<br /><span style="color:var(--color-text-tertiary);">IDNA1679</span></td>
+                        <td>西班牙语</td>
+                        <td>El general que nadie ..<br /><span style="color:var(--color-text-tertiary);">ID:208278491..</span></td>
+                        <td>碟可</td>
+                        <td>2026-08-14 08:30:01</td>
+                      </tr>
+                      <tr>
+                        <td><input type="checkbox" class="overseas-campaign-checkbox" /></td>
+                        <td>13531</td>
+                        <td>
+                          <span class="link" onclick="drillCampaignToAdgroup(13531)">娜可推广瓶广告系列_使用商品库..</span>
+                          <div style="font-size: 11px; color: var(--color-text-tertiary);">ID:1873745963104514</div>
+                        </td>
+                        <td><span class="tag tag-error">上传失败</span></td>
+                        <td><span class="link">1</span><div style="font-size:11px;"><span class="stat-success-text">成功1</span> <span style="color:var(--color-error);">失败0</span></div></td>
+                        <td><span class="link">2</span><div style="font-size:11px;"><span class="stat-success-text">成功2</span> <span class="stat-row-empty">失败0</span></div></td>
+                        <td><button class="row-action-btn danger">刷新</button> <button class="row-action-btn">重试</button></td>
+                        <td>推广系列预算</td>
+                        <td><span class="link">20</span></td>
+                        <td>TT-MAD-IAA-二组-京服..<br /><span style="color:var(--color-text-tertiary);">ID:7648215203578101780</span></td>
+                        <td>复制: 复制: 复制: 复制..<br /><span style="color:var(--color-text-tertiary);">ID:293</span></td>
+                        <td>卸甲布衣镇山河<br /><span style="color:var(--color-text-tertiary);">IDNA1679</span></td>
+                        <td>西班牙语</td>
+                        <td>El general que nadie ..<br /><span style="color:var(--color-text-tertiary);">ID:208278491..</span></td>
+                        <td>碟可</td>
+                        <td>2026-08-14 08:30:01</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="pagination">
+                  <span class="pagination-info">共 42 条</span>
+                  <div class="pagination-pages">
+                    <button class="page-btn" onclick="changeOverseasPage('prev')">&lt;</button>
+                    <button class="page-btn active" onclick="changeOverseasPage(1)">1</button>
+                    <button class="page-btn" onclick="changeOverseasPage(2)">2</button>
+                    <button class="page-btn" onclick="changeOverseasPage(3)">3</button>
+                    <button class="page-btn" onclick="changeOverseasPage('next')">&gt;</button>
+                  </div>
+                  <select class="page-size-select">
+                    <option>20 条/页</option>
+                    <option>50 条/页</option>
+                  </select>
+                  <span>跳至</span>
+                  <input type="text" class="jump-input" value="1" />
+                  <span>页</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tab Content: Ad Group -->
+            <div id="overseas-auto-delivery-adgroup" class="tab-content" style="display: none;">
+              <!-- Filter Bar -->
+              <div class="filter-bar">
+                <div class="filter-range">
+                  <span class="filter-range-label">创建时间</span>
+                  <input type="text" placeholder="开始时间" />
+                  <span class="filter-range-tilde">-</span>
+                  <input type="text" placeholder="结束时间" />
+                  <button type="button" class="filter-range-pick" title="选择日期">📅</button>
+                  <span class="filter-range-unit">月</span>
+                </div>
+                <div class="filter-combo" data-filter-type="task-name">
+                  <select class="filter-combo-select">
+                    <option>任务名称</option>
+                    <option>任务ID</option>
+                  </select>
+                  <input type="text" class="filter-combo-input" placeholder="请输入" />
+                </div>
+                <div class="filter-combo" data-filter-type="account-name">
+                  <select class="filter-combo-select">
+                    <option>账户名称</option>
+                    <option>账户ID</option>
+                    <option>账户列表ID</option>
+                  </select>
+                  <input type="text" class="filter-combo-input" placeholder="请输入" />
+                </div>
+                <div class="filter-combo" data-filter-type="campaign-name">
+                  <select class="filter-combo-select">
+                    <option>推广系列名称</option>
+                    <option>推广系列ID</option>
+                    <option>推广系列列表ID</option>
+                  </select>
+                  <input type="text" class="filter-combo-input" placeholder="请输入" />
+                </div>
+                <div class="filter-combo" data-filter-type="adgroup-name">
+                  <select class="filter-combo-select">
+                    <option>广告组名称</option>
+                    <option>广告组ID</option>
+                    <option>广告组列表ID</option>
+                  </select>
+                  <input type="text" class="filter-combo-input" placeholder="请输入" />
+                </div>
+                <select class="filter-select">
+                  <option>请选择上传状态</option>
+                  <option>上传成功</option>
+                  <option>上传失败</option>
+                </select>
+                <select class="filter-select">
+                  <option>请选择目标</option>
+                </select>
+                <select class="filter-select">
+                  <option>请选择小程序</option>
+                </select>
+                <div class="filter-combo">
+                  <select class="filter-combo-select">
+                    <option>剧本名称</option>
+                    <option>剧本ID</option>
+                  </select>
+                  <input type="text" class="filter-combo-input" placeholder="请输入剧本..." />
+                </div>
+                <div class="filter-combo">
+                  <select class="filter-combo-select">
+                    <option>短剧名称</option>
+                    <option>短剧ID</option>
+                  </select>
+                  <input type="text" class="filter-combo-input" placeholder="请选择短剧名称" />
+                </div>
+                <select class="filter-select">
+                  <option>请选择语言</option>
+                  <option>西班牙语</option>
+                  <option>泰语</option>
+                </select>
+                <select class="filter-select">
+                  <option>请选择创建人</option>
+                  <option>碟可</option>
+                </select>
+                <div class="filter-actions">
+                  <button class="btn btn-info btn-sm" onclick="searchOverseasAutoDelivery('adgroup')">查询</button>
+                  <button class="btn btn-outline btn-sm" onclick="resetOverseasFilters('adgroup')">重置</button>
+                </div>
+              </div>
+
+              <div class="filter-status">已选择0个  重试</div>
+
+              <div class="table-card">
+                <div class="table-wrapper">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th class="checkbox-col"><input type="checkbox" id="selectAllOverseasAdgroups" onclick="toggleSelectAllOverseasRows('selectAllOverseasAdgroups','overseas-adgroup-checkbox')" /></th>
+                        <th>ID</th>
+                        <th>广告组信息</th>
+                        <th>上传状态</th>
+                        <th>广告数</th>
+                        <th>操作</th>
+                        <th>小程序</th>
+                        <th>竞价策略</th>
+                        <th>目标ROAS</th>
+                        <th>日预算</th>
+                        <th>推广系列信息</th>
+                        <th>账户信息</th>
+                        <th>任务信息</th>
+                        <th>投放剧本</th>
+                        <th>投放短剧</th>
+                        <th>创建人</th>
+                        <th>创建时间</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><input type="checkbox" class="overseas-adgroup-checkbox" /></td>
+                        <td>13531</td>
+                        <td>
+                          <span class="link" onclick="drillAdgroupToAd(13531)">娜可#225877_西班牙这边_TT..</span>
+                          <div style="font-size: 11px; color: var(--color-text-tertiary);">ID:1873745963104514</div>
+                        </td>
+                        <td><span class="tag tag-success">上传成功</span></td>
+                        <td><span class="link">2</span><div style="font-size:11px;"><span class="stat-success-text">成功2</span> <span style="color:var(--color-error);">失败2</span></div></td>
+                        <td><button class="row-action-btn danger">刷新</button> <button class="row-action-btn">重试</button></td>
+                        <td>TT_ZeroDrama</td>
+                        <td>目标ROAS</td>
+                        <td>1</td>
+                        <td>--</td>
+                        <td>娜可广告瓶广告系列_使用商..<br /><span style="color:var(--color-text-tertiary);">ID:1873745963104514</span></td>
+                        <td>TT-MAD-IAA-二组-京服..<br /><span style="color:var(--color-text-tertiary);">ID:7648215203578101780</span></td>
+                        <td>复制: 复制: 复制: 复制..<br /><span style="color:var(--color-text-tertiary);">ID:293</span></td>
+                        <td>卸甲布衣镇山河<br /><span style="color:var(--color-text-tertiary);">IDNA1679</span></td>
+                        <td>El general que nadie ..<br /><span style="color:var(--color-text-tertiary);">ID:208278491..</span></td>
+                        <td>碟可</td>
+                        <td>2026-08-14 08:30:01</td>
+                      </tr>
+                      <tr>
+                        <td><input type="checkbox" class="overseas-adgroup-checkbox" /></td>
+                        <td>13530</td>
+                        <td>
+                          <span class="link" onclick="drillAdgroupToAd(13530)">娜可#225877_西班牙这边_TT..</span>
+                          <div style="font-size: 11px; color: var(--color-text-tertiary);">ID:1873745963104514</div>
+                        </td>
+                        <td><span class="tag tag-error">上传失败</span></td>
+                        <td><span class="link">2</span><div style="font-size:11px;"><span class="stat-success-text">成功2</span> <span style="color:var(--color-error);">失败2</span></div></td>
+                        <td><button class="row-action-btn danger">刷新</button> <button class="row-action-btn">重试</button></td>
+                        <td>TT_ZeroDrama</td>
+                        <td>目标ROAS</td>
+                        <td>1</td>
+                        <td>--</td>
+                        <td>娜可广告瓶广告系列_使用商..<br /><span style="color:var(--color-text-tertiary);">ID:1873745963104514</span></td>
+                        <td>TT-MAD-IAA-二组-京服..<br /><span style="color:var(--color-text-tertiary);">ID:7648215203578101780</span></td>
+                        <td>复制: 复制: 复制: 复制..<br /><span style="color:var(--color-text-tertiary);">ID:293</span></td>
+                        <td>卸甲布衣镇山河<br /><span style="color:var(--color-text-tertiary);">IDNA1679</span></td>
+                        <td>El general que nadie ..<br /><span style="color:var(--color-text-tertiary);">ID:208278491..</span></td>
+                        <td>碟可</td>
+                        <td>2026-08-14 08:30:01</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="pagination">
+                  <span class="pagination-info">共 42 条</span>
+                  <div class="pagination-pages">
+                    <button class="page-btn" onclick="changeOverseasPage('prev')">&lt;</button>
+                    <button class="page-btn active" onclick="changeOverseasPage(1)">1</button>
+                    <button class="page-btn" onclick="changeOverseasPage(2)">2</button>
+                    <button class="page-btn" onclick="changeOverseasPage(3)">3</button>
+                    <button class="page-btn" onclick="changeOverseasPage('next')">&gt;</button>
+                  </div>
+                  <select class="page-size-select">
+                    <option>20 条/页</option>
+                    <option>50 条/页</option>
+                  </select>
+                  <span>跳至</span>
+                  <input type="text" class="jump-input" value="1" />
+                  <span>页</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tab Content: Ad -->
+            <div id="overseas-auto-delivery-ad" class="tab-content" style="display: none;">
+              <!-- Filter Bar -->
+              <div class="filter-bar">
+                <div class="filter-range">
+                  <span class="filter-range-label">创建时间</span>
+                  <input type="text" placeholder="开始时间" />
+                  <span class="filter-range-tilde">-</span>
+                  <input type="text" placeholder="结束时间" />
+                  <button type="button" class="filter-range-pick" title="选择日期">📅</button>
+                  <span class="filter-range-unit">月</span>
+                </div>
+                <div class="filter-combo" data-filter-type="task-name">
+                  <select class="filter-combo-select">
+                    <option>任务名称</option>
+                    <option>任务ID</option>
+                  </select>
+                  <input type="text" class="filter-combo-input" placeholder="请输入" />
+                </div>
+                <div class="filter-combo" data-filter-type="account-name">
+                  <select class="filter-combo-select">
+                    <option>账户名称</option>
+                    <option>账户ID</option>
+                    <option>账户列表ID</option>
+                  </select>
+                  <input type="text" class="filter-combo-input" placeholder="请输入" />
+                </div>
+                <div class="filter-combo" data-filter-type="campaign-name">
+                  <select class="filter-combo-select">
+                    <option>推广系列名称</option>
+                    <option>推广系列ID</option>
+                    <option>推广系列列表ID</option>
+                  </select>
+                  <input type="text" class="filter-combo-input" placeholder="请输入" />
+                </div>
+                <div class="filter-combo" data-filter-type="adgroup-name">
+                  <select class="filter-combo-select">
+                    <option>广告组名称</option>
+                    <option>广告组ID</option>
+                    <option>广告组列表ID</option>
+                  </select>
+                  <input type="text" class="filter-combo-input" placeholder="请输入" />
+                </div>
+                <div class="filter-combo" data-filter-type="ad-name">
+                  <select class="filter-combo-select">
+                    <option>广告名称</option>
+                    <option>广告ID</option>
+                    <option>广告列表ID</option>
+                  </select>
+                  <input type="text" class="filter-combo-input" placeholder="请输入" />
+                </div>
+                <select class="filter-select">
+                  <option>请选择上传状态</option>
+                  <option>上传成功</option>
+                  <option>上传失败</option>
+                </select>
+                <input type="text" class="filter-input" placeholder="请输入推广链接ID" style="min-width: 160px;" />
+                <input type="text" class="filter-input" placeholder="请输入渠道号" style="min-width: 160px;" />
+                <div class="filter-combo">
+                  <select class="filter-combo-select">
+                    <option>剧本名称</option>
+                    <option>剧本ID</option>
+                  </select>
+                  <input type="text" class="filter-combo-input" placeholder="请输入剧本..." />
+                </div>
+                <div class="filter-combo">
+                  <select class="filter-combo-select">
+                    <option>短剧名称</option>
+                    <option>短剧ID</option>
+                  </select>
+                  <input type="text" class="filter-combo-input" placeholder="请选择短剧名称" />
+                </div>
+                <select class="filter-select">
+                  <option>请选择语言</option>
+                  <option>西班牙语</option>
+                  <option>泰语</option>
+                </select>
+                <select class="filter-select">
+                  <option>请选择创建人</option>
+                  <option>碟可</option>
+                </select>
+                <div class="filter-actions">
+                  <button class="btn btn-info btn-sm" onclick="searchOverseasAutoDelivery('ad')">查询</button>
+                  <button class="btn btn-outline btn-sm" onclick="resetOverseasFilters('ad')">重置</button>
+                </div>
+              </div>
+
+              <div class="filter-status">已选择0个  重试</div>
+
+              <div class="table-card">
+                <div class="table-wrapper">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th class="checkbox-col"><input type="checkbox" id="selectAllOverseasAds" onclick="toggleSelectAllOverseasRows('selectAllOverseasAds','overseas-ad-checkbox')" /></th>
+                        <th>ID</th>
+                        <th>广告信息</th>
+                        <th>创意素材</th>
+                        <th>TikTok账号</th>
+                        <th>上传状态</th>
+                        <th>操作</th>
+                        <th>推广链接ID</th>
+                        <th>渠道号</th>
+                        <th>广告组信息</th>
+                        <th>推广系列信息</th>
+                        <th>账户信息</th>
+                        <th>任务信息</th>
+                        <th>投放短剧</th>
+                        <th>创建人</th>
+                        <th>创建时间</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><input type="checkbox" class="overseas-ad-checkbox" /></td>
+                        <td>19456</td>
+                        <td>
+                          <span class="link" onclick="showOverseasAdDetail(19456)">娜可#西班牙#225877_西班..</span>
+                          <div style="font-size: 11px; color: var(--color-text-tertiary);">ID:-</div>
+                        </td>
+                        <td><span class="tag tag-info">1 个素材</span></td>
+                        <td>Yoyo Contos</td>
+                        <td><span class="tag tag-warning">待上传</span></td>
+                        <td><button class="row-action-btn danger">刷新</button> <button class="row-action-btn">重试</button></td>
+                        <td>--</td>
+                        <td>MZDATUAAAC</td>
+                        <td>娜可#225877_西班牙这边_TT..<br /><span style="color:var(--color-text-tertiary);">ID:1873745963104514</span></td>
+                        <td>娜可广告瓶广告系列_使用商..<br /><span style="color:var(--color-text-tertiary);">ID:1873745963104514</span></td>
+                        <td>TT-MAD-IAA-二组-京服..<br /><span style="color:var(--color-text-tertiary);">ID:7648215203578101780</span></td>
+                        <td>复制: 复制: 复制: 复制..<br /><span style="color:var(--color-text-tertiary);">ID:293</span></td>
+                        <td>El general que nadie ..<br /><span style="color:var(--color-text-tertiary);">ID:208278491..</span></td>
+                        <td>碟可</td>
+                        <td>2026-08-14 08:30:01</td>
+                      </tr>
+                      <tr>
+                        <td><input type="checkbox" class="overseas-ad-checkbox" /></td>
+                        <td>19457</td>
+                        <td>
+                          <span class="link" onclick="showOverseasAdDetail(19457)">娜可#西班牙#225877_西班..</span>
+                          <div style="font-size: 11px; color: var(--color-text-tertiary);">ID:-</div>
+                        </td>
+                        <td><span class="tag tag-info">1 个素材</span></td>
+                        <td>Yoyo Contos</td>
+                        <td><span class="tag tag-success">上传成功</span></td>
+                        <td><button class="row-action-btn danger">刷新</button> <button class="row-action-btn">重试</button></td>
+                        <td>--</td>
+                        <td>MZDATUAAAC</td>
+                        <td>娜可#225877_西班牙这边_TT..<br /><span style="color:var(--color-text-tertiary);">ID:1873745963104514</span></td>
+                        <td>娜可广告瓶广告系列_使用商..<br /><span style="color:var(--color-text-tertiary);">ID:1873745963104514</span></td>
+                        <td>TT-MAD-IAA-二组-京服..<br /><span style="color:var(--color-text-tertiary);">ID:7648215203578101780</span></td>
+                        <td>复制: 复制: 复制: 复制..<br /><span style="color:var(--color-text-tertiary);">ID:293</span></td>
+                        <td>El general que nadie ..<br /><span style="color:var(--color-text-tertiary);">ID:208278491..</span></td>
+                        <td>碟可</td>
+                        <td>2026-08-14 08:30:01</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="pagination">
+                  <span class="pagination-info">共 84 条</span>
+                  <div class="pagination-pages">
+                    <button class="page-btn" onclick="changeOverseasPage('prev')">&lt;</button>
+                    <button class="page-btn active" onclick="changeOverseasPage(1)">1</button>
+                    <button class="page-btn" onclick="changeOverseasPage(2)">2</button>
+                    <button class="page-btn" onclick="changeOverseasPage(3)">3</button>
+                    <button class="page-btn" onclick="changeOverseasPage(4)">4</button>
+                    <button class="page-btn" onclick="changeOverseasPage(5)">5</button>
+                    <button class="page-btn" onclick="changeOverseasPage('next')">&gt;</button>
+                  </div>
+                  <select class="page-size-select">
+                    <option>20 条/页</option>
+                    <option>50 条/页</option>
+                  </select>
+                  <span>跳至</span>
+                  <input type="text" class="jump-input" value="1" />
+                  <span>页</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- New Task Drawer -->
+            <div id="drawer-overlay-overseas-new-task" class="drawer-overlay" onclick="closeOverseasNewTaskDrawer(event)"></div>
+            <div id="drawer-overseas-new-task" class="drawer">
+              <div class="drawer-header">
+                <h3 class="drawer-title">新建TikTok自动化任务</h3>
+                <button class="drawer-close" onclick="closeOverseasNewTaskDrawer()">×</button>
+              </div>
+              <div class="drawer-body">
+                <!-- 基本信息 -->
+                <div class="form-section">
+                  <h4 class="form-section-title">基本信息</h4>
+                  <div class="form-row">
+                    <div class="form-item">
+                      <label class="form-label"><span class="form-required">*</span> 任务名称</label>
+                      <input type="text" class="form-input" placeholder="请输入任务名称" />
+                    </div>
+                    <div class="form-item">
+                      <label class="form-label"><span class="form-required">*</span> 状态</label>
+                      <div class="segmented-control" id="new-task-status">
+                        <button type="button" class="segmented-item active" data-value="inactive">停用</button>
+                        <button type="button" class="segmented-item success" data-value="active">生效</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-item">
+                      <label class="form-label"><span class="form-required">*</span> 生效时间</label>
+                      <div class="filter-range" style="width: 100%; box-sizing: border-box;">
+                        <input type="text" value="00:00:00" />
+                        <span class="filter-range-tilde">-</span>
+                        <input type="text" value="23:59:59" />
+                        <button type="button" class="filter-range-pick">⏰</button>
+                      </div>
+                      <div><span class="form-link" onclick="addNewTaskTimeRange()">添加时间范围</span></div>
+                    </div>
+                    <div class="form-item">
+                      <label class="form-label"><span class="form-required">*</span> 执行频率</label>
+                      <div class="inline-field">
+                        <span>间隔</span>
+                        <input type="text" class="form-input" placeholder="执行频率" style="width: 120px;" />
+                        <span>分钟执行一次</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 短剧范围 -->
+                <div class="form-section">
+                  <h4 class="form-section-title">短剧范围</h4>
+                  <div class="form-row">
+                    <div class="form-item" style="flex: 0 0 160px; min-width: 140px;">
+                      <select class="form-select"><option>语言</option></select>
+                    </div>
+                    <div class="form-item" style="flex: 0 0 160px; min-width: 140px;">
+                      <select class="form-select"><option>包含</option></select>
+                    </div>
+                    <div class="form-item">
+                      <input type="text" class="form-input" placeholder="请选择" />
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <span class="form-link" onclick="addDramaRange()">添加短剧范围</span>
+                  </div>
+                </div>
+
+                <!-- 基建数量/单剧 -->
+                <div class="form-section">
+                  <h4 class="form-section-title">基建数量/单剧</h4>
+                  <div class="form-row">
+                    <div class="form-item form-item-inline">
+                      <label class="form-label"><span class="form-required">*</span> 基建次数/天</label>
+                      <div class="segmented-control" id="infra-times-day">
+                        <button type="button" class="segmented-item" data-value="unlimited">不限</button>
+                        <button type="button" class="segmented-item active" data-value="custom">自定义</button>
+                      </div>
+                      <input type="text" class="form-input" value="1" style="width: 80px;" />
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-item">
+                      <label class="form-label">基建总次数</label>
+                      <div class="inline-field">
+                        <input type="text" class="form-input" placeholder="请输入" />
+                      </div>
+                    </div>
+                    <div class="form-item">
+                      <label class="form-label">投放账户数</label>
+                      <div class="inline-field">
+                        <input type="text" class="form-input" placeholder="请输入" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-item">
+                      <label class="form-label">账户下推广系列数</label>
+                      <div class="inline-field">
+                        <input type="text" class="form-input" placeholder="请输入" />
+                      </div>
+                    </div>
+                    <div class="form-item">
+                      <label class="form-label">广告组下广告数</label>
+                      <div class="inline-field">
+                        <input type="text" class="form-input" placeholder="请输入" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-item">
+                      <label class="form-label">广告下素材数</label>
+                      <div class="inline-field">
+                        <input type="text" class="form-input" placeholder="请输入" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 素材配置/单剧 -->
+                <div class="form-section">
+                  <h4 class="form-section-title">素材配置/单剧</h4>
+                  <div class="form-row">
+                    <div class="form-item form-item-inline">
+                      <label class="form-label"><span class="form-required">*</span> 素材选择方式</label>
+                      <div class="segmented-control" id="material-select-mode">
+                        <button type="button" class="segmented-item active" data-value="time">按时间</button>
+                        <button type="button" class="segmented-item" data-value="sort">按排序</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-item">
+                      <label class="form-label"><span class="form-required">*</span> 素材创建时间</label>
+                      <div class="segmented-control" id="material-create-time">
+                        <button type="button" class="segmented-item" data-value="3h">3小时</button>
+                        <button type="button" class="segmented-item active" data-value="1d">1天</button>
+                        <button type="button" class="segmented-item" data-value="3d">3天</button>
+                        <button type="button" class="segmented-item" data-value="7d">7天</button>
+                        <button type="button" class="segmented-item" data-value="15d">15天</button>
+                        <button type="button" class="segmented-item" data-value="30d">30天</button>
+                        <button type="button" class="segmented-item" data-value="custom">自定义</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-item form-item-inline">
+                      <label class="form-label"><span class="form-required">*</span> 素材消耗</label>
+                      <div class="segmented-control" id="material-cost">
+                        <button type="button" class="segmented-item" data-value="unlimited">不限</button>
+                        <button type="button" class="segmented-item active" data-value="custom">自定义</button>
+                      </div>
+                      <select class="form-select" style="width: 100px;"><option>累计</option></select>
+                      <select class="form-select" style="width: 80px;"><option>>=</option></select>
+                      <input type="text" class="form-input" placeholder="请输入" style="width: 120px;" />
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-item form-item-inline">
+                      <label class="form-label">素材重复次数</label>
+                      <div class="segmented-control" id="material-repeat">
+                        <button type="button" class="segmented-item" data-value="unlimited">不限</button>
+                        <button type="button" class="segmented-item" data-value="custom">自定义</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-item form-item-inline">
+                      <label class="form-label">素材重复范围</label>
+                      <div class="segmented-control" id="material-repeat-scope">
+                        <button type="button" class="segmented-item" data-value="single">单个账户</button>
+                        <button type="button" class="segmented-item active" data-value="all">全部账户</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 投放账户 -->
+                <div class="form-section">
+                  <h4 class="form-section-title">投放账户</h4>
+                  <div class="form-row">
+                    <div class="form-item form-item-inline">
+                      <label class="form-label">账户包：</label>
+                      <button type="button" class="btn btn-outline btn-sm" onclick="selectAccountPackage()">选择账户包</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 投放配置 -->
+                <div class="form-section">
+                  <h4 class="form-section-title">投放配置</h4>
+                  <!-- 推广系列 -->
+                  <div class="form-sub-section">
+                    <div class="form-sub-section-title">推广系列</div>
+                    <div class="form-row">
+                      <div class="form-item">
+                        <label class="form-label">推广目标</label>
+                        <input type="text" class="form-input" value="TikTok 应用增长" readonly />
+                      </div>
+                      <div class="form-item">
+                        <label class="form-label">价值类型</label>
+                        <input type="text" class="form-input" value="广告收入价值" readonly />
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="form-item">
+                        <label class="form-label"><span class="form-required">*</span> 预算分配策略</label>
+                        <div class="segmented-control" id="budget-strategy">
+                          <button type="button" class="segmented-item active" data-value="campaign">推广系列预算</button>
+                          <button type="button" class="segmented-item" data-value="adgroup">广告组预算</button>
+                        </div>
+                      </div>
+                      <div class="form-item">
+                        <label class="form-label"><span class="form-required">*</span> 日预算</label>
+                        <input type="text" class="form-input" placeholder="请输入" />
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="form-item form-item-inline">
+                        <label class="form-label">使用商品库</label>
+                        <label class="toggle-switch">
+                          <input type="checkbox" />
+                          <span class="toggle-slider"></span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- 广告组 -->
+                  <div class="form-sub-section">
+                    <div class="form-sub-section-title">广告组</div>
+                    <div class="form-row">
+                      <div class="form-item">
+                        <label class="form-label"><span class="form-required">*</span> 竞价策略</label>
+                        <div class="segmented-control" id="bid-strategy">
+                          <button type="button" class="segmented-item active" data-value="roas">目标ROAS</button>
+                          <button type="button" class="segmented-item" data-value="highest">最高价值</button>
+                        </div>
+                      </div>
+                      <div class="form-item">
+                        <label class="form-label"><span class="form-required">*</span> 目标ROAS</label>
+                        <input type="text" class="form-input" placeholder="请输入" />
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="form-item">
+                        <label class="form-label">广告位</label>
+                        <div class="checkbox-group">
+                          <label class="checkbox-label"><input type="checkbox" checked /> 允许自然评论</label>
+                          <label class="checkbox-label"><input type="checkbox" checked /> 允许评论</label>
+                          <label class="checkbox-label"><input type="checkbox" checked /> 允许共享视频</label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="form-item">
+                        <label class="form-label"><span class="form-required">*</span> 定向包</label>
+                        <div class="inline-field">
+                          <button type="button" class="btn btn-outline btn-sm">定向包</button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="form-item">
+                        <label class="form-label"><span class="form-required">*</span> 小程序</label>
+                        <div class="inline-field" style="width: 100%;">
+                          <select class="form-select" style="flex: 1;"><option>请选择小程序</option></select>
+                          <select class="form-select" style="flex: 1;"><option>请先选择小程序</option></select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- 广告 -->
+                  <div class="form-sub-section">
+                    <div class="form-sub-section-title">广告</div>
+                    <div class="form-row">
+                      <div class="form-item">
+                        <label class="form-label"><span class="form-required">*</span> 投放身份</label>
+                        <input type="text" class="form-input" placeholder="请选择" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 排期 -->
+                <div class="form-section">
+                  <h4 class="form-section-title">排期</h4>
+                  <div class="form-row">
+                    <div class="form-item form-item-inline">
+                      <label class="form-label">开始时间</label>
+                      <div class="segmented-control" id="schedule-start">
+                        <button type="button" class="segmented-item active" data-value="now">现在</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-item form-item-inline">
+                      <label class="form-label"><span class="form-required">*</span> 投放时长</label>
+                      <div class="segmented-control" id="schedule-duration">
+                        <button type="button" class="segmented-item active" data-value="unlimited">不限</button>
+                        <button type="button" class="segmented-item" data-value="custom">自定义</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-item form-item-inline">
+                      <label class="form-label"><span class="form-required">*</span> 投放时段</label>
+                      <div class="segmented-control" id="schedule-period">
+                        <button type="button" class="segmented-item active" data-value="all">全天</button>
+                        <button type="button" class="segmented-item" data-value="custom">自定义</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="drawer-footer">
+                <button class="btn btn-outline btn-sm" onclick="closeOverseasNewTaskDrawer()">取消</button>
+                <button class="btn btn-primary btn-sm" onclick="submitOverseasNewTask()">确定</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      /* ===== 独立页面导航：本页停留 / 海外页面互跳 / 国内页面跳回 index ===== */
+      function showPage(pageName) {
+        if (pageName === 'overseas-auto-delivery') return;
+        if (pageName === 'overseas-batch-delivery') {
+          window.location.href = './overseas-batch-delivery.html';
+          return;
+        }
+        if (pageName === 'overseas-template') {
+          alert('页面开发中：模板管理');
+          return;
+        }
+        window.location.href = '../index.html#' + pageName;
+      }
+
+      /* ===== 左上角系统切换器 ===== */
+      function toggleSystemMenu(e) {
+        if (e) e.stopPropagation();
+        var menu = document.getElementById('systemSwitchMenu');
+        if (menu) menu.classList.toggle('open');
+      }
+
+      function switchSystem(system) {
+        try {
+          localStorage.setItem('delivery_system', system);
+        } catch (err) {}
+        if (system === 'overseas') {
+          window.location.href = './overseas-batch-delivery.html';
+        } else {
+          window.location.href = '../index.html';
+        }
+      }
+
+      document.addEventListener('click', function (e) {
+        var menu = document.getElementById('systemSwitchMenu');
+        if (!menu || !menu.classList.contains('open')) return;
+        if (menu.contains(e.target)) return;
+        if (e.target.closest && e.target.closest('.system-switch-trigger')) return;
+        menu.classList.remove('open');
+      });
+
+      /* 页面加载：按 localStorage 高亮当前系统 */
+      (function highlightCurrentSystem() {
+        var current = 'cn';
+        try {
+          current = localStorage.getItem('delivery_system') || 'cn';
+        } catch (err) {}
+        document.querySelectorAll('.system-switch-item').forEach(function (item) {
+          if (item.getAttribute('data-system') === current) {
+            item.classList.add('active');
+          } else {
+            item.classList.remove('active');
+          }
+        });
+      })();
+
+      /* ===== 侧边栏展开/收起 ===== */
+      function toggleNavExpand(item, caretSelector) {
+        item.classList.toggle('expanded');
+        var caret = item.querySelector(caretSelector);
+        if (caret) {
+          caret.textContent = item.classList.contains('expanded') ? '▼' : '▶';
+        }
+      }
+
+      document.querySelectorAll('.nav-item.has-children').forEach(function (item) {
+        item.addEventListener('click', function (e) {
+          e.stopPropagation();
+          toggleNavExpand(this, '.nav-item-caret');
+        });
+      });
+
+      /* ===== 子菜单项跳转 ===== */
+      document.querySelectorAll('.nav-child-item[data-page], .nav-item[data-page]').forEach(function (item) {
+        item.addEventListener('click', function () {
+          showPage(this.getAttribute('data-page'));
+        });
+      });
+
+      function resetOverseasFilters(tabKey) {
+        tabKey = tabKey || 'task';
+        var root = document.getElementById('overseas-auto-delivery-' + tabKey);
+        if (!root) {
+          root = document.getElementById('page-overseas-auto-delivery');
+        }
+        root.querySelectorAll('.filter-select').forEach(function (s) { s.selectedIndex = 0; });
+        root.querySelectorAll('.filter-input').forEach(function (i) { i.value = ''; });
+        root.querySelectorAll('.filter-range input').forEach(function (i) { i.value = ''; });
+        root.querySelectorAll('.filter-combo-select').forEach(function (s) { s.selectedIndex = 0; });
+        root.querySelectorAll('.filter-combo-input').forEach(function (i) { i.value = ''; });
+      }
+
+      function updateTaskSearchPlaceholder(select) {
+        var input = select.parentElement.querySelector('.filter-combo-input');
+        if (!input) return;
+        input.placeholder = select.value === 'id' ? '请输入任务ID' : '请输入任务名称';
+      }
+
+      function searchOverseasAutoDelivery(tabKey) {
+        tabKey = tabKey || 'task';
+        var labels = { task: '任务', account: '账户', campaign: '推广系列', adgroup: '广告组', ad: '广告' };
+        alert('查询海外自动化' + (labels[tabKey] || '任务'));
+      }
+
+      function toggleSelectAllOverseasTasks() {
+        var checked = document.getElementById('selectAllOverseasTasks').checked;
+        document
+          .querySelectorAll('#page-overseas-auto-delivery .overseas-task-checkbox')
+          .forEach(function (cb) { cb.checked = checked; });
+      }
+
+      function toggleSelectAllOverseasRows(masterId, childClass) {
+        var master = document.getElementById(masterId);
+        if (!master) return;
+        var checked = master.checked;
+        document
+          .querySelectorAll('#page-overseas-auto-delivery .' + childClass)
+          .forEach(function (cb) { cb.checked = checked; });
+      }
+
+      function openOverseasNewTaskModal(title) {
+        var overlay = document.getElementById('drawer-overlay-overseas-new-task');
+        var drawer = document.getElementById('drawer-overseas-new-task');
+        var titleEl = drawer ? drawer.querySelector('.drawer-title') : null;
+        if (titleEl) titleEl.textContent = title || '新建TikTok自动化任务';
+        if (overlay) overlay.classList.add('open');
+        if (drawer) drawer.classList.add('open');
+      }
+
+      function closeOverseasNewTaskDrawer(event) {
+        if (event && event.target !== document.getElementById('drawer-overlay-overseas-new-task')) return;
+        var overlay = document.getElementById('drawer-overlay-overseas-new-task');
+        var drawer = document.getElementById('drawer-overseas-new-task');
+        if (overlay) overlay.classList.remove('open');
+        if (drawer) drawer.classList.remove('open');
+      }
+
+      function submitOverseasNewTask() {
+        alert('新建海外任务已保存');
+        closeOverseasNewTaskDrawer();
+      }
+
+      /* ===== 抽屉内分段选择器交互 ===== */
+      document.querySelectorAll('#drawer-overseas-new-task .segmented-control').forEach(function (group) {
+        group.addEventListener('click', function (e) {
+          var btn = e.target.closest('.segmented-item');
+          if (!btn) return;
+          group.querySelectorAll('.segmented-item').forEach(function (item) { item.classList.remove('active'); });
+          btn.classList.add('active');
+        });
+      });
+
+      function addNewTaskTimeRange() {
+        alert('添加时间范围');
+      }
+
+      function addDramaRange() {
+        alert('添加短剧范围');
+      }
+
+      function selectAccountPackage() {
+        alert('选择账户包');
+      }
+
+      function showOverseasTaskDetail(id) {
+        alert('查看任务详情：' + id);
+      }
+
+      function editOverseasTask(id) {
+        openOverseasNewTaskModal('编辑TikTok自动化任务');
+      }
+
+      function copyOverseasTask(id) {
+        openOverseasNewTaskModal('复制TikTok自动化任务');
+      }
+
+      function showOverseasTaskLog(id) {
+        alert('查看任务日志：' + id);
+      }
+
+      function changeOverseasPage(page) {
+        if (page === 'prev') {
+          alert('上一页');
+        } else if (page === 'next') {
+          alert('下一页');
+        } else {
+          alert('跳转到第 ' + page + ' 页');
+        }
+      }
+
+      /* ===== 海外自动化任务页 ===== */
+      function switchOverseasTab(tabName) {
+        var tabIds = ['task', 'account', 'campaign', 'adgroup', 'ad'];
+        tabIds.forEach(function (id) {
+          document.getElementById('overseas-auto-delivery-' + id).style.display = 'none';
+        });
+        document.getElementById('overseas-auto-delivery-' + tabName).style.display = 'block';
+
+        document.querySelectorAll('#overseas-auto-delivery-tabs .tab').forEach(function (tab, index) {
+          if (tabIds[index] === tabName) {
+            tab.classList.add('active');
+          } else {
+            tab.classList.remove('active');
+          }
+        });
+      }
+
+      function switchOverseasTabFromHash() {
+        var hash = (window.location.hash || '').replace('#', '');
+        var valid = ['task', 'account', 'campaign', 'adgroup', 'ad'];
+        if (valid.indexOf(hash) >= 0) {
+          switchOverseasTab(hash);
+        }
+      }
+      window.addEventListener('hashchange', switchOverseasTabFromHash);
+      window.addEventListener('load', function () {
+        setTimeout(switchOverseasTabFromHash, 50);
+      });
+
+      /* ===== 各 Tab 行详情/操作占位函数 ===== */
+      function showOverseasAccountDetail(id) {
+        alert('查看账户详情：' + id);
+      }
+      function showOverseasCampaignDetail(id) {
+        alert('查看推广系列详情：' + id);
+      }
+      function showOverseasAdgroupDetail(id) {
+        alert('查看广告组详情：' + id);
+      }
+      function showOverseasAdDetail(id) {
+        alert('查看广告详情：' + id);
+      }
+
+      /* ===== 名称下钻：切换 Tab 并自动带入对应列表 ID 筛选项 ===== */
+      function setOverseasFilter(tabKey, filterType, optionText, value) {
+        var root = document.getElementById('overseas-auto-delivery-' + tabKey);
+        if (!root) return;
+        var combo = root.querySelector('[data-filter-type="' + filterType + '"]');
+        if (!combo) return;
+        var select = combo.querySelector('.filter-combo-select');
+        var input = combo.querySelector('.filter-combo-input');
+        if (select) select.value = optionText;
+        if (input) input.value = value;
+      }
+
+      function drillTaskToAccount(taskId) {
+        switchOverseasTab('account');
+        setOverseasFilter('account', 'task-name', '任务ID', taskId);
+      }
+
+      function drillAccountToCampaign(accountId) {
+        switchOverseasTab('campaign');
+        setOverseasFilter('campaign', 'account-name', '账户列表ID', accountId);
+      }
+
+      function drillCampaignToAdgroup(campaignId) {
+        switchOverseasTab('adgroup');
+        setOverseasFilter('adgroup', 'campaign-name', '推广系列列表ID', campaignId);
+      }
+
+      function drillAdgroupToAd(adgroupId) {
+        switchOverseasTab('ad');
+        setOverseasFilter('ad', 'adgroup-name', '广告组列表ID', adgroupId);
+      }
+      function overseasRowAction(action, id) {
+        alert(action + ': ' + id);
+      }
+    </script>
+  </body>
+</html>

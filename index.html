@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>短剧投放系统</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles/main.css" />
+  </head>
+  <body>
+    <div class="layout">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+          <div class="logo" style="padding: 16px 20px 12px;">
+          <div class="logo-icon">短</div>
+          <div class="logo-info">
+            <span class="logo-name">短剧投放系统</span>
+            <span class="system-switch-trigger" onclick="toggleSystemMenu(event)">切换系统 <span class="system-switch-caret">▾</span></span>
+          </div>
+          <div class="system-switch-menu" id="systemSwitchMenu">
+            <div class="system-switch-item active" data-system="cn" onclick="switchSystem('cn')">国内投放系统<span class="check">✓</span></div>
+            <div class="system-switch-item" data-system="overseas" onclick="switchSystem('overseas')">海外投放系统</div>
+          </div>
+        </div>
+        <nav class="nav">
+          <div class="nav-section">
+            <div class="nav-item" data-page="dashboard">
+              <span class="nav-item-icon">⊞</span>
+              <span>数据看板</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">⊟</span>
+              <span>项目管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">📊</span>
+              <span>数据统计</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">▶</span>
+              <span>短剧管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">▣</span>
+              <span>素材管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children expanded">
+              <span class="nav-item-icon">▦</span>
+              <span>批量投放</span>
+              <span class="nav-item-caret">▼</span>
+            </div>
+            <div class="nav-children">
+              <span class="nav-child-item active" data-page="auto-delivery">自动化任务</span>
+              <span class="nav-child-item" data-page="semi-auto-delivery">半自动投放</span>
+              <span class="nav-child-item" data-page="roi3-auto-delivery">Roi3自动投放</span>
+              <span class="nav-child-item" data-page="roi3-material-update">Roi3素材更新</span>
+              <span class="nav-child-item" data-page="template-manage">模板管理</span>
+              <span class="nav-child-item" data-page="subject-package">主体包</span>
+              <span class="nav-child-item" data-page="app-package">应用包</span>
+              <span class="nav-child-item" data-page="account-package">账户包</span>
+              <span class="nav-child-item" data-page="asset-management">资产管理</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">👤</span>
+              <span>账号管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children expanded">
+              <span class="nav-item-icon">◈</span>
+              <span>投放管理</span>
+              <span class="nav-item-caret">▼</span>
+            </div>
+            <div class="nav-children">
+              <span class="nav-child-item">巨量</span>
+              <span class="nav-child-item">账户监控</span>
+              <span class="nav-child-item">共享钱包余额</span>
+              <span class="nav-child-item">项目盯盘</span>
+              <span class="nav-child-item">全域项目盯盘</span>
+              <span class="nav-child-item">广告控损</span>
+              <span class="nav-child-item">基建管理</span>
+              <span class="nav-child-item">出价控损</span>
+              <span class="nav-child-item">掉排账户</span>
+              <span class="nav-child-item">低效账户</span>
+              <span class="nav-child-item">低效计划</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">🗂️</span>
+              <span>资产管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">💰</span>
+              <span>财务管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">🛡️</span>
+              <span>控损管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">⚙️</span>
+              <span>系统设置</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">🔗</span>
+              <span>关联绑定</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">🧠</span>
+              <span>算法管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+        </nav>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main">
+        <!-- Top Header -->
+        <header class="top-header">
+          <div class="top-header-left"></div>
+          <div class="top-header-right">
+            <div class="notification">
+              <span>消息</span>
+              <span class="notification-badge">88</span>
+            </div>
+            <div class="avatar">M</div>
+            <div class="user-info">
+              <span>短剧投放</span>
+            </div>
+            <button class="btn btn-outline btn-sm" onclick="alert('打开帮助文档')">帮助文档</button>
+          </div>
+        </header>
+
+        <!-- Content Pages -->
+        <div class="content">
+          <div id="page-dashboard" class="page">
+            <h2 class="page-title">我的看板</h2>
+            <div class="stats-grid" style="grid-template-columns: repeat(4, 1fr);">
+              <div class="stat-card">
+                <div class="stat-card-title">今日投放任务</div>
+                <div class="stat-card-value">128</div>
+                <div class="stat-card-change up">+12% 较昨日</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-title">生效任务</div>
+                <div class="stat-card-value">96</div>
+                <div class="stat-card-change up">+5% 较昨日</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-title">总消耗</div>
+                <div class="stat-card-value">¥28,500</div>
+                <div class="stat-card-change down">-3% 较昨日</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-title">ROI</div>
+                <div class="stat-card-value">1.08</div>
+                <div class="stat-card-change up">+0.05 较昨日</div>
+              </div>
+            </div>
+            <div class="table-card" style="padding: 40px; text-align: center; color: #999;">
+              看板详情图表 - 待后续截图补充
+            </div>
+          </div>
+
+          <!-- 自动投放任务 -->
+          <div id="page-auto-delivery" class="page">
+            <div class="breadcrumb">
+              <a href="#" onclick="showPage('dashboard')">首页</a>
+              <span class="breadcrumb-sep">/</span>
+              <span>批量投放</span>
+              <span class="breadcrumb-sep">/</span>
+              <span>自动化任务</span>
+            </div>
+
+            <div class="page-header">
+              <h2 class="page-title">自动化任务</h2>
+              <div class="page-header-right">
+                <a class="page-manual-link" href="#" onclick="alert('跳转至：自动化任务用户使用手册')">自动化任务用户使用手册</a>
+              </div>
+            </div>
+
+            <div class="tabs" id="auto-delivery-tabs">
+              <button class="tab active" onclick="switchAutoDeliveryTab('task')">任务</button>
+              <button class="tab" onclick="switchAutoDeliveryTab('account')">账户</button>
+              <button class="tab" onclick="switchAutoDeliveryTab('project')">项目</button>
+              <button class="tab" onclick="switchAutoDeliveryTab('unit')">单元</button>
+            </div>
+
+            <div id="auto-delivery-task" class="tab-content">
+              <div class="filter-bar">
+                <input type="text" class="filter-input" placeholder="请输入" />
+                <select class="filter-select">
+                  <option value="">请选择状态</option>
+                  <option value="active">生效</option>
+                  <option value="inactive">停用</option>
+                </select>
+                <select class="filter-select">
+                  <option value="">请选择竞价策略</option>
+                  <option value="max-convert">最大转化</option>
+                  <option value="stable-cost">稳定成本</option>
+                </select>
+                <select class="filter-select">
+                  <option value="">选择用户</option>
+                  <option value="huanxue">还音</option>
+                </select>
+                <select class="filter-select">
+                  <option value="">选择业务场景</option>
+                  <option value="fufei">崛原生免费</option>
+                </select>
+                <div class="filter-actions">
+                  <button class="btn btn-info btn-sm" onclick="searchAutoDelivery()">查询</button>
+                  <button class="btn btn-outline btn-sm" onclick="resetAutoDeliveryFilters()">重置</button>
+                  <button class="btn btn-primary btn-sm" onclick="openNewTaskModal()">新建任务</button>
+                </div>
+              </div>
+
+              <div class="filter-status">已选择0个任务 任务状态</div>
+
+              <div class="table-card">
+                <div class="table-wrapper">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th class="checkbox-col"><input type="checkbox" id="selectAllTasks" onclick="toggleSelectAllTasks()" /></th>
+                        <th>ID</th>
+                        <th>名称</th>
+                        <th>状态</th>
+                        <th>间隔(分钟)</th>
+                        <th>竞价策略</th>
+                        <th>ROI系数</th>
+                        <th>日预算</th>
+                        <th>出价</th>
+                        <th>业务场景</th>
+                        <th>上次执行完成时间</th>
+                        <th>创建人</th>
+                        <th>更新人</th>
+                        <th>更新时间</th>
+                        <th>操作</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><input type="checkbox" class="task-checkbox" /></td>
+                        <td>15530</td>
+                        <td><span class="link" onclick="showTaskDetail(15530)">任务二：番茄漫画激活活跃用户</span></td>
+                        <td><span class="tag tag-success">生效</span></td>
+                        <td>10</td>
+                        <td>最大转化</td>
+                        <td>--</td>
+                        <td>100</td>
+                        <td>--</td>
+                        <td>崛原生免费</td>
+                        <td>--</td>
+                        <td>还音</td>
+                        <td>还音</td>
+                        <td>2026-08-19 22:20:34</td>
+                        <td>
+                          <div class="row-actions">
+                            <button class="row-action-btn" onclick="editTask(15530)">编辑</button>
+                            <button class="row-action-btn" onclick="copyTask(15530)">复制</button>
+                            <button class="row-action-btn" onclick="showTaskLog(15530)">日志</button>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td><input type="checkbox" class="task-checkbox" /></td>
+                        <td>15523</td>
+                        <td><span class="link" onclick="showTaskDetail(15523)">任务十二：番茄漫画完璧归赵召回</span></td>
+                        <td><span class="tag tag-error">停用</span></td>
+                        <td>10</td>
+                        <td>稳定成本</td>
+                        <td>1.03</td>
+                        <td>3000</td>
+                        <td>--</td>
+                        <td>崛原生免费</td>
+                        <td>2026-08-19 16:39:34</td>
+                        <td>还音</td>
+                        <td>还音</td>
+                        <td>2026-08-19 16:48:59</td>
+                        <td>
+                          <div class="row-actions">
+                            <button class="row-action-btn" onclick="editTask(15523)">编辑</button>
+                            <button class="row-action-btn" onclick="copyTask(15523)">复制</button>
+                            <button class="row-action-btn" onclick="showTaskLog(15523)">日志</button>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="pagination">
+                  <span class="pagination-info">共 15530 条</span>
+                  <div class="pagination-pages">
+                    <button class="page-btn" onclick="changePage('prev')">&lt;</button>
+                    <button class="page-btn active" onclick="changePage(1)">1</button>
+                    <button class="page-btn" onclick="changePage(2)">2</button>
+                    <button class="page-btn" onclick="changePage(3)">3</button>
+                    <button class="page-btn" onclick="changePage(4)">4</button>
+                    <button class="page-btn" onclick="changePage(5)">5</button>
+                    <span>...</span>
+                    <button class="page-btn" onclick="changePage(777)">777</button>
+                    <button class="page-btn" onclick="changePage('next')">&gt;</button>
+                  </div>
+                  <select class="page-size-select">
+                    <option value="20">20 条/页</option>
+                    <option value="50">50 条/页</option>
+                    <option value="100">100 条/页</option>
+                  </select>
+                  <span>跳至</span>
+                  <input type="text" class="jump-input" value="1" />
+                  <span>页</span>
+                </div>
+              </div>
+            </div>
+
+            <div id="auto-delivery-account" class="tab-content" style="display: none;">
+              <div class="table-card" style="padding: 40px; text-align: center; color: #999;">账户列表 - 待后续截图补充</div>
+            </div>
+            <div id="auto-delivery-project" class="tab-content" style="display: none;">
+              <div class="table-card" style="padding: 40px; text-align: center; color: #999;">项目列表 - 待后续截图补充</div>
+            </div>
+            <div id="auto-delivery-unit" class="tab-content" style="display: none;">
+              <div class="table-card" style="padding: 40px; text-align: center; color: #999;">单元列表 - 待后续截图补充</div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- New Task Modal -->
+    <div
+      id="modal-new-task"
+      style="
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+      "
+      onclick="closeNewTaskModal(event)"
+    >
+      <div
+        style="
+          background: white;
+          border-radius: 16px;
+          width: 560px;
+          max-width: 90vw;
+          max-height: 85vh;
+          overflow: hidden;
+          box-shadow: 0 25px 80px rgba(0, 0, 0, 0.35);
+        "
+        onclick="event.stopPropagation()"
+      >
+        <div
+          style="
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f9fafb;
+          "
+        >
+          <h3 style="margin: 0; font-size: 18px; font-weight: 600; color: #111827;">新建自动化任务</h3>
+          <button
+            onclick="closeNewTaskModal()"
+            style="
+              border: none;
+              background: none;
+              font-size: 24px;
+              color: #6b7280;
+              cursor: pointer;
+              padding: 4px;
+              line-height: 1;
+            "
+          >
+            ×
+          </button>
+        </div>
+        <div style="padding: 24px; overflow-y: auto; max-height: calc(85vh - 140px);">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div>
+              <label style="display: block; font-size: 14px; font-weight: 500; margin-bottom: 8px; color: #374151;">
+                任务名称 <span style="color: #ef4444;">*</span>
+              </label>
+              <input type="text" placeholder="请输入任务名称" style="width: 100%; padding: 10px 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 14px; box-sizing: border-box;" />
+            </div>
+            <div>
+              <label style="display: block; font-size: 14px; font-weight: 500; margin-bottom: 8px; color: #374151;">
+                业务场景 <span style="color: #ef4444;">*</span>
+              </label>
+              <select style="width: 100%; padding: 10px 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 14px; background: white; box-sizing: border-box;">
+                <option>请选择业务场景</option>
+                <option>崛原生免费</option>
+              </select>
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 16px;">
+            <div>
+              <label style="display: block; font-size: 14px; font-weight: 500; margin-bottom: 8px; color: #374151;">
+                报价策略 <span style="color: #ef4444;">*</span>
+              </label>
+              <select style="width: 100%; padding: 10px 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 14px; background: white; box-sizing: border-box;">
+                <option>请选择报价策略</option>
+                <option>最大转化</option>
+                <option>稳定成本</option>
+              </select>
+            </div>
+            <div>
+              <label style="display: block; font-size: 14px; font-weight: 500; margin-bottom: 8px; color: #374151;">ROI 系数</label>
+              <input type="number" placeholder="请输入 ROI 系数" style="width: 100%; padding: 10px 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 14px; box-sizing: border-box;" />
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 16px;">
+            <div>
+              <label style="display: block; font-size: 14px; font-weight: 500; margin-bottom: 8px; color: #374151;">日预算</label>
+              <input type="number" placeholder="请输入日预算" style="width: 100%; padding: 10px 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 14px; box-sizing: border-box;" />
+            </div>
+            <div>
+              <label style="display: block; font-size: 14px; font-weight: 500; margin-bottom: 8px; color: #374151;">执行间隔（分钟）</label>
+              <input type="number" value="10" placeholder="请输入执行间隔" style="width: 100%; padding: 10px 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 14px; box-sizing: border-box;" />
+            </div>
+          </div>
+          <div style="margin-top: 16px;">
+            <label style="display: block; font-size: 14px; font-weight: 500; margin-bottom: 8px; color: #374151;">备注</label>
+            <textarea rows="3" placeholder="请输入备注" style="width: 100%; padding: 10px 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 14px; resize: none; box-sizing: border-box;"></textarea>
+          </div>
+        </div>
+        <div style="padding: 16px 24px; border-top: 1px solid #e5e7eb; display: flex; justify-content: flex-end; gap: 12px; background: #f9fafb;">
+          <button onclick="closeNewTaskModal()" class="btn btn-outline" style="padding: 10px 24px; border-radius: 50px; font-size: 14px;">取消</button>
+          <button onclick="submitNewTask()" class="btn btn-primary" style="padding: 10px 24px; border-radius: 50px; font-size: 14px;">保存</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="scripts/main.js"></script>
+    <script>
+      /* ===== 子菜单与二级分组展开/收起 ===== */
+      function toggleNavExpand(item, caretSelector) {
+        item.classList.toggle('expanded');
+        var caret = item.querySelector(caretSelector);
+        if (caret) {
+          caret.textContent = item.classList.contains('expanded') ? '▼' : '▶';
+        }
+      }
+
+      document.querySelectorAll('.nav-child-item.has-children').forEach(function (item) {
+        item.addEventListener('click', function (e) {
+          e.stopPropagation();
+          toggleNavExpand(this, '.nav-child-caret');
+        });
+      });
+
+      document.querySelectorAll('.nav-child-item[data-page]').forEach(function (item) {
+        item.addEventListener('click', function () {
+          showPage(this.getAttribute('data-page'));
+        });
+      });
+
+      /* ===== 自动投放任务页 ===== */
+      function switchAutoDeliveryTab(tabName) {
+        ['task', 'account', 'project', 'unit'].forEach(function (name) {
+          document.getElementById('auto-delivery-' + name).style.display = 'none';
+        });
+        document.getElementById('auto-delivery-' + tabName).style.display = 'block';
+        document.querySelectorAll('#auto-delivery-tabs .tab').forEach(function (tab, index) {
+          var names = ['task', 'account', 'project', 'unit'];
+          if (names[index] === tabName) {
+            tab.classList.add('active');
+          } else {
+            tab.classList.remove('active');
+          }
+        });
+      }
+
+      function resetAutoDeliveryFilters() {
+        document.querySelectorAll('#page-auto-delivery .filter-select').forEach(function (s) { s.selectedIndex = 0; });
+        document.querySelectorAll('#page-auto-delivery .filter-input').forEach(function (i) { i.value = ''; });
+      }
+
+      function searchAutoDelivery() {
+        alert('查询自动投放任务');
+      }
+
+      function toggleSelectAllTasks() {
+        var checked = document.getElementById('selectAllTasks').checked;
+        document.querySelectorAll('#page-auto-delivery .task-checkbox').forEach(function (cb) { cb.checked = checked; });
+      }
+
+      function openNewTaskModal() {
+        document.getElementById('modal-new-task').style.display = 'flex';
+      }
+
+      function closeNewTaskModal(event) {
+        if (!event || event.target === document.getElementById('modal-new-task')) {
+          document.getElementById('modal-new-task').style.display = 'none';
+        }
+      }
+
+      function submitNewTask() {
+        alert('新建任务已保存');
+        closeNewTaskModal();
+      }
+
+      function showTaskDetail(id) {
+        alert('查看任务详情：' + id);
+      }
+
+      function editTask(id) {
+        alert('编辑任务：' + id);
+      }
+
+      function copyTask(id) {
+        alert('复制任务：' + id);
+      }
+
+      function showTaskLog(id) {
+        alert('查看任务日志：' + id);
+      }
+
+      function changePage(page) {
+        if (page === 'prev') {
+          alert('上一页');
+        } else if (page === 'next') {
+          alert('下一页');
+        } else {
+          alert('跳转到第 ' + page + ' 页');
+        }
+      }
+    </script>
+  </body>
+</html>

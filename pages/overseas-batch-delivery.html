@@ -1,0 +1,1555 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>批量投放 - 海外投放系统</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../styles/main.css" />
+  </head>
+  <body>
+    <div class="layout">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="logo" style="padding: 16px 20px 12px;">
+          <div class="logo-icon">海</div>
+          <div class="logo-info">
+            <span class="logo-name">海外投放系统</span>
+            <span class="system-switch-trigger" onclick="toggleSystemMenu(event)">切换系统 <span class="system-switch-caret">▾</span></span>
+          </div>
+          <div class="system-switch-menu" id="systemSwitchMenu">
+            <div class="system-switch-item" data-system="cn" onclick="switchSystem('cn')">国内投放系统</div>
+            <div class="system-switch-item active" data-system="overseas" onclick="switchSystem('overseas')">海外投放系统<span class="check">✓</span></div>
+          </div>
+        </div>
+        <nav class="nav">
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">⊟</span>
+              <span>项目管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">📊</span>
+              <span>数据统计</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">▶</span>
+              <span>短剧管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">▣</span>
+              <span>素材管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children expanded">
+              <span class="nav-item-icon">▦</span>
+              <span>批量投放</span>
+              <span class="nav-item-caret">▼</span>
+            </div>
+            <div class="nav-children">
+              <span class="nav-child-item active" data-page="overseas-batch-delivery">批量投放</span>
+              <span class="nav-child-item" data-page="overseas-auto-delivery">自动化任务</span>
+              <span class="nav-child-item" data-page="overseas-template">模板管理</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">👤</span>
+              <span>账号管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">🗂️</span>
+              <span>资产管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">🛡️</span>
+              <span>控损管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">⚙️</span>
+              <span>系统设置</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">🔗</span>
+              <span>关联绑定</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+        </nav>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main">
+        <!-- Top Header -->
+        <header class="top-header">
+          <div class="top-header-left"></div>
+          <div class="top-header-right">
+            <div class="notification">
+              <span>消息</span>
+              <span class="notification-badge">88</span>
+            </div>
+            <div class="avatar">M</div>
+            <div class="user-info">
+              <span>UTC+8</span>
+            </div>
+            <button class="btn btn-outline btn-sm" onclick="alert('打开帮助指南')">帮助指南</button>
+          </div>
+        </header>
+
+        <!-- Content -->
+        <div class="content">
+          <div id="page-overseas-batch-delivery" class="page active">
+            <!-- Breadcrumb -->
+            <div class="breadcrumb">
+              <a href="#" onclick="showPage('dashboard')">首页</a>
+              <span class="breadcrumb-sep">/</span>
+              <span>批量投放</span>
+              <span class="breadcrumb-sep">/</span>
+              <span>批量投放</span>
+            </div>
+
+            <!-- Page Title -->
+            <div class="page-header">
+              <h2 class="page-title">批量投放</h2>
+            </div>
+
+            <!-- Filter Bar -->
+            <div class="filter-bar">
+              <div class="filter-range">
+                <span class="filter-range-label">创建时间</span>
+                <input type="text" placeholder="开始时间" />
+                <span class="filter-range-tilde">-</span>
+                <input type="text" placeholder="结束时间" />
+                <button type="button" class="filter-range-pick" title="选择日期">📅</button>
+                <button type="button" class="filter-range-pick" title="按月选择">月</button>
+              </div>
+              <div class="filter-combo">
+                <select class="filter-combo-select" onchange="updateFilterComboPlaceholder(this)">
+                  <option value="name">任务名称</option>
+                  <option value="id">任务ID</option>
+                </select>
+                <input type="text" class="filter-combo-input" placeholder="请输入" />
+              </div>
+              <div class="filter-combo">
+                <select class="filter-combo-select" onchange="updateFilterComboPlaceholder(this)">
+                  <option value="name">账户名称</option>
+                  <option value="id">账户ID</option>
+                </select>
+                <input type="text" class="filter-combo-input" placeholder="请输入" />
+              </div>
+              <div class="filter-combo">
+                <select class="filter-combo-select">
+                  <option>剧本名称</option>
+                </select>
+                <input type="text" class="filter-combo-input" placeholder="请输入" />
+              </div>
+              <div class="filter-combo">
+                <select class="filter-combo-select">
+                  <option>短剧名称</option>
+                </select>
+                <input type="text" class="filter-combo-input" placeholder="请输入" />
+              </div>
+              <select class="filter-select">
+                <option value="">请选择语言</option>
+                <option value="pt">葡萄牙语</option>
+                <option value="es">西班牙语</option>
+                <option value="en">英语</option>
+              </select>
+              <select class="filter-select">
+                <option value="">请选择版权方</option>
+              </select>
+              <select class="filter-select">
+                <option value="">请选择小程序</option>
+              </select>
+              <select class="filter-select">
+                <option value="">请选择创建人</option>
+              </select>
+              <div class="filter-actions">
+                <button class="btn btn-info btn-sm" onclick="searchBatchDelivery()">查询</button>
+                <button class="btn btn-outline btn-sm" onclick="resetBatchDeliveryFilters()">重置</button>
+                <button class="btn btn-primary btn-sm" onclick="openNewBatchDeliveryModal()">批量添加</button>
+              </div>
+            </div>
+
+            <!-- Selected count + Retry -->
+            <div class="filter-status-bar">
+              <span>已选择 <strong id="batchSelectedCount" style="color: var(--color-info);">2</strong> 个</span>
+              <button class="retry-link" onclick="handleBatchRetry(event)">重试</button>
+            </div>
+
+            <!-- Data Table -->
+            <div class="table-card">
+              <div class="table-wrapper">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th class="checkbox-col"><input type="checkbox" id="selectAllBatchTasks" onclick="toggleSelectAllBatchTasks()" /></th>
+                      <th>ID</th>
+                      <th>任务名称</th>
+                      <th>投放短剧</th>
+                      <th>语言</th>
+                      <th>小程序</th>
+                      <th>账户数</th>
+                      <th>推广系列数</th>
+                      <th>广告组数</th>
+                      <th>广告数</th>
+                      <th>操作</th>
+                      <th>定时时间</th>
+                      <th>剧本名称</th>
+                      <th>版权方</th>
+                      <th>创建人</th>
+                      <th>创建时间</th>
+                      <th>操作</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><input type="checkbox" class="batch-task-checkbox" checked /></td>
+                      <td>25</td>
+                      <td><span class="link" onclick="showBatchTaskDetail(25)">任务1</span></td>
+                      <td>
+                        <span class="link" onclick="showRuleDetail('A Yingango Cos..')">A Yingango Cos..</span>
+                        <div style="font-size: 11px; color: var(--color-text-tertiary);">ID: 20747</div>
+                      </td>
+                      <td>葡萄牙语</td>
+                      <td><span style="color: var(--color-text-tertiary);">-</span></td>
+                      <td>50</td>
+                      <td>
+                        <div class="stat-stack">
+                          <span class="stat-total">50</span>
+                          <span class="stat-row">
+                            <span class="stat-row-empty">成功: 0</span>
+                            <span class="stat-fail-text">失败: 40</span>
+                          </span>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="stat-stack">
+                          <span class="stat-total">50</span>
+                          <span class="stat-row">
+                            <span class="stat-row-empty">成功: 0</span>
+                            <span class="stat-fail-text">失败: 40</span>
+                          </span>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="stat-stack">
+                          <span class="stat-total">50</span>
+                          <span class="stat-row">
+                            <span class="stat-row-empty">成功: 0</span>
+                            <span class="stat-row-empty">失败: 0</span>
+                          </span>
+                        </div>
+                      </td>
+                      <td>
+                        <button class="inline-link" onclick="refreshBatchTask(25)">刷新</button>
+                        <button class="inline-link" onclick="handleBatchRetry(event, 25)">重试</button>
+                      </td>
+                      <td><span style="color: var(--color-text-tertiary);">-</span></td>
+                      <td>
+                        <span class="link" onclick="showScriptDetail('雷隆太子的地..')">雷隆太子的地..</span>
+                        <div style="font-size: 11px; color: var(--color-text-tertiary);">ID: BA4019</div>
+                      </td>
+                      <td><span style="color: var(--color-text-tertiary);">-</span></td>
+                      <td><span style="color: var(--color-text-tertiary);">-</span></td>
+                      <td>2026-08-20 09:30</td>
+                      <td><button class="inline-link" onclick="copyBatchTask(25)">复制</button></td>
+                    </tr>
+
+                    <tr>
+                      <td><input type="checkbox" class="batch-task-checkbox" checked /></td>
+                      <td>24</td>
+                      <td><span class="link" onclick="showBatchTaskDetail(24)">任务2</span></td>
+                      <td><span style="color: var(--color-text-tertiary);">-</span></td>
+                      <td><span style="color: var(--color-text-tertiary);">-</span></td>
+                      <td><span style="color: var(--color-text-tertiary);">-</span></td>
+                      <td><span style="color: var(--color-text-tertiary);">-</span></td>
+                      <td>
+                        <div class="stat-stack">
+                          <span class="stat-total">50</span>
+                          <span class="stat-row">
+                            <span class="stat-success-text">成功: 46</span>
+                            <span class="stat-row-empty">失败: 0</span>
+                          </span>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="stat-stack">
+                          <span class="stat-total">50</span>
+                          <span class="stat-row">
+                            <span class="stat-row-empty">成功: 0</span>
+                            <span class="stat-fail-text">失败: 40</span>
+                          </span>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="stat-stack">
+                          <span class="stat-total">50</span>
+                          <span class="stat-row">
+                            <span class="stat-row-empty">成功: 0</span>
+                            <span class="stat-row-empty">失败: 0</span>
+                          </span>
+                        </div>
+                      </td>
+                      <td>
+                        <button class="inline-link" onclick="refreshBatchTask(24)">刷新</button>
+                        <button class="inline-link" onclick="handleBatchRetry(event, 24)">重试</button>
+                      </td>
+                      <td><span style="color: var(--color-text-tertiary);">-</span></td>
+                      <td><span style="color: var(--color-text-tertiary);">-</span></td>
+                      <td><span style="color: var(--color-text-tertiary);">-</span></td>
+                      <td><span style="color: var(--color-text-tertiary);">-</span></td>
+                      <td>2026-08-19 14:12</td>
+                      <td><button class="inline-link" onclick="copyBatchTask(24)">复制</button></td>
+                    </tr>
+
+                    <tr>
+                      <td><input type="checkbox" class="batch-task-checkbox" /></td>
+                      <td>23</td>
+                      <td><span class="link" onclick="showBatchTaskDetail(23)">任务3</span></td>
+                      <td><span style="color: var(--color-text-tertiary);">-</span></td>
+                      <td><span style="color: var(--color-text-tertiary);">-</span></td>
+                      <td><span style="color: var(--color-text-tertiary);">-</span></td>
+                      <td><span style="color: var(--color-text-tertiary);">-</span></td>
+                      <td><span style="color: var(--color-text-tertiary);">-</span></td>
+                      <td>
+                        <div class="stat-stack">
+                          <span class="stat-total">50</span>
+                          <span class="stat-row">
+                            <span class="stat-row-empty">成功: 0</span>
+                            <span class="stat-row-empty">失败: 0</span>
+                          </span>
+                        </div>
+                      </td>
+                      <td>35</td>
+                      <td>
+                        <button class="inline-link" onclick="refreshBatchTask(23)">刷新</button>
+                        <button class="inline-link" onclick="handleBatchRetry(event, 23)">重试</button>
+                      </td>
+                      <td><span style="color: var(--color-text-tertiary);">-</span></td>
+                      <td><span style="color: var(--color-text-tertiary);">-</span></td>
+                      <td><span style="color: var(--color-text-tertiary);">-</span></td>
+                      <td><span style="color: var(--color-text-tertiary);">-</span></td>
+                      <td>2026-08-18 10:05</td>
+                      <td><button class="inline-link" onclick="copyBatchTask(23)">复制</button></td>
+                    </tr>
+
+                    <tr>
+                      <td><input type="checkbox" class="batch-task-checkbox" /></td>
+                      <td>22</td>
+                      <td><span class="link" onclick="showBatchTaskDetail(22)">任务4</span></td>
+                      <td><span style="color: var(--color-text-tertiary);">-</span></td>
+                      <td><span style="color: var(--color-text-tertiary);">-</span></td>
+                      <td><span style="color: var(--color-text-tertiary);">-</span></td>
+                      <td><span style="color: var(--color-text-tertiary);">-</span></td>
+                      <td>
+                        <div class="stat-stack">
+                          <span class="stat-total">50</span>
+                          <span class="stat-row">
+                            <span class="stat-row-empty">成功: 0</span>
+                            <span class="stat-row-empty">失败: 0</span>
+                          </span>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="stat-stack">
+                          <span class="stat-total">50</span>
+                          <span class="stat-row">
+                            <span class="stat-row-empty">成功: 0</span>
+                            <span class="stat-row-empty">失败: 0</span>
+                          </span>
+                        </div>
+                      </td>
+                      <td><span style="color: var(--color-text-tertiary);">-</span></td>
+                      <td>
+                        <button class="inline-link" onclick="refreshBatchTask(22)">刷新</button>
+                        <button class="inline-link" onclick="handleBatchRetry(event, 22)">重试</button>
+                      </td>
+                      <td><span style="color: var(--color-text-tertiary);">-</span></td>
+                      <td><span style="color: var(--color-text-tertiary);">-</span></td>
+                      <td><span style="color: var(--color-text-tertiary);">-</span></td>
+                      <td><span style="color: var(--color-text-tertiary);">-</span></td>
+                      <td>2026-08-17 16:48</td>
+                      <td><button class="inline-link" onclick="copyBatchTask(22)">复制</button></td>
+                    </tr>
+
+                    <tr>
+                      <td><input type="checkbox" class="batch-task-checkbox" /></td>
+                      <td>21</td>
+                      <td><span class="link" onclick="showBatchTaskDetail(21)">任务5</span></td>
+                      <td><span style="color: var(--color-text-tertiary);">-</span></td>
+                      <td><span style="color: var(--color-text-tertiary);">-</span></td>
+                      <td><span style="color: var(--color-text-tertiary);">-</span></td>
+                      <td><span style="color: var(--color-text-tertiary);">-</span></td>
+                      <td><span style="color: var(--color-text-tertiary);">-</span></td>
+                      <td>
+                        <div class="stat-stack">
+                          <span class="stat-total">50</span>
+                          <span class="stat-row">
+                            <span class="stat-row-empty">成功: 0</span>
+                            <span class="stat-row-empty">失败: 0</span>
+                          </span>
+                        </div>
+                      </td>
+                      <td>35</td>
+                      <td>
+                        <button class="inline-link" onclick="refreshBatchTask(21)">刷新</button>
+                        <button class="inline-link" onclick="handleBatchRetry(event, 21)">重试</button>
+                      </td>
+                      <td><span style="color: var(--color-text-tertiary);">-</span></td>
+                      <td><span style="color: var(--color-text-tertiary);">-</span></td>
+                      <td><span style="color: var(--color-text-tertiary);">-</span></td>
+                      <td><span style="color: var(--color-text-tertiary);">-</span></td>
+                      <td>2026-08-16 11:32</td>
+                      <td><button class="inline-link" onclick="copyBatchTask(21)">复制</button></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Pagination -->
+              <div class="pagination">
+                <div class="pagination-info">共 <strong>13</strong> 条</div>
+                <select class="page-size-select">
+                  <option>10 条/页</option>
+                  <option>20 条/页</option>
+                  <option>50 条/页</option>
+                </select>
+                <div class="pagination-pages">
+                  <button class="page-btn">‹</button>
+                  <button class="page-btn active">1</button>
+                  <button class="page-btn">2</button>
+                  <button class="page-btn">›</button>
+                </div>
+                <span style="color: var(--color-text-tertiary);">前往</span>
+                <input type="text" class="jump-input" value="1" />
+                <span style="color: var(--color-text-tertiary);">页</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+
+    <!-- 配置区弹框 -->
+    <div id="batch-config-overlay" class="config-modal-overlay" onclick="closeBatchConfigModal()"></div>
+    <div id="batch-config-modal" class="config-modal">
+      <div class="config-modal-card">
+        <div class="config-modal-header">
+          <span>配置区</span>
+          <button class="config-modal-close" onclick="closeBatchConfigModal()">×</button>
+        </div>
+        <div class="config-modal-body">
+          <!-- 6 面板（3列×2行） -->
+          <div class="config-panels">
+            <!-- 账号 -->
+            <div class="config-panel">
+              <div class="config-panel-header">
+                <span>账号</span>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                  <span class="config-action" onclick="openAccountSelectModal()">新增</span>
+                  <span class="config-action" onclick="alert('清空账号')">清空</span>
+                </div>
+              </div>
+              <div class="config-panel-body">
+                <ul class="config-account-list">
+                  <li>WingShort-IAA-US-015654-MY-融眸-SIND-TT(76…</li>
+                  <li>WingShort-IAA-US-022285-MY-融眸-SIND-TT(76…</li>
+                  <li>WingShort-IAA-US-031723-MY-融眸-SIND-TT(76…</li>
+                  <li>WingShort-IAA-US-031755-MY-融眸-SIND-TT(76…</li>
+                  <li>WingShort-IAA-US-033730-MY-融眸-SIND-TT(76…</li>
+                  <li>WingShort-IAA-US-060457-MY-融眸-SIND-TT(76…</li>
+                  <li>WingShort-IAA-US-000991-MY-融眸-SIND-TT(76…</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- 计划基本信息 -->
+            <div class="config-panel">
+              <div class="config-panel-header">
+                <span>计划基本信息</span>
+                <span class="config-action" onclick="openPlanInfoDrawer()">编辑</span>
+              </div>
+              <div class="config-panel-body">
+                <div class="config-row"><span class="config-key">广告目标：</span><span class="config-value">应用推广</span></div>
+                <div class="config-row"><span class="config-key">常规链接模板：</span><span class="config-value">Py_LA001257-WingShort-实验1</span></div>
+                <div class="config-row"><span class="config-key">广告系列名称：</span><span class="config-value">Py_LA001257-WingShort-实验1</span></div>
+                <div class="config-row"><span class="config-key">广告系列类型：</span><span class="config-value">应用</span></div>
+                <div class="config-row"><span class="config-key">Smart+ 推广系列：</span><span class="config-value">2.0</span></div>
+                <div class="config-row"><span class="config-key">商品数据集：</span><span class="config-value">关闭</span></div>
+                <div class="config-row"><span class="config-key">广告系列状态：</span><span class="config-value">开启</span></div>
+                <div class="config-row"><span class="config-key">启用现有广告模式：</span><span class="config-value">开启</span></div>
+                <div class="config-row"><span class="config-key">推广系列类型：</span><span class="config-value">TikTok Minis</span></div>
+                <div class="config-row"><span class="config-key">推广系列预算优化：</span><span class="config-value">开启</span></div>
+              </div>
+            </div>
+
+            <!-- 广告组 -->
+            <div class="config-panel">
+              <div class="config-panel-header">
+                <span>广告组</span>
+                <span class="config-action" onclick="openAdGroupDrawer()">编辑</span>
+              </div>
+              <div class="config-panel-body">
+                <div class="config-row"><span class="config-key">广告组名称：</span><span class="config-value">Py_LA001257-WingShort-实验1</span></div>
+                <div class="config-row"><span class="config-key">广告组昵称：</span><span class="config-value">开启</span></div>
+                <div class="config-row"><span class="config-key">优化目标：</span><span class="config-value">价值</span></div>
+                <div class="config-row"><span class="config-key">目标ROAS：</span><span class="config-value">1.13</span></div>
+                <div class="config-row"><span class="config-key">计费方式：</span><span class="config-value">展示(oCPM)</span></div>
+                <div class="config-row"><span class="config-key">竞价策略：</span><span class="config-value">最大投放量</span></div>
+                <div class="config-row"><span class="config-key">起量速度：</span><span class="config-value">标准</span></div>
+                <div class="config-row"><span class="config-key">预算：</span><span class="config-value">持续驱动广告组</span></div>
+                <div class="config-row"><span class="config-key">开始时间：</span><span class="config-value">持续驱动</span></div>
+              </div>
+            </div>
+
+            <!-- 定向 -->
+            <div class="config-panel">
+              <div class="config-panel-header">
+                <span>定向</span>
+                <span class="config-action" onclick="alert('清空定向')">清空</span>
+              </div>
+              <div class="config-panel-body">
+                <div class="config-row"><span class="config-key">定向：</span><span class="config-value">全球（EN）</span></div>
+                <div class="config-creative-footer" style="margin-top: 10px;">
+                  <a onclick="openTargetingListModal()">编辑定向</a>
+                  <a onclick="openTargetingListModal()">选择定向包</a>
+                </div>
+              </div>
+            </div>
+
+            <!-- 创意素材 -->
+            <div class="config-panel">
+              <div class="config-panel-header">
+                <span>创意素材</span>
+                <span class="config-action" onclick="alert('选择素材包')">选择素材包</span>
+              </div>
+              <div class="config-panel-body">
+                <div class="config-row" style="justify-content: space-between; margin-bottom: 8px;">
+                  <span class="config-key">素材数：</span>
+                  <span class="config-value">10 个素材</span>
+                </div>
+                <div class="config-creative-tags">
+                  <span class="config-creative-tag">创意组 1</span>
+                  <span class="config-creative-tag" style="background: var(--color-warning-bg); color: var(--color-warning); border-color: #ffe58f;">10 个素材 <span class="config-tag-x" onclick="alert('移除素材')">×</span></span>
+                </div>
+                <div class="config-creative-footer">
+                  <a onclick="openCreativeEditDrawer()">编辑</a>
+                  <a onclick="openMaterialSelectModal()">选择素材包</a>
+                </div>
+              </div>
+            </div>
+
+            <!-- 标题包 -->
+            <div class="config-panel">
+              <div class="config-panel-header">
+                <span>标题包</span>
+                <span class="config-action" onclick="alert('清空标题包')">清空</span>
+              </div>
+              <div class="config-panel-body">
+                <div class="config-row" style="justify-content: space-between; margin-bottom: 8px;">
+                  <span class="config-key">已选：</span>
+                  <span class="config-value">4 个</span>
+                </div>
+                <div class="config-title-tags">
+                  <span class="config-creative-tag">美国(1) <span class="config-tag-x" onclick="alert('移除')">×</span></span>
+                  <span class="config-creative-tag">美国(1) <span class="config-tag-x" onclick="alert('移除')">×</span></span>
+                  <span class="config-creative-tag">美国(1) <span class="config-tag-x" onclick="alert('移除')">×</span></span>
+                  <span class="config-creative-tag">美国(1) <span class="config-tag-x" onclick="alert('移除')">×</span></span>
+                </div>
+                <div class="config-creative-footer">
+                  <a onclick="openTitleCopySelectModal()">选择文案</a>
+                  <a onclick="openTitleCopyManualModal()">手动添加</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 中部 3 个按钮 -->
+          <div class="config-action-buttons">
+            <button class="btn btn-info btn-sm" onclick="alert('启用列表')">启用列表</button>
+            <button class="btn btn-outline btn-sm" onclick="alert('身份信息')">身份信息</button>
+            <button class="btn btn-outline btn-sm" onclick="alert('空仓配置')">空仓配置</button>
+          </div>
+
+          <!-- 预览区 -->
+          <div class="config-preview">
+            <div class="config-preview-header">
+              <div class="config-preview-title">
+                预览区 <span class="config-refresh" onclick="alert('刷新预览')">↻ 刷新</span>
+              </div>
+              <div class="config-preview-meta">预计生成 14 条广告</div>
+              <div class="config-preview-actions">
+                <button class="btn btn-info btn-sm" onclick="alert('立即提交')">立即提交</button>
+                <button class="btn btn-outline btn-sm" onclick="alert('定时提交')">定时提交</button>
+              </div>
+            </div>
+            <div class="config-preview-tabs">
+              <div class="config-preview-tab active" onclick="switchBatchPreviewTab(this, 'enabled')">启用列表</div>
+              <div class="config-preview-tab" onclick="switchBatchPreviewTab(this, 'identity')">身份信息</div>
+              <div class="config-preview-tab" onclick="switchBatchPreviewTab(this, 'empty')">空仓配置</div>
+            </div>
+            <table class="config-preview-table">
+              <thead>
+                <tr>
+                  <th colspan="5" class="preview-group-header">计划信息</th>
+                  <th colspan="5" class="preview-group-header">广告组信息</th>
+                  <th colspan="3" class="preview-group-header">广告/创意</th>
+                </tr>
+                <tr>
+                  <th>广告目标</th>
+                  <th>系列名称</th>
+                  <th>状态</th>
+                  <th>排期</th>
+                  <th>开始时间</th>
+                  <th>状态</th>
+                  <th>定向包</th>
+                  <th>监测链接ID</th>
+                  <th>创意名称</th>
+                  <th>状态</th>
+                  <th>状态</th>
+                  <th>素材</th>
+                  <th>标题包</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>应用推广</td>
+                  <td>晶眸_广告系列<br />-08_24_0717109820-3</td>
+                  <td><span class="tag tag-default">待上传</span></td>
+                  <td>现在开始投放</td>
+                  <td class="preview-cell-empty">--</td>
+                  <td class="preview-cell-empty">--</td>
+                  <td><span class="tag tag-default">待上传</span></td>
+                  <td>全球（EN）</td>
+                  <td class="preview-cell-empty">--</td>
+                  <td>创意组1</td>
+                  <td><span class="tag tag-default">待上传</span></td>
+                  <td><a href="#">创意组1（10条）</a></td>
+                  <td><a href="#">标题包1（1条）</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== 选择账号 弹框 ========== -->
+    <div id="account-select-overlay" class="modal-overlay" onclick="closeAccountSelectModal()"></div>
+    <div id="account-select-modal" class="modal">
+      <div class="modal-card" style="width: min(720px, calc(100vw - 40px));">
+        <div class="modal-header">
+          <span>选择账号</span>
+          <button class="modal-close" onclick="closeAccountSelectModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-filter">
+            <select class="form-select form-input-sm">
+              <option>账户ID</option>
+              <option>账户名称</option>
+            </select>
+            <input type="text" class="form-input" placeholder="请输入账户ID查询" style="width: 240px;" />
+            <button class="btn btn-info btn-sm">搜索</button>
+            <button class="btn btn-outline btn-sm">重置</button>
+          </div>
+          <table class="modal-table">
+            <thead>
+              <tr>
+                <th class="checkbox-col"><input type="checkbox" /></th>
+                <th>账户ID</th>
+                <th>账户名称</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><input type="checkbox" checked /></td>
+                <td>76482152023578101780</td>
+                <td>TT-MAD-IAA-二组-芬斯-（UTC 8）-5</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="pagination" style="padding: 12px 0;">
+            <div class="pagination-info">共 <strong>1</strong> 条</div>
+            <div class="pagination-pages">
+              <button class="page-btn">‹</button>
+              <button class="page-btn active">1</button>
+              <button class="page-btn">›</button>
+            </div>
+            <select class="page-size-select"><option>10 条/页</option></select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline btn-sm" onclick="closeAccountSelectModal()">取消</button>
+          <button class="btn btn-info btn-sm" onclick="closeAccountSelectModal()">确定(14)</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== 计划基本信息 编辑抽屉 ========== -->
+    <div id="plan-info-overlay" class="drawer-overlay" onclick="closePlanInfoDrawer()"></div>
+    <div id="plan-info-drawer" class="drawer">
+      <div class="drawer-card">
+        <div class="drawer-header">
+          <span>计划基本信息</span>
+          <button class="modal-close" onclick="closePlanInfoDrawer()">×</button>
+        </div>
+        <div class="drawer-body">
+          <div class="drawer-form-grid">
+            <div class="form-row">
+              <div class="form-label">投放内容：</div>
+              <div class="form-field">
+                <span class="pill-tag">小程序IAA</span>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-label required">投放短剧：</div>
+              <div class="form-field form-field-inline">
+                <select class="form-select form-input-sm"><option>短剧ID</option></select>
+                <input type="text" class="form-input" placeholder="请输入" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-label">版权方：</div>
+              <div class="form-field">织光</div>
+            </div>
+            <div class="form-row">
+              <div class="form-label">短剧：</div>
+              <div class="form-field">社長おやめください、妹のようです！（208234）</div>
+            </div>
+            <div class="form-row">
+              <div class="form-label">语言：</div>
+              <div class="form-field">日语</div>
+            </div>
+            <div class="form-row">
+              <div class="form-label">剧本：</div>
+              <div class="form-field">放羊的星星（N011）</div>
+            </div>
+            <div class="form-row">
+              <div class="form-label required">小程序：</div>
+              <div class="form-field form-field-inline">
+                <select class="form-select"><option>请选择小程序</option></select>
+                <select class="form-select"><option>请选择渠道号</option></select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-label required">预算策略：</div>
+              <div class="form-field"><span class="pill-tag">广告系列预算</span></div>
+            </div>
+            <div class="form-row">
+              <div class="form-label required">日预算：</div>
+              <div class="form-field form-field-inline">
+                <input type="text" class="form-input form-input-md" placeholder="请输入" />
+                <span class="form-unit">$</span>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-label required">使用商品库：</div>
+              <div class="form-field">
+                <div class="toggle-group">
+                  <button class="toggle-option active">开启</button>
+                  <button class="toggle-option">关闭</button>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-label required">广告系列状态：</div>
+              <div class="form-field">
+                <div class="toggle-group">
+                  <button class="toggle-option active">开启</button>
+                  <button class="toggle-option">关闭</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="drawer-footer">
+          <button class="btn btn-outline btn-sm" onclick="closePlanInfoDrawer()">取消</button>
+          <button class="btn btn-info btn-sm" onclick="closePlanInfoDrawer()">确定</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== 广告组设置 编辑抽屉 ========== -->
+    <div id="ad-group-overlay" class="drawer-overlay" onclick="closeAdGroupDrawer()"></div>
+    <div id="ad-group-drawer" class="drawer">
+      <div class="drawer-card">
+        <div class="drawer-header">
+          <span>广告组设置</span>
+          <button class="modal-close" onclick="closeAdGroupDrawer()">×</button>
+        </div>
+        <div class="drawer-body">
+          <div class="drawer-form-grid">
+            <div class="form-section">
+              <div class="form-section-title">广告组基本信息</div>
+              <div class="form-row">
+                <div class="form-label required">广告组名称：</div>
+                <div class="form-field form-field-inline">
+                  <input type="text" class="form-input" value="EN_LA986-CQMFQ" style="width: 300px;" />
+                  <span class="form-counter">14 / 50</span>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-label required">广告组状态：</div>
+                <div class="form-field">
+                  <div class="toggle-group">
+                    <button class="toggle-option active">开启</button>
+                    <button class="toggle-option">暂停</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <div class="form-section-title">出价和预算信息</div>
+              <div class="form-row">
+                <div class="form-label">优化目标：</div>
+                <div class="form-field"><span class="pill-tag">价值</span></div>
+              </div>
+              <div class="form-row">
+                <div class="form-label">选择应用内事件：</div>
+                <div class="form-field">
+                  <select class="form-select form-input-md"><option>广告收入价值</option></select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-label">目标ROAS：</div>
+                <div class="form-field">
+                  <input type="text" class="form-input form-input-sm" value="1.12" />
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-label">计费方式：</div>
+                <div class="form-field"><span class="pill-tag">展示(oCPM)</span></div>
+              </div>
+              <div class="form-row">
+                <div class="form-label">竞价策略：</div>
+                <div class="form-field"><span class="pill-tag">最大投放量</span></div>
+              </div>
+              <div class="form-row">
+                <div class="form-label">投放速度：</div>
+                <div class="form-field"><span class="pill-tag">标准</span></div>
+              </div>
+              <div class="form-row">
+                <div class="form-label">排期：</div>
+                <div class="form-field form-field-inline">
+                  <span class="pill-tag" style="background: transparent; border-color: var(--color-border); color: var(--color-text-secondary);">未填即立即投放</span>
+                  <div class="toggle-group">
+                    <button class="toggle-option active">持续驱动广告组</button>
+                    <button class="toggle-option">设置开始和结束时间</button>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-label">开始时间：</div>
+                <div class="form-field">
+                  <input type="text" class="form-input form-input-md" placeholder="开始时间" />
+                </div>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <div class="form-section-title">版位</div>
+              <div class="form-row">
+                <div class="form-label">版位：</div>
+                <div class="form-field"><button class="btn btn-info btn-sm">指定版位</button></div>
+              </div>
+              <div class="form-row">
+                <div class="form-label"></div>
+                <div class="form-field">
+                  <span class="pill-tag">TikTok <span class="pill-remove" onclick="this.parentElement.remove()">×</span></span>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-label">用户评论：</div>
+                <div class="form-field">
+                  <div class="toggle-group">
+                    <button class="toggle-option active">开启</button>
+                    <button class="toggle-option">关闭</button>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-label">视频下载：</div>
+                <div class="form-field">
+                  <div class="toggle-group">
+                    <button class="toggle-option">开启</button>
+                    <button class="toggle-option active">关闭</button>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-label">视频共享：</div>
+                <div class="form-field">
+                  <div class="toggle-group">
+                    <button class="toggle-option active">开启</button>
+                    <button class="toggle-option">关闭</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="drawer-footer">
+          <button class="btn btn-outline btn-sm" onclick="closeAdGroupDrawer()">取消</button>
+          <button class="btn btn-info btn-sm" onclick="closeAdGroupDrawer()">确定</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== 我的定向包 弹框 ========== -->
+    <div id="targeting-list-overlay" class="modal-overlay" onclick="closeTargetingListModal()"></div>
+    <div id="targeting-list-modal" class="modal">
+      <div class="modal-card" style="width: min(860px, calc(100vw - 40px));">
+        <div class="modal-header">
+          <span>我的定向包</span>
+          <button class="modal-close" onclick="closeTargetingListModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-filter">
+            <button class="btn btn-info btn-sm" onclick="openNewTargetingDrawer()">新增定向包</button>
+            <input type="text" class="form-input" placeholder="请输入关键字" style="margin-left: auto; width: 240px;" />
+            <button class="btn btn-info btn-sm">搜索</button>
+            <button class="btn btn-outline btn-sm">重置</button>
+          </div>
+          <table class="modal-table">
+            <thead>
+              <tr>
+                <th class="checkbox-col"><input type="checkbox" /></th>
+                <th>ID</th>
+                <th>定向包名称</th>
+                <th>年龄</th>
+                <th>操作系统</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><input type="checkbox" /></td>
+                <td>56</td>
+                <td>意大利</td>
+                <td>25</td>
+                <td>不限</td>
+                <td>
+                  <button class="inline-link">修改</button>
+                  <button class="inline-link">复制</button>
+                  <button class="inline-link" style="color: var(--color-error);">删除</button>
+                </td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" /></td>
+                <td>49</td>
+                <td>日语</td>
+                <td>18</td>
+                <td>不限</td>
+                <td>
+                  <button class="inline-link">修改</button>
+                  <button class="inline-link">复制</button>
+                  <button class="inline-link" style="color: var(--color-error);">删除</button>
+                </td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" /></td>
+                <td>48</td>
+                <td>西班牙</td>
+                <td>18</td>
+                <td>不限</td>
+                <td>
+                  <button class="inline-link">修改</button>
+                  <button class="inline-link">复制</button>
+                  <button class="inline-link" style="color: var(--color-error);">删除</button>
+                </td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" /></td>
+                <td>46</td>
+                <td>泰国</td>
+                <td>25</td>
+                <td>不限</td>
+                <td>
+                  <button class="inline-link">修改</button>
+                  <button class="inline-link">复制</button>
+                  <button class="inline-link" style="color: var(--color-error);">删除</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="pagination" style="padding: 12px 0;">
+            <div class="pagination-info">共 <strong>4</strong> 条</div>
+            <div class="pagination-pages">
+              <button class="page-btn">‹</button>
+              <button class="page-btn active">1</button>
+              <button class="page-btn">›</button>
+            </div>
+            <select class="page-size-select"><option>10 条/页</option></select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline btn-sm" onclick="closeTargetingListModal()">取消</button>
+          <button class="btn btn-info btn-sm" onclick="closeTargetingListModal()">确定</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== 新增定向包 抽屉 ========== -->
+    <div id="new-targeting-overlay" class="drawer-overlay" onclick="closeNewTargetingDrawer()"></div>
+    <div id="new-targeting-drawer" class="drawer">
+      <div class="drawer-card">
+        <div class="drawer-header">
+          <span>新增定向包</span>
+          <button class="modal-close" onclick="closeNewTargetingDrawer()">×</button>
+        </div>
+        <div class="drawer-body">
+          <div class="form-section">
+            <div class="form-section-title">定向信息</div>
+            <div class="drawer-form-grid">
+              <div class="form-row">
+                <div class="form-label required">定向包名称：</div>
+                <div class="form-field form-field-inline">
+                  <input type="text" class="form-input" placeholder="定向包名称" style="width: 300px;" />
+                  <span class="form-counter">0 / 50</span>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-label">性别：</div>
+                <div class="form-field">
+                  <select class="form-select form-input-md"><option>不限</option><option>男</option><option>女</option></select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-label required">年龄：</div>
+                <div class="form-field">
+                  <select class="form-select form-input-md"><option>请选择</option></select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-label">语言：</div>
+                <div class="form-field">
+                  <select class="form-select form-input-md"><option>请选择语言</option></select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-title">地区定向信息</div>
+            <div class="drawer-split">
+              <div>
+                <div class="modal-filter" style="margin-bottom: 8px;">
+                  <input type="text" class="form-input" placeholder="请输入关键字搜索" style="flex: 1;" />
+                  <button class="btn btn-outline btn-sm">搜索</button>
+                </div>
+                <div class="region-select-box">
+                  <div class="region-select-header">
+                    <label><input type="checkbox" /> 全选</label>
+                    <span>名称</span>
+                    <span>操作</span>
+                  </div>
+                  <div class="region-select-body">
+                    <ul class="region-select-list">
+                      <li><label><input type="checkbox" /> 意大利</label><span class="region-select-action">定向</span></li>
+                      <li><label><input type="checkbox" /> 阿根廷</label><span class="region-select-action">定向</span></li>
+                      <li><label><input type="checkbox" /> 希腊</label><span class="region-select-action">定向</span></li>
+                      <li><label><input type="checkbox" /> 巴西</label><span class="region-select-action">定向</span></li>
+                      <li><label><input type="checkbox" /> 科威特</label><span class="region-select-action">定向</span></li>
+                      <li><label><input type="checkbox" /> 巴拿马</label><span class="region-select-action">定向</span></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div class="region-select-header" style="border-radius: 4px 4px 0 0;">
+                  <span>已选</span>
+                  <span class="region-select-action">批量导入</span>
+                  <span class="region-select-action">清除</span>
+                </div>
+                <div class="region-select-box" style="border-top: none; border-radius: 0 0 4px 4px;">
+                  <div class="region-select-body">
+                    <div class="empty-state" style="padding: 60px 20px;">
+                      <div class="empty-state-icon">📍</div>
+                      <span>暂无数据</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="drawer-footer">
+          <button class="btn btn-outline btn-sm" onclick="closeNewTargetingDrawer()">取消</button>
+          <button class="btn btn-info btn-sm" onclick="closeNewTargetingDrawer()">确定</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== 选择素材（创意编辑） 抽屉 ========== -->
+    <div id="creative-edit-overlay" class="drawer-overlay" onclick="closeCreativeEditDrawer()"></div>
+    <div id="creative-edit-drawer" class="drawer">
+      <div class="drawer-card">
+        <div class="drawer-header">
+          <span>选择素材</span>
+          <button class="modal-close" onclick="closeCreativeEditDrawer()">×</button>
+        </div>
+        <div class="drawer-body">
+          <div class="form-row">
+            <div class="form-label required">广告状态：</div>
+            <div class="form-field">
+              <div class="toggle-group">
+                <button class="toggle-option active">开启</button>
+                <button class="toggle-option">暂停</button>
+              </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-label required">行动号召：</div>
+            <div class="form-field">
+              <select class="form-select form-input-md"><option>立即观看</option></select>
+            </div>
+          </div>
+
+          <div class="form-tabs">
+            <button class="form-tab active">账户一投一</button>
+            <button class="form-tab">账户均分</button>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-title">创意制作</div>
+            <div class="creative-mode-tabs">
+              <label class="creative-mode-tab active"><input type="radio" name="creativeMode" checked /> 一包多素材</label>
+              <label class="creative-mode-tab"><input type="radio" name="creativeMode" /> 一包一素材</label>
+              <label class="creative-mode-tab"><input type="radio" name="creativeMode" /> 自定义包素材</label>
+            </div>
+            <div class="selected-summary">
+              <button class="btn btn-info btn-sm" onclick="openMaterialSelectModal()">选择素材包</button>
+              <span>已添加：1 个创意组 10 个不同素材</span>
+              <span style="margin-left: auto;">
+                <button class="btn btn-info btn-sm">保存素材包</button>
+                <button class="btn btn-outline btn-sm">收起</button>
+              </span>
+            </div>
+
+            <div style="border: 1px solid var(--color-border); border-radius: 6px; padding: 12px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                <div style="font-weight: 600; font-size: 13px;">
+                  <span style="margin-right: 8px;">创意组 1</span>
+                  <span class="config-action">✎</span>
+                </div>
+                <span style="font-size: 12px; color: var(--color-text-tertiary);">已选 10 个素材</span>
+              </div>
+              <div class="material-grid">
+                <div class="material-card"><div class="material-thumb">🖼</div><div class="material-name">228156_mezhua_EN_VP_26...</div></div>
+                <div class="material-card"><div class="material-thumb">🖼</div><div class="material-name">228156_mezhua_EN_VP_26...</div></div>
+                <div class="material-card"><div class="material-thumb">🖼</div><div class="material-name">228156_mezhua_EN_VP_26...</div></div>
+                <div class="material-card"><div class="material-thumb">🖼</div><div class="material-name">228156_mezhua_EN_VP_26...</div></div>
+                <div class="material-card"><div class="material-thumb">🖼</div><div class="material-name">228156_mezhua_EN_VP_26...</div></div>
+                <div class="material-card"><div class="material-thumb">🖼</div><div class="material-name">228156_mezhua_EN_VP_26...</div></div>
+                <div class="material-card"><div class="material-thumb">🖼</div><div class="material-name">228156_mezhua_EN_VP_26...</div></div>
+                <div class="material-card"><div class="material-thumb">🖼</div><div class="material-name">228156_mezhua_EN_VP_26...</div></div>
+                <div class="material-card"><div class="material-thumb">🖼</div><div class="material-name">228156_mezhua_EN_VP_26...</div></div>
+                <div class="material-card"><div class="material-thumb">🖼</div><div class="material-name">228156_mezhua_EN_VP_26...</div></div>
+                <div class="material-card" style="display: flex; align-items: center; justify-content: center; cursor: pointer; min-height: 180px;"><span style="font-size: 32px; color: var(--color-text-tertiary);">+</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="drawer-footer">
+          <button class="btn btn-outline btn-sm" onclick="closeCreativeEditDrawer()">取消</button>
+          <button class="btn btn-info btn-sm" onclick="closeCreativeEditDrawer()">确定</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== 选择素材（素材包选择） 弹框 ========== -->
+    <div id="material-select-overlay" class="modal-overlay" onclick="closeMaterialSelectModal()"></div>
+    <div id="material-select-modal" class="modal">
+      <div class="modal-card" style="width: min(1100px, calc(100vw - 40px));">
+        <div class="modal-header">
+          <span>选择素材</span>
+          <button class="modal-close" onclick="closeMaterialSelectModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-filter">
+            <select class="form-select form-input-sm"><option>视频</option></select>
+            <select class="form-select"><option>请选择短剧</option></select>
+            <input type="text" class="form-input" placeholder="请输入原创剧名" />
+            <select class="form-select"><option>请选择版权方</option></select>
+            <select class="form-select form-input-sm"><option>素材名称</option></select>
+            <input type="text" class="form-input" placeholder="请输入素材名称" />
+            <select class="form-select"><option>请选择账户</option></select>
+            <select class="form-select"><option>请选择标签</option></select>
+            <input type="text" class="form-input" placeholder="文件夹搜索" />
+          </div>
+          <div class="modal-filter" style="margin-top: -8px;">
+            <div class="filter-range" style="height: 32px; padding-right: 8px;">
+              <span class="filter-range-label" style="font-size: 12px; color: var(--color-text-secondary);">创意开始日期</span>
+              <input type="text" placeholder="开始" style="width: 80px;" />
+              <span class="filter-range-tilde">-</span>
+              <input type="text" placeholder="结束" style="width: 80px;" />
+            </div>
+            <select class="form-select form-input-sm"><option>消耗排序</option></select>
+            <select class="form-select form-input-sm"><option>转化排序</option></select>
+            <div class="filter-range" style="height: 32px; padding-right: 8px;">
+              <span class="filter-range-label" style="font-size: 12px; color: var(--color-text-secondary);">投放开始日期</span>
+              <input type="text" placeholder="开始" style="width: 80px;" />
+              <span class="filter-range-tilde">-</span>
+              <input type="text" placeholder="结束" style="width: 80px;" />
+            </div>
+            <select class="form-select"><option>全部尺寸</option></select>
+          </div>
+          <div class="modal-filter" style="margin-top: -8px;">
+            <input type="text" class="form-input form-input-sm" placeholder="素材时长(s)" />
+            <select class="form-select"><option>素材类型</option></select>
+            <select class="form-select"><option>上传状态</option></select>
+            <select class="form-select form-input-sm"><option>包含</option></select>
+            <select class="form-select"><option>请选择短剧标签</option></select>
+            <button class="btn btn-info btn-sm">查询</button>
+            <button class="btn btn-outline btn-sm">重置</button>
+            <button class="btn btn-outline btn-sm">全选</button>
+            <button class="btn btn-outline btn-sm">竞序</button>
+            <label style="font-size: 12px; color: var(--color-text-secondary);"><input type="checkbox" /> 低效素材</label>
+            <label style="font-size: 12px; color: var(--color-text-secondary);"><input type="checkbox" checked /> 动选劣素材</label>
+          </div>
+          <div style="display: flex; gap: 12px; margin-bottom: 12px; font-size: 12px; color: var(--color-text-secondary);">
+            <label><input type="checkbox" /> 过滤相同时长素材</label>
+            <button class="btn btn-text btn-sm">上传素材</button>
+            <button class="btn btn-text btn-sm">按页展示</button>
+          </div>
+          <div class="material-grid">
+            <div class="material-card"><div class="material-thumb">🖼</div><div class="material-status"><span class="tag tag-warning">无消耗</span></div><div class="material-name">2026-08-24 07:34:08</div><div class="material-status"><span class="tag tag-default">短剧</span></div></div>
+            <div class="material-card"><div class="material-thumb">🖼</div><div class="material-status"><span class="tag tag-warning">无消耗</span></div><div class="material-name">2026-08-24 07:34:08</div><div class="material-status"><span class="tag tag-default">短剧</span></div></div>
+            <div class="material-card"><div class="material-thumb">🖼</div><div class="material-status"><span class="tag tag-warning">无消耗</span></div><div class="material-name">2026-08-24 07:34:08</div><div class="material-status"><span class="tag tag-default">短剧</span></div></div>
+            <div class="material-card"><div class="material-thumb">🖼</div><div class="material-status"><span class="tag tag-warning">无消耗</span></div><div class="material-name">2026-08-24 07:34:08</div><div class="material-status"><span class="tag tag-default">短剧</span></div></div>
+            <div class="material-card"><div class="material-thumb">🖼</div><div class="material-status"><span class="tag tag-warning">无消耗</span></div><div class="material-name">2026-08-24 07:34:08</div><div class="material-status"><span class="tag tag-default">短剧</span></div></div>
+            <div class="material-card"><div class="material-thumb">🖼</div><div class="material-status"><span class="tag tag-warning">无消耗</span></div><div class="material-name">2026-08-24 07:34:08</div><div class="material-status"><span class="tag tag-default">短剧</span></div></div>
+            <div class="material-card"><div class="material-thumb">🖼</div><div class="material-status"><span class="tag tag-warning">无消耗</span></div><div class="material-name">2026-08-24 07:34:08</div><div class="material-status"><span class="tag tag-default">短剧</span></div></div>
+            <div class="material-card"><div class="material-thumb">🖼</div><div class="material-status"><span class="tag tag-warning">无消耗</span></div><div class="material-name">2026-08-24 07:34:08</div><div class="material-status"><span class="tag tag-default">短剧</span></div></div>
+            <div class="material-card"><div class="material-thumb">🖼</div><div class="material-status"><span class="tag tag-warning">无消耗</span></div><div class="material-name">2026-08-24 07:34:08</div><div class="material-status"><span class="tag tag-default">短剧</span></div></div>
+            <div class="material-card"><div class="material-thumb">🖼</div><div class="material-status"><span class="tag tag-warning">无消耗</span></div><div class="material-name">2026-08-24 07:34:08</div><div class="material-status"><span class="tag tag-default">短剧</span></div></div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline btn-sm" onclick="closeMaterialSelectModal()">取消</button>
+          <button class="btn btn-info btn-sm" onclick="closeMaterialSelectModal()">确定</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== 标题包 - 选择文案 弹框 ========== -->
+    <div id="title-copy-select-overlay" class="modal-overlay" onclick="closeTitleCopySelectModal()"></div>
+    <div id="title-copy-select-modal" class="modal">
+      <div class="modal-card" style="width: min(720px, calc(100vw - 40px));">
+        <div class="modal-header">
+          <span>选择文案</span>
+          <button class="modal-close" onclick="closeTitleCopySelectModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-filter">
+            <input type="text" class="form-input" placeholder="请输入关键字" style="width: 240px;" />
+            <button class="btn btn-info btn-sm">搜索</button>
+          </div>
+          <div class="empty-state">
+            <div class="empty-state-icon">📄</div>
+            <span>暂无数据</span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline btn-sm" onclick="closeTitleCopySelectModal()">取消</button>
+          <button class="btn btn-info btn-sm" onclick="closeTitleCopySelectModal()">确定</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== 标题包 - 手动添加文案 弹框 ========== -->
+    <div id="title-copy-manual-overlay" class="modal-overlay" onclick="closeTitleCopyManualModal()"></div>
+    <div id="title-copy-manual-modal" class="modal">
+      <div class="modal-card" style="width: min(560px, calc(100vw - 40px));">
+        <div class="modal-header">
+          <span>手动添加文案</span>
+          <button class="modal-close" onclick="closeTitleCopyManualModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-row" style="align-items: flex-start;">
+            <div class="form-label">文案：</div>
+            <div class="form-field">
+              <textarea class="form-textarea" placeholder="每行一条文案"></textarea>
+              <div class="form-counter" style="text-align: right;">当前 0 / 5 条</div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline btn-sm" onclick="closeTitleCopyManualModal()">取消</button>
+          <button class="btn btn-info btn-sm" onclick="closeTitleCopyManualModal()">确定</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      /* ===== 独立页面导航：本页停留 / 海外页面互跳 / 国内页面跳回 index ===== */
+      function showPage(pageName) {
+        if (pageName === 'overseas-batch-delivery') return;
+        if (pageName === 'overseas-auto-delivery') {
+          window.location.href = './overseas-auto-delivery.html';
+          return;
+        }
+        if (pageName === 'overseas-template') {
+          alert('页面开发中：模板管理');
+          return;
+        }
+        window.location.href = '../index.html#' + pageName;
+      }
+
+      /* ===== 左上角系统切换器 ===== */
+      function toggleSystemMenu(e) {
+        if (e) e.stopPropagation();
+        var menu = document.getElementById('systemSwitchMenu');
+        if (menu) menu.classList.toggle('open');
+      }
+
+      function switchSystem(system) {
+        try {
+          localStorage.setItem('delivery_system', system);
+        } catch (err) {}
+        if (system === 'overseas') {
+          window.location.href = './overseas-batch-delivery.html';
+        } else {
+          window.location.href = '../index.html';
+        }
+      }
+
+      document.addEventListener('click', function (e) {
+        var menu = document.getElementById('systemSwitchMenu');
+        if (!menu || !menu.classList.contains('open')) return;
+        if (menu.contains(e.target)) return;
+        if (e.target.closest && e.target.closest('.system-switch-trigger')) return;
+        menu.classList.remove('open');
+      });
+
+      /* 页面加载：按 localStorage 高亮当前系统 */
+      (function highlightCurrentSystem() {
+        var current = 'cn';
+        try {
+          current = localStorage.getItem('delivery_system') || 'cn';
+        } catch (err) {}
+        document.querySelectorAll('.system-switch-item').forEach(function (item) {
+          if (item.getAttribute('data-system') === current) {
+            item.classList.add('active');
+          } else {
+            item.classList.remove('active');
+          }
+        });
+      })();
+
+      /* ===== 侧边栏：一级菜单展开/收起 ===== */
+      function toggleNavExpand(item, caretSelector) {
+        if (item.classList.contains('expanded')) {
+          item.classList.remove('expanded');
+        } else {
+          item.classList.add('expanded');
+        }
+        var caret = item.querySelector(caretSelector);
+        if (caret) {
+          caret.textContent = item.classList.contains('expanded') ? '▼' : '▶';
+        }
+      }
+
+      document.querySelectorAll('.nav-item.has-children').forEach(function (item) {
+        item.addEventListener('click', function (e) {
+          e.stopPropagation();
+          toggleNavExpand(this, '.nav-item-caret');
+        });
+      });
+
+      /* ===== 子菜单项跳转 ===== */
+      document.querySelectorAll('.nav-child-item[data-page], .nav-item[data-page]').forEach(function (item) {
+        item.addEventListener('click', function () {
+          showPage(this.getAttribute('data-page'));
+        });
+      });
+
+      /* ===== 通用：组合控件 placeholder 切换 ===== */
+      function updateFilterComboPlaceholder(select) {
+        var input = select.parentElement.querySelector('.filter-combo-input');
+        if (!input) return;
+        var optionText = select.options[select.selectedIndex].text;
+        input.placeholder = select.value === 'id' ? '请输入' + optionText : '请输入';
+      }
+
+      /* ===== 筛选：查询/重置 ===== */
+      function searchBatchDelivery() {
+        alert('查询批量投放任务');
+      }
+
+      function resetBatchDeliveryFilters() {
+        document
+          .querySelectorAll('#page-overseas-batch-delivery .filter-select')
+          .forEach(function (s) { s.selectedIndex = 0; });
+        document
+          .querySelectorAll('#page-overseas-batch-delivery .filter-input')
+          .forEach(function (i) { i.value = ''; });
+        document
+          .querySelectorAll('#page-overseas-batch-delivery .filter-range input')
+          .forEach(function (i) { i.value = ''; });
+        var comboSelects = document.querySelectorAll('#page-overseas-batch-delivery .filter-combo-select');
+        var comboInputs = document.querySelectorAll('#page-overseas-batch-delivery .filter-combo-input');
+        comboSelects.forEach(function (s) { s.selectedIndex = 0; });
+        comboInputs.forEach(function (i) { i.value = ''; });
+        comboSelects.forEach(updateFilterComboPlaceholder);
+      }
+
+      /* ===== 表格：全选/计数 ===== */
+      function toggleSelectAllBatchTasks() {
+        var checked = document.getElementById('selectAllBatchTasks').checked;
+        document
+          .querySelectorAll('#page-overseas-batch-delivery .batch-task-checkbox')
+          .forEach(function (cb) { cb.checked = checked; });
+        updateSelectedCount();
+      }
+
+      function updateSelectedCount() {
+        var n = document.querySelectorAll('#page-overseas-batch-delivery .batch-task-checkbox:checked').length;
+        var el = document.getElementById('batchSelectedCount');
+        if (el) el.textContent = n;
+      }
+
+      document.addEventListener('change', function (e) {
+        if (e.target && e.target.classList && e.target.classList.contains('batch-task-checkbox')) {
+          updateSelectedCount();
+        }
+      });
+
+      /* ===== 行操作：刷新 / 重试 / 复制 / 详情 ===== */
+      function refreshBatchTask(id) {
+        alert('刷新任务：' + id);
+      }
+
+      function copyBatchTask(id) {
+        alert('复制任务：' + id);
+      }
+
+      function showBatchTaskDetail(id) {
+        alert('查看任务详情：' + id);
+      }
+
+      function showRuleDetail(name) {
+        alert('查看投放规则：' + name);
+      }
+
+      function showScriptDetail(name) {
+        alert('查看投放脚本：' + name);
+      }
+
+      /* ===== 重试：占位 ===== */
+      function handleBatchRetry(event, id) {
+        event.stopPropagation();
+        var target = id != null ? '任务 ' + id : '已选项';
+        alert('开始重试：' + target);
+      }
+
+      /* ===== 批量添加 - 配置区弹窗 ===== */
+      function openNewBatchDeliveryModal() {
+        var overlay = document.getElementById('batch-config-overlay');
+        var modal = document.getElementById('batch-config-modal');
+        if (overlay) overlay.classList.add('open');
+        if (modal) modal.classList.add('open');
+      }
+
+      function closeBatchConfigModal() {
+        var overlay = document.getElementById('batch-config-overlay');
+        var modal = document.getElementById('batch-config-modal');
+        if (overlay) overlay.classList.remove('open');
+        if (modal) modal.classList.remove('open');
+      }
+
+      function switchBatchPreviewTab(tabEl, key) {
+        var parent = tabEl.parentElement;
+        if (!parent) return;
+        parent.querySelectorAll('.config-preview-tab').forEach(function (t) { t.classList.remove('active'); });
+        tabEl.classList.add('active');
+      }
+
+      /* ===== 通用弹框开关工具 ===== */
+      function openModal(overlayId, modalId) {
+        var overlay = document.getElementById(overlayId);
+        var modal = document.getElementById(modalId);
+        if (overlay) overlay.classList.add('open');
+        if (modal) modal.classList.add('open');
+      }
+
+      function closeModal(overlayId, modalId) {
+        var overlay = document.getElementById(overlayId);
+        var modal = document.getElementById(modalId);
+        if (overlay) overlay.classList.remove('open');
+        if (modal) modal.classList.remove('open');
+      }
+
+      /* ===== 账号 - 选择账号弹框 ===== */
+      function openAccountSelectModal() { openModal('account-select-overlay', 'account-select-modal'); }
+      function closeAccountSelectModal() { closeModal('account-select-overlay', 'account-select-modal'); }
+
+      /* ===== 计划基本信息 - 编辑抽屉 ===== */
+      function openPlanInfoDrawer() { openModal('plan-info-overlay', 'plan-info-drawer'); }
+      function closePlanInfoDrawer() { closeModal('plan-info-overlay', 'plan-info-drawer'); }
+
+      /* ===== 广告组 - 编辑抽屉 ===== */
+      function openAdGroupDrawer() { openModal('ad-group-overlay', 'ad-group-drawer'); }
+      function closeAdGroupDrawer() { closeModal('ad-group-overlay', 'ad-group-drawer'); }
+
+      /* ===== 定向 - 我的定向包弹框 ===== */
+      function openTargetingListModal() { openModal('targeting-list-overlay', 'targeting-list-modal'); }
+      function closeTargetingListModal() { closeModal('targeting-list-overlay', 'targeting-list-modal'); }
+
+      /* ===== 定向 - 新增定向包抽屉 ===== */
+      function openNewTargetingDrawer() { openModal('new-targeting-overlay', 'new-targeting-drawer'); }
+      function closeNewTargetingDrawer() { closeModal('new-targeting-overlay', 'new-targeting-drawer'); }
+
+      /* ===== 创意素材 - 编辑抽屉 ===== */
+      function openCreativeEditDrawer() { openModal('creative-edit-overlay', 'creative-edit-drawer'); }
+      function closeCreativeEditDrawer() { closeModal('creative-edit-overlay', 'creative-edit-drawer'); }
+
+      /* ===== 创意素材 - 选择素材弹框 ===== */
+      function openMaterialSelectModal() { openModal('material-select-overlay', 'material-select-modal'); }
+      function closeMaterialSelectModal() { closeModal('material-select-overlay', 'material-select-modal'); }
+
+      /* ===== 标题包 - 选择文案弹框 ===== */
+      function openTitleCopySelectModal() { openModal('title-copy-select-overlay', 'title-copy-select-modal'); }
+      function closeTitleCopySelectModal() { closeModal('title-copy-select-overlay', 'title-copy-select-modal'); }
+
+      /* ===== 标题包 - 手动添加文案弹框 ===== */
+      function openTitleCopyManualModal() { openModal('title-copy-manual-overlay', 'title-copy-manual-modal'); }
+      function closeTitleCopyManualModal() { closeModal('title-copy-manual-overlay', 'title-copy-manual-modal'); }
+    </script>
+  </body>
+</html>
