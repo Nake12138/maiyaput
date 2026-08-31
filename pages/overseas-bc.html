@@ -190,14 +190,20 @@
                 </table>
               </div>
               <div class="pagination">
-                <span class="pagination-total">共 3 条</span>
-                <button class="page-btn" disabled>&lt;</button>
-                <button class="page-btn active">1</button>
-                <button class="page-btn" disabled>&gt;</button>
-                <span class="pagination-size">
-                  <select class="form-select form-select-sm"><option>10条/页</option><option>20条/页</option><option>50条/页</option></select>
-                </span>
-                <span class="pagination-jumper">跳至 <input type="text" class="form-input form-input-xs" value="1" /> 页</span>
+                <span class="pagination-info">共 3 条</span>
+                <div class="pagination-pages">
+                  <button class="page-btn" disabled>&lt;</button>
+                  <button class="page-btn active">1</button>
+                  <button class="page-btn" disabled>&gt;</button>
+                </div>
+                <select class="page-size-select">
+                  <option value="10">10 条/页</option>
+                  <option value="20">20 条/页</option>
+                  <option value="50">50 条/页</option>
+                </select>
+                <span>跳至</span>
+                <input type="text" class="jump-input" value="1" />
+                <span>页</span>
               </div>
             </div>
           </div>
@@ -211,10 +217,8 @@
                 <button class="drawer-close" onclick="closeBcUserDrawer()">×</button>
               </div>
               <div class="drawer-body">
-                <div class="filter-bar" style="margin-bottom:12px;">
-                  <div class="filter-bar-row">
-                    <input type="text" id="bc-user-search" class="filter-input" placeholder="请输入用户名" style="flex:1;" oninput="renderBcUserList()" />
-                  </div>
+                <div class="modal-filter">
+                  <input type="text" id="bc-user-search" class="form-input" placeholder="请输入用户名搜索" style="flex:1;" oninput="renderBcUserList()" />
                 </div>
                 <div class="table-card" style="border-radius:4px;">
                   <div class="table-wrapper">
