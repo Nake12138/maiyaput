@@ -69,10 +69,13 @@
           </div>
 
           <div class="nav-section">
-            <div class="nav-item has-children">
+            <div class="nav-item has-children expanded">
               <span class="nav-item-icon">👤</span>
               <span>账号管理</span>
-              <span class="nav-item-caret">▶</span>
+              <span class="nav-item-caret">▼</span>
+            </div>
+            <div class="nav-children">
+              <span class="nav-child-item" data-page="overseas-bc">BC</span>
             </div>
           </div>
 
@@ -1316,6 +1319,10 @@
         }
         if (pageName === 'overseas-template') {
           window.location.href = navUrl('pages/overseas-template.html');
+          return;
+        }
+        if (pageName === 'overseas-bc') {
+          window.location.href = navUrl('pages/overseas-bc.html');
           return;
         }
         window.location.href = navUrl('index.html') + '#' + pageName;

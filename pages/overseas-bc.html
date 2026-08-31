@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BC - 海外投放系统</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../styles/main.css" />
+  </head>
+  <body>
+    <div class="layout">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="logo" style="padding: 16px 20px 12px;">
+          <div class="logo-icon">海</div>
+          <div class="logo-info">
+            <span class="logo-name">海外投放系统</span>
+            <span class="system-switch-trigger" onclick="toggleSystemMenu(event)">切换系统 <span class="system-switch-caret">▾</span></span>
+          </div>
+          <div class="system-switch-menu" id="systemSwitchMenu">
+            <div class="system-switch-item" data-system="cn" onclick="switchSystem('cn')">国内投放系统</div>
+            <div class="system-switch-item active" data-system="overseas" onclick="switchSystem('overseas')">海外投放系统<span class="check">✓</span></div>
+          </div>
+        </div>
+        <nav class="nav">
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">⊟</span>
+              <span>项目管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">📊</span>
+              <span>数据统计</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">▶</span>
+              <span>短剧管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">▣</span>
+              <span>素材管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">▦</span>
+              <span>批量投放</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+            <div class="nav-children">
+              <span class="nav-child-item" data-page="overseas-batch-delivery">批量投放</span>
+              <span class="nav-child-item" data-page="overseas-auto-delivery">自动化任务</span>
+              <span class="nav-child-item" data-page="overseas-template">模板管理</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children expanded">
+              <span class="nav-item-icon">👤</span>
+              <span>账号管理</span>
+              <span class="nav-item-caret">▼</span>
+            </div>
+            <div class="nav-children">
+              <span class="nav-child-item active" data-page="overseas-bc">BC</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">🗂️</span>
+              <span>资产管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">🛡️</span>
+              <span>控损管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">⚙️</span>
+              <span>系统设置</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">🔗</span>
+              <span>关联绑定</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+        </nav>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main">
+        <!-- Top Header -->
+        <header class="top-header">
+          <div class="top-header-left"></div>
+          <div class="top-header-right">
+            <div class="notification">
+              <span>消息</span>
+              <span class="notification-badge">88</span>
+            </div>
+            <div class="avatar">M</div>
+            <div class="user-info">
+              <span>UTC+8</span>
+            </div>
+            <button class="btn btn-outline btn-sm" onclick="alert('打开帮助指南')">帮助指南</button>
+          </div>
+        </header>
+
+        <!-- Content -->
+        <div class="content">
+          <div id="page-overseas-bc" class="page active">
+            <!-- Breadcrumb -->
+            <div class="breadcrumb">
+              <a href="#" onclick="showPage('dashboard')">首页</a>
+              <span class="breadcrumb-sep">/</span>
+              <span>账号管理</span>
+              <span class="breadcrumb-sep">/</span>
+              <span>BC</span>
+            </div>
+
+            <!-- Page Header -->
+            <div class="page-header" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+              <h2 class="page-title">BC</h2>
+            </div>
+
+            <!-- Filter Bar -->
+            <div class="filter-bar">
+              <div class="filter-bar-row">
+                <input type="text" class="filter-input" placeholder="请输入BC名称/ID" />
+                <div class="filter-actions">
+                  <button class="btn btn-primary btn-sm" onclick="searchBC()">查询</button>
+                  <button class="btn btn-outline btn-sm" onclick="resetBCFilter()">重置</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- BC Table -->
+            <div class="table-card">
+              <div class="table-wrapper">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>BC名称</th>
+                      <th>用户数量</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1001</td>
+                      <td>Mayaput-Main-BC</td>
+                      <td><a href="#" class="link" onclick="openBcUserDrawer('1001', 'Mayaput-Main-BC', 6);return false;">6</a></td>
+                    </tr>
+                    <tr>
+                      <td>1002</td>
+                      <td>ViviShort-BC</td>
+                      <td><a href="#" class="link" onclick="openBcUserDrawer('1002', 'ViviShort-BC', 4);return false;">4</a></td>
+                    </tr>
+                    <tr>
+                      <td>1003</td>
+                      <td>DramaGo-BC</td>
+                      <td><a href="#" class="link" onclick="openBcUserDrawer('1003', 'DramaGo-BC', 3);return false;">3</a></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="pagination">
+                <span class="pagination-total">共 3 条</span>
+                <button class="page-btn" disabled>&lt;</button>
+                <button class="page-btn active">1</button>
+                <button class="page-btn" disabled>&gt;</button>
+                <span class="pagination-size">
+                  <select class="form-select form-select-sm"><option>10条/页</option><option>20条/页</option><option>50条/页</option></select>
+                </span>
+                <span class="pagination-jumper">跳至 <input type="text" class="form-input form-input-xs" value="1" /> 页</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- BC 用户列表抽屉 -->
+          <div id="bc-user-overlay" class="drawer-overlay" onclick="closeBcUserDrawer()"></div>
+          <div id="bc-user-drawer" class="drawer drawer-narrow">
+            <div class="drawer-card">
+              <div class="drawer-header">
+                <span id="bc-user-title">用户列表</span>
+                <button class="drawer-close" onclick="closeBcUserDrawer()">×</button>
+              </div>
+              <div class="drawer-body">
+                <div class="filter-bar" style="margin-bottom:12px;">
+                  <div class="filter-bar-row">
+                    <input type="text" id="bc-user-search" class="filter-input" placeholder="请输入用户名" style="flex:1;" oninput="renderBcUserList()" />
+                  </div>
+                </div>
+                <div class="table-card" style="border-radius:4px;">
+                  <div class="table-wrapper">
+                    <table class="data-table">
+                      <thead>
+                        <tr><th>用户名</th></tr>
+                      </thead>
+                      <tbody id="bc-user-tbody"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="drawer-footer">
+                <button class="btn btn-outline btn-sm" onclick="closeBcUserDrawer()">关闭</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      /* ===== 跨环境页面跳转：兼容本地 / GitHub Pages / htmlpreview.github.io ===== */
+      function navUrl(rootPath) {
+        if (window.location.hostname === 'htmlpreview.github.io') {
+          return 'https://htmlpreview.github.io/?https://github.com/Nake12138/maiyaput/blob/main/' + rootPath;
+        }
+        if (rootPath === 'index.html') return '../index.html';
+        return './' + rootPath.replace(/^pages\//, '');
+      }
+
+      function showPage(pageName) {
+        if (pageName === 'overseas-bc') return;
+        if (pageName === 'overseas-batch-delivery') {
+          window.location.href = navUrl('pages/overseas-batch-delivery.html');
+          return;
+        }
+        if (pageName === 'overseas-auto-delivery') {
+          window.location.href = navUrl('pages/overseas-auto-delivery.html');
+          return;
+        }
+        if (pageName === 'overseas-template') {
+          window.location.href = navUrl('pages/overseas-template.html');
+          return;
+        }
+        window.location.href = navUrl('index.html') + '#' + pageName;
+      }
+
+      function switchSystem(system) {
+        try { localStorage.setItem('delivery_system', system); } catch (err) {}
+        if (system === 'overseas') {
+          window.location.href = navUrl('pages/overseas-batch-delivery.html');
+        } else {
+          window.location.href = navUrl('index.html');
+        }
+      }
+
+      function toggleSystemMenu(e) {
+        if (e) e.stopPropagation();
+        var menu = document.getElementById('systemSwitchMenu');
+        if (menu) menu.classList.toggle('open');
+      }
+
+      document.addEventListener('click', function (e) {
+        var menu = document.getElementById('systemSwitchMenu');
+        if (!menu || !menu.classList.contains('open')) return;
+        if (menu.contains(e.target)) return;
+        if (e.target.closest && e.target.closest('.system-switch-trigger')) return;
+        menu.classList.remove('open');
+      });
+
+      (function highlightCurrentSystem() {
+        var current = 'overseas';
+        try { current = localStorage.getItem('delivery_system') || 'overseas'; } catch (err) {}
+        document.querySelectorAll('.system-switch-item').forEach(function (item) {
+          item.classList.toggle('active', item.getAttribute('data-system') === current);
+        });
+      })();
+
+      /* ===== 侧边栏展开/收起 ===== */
+      document.querySelectorAll('.nav-item.has-children').forEach(function (item) {
+        item.addEventListener('click', function (e) {
+          e.stopPropagation();
+          this.classList.toggle('expanded');
+          var caret = this.querySelector('.nav-item-caret');
+          if (caret) caret.textContent = this.classList.contains('expanded') ? '▼' : '▶';
+        });
+      });
+
+      /* ===== 子菜单项跳转 ===== */
+      document.querySelectorAll('.nav-child-item[data-page], .nav-item[data-page]').forEach(function (item) {
+        item.addEventListener('click', function () {
+          showPage(this.getAttribute('data-page'));
+        });
+      });
+
+      /* ===== 遮罩点击关闭弹框（全系统统一） ===== */
+      document.addEventListener('click', function (e) {
+        var t = e.target;
+        if (!t || !t.classList) return;
+        if (t.classList.contains('drawer') || t.classList.contains('modal') || t.classList.contains('config-modal')) {
+          if (t.classList.contains('open')) {
+            t.classList.remove('open');
+            document.querySelectorAll('.drawer-overlay.open, .modal-overlay.open, .config-modal-overlay.open').forEach(function (o) { o.classList.remove('open'); });
+          }
+          return;
+        }
+        if (t.classList.contains('drawer-overlay') || t.classList.contains('modal-overlay') || t.classList.contains('config-modal-overlay')) {
+          t.classList.remove('open');
+          document.querySelectorAll('.drawer.open, .modal.open, .config-modal.open').forEach(function (m) { m.classList.remove('open'); });
+        }
+      });
+
+      /* ===== BC 页面逻辑 ===== */
+      var bcUserData = {
+        '1001': ['听泉', '娜可', '橙子', '孤树', '魔法七', '阿澈'],
+        '1002': ['听泉', '橙子', '小鹿', '青栀'],
+        '1003': ['娜可', '魔法七', '阿澈']
+      };
+      var currentBcId = null;
+
+      function searchBC() { alert('查询BC列表'); }
+
+      function resetBCFilter() {
+        document.querySelectorAll('#page-overseas-bc .filter-input').forEach(function (i) { i.value = ''; });
+      }
+
+      function openBcUserDrawer(bcId, bcName, count) {
+        currentBcId = bcId;
+        document.getElementById('bc-user-title').textContent = '用户列表 - ' + bcName + '（' + count + '）';
+        document.getElementById('bc-user-search').value = '';
+        renderBcUserList();
+        document.getElementById('bc-user-overlay').classList.add('open');
+        document.getElementById('bc-user-drawer').classList.add('open');
+      }
+
+      function closeBcUserDrawer() {
+        document.getElementById('bc-user-overlay').classList.remove('open');
+        document.getElementById('bc-user-drawer').classList.remove('open');
+      }
+
+      function renderBcUserList() {
+        var keyword = (document.getElementById('bc-user-search').value || '').trim().toLowerCase();
+        var users = bcUserData[currentBcId] || [];
+        var filtered = keyword ? users.filter(function (u) { return u.toLowerCase().indexOf(keyword) !== -1; }) : users;
+        var tbody = document.getElementById('bc-user-tbody');
+        if (!filtered.length) {
+          tbody.innerHTML = '<tr><td style="text-align:center;color:#999;padding:32px 0;">暂无数据</td></tr>';
+          return;
+        }
+        tbody.innerHTML = filtered.map(function (u) {
+          return '<tr><td>' + u + '</td></tr>';
+        }).join('');
+      }
+    </script>
+  </body>
+</html>
