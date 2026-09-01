@@ -250,11 +250,20 @@
                 <div class="modal-filter">
                   <input type="text" id="bc-user-search" class="form-input" placeholder="请输入用户名搜索" style="flex:1;" oninput="renderBcUserList()" />
                 </div>
+                <div class="bc-user-toolbar">
+                  <span class="bc-user-selected-info">已选择 <span id="bc-user-selected-count">0</span> 个用户</span>
+                  <button type="button" class="btn btn-primary btn-sm" id="bc-user-batch-assign-btn" onclick="openBatchAssignTtModal()" disabled>分配TikTok</button>
+                </div>
                 <div class="table-card" style="border-radius:4px;">
                   <div class="table-wrapper">
                     <table class="data-table">
                       <thead>
-                        <tr><th>用户名</th><th style="width:110px;">TikTok 账号</th><th style="width:140px;">操作</th></tr>
+                        <tr>
+                          <th style="width:36px;text-align:center;"><input type="checkbox" id="bc-user-checkall" onchange="toggleBcUserAll(this)" /></th>
+                          <th>用户名</th>
+                          <th style="width:110px;">TikTok 账号</th>
+                          <th style="width:140px;">操作</th>
+                        </tr>
                       </thead>
                       <tbody id="bc-user-tbody"></tbody>
                     </table>
@@ -263,6 +272,41 @@
               </div>
               <div class="drawer-footer">
                 <button class="btn btn-outline btn-sm" onclick="closeBcUserDrawer()">关闭</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 批量分配 TikTok 账号弹框 -->
+          <div id="batch-assign-overlay" class="modal-overlay" onclick="closeBatchAssignModal(event)"></div>
+          <div id="batch-assign-modal" class="modal">
+            <div class="modal-card" style="width:520px;">
+              <div class="modal-header">
+                <span>分配 TikTok 账号</span>
+                <button class="modal-close" onclick="closeBatchAssignModal()">×</button>
+              </div>
+              <div class="modal-body">
+                <div class="form-item" id="batch-assign-info" style="background:#f5f7fa;border:1px solid #e4e7ec;border-radius:4px;padding:8px 12px;font-size:13px;color:#344054;"></div>
+                <div class="modal-filter">
+                  <input type="text" id="batch-assign-search" class="form-input" placeholder="搜索 TikTok 账号名称" style="flex:1;" oninput="renderBatchAssignList()" />
+                </div>
+                <div class="table-card" style="border-radius:4px;max-height:300px;overflow:auto;">
+                  <div class="table-wrapper">
+                    <table class="data-table">
+                      <thead>
+                        <tr>
+                          <th style="width:48px;"><input type="checkbox" id="batch-assign-checkall" onchange="toggleBatchAssignAll(this)" /></th>
+                          <th>TikTok 账号</th>
+                          <th>语言</th>
+                        </tr>
+                      </thead>
+                      <tbody id="batch-assign-tbody"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-outline btn-sm" onclick="closeBatchAssignModal()">取消</button>
+                <button class="btn btn-primary btn-sm" onclick="submitBatchAssign()">确定</button>
               </div>
             </div>
           </div>
@@ -489,6 +533,26 @@
       /* 分配 TikTok 账号弹框需在用户列表抽屉之上显示（修正层级错乱） */
       #assign-tt-overlay { z-index: 1200; }
       #assign-tt-modal { z-index: 1201; }
+
+      /* 批量分配 TikTok 账号弹框：叠加在用户抽屉之上 */
+      #batch-assign-overlay { z-index: 1200; }
+      #batch-assign-modal { z-index: 1201; }
+
+      /* 用户列表工具条：已选数量 + 批量分配按钮 */
+      .bc-user-toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 0 0 10px;
+      }
+      .bc-user-selected-info {
+        font-size: 13px;
+        color: #344054;
+      }
+      .bc-user-selected-info span {
+        color: var(--color-info, #1d4ed8);
+        font-weight: 600;
+      }
 
       /* 已分配账户标记 */
       .tag-assigned {
@@ -788,6 +852,7 @@
       function openBcUserDrawer(bcId, bcName, count) {
         currentBcUserId = bcId;
         currentBcUserName = bcName;
+        batchSelectedUsers = [];
         document.getElementById('bc-user-title').textContent = '用户列表 - ' + bcName + '（' + count + '）';
         document.getElementById('bc-user-search').value = '';
         renderBcUserList();
@@ -806,15 +871,23 @@
         var filtered = keyword ? users.filter(function (u) { return u.toLowerCase().indexOf(keyword) !== -1; }) : users;
         var tbody = document.getElementById('bc-user-tbody');
         if (!filtered.length) {
-          tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#999;padding:32px 0;">暂无数据</td></tr>';
+          tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#999;padding:32px 0;">暂无数据</td></tr>';
+          updateBcUserSelected();
           return;
         }
         tbody.innerHTML = filtered.map(function (u) {
+          var checked = batchSelectedUsers.indexOf(u) !== -1 ? ' checked' : '';
           var ttCount = (bcUserTtCount[currentBcUserId] && bcUserTtCount[currentBcUserId][u] != null) ? bcUserTtCount[currentBcUserId][u] : 0;
           var ttCountLink = '<a href="#" class="link" onclick="openBcTtDrawer(\'' + currentBcUserId + '\', \'' + currentBcUserName + '\');return false;">' + ttCount + '</a>';
           var action = '<a href="#" class="link" onclick="openAssignTtModal(\'' + currentBcUserId + '\',\'' + u + '\');return false;">分配 TikTok 账号</a>';
-          return '<tr><td>' + u + '</td><td>' + ttCountLink + '</td><td>' + action + '</td></tr>';
+          return '<tr>' +
+            '<td style="text-align:center;"><input type="checkbox" class="bc-user-check" value="' + u + '"' + checked + ' onchange="updateBcUserSelected()" /></td>' +
+            '<td>' + u + '</td>' +
+            '<td>' + ttCountLink + '</td>' +
+            '<td>' + action + '</td>' +
+          '</tr>';
         }).join('');
+        updateBcUserSelected();
       }
 
       /* ===== 分配 TikTok 账号弹框（多选） ===== */
@@ -869,6 +942,94 @@
         if (!names.length) { alert('请至少选择一个未分配的 TikTok 账号'); return; }
         alert('已为「' + assignTtUser + '」分配 ' + names.length + ' 个 TikTok 账号：\n' + names.join('、'));
         closeAssignTtModal();
+      }
+
+      /* ===== 用户列表批量勾选 + 批量分配 TikTok 账号 ===== */
+      var batchSelectedUsers = [];
+
+      function toggleBcUserAll(src) {
+        document.querySelectorAll('#bc-user-tbody .bc-user-check').forEach(function (c) { c.checked = src.checked; });
+        updateBcUserSelected();
+      }
+
+      function updateBcUserSelected() {
+        /* 将当前可见勾选同步进 batchSelectedUsers（保留被搜索过滤掉但仍选中的用户） */
+        document.querySelectorAll('#bc-user-tbody .bc-user-check').forEach(function (c) {
+          var idx = batchSelectedUsers.indexOf(c.value);
+          if (c.checked && idx === -1) batchSelectedUsers.push(c.value);
+          if (!c.checked && idx !== -1) batchSelectedUsers.splice(idx, 1);
+        });
+        var count = batchSelectedUsers.length;
+        var countEl = document.getElementById('bc-user-selected-count');
+        var btn = document.getElementById('bc-user-batch-assign-btn');
+        if (countEl) countEl.textContent = count;
+        if (btn) btn.disabled = count === 0;
+        var all = document.getElementById('bc-user-checkall');
+        if (all) {
+          var checks = document.querySelectorAll('#bc-user-tbody .bc-user-check');
+          var someChecked = Array.prototype.some.call(checks, function (c) { return c.checked; });
+          var allChecked = checks.length > 0 && Array.prototype.every.call(checks, function (c) { return c.checked; });
+          all.checked = allChecked;
+          all.indeterminate = !allChecked && someChecked;
+        }
+      }
+
+      function openBatchAssignTtModal() {
+        if (!batchSelectedUsers.length) return;
+        var info = document.getElementById('batch-assign-info');
+        if (info) info.innerHTML = '已选择 <b style="color:#1d4ed8;">' + batchSelectedUsers.length + '</b> 个用户，请勾选要分配的 TikTok 账号：';
+        document.getElementById('batch-assign-search').value = '';
+        renderBatchAssignList();
+        document.getElementById('batch-assign-overlay').classList.add('open');
+        document.getElementById('batch-assign-modal').classList.add('open');
+      }
+
+      function closeBatchAssignModal(e) {
+        if (e && e.stopPropagation) e.stopPropagation();
+        document.getElementById('batch-assign-overlay').classList.remove('open');
+        document.getElementById('batch-assign-modal').classList.remove('open');
+      }
+
+      function renderBatchAssignList() {
+        var keyword = (document.getElementById('batch-assign-search').value || '').trim().toLowerCase();
+        var accounts = bcTtData[currentBcUserId] || [];
+        /* 已分配给任一选中用户的账号视为已分配，禁选 */
+        var assigned = {};
+        batchSelectedUsers.forEach(function (u) {
+          var arr = (bcUserAssignedTt[currentBcUserId] && bcUserAssignedTt[currentBcUserId][u]) || [];
+          arr.forEach(function (n) { assigned[n] = true; });
+        });
+        var filtered = keyword ? accounts.filter(function (a) { return (a.name || '').toLowerCase().indexOf(keyword) !== -1; }) : accounts;
+        var tbody = document.getElementById('batch-assign-tbody');
+        if (!filtered.length) {
+          tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#999;padding:24px 0;">暂无可选 TikTok 账号</td></tr>';
+          return;
+        }
+        tbody.innerHTML = filtered.map(function (a) {
+          var isAssigned = !!assigned[a.name];
+          var checkboxHtml = isAssigned
+            ? '<input type="checkbox" class="batch-assign-check" value="' + (a.name || '') + '" checked disabled /> <span class="tag-assigned">已分配</span>'
+            : '<input type="checkbox" class="batch-assign-check" value="' + (a.name || '') + '" />';
+          return '<tr>' +
+            '<td>' + checkboxHtml + '</td>' +
+            '<td>' + renderTtAccountCell(a.name, a.handle) + '</td>' +
+            '<td>' + (a.lang || '') + '</td>' +
+          '</tr>';
+        }).join('');
+      }
+
+      function toggleBatchAssignAll(src) {
+        document.querySelectorAll('#batch-assign-tbody .batch-assign-check').forEach(function (c) {
+          if (!c.disabled) c.checked = src.checked;
+        });
+      }
+
+      function submitBatchAssign() {
+        var checks = document.querySelectorAll('#batch-assign-tbody .batch-assign-check:checked:not(:disabled)');
+        var names = Array.prototype.map.call(checks, function (c) { return c.value; });
+        if (!names.length) { alert('请至少选择一个未分配的 TikTok 账号'); return; }
+        alert('已为 ' + batchSelectedUsers.length + ' 个用户分配 ' + names.length + ' 个 TikTok 账号：\n' + names.join('、'));
+        closeBatchAssignModal();
       }
 
       /* ===== TikTok 账号列表抽屉 ===== */
