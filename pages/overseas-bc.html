@@ -185,44 +185,29 @@
                   <tbody>
                     <tr>
                       <td>Mayaput-Main-BC</td>
-                      <td><a href="#" class="link" onclick="toggleBcUserExpand('1001', 'Mayaput-Main-BC', 6);return false;">6</a></td>
+                      <td><a href="#" class="link" onclick="openBcUserDrawer('1001', 'Mayaput-Main-BC', 6);return false;">6</a></td>
                       <td><a href="#" class="link" onclick="openBcTtDrawer('1001', 'Mayaput-Main-BC');return false;">3</a></td>
                       <td>
                         <a href="#" class="link" onclick="openBcNewTtModal('Mayaput-Main-BC');return false;">新建 TikTok 账号</a>
                         <a href="#" class="link" style="margin-left:12px;" onclick="openTtQrModal('Mayaput-Main-BC');return false;">关联 TikTok 账号</a>
                       </td>
                     </tr>
-                    <tr class="bc-user-expand-row" id="bc-expand-1001" style="display:none;">
-                      <td colspan="4" style="background:#fafbfc;padding:0;">
-                        <div class="bc-user-expand" id="bc-expand-body-1001"></div>
-                      </td>
-                    </tr>
                     <tr>
                       <td>ViviShort-BC</td>
-                      <td><a href="#" class="link" onclick="toggleBcUserExpand('1002', 'ViviShort-BC', 4);return false;">4</a></td>
+                      <td><a href="#" class="link" onclick="openBcUserDrawer('1002', 'ViviShort-BC', 4);return false;">4</a></td>
                       <td><a href="#" class="link" onclick="openBcTtDrawer('1002', 'ViviShort-BC');return false;">2</a></td>
                       <td>
                         <a href="#" class="link" onclick="openBcNewTtModal('ViviShort-BC');return false;">新建 TikTok 账号</a>
                         <a href="#" class="link" style="margin-left:12px;" onclick="openTtQrModal('ViviShort-BC');return false;">关联 TikTok 账号</a>
                       </td>
                     </tr>
-                    <tr class="bc-user-expand-row" id="bc-expand-1002" style="display:none;">
-                      <td colspan="4" style="background:#fafbfc;padding:0;">
-                        <div class="bc-user-expand" id="bc-expand-body-1002"></div>
-                      </td>
-                    </tr>
                     <tr>
                       <td>DramaGo-BC</td>
-                      <td><a href="#" class="link" onclick="toggleBcUserExpand('1003', 'DramaGo-BC', 3);return false;">3</a></td>
+                      <td><a href="#" class="link" onclick="openBcUserDrawer('1003', 'DramaGo-BC', 3);return false;">3</a></td>
                       <td><a href="#" class="link" onclick="openBcTtDrawer('1003', 'DramaGo-BC');return false;">2</a></td>
                       <td>
                         <a href="#" class="link" onclick="openBcNewTtModal('DramaGo-BC');return false;">新建 TikTok 账号</a>
                         <a href="#" class="link" style="margin-left:12px;" onclick="openTtQrModal('DramaGo-BC');return false;">关联 TikTok 账号</a>
-                      </td>
-                    </tr>
-                    <tr class="bc-user-expand-row" id="bc-expand-1003" style="display:none;">
-                      <td colspan="4" style="background:#fafbfc;padding:0;">
-                        <div class="bc-user-expand" id="bc-expand-body-1003"></div>
                       </td>
                     </tr>
                   </tbody>
@@ -277,6 +262,35 @@
               <div class="modal-footer">
                 <button class="btn btn-outline btn-sm" onclick="closeAssignTtModal()">取消</button>
                 <button class="btn btn-primary btn-sm" onclick="submitAssignTt()">确定</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 用户列表抽屉 -->
+          <div id="bc-user-overlay" class="drawer-overlay" onclick="closeBcUserDrawer()"></div>
+          <div id="bc-user-drawer" class="drawer">
+            <div class="drawer-card">
+              <div class="drawer-header">
+                <span id="bc-user-title">用户列表</span>
+                <button class="drawer-close" onclick="closeBcUserDrawer()">×</button>
+              </div>
+              <div class="drawer-body">
+                <div class="modal-filter">
+                  <input type="text" id="bc-user-search" class="form-input" placeholder="请输入用户名搜索" style="flex:1;" oninput="renderBcUserList()" />
+                </div>
+                <div class="table-card" style="border-radius:4px;">
+                  <div class="table-wrapper">
+                    <table class="data-table">
+                      <thead>
+                        <tr><th>用户名</th><th style="width:110px;">TikTok 账号数量</th><th style="width:140px;">操作</th></tr>
+                      </thead>
+                      <tbody id="bc-user-tbody"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="drawer-footer">
+                <button class="btn btn-outline btn-sm" onclick="closeBcUserDrawer()">关闭</button>
               </div>
             </div>
           </div>
@@ -480,24 +494,10 @@
         display: flex;
       }
 
-      /* ===== 用户列表下方展开 ===== */
-      .bc-user-expand {
-        padding: 16px 0;
-        border-top: 1px dashed #eef0f3;
-      }
-      .bc-list-table,
-      .bc-user-sub-table {
+      /* ===== 商务中心主表 ===== */
+      .bc-list-table {
         table-layout: fixed;
         width: 100%;
-      }
-      .bc-user-expand .data-table th,
-      .bc-user-expand .data-table td {
-        font-size: 13px;
-      }
-      /* 子表首列占位，对齐父表「商务中心名称」列 */
-      .bc-user-sub-table th:first-child,
-      .bc-user-sub-table td:first-child {
-        color: transparent;
       }
     </style>
 
@@ -633,7 +633,8 @@
         '1003': { '娜可': 1, '魔法七': 0, '阿澈': 1 }
       };
       var currentBcTtId = null;
-      var expandedBcId = null;
+      var currentBcUserId = null;
+      var currentBcUserName = null;
       var assignTtBcId = null;
       var assignTtUser = null;
 
@@ -643,46 +644,37 @@
         document.querySelectorAll('#page-overseas-bc .filter-input').forEach(function (i) { i.value = ''; });
       }
 
-      /* ===== 用户数量：下方展开逐行显示用户 ===== */
-      function toggleBcUserExpand(bcId, bcName, count) {
-        if (expandedBcId === bcId) {
-          var open = document.getElementById('bc-expand-' + bcId);
-          if (open) open.style.display = 'none';
-          expandedBcId = null;
-          return;
-        }
-        if (expandedBcId) {
-          var prev = document.getElementById('bc-expand-' + expandedBcId);
-          if (prev) prev.style.display = 'none';
-        }
-        expandedBcId = bcId;
-        var row = document.getElementById('bc-expand-' + bcId);
-        if (row) row.style.display = '';
-        renderBcUserExpandList(bcId, bcName, count);
+      /* ===== 用户数量：点击打开用户列表抽屉 ===== */
+      function openBcUserDrawer(bcId, bcName, count) {
+        currentBcUserId = bcId;
+        currentBcUserName = bcName;
+        document.getElementById('bc-user-title').textContent = '用户列表 - ' + bcName + '（' + count + '）';
+        document.getElementById('bc-user-search').value = '';
+        renderBcUserList();
+        document.getElementById('bc-user-overlay').classList.add('open');
+        document.getElementById('bc-user-drawer').classList.add('open');
       }
 
-      function renderBcUserExpandList(bcId, bcName, count) {
-        var users = bcUserData[bcId] || [];
-        var rows = users.map(function (u) {
-          var ttCount = (bcUserTtCount[bcId] && bcUserTtCount[bcId][u] != null) ? bcUserTtCount[bcId][u] : 0;
-          var ttCountLink = '<a href="#" class="link" onclick="openBcTtDrawer(\'' + bcId + '\', \'' + bcName + '\');return false;">' + ttCount + '</a>';
-          var action = '<a href="#" class="link" onclick="openAssignTtModal(\'' + bcId + '\',\'' + u + '\');return false;">分配 TikTok 账号</a>';
-          return '<tr><td></td><td>' + u + '</td><td>' + ttCountLink + '</td><td>' + action + '</td></tr>';
+      function closeBcUserDrawer() {
+        document.getElementById('bc-user-overlay').classList.remove('open');
+        document.getElementById('bc-user-drawer').classList.remove('open');
+      }
+
+      function renderBcUserList() {
+        var keyword = (document.getElementById('bc-user-search').value || '').trim().toLowerCase();
+        var users = bcUserData[currentBcUserId] || [];
+        var filtered = keyword ? users.filter(function (u) { return u.toLowerCase().indexOf(keyword) !== -1; }) : users;
+        var tbody = document.getElementById('bc-user-tbody');
+        if (!filtered.length) {
+          tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#999;padding:32px 0;">暂无数据</td></tr>';
+          return;
+        }
+        tbody.innerHTML = filtered.map(function (u) {
+          var ttCount = (bcUserTtCount[currentBcUserId] && bcUserTtCount[currentBcUserId][u] != null) ? bcUserTtCount[currentBcUserId][u] : 0;
+          var ttCountLink = '<a href="#" class="link" onclick="closeBcUserDrawer();openBcTtDrawer(\'' + currentBcUserId + '\', \'' + currentBcUserName + '\');return false;">' + ttCount + '</a>';
+          var action = '<a href="#" class="link" onclick="openAssignTtModal(\'' + currentBcUserId + '\',\'' + u + '\');return false;">分配 TikTok 账号</a>';
+          return '<tr><td>' + u + '</td><td>' + ttCountLink + '</td><td>' + action + '</td></tr>';
         }).join('');
-        var html = '<div class="bc-user-expand-inner">' +
-          '<div class="table-card" style="border-radius:4px;">' +
-            '<div class="table-wrapper"><table class="data-table bc-user-sub-table">' +
-              '<colgroup>' +
-                '<col style="width:32%" />' +
-                '<col style="width:15%" />' +
-                '<col style="width:15%" />' +
-                '<col style="width:38%" />' +
-              '</colgroup>' +
-              '<thead><tr><th></th><th>用户名</th><th>TikTok 账号数量</th><th>操作</th></tr></thead>' +
-              '<tbody>' + rows + '</tbody>' +
-            '</table></div>' +
-          '</div></div>';
-        document.getElementById('bc-expand-body-' + bcId).innerHTML = html;
       }
 
       /* ===== 分配 TikTok 账号弹框（多选） ===== */
