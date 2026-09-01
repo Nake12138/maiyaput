@@ -694,6 +694,190 @@
         font-size: 12px;
         color: #98a2b3;
       }
+
+      /* ===== 需求说明（简洁版 PRD）面板 ===== */
+      .prd-float-btn {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        z-index: 1300;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 14px;
+        font-size: 13px;
+        color: #fff;
+        background: #1d4ed8;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(29, 78, 216, 0.35);
+        transition: box-shadow 0.15s;
+      }
+      .prd-float-btn:hover {
+        box-shadow: 0 4px 12px rgba(29, 78, 216, 0.45);
+      }
+      .prd-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 1299;
+        background: rgba(16, 24, 40, 0.45);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.2s, visibility 0.2s;
+      }
+      .prd-overlay.open {
+        opacity: 1;
+        visibility: visible;
+      }
+      .prd-panel {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 460px;
+        max-width: 88vw;
+        z-index: 1301;
+        background: #fff;
+        box-shadow: -4px 0 20px rgba(16, 24, 40, 0.15);
+        transform: translateX(102%);
+        transition: transform 0.25s ease;
+        display: flex;
+        flex-direction: column;
+      }
+      .prd-panel.open {
+        transform: translateX(0);
+      }
+      .prd-panel-header {
+        flex: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 16px;
+        border-bottom: 1px solid #e4e7ec;
+        background: #f8fafc;
+      }
+      .prd-panel-title {
+        font-size: 15px;
+        font-weight: 600;
+        color: #1d2939;
+      }
+      .prd-panel-sub {
+        margin-top: 2px;
+        font-size: 12px;
+        color: #98a2b3;
+      }
+      .prd-panel-close {
+        width: 28px;
+        height: 28px;
+        border: none;
+        border-radius: 4px;
+        background: transparent;
+        color: #667085;
+        font-size: 18px;
+        line-height: 1;
+        cursor: pointer;
+      }
+      .prd-panel-close:hover {
+        background: #eef2f6;
+        color: #1d2939;
+      }
+      .prd-panel-body {
+        flex: 1;
+        overflow-y: auto;
+        padding: 14px 16px 20px;
+      }
+      .prd-story {
+        border: 1px solid #e4e7ec;
+        border-radius: 6px;
+        margin-bottom: 10px;
+        overflow: hidden;
+        background: #fff;
+      }
+      .prd-story-head {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 12px;
+        cursor: pointer;
+        user-select: none;
+      }
+      .prd-story-head:hover {
+        background: #f8fafc;
+      }
+      .prd-story-id {
+        font-size: 12px;
+        font-weight: 600;
+        color: #1d4ed8;
+        background: #eff4ff;
+        border-radius: 4px;
+        padding: 1px 6px;
+        flex: none;
+      }
+      .prd-story-title {
+        flex: 1;
+        font-size: 13px;
+        font-weight: 600;
+        color: #1d2939;
+      }
+      .prd-story-pri {
+        flex: none;
+        font-size: 11px;
+        color: #b54708;
+        background: #fffaeb;
+        border: 1px solid #fedf89;
+        border-radius: 4px;
+        padding: 0 5px;
+      }
+      .prd-story-pri.p1 {
+        color: #027a48;
+        background: #ecfdf3;
+        border-color: #abefc6;
+      }
+      .prd-story-caret {
+        flex: none;
+        font-size: 11px;
+        color: #98a2b3;
+        transition: transform 0.15s;
+      }
+      .prd-story.open .prd-story-caret {
+        transform: rotate(90deg);
+      }
+      .prd-story-desc {
+        padding: 2px 12px 8px;
+        font-size: 12px;
+        line-height: 1.6;
+        color: #475467;
+      }
+      .prd-story-ac {
+        display: none;
+        padding: 0 12px 12px;
+      }
+      .prd-story.open .prd-story-ac {
+        display: block;
+      }
+      .prd-story-ac-item {
+        position: relative;
+        padding-left: 18px;
+        margin: 5px 0;
+        font-size: 12px;
+        line-height: 1.55;
+        color: #475467;
+      }
+      .prd-story-ac-item::before {
+        content: '☑';
+        position: absolute;
+        left: 0;
+        top: 0;
+        font-size: 12px;
+        color: #1d4ed8;
+      }
+      .prd-story-ac-head {
+        margin: 8px 0 2px;
+        font-size: 12px;
+        font-weight: 600;
+        color: #344054;
+      }
     </style>
 
     <script>
@@ -1221,8 +1405,145 @@
         wrap.classList.remove('has-file');
       }
 
+      /* ===== 需求说明（简洁版 PRD）面板 ===== */
+      var prdStories = [
+        {
+          id: 'US-001', title: '商务中心列表查询与展示', priority: 'P0',
+          desc: '作为投放运营，我想要查看并按名称搜索商务中心列表，以便快速定位目标商务中心。',
+          ac: [
+            '页面加载后展示 BC 列表，列为：商务中心名称 / 用户数量 / TikTok 账号 / 操作',
+            '支持按商务中心名称模糊查询与重置',
+            '「用户数量」「TikTok 账号」为可点击链接，分别打开对应抽屉',
+            '操作列提供「添加 TikTok 账号」「刷新」；点击「刷新」调用接口查询商务中心下的用户和tiktok账号列表'
+          ]
+        },
+        {
+          id: 'US-002', title: '用户列表抽屉与搜索', priority: 'P0',
+          desc: '作为投放运营，我想要打开某个 BC 的成员列表并搜索用户，以便定位目标成员。',
+          ac: [
+            '点击「用户数量」打开右侧窄抽屉（约 720px），标题：用户列表 - {BC名称}（{用户数}）',
+            '支持按用户名实时搜索（包含匹配、不区分大小写），无结果显示「暂无数据」空态',
+            '每次打开抽屉重置搜索关键字与勾选状态'
+          ]
+        },
+        {
+          id: 'US-003', title: '单用户分配 TikTok 账号', priority: 'P0',
+          desc: '作为投放运营，我想要为单个用户分配 TikTok 账号，以便授予其投放资产权限。',
+          ac: [
+            '用户行内「分配 TikTok 账号」打开弹框，标题：分配 TikTok 账号 - {用户名}',
+            '弹框列出该 BC 全部 TikTok 账号（头像 + 名称 + handle + 语言），支持按名称搜索与表头全选',
+            '已分配给该用户的账号复选框禁用并标注「已分配」，全选自动跳过',
+            '未勾选可用账号时点「确定」→ 提示「请至少选择一个未分配的 TikTok 账号」',
+            '弹框层级高于用户抽屉，关闭弹框不影响底层抽屉'
+          ]
+        },
+        {
+          id: 'US-004', title: '批量分配 TikTok 账号', priority: 'P0',
+          desc: '作为投放运营，我想要勾选多个用户后批量分配 TikTok 账号，以便提高分配效率。',
+          ac: [
+            '用户列表首列复选框（表头全选支持半选态），工具条实时显示「已选择 X 个用户」',
+            '未勾选用户时「分配TikTok」按钮置灰',
+            '点击「分配TikTok」打开弹框，顶部提示「已选择 N 个用户，请勾选要分配的 TikTok 账号」',
+            '弹框账号列表第一列固定显示复选框，不展示「已分配」状态（是否已分配由后端自动判断）',
+            '未勾选账号时点「确定」→ 提示「请至少选择一个 TikTok 账号」'
+          ]
+        },
+        {
+          id: 'US-005', title: 'TikTok 账号列表抽屉与搜索', priority: 'P0',
+          desc: '作为投放运营，我想要查看某个 BC 的 TikTok 账号资产明细，以便了解资产情况。',
+          ac: [
+            '点击主表或用户列表的「TikTok 账号」数量，打开右侧宽抽屉，标题：TikTok 账号列表 - {BC名称}（{数量}）',
+            '表格字段：TikTok账号名称（头像 + handle）/ 语言 / 备注 / 更新人 / 更新时间，无操作列',
+            '支持按账号名称实时搜索，无结果显示空态',
+            '从用户列表进入时叠加在用户抽屉之上，关闭后回到用户列表'
+          ]
+        },
+        {
+          id: 'US-006', title: '添加 TikTok 账号（新建方式）', priority: 'P0',
+          desc: '作为投放运营，我想要在 BC 下新建 TikTok 账号，以便扩充资产。',
+          ac: [
+            '点击「添加 TikTok 账号」打开弹框，商务中心名称自动带入且不可编辑',
+            '添加方式为左右两张卡片：「新建 TikTok 账号」「关联 TikTok 账号」，选中卡片高亮',
+            '选择「新建」后在弹框内直接展开字段：TikTok账号名称（必填）/ 头像（必传，支持预览与清除）/ 国家地区（必选，下拉 20 项）',
+            '校验失败分别提示「请输入TikTok账号名称 / 请上传头像 / 请选择国家/地区」；成功提示「创建成功：{名称}（{BC} / {地区}）」',
+            '未选择方式时底部仅显示「取消」；每次打开弹框重置全部状态'
+          ]
+        },
+        {
+          id: 'US-007', title: '添加 TikTok 账号（关联方式）', priority: 'P0',
+          desc: '作为投放运营，我想要通过扫码关联已有 TikTok 账号，以便复用已有资产。',
+          ac: [
+            '在添加弹框中选择「关联 TikTok 账号」卡片',
+            '弹框内展开二维码区域：二维码 + 提示「请使用 TikTok App 扫描二维码完成账号授权」+ 授权对象 {BC名称}',
+            '底部按钮切换为「关闭」'
+          ]
+        }
+      ];
+
+      function renderPrdPanel() {
+        var body = document.getElementById('prd-panel-body');
+        if (!body) return;
+        body.innerHTML = prdStories.map(function (s, i) {
+          var acItems = s.ac.map(function (item) {
+            return '<div class="prd-story-ac-item">' + item + '</div>';
+          }).join('');
+          return '<div class="prd-story' + (i === 0 ? ' open' : '') + '" id="prd-story-' + s.id + '">' +
+            '<div class="prd-story-head" onclick="togglePrdStory(\'' + s.id + '\')">' +
+              '<span class="prd-story-id">' + s.id + '</span>' +
+              '<span class="prd-story-title">' + s.title + '</span>' +
+              '<span class="prd-story-pri' + (s.priority === 'P1' ? ' p1' : '') + '">' + s.priority + '</span>' +
+              '<span class="prd-story-caret">▶</span>' +
+            '</div>' +
+            '<div class="prd-story-desc">' + s.desc + '</div>' +
+            '<div class="prd-story-ac"><div class="prd-story-ac-head">验收标准</div>' + acItems + '</div>' +
+          '</div>';
+        }).join('');
+      }
+
+      function togglePrdStory(id) {
+        var el = document.getElementById('prd-story-' + id);
+        if (el) el.classList.toggle('open');
+      }
+
+      function openPrdPanel() {
+        document.getElementById('prd-overlay').classList.add('open');
+        document.getElementById('prd-panel').classList.add('open');
+        document.getElementById('prd-float-btn').style.display = 'none';
+      }
+
+      function closePrdPanel() {
+        document.getElementById('prd-overlay').classList.remove('open');
+        document.getElementById('prd-panel').classList.remove('open');
+        document.getElementById('prd-float-btn').style.display = '';
+      }
+
       /* 初始化商务中心主表 */
       renderBcList();
+    </script>
+
+    <!-- ===== 需求说明（简洁版 PRD）入口 ===== -->
+    <div id="prd-overlay" class="prd-overlay"></div>
+    <aside id="prd-panel" class="prd-panel" role="dialog" aria-label="交互需求说明">
+      <div class="prd-panel-header">
+        <div>
+          <div class="prd-panel-title">商务中心 · 交互需求说明</div>
+          <div class="prd-panel-sub">简洁版 PRD（7 个用户故事 · 点击标题展开验收标准）</div>
+        </div>
+        <button type="button" class="prd-panel-close" onclick="closePrdPanel()" title="关闭">×</button>
+      </div>
+      <div class="prd-panel-body" id="prd-panel-body"></div>
+    </aside>
+    <button type="button" id="prd-float-btn" class="prd-float-btn" onclick="openPrdPanel()">📋 需求说明</button>
+
+    <script>
+      /* PRD 面板初始化：在 DOM 就绪后执行，避免引用尚未渲染的面板节点 */
+      (function () {
+        document.getElementById('prd-overlay').addEventListener('click', function (e) {
+          if (e) e.stopPropagation();
+          closePrdPanel();
+        });
+        renderPrdPanel();
+      })();
     </script>
   </body>
 </html>

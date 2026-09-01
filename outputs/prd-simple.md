@@ -1,6 +1,6 @@
 # 商务中心页面 PRD（简洁版）
 
-> **原型来源**：`pages/overseas-bc.html`（海外投放系统 → 账号管理 → 商务中心）
+> **原型来源**：`pages/overseas-bc.html`（海外投放系统 → 账号管理 → 商务中心）  
 > **版本**：v1.0-simple ｜ **说明**：聚焦用户故事与验收标准，接口细节见文末官方文档链接
 
 ---
@@ -16,26 +16,32 @@
 > 按实施顺序排列（数据源 → 展示 → 交互），优先级 P0 为必须、P1 为增强。
 
 ### US-001 商务中心列表查询与展示（P0）
+
 作为投放运营，我想要查看并按名称搜索商务中心列表，以便快速定位目标商务中心。
 
 **验收标准**
+
 - [ ] 页面加载后展示 BC 列表，列为：商务中心名称 / 用户数量 / TikTok 账号 / 操作
 - [ ] 支持按商务中心名称模糊查询与重置
 - [ ] 「用户数量」「TikTok 账号」为可点击链接，分别打开对应抽屉
-- [ ] 操作列提供「添加 TikTok 账号」「刷新」；点击「刷新」重新渲染当前列表
+- [ ] 操作列提供「添加 TikTok 账号」「刷新」；点击「刷新」调用接口查询商务中心下的用户和tiktok账号列表
 
 ### US-002 用户列表抽屉与搜索（P0）
+
 作为投放运营，我想要打开某个 BC 的成员列表并搜索用户，以便定位目标成员。
 
 **验收标准**
+
 - [ ] 点击「用户数量」打开右侧窄抽屉（约 720px），标题：`用户列表 - {BC名称}（{用户数}）`
 - [ ] 支持按用户名实时搜索（包含匹配、不区分大小写），无结果显示「暂无数据」空态
 - [ ] 每次打开抽屉重置搜索关键字与勾选状态
 
 ### US-003 单用户分配 TikTok 账号（P0）
+
 作为投放运营，我想要为单个用户分配 TikTok 账号，以便授予其投放资产权限。
 
 **验收标准**
+
 - [ ] 用户行内「分配 TikTok 账号」打开弹框，标题：`分配 TikTok 账号 - {用户名}`
 - [ ] 弹框列出该 BC 全部 TikTok 账号（头像 + 名称 + handle + 语言），支持按名称搜索与表头全选
 - [ ] 已分配给该用户的账号复选框禁用并标注「已分配」，全选自动跳过
@@ -43,9 +49,11 @@
 - [ ] 弹框层级高于用户抽屉，关闭弹框不影响底层抽屉
 
 ### US-004 批量分配 TikTok 账号（P0）
+
 作为投放运营，我想要勾选多个用户后批量分配 TikTok 账号，以便提高分配效率。
 
 **验收标准**
+
 - [ ] 用户列表首列复选框（表头全选支持半选态），工具条实时显示「已选择 X 个用户」
 - [ ] 未勾选用户时「分配TikTok」按钮置灰
 - [ ] 点击「分配TikTok」打开弹框，顶部提示「已选择 N 个用户，请勾选要分配的 TikTok 账号」
@@ -53,18 +61,22 @@
 - [ ] 未勾选账号时点「确定」→ 提示「请至少选择一个 TikTok 账号」
 
 ### US-005 TikTok 账号列表抽屉与搜索（P0）
+
 作为投放运营，我想要查看某个 BC 的 TikTok 账号资产明细，以便了解资产情况。
 
 **验收标准**
+
 - [ ] 点击主表或用户列表的「TikTok 账号」数量，打开右侧宽抽屉，标题：`TikTok 账号列表 - {BC名称}（{数量}）`
 - [ ] 表格字段：TikTok账号名称（头像 + handle）/ 语言 / 备注 / 更新人 / 更新时间，无操作列
 - [ ] 支持按账号名称实时搜索，无结果显示空态
 - [ ] 从用户列表进入时叠加在用户抽屉之上，关闭后回到用户列表
 
 ### US-006 添加 TikTok 账号（新建方式）（P0）
+
 作为投放运营，我想要在 BC 下新建 TikTok 账号，以便扩充资产。
 
 **验收标准**
+
 - [ ] 点击「添加 TikTok 账号」打开弹框，商务中心名称自动带入且不可编辑
 - [ ] 添加方式为左右两张卡片：「新建 TikTok 账号」「关联 TikTok 账号」，选中卡片高亮
 - [ ] 选择「新建」后在弹框内直接展开字段：TikTok账号名称（必填）/ 头像（必传，支持预览与清除）/ 国家地区（必选，下拉 20 项）
@@ -72,9 +84,11 @@
 - [ ] 未选择方式时底部仅显示「取消」；每次打开弹框重置全部状态
 
 ### US-007 添加 TikTok 账号（关联方式）（P0）
+
 作为投放运营，我想要通过扫码关联已有 TikTok 账号，以便复用已有资产。
 
 **验收标准**
+
 - [ ] 在添加弹框中选择「关联 TikTok 账号」卡片
 - [ ] 弹框内展开二维码区域：二维码 + 提示「请使用 TikTok App 扫描二维码完成账号授权」+ 授权对象 `{BC名称}`
 - [ ] 底部按钮切换为「关闭」
@@ -85,15 +99,15 @@
 
 > 接口细节暂不梳理，下表列出各用户故事对应的 TikTok Business API 官方文档链接。
 
-| 用户故事 | 接口用途 | 官方文档链接 |
-|---------|---------|-------------|
-| US-001 | 获取商务中心列表 | https://business-api.tiktok.com/portal/docs/get-business-centers/v1.3 |
-| US-002 | 获取商务中心成员列表 | https://business-api.tiktok.com/portal/docs/get-the-members-of-a-bc/v1.3 |
-| US-003 / US-004 / US-005 | 获取资产（TikTok 账号）列表 | https://business-api.tiktok.com/portal/docs/get-assets/v1.3 |
-| US-003 / US-004 | 将资产分配给用户 | https://business-api.tiktok.com/portal/docs/assign-an-asset/v1.3 |
-| US-003（撤销场景） | 撤销用户对资产的权限 | https://business-api.tiktok.com/portal/docs/unassign-an-asset/v1.3 |
-| US-006 | 在商务中心创建Tiktok账号 | https://business-api.tiktok.com/portal/docs/create-an-organization-account-in-a-business-center/v1.3 |
-| US-007 | 获取 TikTok 账号授权链接 | https://business-api.tiktok.com/portal/docs/obtain-a-tiktok-account-ad-delivery-authorization-url/v1.3 |
+| 用户故事                     | 接口用途              | 官方文档链接                                                                                                   |
+| ------------------------ | ----------------- | -------------------------------------------------------------------------------------------------------- |
+| US-001                   | 获取商务中心列表          | <https://business-api.tiktok.com/portal/docs/get-business-centers/v1.3>                                  |
+| US-002                   | 获取商务中心成员列表        | <https://business-api.tiktok.com/portal/docs/get-the-members-of-a-bc/v1.3>                               |
+| US-003 / US-004 / US-005 | 获取资产（TikTok 账号）列表 | <https://business-api.tiktok.com/portal/docs/get-assets/v1.3>                                            |
+| US-003 / US-004          | 将资产分配给用户          | <https://business-api.tiktok.com/portal/docs/assign-an-asset/v1.3>                                       |
+| US-003（撤销场景）             | 撤销用户对资产的权限        | <https://business-api.tiktok.com/portal/docs/unassign-an-asset/v1.3>                                     |
+| US-006                   | 在商务中心创建Tiktok账号   | <https://business-api.tiktok.com/portal/docs/create-an-organization-account-in-a-business-center/v1.3>   |
+| US-007                   | 获取 TikTok 账号授权链接  | <https://business-api.tiktok.com/portal/docs/obtain-a-tiktok-account-ad-delivery-authorization-url/v1.3> |
 
 ## 4. 非功能需求（简）
 
