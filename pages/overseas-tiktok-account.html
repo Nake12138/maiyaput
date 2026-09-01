@@ -188,7 +188,7 @@
                   </thead>
                   <tbody>
                     <tr>
-                      <td>Sasa ดู</td>
+                      <td data-handle="sasa_dailyup">Sasa ดู</td>
                       <td>葡萄牙语</td>
                       <td>--</td>
                       <td>admin</td>
@@ -196,7 +196,7 @@
                       <td><a href="#" class="link" onclick="openEditTiktokModal('Sasa ดู','葡萄牙语','--');return false;">编辑</a></td>
                     </tr>
                     <tr>
-                      <td>廖廖短剧</td>
+                      <td data-handle="liaoliaodrama_tw">廖廖短剧</td>
                       <td>繁体中文</td>
                       <td>--</td>
                       <td>admin</td>
@@ -204,7 +204,7 @@
                       <td><a href="#" class="link" onclick="openEditTiktokModal('廖廖短剧','繁体中文','--');return false;">编辑</a></td>
                     </tr>
                     <tr>
-                      <td>Titi Pendek</td>
+                      <td data-handle="titipendek_my">Titi Pendek</td>
                       <td>马来西亚语</td>
                       <td>--</td>
                       <td>admin</td>
@@ -212,7 +212,7 @@
                       <td><a href="#" class="link" onclick="openEditTiktokModal('Titi Pendek','马来西亚语','--');return false;">编辑</a></td>
                     </tr>
                     <tr>
-                      <td>Yoyo Cortos</td>
+                      <td data-handle="yoyocortos_mx">Yoyo Cortos</td>
                       <td>英语</td>
                       <td>--</td>
                       <td>admin</td>
@@ -220,7 +220,7 @@
                       <td><a href="#" class="link" onclick="openEditTiktokModal('Yoyo Cortos','英语','--');return false;">编辑</a></td>
                     </tr>
                     <tr>
-                      <td>Rio Curtas</td>
+                      <td data-handle="riocurtas_br">Rio Curtas</td>
                       <td>英语</td>
                       <td>--</td>
                       <td>admin</td>
@@ -228,7 +228,7 @@
                       <td><a href="#" class="link" onclick="openEditTiktokModal('Rio Curtas','英语','--');return false;">编辑</a></td>
                     </tr>
                     <tr>
-                      <td>Bobo Flicks</td>
+                      <td data-handle="boboflicks_en">Bobo Flicks</td>
                       <td>英语</td>
                       <td>--</td>
                       <td>admin</td>
@@ -236,7 +236,7 @@
                       <td><a href="#" class="link" onclick="openEditTiktokModal('Bobo Flicks','英语','--');return false;">编辑</a></td>
                     </tr>
                     <tr>
-                      <td>Milo Reels</td>
+                      <td data-handle="miloreels_en">Milo Reels</td>
                       <td>英语</td>
                       <td>--</td>
                       <td>admin</td>
@@ -244,7 +244,7 @@
                       <td><a href="#" class="link" onclick="openEditTiktokModal('Milo Reels','英语','--');return false;">编辑</a></td>
                     </tr>
                     <tr>
-                      <td>Kiki Kurz</td>
+                      <td data-handle="kikikurz_de">Kiki Kurz</td>
                       <td>德语</td>
                       <td>--</td>
                       <td>admin</td>
@@ -252,7 +252,7 @@
                       <td><a href="#" class="link" onclick="openEditTiktokModal('Kiki Kurz','德语','--');return false;">编辑</a></td>
                     </tr>
                     <tr>
-                      <td>Momo Corti</td>
+                      <td data-handle="momocorti_it">Momo Corti</td>
                       <td>意大利语</td>
                       <td>--</td>
                       <td>admin</td>
@@ -260,7 +260,7 @@
                       <td><a href="#" class="link" onclick="openEditTiktokModal('Momo Corti','意大利语','--');return false;">编辑</a></td>
                     </tr>
                     <tr>
-                      <td>Coco Courts</td>
+                      <td data-handle="cococourts_fr">Coco Courts</td>
                       <td>法语</td>
                       <td>--</td>
                       <td>admin</td>
@@ -400,6 +400,38 @@
         alert('保存成功：' + name);
         closeEditTiktokModal();
       }
+
+      /* ===== TikTok 账号名称头像+handle 渲染 ===== */
+      function stringToColor(str) {
+        var colors = ['#1d4ed8','#059669','#b45309','#be123c','#7c3aed','#0891b2','#4338ca','#c2410c'];
+        var hash = 0;
+        for (var i = 0; i < (str || '').length; i++) {
+          hash = ((hash << 5) - hash) + str.charCodeAt(i);
+          hash |= 0;
+        }
+        return colors[Math.abs(hash) % colors.length];
+      }
+
+      function renderTtAccountCell(name, handle) {
+        var initial = String(name || '').replace(/^\s+/, '').charAt(0).toUpperCase() || '#';
+        return '<div class="tt-account-info">' +
+          '<div class="tt-avatar" style="background:' + stringToColor(name) + ';">' + initial + '</div>' +
+          '<div class="tt-account-meta">' +
+            '<div class="tt-account-name">' + (name || '') + '</div>' +
+            '<div class="tt-account-handle">' + (handle || '') + '</div>' +
+          '</div>' +
+        '</div>';
+      }
+
+      (function renderTiktokAccountCells() {
+        document.querySelectorAll('#page-overseas-tiktok-account .data-table tbody tr').forEach(function (row) {
+          var cell = row.cells[0];
+          if (!cell) return;
+          var name = cell.textContent.trim();
+          var handle = cell.getAttribute('data-handle') || '';
+          cell.innerHTML = renderTtAccountCell(name, handle);
+        });
+      })();
     </script>
   </body>
 </html>

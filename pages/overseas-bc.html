@@ -157,14 +157,6 @@
             <div class="filter-bar">
               <div class="filter-bar-row">
                 <input type="text" class="filter-input" placeholder="请输入商务中心名称" />
-                <select class="filter-select" id="bc-type">
-                  <option value="">请选择商务中心类型</option>
-                  <option value="NORMAL">普通商务中心</option>
-                  <option value="DIRECT">非自助直客商务中心</option>
-                  <option value="AGENCY">非自助代理商商务中心</option>
-                  <option value="SELF_SERVICE">自助直客商务中心</option>
-                  <option value="SELF_SERVICE_AGENCY">自助代理商商务中心</option>
-                </select>
                 <div class="filter-actions">
                   <button class="btn btn-primary btn-sm" onclick="searchBC()">查询</button>
                   <button class="btn btn-outline btn-sm" onclick="resetBCFilter()">重置</button>
@@ -181,6 +173,7 @@
                       <th>商务中心名称</th>
                       <th>商务中心类型</th>
                       <th>用户数量</th>
+                      <th>TikTok 账号</th>
                       <th>操作</th>
                     </tr>
                   </thead>
@@ -189,6 +182,7 @@
                       <td>Mayaput-Main-BC</td>
                       <td>非自助直客商务中心</td>
                       <td><a href="#" class="link" onclick="openBcUserDrawer('1001', 'Mayaput-Main-BC', 6);return false;">6</a></td>
+                      <td><a href="#" class="link" onclick="openBcTtDrawer('1001', 'Mayaput-Main-BC');return false;">3</a></td>
                       <td>
                         <a href="#" class="link" onclick="openBcNewTtModal('Mayaput-Main-BC');return false;">新建 TikTok 账号</a>
                         <a href="#" class="link" style="margin-left:12px;" onclick="openTtQrModal('Mayaput-Main-BC');return false;">关联 TikTok 账号</a>
@@ -198,6 +192,7 @@
                       <td>ViviShort-BC</td>
                       <td>非自助代理商商务中心</td>
                       <td><a href="#" class="link" onclick="openBcUserDrawer('1002', 'ViviShort-BC', 4);return false;">4</a></td>
+                      <td><a href="#" class="link" onclick="openBcTtDrawer('1002', 'ViviShort-BC');return false;">2</a></td>
                       <td>
                         <a href="#" class="link" onclick="openBcNewTtModal('ViviShort-BC');return false;">新建 TikTok 账号</a>
                         <a href="#" class="link" style="margin-left:12px;" onclick="openTtQrModal('ViviShort-BC');return false;">关联 TikTok 账号</a>
@@ -207,6 +202,7 @@
                       <td>DramaGo-BC</td>
                       <td>普通商务中心</td>
                       <td><a href="#" class="link" onclick="openBcUserDrawer('1003', 'DramaGo-BC', 3);return false;">3</a></td>
+                      <td><a href="#" class="link" onclick="openBcTtDrawer('1003', 'DramaGo-BC');return false;">2</a></td>
                       <td>
                         <a href="#" class="link" onclick="openBcNewTtModal('DramaGo-BC');return false;">新建 TikTok 账号</a>
                         <a href="#" class="link" style="margin-left:12px;" onclick="openTtQrModal('DramaGo-BC');return false;">关联 TikTok 账号</a>
@@ -259,6 +255,41 @@
               </div>
               <div class="drawer-footer">
                 <button class="btn btn-outline btn-sm" onclick="closeBcUserDrawer()">关闭</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- TikTok 账号列表抽屉 -->
+          <div id="bc-tt-overlay" class="drawer-overlay" onclick="closeBcTtDrawer()"></div>
+          <div id="bc-tt-drawer" class="drawer drawer-wide">
+            <div class="drawer-card">
+              <div class="drawer-header">
+                <span id="bc-tt-title">TikTok 账号列表</span>
+                <button class="drawer-close" onclick="closeBcTtDrawer()">×</button>
+              </div>
+              <div class="drawer-body">
+                <div class="modal-filter">
+                  <input type="text" id="bc-tt-search" class="form-input" placeholder="请输入TikTok账号名称搜索" style="flex:1;" oninput="renderBcTtList()" />
+                </div>
+                <div class="table-card" style="border-radius:4px;">
+                  <div class="table-wrapper">
+                    <table class="data-table">
+                      <thead>
+                        <tr>
+                          <th>TikTok账号名称</th>
+                          <th>语言</th>
+                          <th>备注</th>
+                          <th>更新人</th>
+                          <th>更新时间</th>
+                        </tr>
+                      </thead>
+                      <tbody id="bc-tt-tbody"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="drawer-footer">
+                <button class="btn btn-outline btn-sm" onclick="closeBcTtDrawer()">关闭</button>
               </div>
             </div>
           </div>
@@ -538,14 +569,28 @@
         '1002': ['听泉', '橙子', '小鹿', '青栀'],
         '1003': ['娜可', '魔法七', '阿澈']
       };
+      var bcTtData = {
+        '1001': [
+          { name: 'Sasa ดู', handle: 'sasa_dailyup', lang: '葡萄牙语', remark: '--', updater: 'admin', updateTime: '2026-08-27 14:19:37' },
+          { name: '廖廖短剧', handle: 'liaoliaodrama_tw', lang: '繁体中文', remark: '--', updater: 'admin', updateTime: '2026-08-27 14:19:37' },
+          { name: 'Titi Pendek', handle: 'titipendek_my', lang: '马来西亚语', remark: '--', updater: 'admin', updateTime: '2026-08-27 14:19:37' }
+        ],
+        '1002': [
+          { name: 'Bobo Flicks', handle: 'boboflicks_en', lang: '英语', remark: '--', updater: 'admin', updateTime: '2026-08-27 14:19:37' },
+          { name: 'Yoyo Cortos', handle: 'yoyocortos_mx', lang: '英语', remark: '--', updater: 'admin', updateTime: '2026-08-27 14:19:37' }
+        ],
+        '1003': [
+          { name: 'Rio Curtas', handle: 'riocurtas_br', lang: '英语', remark: '--', updater: 'admin', updateTime: '2026-08-27 14:19:37' },
+          { name: 'Coco Courts', handle: 'cococourts_fr', lang: '法语', remark: '--', updater: 'admin', updateTime: '2026-08-27 14:19:37' }
+        ]
+      };
       var currentBcId = null;
+      var currentBcTtId = null;
 
       function searchBC() { alert('查询BC列表'); }
 
       function resetBCFilter() {
         document.querySelectorAll('#page-overseas-bc .filter-input').forEach(function (i) { i.value = ''; });
-        var typeSel = document.getElementById('bc-type');
-        if (typeSel) typeSel.selectedIndex = 0;
       }
 
       function openBcUserDrawer(bcId, bcName, count) {
@@ -576,7 +621,64 @@
         }).join('');
       }
 
-      /* ===== TT账号授权二维码弹框 ===== */
+      /* ===== TikTok 账号列表抽屉 ===== */
+      function stringToColor(str) {
+        var colors = ['#1d4ed8','#059669','#b45309','#be123c','#7c3aed','#0891b2','#4338ca','#c2410c'];
+        var hash = 0;
+        for (var i = 0; i < (str || '').length; i++) {
+          hash = ((hash << 5) - hash) + str.charCodeAt(i);
+          hash |= 0;
+        }
+        return colors[Math.abs(hash) % colors.length];
+      }
+
+      function renderTtAccountCell(name, handle) {
+        var initial = String(name || '').replace(/^\s+/, '').charAt(0).toUpperCase() || '#';
+        return '<div class="tt-account-info">' +
+          '<div class="tt-avatar" style="background:' + stringToColor(name) + ';">' + initial + '</div>' +
+          '<div class="tt-account-meta">' +
+            '<div class="tt-account-name">' + (name || '') + '</div>' +
+            '<div class="tt-account-handle">' + (handle || '') + '</div>' +
+          '</div>' +
+        '</div>';
+      }
+
+      function openBcTtDrawer(bcId, bcName) {
+        currentBcTtId = bcId;
+        var accounts = bcTtData[currentBcTtId] || [];
+        document.getElementById('bc-tt-title').textContent = 'TikTok 账号列表 - ' + bcName + '（' + accounts.length + '）';
+        document.getElementById('bc-tt-search').value = '';
+        renderBcTtList();
+        document.getElementById('bc-tt-overlay').classList.add('open');
+        document.getElementById('bc-tt-drawer').classList.add('open');
+      }
+
+      function closeBcTtDrawer() {
+        document.getElementById('bc-tt-overlay').classList.remove('open');
+        document.getElementById('bc-tt-drawer').classList.remove('open');
+      }
+
+      function renderBcTtList() {
+        var keyword = (document.getElementById('bc-tt-search').value || '').trim().toLowerCase();
+        var accounts = bcTtData[currentBcTtId] || [];
+        var filtered = keyword ? accounts.filter(function (a) { return (a.name || '').toLowerCase().indexOf(keyword) !== -1; }) : accounts;
+        var tbody = document.getElementById('bc-tt-tbody');
+        if (!filtered.length) {
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#999;padding:32px 0;">暂无数据</td></tr>';
+          return;
+        }
+        tbody.innerHTML = filtered.map(function (a) {
+          return '<tr>' +
+            '<td>' + renderTtAccountCell(a.name, a.handle) + '</td>' +
+            '<td>' + (a.lang || '') + '</td>' +
+            '<td>' + (a.remark || '') + '</td>' +
+            '<td>' + (a.updater || '') + '</td>' +
+            '<td>' + (a.updateTime || '') + '</td>' +
+          '</tr>';
+        }).join('');
+      }
+
+      /* ===== 关联 TikTok 账号二维码弹框 ===== */
       function openTtQrModal(label) {
         document.getElementById('tt-qr-title').textContent = '关联 TikTok 账号 - ' + label;
         document.getElementById('tt-qr-user').textContent = label;
