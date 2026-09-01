@@ -87,6 +87,9 @@
               <span>资产管理</span>
               <span class="nav-item-caret">▶</span>
             </div>
+            <div class="nav-children">
+              <span class="nav-child-item" data-page="overseas-tiktok-account">TikTok账户</span>
+            </div>
           </div>
 
           <div class="nav-section">
@@ -688,6 +691,10 @@
       }
 
       function showPage(pageName) {
+        if (pageName === 'overseas-tiktok-account') {
+          window.location.href = navUrl('pages/overseas-tiktok-account.html');
+          return;
+        }
         if (pageName === 'overseas-account') return;
         if (pageName === 'overseas-app') {
           window.location.href = navUrl('pages/overseas-app.html');

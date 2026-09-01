@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TikTok账号 - 海外投放系统</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../styles/main.css" />
+  </head>
+  <body>
+    <div class="layout">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="logo" style="padding: 16px 20px 12px;">
+          <div class="logo-icon">海</div>
+          <div class="logo-info">
+            <span class="logo-name">海外投放系统</span>
+            <span class="system-switch-trigger" onclick="toggleSystemMenu(event)">切换系统 <span class="system-switch-caret">▾</span></span>
+          </div>
+          <div class="system-switch-menu" id="systemSwitchMenu">
+            <div class="system-switch-item" data-system="cn" onclick="switchSystem('cn')">国内投放系统</div>
+            <div class="system-switch-item active" data-system="overseas" onclick="switchSystem('overseas')">海外投放系统<span class="check">✓</span></div>
+          </div>
+        </div>
+        <nav class="nav">
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">⊟</span>
+              <span>项目管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">📊</span>
+              <span>数据统计</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">▶</span>
+              <span>短剧管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">▣</span>
+              <span>素材管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">▦</span>
+              <span>批量投放</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+            <div class="nav-children">
+              <span class="nav-child-item" data-page="overseas-batch-delivery">批量投放</span>
+              <span class="nav-child-item" data-page="overseas-auto-delivery">自动化任务</span>
+              <span class="nav-child-item" data-page="overseas-template">模板管理</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">👤</span>
+              <span>账号管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+            <div class="nav-children">
+              <span class="nav-child-item" data-page="overseas-account">账户</span>
+              <span class="nav-child-item" data-page="overseas-app">应用</span>
+              <span class="nav-child-item" data-page="overseas-bc">BC</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children expanded">
+              <span class="nav-item-icon">🗂️</span>
+              <span>资产管理</span>
+              <span class="nav-item-caret">▼</span>
+            </div>
+            <div class="nav-children">
+              <span class="nav-child-item active" data-page="overseas-tiktok-account">TikTok账户</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">🛡️</span>
+              <span>控损管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">⚙️</span>
+              <span>系统设置</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">🔗</span>
+              <span>关联绑定</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+        </nav>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main">
+        <header class="top-header">
+          <div class="top-header-left"></div>
+          <div class="top-header-right">
+            <div class="notification">
+              <span>消息</span>
+              <span class="notification-badge">88</span>
+            </div>
+            <div class="avatar">M</div>
+            <div class="user-info">
+              <span>UTC+8</span>
+            </div>
+            <button class="btn btn-outline btn-sm" onclick="alert('打开帮助指南')">帮助指南</button>
+          </div>
+        </header>
+
+        <div class="content">
+          <div id="page-overseas-tiktok-account" class="page active">
+            <div class="breadcrumb">
+              <a href="#" onclick="showPage('dashboard')">首页</a>
+              <span class="breadcrumb-sep">/</span>
+              <span>资产管理</span>
+              <span class="breadcrumb-sep">/</span>
+              <span>TikTok账号</span>
+            </div>
+
+            <div class="page-header">
+              <h2 class="page-title">TikTok账号</h2>
+              <div class="page-header-right"></div>
+            </div>
+
+            <!-- Filter Bar -->
+            <div class="filter-bar">
+              <div class="filter-bar-row">
+                <input type="text" class="filter-input" id="tt-account-name" placeholder="请输入TT账号名称" />
+                <select class="filter-select" id="tt-account-lang">
+                  <option value="">请选择语言</option>
+                  <option>葡萄牙语</option>
+                  <option>繁体中文</option>
+                  <option>马来西亚语</option>
+                  <option>英语</option>
+                  <option>德语</option>
+                  <option>意大利语</option>
+                  <option>法语</option>
+                </select>
+                <input type="text" class="filter-input" id="tt-account-remark" placeholder="请输入备注" />
+                <div class="filter-actions">
+                  <button class="btn btn-primary btn-sm" onclick="searchTiktokAccounts()">查询</button>
+                  <button class="btn btn-outline btn-sm" onclick="resetTiktokFilters()">重置</button>
+                  <button class="btn btn-outline btn-sm" onclick="refreshTiktokList()">刷新列表</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- TikTok Account Table -->
+            <div class="table-card">
+              <div class="table-wrapper">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>TikTok账号名称</th>
+                      <th>语言</th>
+                      <th>备注</th>
+                      <th>更新人</th>
+                      <th>更新时间</th>
+                      <th>操作</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Sasa ดู</td>
+                      <td>葡萄牙语</td>
+                      <td>--</td>
+                      <td>admin</td>
+                      <td>2026-08-27 14:19:37</td>
+                      <td><a href="#" class="link" onclick="openEditTiktokModal('Sasa ดู','葡萄牙语','--');return false;">编辑</a></td>
+                    </tr>
+                    <tr>
+                      <td>廖廖短剧</td>
+                      <td>繁体中文</td>
+                      <td>--</td>
+                      <td>admin</td>
+                      <td>2026-08-27 14:19:37</td>
+                      <td><a href="#" class="link" onclick="openEditTiktokModal('廖廖短剧','繁体中文','--');return false;">编辑</a></td>
+                    </tr>
+                    <tr>
+                      <td>Titi Pendek</td>
+                      <td>马来西亚语</td>
+                      <td>--</td>
+                      <td>admin</td>
+                      <td>2026-08-27 14:19:37</td>
+                      <td><a href="#" class="link" onclick="openEditTiktokModal('Titi Pendek','马来西亚语','--');return false;">编辑</a></td>
+                    </tr>
+                    <tr>
+                      <td>Yoyo Cortos</td>
+                      <td>英语</td>
+                      <td>--</td>
+                      <td>admin</td>
+                      <td>2026-08-27 14:19:37</td>
+                      <td><a href="#" class="link" onclick="openEditTiktokModal('Yoyo Cortos','英语','--');return false;">编辑</a></td>
+                    </tr>
+                    <tr>
+                      <td>Rio Curtas</td>
+                      <td>英语</td>
+                      <td>--</td>
+                      <td>admin</td>
+                      <td>2026-08-27 14:19:37</td>
+                      <td><a href="#" class="link" onclick="openEditTiktokModal('Rio Curtas','英语','--');return false;">编辑</a></td>
+                    </tr>
+                    <tr>
+                      <td>Bobo Flicks</td>
+                      <td>英语</td>
+                      <td>--</td>
+                      <td>admin</td>
+                      <td>2026-08-27 14:19:37</td>
+                      <td><a href="#" class="link" onclick="openEditTiktokModal('Bobo Flicks','英语','--');return false;">编辑</a></td>
+                    </tr>
+                    <tr>
+                      <td>Milo Reels</td>
+                      <td>英语</td>
+                      <td>--</td>
+                      <td>admin</td>
+                      <td>2026-08-27 14:19:37</td>
+                      <td><a href="#" class="link" onclick="openEditTiktokModal('Milo Reels','英语','--');return false;">编辑</a></td>
+                    </tr>
+                    <tr>
+                      <td>Kiki Kurz</td>
+                      <td>德语</td>
+                      <td>--</td>
+                      <td>admin</td>
+                      <td>2026-08-27 14:19:37</td>
+                      <td><a href="#" class="link" onclick="openEditTiktokModal('Kiki Kurz','德语','--');return false;">编辑</a></td>
+                    </tr>
+                    <tr>
+                      <td>Momo Corti</td>
+                      <td>意大利语</td>
+                      <td>--</td>
+                      <td>admin</td>
+                      <td>2026-08-27 14:19:37</td>
+                      <td><a href="#" class="link" onclick="openEditTiktokModal('Momo Corti','意大利语','--');return false;">编辑</a></td>
+                    </tr>
+                    <tr>
+                      <td>Coco Courts</td>
+                      <td>法语</td>
+                      <td>--</td>
+                      <td>admin</td>
+                      <td>2026-08-27 14:19:37</td>
+                      <td><a href="#" class="link" onclick="openEditTiktokModal('Coco Courts','法语','--');return false;">编辑</a></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination-bar">
+              <div class="pagination-info">共 16 条</div>
+              <div class="pagination-pages">
+                <button class="page-btn" disabled>&lt;</button>
+                <button class="page-btn active">1</button>
+                <button class="page-btn">2</button>
+                <button class="page-btn">&gt;</button>
+              </div>
+              <div class="pagination-size">
+                <select class="page-size-select"><option>10条/页</option><option>20条/页</option><option>50条/页</option></select>
+              </div>
+              <div class="pagination-jumper">
+                跳至 <input type="text" class="jump-input" value="1" /> 页
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Edit TikTok Account Modal -->
+    <div id="tiktok-edit-overlay" class="modal-overlay" onclick="closeEditTiktokModal()"></div>
+    <div id="tiktok-edit-modal" class="modal">
+      <div class="modal-card" style="width:480px;">
+        <div class="modal-header">
+          <span>编辑TikTok账号</span>
+          <button class="modal-close" onclick="closeEditTiktokModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-item">
+            <label class="form-label"><span class="form-required">*</span> TikTok账号名称：</label>
+            <input type="text" class="form-input" id="edit-tt-name" />
+          </div>
+          <div class="form-item">
+            <label class="form-label"><span class="form-required">*</span> 语言：</label>
+            <select class="form-select" id="edit-tt-lang">
+              <option>葡萄牙语</option>
+              <option>繁体中文</option>
+              <option>马来西亚语</option>
+              <option>英语</option>
+              <option>德语</option>
+              <option>意大利语</option>
+              <option>法语</option>
+            </select>
+          </div>
+          <div class="form-item">
+            <label class="form-label">备注：</label>
+            <input type="text" class="form-input" id="edit-tt-remark" placeholder="请输入备注" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline btn-sm" onclick="closeEditTiktokModal()">取消</button>
+          <button class="btn btn-primary btn-sm" onclick="submitEditTiktok()">确定</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="../scripts/main.js"></script>
+    <script>
+      function showPage(pageName) {
+        if (pageName === 'overseas-tiktok-account') {
+          window.location.href = navUrl('pages/overseas-tiktok-account.html');
+          return;
+        }
+        window.location.href = navUrl('index.html') + '#' + pageName;
+      }
+
+      function searchTiktokAccounts() { alert('查询TikTok账号列表'); }
+      function resetTiktokFilters() {
+        document.getElementById('tt-account-name').value = '';
+        document.getElementById('tt-account-lang').selectedIndex = 0;
+        document.getElementById('tt-account-remark').value = '';
+      }
+      function refreshTiktokList() { alert('刷新TikTok账号列表'); }
+
+      /* ===== 编辑 TikTok 账号弹框 ===== */
+      function openEditTiktokModal(name, lang, remark) {
+        document.getElementById('edit-tt-name').value = name || '';
+        document.getElementById('edit-tt-lang').value = lang || '英语';
+        document.getElementById('edit-tt-remark').value = remark === '--' ? '' : (remark || '');
+        document.getElementById('tiktok-edit-overlay').classList.add('open');
+        document.getElementById('tiktok-edit-modal').classList.add('open');
+      }
+      function closeEditTiktokModal() {
+        document.getElementById('tiktok-edit-overlay').classList.remove('open');
+        document.getElementById('tiktok-edit-modal').classList.remove('open');
+      }
+      function submitEditTiktok() {
+        var name = document.getElementById('edit-tt-name').value.trim();
+        if (!name) { alert('请输入TikTok账号名称'); return; }
+        alert('保存成功：' + name);
+        closeEditTiktokModal();
+      }
+    </script>
+  </body>
+</html>
