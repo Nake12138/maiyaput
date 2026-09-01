@@ -490,13 +490,6 @@
         table-layout: fixed;
         width: 100%;
       }
-      .bc-user-expand-inner { }
-      .bc-user-expand-title {
-        font-size: 13px;
-        font-weight: 600;
-        color: #344054;
-        margin-bottom: 10px;
-      }
       .bc-user-expand .data-table th,
       .bc-user-expand .data-table td {
         font-size: 13px;
@@ -672,11 +665,11 @@
         var users = bcUserData[bcId] || [];
         var rows = users.map(function (u) {
           var ttCount = (bcUserTtCount[bcId] && bcUserTtCount[bcId][u] != null) ? bcUserTtCount[bcId][u] : 0;
+          var ttCountLink = '<a href="#" class="link" onclick="openBcTtDrawer(\'' + bcId + '\', \'' + bcName + '\');return false;">' + ttCount + '</a>';
           var action = '<a href="#" class="link" onclick="openAssignTtModal(\'' + bcId + '\',\'' + u + '\');return false;">分配 TikTok 账号</a>';
-          return '<tr><td></td><td>' + u + '</td><td>' + ttCount + '</td><td>' + action + '</td></tr>';
+          return '<tr><td></td><td>' + u + '</td><td>' + ttCountLink + '</td><td>' + action + '</td></tr>';
         }).join('');
         var html = '<div class="bc-user-expand-inner">' +
-          '<div class="bc-user-expand-title">用户列表 - ' + bcName + '（' + count + '）</div>' +
           '<div class="table-card" style="border-radius:4px;">' +
             '<div class="table-wrapper"><table class="data-table bc-user-sub-table">' +
               '<colgroup>' +
