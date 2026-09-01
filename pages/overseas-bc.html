@@ -75,6 +75,8 @@
               <span class="nav-item-caret">▼</span>
             </div>
             <div class="nav-children">
+              <span class="nav-child-item" data-page="overseas-account">账户</span>
+              <span class="nav-child-item" data-page="overseas-app">应用</span>
               <span class="nav-child-item active" data-page="overseas-bc">BC</span>
             </div>
           </div>
@@ -266,6 +268,14 @@
       }
 
       function showPage(pageName) {
+        if (pageName === 'overseas-account') {
+          window.location.href = navUrl('pages/overseas-account.html');
+          return;
+        }
+        if (pageName === 'overseas-app') {
+          window.location.href = navUrl('pages/overseas-app.html');
+          return;
+        }
         if (pageName === 'overseas-bc') return;
         if (pageName === 'overseas-batch-delivery') {
           window.location.href = navUrl('pages/overseas-batch-delivery.html');

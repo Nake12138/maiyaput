@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>账户 - 海外投放系统</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../styles/main.css" />
+  </head>
+  <body>
+    <div class="layout">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="logo" style="padding: 16px 20px 12px;">
+          <div class="logo-icon">海</div>
+          <div class="logo-info">
+            <span class="logo-name">海外投放系统</span>
+            <span class="system-switch-trigger" onclick="toggleSystemMenu(event)">切换系统 <span class="system-switch-caret">▾</span></span>
+          </div>
+          <div class="system-switch-menu" id="systemSwitchMenu">
+            <div class="system-switch-item" data-system="cn" onclick="switchSystem('cn')">国内投放系统</div>
+            <div class="system-switch-item active" data-system="overseas" onclick="switchSystem('overseas')">海外投放系统<span class="check">✓</span></div>
+          </div>
+        </div>
+        <nav class="nav">
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">⊟</span>
+              <span>项目管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">📊</span>
+              <span>数据统计</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">▶</span>
+              <span>短剧管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">▣</span>
+              <span>素材管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">▦</span>
+              <span>批量投放</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+            <div class="nav-children">
+              <span class="nav-child-item" data-page="overseas-batch-delivery">批量投放</span>
+              <span class="nav-child-item" data-page="overseas-auto-delivery">自动化任务</span>
+              <span class="nav-child-item" data-page="overseas-template">模板管理</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children expanded">
+              <span class="nav-item-icon">👤</span>
+              <span>账号管理</span>
+              <span class="nav-item-caret">▼</span>
+            </div>
+            <div class="nav-children">
+              <span class="nav-child-item active" data-page="overseas-account">账户</span>
+              <span class="nav-child-item" data-page="overseas-app">应用</span>
+              <span class="nav-child-item" data-page="overseas-bc">BC</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">🗂️</span>
+              <span>资产管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">🛡️</span>
+              <span>控损管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">⚙️</span>
+              <span>系统设置</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">🔗</span>
+              <span>关联绑定</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+        </nav>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main">
+        <header class="top-header">
+          <div class="top-header-left"></div>
+          <div class="top-header-right">
+            <div class="notification">
+              <span>消息</span>
+              <span class="notification-badge">88</span>
+            </div>
+            <div class="avatar">M</div>
+            <div class="user-info">
+              <span>UTC+8</span>
+            </div>
+            <button class="btn btn-outline btn-sm" onclick="alert('打开帮助指南')">帮助指南</button>
+          </div>
+        </header>
+
+        <div class="content">
+          <div id="page-overseas-account" class="page active">
+            <div class="breadcrumb">
+              <a href="#" onclick="showPage('dashboard')">首页</a>
+              <span class="breadcrumb-sep">/</span>
+              <span>账号管理</span>
+              <span class="breadcrumb-sep">/</span>
+              <span>账户</span>
+            </div>
+
+            <div class="page-header">
+              <h2 class="page-title">账户</h2>
+              <div class="page-header-right">
+                <button class="btn btn-primary btn-sm" id="btn-assign-user" onclick="openAssignUserModal()">分配用户</button>
+                <button class="btn btn-outline btn-sm" onclick="openClaimAccountDrawer()">认领账户</button>
+              </div>
+            </div>
+
+            <!-- Filter Bar -->
+            <div class="filter-bar">
+              <div class="filter-bar-row">
+                <div class="filter-combo" style="min-width:260px;">
+                  <select class="filter-combo-select"><option>账户ID</option></select>
+                  <input type="text" class="filter-combo-input" placeholder="请输入ID" />
+                </div>
+                <select class="filter-select"><option>应用名称</option><option>娜可-NetShort-CQ-03</option><option>ViviShort-IAA</option></select>
+                <select class="filter-select"><option>同步消耗状态</option><option>开启</option><option>关闭</option></select>
+                <select class="filter-select"><option>所属用户</option><option>春光</option><option>冷吃兔</option></select>
+                <div class="filter-actions">
+                  <button class="btn btn-primary btn-sm" onclick="searchAccounts()">查询</button>
+                  <button class="btn btn-outline btn-sm" onclick="resetAccountFilters()">重置</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Selected status -->
+            <div class="filter-status-bar">
+              <span>已选 <strong id="selected-count">0</strong> 个账户</span>
+              <button class="retry-link" onclick="searchAccounts()">同步消耗状态</button>
+              <button class="retry-link" onclick="openAssignUserModal()">分配用户</button>
+            </div>
+
+            <!-- Account Table -->
+            <div class="table-card">
+              <div class="table-wrapper">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th class="checkbox-col"><input type="checkbox" id="select-all-accounts" onclick="toggleSelectAllAccounts(this)" /></th>
+                      <th>账户名称</th>
+                      <th>账户ID</th>
+                      <th>时区</th>
+                      <th>所属应用</th>
+                      <th>用户</th>
+                      <th>创建时间</th>
+                      <th>同步消耗状态</th>
+                      <th>操作</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="checkbox-col"><input type="checkbox" class="account-checkbox" value="White-light_popkon-溜溜-03" /></td>
+                      <td><a href="#" class="link" onclick="openAccountDetailDrawer('White-light_popkon-溜溜-03','7674191162747633684');return false;">White-light_popkon-溜溜-03</a></td>
+                      <td>7674191162747633684</td>
+                      <td>UTC+0</td>
+                      <td>娜可-NetShort-CQ-03</td>
+                      <td>--</td>
+                      <td>2026-08-28 17:55:18</td>
+                      <td><span class="tag tag-error">关闭</span></td>
+                      <td><a href="#" class="link" onclick="openOperationLogDrawer('White-light_popkon-溜溜-03','7674191162747633684');return false;">操作记录</a></td>
+                    </tr>
+                    <tr>
+                      <td class="checkbox-col"><input type="checkbox" class="account-checkbox" value="White-light_popkon-溜溜-04" /></td>
+                      <td><a href="#" class="link" onclick="openAccountDetailDrawer('White-light_popkon-溜溜-04','7674190827066474504');return false;">White-light_popkon-溜溜-04</a></td>
+                      <td>7674190827066474504</td>
+                      <td>UTC+0</td>
+                      <td>娜可-NetShort-CQ-03</td>
+                      <td>--</td>
+                      <td>2026-08-28 17:55:18</td>
+                      <td><span class="tag tag-error">关闭</span></td>
+                      <td><a href="#" class="link" onclick="openOperationLogDrawer('White-light_popkon-溜溜-04','7674190827066474504');return false;">操作记录</a></td>
+                    </tr>
+                    <tr>
+                      <td class="checkbox-col"><input type="checkbox" class="account-checkbox" value="White-light_popkon-溜溜-05" /></td>
+                      <td><a href="#" class="link" onclick="openAccountDetailDrawer('White-light_popkon-溜溜-05','7674191628084445205');return false;">White-light_popkon-溜溜-05</a></td>
+                      <td>7674191628084445205</td>
+                      <td>UTC+0</td>
+                      <td>娜可-NetShort-CQ-03</td>
+                      <td>--</td>
+                      <td>2026-08-28 17:55:18</td>
+                      <td><span class="tag tag-error">关闭</span></td>
+                      <td><a href="#" class="link" onclick="openOperationLogDrawer('White-light_popkon-溜溜-05','7674191628084445205');return false;">操作记录</a></td>
+                    </tr>
+                    <tr>
+                      <td class="checkbox-col"><input type="checkbox" class="account-checkbox" value="White-light_popkon-溜溜-01" /></td>
+                      <td><a href="#" class="link" onclick="openAccountDetailDrawer('White-light_popkon-溜溜-01','7674191439886106642');return false;">White-light_popkon-溜溜-01</a></td>
+                      <td>7674191439886106642</td>
+                      <td>UTC+0</td>
+                      <td>娜可-NetShort-CQ-03</td>
+                      <td>春光</td>
+                      <td>2026-08-28 17:55:18</td>
+                      <td><span class="tag tag-error">关闭</span></td>
+                      <td><a href="#" class="link" onclick="openOperationLogDrawer('White-light_popkon-溜溜-01','7674191439886106642');return false;">操作记录</a></td>
+                    </tr>
+                    <tr>
+                      <td class="checkbox-col"><input type="checkbox" class="account-checkbox" value="White-light_popkon-溜溜-02" /></td>
+                      <td><a href="#" class="link" onclick="openAccountDetailDrawer('White-light_popkon-溜溜-02','7674191083738710034');return false;">White-light_popkon-溜溜-02</a></td>
+                      <td>7674191083738710034</td>
+                      <td>UTC+0</td>
+                      <td>娜可-NetShort-CQ-03</td>
+                      <td>冷吃兔</td>
+                      <td>2026-08-24 11:55:29</td>
+                      <td><span class="tag tag-success">开启</span></td>
+                      <td><a href="#" class="link" onclick="openOperationLogDrawer('White-light_popkon-溜溜-02','7674191083738710034');return false;">操作记录</a></td>
+                    </tr>
+                    <tr>
+                      <td class="checkbox-col"><input type="checkbox" class="account-checkbox" value="ViviShort-IAA-US-016448-MY-苙斯..." /></td>
+                      <td><a href="#" class="link" onclick="openAccountDetailDrawer('ViviShort-IAA-US-016448-MY-苙斯...','765813164552033800');return false;">ViviShort-IAA-US-016448-MY-苙斯...</a></td>
+                      <td>765813164552033800</td>
+                      <td>UTC-5</td>
+                      <td>ns_test_lct1111668</td>
+                      <td>大卡</td>
+                      <td>2026-08-05 09:45:22</td>
+                      <td><span class="tag tag-error">关闭</span></td>
+                      <td><a href="#" class="link" onclick="openOperationLogDrawer('ViviShort-IAA-US-016448-MY-苙斯...','765813164552033800');return false;">操作记录</a></td>
+                    </tr>
+                    <tr>
+                      <td class="checkbox-col"><input type="checkbox" class="account-checkbox" value="ViviShort-IAA-US-045964-MY-苙斯..." /></td>
+                      <td><a href="#" class="link" onclick="openAccountDetailDrawer('ViviShort-IAA-US-045964-MY-苙斯...','7657515022427389960');return false;">ViviShort-IAA-US-045964-MY-苙斯...</a></td>
+                      <td>7657515022427389960</td>
+                      <td>UTC-5</td>
+                      <td>ns_test_lct1111668</td>
+                      <td>冷吃兔</td>
+                      <td>2026-08-05 09:45:22</td>
+                      <td><span class="tag tag-success">开启</span></td>
+                      <td><a href="#" class="link" onclick="openOperationLogDrawer('ViviShort-IAA-US-045964-MY-苙斯...','7657515022427389960');return false;">操作记录</a></td>
+                    </tr>
+                    <tr>
+                      <td class="checkbox-col"><input type="checkbox" class="account-checkbox" value="VoltShort-IAA(UTC-5)-063195-MY-..." /></td>
+                      <td><a href="#" class="link" onclick="openAccountDetailDrawer('VoltShort-IAA(UTC-5)-063195-MY-...','7655263592175550471');return false;">VoltShort-IAA(UTC-5)-063195-MY-...</a></td>
+                      <td>7655263592175550471</td>
+                      <td>UTC-5</td>
+                      <td>娜可-NetShort-CQ-03</td>
+                      <td>冷吃兔</td>
+                      <td>2026-08-05 09:45:22</td>
+                      <td><span class="tag tag-error">关闭</span></td>
+                      <td><a href="#" class="link" onclick="openOperationLogDrawer('VoltShort-IAA(UTC-5)-063195-MY-...','7655263592175550471');return false;">操作记录</a></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="pagination">
+                <span class="pagination-info">共 20 条</span>
+                <div class="pagination-pages">
+                  <button class="page-btn" disabled>&lt;</button>
+                  <button class="page-btn active">1</button>
+                  <button class="page-btn">2</button>
+                  <button class="page-btn">&gt;</button>
+                </div>
+                <select class="page-size-select">
+                  <option>10 条/页</option>
+                  <option>20 条/页</option>
+                  <option>50 条/页</option>
+                </select>
+                <span>跳至</span>
+                <input type="text" class="jump-input" value="1" />
+                <span>页</span>
+              </div>
+            </div>
+
+            <!-- 分配用户管理弹框 -->
+            <div id="assign-user-overlay" class="modal-overlay" onclick="closeAssignUserModal()"></div>
+            <div id="assign-user-modal" class="modal">
+              <div class="modal-card" style="width:480px;">
+                <div class="modal-header">
+                  <span>分配用户管理</span>
+                  <button class="modal-close" onclick="closeAssignUserModal()">×</button>
+                </div>
+                <div class="modal-body">
+                  <div style="margin-bottom:20px;font-size:13px;color:#5c5c5c;">已选择 <strong id="assign-selected-count">0</strong> 个账号</div>
+                  <div style="margin-bottom:20px;">
+                    <label style="display:block;font-size:13px;font-weight:500;margin-bottom:8px;color:#374151;">操作</label>
+                    <div class="segmented-control" id="assign-action-segmented">
+                      <button class="segmented-item active" data-action="assign" onclick="switchAssignAction('assign')">分配用户</button>
+                      <button class="segmented-item error" data-action="release" onclick="switchAssignAction('release')">释放用户</button>
+                    </div>
+                  </div>
+                  <div id="assign-user-form">
+                    <div class="form-item" style="margin-bottom:0;">
+                      <label class="form-label"><span class="form-required">*</span> 分配用户：</label>
+                      <select class="form-select" id="assign-user-select">
+                        <option value="">请选择用户</option>
+                        <option>春光</option>
+                        <option>冷吃兔</option>
+                        <option>大卡</option>
+                        <option>听泉</option>
+                        <option>娜可</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div id="release-user-warning" style="display:none;font-size:13px;color:#5c5c5c;line-height:1.6;padding:10px 12px;background:#fff7e6;border-radius:4px;">
+                    <span style="color:#faad14;font-weight:600;">⚠</span> 点击下方确认按钮后，一键清除分配的用户，是否继续？
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-outline btn-sm" onclick="closeAssignUserModal()">取消</button>
+                  <button class="btn btn-primary btn-sm" onclick="submitAssignUser()">确定</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 认领账户抽屉 -->
+            <div id="claim-account-overlay" class="drawer-overlay" onclick="closeClaimAccountDrawer()"></div>
+            <div id="claim-account-drawer" class="drawer drawer-narrow">
+              <div class="drawer-card">
+                <div class="drawer-header">
+                  <span class="drawer-title">认领账户</span>
+                  <button class="drawer-close" onclick="closeClaimAccountDrawer()">×</button>
+                </div>
+                <div class="drawer-body">
+                  <div class="filter-bar" style="padding:12px;margin-bottom:12px;">
+                    <div class="filter-bar-row">
+                      <div class="filter-combo" style="min-width:220px;">
+                        <select class="filter-combo-select"><option>账户ID</option></select>
+                        <input type="text" class="filter-combo-input" placeholder="请输入ID" />
+                      </div>
+                      <select class="filter-select"><option>应用名称</option></select>
+                      <div class="filter-actions" style="margin-left:auto;">
+                        <button class="btn btn-primary btn-sm" onclick="searchClaimAccounts()">查询</button>
+                        <button class="btn btn-outline btn-sm" onclick="resetClaimFilters()">重置</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="background:#e6f4ff;border:1px solid #b3d8ff;border-radius:4px;padding:8px 12px;font-size:12px;color:#096dd9;margin-bottom:12px;">
+                    表格罗列所有未被分配的账户，默认按照创建时间倒序排列，支持复制单列数据。
+                  </div>
+                  <div class="filter-status-bar" style="padding-top:0;">
+                    <span>已选 <strong id="claim-selected-count">0</strong> 个账户</span>
+                    <button class="retry-link" onclick="openClaimConfirmModal()">认领账户</button>
+                  </div>
+                  <div class="table-card" style="border-radius:4px;">
+                    <div class="table-wrapper">
+                      <table class="data-table">
+                        <thead>
+                          <tr>
+                            <th class="checkbox-col"><input type="checkbox" id="select-all-claim" onclick="toggleSelectAllClaim(this)" /></th>
+                            <th>账户名称</th>
+                            <th>账户ID</th>
+                            <th>时区</th>
+                            <th>所属应用</th>
+                            <th>创建时间</th>
+                            <th>操作</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td class="checkbox-col"><input type="checkbox" class="claim-checkbox" value="White-light_popkon-溜溜-04" /></td>
+                            <td>White-light_popkon-溜溜-04</td>
+                            <td>7674190827066474504</td>
+                            <td>UTC+0</td>
+                            <td>娜可-NetShort-CQ-03</td>
+                            <td>2026-08-28 17:55:18</td>
+                            <td><button class="btn btn-primary btn-sm" onclick="claimSingleAccount('White-light_popkon-溜溜-04')">认领</button></td>
+                          </tr>
+                          <tr>
+                            <td class="checkbox-col"><input type="checkbox" class="claim-checkbox" value="White-light_popkon-溜溜-03" /></td>
+                            <td>White-light_popkon-溜溜-03</td>
+                            <td>7674191162747633684</td>
+                            <td>UTC+0</td>
+                            <td>娜可-NetShort-CQ-03</td>
+                            <td>2026-08-28 17:55:18</td>
+                            <td><button class="btn btn-primary btn-sm" onclick="claimSingleAccount('White-light_popkon-溜溜-03')">认领</button></td>
+                          </tr>
+                          <tr>
+                            <td class="checkbox-col"><input type="checkbox" class="claim-checkbox" value="White-light_popkon-溜溜-05" /></td>
+                            <td>White-light_popkon-溜溜-05</td>
+                            <td>7674191628084445205</td>
+                            <td>UTC+0</td>
+                            <td>娜可-NetShort-CQ-03</td>
+                            <td>2026-08-28 17:55:18</td>
+                            <td><button class="btn btn-primary btn-sm" onclick="claimSingleAccount('White-light_popkon-溜溜-05')">认领</button></td>
+                          </tr>
+                          <tr>
+                            <td class="checkbox-col"><input type="checkbox" class="claim-checkbox" value="TT-MAD-IAA-US-(UTC-5)-苙斯..." /></td>
+                            <td>TT-MAD-IAA-US-(UTC-5)-苙斯...</td>
+                            <td>7651834061279019029</td>
+                            <td>UTC-5</td>
+                            <td>娜可-NetShort-CQ-03</td>
+                            <td>2026-07-23 10:56:19</td>
+                            <td><button class="btn btn-primary btn-sm" onclick="claimSingleAccount('TT-MAD-IAA-US-(UTC-5)-苙斯...')">认领</button></td>
+                          </tr>
+                          <tr>
+                            <td class="checkbox-col"><input type="checkbox" class="claim-checkbox" value="TT-MAD-IAA-AvoShort-(UTC+..." /></td>
+                            <td>TT-MAD-IAA-AvoShort-(UTC+...</td>
+                            <td>7654061089965195282</td>
+                            <td>UTC+8</td>
+                            <td>娜可-NetShort-CQ-03</td>
+                            <td>2026-07-23 10:56:19</td>
+                            <td><button class="btn btn-primary btn-sm" onclick="claimSingleAccount('TT-MAD-IAA-AvoShort-(UTC+...')">认领</button></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="pagination" style="justify-content:flex-end;">
+                      <span class="pagination-info">共 5 条</span>
+                      <div class="pagination-pages">
+                        <button class="page-btn" disabled>&lt;</button>
+                        <button class="page-btn active">1</button>
+                        <button class="page-btn" disabled>&gt;</button>
+                      </div>
+                      <select class="page-size-select"><option>10 条/页</option></select>
+                    </div>
+                  </div>
+                </div>
+                <div class="drawer-footer">
+                  <button class="btn btn-outline btn-sm" onclick="closeClaimAccountDrawer()">关闭</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 认领确认弹框 -->
+            <div id="claim-confirm-overlay" class="modal-overlay" onclick="closeClaimConfirmModal()"></div>
+            <div id="claim-confirm-modal" class="modal">
+              <div class="modal-card" style="width:380px;">
+                <div class="modal-body" style="display:flex;align-items:flex-start;gap:16px;padding:24px;">
+                  <div style="width:40px;height:40px;border-radius:50%;background:#fff7e6;display:flex;align-items:center;justify-content:center;font-size:20px;color:#faad14;flex-shrink:0;">!</div>
+                  <div>
+                    <div style="font-size:16px;font-weight:600;margin-bottom:8px;">提示</div>
+                    <div style="font-size:13px;color:#5c5c5c;line-height:1.6;">是否确认认领所选 <strong id="claim-confirm-count">0</strong> 个账户？</div>
+                  </div>
+                </div>
+                <div class="modal-footer" style="justify-content:center;">
+                  <button class="btn btn-outline btn-sm" onclick="closeClaimConfirmModal()">取消</button>
+                  <button class="btn btn-primary btn-sm" onclick="submitClaimAccount()">确认</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 账户详情抽屉 -->
+            <div id="account-detail-overlay" class="drawer-overlay" onclick="closeAccountDetailDrawer()"></div>
+            <div id="account-detail-drawer" class="drawer drawer-wide">
+              <div class="drawer-card">
+                <div class="drawer-header">
+                  <span class="drawer-title" id="account-detail-title">账户详情</span>
+                  <button class="drawer-close" onclick="closeAccountDetailDrawer()">×</button>
+                </div>
+                <div class="drawer-body">
+                  <div class="filter-bar" style="padding:12px;margin-bottom:12px;">
+                    <div class="filter-bar-row">
+                      <div class="filter-combo" style="min-width:220px;">
+                        <select class="filter-combo-select"><option>账户ID</option></select>
+                        <input type="text" class="filter-combo-input" placeholder="请输入账户ID" />
+                      </div>
+                      <select class="filter-select"><option>同步消耗状态</option><option>开启</option><option>关闭</option></select>
+                      <select class="filter-select"><option>所属用户</option></select>
+                      <div class="filter-actions" style="margin-left:auto;">
+                        <button class="btn btn-primary btn-sm" onclick="searchDetailAccounts()">查询</button>
+                        <button class="btn btn-outline btn-sm" onclick="resetDetailFilters()">重置</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="filter-status-bar" style="padding-top:0;">
+                    <span>已选 <strong id="detail-selected-count">0</strong> 个</span>
+                    <button class="retry-link" onclick="alert('同步消耗')">同步消耗</button>
+                    <button class="retry-link" onclick="openAssignUserModal()">分配用户</button>
+                  </div>
+                  <div class="table-card" style="border-radius:4px;">
+                    <div class="table-wrapper">
+                      <table class="data-table">
+                        <thead>
+                          <tr>
+                            <th class="checkbox-col"><input type="checkbox" id="select-all-detail" onclick="toggleSelectAllDetail(this)" /></th>
+                            <th>账户名称</th>
+                            <th>账户ID</th>
+                            <th>时区</th>
+                            <th>用户</th>
+                            <th>同步消耗状态</th>
+                            <th>创建时间</th>
+                            <th>操作</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td class="checkbox-col"><input type="checkbox" class="detail-checkbox" /></td>
+                            <td>White-light_popkon-溜溜-03</td>
+                            <td>7674191162747633684</td>
+                            <td>UTC+00:00</td>
+                            <td>--</td>
+                            <td><span class="tag tag-error">关闭</span></td>
+                            <td>2026-08-28 17:55:18</td>
+                            <td><a href="#" class="link" onclick="openOperationLogDrawer('White-light_popkon-溜溜-03','7674191162747633684');return false;">操作记录</a></td>
+                          </tr>
+                          <tr>
+                            <td class="checkbox-col"><input type="checkbox" class="detail-checkbox" /></td>
+                            <td>White-light_popkon-溜溜-05</td>
+                            <td>7674191628084445205</td>
+                            <td>UTC+00:00</td>
+                            <td>--</td>
+                            <td><span class="tag tag-error">关闭</span></td>
+                            <td>2026-08-28 17:55:18</td>
+                            <td><a href="#" class="link" onclick="openOperationLogDrawer('White-light_popkon-溜溜-05','7674191628084445205');return false;">操作记录</a></td>
+                          </tr>
+                          <tr>
+                            <td class="checkbox-col"><input type="checkbox" class="detail-checkbox" /></td>
+                            <td>White-light_popkon-溜溜-04</td>
+                            <td>7674190827066474504</td>
+                            <td>UTC+00:00</td>
+                            <td>--</td>
+                            <td><span class="tag tag-error">关闭</span></td>
+                            <td>2026-08-28 17:55:18</td>
+                            <td><a href="#" class="link" onclick="openOperationLogDrawer('White-light_popkon-溜溜-04','7674190827066474504');return false;">操作记录</a></td>
+                          </tr>
+                          <tr>
+                            <td class="checkbox-col"><input type="checkbox" class="detail-checkbox" /></td>
+                            <td>White-light_popkon-溜溜-01</td>
+                            <td>7674191439886106642</td>
+                            <td>UTC+00:00</td>
+                            <td>春光</td>
+                            <td><span class="tag tag-error">关闭</span></td>
+                            <td>2026-08-28 17:55:18</td>
+                            <td><a href="#" class="link" onclick="openOperationLogDrawer('White-light_popkon-溜溜-01','7674191439886106642');return false;">操作记录</a></td>
+                          </tr>
+                          <tr>
+                            <td class="checkbox-col"><input type="checkbox" class="detail-checkbox" /></td>
+                            <td>White-light_popkon-溜溜-02</td>
+                            <td>7674191083738710034</td>
+                            <td>UTC+00:00</td>
+                            <td>冷吃兔</td>
+                            <td><span class="tag tag-success">开启</span></td>
+                            <td>2026-08-24 11:55:29</td>
+                            <td><a href="#" class="link" onclick="openOperationLogDrawer('White-light_popkon-溜溜-02','7674191083738710034');return false;">操作记录</a></td>
+                          </tr>
+                          <tr>
+                            <td class="checkbox-col"><input type="checkbox" class="detail-checkbox" /></td>
+                            <td>VoltShort-IAA(UTC-5)-063195-MY-...</td>
+                            <td>7655263592175550471</td>
+                            <td>UTC-05:00</td>
+                            <td>冷吃兔</td>
+                            <td><span class="tag tag-error">关闭</span></td>
+                            <td>2026-08-05 09:45:22</td>
+                            <td><a href="#" class="link" onclick="openOperationLogDrawer('VoltShort-IAA(UTC-5)-063195-MY-...','7655263592175550471');return false;">操作记录</a></td>
+                          </tr>
+                          <tr>
+                            <td class="checkbox-col"><input type="checkbox" class="detail-checkbox" /></td>
+                            <td>TT-MAD-IAA-二喵-苙斯-（UTC 8）-2</td>
+                            <td>7648214928863739922</td>
+                            <td>UTC+08:00</td>
+                            <td>伍吟</td>
+                            <td><span class="tag tag-success">开启</span></td>
+                            <td>2026-08-05 09:45:22</td>
+                            <td><a href="#" class="link" onclick="openOperationLogDrawer('TT-MAD-IAA-二喵-苙斯-（UTC 8）-2','7648214928863739922');return false;">操作记录</a></td>
+                          </tr>
+                          <tr>
+                            <td class="checkbox-col"><input type="checkbox" class="detail-checkbox" /></td>
+                            <td>TT-MAD-IAA-二喵-苙斯-（UTC-5）-5</td>
+                            <td>764821520886873362</td>
+                            <td>UTC-05:00</td>
+                            <td>娜可</td>
+                            <td><span class="tag tag-error">关闭</span></td>
+                            <td>2026-07-23 10:56:19</td>
+                            <td><a href="#" class="link" onclick="openOperationLogDrawer('TT-MAD-IAA-二喵-苙斯-（UTC-5）-5','764821520886873362');return false;">操作记录</a></td>
+                          </tr>
+                          <tr>
+                            <td class="checkbox-col"><input type="checkbox" class="detail-checkbox" /></td>
+                            <td>TT-MAD-IAA-AvoShort-(UTC+8)-苙斯-1</td>
+                            <td>7654061089965195282</td>
+                            <td>UTC+08:00</td>
+                            <td>--</td>
+                            <td><span class="tag tag-success">开启</span></td>
+                            <td>2026-07-23 10:56:19</td>
+                            <td><a href="#" class="link" onclick="openOperationLogDrawer('TT-MAD-IAA-AvoShort-(UTC+8)-苙斯-1','7654061089965195282');return false;">操作记录</a></td>
+                          </tr>
+                          <tr>
+                            <td class="checkbox-col"><input type="checkbox" class="detail-checkbox" /></td>
+                            <td>TT-MAD-IAA-US-(UTC-5)-苙斯-2</td>
+                            <td>7651834061279019029</td>
+                            <td>UTC-05:00</td>
+                            <td>--</td>
+                            <td><span class="tag tag-success">开启</span></td>
+                            <td>2026-07-23 10:56:19</td>
+                            <td><a href="#" class="link" onclick="openOperationLogDrawer('TT-MAD-IAA-US-(UTC-5)-苙斯-2','7651834061279019029');return false;">操作记录</a></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="pagination" style="justify-content:flex-end;">
+                      <span class="pagination-info">共 17 条</span>
+                      <div class="pagination-pages">
+                        <button class="page-btn" disabled>&lt;</button>
+                        <button class="page-btn active">1</button>
+                        <button class="page-btn">2</button>
+                        <button class="page-btn">&gt;</button>
+                      </div>
+                      <select class="page-size-select"><option>10 条/页</option></select>
+                      <span>跳至</span>
+                      <input type="text" class="jump-input" value="1" />
+                      <span>页</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="drawer-footer">
+                  <button class="btn btn-outline btn-sm" onclick="closeAccountDetailDrawer()">关闭</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 操作记录抽屉 -->
+            <div id="operation-log-overlay" class="drawer-overlay" onclick="closeOperationLogDrawer()"></div>
+            <div id="operation-log-drawer" class="drawer drawer-narrow">
+              <div class="drawer-card">
+                <div class="drawer-header">
+                  <span class="drawer-title" id="operation-log-title">操作记录</span>
+                  <button class="drawer-close" onclick="closeOperationLogDrawer()">×</button>
+                </div>
+                <div class="drawer-body">
+                  <div class="table-card" style="border-radius:4px;">
+                    <div class="table-wrapper">
+                      <table class="data-table">
+                        <thead>
+                          <tr>
+                            <th>操作者</th>
+                            <th>操作内容</th>
+                            <th>操作时间</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td colspan="3" style="text-align:center;color:#999;padding:48px 0;">
+                              <div style="font-size:13px;color:#bfbfbf;">暂无数据</div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <div class="drawer-footer">
+                  <button class="btn btn-outline btn-sm" onclick="closeOperationLogDrawer()">关闭</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      /* ===== 跨环境页面跳转 ===== */
+      function navUrl(rootPath) {
+        if (window.location.hostname === 'htmlpreview.github.io') {
+          return 'https://htmlpreview.github.io/?https://github.com/Nake12138/maiyaput/blob/main/' + rootPath;
+        }
+        if (rootPath === 'index.html') return '../index.html';
+        return './' + rootPath.replace(/^pages\//, '');
+      }
+
+      function showPage(pageName) {
+        if (pageName === 'overseas-account') return;
+        if (pageName === 'overseas-app') {
+          window.location.href = navUrl('pages/overseas-app.html');
+          return;
+        }
+        if (pageName === 'overseas-bc') {
+          window.location.href = navUrl('pages/overseas-bc.html');
+          return;
+        }
+        if (pageName === 'overseas-batch-delivery') {
+          window.location.href = navUrl('pages/overseas-batch-delivery.html');
+          return;
+        }
+        if (pageName === 'overseas-auto-delivery') {
+          window.location.href = navUrl('pages/overseas-auto-delivery.html');
+          return;
+        }
+        if (pageName === 'overseas-template') {
+          window.location.href = navUrl('pages/overseas-template.html');
+          return;
+        }
+        window.location.href = navUrl('index.html') + '#' + pageName;
+      }
+
+      function switchSystem(system) {
+        try { localStorage.setItem('delivery_system', system); } catch (err) {}
+        if (system === 'overseas') {
+          window.location.href = navUrl('pages/overseas-batch-delivery.html');
+        } else {
+          window.location.href = navUrl('index.html');
+        }
+      }
+
+      function toggleSystemMenu(e) {
+        if (e) e.stopPropagation();
+        var menu = document.getElementById('systemSwitchMenu');
+        if (menu) menu.classList.toggle('open');
+      }
+
+      document.addEventListener('click', function (e) {
+        var menu = document.getElementById('systemSwitchMenu');
+        if (!menu || !menu.classList.contains('open')) return;
+        if (menu.contains(e.target)) return;
+        if (e.target.closest && e.target.closest('.system-switch-trigger')) return;
+        menu.classList.remove('open');
+      });
+
+      (function highlightCurrentSystem() {
+        var current = 'overseas';
+        try { current = localStorage.getItem('delivery_system') || 'overseas'; } catch (err) {}
+        document.querySelectorAll('.system-switch-item').forEach(function (item) {
+          item.classList.toggle('active', item.getAttribute('data-system') === current);
+        });
+      })();
+
+      /* ===== 侧边栏展开/收起 ===== */
+      document.querySelectorAll('.nav-item.has-children').forEach(function (item) {
+        item.addEventListener('click', function (e) {
+          e.stopPropagation();
+          this.classList.toggle('expanded');
+          var caret = this.querySelector('.nav-item-caret');
+          if (caret) caret.textContent = this.classList.contains('expanded') ? '▼' : '▶';
+        });
+      });
+
+      document.querySelectorAll('.nav-child-item[data-page], .nav-item[data-page]').forEach(function (item) {
+        item.addEventListener('click', function () {
+          showPage(this.getAttribute('data-page'));
+        });
+      });
+
+      /* ===== 遮罩点击关闭弹框 ===== */
+      document.addEventListener('click', function (e) {
+        var t = e.target;
+        if (!t || !t.classList) return;
+        if (t.classList.contains('drawer') || t.classList.contains('modal')) {
+          if (t.classList.contains('open')) {
+            t.classList.remove('open');
+            document.querySelectorAll('.drawer-overlay.open, .modal-overlay.open').forEach(function (o) { o.classList.remove('open'); });
+          }
+          return;
+        }
+        if (t.classList.contains('drawer-overlay') || t.classList.contains('modal-overlay')) {
+          t.classList.remove('open');
+          document.querySelectorAll('.drawer.open, .modal.open').forEach(function (m) { m.classList.remove('open'); });
+        }
+      });
+
+      /* ===== 账户列表选择 ===== */
+      function updateSelectedCount() {
+        var count = document.querySelectorAll('#page-overseas-account .account-checkbox:checked').length;
+        document.getElementById('selected-count').textContent = count;
+        document.getElementById('assign-selected-count').textContent = count;
+        var btn = document.getElementById('btn-assign-user');
+        if (count === 0) {
+          btn.classList.remove('btn-primary');
+          btn.classList.add('btn-outline');
+        } else {
+          btn.classList.add('btn-primary');
+          btn.classList.remove('btn-outline');
+        }
+      }
+
+      function toggleSelectAllAccounts(el) {
+        document.querySelectorAll('#page-overseas-account .account-checkbox').forEach(function (c) { c.checked = el.checked; });
+        updateSelectedCount();
+      }
+
+      document.querySelectorAll('#page-overseas-account .account-checkbox').forEach(function (c) {
+        c.addEventListener('change', updateSelectedCount);
+      });
+
+      function searchAccounts() { alert('查询账户列表'); }
+      function resetAccountFilters() {
+        document.querySelectorAll('#page-overseas-account .filter-input, #page-overseas-account .filter-combo-input').forEach(function (i) { i.value = ''; });
+        document.querySelectorAll('#page-overseas-account .filter-select, #page-overseas-account .filter-combo-select').forEach(function (s) { s.selectedIndex = 0; });
+      }
+
+      /* ===== 分配用户弹框 ===== */
+      var currentAssignAction = 'assign';
+      function openAssignUserModal() {
+        updateSelectedCount();
+        document.getElementById('assign-user-overlay').classList.add('open');
+        document.getElementById('assign-user-modal').classList.add('open');
+      }
+      function closeAssignUserModal() {
+        document.getElementById('assign-user-overlay').classList.remove('open');
+        document.getElementById('assign-user-modal').classList.remove('open');
+      }
+      function switchAssignAction(action) {
+        currentAssignAction = action;
+        document.querySelectorAll('#assign-action-segmented .segmented-item').forEach(function (item) {
+          item.classList.toggle('active', item.getAttribute('data-action') === action);
+        });
+        document.getElementById('assign-user-form').style.display = action === 'assign' ? 'block' : 'none';
+        document.getElementById('release-user-warning').style.display = action === 'release' ? 'block' : 'none';
+      }
+      function submitAssignUser() {
+        if (currentAssignAction === 'assign') {
+          var user = document.getElementById('assign-user-select').value;
+          if (!user) { alert('请选择分配用户'); return; }
+          alert('已分配用户：' + user);
+        } else {
+          alert('已释放所选账户的用户分配');
+        }
+        closeAssignUserModal();
+      }
+
+      /* ===== 认领账户抽屉 ===== */
+      function openClaimAccountDrawer() {
+        document.getElementById('claim-account-overlay').classList.add('open');
+        document.getElementById('claim-account-drawer').classList.add('open');
+        updateClaimCount();
+      }
+      function closeClaimAccountDrawer() {
+        document.getElementById('claim-account-overlay').classList.remove('open');
+        document.getElementById('claim-account-drawer').classList.remove('open');
+      }
+      function updateClaimCount() {
+        document.getElementById('claim-selected-count').textContent = document.querySelectorAll('#claim-account-drawer .claim-checkbox:checked').length;
+      }
+      function toggleSelectAllClaim(el) {
+        document.querySelectorAll('#claim-account-drawer .claim-checkbox').forEach(function (c) { c.checked = el.checked; });
+        updateClaimCount();
+      }
+      document.querySelectorAll('#claim-account-drawer .claim-checkbox').forEach(function (c) {
+        c.addEventListener('change', updateClaimCount);
+      });
+      function searchClaimAccounts() { alert('查询可认领账户'); }
+      function resetClaimFilters() {
+        document.querySelectorAll('#claim-account-drawer .filter-combo-input').forEach(function (i) { i.value = ''; });
+        document.querySelectorAll('#claim-account-drawer .filter-select, #claim-account-drawer .filter-combo-select').forEach(function (s) { s.selectedIndex = 0; });
+      }
+
+      /* ===== 认领确认弹框 ===== */
+      function openClaimConfirmModal() {
+        var count = document.querySelectorAll('#claim-account-drawer .claim-checkbox:checked').length;
+        if (count === 0) { alert('请先选择要认领的账户'); return; }
+        document.getElementById('claim-confirm-count').textContent = count;
+        document.getElementById('claim-confirm-overlay').classList.add('open');
+        document.getElementById('claim-confirm-modal').classList.add('open');
+      }
+      function closeClaimConfirmModal() {
+        document.getElementById('claim-confirm-overlay').classList.remove('open');
+        document.getElementById('claim-confirm-modal').classList.remove('open');
+      }
+      function claimSingleAccount(name) {
+        document.querySelectorAll('#claim-account-drawer .claim-checkbox').forEach(function (c) { c.checked = false; });
+        var cb = document.querySelector('#claim-account-drawer .claim-checkbox[value="' + name + '"]');
+        if (cb) cb.checked = true;
+        updateClaimCount();
+        openClaimConfirmModal();
+      }
+      function submitClaimAccount() {
+        alert('认领成功');
+        closeClaimConfirmModal();
+        closeClaimAccountDrawer();
+      }
+
+      /* ===== 账户详情抽屉 ===== */
+      function openAccountDetailDrawer(name, id) {
+        document.getElementById('account-detail-title').textContent = name + ' - 账户详情';
+        document.getElementById('account-detail-overlay').classList.add('open');
+        document.getElementById('account-detail-drawer').classList.add('open');
+        updateDetailCount();
+      }
+      function closeAccountDetailDrawer() {
+        document.getElementById('account-detail-overlay').classList.remove('open');
+        document.getElementById('account-detail-drawer').classList.remove('open');
+      }
+      function updateDetailCount() {
+        document.getElementById('detail-selected-count').textContent = document.querySelectorAll('#account-detail-drawer .detail-checkbox:checked').length;
+      }
+      function toggleSelectAllDetail(el) {
+        document.querySelectorAll('#account-detail-drawer .detail-checkbox').forEach(function (c) { c.checked = el.checked; });
+        updateDetailCount();
+      }
+      document.querySelectorAll('#account-detail-drawer .detail-checkbox').forEach(function (c) {
+        c.addEventListener('change', updateDetailCount);
+      });
+      function searchDetailAccounts() { alert('查询子账户'); }
+      function resetDetailFilters() {
+        document.querySelectorAll('#account-detail-drawer .filter-combo-input').forEach(function (i) { i.value = ''; });
+        document.querySelectorAll('#account-detail-drawer .filter-select, #account-detail-drawer .filter-combo-select').forEach(function (s) { s.selectedIndex = 0; });
+      }
+
+      /* ===== 操作记录抽屉 ===== */
+      function openOperationLogDrawer(name, id) {
+        document.getElementById('operation-log-title').textContent = '操作记录 ' + name + '（' + id + '）';
+        document.getElementById('operation-log-overlay').classList.add('open');
+        document.getElementById('operation-log-drawer').classList.add('open');
+      }
+      function closeOperationLogDrawer() {
+        document.getElementById('operation-log-overlay').classList.remove('open');
+        document.getElementById('operation-log-drawer').classList.remove('open');
+      }
+    </script>
+  </body>
+</html>

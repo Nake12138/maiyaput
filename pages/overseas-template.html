@@ -489,6 +489,14 @@
       }
 
       function showPage(pageName) {
+        if (pageName === 'overseas-account') {
+          window.location.href = navUrl('pages/overseas-account.html');
+          return;
+        }
+        if (pageName === 'overseas-app') {
+          window.location.href = navUrl('pages/overseas-app.html');
+          return;
+        }
         if (pageName === 'overseas-template') return;
         if (pageName === 'overseas-batch-delivery') {
           window.location.href = navUrl('pages/overseas-batch-delivery.html');

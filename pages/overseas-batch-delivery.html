@@ -1336,6 +1336,14 @@
 
       /* ===== 独立页面导航：本页停留 / 海外页面互跳 / 国内页面跳回 index ===== */
       function showPage(pageName) {
+        if (pageName === 'overseas-account') {
+          window.location.href = navUrl('pages/overseas-account.html');
+          return;
+        }
+        if (pageName === 'overseas-app') {
+          window.location.href = navUrl('pages/overseas-app.html');
+          return;
+        }
         if (pageName === 'overseas-batch-delivery') return;
         if (pageName === 'overseas-auto-delivery') {
           window.location.href = navUrl('pages/overseas-auto-delivery.html');
