@@ -1018,12 +1018,7 @@
       function renderBatchAssignList() {
         var keyword = (document.getElementById('batch-assign-search').value || '').trim().toLowerCase();
         var accounts = bcTtData[currentBcUserId] || [];
-        /* 已分配给任一选中用户的账号视为已分配，禁选 */
-        var assigned = {};
-        batchSelectedUsers.forEach(function (u) {
-          var arr = (bcUserAssignedTt[currentBcUserId] && bcUserAssignedTt[currentBcUserId][u]) || [];
-          arr.forEach(function (n) { assigned[n] = true; });
-        });
+        /* 批量分配：第一列固定复选框，不区分已分配状态（是否已分配由后端自动判断） */
         var filtered = keyword ? accounts.filter(function (a) { return (a.name || '').toLowerCase().indexOf(keyword) !== -1; }) : accounts;
         var tbody = document.getElementById('batch-assign-tbody');
         if (!filtered.length) {
@@ -1031,13 +1026,8 @@
           return;
         }
         tbody.innerHTML = filtered.map(function (a) {
-          var isAssigned = !!assigned[a.name];
-          /* 批量分配弹框：已分配账号不显示复选框，仅显示「已分配」标签 */
-          var firstCell = isAssigned
-            ? '<span class="tag-assigned">已分配</span>'
-            : '<input type="checkbox" class="batch-assign-check" value="' + (a.name || '') + '" />';
           return '<tr>' +
-            '<td>' + firstCell + '</td>' +
+            '<td><input type="checkbox" class="batch-assign-check" value="' + (a.name || '') + '" /></td>' +
             '<td>' + renderTtAccountCell(a.name, a.handle) + '</td>' +
             '<td>' + (a.lang || '') + '</td>' +
           '</tr>';
@@ -1046,14 +1036,14 @@
 
       function toggleBatchAssignAll(src) {
         document.querySelectorAll('#batch-assign-tbody .batch-assign-check').forEach(function (c) {
-          if (!c.disabled) c.checked = src.checked;
+          c.checked = src.checked;
         });
       }
 
       function submitBatchAssign() {
-        var checks = document.querySelectorAll('#batch-assign-tbody .batch-assign-check:checked:not(:disabled)');
+        var checks = document.querySelectorAll('#batch-assign-tbody .batch-assign-check:checked');
         var names = Array.prototype.map.call(checks, function (c) { return c.value; });
-        if (!names.length) { alert('请至少选择一个未分配的 TikTok 账号'); return; }
+        if (!names.length) { alert('请至少选择一个 TikTok 账号'); return; }
         alert('已为 ' + batchSelectedUsers.length + ' 个用户分配 ' + names.length + ' 个 TikTok 账号：\n' + names.join('、'));
         closeBatchAssignModal();
       }
