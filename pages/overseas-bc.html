@@ -254,7 +254,7 @@
                   <div class="table-wrapper">
                     <table class="data-table">
                       <thead>
-                        <tr><th>用户名</th><th style="width:110px;">TikTok 账号数量</th><th style="width:140px;">操作</th></tr>
+                        <tr><th>用户名</th><th style="width:110px;">TikTok 账号</th><th style="width:140px;">操作</th></tr>
                       </thead>
                       <tbody id="bc-user-tbody"></tbody>
                     </table>
@@ -811,7 +811,7 @@
         }
         tbody.innerHTML = filtered.map(function (u) {
           var ttCount = (bcUserTtCount[currentBcUserId] && bcUserTtCount[currentBcUserId][u] != null) ? bcUserTtCount[currentBcUserId][u] : 0;
-          var ttCountLink = '<a href="#" class="link" onclick="closeBcUserDrawer();openBcTtDrawer(\'' + currentBcUserId + '\', \'' + currentBcUserName + '\');return false;">' + ttCount + '</a>';
+          var ttCountLink = '<a href="#" class="link" onclick="openBcTtDrawer(\'' + currentBcUserId + '\', \'' + currentBcUserName + '\');return false;">' + ttCount + '</a>';
           var action = '<a href="#" class="link" onclick="openAssignTtModal(\'' + currentBcUserId + '\',\'' + u + '\');return false;">分配 TikTok 账号</a>';
           return '<tr><td>' + u + '</td><td>' + ttCountLink + '</td><td>' + action + '</td></tr>';
         }).join('');
