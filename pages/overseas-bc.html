@@ -285,7 +285,7 @@
                 <button class="modal-close" onclick="closeBatchAssignModal()">×</button>
               </div>
               <div class="modal-body">
-                <div class="form-item" id="batch-assign-info" style="background:#f5f7fa;border:1px solid #e4e7ec;border-radius:4px;padding:8px 12px;font-size:13px;color:#344054;"></div>
+                <div class="batch-assign-info" id="batch-assign-info"></div>
                 <div class="modal-filter">
                   <input type="text" id="batch-assign-search" class="form-input" placeholder="搜索 TikTok 账号名称" style="flex:1;" oninput="renderBatchAssignList()" />
                 </div>
@@ -554,10 +554,28 @@
         font-weight: 600;
       }
 
+      /* 批量分配弹框顶部已选数量提示 */
+      .batch-assign-info {
+        background: #f5f7fa;
+        border: 1px solid #e4e7ec;
+        border-radius: 4px;
+        padding: 10px 12px;
+        font-size: 13px;
+        color: #344054;
+        line-height: 1.5;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .batch-assign-info .count {
+        color: var(--color-info, #1d4ed8);
+        font-weight: 600;
+        margin: 0 2px;
+      }
+
       /* 已分配账户标记 */
       .tag-assigned {
         display: inline-block;
-        margin-left: 6px;
         padding: 1px 6px;
         font-size: 11px;
         line-height: 16px;
@@ -977,7 +995,7 @@
       function openBatchAssignTtModal() {
         if (!batchSelectedUsers.length) return;
         var info = document.getElementById('batch-assign-info');
-        if (info) info.innerHTML = '已选择 <b style="color:#1d4ed8;">' + batchSelectedUsers.length + '</b> 个用户，请勾选要分配的 TikTok 账号：';
+        if (info) info.innerHTML = '已选择 <span class="count">' + batchSelectedUsers.length + '</span> 个用户，请勾选要分配的 TikTok 账号：';
         document.getElementById('batch-assign-search').value = '';
         renderBatchAssignList();
         document.getElementById('batch-assign-overlay').classList.add('open');
@@ -1007,11 +1025,12 @@
         }
         tbody.innerHTML = filtered.map(function (a) {
           var isAssigned = !!assigned[a.name];
-          var checkboxHtml = isAssigned
-            ? '<input type="checkbox" class="batch-assign-check" value="' + (a.name || '') + '" checked disabled /> <span class="tag-assigned">已分配</span>'
+          /* 批量分配弹框：已分配账号不显示复选框，仅显示「已分配」标签 */
+          var firstCell = isAssigned
+            ? '<span class="tag-assigned">已分配</span>'
             : '<input type="checkbox" class="batch-assign-check" value="' + (a.name || '') + '" />';
           return '<tr>' +
-            '<td>' + checkboxHtml + '</td>' +
+            '<td>' + firstCell + '</td>' +
             '<td>' + renderTtAccountCell(a.name, a.handle) + '</td>' +
             '<td>' + (a.lang || '') + '</td>' +
           '</tr>';
