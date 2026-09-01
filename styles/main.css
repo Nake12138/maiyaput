@@ -1196,6 +1196,8 @@ body {
   display: flex;
   align-items: center;
   gap: 4px;
+  white-space: nowrap;
+  word-break: keep-all;
 }
 
 .form-required {
@@ -1224,6 +1226,14 @@ body {
 .form-input:focus,
 .form-select:focus {
   border-color: var(--color-info);
+}
+
+.form-input:disabled,
+.form-select:disabled {
+  background: var(--color-bg-soft, #fafafa);
+  color: var(--color-text-tertiary, #8a8a8a);
+  cursor: not-allowed;
+  border-color: var(--color-border);
 }
 
 .form-textarea {
