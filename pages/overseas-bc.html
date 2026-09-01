@@ -383,6 +383,45 @@
               </div>
             </div>
           </div>
+
+          <!-- 添加TikTok 账号选择弹框 -->
+          <div id="add-tt-overlay" class="modal-overlay" onclick="closeAddTtModal()"></div>
+          <div id="add-tt-modal" class="modal">
+            <div class="modal-card" style="width:480px;">
+              <div class="modal-header">
+                <span>添加TikTok 账号</span>
+                <button class="modal-close" onclick="closeAddTtModal()">×</button>
+              </div>
+              <div class="modal-body">
+                <div class="form-item">
+                  <label class="form-label"><span class="form-required">*</span> 商务中心名称：</label>
+                  <input type="text" class="form-input" id="add-tt-bcname" disabled />
+                </div>
+                <div class="form-item">
+                  <label class="form-label"><span class="form-required">*</span> 添加方式：</label>
+                  <div class="add-tt-options">
+                    <div class="add-tt-option" onclick="chooseAddTtNew()">
+                      <div class="add-tt-option-icon">＋</div>
+                      <div class="add-tt-option-meta">
+                        <div class="add-tt-option-name">新建 TikTok 账号</div>
+                        <div class="add-tt-option-desc">在当前商务中心下创建一个新的 TikTok 账号</div>
+                      </div>
+                    </div>
+                    <div class="add-tt-option" onclick="chooseAddTtLink()">
+                      <div class="add-tt-option-icon">🔗</div>
+                      <div class="add-tt-option-meta">
+                        <div class="add-tt-option-name">关联 TikTok 账号</div>
+                        <div class="add-tt-option-desc">扫描二维码，关联已有的 TikTok 账号</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-outline btn-sm" onclick="closeAddTtModal()">取消</button>
+              </div>
+            </div>
+          </div>
         </div>
       </main>
     </div>
@@ -490,6 +529,54 @@
       }
       .assign-tt-check:disabled {
         cursor: not-allowed;
+      }
+
+      /* ===== 添加TikTok 账号选择弹框 ===== */
+      .add-tt-options {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .add-tt-option {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 14px 16px;
+        border: 1px solid var(--color-border, #d0d5dd);
+        border-radius: var(--radius-sm, 6px);
+        cursor: pointer;
+        background: #fff;
+        transition: border-color 0.15s, box-shadow 0.15s;
+      }
+      .add-tt-option:hover {
+        border-color: var(--color-info, #1d4ed8);
+        box-shadow: 0 1px 4px rgba(29, 78, 216, 0.12);
+      }
+      .add-tt-option-icon {
+        flex: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        background: #eff4ff;
+        color: #1d4ed8;
+        font-size: 18px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .add-tt-option-meta {
+        min-width: 0;
+      }
+      .add-tt-option-name {
+        font-size: 14px;
+        font-weight: 600;
+        color: #344054;
+      }
+      .add-tt-option-desc {
+        margin-top: 2px;
+        font-size: 12px;
+        color: #667085;
       }
     </style>
 
@@ -658,8 +745,7 @@
             '<td><a href="#" class="link" onclick="openBcUserDrawer(\'' + b.id + '\', \'' + b.name + '\', ' + b.userCount + ');return false;">' + b.userCount + '</a></td>' +
             '<td><a href="#" class="link" onclick="openBcTtDrawer(\'' + b.id + '\', \'' + b.name + '\');return false;">' + b.ttCount + '</a></td>' +
             '<td>' +
-              '<a href="#" class="link" onclick="openBcNewTtModal(\'' + b.name + '\');return false;">新建 TikTok 账号</a>' +
-              '<a href="#" class="link" style="margin-left:12px;" onclick="openTtQrModal(\'' + b.name + '\');return false;">关联 TikTok 账号</a>' +
+              '<a href="#" class="link" onclick="openAddTtModal(\'' + b.id + '\', \'' + b.name + '\');return false;">添加TikTok 账号</a>' +
               '<a href="#" class="link" style="margin-left:12px;" onclick="refreshBC(\'' + b.id + '\',\'' + b.name + '\');return false;">刷新</a>' +
             '</td>' +
           '</tr>';
@@ -879,6 +965,28 @@
           ctx.fillStyle = '#111827';
           ctx.fillRect(fx + 2 * cell, fy + 2 * cell, 3 * cell, 3 * cell);
         });
+      }
+
+      /* ===== 添加TikTok 账号选择弹框 ===== */
+      var addTtBcName = null;
+
+      function openAddTtModal(bcId, bcName) {
+        addTtBcName = bcName;
+        document.getElementById('add-tt-bcname').value = bcName || '';
+        document.getElementById('add-tt-overlay').classList.add('open');
+        document.getElementById('add-tt-modal').classList.add('open');
+      }
+      function closeAddTtModal() {
+        document.getElementById('add-tt-overlay').classList.remove('open');
+        document.getElementById('add-tt-modal').classList.remove('open');
+      }
+      function chooseAddTtNew() {
+        closeAddTtModal();
+        openBcNewTtModal(addTtBcName);
+      }
+      function chooseAddTtLink() {
+        closeAddTtModal();
+        openTtQrModal(addTtBcName);
       }
 
       /* ===== 新建 TikTok 账号弹框 ===== */
