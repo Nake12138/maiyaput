@@ -181,19 +181,28 @@
                       <td>Mayaput-Main-BC</td>
                       <td>直客</td>
                       <td><a href="#" class="link" onclick="openBcUserDrawer('1001', 'Mayaput-Main-BC', 6);return false;">6</a></td>
-                      <td><a href="#" class="link" onclick="openTtQrModal('Mayaput-Main-BC');return false;">TT账号授权</a></td>
+                      <td>
+                        <a href="#" class="link" onclick="openBcNewTtModal('Mayaput-Main-BC');return false;">新建 TikTok 账号</a>
+                        <a href="#" class="link" style="margin-left:12px;" onclick="openTtQrModal('Mayaput-Main-BC');return false;">关联 TikTok 账号</a>
+                      </td>
                     </tr>
                     <tr>
                       <td>ViviShort-BC</td>
                       <td>代理</td>
                       <td><a href="#" class="link" onclick="openBcUserDrawer('1002', 'ViviShort-BC', 4);return false;">4</a></td>
-                      <td><a href="#" class="link" onclick="openTtQrModal('ViviShort-BC');return false;">TT账号授权</a></td>
+                      <td>
+                        <a href="#" class="link" onclick="openBcNewTtModal('ViviShort-BC');return false;">新建 TikTok 账号</a>
+                        <a href="#" class="link" style="margin-left:12px;" onclick="openTtQrModal('ViviShort-BC');return false;">关联 TikTok 账号</a>
+                      </td>
                     </tr>
                     <tr>
                       <td>DramaGo-BC</td>
                       <td>MCN</td>
                       <td><a href="#" class="link" onclick="openBcUserDrawer('1003', 'DramaGo-BC', 3);return false;">3</a></td>
-                      <td><a href="#" class="link" onclick="openTtQrModal('DramaGo-BC');return false;">TT账号授权</a></td>
+                      <td>
+                        <a href="#" class="link" onclick="openBcNewTtModal('DramaGo-BC');return false;">新建 TikTok 账号</a>
+                        <a href="#" class="link" style="margin-left:12px;" onclick="openTtQrModal('DramaGo-BC');return false;">关联 TikTok 账号</a>
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -246,12 +255,12 @@
             </div>
           </div>
 
-          <!-- TT账号授权二维码弹框 -->
+          <!-- 关联 TikTok 账号二维码弹框 -->
           <div id="tt-qr-overlay" class="modal-overlay" onclick="ttQrOverlayClick(event)"></div>
           <div id="tt-qr-modal" class="modal" onclick="ttModalClick(event)">
             <div class="modal-card" style="width:360px;">
               <div class="modal-header">
-                <span id="tt-qr-title">TT账号授权</span>
+                <span id="tt-qr-title">关联 TikTok 账号</span>
                 <button class="modal-close" onclick="closeTtQrModal()">×</button>
               </div>
               <div class="modal-body" style="display:flex;flex-direction:column;align-items:center;padding:24px;">
@@ -264,9 +273,152 @@
               </div>
             </div>
           </div>
+
+          <!-- 新建 TikTok 账号弹框 -->
+          <div id="bc-new-tt-overlay" class="modal-overlay" onclick="closeBcNewTtModal()"></div>
+          <div id="bc-new-tt-modal" class="modal">
+            <div class="modal-card" style="width:480px;">
+              <div class="modal-header">
+                <span>新建 TikTok 账号</span>
+                <button class="modal-close" onclick="closeBcNewTtModal()">×</button>
+              </div>
+              <div class="modal-body">
+                <div class="form-item">
+                  <label class="form-label"><span class="form-required">*</span> 商务中心名称：</label>
+                  <input type="text" class="form-input" id="bc-new-tt-bcname" disabled />
+                </div>
+                <div class="form-item">
+                  <label class="form-label"><span class="form-required">*</span> TikTok账号名称：</label>
+                  <input type="text" class="form-input" id="bc-new-tt-name" placeholder="请输入TikTok账号名称" />
+                </div>
+                <div class="form-item">
+                  <label class="form-label"><span class="form-required">*</span> 头像：</label>
+                  <div class="file-upload" id="bc-new-tt-avatar-wrap">
+                    <input type="file" id="bc-new-tt-avatar" accept="image/*" onchange="previewBcNewAvatar(this)" />
+                    <div class="file-upload-placeholder">
+                      <div class="file-upload-icon">+</div>
+                      <div class="file-upload-text">点击上传头像</div>
+                    </div>
+                    <img class="file-upload-preview" id="bc-new-tt-avatar-preview" alt="头像预览" />
+                    <button type="button" class="file-upload-clear" onclick="clearBcNewAvatar()">×</button>
+                  </div>
+                </div>
+                <div class="form-item">
+                  <label class="form-label"><span class="form-required">*</span> 国家/地区：</label>
+                  <select class="form-select" id="bc-new-tt-region">
+                    <option value="">请选择国家/地区</option>
+                    <option value="中国大陆">中国大陆</option>
+                    <option value="中国香港">中国香港</option>
+                    <option value="中国台湾">中国台湾</option>
+                    <option value="美国">美国</option>
+                    <option value="英国">英国</option>
+                    <option value="日本">日本</option>
+                    <option value="韩国">韩国</option>
+                    <option value="新加坡">新加坡</option>
+                    <option value="马来西亚">马来西亚</option>
+                    <option value="泰国">泰国</option>
+                    <option value="印尼">印尼</option>
+                    <option value="菲律宾">菲律宾</option>
+                    <option value="越南">越南</option>
+                    <option value="巴西">巴西</option>
+                    <option value="德国">德国</option>
+                    <option value="法国">法国</option>
+                    <option value="意大利">意大利</option>
+                    <option value="葡萄牙">葡萄牙</option>
+                    <option value="澳大利亚">澳大利亚</option>
+                    <option value="加拿大">加拿大</option>
+                  </select>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-outline btn-sm" onclick="closeBcNewTtModal()">取消</button>
+                <button class="btn btn-primary btn-sm" onclick="submitBcNewTt()">确定</button>
+              </div>
+            </div>
+          </div>
         </div>
       </main>
     </div>
+
+    <style>
+      .file-upload {
+        position: relative;
+        width: 120px;
+        height: 120px;
+        border: 1px dashed var(--color-border);
+        border-radius: var(--radius-sm);
+        overflow: hidden;
+        cursor: pointer;
+        background: var(--color-bg-soft, #fafafa);
+        transition: border-color 0.2s;
+      }
+      .file-upload:hover {
+        border-color: var(--color-info);
+      }
+      .file-upload input[type="file"] {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+        z-index: 2;
+      }
+      .file-upload-placeholder {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: var(--color-text-tertiary);
+        gap: 6px;
+      }
+      .file-upload-icon {
+        font-size: 28px;
+        line-height: 1;
+      }
+      .file-upload-text {
+        font-size: 12px;
+      }
+      .file-upload-preview {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: none;
+        z-index: 1;
+      }
+      .file-upload.has-file .file-upload-preview {
+        display: block;
+      }
+      .file-upload.has-file .file-upload-placeholder {
+        display: none;
+      }
+      .file-upload-clear {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        width: 20px;
+        height: 20px;
+        border: none;
+        border-radius: 50%;
+        background: rgba(0,0,0,0.5);
+        color: #fff;
+        font-size: 14px;
+        line-height: 1;
+        cursor: pointer;
+        display: none;
+        z-index: 3;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+      }
+      .file-upload.has-file .file-upload-clear {
+        display: flex;
+      }
+    </style>
 
     <script>
       /* ===== 跨环境页面跳转：兼容本地 / GitHub Pages / htmlpreview.github.io ===== */
@@ -416,7 +568,7 @@
 
       /* ===== TT账号授权二维码弹框 ===== */
       function openTtQrModal(label) {
-        document.getElementById('tt-qr-title').textContent = 'TT账号授权 - ' + label;
+        document.getElementById('tt-qr-title').textContent = '关联 TikTok 账号 - ' + label;
         document.getElementById('tt-qr-user').textContent = label;
         drawTtQrCode(label);
         document.getElementById('tt-qr-overlay').classList.add('open');
@@ -478,6 +630,51 @@
           ctx.fillStyle = '#111827';
           ctx.fillRect(fx + 2 * cell, fy + 2 * cell, 3 * cell, 3 * cell);
         });
+      }
+
+      /* ===== 新建 TikTok 账号弹框 ===== */
+      function openBcNewTtModal(bcName) {
+        document.getElementById('bc-new-tt-bcname').value = bcName || '';
+        document.getElementById('bc-new-tt-name').value = '';
+        document.getElementById('bc-new-tt-region').selectedIndex = 0;
+        clearBcNewAvatar();
+        document.getElementById('bc-new-tt-overlay').classList.add('open');
+        document.getElementById('bc-new-tt-modal').classList.add('open');
+      }
+      function closeBcNewTtModal() {
+        document.getElementById('bc-new-tt-overlay').classList.remove('open');
+        document.getElementById('bc-new-tt-modal').classList.remove('open');
+      }
+      function submitBcNewTt() {
+        var bcName = document.getElementById('bc-new-tt-bcname').value;
+        var name = document.getElementById('bc-new-tt-name').value.trim();
+        var region = document.getElementById('bc-new-tt-region').value;
+        var avatarInput = document.getElementById('bc-new-tt-avatar');
+        if (!name) { alert('请输入TikTok账号名称'); return; }
+        if (!avatarInput.files || !avatarInput.files.length) { alert('请上传头像'); return; }
+        if (!region) { alert('请选择国家/地区'); return; }
+        alert('创建成功：' + name + '（' + bcName + ' / ' + region + '）');
+        closeBcNewTtModal();
+      }
+      function previewBcNewAvatar(input) {
+        var wrap = document.getElementById('bc-new-tt-avatar-wrap');
+        var preview = document.getElementById('bc-new-tt-avatar-preview');
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            preview.src = e.target.result;
+            wrap.classList.add('has-file');
+          };
+          reader.readAsDataURL(input.files[0]);
+        }
+      }
+      function clearBcNewAvatar() {
+        var input = document.getElementById('bc-new-tt-avatar');
+        var wrap = document.getElementById('bc-new-tt-avatar-wrap');
+        var preview = document.getElementById('bc-new-tt-avatar-preview');
+        input.value = '';
+        preview.src = '';
+        wrap.classList.remove('has-file');
       }
     </script>
   </body>
