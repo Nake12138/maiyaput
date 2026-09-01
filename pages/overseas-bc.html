@@ -182,35 +182,7 @@
                       <th>操作</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    <tr>
-                      <td>Mayaput-Main-BC</td>
-                      <td><a href="#" class="link" onclick="openBcUserDrawer('1001', 'Mayaput-Main-BC', 6);return false;">6</a></td>
-                      <td><a href="#" class="link" onclick="openBcTtDrawer('1001', 'Mayaput-Main-BC');return false;">3</a></td>
-                      <td>
-                        <a href="#" class="link" onclick="openBcNewTtModal('Mayaput-Main-BC');return false;">新建 TikTok 账号</a>
-                        <a href="#" class="link" style="margin-left:12px;" onclick="openTtQrModal('Mayaput-Main-BC');return false;">关联 TikTok 账号</a>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>ViviShort-BC</td>
-                      <td><a href="#" class="link" onclick="openBcUserDrawer('1002', 'ViviShort-BC', 4);return false;">4</a></td>
-                      <td><a href="#" class="link" onclick="openBcTtDrawer('1002', 'ViviShort-BC');return false;">2</a></td>
-                      <td>
-                        <a href="#" class="link" onclick="openBcNewTtModal('ViviShort-BC');return false;">新建 TikTok 账号</a>
-                        <a href="#" class="link" style="margin-left:12px;" onclick="openTtQrModal('ViviShort-BC');return false;">关联 TikTok 账号</a>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>DramaGo-BC</td>
-                      <td><a href="#" class="link" onclick="openBcUserDrawer('1003', 'DramaGo-BC', 3);return false;">3</a></td>
-                      <td><a href="#" class="link" onclick="openBcTtDrawer('1003', 'DramaGo-BC');return false;">2</a></td>
-                      <td>
-                        <a href="#" class="link" onclick="openBcNewTtModal('DramaGo-BC');return false;">新建 TikTok 账号</a>
-                        <a href="#" class="link" style="margin-left:12px;" onclick="openTtQrModal('DramaGo-BC');return false;">关联 TikTok 账号</a>
-                      </td>
-                    </tr>
-                  </tbody>
+                  <tbody id="bc-list-tbody"></tbody>
                 </table>
               </div>
               <div class="pagination">
@@ -233,7 +205,7 @@
           </div>
 
           <!-- 分配 TikTok 账号弹框 -->
-          <div id="assign-tt-overlay" class="modal-overlay" onclick="closeAssignTtModal()"></div>
+          <div id="assign-tt-overlay" class="modal-overlay" onclick="closeAssignTtModal(event)"></div>
           <div id="assign-tt-modal" class="modal">
             <div class="modal-card" style="width:520px;">
               <div class="modal-header">
@@ -268,7 +240,7 @@
 
           <!-- 用户列表抽屉 -->
           <div id="bc-user-overlay" class="drawer-overlay" onclick="closeBcUserDrawer()"></div>
-          <div id="bc-user-drawer" class="drawer">
+          <div id="bc-user-drawer" class="drawer drawer-narrow">
             <div class="drawer-card">
               <div class="drawer-header">
                 <span id="bc-user-title">用户列表</span>
@@ -499,6 +471,26 @@
         table-layout: fixed;
         width: 100%;
       }
+
+      /* 分配 TikTok 账号弹框需在用户列表抽屉之上显示（修正层级错乱） */
+      #assign-tt-overlay { z-index: 1200; }
+      #assign-tt-modal { z-index: 1201; }
+
+      /* 已分配账户标记 */
+      .tag-assigned {
+        display: inline-block;
+        margin-left: 6px;
+        padding: 1px 6px;
+        font-size: 11px;
+        line-height: 16px;
+        color: #667085;
+        background: #f2f4f7;
+        border-radius: 3px;
+        vertical-align: middle;
+      }
+      .assign-tt-check:disabled {
+        cursor: not-allowed;
+      }
     </style>
 
     <script>
@@ -632,6 +624,18 @@
         '1002': { '听泉': 1, '橙子': 0, '小鹿': 1, '青栀': 0 },
         '1003': { '娜可': 1, '魔法七': 0, '阿澈': 1 }
       };
+      /* 每个用户已分配的 TikTok 账号（与上方数量对应，原型示例数据，用于弹框中禁选） */
+      var bcUserAssignedTt = {
+        '1001': { '听泉': ['Sasa ดู', '廖廖短剧'], '娜可': ['Titi Pendek'], '橙子': [], '孤树': ['Sasa ดู'], '魔法七': ['廖廖短剧'], '阿澈': [] },
+        '1002': { '听泉': ['Bobo Flicks'], '橙子': [], '小鹿': ['Yoyo Cortos'], '青栀': [] },
+        '1003': { '娜可': ['Rio Curtas'], '魔法七': [], '阿澈': ['Coco Courts'] }
+      };
+      /* 商务中心主表数据（驱动列表渲染与刷新） */
+      var bcListData = [
+        { id: '1001', name: 'Mayaput-Main-BC', userCount: 6, ttCount: 3 },
+        { id: '1002', name: 'ViviShort-BC', userCount: 4, ttCount: 2 },
+        { id: '1003', name: 'DramaGo-BC', userCount: 3, ttCount: 2 }
+      ];
       var currentBcTtId = null;
       var currentBcUserId = null;
       var currentBcUserName = null;
@@ -642,6 +646,29 @@
 
       function resetBCFilter() {
         document.querySelectorAll('#page-overseas-bc .filter-input').forEach(function (i) { i.value = ''; });
+      }
+
+      /* ===== 商务中心主表渲染与刷新 ===== */
+      function renderBcList() {
+        var tbody = document.getElementById('bc-list-tbody');
+        if (!tbody) return;
+        tbody.innerHTML = bcListData.map(function (b) {
+          return '<tr>' +
+            '<td>' + b.name + '</td>' +
+            '<td><a href="#" class="link" onclick="openBcUserDrawer(\'' + b.id + '\', \'' + b.name + '\', ' + b.userCount + ');return false;">' + b.userCount + '</a></td>' +
+            '<td><a href="#" class="link" onclick="openBcTtDrawer(\'' + b.id + '\', \'' + b.name + '\');return false;">' + b.ttCount + '</a></td>' +
+            '<td>' +
+              '<a href="#" class="link" onclick="openBcNewTtModal(\'' + b.name + '\');return false;">新建 TikTok 账号</a>' +
+              '<a href="#" class="link" style="margin-left:12px;" onclick="openTtQrModal(\'' + b.name + '\');return false;">关联 TikTok 账号</a>' +
+              '<a href="#" class="link" style="margin-left:12px;" onclick="refreshBC(\'' + b.id + '\',\'' + b.name + '\');return false;">刷新</a>' +
+            '</td>' +
+          '</tr>';
+        }).join('');
+      }
+
+      function refreshBC(bcId, bcName) {
+        /* 原型：重新渲染列表（真实环境此处应重新拉取该商务中心数据） */
+        renderBcList();
       }
 
       /* ===== 用户数量：点击打开用户列表抽屉 ===== */
@@ -688,7 +715,8 @@
         document.getElementById('assign-tt-modal').classList.add('open');
       }
 
-      function closeAssignTtModal() {
+      function closeAssignTtModal(e) {
+        if (e && e.stopPropagation) e.stopPropagation();
         document.getElementById('assign-tt-overlay').classList.remove('open');
         document.getElementById('assign-tt-modal').classList.remove('open');
       }
@@ -696,6 +724,7 @@
       function renderAssignTtList() {
         var keyword = (document.getElementById('assign-tt-search').value || '').trim().toLowerCase();
         var accounts = bcTtData[assignTtBcId] || [];
+        var assignedMap = (bcUserAssignedTt[assignTtBcId] && bcUserAssignedTt[assignTtBcId][assignTtUser]) || [];
         var filtered = keyword ? accounts.filter(function (a) { return (a.name || '').toLowerCase().indexOf(keyword) !== -1; }) : accounts;
         var tbody = document.getElementById('assign-tt-tbody');
         if (!filtered.length) {
@@ -703,8 +732,12 @@
           return;
         }
         tbody.innerHTML = filtered.map(function (a) {
+          var isAssigned = assignedMap.indexOf(a.name) !== -1;
+          var checkboxHtml = isAssigned
+            ? '<input type="checkbox" class="assign-tt-check" value="' + (a.name || '') + '" checked disabled /> <span class="tag-assigned">已分配</span>'
+            : '<input type="checkbox" class="assign-tt-check" value="' + (a.name || '') + '" />';
           return '<tr>' +
-            '<td><input type="checkbox" class="assign-tt-check" value="' + (a.name || '') + '" /></td>' +
+            '<td>' + checkboxHtml + '</td>' +
             '<td>' + renderTtAccountCell(a.name, a.handle) + '</td>' +
             '<td>' + (a.lang || '') + '</td>' +
           '</tr>';
@@ -712,13 +745,15 @@
       }
 
       function toggleAssignTtAll(src) {
-        document.querySelectorAll('#assign-tt-tbody .assign-tt-check').forEach(function (c) { c.checked = src.checked; });
+        document.querySelectorAll('#assign-tt-tbody .assign-tt-check').forEach(function (c) {
+          if (!c.disabled) c.checked = src.checked;
+        });
       }
 
       function submitAssignTt() {
-        var checks = document.querySelectorAll('#assign-tt-tbody .assign-tt-check:checked');
+        var checks = document.querySelectorAll('#assign-tt-tbody .assign-tt-check:checked:not(:disabled)');
         var names = Array.prototype.map.call(checks, function (c) { return c.value; });
-        if (!names.length) { alert('请至少选择一个 TikTok 账号'); return; }
+        if (!names.length) { alert('请至少选择一个未分配的 TikTok 账号'); return; }
         alert('已为「' + assignTtUser + '」分配 ' + names.length + ' 个 TikTok 账号：\n' + names.join('、'));
         closeAssignTtModal();
       }
@@ -890,6 +925,9 @@
         preview.src = '';
         wrap.classList.remove('has-file');
       }
+
+      /* 初始化商务中心主表 */
+      renderBcList();
     </script>
   </body>
 </html>
