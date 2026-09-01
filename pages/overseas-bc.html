@@ -77,7 +77,7 @@
             <div class="nav-children">
               <span class="nav-child-item" data-page="overseas-account">账户</span>
               <span class="nav-child-item" data-page="overseas-app">应用</span>
-              <span class="nav-child-item active" data-page="overseas-bc">BC</span>
+              <span class="nav-child-item active" data-page="overseas-bc">商务中心</span>
             </div>
           </div>
 
@@ -145,18 +145,18 @@
               <span class="breadcrumb-sep">/</span>
               <span>账号管理</span>
               <span class="breadcrumb-sep">/</span>
-              <span>BC</span>
+              <span>商务中心</span>
             </div>
 
             <!-- Page Header -->
             <div class="page-header" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
-              <h2 class="page-title">BC</h2>
+              <h2 class="page-title">商务中心</h2>
             </div>
 
             <!-- Filter Bar -->
             <div class="filter-bar">
               <div class="filter-bar-row">
-                <input type="text" class="filter-input" placeholder="请输入BC名称" />
+                <input type="text" class="filter-input" placeholder="请输入商务中心名称" />
                 <div class="filter-actions">
                   <button class="btn btn-primary btn-sm" onclick="searchBC()">查询</button>
                   <button class="btn btn-outline btn-sm" onclick="resetBCFilter()">重置</button>
@@ -170,21 +170,25 @@
                 <table class="data-table">
                   <thead>
                     <tr>
-                      <th>BC名称</th>
+                      <th>商务中心名称</th>
+                      <th>商务中心类型</th>
                       <th>用户数量</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
                       <td>Mayaput-Main-BC</td>
+                      <td>直客</td>
                       <td><a href="#" class="link" onclick="openBcUserDrawer('1001', 'Mayaput-Main-BC', 6);return false;">6</a></td>
                     </tr>
                     <tr>
                       <td>ViviShort-BC</td>
+                      <td>代理</td>
                       <td><a href="#" class="link" onclick="openBcUserDrawer('1002', 'ViviShort-BC', 4);return false;">4</a></td>
                     </tr>
                     <tr>
                       <td>DramaGo-BC</td>
+                      <td>MCN</td>
                       <td><a href="#" class="link" onclick="openBcUserDrawer('1003', 'DramaGo-BC', 3);return false;">3</a></td>
                     </tr>
                   </tbody>
