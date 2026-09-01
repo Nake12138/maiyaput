@@ -336,8 +336,29 @@
     <script src="../scripts/main.js"></script>
     <script>
       function showPage(pageName) {
-        if (pageName === 'overseas-tiktok-account') {
-          window.location.href = navUrl('pages/overseas-tiktok-account.html');
+        if (pageName === 'overseas-tiktok-account') return;
+        if (pageName === 'overseas-account') {
+          window.location.href = navUrl('pages/overseas-account.html');
+          return;
+        }
+        if (pageName === 'overseas-app') {
+          window.location.href = navUrl('pages/overseas-app.html');
+          return;
+        }
+        if (pageName === 'overseas-bc') {
+          window.location.href = navUrl('pages/overseas-bc.html');
+          return;
+        }
+        if (pageName === 'overseas-batch-delivery') {
+          window.location.href = navUrl('pages/overseas-batch-delivery.html');
+          return;
+        }
+        if (pageName === 'overseas-auto-delivery') {
+          window.location.href = navUrl('pages/overseas-auto-delivery.html');
+          return;
+        }
+        if (pageName === 'overseas-template') {
+          window.location.href = navUrl('pages/overseas-template.html');
           return;
         }
         window.location.href = navUrl('index.html') + '#' + pageName;

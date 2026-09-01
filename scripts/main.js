@@ -15,13 +15,13 @@ function navUrl(rootPath) {
 
 document.addEventListener('DOMContentLoaded', function () {
   // Navigation item click handlers
-  document.querySelectorAll('.nav-item[data-page]').forEach(function (item) {
+  document.querySelectorAll('.nav-item[data-page], .nav-child-item[data-page]').forEach(function (item) {
     item.addEventListener('click', function () {
       const pageName = this.getAttribute('data-page');
       showPage(pageName);
 
       // Update active state in sidebar
-      document.querySelectorAll('.nav-item').forEach(function (nav) {
+      document.querySelectorAll('.nav-item, .nav-child-item').forEach(function (nav) {
         nav.classList.remove('active');
       });
       this.classList.add('active');
