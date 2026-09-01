@@ -151,7 +151,7 @@
             <!-- Filter Bar -->
             <div class="filter-bar">
               <div class="filter-bar-row">
-                <input type="text" class="filter-input" placeholder="请输入BC名称/ID" />
+                <input type="text" class="filter-input" placeholder="请输入BC名称" />
                 <div class="filter-actions">
                   <button class="btn btn-primary btn-sm" onclick="searchBC()">查询</button>
                   <button class="btn btn-outline btn-sm" onclick="resetBCFilter()">重置</button>
@@ -165,24 +165,20 @@
                 <table class="data-table">
                   <thead>
                     <tr>
-                      <th>ID</th>
                       <th>BC名称</th>
                       <th>用户数量</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
-                      <td>1001</td>
                       <td>Mayaput-Main-BC</td>
                       <td><a href="#" class="link" onclick="openBcUserDrawer('1001', 'Mayaput-Main-BC', 6);return false;">6</a></td>
                     </tr>
                     <tr>
-                      <td>1002</td>
                       <td>ViviShort-BC</td>
                       <td><a href="#" class="link" onclick="openBcUserDrawer('1002', 'ViviShort-BC', 4);return false;">4</a></td>
                     </tr>
                     <tr>
-                      <td>1003</td>
                       <td>DramaGo-BC</td>
                       <td><a href="#" class="link" onclick="openBcUserDrawer('1003', 'DramaGo-BC', 3);return false;">3</a></td>
                     </tr>
@@ -224,7 +220,7 @@
                   <div class="table-wrapper">
                     <table class="data-table">
                       <thead>
-                        <tr><th>用户名</th></tr>
+                        <tr><th>用户名</th><th style="width:120px;">操作</th></tr>
                       </thead>
                       <tbody id="bc-user-tbody"></tbody>
                     </table>
@@ -233,6 +229,25 @@
               </div>
               <div class="drawer-footer">
                 <button class="btn btn-outline btn-sm" onclick="closeBcUserDrawer()">关闭</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- TT账号授权二维码弹框 -->
+          <div id="tt-qr-overlay" class="modal-overlay" onclick="ttQrOverlayClick(event)"></div>
+          <div id="tt-qr-modal" class="modal" onclick="ttModalClick(event)">
+            <div class="modal-card" style="width:360px;">
+              <div class="modal-header">
+                <span id="tt-qr-title">TT账号授权</span>
+                <button class="modal-close" onclick="closeTtQrModal()">×</button>
+              </div>
+              <div class="modal-body" style="display:flex;flex-direction:column;align-items:center;padding:24px;">
+                <canvas id="tt-qr-canvas" width="168" height="168" style="border:1px solid #e5e7eb;border-radius:4px;background:#fff;"></canvas>
+                <div style="margin-top:14px;font-size:13px;color:#667085;">请使用 TikTok App 扫描二维码完成账号授权</div>
+                <div style="margin-top:6px;font-size:12px;color:#98a2b3;">授权用户：<span id="tt-qr-user" style="color:#344054;font-weight:600;"></span></div>
+              </div>
+              <div class="modal-footer" style="justify-content:center;">
+                <button class="btn btn-outline btn-sm" onclick="closeTtQrModal()">关闭</button>
               </div>
             </div>
           </div>
@@ -366,12 +381,79 @@
         var filtered = keyword ? users.filter(function (u) { return u.toLowerCase().indexOf(keyword) !== -1; }) : users;
         var tbody = document.getElementById('bc-user-tbody');
         if (!filtered.length) {
-          tbody.innerHTML = '<tr><td style="text-align:center;color:#999;padding:32px 0;">暂无数据</td></tr>';
+          tbody.innerHTML = '<tr><td colspan="2" style="text-align:center;color:#999;padding:32px 0;">暂无数据</td></tr>';
           return;
         }
         tbody.innerHTML = filtered.map(function (u) {
-          return '<tr><td>' + u + '</td></tr>';
+          var action = '<a href="#" class="link" onclick="openTtQrModal(\'' + u + '\');return false;">TT账号授权</a>';
+          return '<tr><td>' + u + '</td><td>' + action + '</td></tr>';
         }).join('');
+      }
+
+      /* ===== TT账号授权二维码弹框 ===== */
+      function openTtQrModal(username) {
+        document.getElementById('tt-qr-title').textContent = 'TT账号授权 - ' + username;
+        document.getElementById('tt-qr-user').textContent = username;
+        drawTtQrCode(username);
+        document.getElementById('tt-qr-overlay').classList.add('open');
+        document.getElementById('tt-qr-modal').classList.add('open');
+      }
+
+      function closeTtQrModal() {
+        document.getElementById('tt-qr-overlay').classList.remove('open');
+        document.getElementById('tt-qr-modal').classList.remove('open');
+      }
+
+      function ttQrOverlayClick(e) {
+        /* 阻止冒泡，避免全系统统一遮罩处理把用户列表抽屉一起关闭 */
+        if (e) e.stopPropagation();
+        closeTtQrModal();
+      }
+
+      function ttModalClick(e) {
+        /* 仅点击弹框背景时关闭二维码弹框，不影响底下的用户列表抽屉 */
+        if (e && e.target === e.currentTarget) {
+          e.stopPropagation();
+          closeTtQrModal();
+        }
+      }
+
+      /* 基于用户名生成确定性的二维码样式图案（原型示意用） */
+      function drawTtQrCode(username) {
+        var canvas = document.getElementById('tt-qr-canvas');
+        if (!canvas || !canvas.getContext) return;
+        var ctx = canvas.getContext('2d');
+        var n = 25, cell = canvas.width / n;
+        var seed = 0;
+        var key = String(username || '') + '|tt-auth';
+        for (var i = 0; i < key.length; i++) {
+          seed = (seed * 31 + key.charCodeAt(i)) % 2147483647;
+        }
+        function rand() {
+          seed = (seed * 48271) % 2147483647;
+          return seed / 2147483647;
+        }
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#111827';
+        for (var y = 0; y < n; y++) {
+          for (var x = 0; x < n; x++) {
+            var inFinder =
+              (x < 7 && y < 7) || (x >= n - 7 && y < 7) || (x < 7 && y >= n - 7);
+            if (inFinder) continue;
+            if (rand() > 0.55) ctx.fillRect(x * cell, y * cell, cell, cell);
+          }
+        }
+        /* 三个定位角 */
+        [[0, 0], [n - 7, 0], [0, n - 7]].forEach(function (pos) {
+          var fx = pos[0] * cell, fy = pos[1] * cell, size = 7 * cell;
+          ctx.fillStyle = '#111827';
+          ctx.fillRect(fx, fy, size, size);
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(fx + cell, fy + cell, 5 * cell, 5 * cell);
+          ctx.fillStyle = '#111827';
+          ctx.fillRect(fx + 2 * cell, fy + 2 * cell, 3 * cell, 3 * cell);
+        });
       }
     </script>
   </body>
