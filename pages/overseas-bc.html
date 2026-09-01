@@ -167,11 +167,16 @@
             <!-- BC Table -->
             <div class="table-card">
               <div class="table-wrapper">
-                <table class="data-table">
+                <table class="data-table bc-list-table">
+                  <colgroup>
+                    <col style="width:32%" />
+                    <col style="width:15%" />
+                    <col style="width:15%" />
+                    <col style="width:38%" />
+                  </colgroup>
                   <thead>
                     <tr>
                       <th>商务中心名称</th>
-                      <th>商务中心类型</th>
                       <th>用户数量</th>
                       <th>TikTok 账号</th>
                       <th>操作</th>
@@ -180,7 +185,6 @@
                   <tbody>
                     <tr>
                       <td>Mayaput-Main-BC</td>
-                      <td>非自助直客商务中心</td>
                       <td><a href="#" class="link" onclick="toggleBcUserExpand('1001', 'Mayaput-Main-BC', 6);return false;">6</a></td>
                       <td><a href="#" class="link" onclick="openBcTtDrawer('1001', 'Mayaput-Main-BC');return false;">3</a></td>
                       <td>
@@ -189,13 +193,12 @@
                       </td>
                     </tr>
                     <tr class="bc-user-expand-row" id="bc-expand-1001" style="display:none;">
-                      <td colspan="5" style="background:#fafbfc;padding:0;">
+                      <td colspan="4" style="background:#fafbfc;padding:0;">
                         <div class="bc-user-expand" id="bc-expand-body-1001"></div>
                       </td>
                     </tr>
                     <tr>
                       <td>ViviShort-BC</td>
-                      <td>非自助代理商商务中心</td>
                       <td><a href="#" class="link" onclick="toggleBcUserExpand('1002', 'ViviShort-BC', 4);return false;">4</a></td>
                       <td><a href="#" class="link" onclick="openBcTtDrawer('1002', 'ViviShort-BC');return false;">2</a></td>
                       <td>
@@ -204,13 +207,12 @@
                       </td>
                     </tr>
                     <tr class="bc-user-expand-row" id="bc-expand-1002" style="display:none;">
-                      <td colspan="5" style="background:#fafbfc;padding:0;">
+                      <td colspan="4" style="background:#fafbfc;padding:0;">
                         <div class="bc-user-expand" id="bc-expand-body-1002"></div>
                       </td>
                     </tr>
                     <tr>
                       <td>DramaGo-BC</td>
-                      <td>普通商务中心</td>
                       <td><a href="#" class="link" onclick="toggleBcUserExpand('1003', 'DramaGo-BC', 3);return false;">3</a></td>
                       <td><a href="#" class="link" onclick="openBcTtDrawer('1003', 'DramaGo-BC');return false;">2</a></td>
                       <td>
@@ -219,7 +221,7 @@
                       </td>
                     </tr>
                     <tr class="bc-user-expand-row" id="bc-expand-1003" style="display:none;">
-                      <td colspan="5" style="background:#fafbfc;padding:0;">
+                      <td colspan="4" style="background:#fafbfc;padding:0;">
                         <div class="bc-user-expand" id="bc-expand-body-1003"></div>
                       </td>
                     </tr>
@@ -480,8 +482,13 @@
 
       /* ===== 用户列表下方展开 ===== */
       .bc-user-expand {
-        padding: 16px 16px 16px 40px;
+        padding: 16px 0;
         border-top: 1px dashed #eef0f3;
+      }
+      .bc-list-table,
+      .bc-user-sub-table {
+        table-layout: fixed;
+        width: 100%;
       }
       .bc-user-expand-inner { }
       .bc-user-expand-title {
@@ -493,6 +500,11 @@
       .bc-user-expand .data-table th,
       .bc-user-expand .data-table td {
         font-size: 13px;
+      }
+      /* 子表首列占位，对齐父表「商务中心名称」列 */
+      .bc-user-sub-table th:first-child,
+      .bc-user-sub-table td:first-child {
+        color: transparent;
       }
     </style>
 
@@ -661,13 +673,19 @@
         var rows = users.map(function (u) {
           var ttCount = (bcUserTtCount[bcId] && bcUserTtCount[bcId][u] != null) ? bcUserTtCount[bcId][u] : 0;
           var action = '<a href="#" class="link" onclick="openAssignTtModal(\'' + bcId + '\',\'' + u + '\');return false;">分配 TikTok 账号</a>';
-          return '<tr><td>' + u + '</td><td>' + ttCount + '</td><td>' + action + '</td></tr>';
+          return '<tr><td></td><td>' + u + '</td><td>' + ttCount + '</td><td>' + action + '</td></tr>';
         }).join('');
         var html = '<div class="bc-user-expand-inner">' +
           '<div class="bc-user-expand-title">用户列表 - ' + bcName + '（' + count + '）</div>' +
           '<div class="table-card" style="border-radius:4px;">' +
-            '<div class="table-wrapper"><table class="data-table">' +
-              '<thead><tr><th>用户名</th><th>TikTok 账号数量</th><th>操作</th></tr></thead>' +
+            '<div class="table-wrapper"><table class="data-table bc-user-sub-table">' +
+              '<colgroup>' +
+                '<col style="width:32%" />' +
+                '<col style="width:15%" />' +
+                '<col style="width:15%" />' +
+                '<col style="width:38%" />' +
+              '</colgroup>' +
+              '<thead><tr><th></th><th>用户名</th><th>TikTok 账号数量</th><th>操作</th></tr></thead>' +
               '<tbody>' + rows + '</tbody>' +
             '</table></div>' +
           '</div></div>';
