@@ -335,6 +335,15 @@
 
     <script src="../scripts/main.js"></script>
     <script>
+      /* ===== 跨环境页面跳转：兼容本地 / GitHub Pages / htmlpreview.github.io ===== */
+      function navUrl(rootPath) {
+        if (window.location.hostname === 'htmlpreview.github.io') {
+          return 'https://htmlpreview.github.io/?https://github.com/Nake12138/maiyaput/blob/main/' + rootPath;
+        }
+        if (rootPath === 'index.html') return '../index.html';
+        return './' + rootPath.replace(/^pages\//, '');
+      }
+
       function showPage(pageName) {
         if (pageName === 'overseas-tiktok-account') return;
         if (pageName === 'overseas-account') {
