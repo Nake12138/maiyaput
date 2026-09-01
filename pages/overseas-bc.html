@@ -251,8 +251,10 @@
                   <input type="text" id="bc-user-search" class="form-input" placeholder="请输入用户名搜索" style="flex:1;" oninput="renderBcUserList()" />
                 </div>
                 <div class="bc-user-toolbar">
-                  <span class="bc-user-selected-info">已选择 <span id="bc-user-selected-count">0</span> 个用户</span>
-                  <button type="button" class="btn btn-primary btn-sm" id="bc-user-batch-assign-btn" onclick="openBatchAssignTtModal()" disabled>分配TikTok</button>
+                  <div class="bc-user-selected-wrap">
+                    <span class="bc-user-selected-info">已选择 <span id="bc-user-selected-count">0</span> 个用户</span>
+                    <button type="button" class="btn btn-primary btn-sm" id="bc-user-batch-assign-btn" onclick="openBatchAssignTtModal()" disabled>分配TikTok</button>
+                  </div>
                 </div>
                 <div class="table-card" style="border-radius:4px;">
                   <div class="table-wrapper">
@@ -542,8 +544,13 @@
       .bc-user-toolbar {
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: flex-start;
         margin: 0 0 10px;
+      }
+      .bc-user-selected-wrap {
+        display: flex;
+        align-items: center;
+        gap: 12px;
       }
       .bc-user-selected-info {
         font-size: 13px;
