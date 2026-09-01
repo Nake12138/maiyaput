@@ -157,6 +157,14 @@
             <div class="filter-bar">
               <div class="filter-bar-row">
                 <input type="text" class="filter-input" placeholder="请输入商务中心名称" />
+                <select class="filter-select" id="bc-type">
+                  <option value="">请选择商务中心类型</option>
+                  <option value="NORMAL">普通商务中心</option>
+                  <option value="DIRECT">非自助直客商务中心</option>
+                  <option value="AGENCY">非自助代理商商务中心</option>
+                  <option value="SELF_SERVICE">自助直客商务中心</option>
+                  <option value="SELF_SERVICE_AGENCY">自助代理商商务中心</option>
+                </select>
                 <div class="filter-actions">
                   <button class="btn btn-primary btn-sm" onclick="searchBC()">查询</button>
                   <button class="btn btn-outline btn-sm" onclick="resetBCFilter()">重置</button>
@@ -179,7 +187,7 @@
                   <tbody>
                     <tr>
                       <td>Mayaput-Main-BC</td>
-                      <td>直客</td>
+                      <td>非自助直客商务中心</td>
                       <td><a href="#" class="link" onclick="openBcUserDrawer('1001', 'Mayaput-Main-BC', 6);return false;">6</a></td>
                       <td>
                         <a href="#" class="link" onclick="openBcNewTtModal('Mayaput-Main-BC');return false;">新建 TikTok 账号</a>
@@ -188,7 +196,7 @@
                     </tr>
                     <tr>
                       <td>ViviShort-BC</td>
-                      <td>代理</td>
+                      <td>非自助代理商商务中心</td>
                       <td><a href="#" class="link" onclick="openBcUserDrawer('1002', 'ViviShort-BC', 4);return false;">4</a></td>
                       <td>
                         <a href="#" class="link" onclick="openBcNewTtModal('ViviShort-BC');return false;">新建 TikTok 账号</a>
@@ -197,7 +205,7 @@
                     </tr>
                     <tr>
                       <td>DramaGo-BC</td>
-                      <td>MCN</td>
+                      <td>普通商务中心</td>
                       <td><a href="#" class="link" onclick="openBcUserDrawer('1003', 'DramaGo-BC', 3);return false;">3</a></td>
                       <td>
                         <a href="#" class="link" onclick="openBcNewTtModal('DramaGo-BC');return false;">新建 TikTok 账号</a>
@@ -536,6 +544,8 @@
 
       function resetBCFilter() {
         document.querySelectorAll('#page-overseas-bc .filter-input').forEach(function (i) { i.value = ''; });
+        var typeSel = document.getElementById('bc-type');
+        if (typeSel) typeSel.selectedIndex = 0;
       }
 
       function openBcUserDrawer(bcId, bcName, count) {
