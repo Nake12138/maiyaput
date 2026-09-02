@@ -1707,7 +1707,7 @@
           shot: '../assets/prd/us-004-user-tt.png',
           desc: '作为投放运营，我想要查看某个用户已分配的 TikTok 账号明细，以便确认其资产权限。',
           filter: '账号筛选：单行文本输入框（占位「请输入TikTok账号名称搜索」），输入即实时过滤。',
-          source: '抽屉内账号列表 ← 该用户与资产的分配关系；真实环境可调用「获取资产列表」（<a href="https://business-api.tiktok.com/portal/docs/get-assets/v1.3" target="_blank">get-assets 官方文档</a>）后按用户名过滤出已分配账号。',
+          source: '抽屉内账号列表 ← 该用户与资产的分配关系；可调用「获取资产列表」（<a href="https://business-api.tiktok.com/portal/docs/get-assets/v1.3" target="_blank">get-assets 官方文档</a>）后按用户名过滤出已分配账号。',
           flow: '用户列表行内点击「TikTok 账号」数量 → 携带 BC ID + 用户名打开宽抽屉 → 调用「获取资产列表」→ 仅展示该用户已被分配的 TikTok 账号 → 渲染账号明细；抽屉叠加在用户抽屉之上，关闭后回到用户列表。',
           ac: [
             '点击用户行内「TikTok 账号」数量，打开右侧宽抽屉，标题：TikTok 账号 - {用户名}（{BC名称}）',

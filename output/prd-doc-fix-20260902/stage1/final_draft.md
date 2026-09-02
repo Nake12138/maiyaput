@@ -223,7 +223,7 @@
 
 **界面截图**
 
-![US-005 TikTok 账号列表抽屉](C:/Users/M/WorkBuddy/2026-08-31-18-10-03/maiyaput/assets/prd/us-005-tt-drawer.png)
+![US-005 TikTok 账号列表抽屉](C:/Users/M/WorkBuddy/2026-08-31-18-10-03/maiyaput/assets/prd/us-006-tt-drawer.png)
 
 ---
 
