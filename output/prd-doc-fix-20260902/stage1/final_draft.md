@@ -1,0 +1,364 @@
+# 商务中心页面需求文档
+
+> **原型来源**：`pages/overseas-bc.html`（海外投放系统 - 账号管理 - 商务中心）
+> **文档版本**：v2.1
+> **生成日期**：2026-09-02
+> **文档格式**：Word（.docx）
+
+---
+
+## 1. 项目背景与目标
+
+### 1.1 项目背景
+
+海外投放系统面向短剧出海投放场景，基于 TikTok Business API 管理广告投放基础设施。商务中心（Business Center，下称 BC）是 TikTok 广告投放的核心组织单元，承载成员（用户）管理、TikTok 账号资产管理与权限分配。
+
+### 1.2 文档目标
+
+本文档定义商务中心页面的功能需求、交互逻辑、数据筛选与接口依赖，作为原型评审、研发排期与测试验收的依据。文档覆盖 7 个核心用户故事、11 个功能点，并明确每个表格的数据来源与数据流转路径。
+
+### 1.3 适用范围
+
+- 所属模块：海外投放系统 → 账号管理 → 商务中心
+- 页面文件：`pages/overseas-bc.html`
+- 复用样式：`styles/main.css`、`scripts/main.js`
+
+---
+
+## 2. 目标用户
+
+| 角色 | 说明 | 使用场景 |
+|------|------|---------|
+| 投放运营/管理员 | 管理商务中心及其成员、TikTok 账号资产 | 查看商务中心成员、分配/撤销 TikTok 账号权限、添加 TikTok 账号 |
+| 系统管理员 | 维护系统级数据 | 查看商务中心资产明细、排查账号归属 |
+
+---
+
+## 3. 核心业务流程
+
+### 3.1 流程概述
+
+```
+查询商务中心列表
+  ├─→ 点击「用户数量」→ 打开用户列表抽屉
+  │      ├─→ 点击「TikTok 账号」数量 → 叠加打开 TikTok 账号列表抽屉（关闭后回到用户列表）
+  │      ├─→ 行内「分配 TikTok 账号」→ 单用户分配弹框（多选，已分配禁选）
+  │      └─→ 勾选用户 → 「分配TikTok」→ 批量分配弹框（多选，不区分已分配）
+  ├─→ 点击「TikTok 账号」→ 打开 TikTok 账号列表抽屉
+  ├─→ 点击「添加 TikTok 账号」→ 添加弹框（选择新建/关联，字段在弹框内展开）
+  └─→ 点击「刷新」→ 重新拉取并渲染当前列表
+```
+
+### 3.2 主流程步骤描述
+
+1. 用户进入商务中心页面，默认加载并展示商务中心列表（原型为 3 条示例数据）。
+2. 可按商务中心名称筛选后查询/重置。
+3. 点击某行「用户数量」，右侧抽屉展示该 BC 的成员列表。
+4. 在用户列表中可搜索、勾选用户，进行单用户或批量分配 TikTok 账号。
+5. 点击「TikTok 账号」数量，叠加查看该 BC 的 TikTok 账号资产列表。
+6. 通过操作列「添加 TikTok 账号」为该 BC 新建或关联 TikTok 账号。
+7. 通过「刷新」重新同步该 BC 数据。
+
+---
+
+## 4. 功能清单
+
+| 功能点 ID | 功能名称 | 所属页面/组件 | 优先级 | 说明 |
+|-----------|---------|--------------|--------|------|
+| F-001 | 商务中心列表查询 | 商务中心主页面 | P0 | 按名称筛选 + 查询/重置 |
+| F-002 | 商务中心主表展示 | 商务中心主页面 | P0 | 名称/用户数量/TikTok账号/操作四列 |
+| F-003 | 打开用户列表抽屉 | 用户列表抽屉 | P0 | 点击用户数量触发 |
+| F-004 | 用户列表搜索 | 用户列表抽屉 | P1 | 按用户名实时过滤 |
+| F-005 | 单用户分配 TikTok 账号 | 分配 TikTok 账号弹框 | P0 | 行内操作，多选，已分配禁选 |
+| F-006 | 批量分配 TikTok 账号 | 批量分配弹框 | P0 | 勾选用户后批量分配 |
+| F-007 | 查看 TikTok 账号列表 | TikTok 账号列表抽屉 | P0 | 点击 TikTok 账号数触发 |
+| F-008 | TikTok 账号列表搜索 | TikTok 账号列表抽屉 | P1 | 按账号名称实时过滤 |
+| F-009 | 添加 TikTok 账号（新建方式） | 添加 TikTok 账号弹框 | P0 | 填写名称/头像/国家地区 |
+| F-010 | 添加 TikTok 账号（关联方式） | 添加 TikTok 账号弹框 | P0 | 二维码授权关联 |
+| F-011 | 商务中心列表刷新 | 商务中心主页面 | P1 | 重新拉取并渲染列表 |
+
+---
+
+## 5. 用户故事
+
+### 5.1 US-001 商务中心列表查询与展示（P0）
+
+**故事描述**：作为投放运营，我想要查看并按名称搜索商务中心列表，以便快速定位目标商务中心。
+
+**筛选项（组件类型）**
+
+- 名称筛选：单行文本输入框（input[type=text]，占位「请输入商务中心名称」）+「查询」/「重置」按钮；原型为前端本地过滤，真实环境将名称作为请求参数传给列表接口。
+
+**数据来源（调用接口）**
+
+- 主表数据 ← 接口「获取商务中心列表」([get-business-centers 官方文档](https://business-api.tiktok.com/portal/docs/get-business-centers/v1.3))。
+
+**数据流转**
+
+- 页面加载 → 调用「获取商务中心列表」→ 返回 BC 列表（名称/用户数/账号数）→ 渲染主表；点击「用户数量」/「TikTok 账号」携带 BC ID 打开对应抽屉；点击「刷新」重新拉取该 BC 数据。
+
+**验收标准**
+
+1. 页面加载后展示 BC 列表，列为：商务中心名称 / 用户数量 / TikTok 账号 / 操作。
+2. 支持按商务中心名称模糊查询与重置。
+3. 「用户数量」「TikTok 账号」为可点击链接，分别打开对应抽屉。
+4. 操作列提供「添加 TikTok 账号」「刷新」；点击「刷新」调用接口查询商务中心下的用户和 TikTok 账号列表。
+
+**界面截图**
+
+![US-001 商务中心主页面](C:/Users/M/WorkBuddy/2026-08-31-18-10-03/maiyaput/assets/prd/us-001-main.png)
+
+---
+
+### 5.2 US-002 用户列表抽屉与搜索（P0）
+
+**故事描述**：作为投放运营，我想要打开某个 BC 的成员列表并搜索用户，以便定位目标成员。
+
+**筛选项（组件类型）**
+
+- 用户名筛选：单行文本输入框（input[type=text]，占位「请输入用户名搜索」），输入即实时过滤（oninput），包含匹配、不区分大小写。
+
+**数据来源（调用接口）**
+
+- 抽屉内用户列表 ← 接口「获取商务中心成员列表」([get-the-members-of-a-bc 官方文档](https://business-api.tiktok.com/portal/docs/get-the-members-of-a-bc/v1.3))，入参为当前 BC ID。
+
+**数据流转**
+
+- 点击主表「用户数量」→ 携带 BC ID 打开用户抽屉 → 调用「获取商务中心成员列表」→ 渲染成员列表；搜索框在本地过滤可见行，勾选状态（batchSelectedUsers）独立于可见列表保留。
+
+**验收标准**
+
+1. 点击「用户数量」打开右侧窄抽屉（约 720px），标题：用户列表 - {BC名称}（{用户数}）。
+2. 支持按用户名实时搜索（包含匹配、不区分大小写），无结果显示「暂无数据」空态。
+3. 每次打开抽屉重置搜索关键字与勾选状态。
+
+**界面截图**
+
+![US-002 用户列表抽屉](C:/Users/M/WorkBuddy/2026-08-31-18-10-03/maiyaput/assets/prd/us-002-user-drawer.png)
+
+---
+
+### 5.3 US-003 单用户分配 TikTok 账号（P0）
+
+**故事描述**：作为投放运营，我想要为单个用户分配 TikTok 账号，以便授予其投放资产权限。
+
+**筛选项（组件类型）**
+
+- 账号筛选：单行文本输入框（input[type=text]，占位「搜索 TikTok 账号名称」），输入即实时过滤（oninput）；列表首列复选框支持表头全选。
+
+**数据来源（调用接口）**
+
+- 弹框账号列表 ← 接口「获取资产列表」([get-assets 官方文档](https://business-api.tiktok.com/portal/docs/get-assets/v1.3))，入参为当前 BC ID；已分配状态来自分配关系数据。提交调用「将资产分配给用户」([assign-an-asset 官方文档](https://business-api.tiktok.com/portal/docs/assign-an-asset/v1.3))，撤销调用「撤销用户对资产的权限」([unassign-an-asset 官方文档](https://business-api.tiktok.com/portal/docs/unassign-an-asset/v1.3))。
+
+**数据流转**
+
+- 用户行内点击「分配 TikTok 账号」→ 携带 BC ID + 用户名打开弹框 → 调用「获取资产列表」→ 展示全部账号并标注已分配 → 勾选未分配账号 → 点「确定」→ 调用「将资产分配给用户」→ 成功提示并关闭；弹框层级高于用户抽屉，关闭不影响底层抽屉。
+
+**验收标准**
+
+1. 用户行内「分配 TikTok 账号」打开弹框，标题：分配 TikTok 账号 - {用户名}。
+2. 弹框列出该 BC 全部 TikTok 账号（头像 + 名称 + handle + 语言），支持按名称搜索与表头全选。
+3. 已分配给该用户的账号复选框禁用并标注「已分配」，全选自动跳过。
+4. 未勾选可用账号时点「确定」→ 提示「请至少选择一个未分配的 TikTok 账号」。
+5. 弹框层级高于用户抽屉，关闭弹框不影响底层抽屉。
+
+**界面截图**
+
+![US-003 单用户分配](C:/Users/M/WorkBuddy/2026-08-31-18-10-03/maiyaput/assets/prd/us-003-single-assign.png)
+
+---
+
+### 5.4 US-004 批量分配 TikTok 账号（P0）
+
+**故事描述**：作为投放运营，我想要勾选多个用户后批量分配 TikTok 账号，以便提高分配效率。
+
+**筛选项（组件类型）**
+
+- 账号筛选：单行文本输入框（input[type=text]，占位「搜索 TikTok 账号名称」），输入即实时过滤（oninput）；列表第一列复选框固定显示，支持表头全选。
+
+**数据来源（调用接口）**
+
+- 弹框账号列表 ← 接口「获取资产列表」([get-assets 官方文档](https://business-api.tiktok.com/portal/docs/get-assets/v1.3))，入参为当前 BC ID；所选用户集合来自用户抽屉本地状态 batchSelectedUsers。提交调用「将资产分配给用户」([assign-an-asset 官方文档](https://business-api.tiktok.com/portal/docs/assign-an-asset/v1.3))。
+
+**数据流转**
+
+- 用户抽屉勾选 N 个用户（本地状态）→ 点「分配TikTok」→ 打开批量弹框 → 调用「获取资产列表」→ 勾选账号 → 点「确定」→ 提交「将资产分配给用户」→ 是否已分配由后端逐一自动判断 → 成功提示并关闭。
+
+**验收标准**
+
+1. 用户列表首列复选框（表头全选支持半选态），工具条实时显示「已选择 X 个用户」。
+2. 未勾选用户时「分配TikTok」按钮置灰。
+3. 点击「分配TikTok」打开弹框，顶部提示「已选择 N 个用户，请勾选要分配的 TikTok 账号」。
+4. 弹框账号列表第一列固定显示复选框，不展示「已分配」状态（是否已分配由后端自动判断）。
+5. 未勾选账号时点「确定」→ 提示「请至少选择一个 TikTok 账号」。
+
+**界面截图**
+
+![US-004 批量分配](C:/Users/M/WorkBuddy/2026-08-31-18-10-03/maiyaput/assets/prd/us-004-batch-assign.png)
+
+---
+
+### 5.5 US-005 TikTok 账号列表抽屉与搜索（P0）
+
+**故事描述**：作为投放运营，我想要查看某个 BC 的 TikTok 账号资产明细，以便了解资产情况。
+
+**筛选项（组件类型）**
+
+- 账号筛选：单行文本输入框（input[type=text]，占位「请输入TikTok账号名称搜索」），输入即实时过滤（oninput）。
+
+**数据来源（调用接口）**
+
+- 抽屉内账号列表 ← 接口「获取资产列表」([get-assets 官方文档](https://business-api.tiktok.com/portal/docs/get-assets/v1.3))，入参为当前 BC ID。
+
+**数据流转**
+
+- 点击主表「TikTok 账号」或用户列表行内数量 → 携带 BC ID 打开宽抽屉 → 调用「获取资产列表」→ 渲染账号明细；从用户列表进入时叠加在用户抽屉之上，关闭后回到用户列表。
+
+**验收标准**
+
+1. 点击主表或用户列表的「TikTok 账号」数量，打开右侧宽抽屉，标题：TikTok 账号列表 - {BC名称}（{数量}）。
+2. 表格字段：TikTok账号名称（头像 + handle）/ 语言 / 备注 / 更新人 / 更新时间，无操作列。
+3. 支持按账号名称实时搜索，无结果显示空态。
+4. 从用户列表进入时叠加在用户抽屉之上，关闭后回到用户列表。
+
+**界面截图**
+
+![US-005 TikTok 账号列表抽屉](C:/Users/M/WorkBuddy/2026-08-31-18-10-03/maiyaput/assets/prd/us-005-tt-drawer.png)
+
+---
+
+### 5.6 US-006 添加 TikTok 账号（新建方式）（P0）
+
+**故事描述**：作为投放运营，我想要在 BC 下新建 TikTok 账号，以便扩充资产。
+
+**筛选项（组件类型）**
+
+- 无列表筛选；表单控件类型：单行文本输入框（账号名称）、文件上传 + 本地预览（头像）、下拉选择 select（国家/地区，20 项，必选）。
+
+**数据来源（调用接口）**
+
+- 商务中心名称由主表行带入（后端注入、前端不可编辑）；提交调用接口「在商务中心创建 TikTok 账号」([create-an-organization-account-in-a-business-center 官方文档](https://business-api.tiktok.com/portal/docs/create-an-organization-account-in-a-business-center/v1.3))。
+
+**数据流转**
+
+- 点击主表「添加 TikTok 账号」→ 携带 BC ID + 名称打开弹框 → 选择「新建」卡片 → 弹框内展开字段（名称/头像/地区）→ 前端校验（名称非空、头像必传、地区必选）→ 点「确定」→ 调用创建接口 → 成功提示并关闭 → 刷新后新账号出现在资产列表。
+
+**验收标准**
+
+1. 点击「添加 TikTok 账号」打开弹框，商务中心名称自动带入且不可编辑。
+2. 添加方式为左右两张卡片：「新建 TikTok 账号」「关联 TikTok 账号」，选中卡片高亮。
+3. 选择「新建」后在弹框内直接展开字段：TikTok账号名称（必填）/ 头像（必传，支持预览与清除）/ 国家地区（必选，下拉 20 项）。
+4. 校验失败分别提示「请输入TikTok账号名称 / 请上传头像 / 请选择国家/地区」；成功提示「创建成功：{名称}（{BC} / {地区}）」。
+5. 未选择方式时底部仅显示「取消」；每次打开弹框重置全部状态。
+
+**界面截图**
+
+![US-006 添加 TikTok 账号（新建）](C:/Users/M/WorkBuddy/2026-08-31-18-10-03/maiyaput/assets/prd/us-006-add-new.png)
+
+---
+
+### 5.7 US-007 添加 TikTok 账号（关联方式）（P0）
+
+**故事描述**：作为投放运营，我想要通过扫码关联已有 TikTok 账号，以便复用已有资产。
+
+**筛选项（组件类型）**
+
+- 无列表筛选；二维码展示组件 + 文本提示 + 授权对象信息（{BC名称}，只读）。
+
+**数据来源（调用接口）**
+
+- 二维码 ← 接口「获取 TikTok 账号授权链接」([obtain-a-tiktok-account-ad-delivery-authorization-url 官方文档](https://business-api.tiktok.com/portal/docs/obtain-a-tiktok-account-ad-delivery-authorization-url/v1.3)) 返回的授权链接渲染生成；原型为确定性伪随机示意图案。
+
+**数据流转**
+
+- 弹框选择「关联」卡片 → 携带 BC ID 调用「获取 TikTok 账号授权链接」→ 渲染二维码 → 用户使用 TikTok App 扫码授权 → 授权完成后系统回传结果 → 关闭弹框 → 刷新后账号出现在资产列表。
+
+**验收标准**
+
+1. 在添加弹框中选择「关联 TikTok 账号」卡片。
+2. 弹框内展开二维码区域：二维码 + 提示「请使用 TikTok App 扫描二维码完成账号授权」+ 授权对象 {BC名称}。
+3. 底部按钮切换为「关闭」。
+
+**界面截图**
+
+![US-007 添加 TikTok 账号（关联）](C:/Users/M/WorkBuddy/2026-08-31-18-10-03/maiyaput/assets/prd/us-007-add-link.png)
+
+---
+
+## 6. 筛选项组件类型汇总
+
+| 用户故事 | 筛选/表单场景 | 组件类型 | 交互说明 |
+|----------|--------------|---------|---------|
+| US-001 | 商务中心名称查询 | input[type=text] + 按钮 | 占位提示「请输入商务中心名称」，支持查询/重置 |
+| US-002 | 用户名搜索 | input[type=text] | 输入即实时过滤，oninput 事件 |
+| US-003 | 账号搜索 | input[type=text] + checkbox | 输入实时过滤；列表首列复选框，表头全选 |
+| US-004 | 账号搜索 | input[type=text] + checkbox | 输入实时过滤；列表首列固定复选框，表头全选 |
+| US-005 | 账号搜索 | input[type=text] | 输入即实时过滤 |
+| US-006 | 新建账号表单 | input + file + select | 名称文本、头像上传、国家/地区下拉 20 项 |
+| US-007 | 关联账号授权 | 二维码展示组件 + 文本 | 只读授权对象信息，底部「关闭」按钮 |
+
+---
+
+## 7. 表格数据来源与接口映射
+
+| 功能/表格 | 调用接口 | 入参 | 官方文档 |
+|----------|---------|------|---------|
+| 商务中心主表 | 获取商务中心列表 | 名称关键字（可选） | [get-business-centers](https://business-api.tiktok.com/portal/docs/get-business-centers/v1.3) |
+| 用户列表抽屉 | 获取商务中心成员列表 | BC ID | [get-the-members-of-a-bc](https://business-api.tiktok.com/portal/docs/get-the-members-of-a-bc/v1.3) |
+| TikTok 账号列表抽屉 | 获取资产列表 | BC ID | [get-assets](https://business-api.tiktok.com/portal/docs/get-assets/v1.3) |
+| 单用户/批量分配弹框 | 将资产分配给用户 | BC ID / 用户集合 / 账号集合 | [assign-an-asset](https://business-api.tiktok.com/portal/docs/assign-an-asset/v1.3) |
+| 撤销已分配账号 | 撤销用户对资产的权限 | BC ID / 用户 / 账号 | [unassign-an-asset](https://business-api.tiktok.com/portal/docs/unassign-an-asset/v1.3) |
+| 新建 TikTok 账号 | 在商务中心创建 TikTok 账号 | BC ID / 名称 / 头像 / 地区 | [create-an-organization-account-in-a-business-center](https://business-api.tiktok.com/portal/docs/create-an-organization-account-in-a-business-center/v1.3) |
+| 关联 TikTok 账号 | 获取 TikTok 账号授权链接 | BC ID | [obtain-a-tiktok-account-ad-delivery-authorization-url](https://business-api.tiktok.com/portal/docs/obtain-a-tiktok-account-ad-delivery-authorization-url/v1.3) |
+
+---
+
+## 8. 数据流转说明
+
+### 8.1 主表加载与刷新
+
+页面初始化或点击「刷新」时，前端调用「获取商务中心列表」，后端返回当前可见商务中心集合（含名称、用户数量、TikTok 账号数量）。前端渲染主表后，用户数量与 TikTok 账号数量作为打开抽屉的入口参数。
+
+### 8.2 用户抽屉打开与搜索
+
+点击「用户数量」→ 携带 BC ID 调用「获取商务中心成员列表」→ 渲染用户列表。搜索框在本地对可见行做包含匹配，不影响已勾选状态（batchSelectedUsers）。
+
+### 8.3 单用户/批量分配
+
+打开弹框时携带 BC ID（批量场景额外携带所选用户集合）→ 调用「获取资产列表」→ 渲染可选账号。用户勾选后点击「确定」→ 调用「将资产分配给用户」。单用户场景后端根据已分配关系设置禁用态；批量场景由后端逐一判断账号是否已分配。
+
+### 8.4 添加账号（新建/关联）
+
+新建：弹框内完成前端校验后调用「在商务中心创建 TikTok 账号」→ 成功后关闭弹框 → 重新拉取资产列表。关联：选择关联卡片后调用「获取 TikTok 账号授权链接」→ 渲染二维码 → 用户扫码授权 → 系统回传结果 → 刷新资产列表。
+
+---
+
+## 9. 非功能需求
+
+### 9.1 权限控制
+
+- 商务中心成员仅能查看/操作其有权限的商务中心及资产；资产分配、账号添加等写操作需校验操作者权限。
+- 商务中心名称字段在添加弹框中禁用编辑，由后端基于当前操作上下文注入，防止越权填写。
+
+### 9.2 数据校验
+
+- 新建 TikTok 账号：名称非空、头像必传、国家/地区必选，提交前前端校验，后端二次校验。
+- 分配操作：至少选择一个账号；批量分配时是否已分配由后端自动判断，避免前端状态不一致。
+
+### 9.3 交互层级
+
+- 用户列表抽屉 z-index 高于主表内容。
+- 分配弹框 z-index 高于用户列表抽屉，关闭不影响底层抽屉。
+- TikTok 账号列表抽屉从用户列表进入时叠加在用户列表抽屉之上。
+
+---
+
+## 10. 接口参考汇总
+
+- [获取商务中心列表](https://business-api.tiktok.com/portal/docs/get-business-centers/v1.3)
+- [获取商务中心成员列表](https://business-api.tiktok.com/portal/docs/get-the-members-of-a-bc/v1.3)
+- [获取资产列表](https://business-api.tiktok.com/portal/docs/get-assets/v1.3)
+- [将资产分配给用户](https://business-api.tiktok.com/portal/docs/assign-an-asset/v1.3)
+- [撤销用户对资产的权限](https://business-api.tiktok.com/portal/docs/unassign-an-asset/v1.3)
+- [在商务中心创建 TikTok 账号](https://business-api.tiktok.com/portal/docs/create-an-organization-account-in-a-business-center/v1.3)
+- [获取 TikTok 账号授权链接](https://business-api.tiktok.com/portal/docs/obtain-a-tiktok-account-ad-delivery-authorization-url/v1.3)

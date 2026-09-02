@@ -1,0 +1,33 @@
+request_id: prd-doc-fix-20260902
+entry_type: full_pipeline
+current_stage: stage_3
+status: completed
+stages:
+  stage_0:
+    status: completed
+    decision: full_pipeline
+    reason: regenerate_docx_to_fix_image_link_list_issues
+  stage_1:
+    status: completed
+    completed_at: 2026-09-02T10:15:00+08:00
+    output_path: stage1/final_draft.md
+    genre: business-report
+    expert_used: general-writer
+    route_tag: general_writing
+  stage_2:
+    status: completed
+    completed_at: 2026-09-02T10:20:00+08:00
+    output_path: stage2/formatted-business-report.html
+    output_format: html
+    route: html
+    html_sub: template
+    skills_invoked: [markdown, custom-html-formatter]
+  stage_3:
+    status: completed
+    completed_at: 2026-09-02T10:25:00+08:00
+    output_path: stage3/output.docx
+    input_format: html
+    skill_used: [html-to-docx]
+    present_files_opened: true
+    fallback: false
+    fallback_reason: null

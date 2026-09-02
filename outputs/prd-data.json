@@ -184,7 +184,7 @@
               "点「确定」→ 依次校验 → 提示创建成功并关闭"
             ],
             "alternative": [
-              "校验失败分别提示：请输入TikTok账号名称 / 请上传头像 / 请选择国家/地区",
+              "校验失败分别提示：请输入TikTok账号名称 / TikTok账号名称长度不能超过30个字符 / 请上传头像 / 请选择国家/地区",
               "未选择方式时底部仅显示「取消」",
               "可随时切换添加方式，字段区随之切换"
             ],
@@ -192,18 +192,19 @@
           },
           "rules": [
             "每次打开弹框重置：方式未选、字段清空、头像清空、按钮初始态",
-            "国家/地区下拉：中国大陆、中国香港、中国台湾、美国、英国、日本、韩国、新加坡、马来西亚、泰国、印尼、菲律宾、越南、巴西、德国、法国、意大利、葡萄牙、澳大利亚、加拿大",
+            "TikTok账号名称长度限制：最多 30 个字符（输入框 maxlength=30，提交前二次校验，后端同步校验）",
+            "国家/地区下拉框枚举值取对应接口（如创建账号接口的 region 枚举定义）动态下发，前端不硬编码；原型中 20 项为接口返回的示例枚举：中国大陆、中国香港、中国台湾、美国、英国、日本、韩国、新加坡、马来西亚、泰国、印尼、菲律宾、越南、巴西、德国、法国、意大利、葡萄牙、澳大利亚、加拿大",
             "商务中心名称 disabled 不可编辑"
           ],
           "fields": [
             {"key": "bcName", "name": "商务中心名称", "type": "input", "required": true, "editable": false, "note": "自动带入当前BC"},
             {"key": "mode", "name": "添加方式", "type": "radio-card", "required": true, "options": ["新建 TikTok 账号", "关联 TikTok 账号"]},
-            {"key": "ttName", "name": "TikTok账号名称", "type": "input", "required": true, "placeholder": "请输入TikTok账号名称"},
+            {"key": "ttName", "name": "TikTok账号名称", "type": "input", "required": true, "placeholder": "请输入TikTok账号名称", "maxLength": 30, "note": "长度限制 30 个字符"},
             {"key": "avatar", "name": "头像", "type": "file-upload", "required": true},
-            {"key": "region", "name": "国家/地区", "type": "select", "required": true, "options": ["中国大陆","中国香港","中国台湾","美国","英国","日本","韩国","新加坡","马来西亚","泰国","印尼","菲律宾","越南","巴西","德国","法国","意大利","葡萄牙","澳大利亚","加拿大"]}
+            {"key": "region", "name": "国家/地区", "type": "select", "required": true, "source": "api-enum", "note": "枚举值由接口动态下发，前端不硬编码", "options": ["中国大陆","中国香港","中国台湾","美国","英国","日本","韩国","新加坡","马来西亚","泰国","印尼","菲律宾","越南","巴西","德国","法国","意大利","葡萄牙","澳大利亚","加拿大"]}
           ],
           "relatedFunctions": [{"id": "F-002", "relation": "before", "note": "进入路径"}],
-          "codeTraces": ["pages/overseas-bc.html:351-445 弹框", "pages/overseas-bc.html:1146-1222 openAddTtModal/selectAddTtMode/submitAddTtNew"]
+          "codeTraces": ["pages/overseas-bc.html:351-445 弹框", "pages/overseas-bc.html:1146-1222 openAddTtModal/selectAddTtMode/submitAddTtNew", "pages/overseas-bc.html fetchTtRegionOptions/loadTtRegionOptions 地区枚举动态加载"]
         },
         {
           "id": "F-010",

@@ -387,7 +387,8 @@
                 <div class="add-tt-fields" id="add-tt-new-fields" style="display:none;">
                   <div class="form-item">
                     <label class="form-label"><span class="form-required">*</span> TikTok账号名称：</label>
-                    <input type="text" class="form-input" id="add-tt-new-name" placeholder="请输入TikTok账号名称" />
+                    <input type="text" class="form-input" id="add-tt-new-name" placeholder="请输入TikTok账号名称" maxlength="30" />
+                    <div class="form-tip">最长 30 个字符</div>
                   </div>
                   <div class="form-item">
                     <label class="form-label"><span class="form-required">*</span> 头像：</label>
@@ -403,28 +404,9 @@
                   </div>
                   <div class="form-item">
                     <label class="form-label"><span class="form-required">*</span> 国家/地区：</label>
+                    <!-- 枚举值由接口「获取地区枚举」动态下发（见 loadTtRegionOptions()），原型以模拟接口填充 -->
                     <select class="form-select" id="add-tt-new-region">
                       <option value="">请选择国家/地区</option>
-                      <option value="中国大陆">中国大陆</option>
-                      <option value="中国香港">中国香港</option>
-                      <option value="中国台湾">中国台湾</option>
-                      <option value="美国">美国</option>
-                      <option value="英国">英国</option>
-                      <option value="日本">日本</option>
-                      <option value="韩国">韩国</option>
-                      <option value="新加坡">新加坡</option>
-                      <option value="马来西亚">马来西亚</option>
-                      <option value="泰国">泰国</option>
-                      <option value="印尼">印尼</option>
-                      <option value="菲律宾">菲律宾</option>
-                      <option value="越南">越南</option>
-                      <option value="巴西">巴西</option>
-                      <option value="德国">德国</option>
-                      <option value="法国">法国</option>
-                      <option value="意大利">意大利</option>
-                      <option value="葡萄牙">葡萄牙</option>
-                      <option value="澳大利亚">澳大利亚</option>
-                      <option value="加拿大">加拿大</option>
                     </select>
                   </div>
                 </div>
@@ -524,6 +506,13 @@
       }
       .file-upload.has-file .file-upload-clear {
         display: flex;
+      }
+
+      /* 表单辅助提示：字段长度限制等 */
+      .form-tip {
+        margin-top: 4px;
+        font-size: 12px;
+        color: var(--color-text-tertiary, #98a2b3);
       }
 
       /* ===== 商务中心主表 ===== */
@@ -1149,7 +1138,7 @@
           var checked = batchSelectedUsers.indexOf(u) !== -1 ? ' checked' : '';
           var ttCount = (bcUserTtCount[currentBcUserId] && bcUserTtCount[currentBcUserId][u] != null) ? bcUserTtCount[currentBcUserId][u] : 0;
           var ttCountLink = '<a href="#" class="link" onclick="openBcTtDrawer(\'' + currentBcUserId + '\', \'' + currentBcUserName + '\');return false;">' + ttCount + '</a>';
-          var action = '<a href="#" class="link" onclick="openAssignTtModal(\'' + currentBcUserId + '\',\'' + u + '\');return false;">分配 TikTok 账号</a>';
+          var action = '<a href="#" class="link" onclick="openAssignTtModal(\'' + currentBcUserId + '\',\'' + currentBcUserName + '\',\'' + u + '\');return false;">分配 TikTok 账号</a>';
           return '<tr>' +
             '<td style="text-align:center;"><input type="checkbox" class="bc-user-check" value="' + u + '"' + checked + ' onchange="updateBcUserSelected()" /></td>' +
             '<td>' + u + '</td>' +
@@ -1160,11 +1149,11 @@
         updateBcUserSelected();
       }
 
-      /* ===== 分配 TikTok 账号弹框（多选） ===== */
-      function openAssignTtModal(bcId, user) {
+      /* ===== 用户已分配 TikTok 账号弹框（查看） ===== */
+      function openAssignTtModal(bcId, bcName, user) {
         assignTtBcId = bcId;
         assignTtUser = user;
-        document.getElementById('assign-tt-title').textContent = '分配 TikTok 账号 - ' + user;
+        document.getElementById('assign-tt-title').textContent = 'TikTok 账号 - ' + user + '（' + bcName + '）';
         document.getElementById('assign-tt-search').value = '';
         renderAssignTtList();
         document.getElementById('assign-tt-overlay').classList.add('open');
@@ -1180,18 +1169,20 @@
       function renderAssignTtList() {
         var keyword = (document.getElementById('assign-tt-search').value || '').trim().toLowerCase();
         var accounts = bcTtData[assignTtBcId] || [];
-        var assignedMap = (bcUserAssignedTt[assignTtBcId] && bcUserAssignedTt[assignTtBcId][assignTtUser]) || [];
-        var filtered = keyword ? accounts.filter(function (a) { return (a.name || '').toLowerCase().indexOf(keyword) !== -1; }) : accounts;
+        var assignedNames = (bcUserAssignedTt[assignTtBcId] && bcUserAssignedTt[assignTtBcId][assignTtUser]) || [];
+        /* 仅展示该用户已被分配的 TikTok 账号，而非 BC 下全量账号 */
+        var assignedAccounts = accounts.filter(function (a) { return assignedNames.indexOf(a.name) !== -1; });
+        var filtered = keyword ? assignedAccounts.filter(function (a) { return (a.name || '').toLowerCase().indexOf(keyword) !== -1; }) : assignedAccounts;
         var tbody = document.getElementById('assign-tt-tbody');
+        var checkAll = document.getElementById('assign-tt-checkall');
+        if (checkAll) { checkAll.checked = false; checkAll.indeterminate = false; checkAll.disabled = true; }
         if (!filtered.length) {
-          tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#999;padding:24px 0;">暂无可选 TikTok 账号</td></tr>';
+          tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#999;padding:24px 0;">该用户暂无已分配 TikTok 账号</td></tr>';
           return;
         }
+        if (checkAll) checkAll.disabled = false;
         tbody.innerHTML = filtered.map(function (a) {
-          var isAssigned = assignedMap.indexOf(a.name) !== -1;
-          var checkboxHtml = isAssigned
-            ? '<input type="checkbox" class="assign-tt-check" value="' + (a.name || '') + '" checked disabled /> <span class="tag-assigned">已分配</span>'
-            : '<input type="checkbox" class="assign-tt-check" value="' + (a.name || '') + '" />';
+          var checkboxHtml = '<input type="checkbox" class="assign-tt-check" value="' + (a.name || '') + '" checked disabled /> <span class="tag-assigned">已分配</span>';
           return '<tr>' +
             '<td>' + checkboxHtml + '</td>' +
             '<td>' + renderTtAccountCell(a.name, a.handle) + '</td>' +
@@ -1207,10 +1198,6 @@
       }
 
       function submitAssignTt() {
-        var checks = document.querySelectorAll('#assign-tt-tbody .assign-tt-check:checked:not(:disabled)');
-        var names = Array.prototype.map.call(checks, function (c) { return c.value; });
-        if (!names.length) { alert('请至少选择一个未分配的 TikTok 账号'); return; }
-        alert('已为「' + assignTtUser + '」分配 ' + names.length + ' 个 TikTok 账号：\n' + names.join('、'));
         closeAssignTtModal();
       }
 
@@ -1440,6 +1427,7 @@
         var region = document.getElementById('add-tt-new-region').value;
         var avatarInput = document.getElementById('add-tt-new-avatar');
         if (!name) { alert('请输入TikTok账号名称'); return; }
+        if (name.length > 30) { alert('TikTok账号名称长度不能超过30个字符'); return; }
         if (!avatarInput.files || !avatarInput.files.length) { alert('请上传头像'); return; }
         if (!region) { alert('请选择国家/地区'); return; }
         alert('创建成功：' + name + '（' + bcName + ' / ' + region + '）');
@@ -1465,6 +1453,48 @@
         preview.src = '';
         wrap.classList.remove('has-file');
       }
+
+      /* ===== 国家/地区枚举：由接口动态下发 ===== */
+      /* 真实环境调用接口「获取地区枚举」（如 create-an-organization-account-in-a-business-center 的
+         region 枚举定义）返回 options，前端不硬编码；原型以本地数据模拟接口返回 */
+      function fetchTtRegionOptions(callback) {
+        var options = [
+          { value: '中国大陆', label: '中国大陆' },
+          { value: '中国香港', label: '中国香港' },
+          { value: '中国台湾', label: '中国台湾' },
+          { value: '美国', label: '美国' },
+          { value: '英国', label: '英国' },
+          { value: '日本', label: '日本' },
+          { value: '韩国', label: '韩国' },
+          { value: '新加坡', label: '新加坡' },
+          { value: '马来西亚', label: '马来西亚' },
+          { value: '泰国', label: '泰国' },
+          { value: '印尼', label: '印尼' },
+          { value: '菲律宾', label: '菲律宾' },
+          { value: '越南', label: '越南' },
+          { value: '巴西', label: '巴西' },
+          { value: '德国', label: '德国' },
+          { value: '法国', label: '法国' },
+          { value: '意大利', label: '意大利' },
+          { value: '葡萄牙', label: '葡萄牙' },
+          { value: '澳大利亚', label: '澳大利亚' },
+          { value: '加拿大', label: '加拿大' }
+        ];
+        if (callback) callback(options);
+      }
+      function loadTtRegionOptions() {
+        fetchTtRegionOptions(function (options) {
+          var select = document.getElementById('add-tt-new-region');
+          if (!select) return;
+          /* 保留首个「请选择国家/地区」占位项 */
+          var html = '<option value="">请选择国家/地区</option>';
+          options.forEach(function (o) {
+            html += '<option value="' + o.value + '">' + o.label + '</option>';
+          });
+          select.innerHTML = html;
+        });
+      }
+      loadTtRegionOptions();
 
       /* ===== 需求说明（简洁版 PRD）面板 ===== */
       var prdStories = [
@@ -1543,14 +1573,16 @@
           id: 'US-006', title: '添加 TikTok 账号（新建方式）', priority: 'P0',
           shot: '../assets/prd/us-006-add-new.png',
           desc: '作为投放运营，我想要在 BC 下新建 TikTok 账号，以便扩充资产。',
-          filter: '无列表筛选；表单控件类型：单行文本输入框（账号名称）、文件上传 + 本地预览（头像）、下拉选择 select（国家/地区，20 项，必选）。',
-          source: '商务中心名称由主表行带入（后端注入、前端不可编辑）；提交调用接口「在商务中心创建 TikTok 账号」（<a href="https://business-api.tiktok.com/portal/docs/create-an-organization-account-in-a-business-center/v1.3" target="_blank">create-an-organization-account-in-a-business-center 官方文档</a>）。',
-          flow: '点击主表「添加 TikTok 账号」→ 携带 BC ID + 名称打开弹框 → 选择「新建」卡片 → 弹框内展开字段（名称/头像/地区）→ 前端校验（名称非空、头像必传、地区必选）→ 点「确定」→ 调用创建接口 → 成功提示并关闭 → 刷新后新账号出现在资产列表。',
+          filter: '无列表筛选；表单控件类型：单行文本输入框（账号名称，最长 30 字符）、文件上传 + 本地预览（头像）、下拉选择 select（国家/地区，必选，枚举值由接口「获取地区枚举」动态下发，前端不硬编码）。',
+          source: '商务中心名称由主表行带入（后端注入、前端不可编辑）；国家/地区下拉枚举值 ← 接口返回（如 create-an-organization-account-in-a-business-center 的 region 枚举定义）；提交调用接口「在商务中心创建 TikTok 账号」（<a href="https://business-api.tiktok.com/portal/docs/create-an-organization-account-in-a-business-center/v1.3" target="_blank">create-an-organization-account-in-a-business-center 官方文档</a>）。',
+          flow: '点击主表「添加 TikTok 账号」→ 携带 BC ID + 名称打开弹框 → 选择「新建」卡片 → 弹框内展开字段（名称/头像/地区，地区枚举由接口加载）→ 前端校验（名称非空且 ≤30 字符、头像必传、地区必选）→ 点「确定」→ 调用创建接口 → 成功提示并关闭 → 刷新后新账号出现在资产列表。',
           ac: [
             '点击「添加 TikTok 账号」打开弹框，商务中心名称自动带入且不可编辑',
             '添加方式为左右两张卡片：「新建 TikTok 账号」「关联 TikTok 账号」，选中卡片高亮',
-            '选择「新建」后在弹框内直接展开字段：TikTok账号名称（必填）/ 头像（必传，支持预览与清除）/ 国家地区（必选，下拉 20 项）',
-            '校验失败分别提示「请输入TikTok账号名称 / 请上传头像 / 请选择国家/地区」；成功提示「创建成功：{名称}（{BC} / {地区}）」',
+            '选择「新建」后在弹框内直接展开字段：TikTok账号名称（必填，最长 30 个字符）/ 头像（必传，支持预览与清除）/ 国家地区（必选，下拉枚举值由接口下发）',
+            'TikTok账号名称输入框限制 maxlength=30，超长提交提示「TikTok账号名称长度不能超过30个字符」',
+            '国家/地区下拉框选项不硬编码，由「获取地区枚举」接口返回填充（原型以模拟接口实现）',
+            '校验失败分别提示「请输入TikTok账号名称 / TikTok账号名称长度不能超过30个字符 / 请上传头像 / 请选择国家/地区」；成功提示「创建成功：{名称}（{BC} / {地区}）」',
             '未选择方式时底部仅显示「取消」；每次打开弹框重置全部状态'
           ]
         },
