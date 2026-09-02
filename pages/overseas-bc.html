@@ -878,6 +878,35 @@
         font-weight: 600;
         color: #344054;
       }
+      .prd-story-shot {
+        display: none;
+        padding: 0 12px 10px;
+      }
+      .prd-story.open .prd-story-shot {
+        display: block;
+      }
+      .prd-story-shot-label {
+        margin-bottom: 6px;
+        font-size: 11px;
+        font-weight: 600;
+        color: #667085;
+      }
+      .prd-story-shot img {
+        width: 100%;
+        height: auto;
+        border: 1px solid #e4e7ec;
+        border-radius: 6px;
+        background: #f8fafc;
+        display: block;
+      }
+      .prd-story-shot-empty {
+        padding: 8px 12px;
+        font-size: 12px;
+        color: #98a2b3;
+        background: #f8fafc;
+        border: 1px dashed #e4e7ec;
+        border-radius: 6px;
+      }
     </style>
 
     <script>
@@ -1409,6 +1438,7 @@
       var prdStories = [
         {
           id: 'US-001', title: '商务中心列表查询与展示', priority: 'P0',
+          shot: '../assets/prd/us-001-main.png',
           desc: '作为投放运营，我想要查看并按名称搜索商务中心列表，以便快速定位目标商务中心。',
           ac: [
             '页面加载后展示 BC 列表，列为：商务中心名称 / 用户数量 / TikTok 账号 / 操作',
@@ -1419,6 +1449,7 @@
         },
         {
           id: 'US-002', title: '用户列表抽屉与搜索', priority: 'P0',
+          shot: '../assets/prd/us-002-user-drawer.png',
           desc: '作为投放运营，我想要打开某个 BC 的成员列表并搜索用户，以便定位目标成员。',
           ac: [
             '点击「用户数量」打开右侧窄抽屉（约 720px），标题：用户列表 - {BC名称}（{用户数}）',
@@ -1428,6 +1459,7 @@
         },
         {
           id: 'US-003', title: '单用户分配 TikTok 账号', priority: 'P0',
+          shot: '../assets/prd/us-003-single-assign.png',
           desc: '作为投放运营，我想要为单个用户分配 TikTok 账号，以便授予其投放资产权限。',
           ac: [
             '用户行内「分配 TikTok 账号」打开弹框，标题：分配 TikTok 账号 - {用户名}',
@@ -1439,6 +1471,7 @@
         },
         {
           id: 'US-004', title: '批量分配 TikTok 账号', priority: 'P0',
+          shot: '../assets/prd/us-004-batch-assign.png',
           desc: '作为投放运营，我想要勾选多个用户后批量分配 TikTok 账号，以便提高分配效率。',
           ac: [
             '用户列表首列复选框（表头全选支持半选态），工具条实时显示「已选择 X 个用户」',
@@ -1450,6 +1483,7 @@
         },
         {
           id: 'US-005', title: 'TikTok 账号列表抽屉与搜索', priority: 'P0',
+          shot: '../assets/prd/us-005-tt-drawer.png',
           desc: '作为投放运营，我想要查看某个 BC 的 TikTok 账号资产明细，以便了解资产情况。',
           ac: [
             '点击主表或用户列表的「TikTok 账号」数量，打开右侧宽抽屉，标题：TikTok 账号列表 - {BC名称}（{数量}）',
@@ -1460,6 +1494,7 @@
         },
         {
           id: 'US-006', title: '添加 TikTok 账号（新建方式）', priority: 'P0',
+          shot: '../assets/prd/us-006-add-new.png',
           desc: '作为投放运营，我想要在 BC 下新建 TikTok 账号，以便扩充资产。',
           ac: [
             '点击「添加 TikTok 账号」打开弹框，商务中心名称自动带入且不可编辑',
@@ -1471,6 +1506,7 @@
         },
         {
           id: 'US-007', title: '添加 TikTok 账号（关联方式）', priority: 'P0',
+          shot: '../assets/prd/us-007-add-link.png',
           desc: '作为投放运营，我想要通过扫码关联已有 TikTok 账号，以便复用已有资产。',
           ac: [
             '在添加弹框中选择「关联 TikTok 账号」卡片',
@@ -1487,6 +1523,13 @@
           var acItems = s.ac.map(function (item) {
             return '<div class="prd-story-ac-item">' + item + '</div>';
           }).join('');
+          var shotHtml = '';
+          if (s.shot) {
+            shotHtml = '<div class="prd-story-shot">' +
+              '<div class="prd-story-shot-label">界面示意</div>' +
+              '<img src="' + s.shot + '" alt="' + s.title + '" title="' + s.title + '" />' +
+            '</div>';
+          }
           return '<div class="prd-story' + (i === 0 ? ' open' : '') + '" id="prd-story-' + s.id + '">' +
             '<div class="prd-story-head" onclick="togglePrdStory(\'' + s.id + '\')">' +
               '<span class="prd-story-id">' + s.id + '</span>' +
@@ -1495,6 +1538,7 @@
               '<span class="prd-story-caret">▶</span>' +
             '</div>' +
             '<div class="prd-story-desc">' + s.desc + '</div>' +
+            shotHtml +
             '<div class="prd-story-ac"><div class="prd-story-ac-head">验收标准</div>' + acItems + '</div>' +
           '</div>';
         }).join('');
