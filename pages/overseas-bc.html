@@ -722,6 +722,7 @@
       /* ===== 需求说明（简洁版 PRD）面板 ===== */
       .prd-float-btn {
         position: fixed;
+        left: auto;
         right: 20px;
         bottom: 20px;
         z-index: 1300;
@@ -737,9 +738,15 @@
         cursor: pointer;
         box-shadow: 0 2px 8px rgba(29, 78, 216, 0.35);
         transition: box-shadow 0.15s;
+        touch-action: none;
+        user-select: none;
       }
       .prd-float-btn:hover {
         box-shadow: 0 4px 12px rgba(29, 78, 216, 0.45);
+      }
+      .prd-float-btn.dragging {
+        cursor: grabbing;
+        box-shadow: 0 6px 16px rgba(29, 78, 216, 0.55);
       }
       .prd-overlay {
         position: fixed;
@@ -992,6 +999,44 @@
         border-radius: 6px;
         background: #f8fafc;
         display: block;
+        cursor: zoom-in;
+        transition: box-shadow 0.15s;
+      }
+      .prd-story-shot img:hover {
+        box-shadow: 0 2px 10px rgba(16, 24, 40, 0.18);
+      }
+      .prd-img-viewer {
+        position: fixed;
+        inset: 0;
+        z-index: 1400;
+        background: rgba(16, 24, 40, 0.78);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 32px;
+        cursor: zoom-out;
+      }
+      .prd-img-viewer.open {
+        display: flex;
+      }
+      .prd-img-viewer img {
+        max-width: 100%;
+        max-height: 100%;
+        border-radius: 6px;
+        background: #fff;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+      }
+      .prd-img-viewer-tip {
+        position: absolute;
+        top: 16px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 6px 14px;
+        font-size: 12px;
+        color: #fff;
+        background: rgba(16, 24, 40, 0.6);
+        border-radius: 14px;
+        pointer-events: none;
       }
       .prd-story-shot-empty {
         padding: 8px 12px;
@@ -1742,7 +1787,7 @@
           var shotHtml = '';
           if (s.shot) {
             shotHtml = '<div class="prd-story-shot">' +
-              '<div class="prd-story-shot-label">界面示意</div>' +
+              '<div class="prd-story-shot-label">界面示意（点击图片放大查看）</div>' +
               '<img src="' + s.shot + '" alt="' + s.title + '" title="' + s.title + '" />' +
             '</div>';
           }
@@ -1815,7 +1860,11 @@
       </div>
       <div class="prd-panel-body" id="prd-panel-body"></div>
     </aside>
-    <button type="button" id="prd-float-btn" class="prd-float-btn" onclick="openPrdPanel()">📋 需求说明</button>
+    <button type="button" id="prd-float-btn" class="prd-float-btn" title="按住可拖动，点击打开需求说明">📋 需求说明</button>
+    <div id="prd-img-viewer" class="prd-img-viewer" role="dialog" aria-label="图片预览">
+      <div class="prd-img-viewer-tip">点击任意位置或按 Esc 关闭</div>
+      <img id="prd-img-viewer-img" src="" alt="" />
+    </div>
 
     <script>
       /* PRD 面板初始化：在 DOM 就绪后执行，避免引用尚未渲染的面板节点 */
@@ -1887,6 +1936,77 @@
           var top = parseFloat(panel.style.top) || 0;
           panel.style.left = Math.min(Math.max(0, left), Math.max(0, window.innerWidth - w)) + 'px';
           panel.style.top = Math.min(Math.max(0, top), Math.max(0, window.innerHeight - 44)) + 'px';
+        });
+
+        /* ===== 悬浮按钮：可拖动 + 点击打开（位移小于阈值视为点击） ===== */
+        var fab = document.getElementById('prd-float-btn');
+        var fabDrag = { active: false, moved: false, dx: 0, dy: 0, sx: 0, sy: 0 };
+        fab.addEventListener('pointerdown', function (e) {
+          var rect = fab.getBoundingClientRect();
+          fabDrag.active = true;
+          fabDrag.moved = false;
+          fabDrag.sx = e.clientX;
+          fabDrag.sy = e.clientY;
+          fabDrag.dx = e.clientX - rect.left;
+          fabDrag.dy = e.clientY - rect.top;
+          try { fab.setPointerCapture(e.pointerId); } catch (err) { /* 忽略不支持的情况 */ }
+          e.preventDefault();
+        });
+        fab.addEventListener('pointermove', function (e) {
+          if (!fabDrag.active) return;
+          if (!fabDrag.moved && Math.abs(e.clientX - fabDrag.sx) < 5 && Math.abs(e.clientY - fabDrag.sy) < 5) return;
+          fabDrag.moved = true;
+          fab.classList.add('dragging');
+          var w = fab.offsetWidth;
+          var h = fab.offsetHeight;
+          var left = Math.min(Math.max(0, e.clientX - fabDrag.dx), Math.max(0, window.innerWidth - w));
+          var top = Math.min(Math.max(0, e.clientY - fabDrag.dy), Math.max(0, window.innerHeight - h));
+          fab.style.right = 'auto';
+          fab.style.bottom = 'auto';
+          fab.style.left = left + 'px';
+          fab.style.top = top + 'px';
+        });
+        function endFabDrag(e) {
+          if (!fabDrag.active) return;
+          fabDrag.active = false;
+          fab.classList.remove('dragging');
+          if (!fabDrag.moved) openPrdPanel();
+        }
+        fab.addEventListener('pointerup', endFabDrag);
+        fab.addEventListener('pointercancel', function () { fabDrag.active = false; fab.classList.remove('dragging'); });
+        /* 键盘可达性：聚焦后回车/空格仍可打开 */
+        fab.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openPrdPanel(); }
+        });
+        /* 窗口缩放时钳制按钮位置 */
+        window.addEventListener('resize', function () {
+          var rect = fab.getBoundingClientRect();
+          var left = Math.min(Math.max(0, rect.left), Math.max(0, window.innerWidth - fab.offsetWidth));
+          var top = Math.min(Math.max(0, rect.top), Math.max(0, window.innerHeight - fab.offsetHeight));
+          fab.style.left = left + 'px';
+          fab.style.top = top + 'px';
+        });
+
+        /* ===== 图片放大查看（lightbox） ===== */
+        var viewer = document.getElementById('prd-img-viewer');
+        var viewerImg = document.getElementById('prd-img-viewer-img');
+        function openPrdImageViewer(src, alt) {
+          if (!src) return;
+          viewerImg.src = src;
+          viewerImg.alt = alt || '';
+          viewer.classList.add('open');
+        }
+        function closePrdImageViewer() {
+          viewer.classList.remove('open');
+          viewerImg.src = '';
+        }
+        document.getElementById('prd-panel-body').addEventListener('click', function (e) {
+          var img = e.target.closest('.prd-story-shot img');
+          if (img) openPrdImageViewer(img.getAttribute('src'), img.getAttribute('alt'));
+        });
+        viewer.addEventListener('click', function () { closePrdImageViewer(); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && viewer.classList.contains('open')) closePrdImageViewer();
         });
       })();
     </script>
