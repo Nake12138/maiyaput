@@ -849,6 +849,38 @@
         line-height: 1.6;
         color: #475467;
       }
+      .prd-story-supp {
+        display: none;
+        padding: 0 12px 10px;
+      }
+      .prd-story.open .prd-story-supp {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .prd-story-supp-item {
+        font-size: 12px;
+        line-height: 1.6;
+        color: #475467;
+        background: #f8fafc;
+        border: 1px solid #eef2f6;
+        border-radius: 6px;
+        padding: 6px 8px;
+      }
+      .prd-story-supp-label {
+        font-weight: 600;
+        color: #344054;
+      }
+      .prd-story-supp-label::after {
+        content: '：';
+      }
+      .prd-story-supp-text a {
+        color: #1d4ed8;
+        text-decoration: none;
+      }
+      .prd-story-supp-text a:hover {
+        text-decoration: underline;
+      }
       .prd-story-ac {
         display: none;
         padding: 0 12px 12px;
@@ -1440,6 +1472,9 @@
           id: 'US-001', title: '商务中心列表查询与展示', priority: 'P0',
           shot: '../assets/prd/us-001-main.png',
           desc: '作为投放运营，我想要查看并按名称搜索商务中心列表，以便快速定位目标商务中心。',
+          filter: '名称筛选：单行文本输入框（input[type=text]，占位「请输入商务中心名称」）+「查询」/「重置」按钮；原型为前端本地过滤，真实环境将名称作为请求参数传给列表接口。',
+          source: '主表数据 ← 接口「获取商务中心列表」（<a href="https://business-api.tiktok.com/portal/docs/get-business-centers/v1.3" target="_blank">get-business-centers 官方文档</a>）。',
+          flow: '页面加载 → 调用「获取商务中心列表」→ 返回 BC 列表（名称/用户数/账号数）→ 渲染主表；点击「用户数量」/「TikTok 账号」携带 BC ID 打开对应抽屉；点击「刷新」重新拉取该 BC 数据。',
           ac: [
             '页面加载后展示 BC 列表，列为：商务中心名称 / 用户数量 / TikTok 账号 / 操作',
             '支持按商务中心名称模糊查询与重置',
@@ -1451,6 +1486,9 @@
           id: 'US-002', title: '用户列表抽屉与搜索', priority: 'P0',
           shot: '../assets/prd/us-002-user-drawer.png',
           desc: '作为投放运营，我想要打开某个 BC 的成员列表并搜索用户，以便定位目标成员。',
+          filter: '用户名筛选：单行文本输入框（input[type=text]，占位「请输入用户名搜索」），输入即实时过滤（oninput），包含匹配、不区分大小写。',
+          source: '抽屉内用户列表 ← 接口「获取商务中心成员列表」（<a href="https://business-api.tiktok.com/portal/docs/get-the-members-of-a-bc/v1.3" target="_blank">get-the-members-of-a-bc 官方文档</a>），入参为当前 BC ID。',
+          flow: '点击主表「用户数量」→ 携带 BC ID 打开用户抽屉 → 调用「获取商务中心成员列表」→ 渲染成员列表；搜索框在本地过滤可见行，勾选状态（batchSelectedUsers）独立于可见列表保留。',
           ac: [
             '点击「用户数量」打开右侧窄抽屉（约 720px），标题：用户列表 - {BC名称}（{用户数}）',
             '支持按用户名实时搜索（包含匹配、不区分大小写），无结果显示「暂无数据」空态',
@@ -1461,6 +1499,9 @@
           id: 'US-003', title: '单用户分配 TikTok 账号', priority: 'P0',
           shot: '../assets/prd/us-003-single-assign.png',
           desc: '作为投放运营，我想要为单个用户分配 TikTok 账号，以便授予其投放资产权限。',
+          filter: '账号筛选：单行文本输入框（input[type=text]，占位「搜索 TikTok 账号名称」），输入即实时过滤（oninput）；列表首列复选框支持表头全选。',
+          source: '弹框账号列表 ← 接口「获取资产列表」（<a href="https://business-api.tiktok.com/portal/docs/get-assets/v1.3" target="_blank">get-assets 官方文档</a>），入参为当前 BC ID；已分配状态来自分配关系数据。提交调用「将资产分配给用户」（<a href="https://business-api.tiktok.com/portal/docs/assign-an-asset/v1.3" target="_blank">assign-an-asset 官方文档</a>），撤销调用「撤销用户对资产的权限」（<a href="https://business-api.tiktok.com/portal/docs/unassign-an-asset/v1.3" target="_blank">unassign-an-asset 官方文档</a>）。',
+          flow: '用户行内点击「分配 TikTok 账号」→ 携带 BC ID + 用户名打开弹框 → 调用「获取资产列表」→ 展示全部账号并标注已分配 → 勾选未分配账号 → 点「确定」→ 调用「将资产分配给用户」→ 成功提示并关闭；弹框层级高于用户抽屉，关闭不影响底层抽屉。',
           ac: [
             '用户行内「分配 TikTok 账号」打开弹框，标题：分配 TikTok 账号 - {用户名}',
             '弹框列出该 BC 全部 TikTok 账号（头像 + 名称 + handle + 语言），支持按名称搜索与表头全选',
@@ -1473,6 +1514,9 @@
           id: 'US-004', title: '批量分配 TikTok 账号', priority: 'P0',
           shot: '../assets/prd/us-004-batch-assign.png',
           desc: '作为投放运营，我想要勾选多个用户后批量分配 TikTok 账号，以便提高分配效率。',
+          filter: '账号筛选：单行文本输入框（input[type=text]，占位「搜索 TikTok 账号名称」），输入即实时过滤（oninput）；列表第一列复选框固定显示，支持表头全选。',
+          source: '弹框账号列表 ← 接口「获取资产列表」（<a href="https://business-api.tiktok.com/portal/docs/get-assets/v1.3" target="_blank">get-assets 官方文档</a>），入参为当前 BC ID；所选用户集合来自用户抽屉本地状态 batchSelectedUsers。提交调用「将资产分配给用户」（<a href="https://business-api.tiktok.com/portal/docs/assign-an-asset/v1.3" target="_blank">assign-an-asset 官方文档</a>）。',
+          flow: '用户抽屉勾选 N 个用户（本地状态）→ 点「分配TikTok」→ 打开批量弹框 → 调用「获取资产列表」→ 勾选账号 → 点「确定」→ 提交「将资产分配给用户」→ 是否已分配由后端逐一自动判断 → 成功提示并关闭。',
           ac: [
             '用户列表首列复选框（表头全选支持半选态），工具条实时显示「已选择 X 个用户」',
             '未勾选用户时「分配TikTok」按钮置灰',
@@ -1485,6 +1529,9 @@
           id: 'US-005', title: 'TikTok 账号列表抽屉与搜索', priority: 'P0',
           shot: '../assets/prd/us-005-tt-drawer.png',
           desc: '作为投放运营，我想要查看某个 BC 的 TikTok 账号资产明细，以便了解资产情况。',
+          filter: '账号筛选：单行文本输入框（input[type=text]，占位「请输入TikTok账号名称搜索」），输入即实时过滤（oninput）。',
+          source: '抽屉内账号列表 ← 接口「获取资产列表」（<a href="https://business-api.tiktok.com/portal/docs/get-assets/v1.3" target="_blank">get-assets 官方文档</a>），入参为当前 BC ID。',
+          flow: '点击主表「TikTok 账号」或用户列表行内数量 → 携带 BC ID 打开宽抽屉 → 调用「获取资产列表」→ 渲染账号明细；从用户列表进入时叠加在用户抽屉之上，关闭后回到用户列表。',
           ac: [
             '点击主表或用户列表的「TikTok 账号」数量，打开右侧宽抽屉，标题：TikTok 账号列表 - {BC名称}（{数量}）',
             '表格字段：TikTok账号名称（头像 + handle）/ 语言 / 备注 / 更新人 / 更新时间，无操作列',
@@ -1496,6 +1543,9 @@
           id: 'US-006', title: '添加 TikTok 账号（新建方式）', priority: 'P0',
           shot: '../assets/prd/us-006-add-new.png',
           desc: '作为投放运营，我想要在 BC 下新建 TikTok 账号，以便扩充资产。',
+          filter: '无列表筛选；表单控件类型：单行文本输入框（账号名称）、文件上传 + 本地预览（头像）、下拉选择 select（国家/地区，20 项，必选）。',
+          source: '商务中心名称由主表行带入（后端注入、前端不可编辑）；提交调用接口「在商务中心创建 TikTok 账号」（<a href="https://business-api.tiktok.com/portal/docs/create-an-organization-account-in-a-business-center/v1.3" target="_blank">create-an-organization-account-in-a-business-center 官方文档</a>）。',
+          flow: '点击主表「添加 TikTok 账号」→ 携带 BC ID + 名称打开弹框 → 选择「新建」卡片 → 弹框内展开字段（名称/头像/地区）→ 前端校验（名称非空、头像必传、地区必选）→ 点「确定」→ 调用创建接口 → 成功提示并关闭 → 刷新后新账号出现在资产列表。',
           ac: [
             '点击「添加 TikTok 账号」打开弹框，商务中心名称自动带入且不可编辑',
             '添加方式为左右两张卡片：「新建 TikTok 账号」「关联 TikTok 账号」，选中卡片高亮',
@@ -1508,6 +1558,9 @@
           id: 'US-007', title: '添加 TikTok 账号（关联方式）', priority: 'P0',
           shot: '../assets/prd/us-007-add-link.png',
           desc: '作为投放运营，我想要通过扫码关联已有 TikTok 账号，以便复用已有资产。',
+          filter: '无列表筛选；二维码展示组件 + 文本提示 + 授权对象信息（{BC名称}，只读）。',
+          source: '二维码 ← 接口「获取 TikTok 账号授权链接」（<a href="https://business-api.tiktok.com/portal/docs/obtain-a-tiktok-account-ad-delivery-authorization-url/v1.3" target="_blank">obtain-a-tiktok-account-ad-delivery-authorization-url 官方文档</a>）返回的授权链接渲染生成；原型为确定性伪随机示意图案。',
+          flow: '弹框选择「关联」卡片 → 携带 BC ID 调用「获取 TikTok 账号授权链接」→ 渲染二维码 → 用户使用 TikTok App 扫码授权 → 授权完成后系统回传结果 → 关闭弹框 → 刷新后账号出现在资产列表。',
           ac: [
             '在添加弹框中选择「关联 TikTok 账号」卡片',
             '弹框内展开二维码区域：二维码 + 提示「请使用 TikTok App 扫描二维码完成账号授权」+ 授权对象 {BC名称}',
@@ -1530,6 +1583,14 @@
               '<img src="' + s.shot + '" alt="' + s.title + '" title="' + s.title + '" />' +
             '</div>';
           }
+          var suppHtml = '';
+          if (s.filter || s.source || s.flow) {
+            suppHtml = '<div class="prd-story-supp">' +
+              (s.filter ? '<div class="prd-story-supp-item"><span class="prd-story-supp-label">筛选项</span><span class="prd-story-supp-text">' + s.filter + '</span></div>' : '') +
+              (s.source ? '<div class="prd-story-supp-item"><span class="prd-story-supp-label">数据来源</span><span class="prd-story-supp-text">' + s.source + '</span></div>' : '') +
+              (s.flow ? '<div class="prd-story-supp-item"><span class="prd-story-supp-label">数据流转</span><span class="prd-story-supp-text">' + s.flow + '</span></div>' : '') +
+            '</div>';
+          }
           return '<div class="prd-story' + (i === 0 ? ' open' : '') + '" id="prd-story-' + s.id + '">' +
             '<div class="prd-story-head" onclick="togglePrdStory(\'' + s.id + '\')">' +
               '<span class="prd-story-id">' + s.id + '</span>' +
@@ -1538,6 +1599,7 @@
               '<span class="prd-story-caret">▶</span>' +
             '</div>' +
             '<div class="prd-story-desc">' + s.desc + '</div>' +
+            suppHtml +
             shotHtml +
             '<div class="prd-story-ac"><div class="prd-story-ac-head">验收标准</div>' + acItems + '</div>' +
           '</div>';
@@ -1571,7 +1633,7 @@
       <div class="prd-panel-header">
         <div>
           <div class="prd-panel-title">商务中心 · 交互需求说明</div>
-          <div class="prd-panel-sub">简洁版 PRD（7 个用户故事 · 点击标题展开验收标准）</div>
+          <div class="prd-panel-sub">简洁版 PRD（7 个用户故事 · 展开查看筛选项/数据来源/数据流转/验收标准）</div>
         </div>
         <button type="button" class="prd-panel-close" onclick="closePrdPanel()" title="关闭">×</button>
       </div>
