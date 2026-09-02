@@ -348,6 +348,41 @@
             </div>
           </div>
 
+          <!-- 用户已分配 TikTok 账号抽屉 -->
+          <div id="user-tt-overlay" class="drawer-overlay" onclick="closeUserTtDrawer()"></div>
+          <div id="user-tt-drawer" class="drawer drawer-wide">
+            <div class="drawer-card">
+              <div class="drawer-header">
+                <span id="user-tt-title">TikTok 账号</span>
+                <button class="drawer-close" onclick="closeUserTtDrawer()">×</button>
+              </div>
+              <div class="drawer-body">
+                <div class="modal-filter">
+                  <input type="text" id="user-tt-search" class="form-input" placeholder="请输入TikTok账号名称搜索" style="flex:1;" oninput="renderUserTtList()" />
+                </div>
+                <div class="table-card" style="border-radius:4px;">
+                  <div class="table-wrapper">
+                    <table class="data-table">
+                      <thead>
+                        <tr>
+                          <th>TikTok账号名称</th>
+                          <th>语言</th>
+                          <th>备注</th>
+                          <th>更新人</th>
+                          <th>更新时间</th>
+                        </tr>
+                      </thead>
+                      <tbody id="user-tt-tbody"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="drawer-footer">
+                <button class="btn btn-outline btn-sm" onclick="closeUserTtDrawer()">关闭</button>
+              </div>
+            </div>
+          </div>
+
           <!-- 添加 TikTok 账号弹框（选择添加方式后，字段直接在弹框下方展开） -->
           <div id="add-tt-overlay" class="modal-overlay" onclick="closeAddTtModal()"></div>
           <div id="add-tt-modal" class="modal">
@@ -721,30 +756,53 @@
       }
       .prd-panel {
         position: fixed;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        width: 460px;
-        max-width: 88vw;
         z-index: 1301;
         background: #fff;
-        box-shadow: -4px 0 20px rgba(16, 24, 40, 0.15);
-        transform: translateX(102%);
-        transition: transform 0.25s ease;
+        box-shadow: 0 10px 32px rgba(16, 24, 40, 0.2);
+        border: 1px solid #e4e7ec;
+        border-radius: 10px;
         display: flex;
         flex-direction: column;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.2s ease, visibility 0.2s ease;
       }
       .prd-panel.open {
-        transform: translateX(0);
+        opacity: 1;
+        visibility: visible;
+      }
+      .prd-panel.fullscreen {
+        left: 0 !important;
+        top: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        max-width: none;
+        border-radius: 0;
+        border: none;
       }
       .prd-panel-header {
         flex: none;
         display: flex;
         align-items: center;
         justify-content: space-between;
+        gap: 8px;
         padding: 14px 16px;
         border-bottom: 1px solid #e4e7ec;
         background: #f8fafc;
+        border-radius: 10px 10px 0 0;
+        cursor: move;
+        user-select: none;
+        touch-action: none;
+      }
+      .prd-panel.fullscreen .prd-panel-header {
+        border-radius: 0;
+        cursor: default;
+      }
+      .prd-panel-actions {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        flex: none;
       }
       .prd-panel-title {
         font-size: 15px;
@@ -755,6 +813,21 @@
         margin-top: 2px;
         font-size: 12px;
         color: #98a2b3;
+      }
+      .prd-panel-btn {
+        height: 28px;
+        padding: 0 10px;
+        border: none;
+        border-radius: 4px;
+        background: transparent;
+        color: #667085;
+        font-size: 12px;
+        line-height: 1;
+        cursor: pointer;
+      }
+      .prd-panel-btn:hover {
+        background: #eef2f6;
+        color: #1d2939;
       }
       .prd-panel-close {
         width: 28px;
@@ -1137,8 +1210,8 @@
         tbody.innerHTML = filtered.map(function (u) {
           var checked = batchSelectedUsers.indexOf(u) !== -1 ? ' checked' : '';
           var ttCount = (bcUserTtCount[currentBcUserId] && bcUserTtCount[currentBcUserId][u] != null) ? bcUserTtCount[currentBcUserId][u] : 0;
-          var ttCountLink = '<a href="#" class="link" onclick="openBcTtDrawer(\'' + currentBcUserId + '\', \'' + currentBcUserName + '\');return false;">' + ttCount + '</a>';
-          var action = '<a href="#" class="link" onclick="openAssignTtModal(\'' + currentBcUserId + '\',\'' + currentBcUserName + '\',\'' + u + '\');return false;">分配 TikTok 账号</a>';
+          var ttCountLink = '<a href="#" class="link" onclick="openUserTtDrawer(\'' + currentBcUserId + '\', \'' + currentBcUserName + '\', \'' + u + '\');return false;">' + ttCount + '</a>';
+          var action = '<a href="#" class="link" onclick="openAssignTtModal(\'' + currentBcUserId + '\',\'' + u + '\');return false;">分配 TikTok 账号</a>';
           return '<tr>' +
             '<td style="text-align:center;"><input type="checkbox" class="bc-user-check" value="' + u + '"' + checked + ' onchange="updateBcUserSelected()" /></td>' +
             '<td>' + u + '</td>' +
@@ -1149,11 +1222,11 @@
         updateBcUserSelected();
       }
 
-      /* ===== 用户已分配 TikTok 账号弹框（查看） ===== */
-      function openAssignTtModal(bcId, bcName, user) {
+      /* ===== 分配 TikTok 账号弹框（多选） ===== */
+      function openAssignTtModal(bcId, user) {
         assignTtBcId = bcId;
         assignTtUser = user;
-        document.getElementById('assign-tt-title').textContent = 'TikTok 账号 - ' + user + '（' + bcName + '）';
+        document.getElementById('assign-tt-title').textContent = '分配 TikTok 账号 - ' + user;
         document.getElementById('assign-tt-search').value = '';
         renderAssignTtList();
         document.getElementById('assign-tt-overlay').classList.add('open');
@@ -1169,20 +1242,18 @@
       function renderAssignTtList() {
         var keyword = (document.getElementById('assign-tt-search').value || '').trim().toLowerCase();
         var accounts = bcTtData[assignTtBcId] || [];
-        var assignedNames = (bcUserAssignedTt[assignTtBcId] && bcUserAssignedTt[assignTtBcId][assignTtUser]) || [];
-        /* 仅展示该用户已被分配的 TikTok 账号，而非 BC 下全量账号 */
-        var assignedAccounts = accounts.filter(function (a) { return assignedNames.indexOf(a.name) !== -1; });
-        var filtered = keyword ? assignedAccounts.filter(function (a) { return (a.name || '').toLowerCase().indexOf(keyword) !== -1; }) : assignedAccounts;
+        var assignedMap = (bcUserAssignedTt[assignTtBcId] && bcUserAssignedTt[assignTtBcId][assignTtUser]) || [];
+        var filtered = keyword ? accounts.filter(function (a) { return (a.name || '').toLowerCase().indexOf(keyword) !== -1; }) : accounts;
         var tbody = document.getElementById('assign-tt-tbody');
-        var checkAll = document.getElementById('assign-tt-checkall');
-        if (checkAll) { checkAll.checked = false; checkAll.indeterminate = false; checkAll.disabled = true; }
         if (!filtered.length) {
-          tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#999;padding:24px 0;">该用户暂无已分配 TikTok 账号</td></tr>';
+          tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#999;padding:24px 0;">暂无可选 TikTok 账号</td></tr>';
           return;
         }
-        if (checkAll) checkAll.disabled = false;
         tbody.innerHTML = filtered.map(function (a) {
-          var checkboxHtml = '<input type="checkbox" class="assign-tt-check" value="' + (a.name || '') + '" checked disabled /> <span class="tag-assigned">已分配</span>';
+          var isAssigned = assignedMap.indexOf(a.name) !== -1;
+          var checkboxHtml = isAssigned
+            ? '<input type="checkbox" class="assign-tt-check" value="' + (a.name || '') + '" checked disabled /> <span class="tag-assigned">已分配</span>'
+            : '<input type="checkbox" class="assign-tt-check" value="' + (a.name || '') + '" />';
           return '<tr>' +
             '<td>' + checkboxHtml + '</td>' +
             '<td>' + renderTtAccountCell(a.name, a.handle) + '</td>' +
@@ -1198,6 +1269,10 @@
       }
 
       function submitAssignTt() {
+        var checks = document.querySelectorAll('#assign-tt-tbody .assign-tt-check:checked:not(:disabled)');
+        var names = Array.prototype.map.call(checks, function (c) { return c.value; });
+        if (!names.length) { alert('请至少选择一个未分配的 TikTok 账号'); return; }
+        alert('已为「' + assignTtUser + '」分配 ' + names.length + ' 个 TikTok 账号：\n' + names.join('、'));
         closeAssignTtModal();
       }
 
@@ -1324,6 +1399,48 @@
         var tbody = document.getElementById('bc-tt-tbody');
         if (!filtered.length) {
           tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#999;padding:32px 0;">暂无数据</td></tr>';
+          return;
+        }
+        tbody.innerHTML = filtered.map(function (a) {
+          return '<tr>' +
+            '<td>' + renderTtAccountCell(a.name, a.handle) + '</td>' +
+            '<td>' + (a.lang || '') + '</td>' +
+            '<td>' + (a.remark || '') + '</td>' +
+            '<td>' + (a.updater || '') + '</td>' +
+            '<td>' + (a.updateTime || '') + '</td>' +
+          '</tr>';
+        }).join('');
+      }
+
+      /* ===== 用户已分配 TikTok 账号抽屉 ===== */
+      var currentUserTtBcId = '';
+      var currentUserTtName = '';
+
+      function openUserTtDrawer(bcId, bcName, user) {
+        currentUserTtBcId = bcId;
+        currentUserTtName = user;
+        document.getElementById('user-tt-title').textContent = 'TikTok 账号 - ' + user + '（' + bcName + '）';
+        document.getElementById('user-tt-search').value = '';
+        renderUserTtList();
+        document.getElementById('user-tt-overlay').classList.add('open');
+        document.getElementById('user-tt-drawer').classList.add('open');
+      }
+
+      function closeUserTtDrawer() {
+        document.getElementById('user-tt-overlay').classList.remove('open');
+        document.getElementById('user-tt-drawer').classList.remove('open');
+      }
+
+      function renderUserTtList() {
+        var keyword = (document.getElementById('user-tt-search').value || '').trim().toLowerCase();
+        var accounts = bcTtData[currentUserTtBcId] || [];
+        var assignedNames = (bcUserAssignedTt[currentUserTtBcId] && bcUserAssignedTt[currentUserTtBcId][currentUserTtName]) || [];
+        /* 仅展示该用户已被分配的 TikTok 账号，而非 BC 下全量账号 */
+        var assignedAccounts = accounts.filter(function (a) { return assignedNames.indexOf(a.name) !== -1; });
+        var filtered = keyword ? assignedAccounts.filter(function (a) { return (a.name || '').toLowerCase().indexOf(keyword) !== -1; }) : assignedAccounts;
+        var tbody = document.getElementById('user-tt-tbody');
+        if (!filtered.length) {
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#999;padding:32px 0;">该用户暂无已分配 TikTok 账号</td></tr>';
           return;
         }
         tbody.innerHTML = filtered.map(function (a) {
@@ -1526,22 +1643,37 @@
           ]
         },
         {
-          id: 'US-003', title: '查看用户已分配 TikTok 账号', priority: 'P0',
+          id: 'US-003', title: '单用户分配 TikTok 账号', priority: 'P0',
           shot: '../assets/prd/us-003-single-assign.png',
-          desc: '作为投放运营，我想要查看单个用户已被分配的 TikTok 账号，以便确认其资产权限。',
-          filter: '账号筛选：单行文本输入框（占位「搜索 TikTok 账号名称」），输入即实时过滤；列表仅用于查看，复选框全部禁用。',
-          source: '弹框账号列表 ← 用户与资产的分配关系数据；数据可来源于「获取资产列表」（<a href="https://business-api.tiktok.com/portal/docs/get-assets/v1.3" target="_blank">get-assets 官方文档</a>），按用户名过滤出已分配账号。',
-          flow: '用户行内点击「分配 TikTok 账号」→ 携带 BC ID + BC 名称 + 用户名打开弹框 → 调用「获取资产列表」→ 仅展示该用户已被分配的 TikTok 账号 → 点「确定」关闭；弹框层级高于用户抽屉，关闭不影响底层抽屉。',
+          desc: '作为投放运营，我想要为单个用户分配 TikTok 账号，以便授予其投放资产权限。',
+          filter: '账号筛选：单行文本输入框（占位「搜索 TikTok 账号名称」），输入即实时过滤；列表首列复选框支持表头全选。',
+          source: '弹框账号列表 ← 接口「获取资产列表」（<a href="https://business-api.tiktok.com/portal/docs/get-assets/v1.3" target="_blank">get-assets 官方文档</a>），入参为当前 BC ID；已分配状态来自分配关系数据。提交调用「将资产分配给用户」（<a href="https://business-api.tiktok.com/portal/docs/assign-an-asset/v1.3" target="_blank">assign-an-asset 官方文档</a>），撤销调用「撤销用户对资产的权限」（<a href="https://business-api.tiktok.com/portal/docs/unassign-an-asset/v1.3" target="_blank">unassign-an-asset 官方文档</a>）。',
+          flow: '用户行内点击「分配 TikTok 账号」→ 携带 BC ID + 用户名打开弹框 → 调用「获取资产列表」→ 展示全部账号并标注已分配 → 勾选未分配账号 → 点「确定」→ 调用「将资产分配给用户」→ 成功提示并关闭；弹框层级高于用户抽屉，关闭不影响底层抽屉。',
           ac: [
-            '用户行内「分配 TikTok 账号」打开弹框，标题：TikTok 账号 - {用户名}（{BC名称}）',
-            '弹框仅列出该用户已被分配的 TikTok 账号（头像 + 名称 + handle + 语言），支持按名称搜索',
-            '不展示 BC 下未分配给该用户的账号',
-            '全部账号均已分配，复选框勾选并禁用，表头全选禁用',
+            '用户行内「分配 TikTok 账号」打开弹框，标题：分配 TikTok 账号 - {用户名}',
+            '弹框列出该 BC 全部 TikTok 账号（头像 + 名称 + handle + 语言），支持按名称搜索与表头全选',
+            '已分配给该用户的账号复选框禁用并标注「已分配」，全选自动跳过',
+            '未勾选可用账号时点「确定」→ 提示「请至少选择一个未分配的 TikTok 账号」',
             '弹框层级高于用户抽屉，关闭弹框不影响底层抽屉'
           ]
         },
         {
-          id: 'US-004', title: '批量分配 TikTok 账号', priority: 'P0',
+          id: 'US-004', title: '用户已分配 TikTok 账号抽屉', priority: 'P0',
+          shot: '../assets/prd/us-004-user-tt.png',
+          desc: '作为投放运营，我想要查看某个用户已分配的 TikTok 账号明细，以便确认其资产权限。',
+          filter: '账号筛选：单行文本输入框（占位「请输入TikTok账号名称搜索」），输入即实时过滤。',
+          source: '抽屉内账号列表 ← 该用户与资产的分配关系；真实环境可调用「获取资产列表」（<a href="https://business-api.tiktok.com/portal/docs/get-assets/v1.3" target="_blank">get-assets 官方文档</a>）后按用户名过滤出已分配账号。',
+          flow: '用户列表行内点击「TikTok 账号」数量 → 携带 BC ID + 用户名打开宽抽屉 → 调用「获取资产列表」→ 仅展示该用户已被分配的 TikTok 账号 → 渲染账号明细；抽屉叠加在用户抽屉之上，关闭后回到用户列表。',
+          ac: [
+            '点击用户行内「TikTok 账号」数量，打开右侧宽抽屉，标题：TikTok 账号 - {用户名}（{BC名称}）',
+            '抽屉仅列出该用户已被分配的 TikTok 账号（头像 + 名称 + handle），不展示 BC 下未分配给该用户的账号',
+            '表格字段：TikTok账号名称（头像 + handle）/ 语言 / 备注 / 更新人 / 更新时间，无操作列',
+            '支持按账号名称实时搜索，无已分配账号时显示空态「该用户暂无已分配 TikTok 账号」',
+            '抽屉叠加在用户抽屉之上，关闭后回到用户列表'
+          ]
+        },
+        {
+          id: 'US-005', title: '批量分配 TikTok 账号', priority: 'P0',
           shot: '../assets/prd/us-004-batch-assign.png',
           desc: '作为投放运营，我想要勾选多个用户后批量分配 TikTok 账号，以便提高分配效率。',
           filter: '账号筛选：单行文本输入框（占位「搜索 TikTok 账号名称」），输入即实时过滤；列表第一列复选框固定显示，支持表头全选。',
@@ -1556,21 +1688,20 @@
           ]
         },
         {
-          id: 'US-005', title: 'TikTok 账号列表抽屉与搜索', priority: 'P0',
-          shot: '../assets/prd/us-005-tt-drawer.png',
+          id: 'US-006', title: 'TikTok 账号列表抽屉与搜索', priority: 'P0',
+          shot: '../assets/prd/us-006-tt-drawer.png',
           desc: '作为投放运营，我想要查看某个 BC 的 TikTok 账号资产明细，以便了解资产情况。',
           filter: '账号筛选：单行文本输入框（占位「请输入TikTok账号名称搜索」），输入即实时过滤。',
           source: '抽屉内账号列表 ← 接口「获取资产列表」（<a href="https://business-api.tiktok.com/portal/docs/get-assets/v1.3" target="_blank">get-assets 官方文档</a>），入参为当前 BC ID。',
-          flow: '点击主表「TikTok 账号」或用户列表行内数量 → 携带 BC ID 打开宽抽屉 → 调用「获取资产列表」→ 渲染账号明细；从用户列表进入时叠加在用户抽屉之上，关闭后回到用户列表。',
+          flow: '点击主表「TikTok 账号」数量 → 携带 BC ID 打开宽抽屉 → 调用「获取资产列表」→ 渲染账号明细。',
           ac: [
-            '点击主表或用户列表的「TikTok 账号」数量，打开右侧宽抽屉，标题：TikTok 账号列表 - {BC名称}（{数量}）',
+            '点击主表的「TikTok 账号」数量，打开右侧宽抽屉，标题：TikTok 账号列表 - {BC名称}（{数量}）',
             '表格字段：TikTok账号名称（头像 + handle）/ 语言 / 备注 / 更新人 / 更新时间，无操作列',
-            '支持按账号名称实时搜索，无结果显示空态',
-            '从用户列表进入时叠加在用户抽屉之上，关闭后回到用户列表'
+            '支持按账号名称实时搜索，无结果显示空态'
           ]
         },
         {
-          id: 'US-006', title: '添加 TikTok 账号（新建方式）', priority: 'P0',
+          id: 'US-007', title: '添加 TikTok 账号（新建方式）', priority: 'P0',
           shot: '../assets/prd/us-006-add-new.png',
           desc: '作为投放运营，我想要在 BC 下新建 TikTok 账号，以便扩充资产。',
           filter: '无列表筛选；表单控件类型：单行文本输入框（账号名称，最长 30 字符）、文件上传 + 本地预览（头像）、下拉选择（国家/地区，必选，枚举值由接口「获取地区枚举」动态下发，前端不硬编码）。',
@@ -1587,7 +1718,7 @@
           ]
         },
         {
-          id: 'US-007', title: '添加 TikTok 账号（关联方式）', priority: 'P0',
+          id: 'US-008', title: '添加 TikTok 账号（关联方式）', priority: 'P0',
           shot: '../assets/prd/us-007-add-link.png',
           desc: '作为投放运营，我想要通过扫码关联已有 TikTok 账号，以便复用已有资产。',
           filter: '无列表筛选；二维码展示组件 + 文本提示 + 授权对象信息（{BC名称}，只读）。',
@@ -1655,6 +1786,16 @@
         document.getElementById('prd-float-btn').style.display = '';
       }
 
+      function togglePrdFullscreen() {
+        var panel = document.getElementById('prd-panel');
+        var btn = document.getElementById('prd-fullscreen-btn');
+        var isFs = panel.classList.toggle('fullscreen');
+        if (btn) {
+          btn.textContent = isFs ? '还原' : '全屏';
+          btn.title = isFs ? '退出全屏' : '全屏查看';
+        }
+      }
+
       /* 初始化商务中心主表 */
       renderBcList();
     </script>
@@ -1662,12 +1803,15 @@
     <!-- ===== 需求说明（简洁版 PRD）入口 ===== -->
     <div id="prd-overlay" class="prd-overlay"></div>
     <aside id="prd-panel" class="prd-panel" role="dialog" aria-label="交互需求说明">
-      <div class="prd-panel-header">
+      <div class="prd-panel-header" id="prd-panel-header" title="按住此处可拖动面板，双击可全屏">
         <div>
           <div class="prd-panel-title">商务中心 · 交互需求说明</div>
-          <div class="prd-panel-sub">简洁版 PRD（7 个用户故事 · 展开查看筛选项/数据来源/数据流转/验收标准）</div>
+          <div class="prd-panel-sub">简洁版 PRD（8 个用户故事 · 展开查看筛选项/数据来源/数据流转/验收标准 · 按住标题栏可拖动，双击或按钮可全屏）</div>
         </div>
-        <button type="button" class="prd-panel-close" onclick="closePrdPanel()" title="关闭">×</button>
+        <div class="prd-panel-actions">
+          <button type="button" class="prd-panel-btn" id="prd-fullscreen-btn" title="全屏查看">全屏</button>
+          <button type="button" class="prd-panel-close" onclick="closePrdPanel()" title="关闭">×</button>
+        </div>
       </div>
       <div class="prd-panel-body" id="prd-panel-body"></div>
     </aside>
@@ -1681,6 +1825,69 @@
           closePrdPanel();
         });
         renderPrdPanel();
+
+        var panel = document.getElementById('prd-panel');
+        var header = document.getElementById('prd-panel-header');
+
+        /* 初始位置：视口右下角悬浮窗 */
+        function initPrdPanelPos() {
+          var w = Math.min(460, Math.round(window.innerWidth * 0.92));
+          var h = Math.min(Math.max(360, Math.round(window.innerHeight * 0.72)), window.innerHeight - 16);
+          panel.style.width = w + 'px';
+          panel.style.height = h + 'px';
+          panel.style.left = Math.max(8, window.innerWidth - w - 24) + 'px';
+          panel.style.top = Math.max(8, window.innerHeight - h - 24) + 'px';
+        }
+        initPrdPanelPos();
+
+        /* 全屏切换：按钮点击 + 双击标题栏 */
+        document.getElementById('prd-fullscreen-btn').addEventListener('click', togglePrdFullscreen);
+        header.addEventListener('dblclick', function (e) {
+          if (e.target.closest('button')) return;
+          togglePrdFullscreen();
+        });
+
+        /* 按住标题栏拖动面板（Pointer Events，鼠标/触摸通用） */
+        var prdDrag = { active: false, dx: 0, dy: 0 };
+        header.addEventListener('pointerdown', function (e) {
+          if (panel.classList.contains('fullscreen')) return;
+          if (e.target.closest('button')) return;
+          var rect = panel.getBoundingClientRect();
+          prdDrag.active = true;
+          prdDrag.dx = e.clientX - rect.left;
+          prdDrag.dy = e.clientY - rect.top;
+          panel.style.transition = 'none';
+          try { header.setPointerCapture(e.pointerId); } catch (err) { /* 忽略不支持的情况 */ }
+          e.preventDefault();
+        });
+        header.addEventListener('pointermove', function (e) {
+          if (!prdDrag.active) return;
+          var w = panel.offsetWidth;
+          var left = Math.min(Math.max(0, e.clientX - prdDrag.dx), Math.max(0, window.innerWidth - w));
+          var top = Math.min(Math.max(0, e.clientY - prdDrag.dy), Math.max(0, window.innerHeight - 44));
+          panel.style.left = left + 'px';
+          panel.style.top = top + 'px';
+        });
+        function endPrdDrag() {
+          if (!prdDrag.active) return;
+          prdDrag.active = false;
+          panel.style.transition = '';
+        }
+        header.addEventListener('pointerup', endPrdDrag);
+        header.addEventListener('pointercancel', endPrdDrag);
+
+        /* 窗口尺寸变化时保持面板在可视区域内 */
+        window.addEventListener('resize', function () {
+          if (panel.classList.contains('fullscreen')) return;
+          var w = panel.offsetWidth;
+          var h = panel.offsetHeight;
+          if (w > window.innerWidth - 16) { w = window.innerWidth - 16; panel.style.width = w + 'px'; }
+          if (h > window.innerHeight - 16) { h = window.innerHeight - 16; panel.style.height = h + 'px'; }
+          var left = parseFloat(panel.style.left) || 0;
+          var top = parseFloat(panel.style.top) || 0;
+          panel.style.left = Math.min(Math.max(0, left), Math.max(0, window.innerWidth - w)) + 'px';
+          panel.style.top = Math.min(Math.max(0, top), Math.max(0, window.innerHeight - 44)) + 'px';
+        });
       })();
     </script>
   </body>
