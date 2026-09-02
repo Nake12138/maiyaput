@@ -977,16 +977,27 @@
         padding: 6px 8px;
       }
       .prd-story-supp-label {
+        display: block;
         font-weight: 600;
         color: #344054;
+        margin-bottom: 2px;
       }
-      .prd-story-supp-label::after {
-        content: '：';
+      .prd-story-supp-list {
+        margin: 0;
+        padding: 0 0 0 14px;
+        font-size: 12px;
+        line-height: 1.7;
+        color: #475467;
       }
+      .prd-story-supp-list li {
+        margin: 1px 0;
+      }
+      .prd-story-supp-list a,
       .prd-story-supp-text a {
         color: #1d4ed8;
         text-decoration: none;
       }
+      .prd-story-supp-list a:hover,
       .prd-story-supp-text a:hover {
         text-decoration: underline;
       }
@@ -1856,7 +1867,7 @@
           id: 'US-004', title: '用户已分配 TikTok 账号抽屉', priority: 'P0',
           shot: '../assets/prd/us-004-user-tt.png',
           desc: '作为投放运营，我想要查看某个用户已分配的 TikTok 账号明细，以便确认其资产权限。',
-          filter: '筛选项与「资产管理 - TikTok账号」页面保持一致：TT账号名称（单行文本输入框，占位「请输入TT账号名称」）／语言（下拉选择，占位「请选择语言」，枚举：葡萄牙语、繁体中文、马来西亚语、英语、德语、意大利语、法语）／备注（单行文本输入框，占位「请输入备注」）+「查询」/「重置」按钮；点击「查询」后按条件查询，点击「重置」清空全部条件并恢复全量列表。',
+          filter: '筛选项与「资产管理 - TikTok账号」页面保持一致。TT账号名称（单行文本输入框，占位「请输入TT账号名称」）／语言（下拉选择，占位「请选择语言」，枚举：葡萄牙语、繁体中文、马来西亚语、英语、德语、意大利语、法语）／备注（单行文本输入框，占位「请输入备注」）+「查询」/「重置」按钮；点击「查询」后按条件查询，点击「重置」清空全部条件并恢复全量列表。',
           fields: 'TikTok账号名称（头像 + 账号名称 + handle 组合展示）／语言（文本，账号语言）／备注（文本，账号备注，可为空）／更新人（文本，最近操作人）／更新时间（文本，格式 yyyy-MM-dd HH:mm）；仅展示该用户已分配的账号，无操作列。',
           source: '抽屉内账号列表 ← 该用户与资产的分配关系；可调用「获取资产列表」（<a href="https://business-api.tiktok.com/portal/docs/get-assets/v1.3" target="_blank">get-assets 官方文档</a>）后按用户名过滤出已分配账号。',
           flow: '用户列表行内点击「TikTok 账号」数量 → 携带 BC ID + 用户名打开宽抽屉 → 调用「获取资产列表」→ 仅展示该用户已被分配的 TikTok 账号 → 渲染账号明细；抽屉叠加在用户抽屉之上，关闭后回到用户列表。',
@@ -1888,7 +1899,7 @@
           id: 'US-006', title: 'TikTok 账号列表抽屉与搜索', priority: 'P0',
           shot: '../assets/prd/us-006-tt-drawer.png',
           desc: '作为投放运营，我想要查看某个 BC 的 TikTok 账号资产明细，以便了解资产情况。',
-          filter: '筛选项与「资产管理 - TikTok账号」页面保持一致：TT账号名称（单行文本输入框，占位「请输入TT账号名称」）／语言（下拉选择，占位「请选择语言」，枚举：葡萄牙语、繁体中文、马来西亚语、英语、德语、意大利语、法语）／备注（单行文本输入框，占位「请输入备注」）+「查询」/「重置」按钮；点击「查询」后按条件查询，点击「重置」清空全部条件并恢复全量列表。',
+          filter: '筛选项与「资产管理 - TikTok账号」页面保持一致。TT账号名称（单行文本输入框，占位「请输入TT账号名称」）／语言（下拉选择，占位「请选择语言」，枚举：葡萄牙语、繁体中文、马来西亚语、英语、德语、意大利语、法语）／备注（单行文本输入框，占位「请输入备注」）+「查询」/「重置」按钮；点击「查询」后按条件查询，点击「重置」清空全部条件并恢复全量列表。',
           fields: 'TikTok账号名称（头像 + 账号名称 + handle 组合展示）／语言（文本，账号语言）／备注（文本，账号备注，可为空）／更新人（文本，最近操作人）／更新时间（文本，格式 yyyy-MM-dd HH:mm）；展示 BC 下全部 TikTok 账号资产，无操作列。',
           source: '抽屉内账号列表 ← 接口「获取资产列表」（<a href="https://business-api.tiktok.com/portal/docs/get-assets/v1.3" target="_blank">get-assets 官方文档</a>），入参为当前 BC ID。',
           flow: '点击主表「TikTok 账号」数量 → 携带 BC ID 打开宽抽屉 → 调用「获取资产列表」→ 渲染账号明细。',
@@ -1934,6 +1945,37 @@
         }
       ];
 
+      /* 将筛选项/表格字段/数据来源按全角分隔符分行罗列（括号内的分隔符不拆行） */
+      function prdSplitLines(text) {
+        var out = [], buf = '', depth = 0;
+        for (var i = 0; i < text.length; i++) {
+          var ch = text.charAt(i);
+          if (ch === '（') depth++;
+          if (ch === '）' && depth > 0) depth--;
+          if (depth === 0 && (ch === '／' || ch === '；' || ch === '。')) {
+            var t = buf.trim();
+            if (t) out.push(t);
+            buf = '';
+          } else {
+            buf += ch;
+          }
+        }
+        var last = buf.trim();
+        if (last) out.push(last);
+        return out;
+      }
+
+      function prdSuppItemHtml(label, text) {
+        var lines = prdSplitLines(text);
+        var content;
+        if (lines.length > 1) {
+          content = '<ul class="prd-story-supp-list">' + lines.map(function (l) { return '<li>' + l + '</li>'; }).join('') + '</ul>';
+        } else {
+          content = '<span class="prd-story-supp-text">' + text + '</span>';
+        }
+        return '<div class="prd-story-supp-item"><span class="prd-story-supp-label">' + label + '</span>' + content + '</div>';
+      }
+
       function renderPrdPanel() {
         var body = document.getElementById('prd-panel-body');
         if (!body) return;
@@ -1951,9 +1993,9 @@
           var suppHtml = '';
           if (s.filter || s.fields || s.source || s.flow) {
             suppHtml = '<div class="prd-story-supp">' +
-              (s.filter ? '<div class="prd-story-supp-item"><span class="prd-story-supp-label">筛选项</span><span class="prd-story-supp-text">' + s.filter + '</span></div>' : '') +
-              (s.fields ? '<div class="prd-story-supp-item"><span class="prd-story-supp-label">' + (s.fieldsLabel || '表格字段') + '</span><span class="prd-story-supp-text">' + s.fields + '</span></div>' : '') +
-              (s.source ? '<div class="prd-story-supp-item"><span class="prd-story-supp-label">数据来源</span><span class="prd-story-supp-text">' + s.source + '</span></div>' : '') +
+              (s.filter ? prdSuppItemHtml('筛选项', s.filter) : '') +
+              (s.fields ? prdSuppItemHtml(s.fieldsLabel || '表格字段', s.fields) : '') +
+              (s.source ? prdSuppItemHtml('数据来源', s.source) : '') +
               (s.flow ? '<div class="prd-story-supp-item"><span class="prd-story-supp-label">数据流转</span><span class="prd-story-supp-text">' + s.flow + '</span></div>' : '') +
             '</div>';
           }

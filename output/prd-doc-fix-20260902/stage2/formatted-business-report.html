@@ -298,7 +298,9 @@ blockquote {
 <p><strong>故事描述</strong>：作为投放运营，我想要打开某个 BC 的成员列表并搜索用户，以便定位目标成员。</p>
 <p><strong>筛选项（组件类型）</strong></p>
 <ul>
-<li>用户名筛选：单行文本输入框（占位「请输入用户名搜索」）+「查询」/「重置」按钮；点击「查询」后按用户名查询列表（包含匹配、不区分大小写），点击「重置」清空条件并恢复全量列表。</li>
+<li>用户名筛选：单行文本输入框（占位「请输入用户名搜索」）+「查询」/「重置」按钮。</li>
+<li>点击「查询」后按用户名查询列表（包含匹配、不区分大小写）。</li>
+<li>点击「重置」清空条件并恢复全量列表。</li>
 </ul>
 <p><strong>表格字段</strong></p>
 <table>
@@ -354,7 +356,9 @@ blockquote {
 <p><strong>故事描述</strong>：作为投放运营，我想要为单个用户分配 TikTok 账号，以便授予其投放资产权限。</p>
 <p><strong>筛选项（组件类型）</strong></p>
 <ul>
-<li>账号筛选：单行文本输入框（占位「搜索 TikTok 账号名称」）+「查询」/「重置」按钮，点击「查询」后按账号名称查询；列表首列复选框支持表头全选。</li>
+<li>账号筛选：单行文本输入框（占位「搜索 TikTok 账号名称」）+「查询」/「重置」按钮。</li>
+<li>点击「查询」后按账号名称查询。</li>
+<li>列表首列复选框支持表头全选。</li>
 </ul>
 <p><strong>表格字段</strong></p>
 <table>
@@ -385,7 +389,10 @@ blockquote {
 </table>
 <p><strong>数据来源（调用接口）</strong></p>
 <ul>
-<li>弹框账号列表 ← 接口「获取资产列表」(<a href="https://business-api.tiktok.com/portal/docs/get-assets/v1.3" target="_blank" rel="noopener noreferrer">get-assets 官方文档</a>)，入参为当前 BC ID；已分配状态来自分配关系数据。提交调用「将资产分配给用户」(<a href="https://business-api.tiktok.com/portal/docs/assign-an-asset/v1.3" target="_blank" rel="noopener noreferrer">assign-an-asset 官方文档</a>)，撤销调用「撤销用户对资产的权限」(<a href="https://business-api.tiktok.com/portal/docs/unassign-an-asset/v1.3" target="_blank" rel="noopener noreferrer">unassign-an-asset 官方文档</a>)。</li>
+<li>弹框账号列表 ← 接口「获取资产列表」(<a href="https://business-api.tiktok.com/portal/docs/get-assets/v1.3" target="_blank" rel="noopener noreferrer">get-assets 官方文档</a>)，入参为当前 BC ID。</li>
+<li>已分配状态来自分配关系数据。</li>
+<li>提交调用「将资产分配给用户」(<a href="https://business-api.tiktok.com/portal/docs/assign-an-asset/v1.3" target="_blank" rel="noopener noreferrer">assign-an-asset 官方文档</a>)。</li>
+<li>撤销调用「撤销用户对资产的权限」(<a href="https://business-api.tiktok.com/portal/docs/unassign-an-asset/v1.3" target="_blank" rel="noopener noreferrer">unassign-an-asset 官方文档</a>)。</li>
 </ul>
 <p><strong>数据流转</strong></p>
 <ul>
@@ -406,7 +413,9 @@ blockquote {
 <p><strong>故事描述</strong>：作为投放运营，我想要勾选多个用户后批量分配 TikTok 账号，以便提高分配效率。</p>
 <p><strong>筛选项（组件类型）</strong></p>
 <ul>
-<li>账号筛选：单行文本输入框（占位「搜索 TikTok 账号名称」）+「查询」/「重置」按钮，点击「查询」后按账号名称查询；列表第一列复选框固定显示，支持表头全选。</li>
+<li>账号筛选：单行文本输入框（占位「搜索 TikTok 账号名称」）+「查询」/「重置」按钮。</li>
+<li>点击「查询」后按账号名称查询。</li>
+<li>列表第一列复选框固定显示，支持表头全选。</li>
 </ul>
 <p><strong>表格字段</strong></p>
 <table>
@@ -438,7 +447,9 @@ blockquote {
 <p>弹框顶部显示提示条「已选择 N 个用户，请勾选要分配的 TikTok 账号」。</p>
 <p><strong>数据来源（调用接口）</strong></p>
 <ul>
-<li>弹框账号列表 ← 接口「获取资产列表」(<a href="https://business-api.tiktok.com/portal/docs/get-assets/v1.3" target="_blank" rel="noopener noreferrer">get-assets 官方文档</a>)，入参为当前 BC ID；所选用户集合来自用户抽屉内的勾选状态。提交调用「将资产分配给用户」(<a href="https://business-api.tiktok.com/portal/docs/assign-an-asset/v1.3" target="_blank" rel="noopener noreferrer">assign-an-asset 官方文档</a>)。</li>
+<li>弹框账号列表 ← 接口「获取资产列表」(<a href="https://business-api.tiktok.com/portal/docs/get-assets/v1.3" target="_blank" rel="noopener noreferrer">get-assets 官方文档</a>)，入参为当前 BC ID。</li>
+<li>所选用户集合来自用户抽屉内的勾选状态。</li>
+<li>提交调用「将资产分配给用户」(<a href="https://business-api.tiktok.com/portal/docs/assign-an-asset/v1.3" target="_blank" rel="noopener noreferrer">assign-an-asset 官方文档</a>)。</li>
 </ul>
 <p><strong>数据流转</strong></p>
 <ul>
@@ -459,7 +470,11 @@ blockquote {
 <p><strong>故事描述</strong>：作为投放运营，我想要查看某个 BC 的 TikTok 账号资产明细，以便了解资产情况。</p>
 <p><strong>筛选项（组件类型）</strong></p>
 <ul>
-<li>筛选项与「资产管理 - TikTok账号」页面保持一致：TT账号名称（单行文本输入框，占位「请输入TT账号名称」）/ 语言（下拉选择，占位「请选择语言」，枚举：葡萄牙语、繁体中文、马来西亚语、英语、德语、意大利语、法语）/ 备注（单行文本输入框，占位「请输入备注」）+「查询」/「重置」按钮；点击「查询」后按条件查询，点击「重置」清空全部条件并恢复全量列表。</li>
+<li>筛选项与「资产管理 - TikTok账号」页面保持一致。</li>
+<li>TT账号名称：单行文本输入框（占位「请输入TT账号名称」）。</li>
+<li>语言：下拉选择（占位「请选择语言」），枚举为葡萄牙语、繁体中文、马来西亚语、英语、德语、意大利语、法语。</li>
+<li>备注：单行文本输入框（占位「请输入备注」）。</li>
+<li>操作按钮：「查询」/「重置」；点击「查询」后按条件查询，点击「重置」清空全部条件并恢复全量列表。</li>
 </ul>
 <p><strong>表格字段</strong></p>
 <table>
@@ -521,7 +536,11 @@ blockquote {
 <p><strong>故事描述</strong>：作为投放运营，我想要在 BC 下新建 TikTok 账号，以便扩充资产。</p>
 <p><strong>筛选项（组件类型）</strong></p>
 <ul>
-<li>无列表筛选；表单控件类型：单行文本输入框（账号名称）、文件上传 + 本地预览（头像）、下拉选择（国家/地区，20 项，必选）。</li>
+<li>无列表筛选（表单弹框）。</li>
+<li>表单控件类型：</li>
+<li>账号名称：单行文本输入框。</li>
+<li>头像：文件上传 + 本地预览。</li>
+<li>国家/地区：下拉选择，20 项，必选。</li>
 </ul>
 <p><strong>表单字段</strong></p>
 <table>
@@ -562,7 +581,8 @@ blockquote {
 </table>
 <p><strong>数据来源（调用接口）</strong></p>
 <ul>
-<li>商务中心名称由主表行带入（后端注入、前端不可编辑）；提交调用接口「在商务中心创建 TikTok 账号」(<a href="https://business-api.tiktok.com/portal/docs/create-an-organization-account-in-a-business-center/v1.3" target="_blank" rel="noopener noreferrer">create-an-organization-account-in-a-business-center 官方文档</a>)。</li>
+<li>商务中心名称：由主表行带入（后端注入、前端不可编辑）。</li>
+<li>提交调用接口「在商务中心创建 TikTok 账号」(<a href="https://business-api.tiktok.com/portal/docs/create-an-organization-account-in-a-business-center/v1.3" target="_blank" rel="noopener noreferrer">create-an-organization-account-in-a-business-center 官方文档</a>)。</li>
 </ul>
 <p><strong>数据流转</strong></p>
 <ul>
@@ -583,7 +603,10 @@ blockquote {
 <p><strong>故事描述</strong>：作为投放运营，我想要通过扫码关联已有 TikTok 账号，以便复用已有资产。</p>
 <p><strong>筛选项（组件类型）</strong></p>
 <ul>
-<li>无列表筛选；二维码展示组件 + 文本提示 + 授权对象信息（{BC名称}，只读）。</li>
+<li>无列表筛选（扫码授权弹框）。</li>
+<li>二维码展示组件。</li>
+<li>文本提示。</li>
+<li>授权对象信息（{BC名称}，只读）。</li>
 </ul>
 <p><strong>展示字段</strong></p>
 <table>

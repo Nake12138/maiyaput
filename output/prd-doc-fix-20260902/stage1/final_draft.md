@@ -127,7 +127,9 @@
 
 **筛选项（组件类型）**
 
-- 用户名筛选：单行文本输入框（占位「请输入用户名搜索」）+「查询」/「重置」按钮；点击「查询」后按用户名查询列表（包含匹配、不区分大小写），点击「重置」清空条件并恢复全量列表。
+- 用户名筛选：单行文本输入框（占位「请输入用户名搜索」）+「查询」/「重置」按钮。
+- 点击「查询」后按用户名查询列表（包含匹配、不区分大小写）。
+- 点击「重置」清空条件并恢复全量列表。
 
 **表格字段**
 
@@ -166,7 +168,9 @@
 
 **筛选项（组件类型）**
 
-- 账号筛选：单行文本输入框（占位「搜索 TikTok 账号名称」）+「查询」/「重置」按钮，点击「查询」后按账号名称查询；列表首列复选框支持表头全选。
+- 账号筛选：单行文本输入框（占位「搜索 TikTok 账号名称」）+「查询」/「重置」按钮。
+- 点击「查询」后按账号名称查询。
+- 列表首列复选框支持表头全选。
 
 **表格字段**
 
@@ -178,7 +182,10 @@
 
 **数据来源（调用接口）**
 
-- 弹框账号列表 ← 接口「获取资产列表」([get-assets 官方文档](https://business-api.tiktok.com/portal/docs/get-assets/v1.3))，入参为当前 BC ID；已分配状态来自分配关系数据。提交调用「将资产分配给用户」([assign-an-asset 官方文档](https://business-api.tiktok.com/portal/docs/assign-an-asset/v1.3))，撤销调用「撤销用户对资产的权限」([unassign-an-asset 官方文档](https://business-api.tiktok.com/portal/docs/unassign-an-asset/v1.3))。
+- 弹框账号列表 ← 接口「获取资产列表」([get-assets 官方文档](https://business-api.tiktok.com/portal/docs/get-assets/v1.3))，入参为当前 BC ID。
+- 已分配状态来自分配关系数据。
+- 提交调用「将资产分配给用户」([assign-an-asset 官方文档](https://business-api.tiktok.com/portal/docs/assign-an-asset/v1.3))。
+- 撤销调用「撤销用户对资产的权限」([unassign-an-asset 官方文档](https://business-api.tiktok.com/portal/docs/unassign-an-asset/v1.3))。
 
 **数据流转**
 
@@ -204,7 +211,9 @@
 
 **筛选项（组件类型）**
 
-- 账号筛选：单行文本输入框（占位「搜索 TikTok 账号名称」）+「查询」/「重置」按钮，点击「查询」后按账号名称查询；列表第一列复选框固定显示，支持表头全选。
+- 账号筛选：单行文本输入框（占位「搜索 TikTok 账号名称」）+「查询」/「重置」按钮。
+- 点击「查询」后按账号名称查询。
+- 列表第一列复选框固定显示，支持表头全选。
 
 **表格字段**
 
@@ -218,7 +227,9 @@
 
 **数据来源（调用接口）**
 
-- 弹框账号列表 ← 接口「获取资产列表」([get-assets 官方文档](https://business-api.tiktok.com/portal/docs/get-assets/v1.3))，入参为当前 BC ID；所选用户集合来自用户抽屉内的勾选状态。提交调用「将资产分配给用户」([assign-an-asset 官方文档](https://business-api.tiktok.com/portal/docs/assign-an-asset/v1.3))。
+- 弹框账号列表 ← 接口「获取资产列表」([get-assets 官方文档](https://business-api.tiktok.com/portal/docs/get-assets/v1.3))，入参为当前 BC ID。
+- 所选用户集合来自用户抽屉内的勾选状态。
+- 提交调用「将资产分配给用户」([assign-an-asset 官方文档](https://business-api.tiktok.com/portal/docs/assign-an-asset/v1.3))。
 
 **数据流转**
 
@@ -244,7 +255,11 @@
 
 **筛选项（组件类型）**
 
-- 筛选项与「资产管理 - TikTok账号」页面保持一致：TT账号名称（单行文本输入框，占位「请输入TT账号名称」）/ 语言（下拉选择，占位「请选择语言」，枚举：葡萄牙语、繁体中文、马来西亚语、英语、德语、意大利语、法语）/ 备注（单行文本输入框，占位「请输入备注」）+「查询」/「重置」按钮；点击「查询」后按条件查询，点击「重置」清空全部条件并恢复全量列表。
+- 筛选项与「资产管理 - TikTok账号」页面保持一致。
+- TT账号名称：单行文本输入框（占位「请输入TT账号名称」）。
+- 语言：下拉选择（占位「请选择语言」），枚举为葡萄牙语、繁体中文、马来西亚语、英语、德语、意大利语、法语。
+- 备注：单行文本输入框（占位「请输入备注」）。
+- 操作按钮：「查询」/「重置」；点击「查询」后按条件查询，点击「重置」清空全部条件并恢复全量列表。
 
 **表格字段**
 
@@ -285,7 +300,11 @@
 
 **筛选项（组件类型）**
 
-- 无列表筛选；表单控件类型：单行文本输入框（账号名称）、文件上传 + 本地预览（头像）、下拉选择（国家/地区，20 项，必选）。
+- 无列表筛选（表单弹框）。
+- 表单控件类型：
+  - 账号名称：单行文本输入框。
+  - 头像：文件上传 + 本地预览。
+  - 国家/地区：下拉选择，20 项，必选。
 
 **表单字段**
 
@@ -299,7 +318,8 @@
 
 **数据来源（调用接口）**
 
-- 商务中心名称由主表行带入（后端注入、前端不可编辑）；提交调用接口「在商务中心创建 TikTok 账号」([create-an-organization-account-in-a-business-center 官方文档](https://business-api.tiktok.com/portal/docs/create-an-organization-account-in-a-business-center/v1.3))。
+- 商务中心名称：由主表行带入（后端注入、前端不可编辑）。
+- 提交调用接口「在商务中心创建 TikTok 账号」([create-an-organization-account-in-a-business-center 官方文档](https://business-api.tiktok.com/portal/docs/create-an-organization-account-in-a-business-center/v1.3))。
 
 **数据流转**
 
@@ -325,7 +345,10 @@
 
 **筛选项（组件类型）**
 
-- 无列表筛选；二维码展示组件 + 文本提示 + 授权对象信息（{BC名称}，只读）。
+- 无列表筛选（扫码授权弹框）。
+- 二维码展示组件。
+- 文本提示。
+- 授权对象信息（{BC名称}，只读）。
 
 **展示字段**
 
