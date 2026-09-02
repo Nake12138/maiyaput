@@ -214,7 +214,9 @@
               </div>
               <div class="modal-body">
                 <div class="modal-filter">
-                  <input type="text" id="assign-tt-search" class="form-input" placeholder="搜索 TikTok 账号名称" style="flex:1;" oninput="renderAssignTtList()" />
+                  <input type="text" id="assign-tt-search" class="form-input" placeholder="搜索 TikTok 账号名称" style="flex:1;" onkeydown="if(event.key==='Enter')searchAssignTt()" />
+                  <button type="button" class="btn btn-primary btn-sm" onclick="searchAssignTt()">查询</button>
+                  <button type="button" class="btn btn-outline btn-sm" onclick="resetAssignTtFilter()">重置</button>
                 </div>
                 <div class="table-card" style="border-radius:4px;max-height:300px;overflow:auto;">
                   <div class="table-wrapper">
@@ -248,7 +250,9 @@
               </div>
               <div class="drawer-body">
                 <div class="modal-filter">
-                  <input type="text" id="bc-user-search" class="form-input" placeholder="请输入用户名搜索" style="flex:1;" oninput="renderBcUserList()" />
+                  <input type="text" id="bc-user-search" class="form-input" placeholder="请输入用户名搜索" style="flex:1;" onkeydown="if(event.key==='Enter')searchBcUser()" />
+                  <button type="button" class="btn btn-primary btn-sm" onclick="searchBcUser()">查询</button>
+                  <button type="button" class="btn btn-outline btn-sm" onclick="resetBcUserFilter()">重置</button>
                 </div>
                 <div class="bc-user-toolbar">
                   <div class="bc-user-selected-wrap">
@@ -289,7 +293,9 @@
               <div class="modal-body">
                 <div class="batch-assign-info" id="batch-assign-info"></div>
                 <div class="modal-filter">
-                  <input type="text" id="batch-assign-search" class="form-input" placeholder="搜索 TikTok 账号名称" style="flex:1;" oninput="renderBatchAssignList()" />
+                  <input type="text" id="batch-assign-search" class="form-input" placeholder="搜索 TikTok 账号名称" style="flex:1;" onkeydown="if(event.key==='Enter')searchBatchAssign()" />
+                  <button type="button" class="btn btn-primary btn-sm" onclick="searchBatchAssign()">查询</button>
+                  <button type="button" class="btn btn-outline btn-sm" onclick="resetBatchAssignFilter()">重置</button>
                 </div>
                 <div class="table-card" style="border-radius:4px;max-height:300px;overflow:auto;">
                   <div class="table-wrapper">
@@ -322,8 +328,25 @@
                 <button class="drawer-close" onclick="closeBcTtDrawer()">×</button>
               </div>
               <div class="drawer-body">
-                <div class="modal-filter">
-                  <input type="text" id="bc-tt-search" class="form-input" placeholder="请输入TikTok账号名称搜索" style="flex:1;" oninput="renderBcTtList()" />
+                <div class="filter-bar" style="margin-bottom:16px;">
+                  <div class="filter-bar-row">
+                    <input type="text" class="filter-input" id="bc-tt-search" placeholder="请输入TT账号名称" style="width:180px;" onkeydown="if(event.key==='Enter')searchBcTt()" />
+                    <select class="filter-select" id="bc-tt-lang">
+                      <option value="">请选择语言</option>
+                      <option>葡萄牙语</option>
+                      <option>繁体中文</option>
+                      <option>马来西亚语</option>
+                      <option>英语</option>
+                      <option>德语</option>
+                      <option>意大利语</option>
+                      <option>法语</option>
+                    </select>
+                    <input type="text" class="filter-input" id="bc-tt-remark" placeholder="请输入备注" style="width:160px;" onkeydown="if(event.key==='Enter')searchBcTt()" />
+                    <div class="filter-actions">
+                      <button type="button" class="btn btn-primary btn-sm" onclick="searchBcTt()">查询</button>
+                      <button type="button" class="btn btn-outline btn-sm" onclick="resetBcTtFilter()">重置</button>
+                    </div>
+                  </div>
                 </div>
                 <div class="table-card" style="border-radius:4px;">
                   <div class="table-wrapper">
@@ -357,8 +380,25 @@
                 <button class="drawer-close" onclick="closeUserTtDrawer()">×</button>
               </div>
               <div class="drawer-body">
-                <div class="modal-filter">
-                  <input type="text" id="user-tt-search" class="form-input" placeholder="请输入TikTok账号名称搜索" style="flex:1;" oninput="renderUserTtList()" />
+                <div class="filter-bar" style="margin-bottom:16px;">
+                  <div class="filter-bar-row">
+                    <input type="text" class="filter-input" id="user-tt-search" placeholder="请输入TT账号名称" style="width:180px;" onkeydown="if(event.key==='Enter')searchUserTt()" />
+                    <select class="filter-select" id="user-tt-lang">
+                      <option value="">请选择语言</option>
+                      <option>葡萄牙语</option>
+                      <option>繁体中文</option>
+                      <option>马来西亚语</option>
+                      <option>英语</option>
+                      <option>德语</option>
+                      <option>意大利语</option>
+                      <option>法语</option>
+                    </select>
+                    <input type="text" class="filter-input" id="user-tt-remark" placeholder="请输入备注" style="width:160px;" onkeydown="if(event.key==='Enter')searchUserTt()" />
+                    <div class="filter-actions">
+                      <button type="button" class="btn btn-primary btn-sm" onclick="searchUserTt()">查询</button>
+                      <button type="button" class="btn btn-outline btn-sm" onclick="resetUserTtFilter()">重置</button>
+                    </div>
+                  </div>
                 </div>
                 <div class="table-card" style="border-radius:4px;">
                   <div class="table-wrapper">
@@ -1197,17 +1237,35 @@
       var assignTtBcId = null;
       var assignTtUser = null;
 
-      function searchBC() { alert('查询BC列表'); }
+      /* ===== 主列表筛选：点击「查询」后才执行列表查询 ===== */
+      var bcListKeyword = '';
+
+      function searchBC() {
+        var input = document.querySelector('#page-overseas-bc .filter-input');
+        bcListKeyword = ((input && input.value) || '').trim().toLowerCase();
+        renderBcList();
+      }
 
       function resetBCFilter() {
         document.querySelectorAll('#page-overseas-bc .filter-input').forEach(function (i) { i.value = ''; });
+        bcListKeyword = '';
+        renderBcList();
       }
 
       /* ===== 商务中心主表渲染与刷新 ===== */
       function renderBcList() {
         var tbody = document.getElementById('bc-list-tbody');
         if (!tbody) return;
-        tbody.innerHTML = bcListData.map(function (b) {
+        var filtered = bcListKeyword
+          ? bcListData.filter(function (b) { return (b.name || '').toLowerCase().indexOf(bcListKeyword) !== -1; })
+          : bcListData;
+        var totalEl = document.querySelector('#page-overseas-bc .pagination-info');
+        if (totalEl) totalEl.textContent = '共 ' + filtered.length + ' 条';
+        if (!filtered.length) {
+          tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#999;padding:32px 0;">暂无数据</td></tr>';
+          return;
+        }
+        tbody.innerHTML = filtered.map(function (b) {
           return '<tr>' +
             '<td>' + b.name + '</td>' +
             '<td><a href="#" class="link" onclick="openBcUserDrawer(\'' + b.id + '\', \'' + b.name + '\', ' + b.userCount + ');return false;">' + b.userCount + '</a></td>' +
@@ -1226,12 +1284,15 @@
       }
 
       /* ===== 用户数量：点击打开用户列表抽屉 ===== */
+      var bcUserKeyword = '';
+
       function openBcUserDrawer(bcId, bcName, count) {
         currentBcUserId = bcId;
         currentBcUserName = bcName;
         batchSelectedUsers = [];
         document.getElementById('bc-user-title').textContent = '用户列表 - ' + bcName + '（' + count + '）';
         document.getElementById('bc-user-search').value = '';
+        bcUserKeyword = '';
         renderBcUserList();
         document.getElementById('bc-user-overlay').classList.add('open');
         document.getElementById('bc-user-drawer').classList.add('open');
@@ -1242,8 +1303,19 @@
         document.getElementById('bc-user-drawer').classList.remove('open');
       }
 
+      function searchBcUser() {
+        bcUserKeyword = (document.getElementById('bc-user-search').value || '').trim().toLowerCase();
+        renderBcUserList();
+      }
+
+      function resetBcUserFilter() {
+        document.getElementById('bc-user-search').value = '';
+        bcUserKeyword = '';
+        renderBcUserList();
+      }
+
       function renderBcUserList() {
-        var keyword = (document.getElementById('bc-user-search').value || '').trim().toLowerCase();
+        var keyword = bcUserKeyword;
         var users = bcUserData[currentBcUserId] || [];
         var filtered = keyword ? users.filter(function (u) { return u.toLowerCase().indexOf(keyword) !== -1; }) : users;
         var tbody = document.getElementById('bc-user-tbody');
@@ -1268,11 +1340,14 @@
       }
 
       /* ===== 分配 TikTok 账号弹框（多选） ===== */
+      var assignTtKeyword = '';
+
       function openAssignTtModal(bcId, user) {
         assignTtBcId = bcId;
         assignTtUser = user;
         document.getElementById('assign-tt-title').textContent = '分配 TikTok 账号 - ' + user;
         document.getElementById('assign-tt-search').value = '';
+        assignTtKeyword = '';
         renderAssignTtList();
         document.getElementById('assign-tt-overlay').classList.add('open');
         document.getElementById('assign-tt-modal').classList.add('open');
@@ -1284,8 +1359,19 @@
         document.getElementById('assign-tt-modal').classList.remove('open');
       }
 
+      function searchAssignTt() {
+        assignTtKeyword = (document.getElementById('assign-tt-search').value || '').trim().toLowerCase();
+        renderAssignTtList();
+      }
+
+      function resetAssignTtFilter() {
+        document.getElementById('assign-tt-search').value = '';
+        assignTtKeyword = '';
+        renderAssignTtList();
+      }
+
       function renderAssignTtList() {
-        var keyword = (document.getElementById('assign-tt-search').value || '').trim().toLowerCase();
+        var keyword = assignTtKeyword;
         var accounts = bcTtData[assignTtBcId] || [];
         var assignedMap = (bcUserAssignedTt[assignTtBcId] && bcUserAssignedTt[assignTtBcId][assignTtUser]) || [];
         var filtered = keyword ? accounts.filter(function (a) { return (a.name || '').toLowerCase().indexOf(keyword) !== -1; }) : accounts;
@@ -1323,6 +1409,7 @@
 
       /* ===== 用户列表批量勾选 + 批量分配 TikTok 账号 ===== */
       var batchSelectedUsers = [];
+      var batchAssignKeyword = '';
 
       function toggleBcUserAll(src) {
         document.querySelectorAll('#bc-user-tbody .bc-user-check').forEach(function (c) { c.checked = src.checked; });
@@ -1356,6 +1443,7 @@
         var info = document.getElementById('batch-assign-info');
         if (info) info.innerHTML = '已选择 <span class="count">' + batchSelectedUsers.length + '</span> 个用户，请勾选要分配的 TikTok 账号：';
         document.getElementById('batch-assign-search').value = '';
+        batchAssignKeyword = '';
         renderBatchAssignList();
         document.getElementById('batch-assign-overlay').classList.add('open');
         document.getElementById('batch-assign-modal').classList.add('open');
@@ -1367,8 +1455,19 @@
         document.getElementById('batch-assign-modal').classList.remove('open');
       }
 
+      function searchBatchAssign() {
+        batchAssignKeyword = (document.getElementById('batch-assign-search').value || '').trim().toLowerCase();
+        renderBatchAssignList();
+      }
+
+      function resetBatchAssignFilter() {
+        document.getElementById('batch-assign-search').value = '';
+        batchAssignKeyword = '';
+        renderBatchAssignList();
+      }
+
       function renderBatchAssignList() {
-        var keyword = (document.getElementById('batch-assign-search').value || '').trim().toLowerCase();
+        var keyword = batchAssignKeyword;
         var accounts = bcTtData[currentBcUserId] || [];
         /* 批量分配：第一列固定复选框，不区分已分配状态（是否已分配由后端自动判断） */
         var filtered = keyword ? accounts.filter(function (a) { return (a.name || '').toLowerCase().indexOf(keyword) !== -1; }) : accounts;
@@ -1401,6 +1500,8 @@
       }
 
       /* ===== TikTok 账号列表抽屉 ===== */
+      /* 筛选项与「资产管理 - TikTok账号」页面保持一致：名称/语言/备注，点击查询后生效 */
+      var bcTtFilter = { name: '', lang: '', remark: '' };
       function stringToColor(str) {
         var colors = ['#1d4ed8','#059669','#b45309','#be123c','#7c3aed','#0891b2','#4338ca','#c2410c'];
         var hash = 0;
@@ -1427,6 +1528,9 @@
         var accounts = bcTtData[currentBcTtId] || [];
         document.getElementById('bc-tt-title').textContent = 'TikTok 账号列表 - ' + bcName + '（' + accounts.length + '）';
         document.getElementById('bc-tt-search').value = '';
+        document.getElementById('bc-tt-lang').selectedIndex = 0;
+        document.getElementById('bc-tt-remark').value = '';
+        bcTtFilter = { name: '', lang: '', remark: '' };
         renderBcTtList();
         document.getElementById('bc-tt-overlay').classList.add('open');
         document.getElementById('bc-tt-drawer').classList.add('open');
@@ -1437,10 +1541,29 @@
         document.getElementById('bc-tt-drawer').classList.remove('open');
       }
 
+      function searchBcTt() {
+        bcTtFilter.name = (document.getElementById('bc-tt-search').value || '').trim().toLowerCase();
+        bcTtFilter.lang = (document.getElementById('bc-tt-lang').value || '').trim();
+        bcTtFilter.remark = (document.getElementById('bc-tt-remark').value || '').trim().toLowerCase();
+        renderBcTtList();
+      }
+
+      function resetBcTtFilter() {
+        document.getElementById('bc-tt-search').value = '';
+        document.getElementById('bc-tt-lang').selectedIndex = 0;
+        document.getElementById('bc-tt-remark').value = '';
+        bcTtFilter = { name: '', lang: '', remark: '' };
+        renderBcTtList();
+      }
+
       function renderBcTtList() {
-        var keyword = (document.getElementById('bc-tt-search').value || '').trim().toLowerCase();
         var accounts = bcTtData[currentBcTtId] || [];
-        var filtered = keyword ? accounts.filter(function (a) { return (a.name || '').toLowerCase().indexOf(keyword) !== -1; }) : accounts;
+        var filtered = accounts.filter(function (a) {
+          if (bcTtFilter.name && (a.name || '').toLowerCase().indexOf(bcTtFilter.name) === -1) return false;
+          if (bcTtFilter.lang && (a.lang || '') !== bcTtFilter.lang) return false;
+          if (bcTtFilter.remark && (a.remark || '').toLowerCase().indexOf(bcTtFilter.remark) === -1) return false;
+          return true;
+        });
         var tbody = document.getElementById('bc-tt-tbody');
         if (!filtered.length) {
           tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#999;padding:32px 0;">暂无数据</td></tr>';
@@ -1460,12 +1583,17 @@
       /* ===== 用户已分配 TikTok 账号抽屉 ===== */
       var currentUserTtBcId = '';
       var currentUserTtName = '';
+      /* 筛选项与「资产管理 - TikTok账号」页面保持一致：名称/语言/备注，点击查询后生效 */
+      var userTtFilter = { name: '', lang: '', remark: '' };
 
       function openUserTtDrawer(bcId, bcName, user) {
         currentUserTtBcId = bcId;
         currentUserTtName = user;
         document.getElementById('user-tt-title').textContent = 'TikTok 账号 - ' + user + '（' + bcName + '）';
         document.getElementById('user-tt-search').value = '';
+        document.getElementById('user-tt-lang').selectedIndex = 0;
+        document.getElementById('user-tt-remark').value = '';
+        userTtFilter = { name: '', lang: '', remark: '' };
         renderUserTtList();
         document.getElementById('user-tt-overlay').classList.add('open');
         document.getElementById('user-tt-drawer').classList.add('open');
@@ -1476,13 +1604,32 @@
         document.getElementById('user-tt-drawer').classList.remove('open');
       }
 
+      function searchUserTt() {
+        userTtFilter.name = (document.getElementById('user-tt-search').value || '').trim().toLowerCase();
+        userTtFilter.lang = (document.getElementById('user-tt-lang').value || '').trim();
+        userTtFilter.remark = (document.getElementById('user-tt-remark').value || '').trim().toLowerCase();
+        renderUserTtList();
+      }
+
+      function resetUserTtFilter() {
+        document.getElementById('user-tt-search').value = '';
+        document.getElementById('user-tt-lang').selectedIndex = 0;
+        document.getElementById('user-tt-remark').value = '';
+        userTtFilter = { name: '', lang: '', remark: '' };
+        renderUserTtList();
+      }
+
       function renderUserTtList() {
-        var keyword = (document.getElementById('user-tt-search').value || '').trim().toLowerCase();
         var accounts = bcTtData[currentUserTtBcId] || [];
         var assignedNames = (bcUserAssignedTt[currentUserTtBcId] && bcUserAssignedTt[currentUserTtBcId][currentUserTtName]) || [];
         /* 仅展示该用户已被分配的 TikTok 账号，而非 BC 下全量账号 */
         var assignedAccounts = accounts.filter(function (a) { return assignedNames.indexOf(a.name) !== -1; });
-        var filtered = keyword ? assignedAccounts.filter(function (a) { return (a.name || '').toLowerCase().indexOf(keyword) !== -1; }) : assignedAccounts;
+        var filtered = assignedAccounts.filter(function (a) {
+          if (userTtFilter.name && (a.name || '').toLowerCase().indexOf(userTtFilter.name) === -1) return false;
+          if (userTtFilter.lang && (a.lang || '') !== userTtFilter.lang) return false;
+          if (userTtFilter.remark && (a.remark || '').toLowerCase().indexOf(userTtFilter.remark) === -1) return false;
+          return true;
+        });
         var tbody = document.getElementById('user-tt-tbody');
         if (!filtered.length) {
           tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#999;padding:32px 0;">该用户暂无已分配 TikTok 账号</td></tr>';
@@ -1670,7 +1817,7 @@
           flow: '页面加载 → 调用「获取商务中心列表」→ 返回 BC 列表（名称/用户数/账号数）→ 渲染主表；点击「用户数量」/「TikTok 账号」携带 BC ID 打开对应抽屉；点击「刷新」重新拉取该 BC 数据。',
           ac: [
             '页面加载后展示 BC 列表，列为：商务中心名称 / 用户数量 / TikTok 账号 / 操作',
-            '支持按商务中心名称模糊查询与重置',
+            '支持按商务中心名称模糊查询与重置；点击「查询」后才执行列表查询，输入过程中不触发查询',
             '「用户数量」「TikTok 账号」为可点击链接，分别打开对应抽屉',
             '操作列提供「添加 TikTok 账号」「刷新」；点击「刷新」调用接口查询商务中心下的用户和tiktok账号列表'
           ]
@@ -1679,7 +1826,7 @@
           id: 'US-002', title: '用户列表抽屉与搜索', priority: 'P0',
           shot: '../assets/prd/us-002-user-drawer.png',
           desc: '作为投放运营，我想要打开某个 BC 的成员列表并搜索用户，以便定位目标成员。',
-          filter: '用户名筛选：单行文本输入框（占位「请输入用户名搜索」），输入即实时过滤，包含匹配、不区分大小写。',
+          filter: '用户名筛选：单行文本输入框（占位「请输入用户名搜索」）+「查询」/「重置」按钮；点击「查询」后按用户名查询列表（包含匹配、不区分大小写），点击「重置」清空条件并恢复全量列表。',
           fields: '选择列（复选框，表头支持全选/半选，勾选用于批量分配）／用户名（文本，BC 成员账号名称）／TikTok 账号（数字，可点击链接，打开该用户已分配账号抽屉）／操作（按钮：分配 TikTok 账号）；抽屉顶部工具条显示「已选择 X 个用户」与「分配TikTok」按钮。',
           source: '抽屉内用户列表 ← 接口「获取商务中心成员列表」（<a href="https://business-api.tiktok.com/portal/docs/get-the-members-of-a-bc/v1.3" target="_blank">get-the-members-of-a-bc 官方文档</a>），入参为当前 BC ID。',
           flow: '点击主表「用户数量」→ 携带 BC ID 打开用户抽屉 → 调用「获取商务中心成员列表」→ 渲染成员列表；搜索框在本地过滤可见行，勾选状态独立于可见列表保留。',
@@ -1693,7 +1840,7 @@
           id: 'US-003', title: '单用户分配 TikTok 账号', priority: 'P0',
           shot: '../assets/prd/us-003-single-assign.png',
           desc: '作为投放运营，我想要为单个用户分配 TikTok 账号，以便授予其投放资产权限。',
-          filter: '账号筛选：单行文本输入框（占位「搜索 TikTok 账号名称」），输入即实时过滤；列表首列复选框支持表头全选。',
+          filter: '账号筛选：单行文本输入框（占位「搜索 TikTok 账号名称」）+「查询」/「重置」按钮，点击「查询」后按账号名称查询；列表首列复选框支持表头全选。',
           fields: '选择列（复选框；已分配给该用户的账号禁用并标注「已分配」，全选自动跳过）／TikTok 账号（头像 + 账号名称 + handle 组合展示）／语言（文本，账号语言）。',
           source: '弹框账号列表 ← 接口「获取资产列表」（<a href="https://business-api.tiktok.com/portal/docs/get-assets/v1.3" target="_blank">get-assets 官方文档</a>），入参为当前 BC ID；已分配状态来自分配关系数据。提交调用「将资产分配给用户」（<a href="https://business-api.tiktok.com/portal/docs/assign-an-asset/v1.3" target="_blank">assign-an-asset 官方文档</a>），撤销调用「撤销用户对资产的权限」（<a href="https://business-api.tiktok.com/portal/docs/unassign-an-asset/v1.3" target="_blank">unassign-an-asset 官方文档</a>）。',
           flow: '用户行内点击「分配 TikTok 账号」→ 携带 BC ID + 用户名打开弹框 → 调用「获取资产列表」→ 展示全部账号并标注已分配 → 勾选未分配账号 → 点「确定」→ 调用「将资产分配给用户」→ 成功提示并关闭；弹框层级高于用户抽屉，关闭不影响底层抽屉。',
@@ -1709,7 +1856,7 @@
           id: 'US-004', title: '用户已分配 TikTok 账号抽屉', priority: 'P0',
           shot: '../assets/prd/us-004-user-tt.png',
           desc: '作为投放运营，我想要查看某个用户已分配的 TikTok 账号明细，以便确认其资产权限。',
-          filter: '账号筛选：单行文本输入框（占位「请输入TikTok账号名称搜索」），输入即实时过滤。',
+          filter: '筛选项与「资产管理 - TikTok账号」页面保持一致：TT账号名称（单行文本输入框，占位「请输入TT账号名称」）／语言（下拉选择，占位「请选择语言」，枚举：葡萄牙语、繁体中文、马来西亚语、英语、德语、意大利语、法语）／备注（单行文本输入框，占位「请输入备注」）+「查询」/「重置」按钮；点击「查询」后按条件查询，点击「重置」清空全部条件并恢复全量列表。',
           fields: 'TikTok账号名称（头像 + 账号名称 + handle 组合展示）／语言（文本，账号语言）／备注（文本，账号备注，可为空）／更新人（文本，最近操作人）／更新时间（文本，格式 yyyy-MM-dd HH:mm）；仅展示该用户已分配的账号，无操作列。',
           source: '抽屉内账号列表 ← 该用户与资产的分配关系；可调用「获取资产列表」（<a href="https://business-api.tiktok.com/portal/docs/get-assets/v1.3" target="_blank">get-assets 官方文档</a>）后按用户名过滤出已分配账号。',
           flow: '用户列表行内点击「TikTok 账号」数量 → 携带 BC ID + 用户名打开宽抽屉 → 调用「获取资产列表」→ 仅展示该用户已被分配的 TikTok 账号 → 渲染账号明细；抽屉叠加在用户抽屉之上，关闭后回到用户列表。',
@@ -1717,7 +1864,7 @@
             '点击用户行内「TikTok 账号」数量，打开右侧宽抽屉，标题：TikTok 账号 - {用户名}（{BC名称}）',
             '抽屉仅列出该用户已被分配的 TikTok 账号（头像 + 名称 + handle），不展示 BC 下未分配给该用户的账号',
             '表格字段：TikTok账号名称（头像 + handle）/ 语言 / 备注 / 更新人 / 更新时间，无操作列',
-            '支持按账号名称实时搜索，无已分配账号时显示空态「该用户暂无已分配 TikTok 账号」',
+            '支持按账号名称、语言、备注组合查询（点击「查询」后执行，「重置」恢复全量），无已分配账号时显示空态「该用户暂无已分配 TikTok 账号」',
             '抽屉叠加在用户抽屉之上，关闭后回到用户列表'
           ]
         },
@@ -1725,7 +1872,7 @@
           id: 'US-005', title: '批量分配 TikTok 账号', priority: 'P0',
           shot: '../assets/prd/us-004-batch-assign.png',
           desc: '作为投放运营，我想要勾选多个用户后批量分配 TikTok 账号，以便提高分配效率。',
-          filter: '账号筛选：单行文本输入框（占位「搜索 TikTok 账号名称」），输入即实时过滤；列表第一列复选框固定显示，支持表头全选。',
+          filter: '账号筛选：单行文本输入框（占位「搜索 TikTok 账号名称」）+「查询」/「重置」按钮，点击「查询」后按账号名称查询；列表第一列复选框固定显示，支持表头全选。',
           fields: '选择列（复选框，固定显示，表头支持全选；不展示「已分配」状态，是否已分配由后端自动判断）／TikTok 账号（头像 + 账号名称 + handle 组合展示）／语言（文本，账号语言）；弹框顶部显示提示条「已选择 N 个用户，请勾选要分配的 TikTok 账号」。',
           source: '弹框账号列表 ← 接口「获取资产列表」（<a href="https://business-api.tiktok.com/portal/docs/get-assets/v1.3" target="_blank">get-assets 官方文档</a>），入参为当前 BC ID；所选用户集合来自用户抽屉内的勾选状态。提交调用「将资产分配给用户」（<a href="https://business-api.tiktok.com/portal/docs/assign-an-asset/v1.3" target="_blank">assign-an-asset 官方文档</a>）。',
           flow: '用户抽屉勾选 N 个用户（本地状态）→ 点「分配TikTok」→ 打开批量弹框 → 调用「获取资产列表」→ 勾选账号 → 点「确定」→ 提交「将资产分配给用户」→ 是否已分配由后端逐一自动判断 → 成功提示并关闭。',
@@ -1741,14 +1888,14 @@
           id: 'US-006', title: 'TikTok 账号列表抽屉与搜索', priority: 'P0',
           shot: '../assets/prd/us-006-tt-drawer.png',
           desc: '作为投放运营，我想要查看某个 BC 的 TikTok 账号资产明细，以便了解资产情况。',
-          filter: '账号筛选：单行文本输入框（占位「请输入TikTok账号名称搜索」），输入即实时过滤。',
+          filter: '筛选项与「资产管理 - TikTok账号」页面保持一致：TT账号名称（单行文本输入框，占位「请输入TT账号名称」）／语言（下拉选择，占位「请选择语言」，枚举：葡萄牙语、繁体中文、马来西亚语、英语、德语、意大利语、法语）／备注（单行文本输入框，占位「请输入备注」）+「查询」/「重置」按钮；点击「查询」后按条件查询，点击「重置」清空全部条件并恢复全量列表。',
           fields: 'TikTok账号名称（头像 + 账号名称 + handle 组合展示）／语言（文本，账号语言）／备注（文本，账号备注，可为空）／更新人（文本，最近操作人）／更新时间（文本，格式 yyyy-MM-dd HH:mm）；展示 BC 下全部 TikTok 账号资产，无操作列。',
           source: '抽屉内账号列表 ← 接口「获取资产列表」（<a href="https://business-api.tiktok.com/portal/docs/get-assets/v1.3" target="_blank">get-assets 官方文档</a>），入参为当前 BC ID。',
           flow: '点击主表「TikTok 账号」数量 → 携带 BC ID 打开宽抽屉 → 调用「获取资产列表」→ 渲染账号明细。',
           ac: [
             '点击主表的「TikTok 账号」数量，打开右侧宽抽屉，标题：TikTok 账号列表 - {BC名称}（{数量}）',
             '表格字段：TikTok账号名称（头像 + handle）/ 语言 / 备注 / 更新人 / 更新时间，无操作列',
-            '支持按账号名称实时搜索，无结果显示空态'
+            '支持按账号名称、语言、备注组合查询（点击「查询」后执行，「重置」恢复全量），无结果显示空态'
           ]
         },
         {
