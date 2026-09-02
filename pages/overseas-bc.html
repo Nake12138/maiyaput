@@ -410,6 +410,7 @@
                           <th>备注</th>
                           <th>更新人</th>
                           <th>更新时间</th>
+                          <th>操作</th>
                         </tr>
                       </thead>
                       <tbody id="user-tt-tbody"></tbody>
@@ -497,6 +498,27 @@
                 <button id="add-tt-cancel-btn" class="btn btn-outline btn-sm" onclick="closeAddTtModal()">取消</button>
                 <button id="add-tt-submit-btn" class="btn btn-primary btn-sm" onclick="submitAddTtNew()" style="display:none;">确定</button>
                 <button id="add-tt-close-btn" class="btn btn-outline btn-sm" onclick="closeAddTtModal()" style="display:none;">关闭</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 取消授权二次确认弹框（用户已分配 TikTok 账号抽屉 - 删除） -->
+          <div id="unauth-tt-overlay" class="modal-overlay" onclick="closeUnauthTtModal()"></div>
+          <div id="unauth-tt-modal" class="modal">
+            <div class="modal-card" style="width:420px;">
+              <div class="modal-header">
+                <span>取消授权</span>
+                <button class="modal-close" onclick="closeUnauthTtModal()">×</button>
+              </div>
+              <div class="modal-body">
+                <div style="font-size:14px;line-height:1.7;color:var(--color-text-primary, #344054);">
+                  是否取消授权用户该TikTok？<br />
+                  <span style="color:var(--color-text-secondary, #667085);font-size:13px;" id="unauth-tt-detail"></span>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline btn-sm" onclick="closeUnauthTtModal()">取消</button>
+                <button type="button" class="btn btn-primary btn-sm" onclick="confirmRemoveUserTtAuth()" style="background:var(--color-error, #d92d20);border-color:var(--color-error, #d92d20);">确定</button>
               </div>
             </div>
           </div>
@@ -603,6 +625,10 @@
       /* 批量分配 TikTok 账号弹框：叠加在用户抽屉之上 */
       #batch-assign-overlay { z-index: 1200; }
       #batch-assign-modal { z-index: 1201; }
+
+      /* 取消授权确认弹框：叠加在用户已分配 TikTok 账号抽屉之上 */
+      #unauth-tt-overlay { z-index: 1300; }
+      #unauth-tt-modal { z-index: 1301; }
 
       /* 用户列表工具条：已选数量 + 批量分配按钮 */
       .bc-user-toolbar {
@@ -1642,18 +1668,59 @@
         });
         var tbody = document.getElementById('user-tt-tbody');
         if (!filtered.length) {
-          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#999;padding:32px 0;">该用户暂无已分配 TikTok 账号</td></tr>';
+          tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#999;padding:32px 0;">该用户暂无已分配 TikTok 账号</td></tr>';
           return;
         }
         tbody.innerHTML = filtered.map(function (a) {
+          var action = '<button type="button" class="inline-link" style="color:var(--color-error, #d92d20);" onclick="askRemoveUserTtAuth(\'' + currentUserTtBcId + '\',\'' + currentUserTtName + '\',\'' + a.name + '\')">删除</button>';
           return '<tr>' +
             '<td>' + renderTtAccountCell(a.name, a.handle) + '</td>' +
             '<td>' + (a.lang || '') + '</td>' +
             '<td>' + (a.remark || '') + '</td>' +
             '<td>' + (a.updater || '') + '</td>' +
             '<td>' + (a.updateTime || '') + '</td>' +
+            '<td>' + action + '</td>' +
           '</tr>';
         }).join('');
+      }
+
+      /* ===== 取消授权（用户已分配 TikTok 账号抽屉 - 删除） ===== */
+      var unauthTtTarget = null; // { bcId, user, accountName }
+
+      function askRemoveUserTtAuth(bcId, user, accountName) {
+        unauthTtTarget = { bcId: bcId, user: user, accountName: accountName };
+        var detail = document.getElementById('unauth-tt-detail');
+        if (detail) detail.textContent = '用户：' + user + '　TikTok 账号：' + accountName;
+        document.getElementById('unauth-tt-overlay').classList.add('open');
+        document.getElementById('unauth-tt-modal').classList.add('open');
+      }
+
+      function closeUnauthTtModal() {
+        document.getElementById('unauth-tt-overlay').classList.remove('open');
+        document.getElementById('unauth-tt-modal').classList.remove('open');
+      }
+
+      function confirmRemoveUserTtAuth() {
+        if (!unauthTtTarget) return;
+        var t = unauthTtTarget;
+        unauthTtTarget = null;
+        closeUnauthTtModal();
+        /* 用户确认后调用接口「撤销用户对资产的权限」(unassign-an-asset)，原型以本地模拟接口执行 */
+        callUnassignUserTt(t.bcId, t.user, t.accountName);
+      }
+
+      function callUnassignUserTt(bcId, user, accountName) {
+        var map = bcUserAssignedTt[bcId] || (bcUserAssignedTt[bcId] = {});
+        var list = map[user] || [];
+        var idx = list.indexOf(accountName);
+        if (idx !== -1) list.splice(idx, 1);
+        map[user] = list;
+        if (!bcUserTtCount[bcId]) bcUserTtCount[bcId] = {};
+        bcUserTtCount[bcId][user] = list.length;
+        /* 同步刷新底层用户列表与当前抽屉，保持分配数量一致 */
+        renderBcUserList();
+        renderUserTtList();
+        alert('已取消授权：' + user + ' - ' + accountName);
       }
 
       /* 基于用户名生成确定性的二维码样式图案（原型示意用） */
@@ -1867,14 +1934,15 @@
           shot: '../assets/prd/us-004-user-tt.png',
           desc: '作为投放运营，我想要查看某个用户已分配的 TikTok 账号明细，以便确认其资产权限。',
           filter: '筛选项与「资产管理 - TikTok账号」页面保持一致。TT账号名称（单行文本输入框，占位「请输入TT账号名称」）／语言（下拉选择，占位「请选择语言」，枚举与短剧管理页面的语言枚举一致）／备注（单行文本输入框，占位「请输入备注」）+「查询」/「重置」按钮；点击「查询」后按条件查询，点击「重置」清空全部条件并恢复全量列表。',
-          fields: 'TikTok账号名称（头像 + 账号名称组合展示）／语言（文本，账号语言）／备注（文本，账号备注，可为空）／更新人（文本，最近操作人）／更新时间（文本，格式 yyyy-MM-dd HH:mm）；仅展示该用户已分配的账号，无操作列。',
-          source: '抽屉内账号列表 ← 该用户与资产的分配关系；可调用「获取资产列表」（<a href="https://business-api.tiktok.com/portal/docs/get-assets/v1.3" target="_blank">get-assets 官方文档</a>）后按用户名过滤出已分配账号。',
-          flow: '用户列表行内点击「TikTok 账号」数量 → 携带 BC ID + 用户名打开宽抽屉 → 调用「获取资产列表」→ 仅展示该用户已被分配的 TikTok 账号 → 渲染账号明细；抽屉叠加在用户抽屉之上，关闭后回到用户列表。',
+          fields: 'TikTok账号名称（头像 + 账号名称组合展示）／语言（文本，账号语言）／备注（文本，账号备注，可为空）／更新人（文本，最近操作人）／更新时间（文本，格式 yyyy-MM-dd HH:mm）／操作（按钮：删除，点击后二次确认并调用「撤销用户对资产的权限」接口取消授权）；仅展示该用户已分配的账号。',
+          source: '抽屉内账号列表 ← 该用户与资产的分配关系；可调用「获取资产列表」（<a href="https://business-api.tiktok.com/portal/docs/get-assets/v1.3" target="_blank">get-assets 官方文档</a>）后按用户名过滤出已分配账号。取消授权调用「撤销用户对资产的权限」（<a href="https://business-api.tiktok.com/portal/docs/unassign-an-asset/v1.3" target="_blank">unassign-an-asset 官方文档</a>）。',
+          flow: '用户列表行内点击「TikTok 账号」数量 → 携带 BC ID + 用户名打开宽抽屉 → 调用「获取资产列表」→ 仅展示该用户已被分配的 TikTok 账号 → 渲染账号明细（含操作列「删除」）；点击「删除」→ 二次确认「是否取消授权用户该TikTok？」→ 用户确认后调用「撤销用户对资产的权限」→ 成功从列表移除该账号并同步用户账号数；抽屉叠加在用户抽屉之上，关闭后回到用户列表。',
           ac: [
             '点击用户行内「TikTok 账号」数量，打开右侧宽抽屉，标题：TikTok 账号 - {用户名}（{BC名称}）',
             '抽屉仅列出该用户已被分配的 TikTok 账号（头像 + 名称），不展示 BC 下未分配给该用户的账号',
-            '表格字段：TikTok账号名称（头像 + 名称）/ 语言 / 备注 / 更新人 / 更新时间，无操作列',
-            '支持按账号名称、语言、备注组合查询（点击「查询」后执行，「重置」恢复全量），无已分配账号时显示空态「该用户暂无已分配 TikTok 账号」',
+            '表格字段：TikTok账号名称（头像 + 名称）/ 语言 / 备注 / 更新人 / 更新时间 / 操作（删除按钮），无已分配账号时显示空态「该用户暂无已分配 TikTok 账号」',
+            '点击「删除」弹出二次确认「是否取消授权用户该TikTok？」，用户确认后调用「撤销用户对资产的权限」接口取消授权，成功后移除该账号并刷新列表；点击「取消」则不执行',
+            '支持按账号名称、语言、备注组合查询（点击「查询」后执行，「重置」恢复全量）',
             '抽屉叠加在用户抽屉之上，关闭后回到用户列表'
           ]
         },
