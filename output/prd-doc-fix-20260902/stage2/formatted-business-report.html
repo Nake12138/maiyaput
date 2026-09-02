@@ -135,7 +135,7 @@ blockquote {
 </code></pre>
 <h3 id="32">3.2 主流程步骤描述</h3>
 <ol>
-<li>用户进入商务中心页面，默认加载并展示商务中心列表（原型为 3 条示例数据）。</li>
+<li>用户进入商务中心页面，默认加载并展示商务中心列表。</li>
 <li>可按商务中心名称筛选后查询/重置。</li>
 <li>点击某行「用户数量」，右侧抽屉展示该 BC 的成员列表。</li>
 <li>在用户列表中可搜索、勾选用户，进行单用户或批量分配 TikTok 账号。</li>
@@ -241,7 +241,7 @@ blockquote {
 <p><strong>故事描述</strong>：作为投放运营，我想要查看并按名称搜索商务中心列表，以便快速定位目标商务中心。</p>
 <p><strong>筛选项（组件类型）</strong></p>
 <ul>
-<li>名称筛选：单行文本输入框（input[type=text]，占位「请输入商务中心名称」）+「查询」/「重置」按钮；原型为前端本地过滤，真实环境将名称作为请求参数传给列表接口。</li>
+<li>名称筛选：单行文本输入框（占位「请输入商务中心名称」）+「查询」/「重置」按钮。</li>
 </ul>
 <p><strong>数据来源（调用接口）</strong></p>
 <ul>
@@ -265,7 +265,7 @@ blockquote {
 <p><strong>故事描述</strong>：作为投放运营，我想要打开某个 BC 的成员列表并搜索用户，以便定位目标成员。</p>
 <p><strong>筛选项（组件类型）</strong></p>
 <ul>
-<li>用户名筛选：单行文本输入框（input[type=text]，占位「请输入用户名搜索」），输入即实时过滤（oninput），包含匹配、不区分大小写。</li>
+<li>用户名筛选：单行文本输入框（占位「请输入用户名搜索」），输入即实时过滤，包含匹配、不区分大小写。</li>
 </ul>
 <p><strong>数据来源（调用接口）</strong></p>
 <ul>
@@ -273,7 +273,7 @@ blockquote {
 </ul>
 <p><strong>数据流转</strong></p>
 <ul>
-<li>点击主表「用户数量」→ 携带 BC ID 打开用户抽屉 → 调用「获取商务中心成员列表」→ 渲染成员列表；搜索框在本地过滤可见行，勾选状态（batchSelectedUsers）独立于可见列表保留。</li>
+<li>点击主表「用户数量」→ 携带 BC ID 打开用户抽屉 → 调用「获取商务中心成员列表」→ 渲染成员列表；搜索框在本地过滤可见行，勾选状态独立于可见列表保留。</li>
 </ul>
 <p><strong>验收标准</strong></p>
 <ol>
@@ -288,7 +288,7 @@ blockquote {
 <p><strong>故事描述</strong>：作为投放运营，我想要为单个用户分配 TikTok 账号，以便授予其投放资产权限。</p>
 <p><strong>筛选项（组件类型）</strong></p>
 <ul>
-<li>账号筛选：单行文本输入框（input[type=text]，占位「搜索 TikTok 账号名称」），输入即实时过滤（oninput）；列表首列复选框支持表头全选。</li>
+<li>账号筛选：单行文本输入框（占位「搜索 TikTok 账号名称」），输入即实时过滤；列表首列复选框支持表头全选。</li>
 </ul>
 <p><strong>数据来源（调用接口）</strong></p>
 <ul>
@@ -313,11 +313,11 @@ blockquote {
 <p><strong>故事描述</strong>：作为投放运营，我想要勾选多个用户后批量分配 TikTok 账号，以便提高分配效率。</p>
 <p><strong>筛选项（组件类型）</strong></p>
 <ul>
-<li>账号筛选：单行文本输入框（input[type=text]，占位「搜索 TikTok 账号名称」），输入即实时过滤（oninput）；列表第一列复选框固定显示，支持表头全选。</li>
+<li>账号筛选：单行文本输入框（占位「搜索 TikTok 账号名称」），输入即实时过滤；列表第一列复选框固定显示，支持表头全选。</li>
 </ul>
 <p><strong>数据来源（调用接口）</strong></p>
 <ul>
-<li>弹框账号列表 ← 接口「获取资产列表」(<a href="https://business-api.tiktok.com/portal/docs/get-assets/v1.3" target="_blank" rel="noopener noreferrer">get-assets 官方文档</a>)，入参为当前 BC ID；所选用户集合来自用户抽屉本地状态 batchSelectedUsers。提交调用「将资产分配给用户」(<a href="https://business-api.tiktok.com/portal/docs/assign-an-asset/v1.3" target="_blank" rel="noopener noreferrer">assign-an-asset 官方文档</a>)。</li>
+<li>弹框账号列表 ← 接口「获取资产列表」(<a href="https://business-api.tiktok.com/portal/docs/get-assets/v1.3" target="_blank" rel="noopener noreferrer">get-assets 官方文档</a>)，入参为当前 BC ID；所选用户集合来自用户抽屉内的勾选状态。提交调用「将资产分配给用户」(<a href="https://business-api.tiktok.com/portal/docs/assign-an-asset/v1.3" target="_blank" rel="noopener noreferrer">assign-an-asset 官方文档</a>)。</li>
 </ul>
 <p><strong>数据流转</strong></p>
 <ul>
@@ -338,7 +338,7 @@ blockquote {
 <p><strong>故事描述</strong>：作为投放运营，我想要查看某个 BC 的 TikTok 账号资产明细，以便了解资产情况。</p>
 <p><strong>筛选项（组件类型）</strong></p>
 <ul>
-<li>账号筛选：单行文本输入框（input[type=text]，占位「请输入TikTok账号名称搜索」），输入即实时过滤（oninput）。</li>
+<li>账号筛选：单行文本输入框（占位「请输入TikTok账号名称搜索」），输入即实时过滤。</li>
 </ul>
 <p><strong>数据来源（调用接口）</strong></p>
 <ul>
@@ -362,7 +362,7 @@ blockquote {
 <p><strong>故事描述</strong>：作为投放运营，我想要在 BC 下新建 TikTok 账号，以便扩充资产。</p>
 <p><strong>筛选项（组件类型）</strong></p>
 <ul>
-<li>无列表筛选；表单控件类型：单行文本输入框（账号名称）、文件上传 + 本地预览（头像）、下拉选择 select（国家/地区，20 项，必选）。</li>
+<li>无列表筛选；表单控件类型：单行文本输入框（账号名称）、文件上传 + 本地预览（头像）、下拉选择（国家/地区，20 项，必选）。</li>
 </ul>
 <p><strong>数据来源（调用接口）</strong></p>
 <ul>
@@ -391,7 +391,7 @@ blockquote {
 </ul>
 <p><strong>数据来源（调用接口）</strong></p>
 <ul>
-<li>二维码 ← 接口「获取 TikTok 账号授权链接」(<a href="https://business-api.tiktok.com/portal/docs/obtain-a-tiktok-account-ad-delivery-authorization-url/v1.3" target="_blank" rel="noopener noreferrer">obtain-a-tiktok-account-ad-delivery-authorization-url 官方文档</a>) 返回的授权链接渲染生成；原型为确定性伪随机示意图案。</li>
+<li>二维码 ← 接口「获取 TikTok 账号授权链接」(<a href="https://business-api.tiktok.com/portal/docs/obtain-a-tiktok-account-ad-delivery-authorization-url/v1.3" target="_blank" rel="noopener noreferrer">obtain-a-tiktok-account-ad-delivery-authorization-url 官方文档</a>) 返回的授权链接渲染生成。</li>
 </ul>
 <p><strong>数据流转</strong></p>
 <ul>
@@ -420,37 +420,37 @@ blockquote {
 <tr>
 <td>US-001</td>
 <td>商务中心名称查询</td>
-<td>input[type=text] + 按钮</td>
+<td>单行文本输入框 + 按钮</td>
 <td>占位提示「请输入商务中心名称」，支持查询/重置</td>
 </tr>
 <tr>
 <td>US-002</td>
 <td>用户名搜索</td>
-<td>input[type=text]</td>
-<td>输入即实时过滤，oninput 事件</td>
+<td>单行文本输入框</td>
+<td>输入即实时过滤</td>
 </tr>
 <tr>
 <td>US-003</td>
 <td>账号搜索</td>
-<td>input[type=text] + checkbox</td>
+<td>单行文本输入框 + 复选框</td>
 <td>输入实时过滤；列表首列复选框，表头全选</td>
 </tr>
 <tr>
 <td>US-004</td>
 <td>账号搜索</td>
-<td>input[type=text] + checkbox</td>
+<td>单行文本输入框 + 复选框</td>
 <td>输入实时过滤；列表首列固定复选框，表头全选</td>
 </tr>
 <tr>
 <td>US-005</td>
 <td>账号搜索</td>
-<td>input[type=text]</td>
+<td>单行文本输入框</td>
 <td>输入即实时过滤</td>
 </tr>
 <tr>
 <td>US-006</td>
 <td>新建账号表单</td>
-<td>input + file + select</td>
+<td>文本输入框 + 文件上传 + 下拉选择</td>
 <td>名称文本、头像上传、国家/地区下拉 20 项</td>
 </tr>
 <tr>
@@ -522,7 +522,7 @@ blockquote {
 <h3 id="81">8.1 主表加载与刷新</h3>
 <p>页面初始化或点击「刷新」时，前端调用「获取商务中心列表」，后端返回当前可见商务中心集合（含名称、用户数量、TikTok 账号数量）。前端渲染主表后，用户数量与 TikTok 账号数量作为打开抽屉的入口参数。</p>
 <h3 id="82">8.2 用户抽屉打开与搜索</h3>
-<p>点击「用户数量」→ 携带 BC ID 调用「获取商务中心成员列表」→ 渲染用户列表。搜索框在本地对可见行做包含匹配，不影响已勾选状态（batchSelectedUsers）。</p>
+<p>点击「用户数量」→ 携带 BC ID 调用「获取商务中心成员列表」→ 渲染用户列表。搜索框在本地对可见行做包含匹配，不影响已勾选状态。</p>
 <h3 id="83">8.3 单用户/批量分配</h3>
 <p>打开弹框时携带 BC ID（批量场景额外携带所选用户集合）→ 调用「获取资产列表」→ 渲染可选账号。用户勾选后点击「确定」→ 调用「将资产分配给用户」。单用户场景后端根据已分配关系设置禁用态；批量场景由后端逐一判断账号是否已分配。</p>
 <h3 id="84">8.4 添加账号（新建/关联）</h3>

@@ -24,10 +24,15 @@ stages:
     skills_invoked: [markdown, custom-html-formatter]
   stage_3:
     status: completed
-    completed_at: 2026-09-02T10:25:00+08:00
+    completed_at: 2026-09-02T10:35:00+08:00
     output_path: stage3/output.docx
     input_format: html
     skill_used: [html-to-docx]
     present_files_opened: true
     fallback: false
     fallback_reason: null
+revisions:
+  - rev: 2
+    at: 2026-09-02T10:40:00+08:00
+    reason: 去除 PRD 面板与需求文档中的实现细节表达（input[type=text]/select/oninput/maxlength、原型为…真实环境…说明、batchSelectedUsers 变量名），保留自然语言组件类型描述
+    files: [pages/overseas-bc.html, stage1/final_draft.md, stage3/output.docx]
