@@ -237,7 +237,7 @@
                 <button class="btn btn-outline btn-sm" onclick="closeAssignTtModal()">取消</button>
                 <button class="btn btn-primary btn-sm" onclick="submitAssignTt()">确定</button>
               </div>
-              <button type="button" class="us-fab" onclick="openUsDetail('US-003')" title="查看本弹框用户故事说明">📋 US-003 说明</button>
+              <button type="button" class="us-fab" data-us="US-003" title="按住可拖动，点击查看本弹框用户故事说明">📋 US-003 说明 · 单用户分配 TikTok 账号</button>
             </div>
           </div>
 
@@ -280,7 +280,7 @@
               <div class="drawer-footer">
                 <button class="btn btn-outline btn-sm" onclick="closeBcUserDrawer()">关闭</button>
               </div>
-              <button type="button" class="us-fab" onclick="openUsDetail('US-002')" title="查看本抽屉用户故事说明">📋 US-002 说明</button>
+              <button type="button" class="us-fab" data-us="US-002" title="按住可拖动，点击查看本抽屉用户故事说明">📋 US-002 说明 · 用户列表抽屉与搜索</button>
             </div>
           </div>
 
@@ -318,7 +318,7 @@
                 <button class="btn btn-outline btn-sm" onclick="closeBatchAssignModal()">取消</button>
                 <button class="btn btn-primary btn-sm" onclick="submitBatchAssign()">确定</button>
               </div>
-              <button type="button" class="us-fab" onclick="openUsDetail('US-005')" title="查看本弹框用户故事说明">📋 US-005 说明</button>
+              <button type="button" class="us-fab" data-us="US-005" title="按住可拖动，点击查看本弹框用户故事说明">📋 US-005 说明 · 批量分配 TikTok 账号</button>
             </div>
           </div>
 
@@ -371,7 +371,7 @@
               <div class="drawer-footer">
                 <button class="btn btn-outline btn-sm" onclick="closeBcTtDrawer()">关闭</button>
               </div>
-              <button type="button" class="us-fab" onclick="openUsDetail('US-006')" title="查看本抽屉用户故事说明">📋 US-006 说明</button>
+              <button type="button" class="us-fab" data-us="US-006" title="按住可拖动，点击查看本抽屉用户故事说明">📋 US-006 说明 · TikTok 账号列表抽屉与搜索</button>
             </div>
           </div>
 
@@ -425,7 +425,7 @@
               <div class="drawer-footer">
                 <button class="btn btn-outline btn-sm" onclick="closeUserTtDrawer()">关闭</button>
               </div>
-              <button type="button" class="us-fab" onclick="openUsDetail('US-004')" title="查看本抽屉用户故事说明">📋 US-004 说明</button>
+              <button type="button" class="us-fab" data-us="US-004" title="按住可拖动，点击查看本抽屉用户故事说明">📋 US-004 说明 · 用户已分配 TikTok 账号抽屉</button>
             </div>
           </div>
 
@@ -504,7 +504,7 @@
                 <button id="add-tt-submit-btn" class="btn btn-primary btn-sm" onclick="submitAddTtNew()" style="display:none;">确定</button>
                 <button id="add-tt-close-btn" class="btn btn-outline btn-sm" onclick="closeAddTtModal()" style="display:none;">关闭</button>
               </div>
-              <button type="button" class="us-fab" id="add-tt-us-fab" onclick="openAddTtUsDetail()" title="查看本弹框用户故事说明（按添加方式切换 US-007 / US-008）">📋 US-007 说明</button>
+              <button type="button" class="us-fab" id="add-tt-us-fab" data-us="add-tt" title="按住可拖动，点击查看本弹框用户故事说明（按添加方式切换 US-007 / US-008）">📋 US-007 说明 · 添加 TikTok 账号（新建方式）</button>
             </div>
           </div>
 
@@ -820,7 +820,7 @@
         cursor: grabbing;
         box-shadow: 0 6px 16px rgba(29, 78, 216, 0.55);
       }
-      /* ===== 抽屉/弹框内：单个 US 悬浮说明按钮 ===== */
+      /* ===== 抽屉/弹框内：单个 US 悬浮说明按钮（配色与「📋 需求说明」按钮一致，可拖动） ===== */
       .us-fab-host { position: relative; }
       .us-fab {
         position: absolute;
@@ -832,17 +832,23 @@
         gap: 5px;
         padding: 6px 12px;
         font-size: 12px;
-        color: #1d4ed8;
-        background: #eff4ff;
-        border: 1px solid #b2ccff;
+        color: #fff;
+        background: #1d4ed8;
+        border: 1px solid #1d4ed8;
         border-radius: 16px;
         cursor: pointer;
+        box-shadow: 0 2px 8px rgba(29, 78, 216, 0.35);
         transition: background 0.15s, box-shadow 0.15s;
+        touch-action: none;
         user-select: none;
       }
       .us-fab:hover {
-        background: #dce7fd;
-        box-shadow: 0 2px 8px rgba(29, 78, 216, 0.25);
+        background: #1e40af;
+        box-shadow: 0 4px 12px rgba(29, 78, 216, 0.45);
+      }
+      .us-fab.dragging {
+        cursor: grabbing;
+        box-shadow: 0 6px 16px rgba(29, 78, 216, 0.55);
       }
       /* 主页面 US-001：固定悬浮，叠在「📋 需求说明」按钮上方 */
       .us-fab-page {
@@ -851,16 +857,8 @@
         right: 20px;
         bottom: 66px;
         z-index: 1300;
-        color: #fff;
-        background: #1d4ed8;
-        border: 1px solid #1d4ed8;
         border-radius: 20px;
         padding: 7px 13px;
-        box-shadow: 0 2px 8px rgba(29, 78, 216, 0.35);
-      }
-      .us-fab-page:hover {
-        background: #1e40af;
-        box-shadow: 0 4px 12px rgba(29, 78, 216, 0.45);
       }
       /* ===== 单个 US 详情面板（悬浮按钮点击后展开） ===== */
       .us-detail-panel {
@@ -2272,15 +2270,22 @@
       function updateAddTtUsFab() {
         var fab = document.getElementById('add-tt-us-fab');
         if (!fab) return;
-        fab.textContent = '📋 ' + (addTtMode === 'link' ? 'US-008' : 'US-007') + ' 说明';
+        var id = addTtMode === 'link' ? 'US-008' : 'US-007';
+        var s = findPrdStory(id);
+        fab.textContent = '📋 ' + id + ' 说明' + (s ? ' · ' + s.title : '');
       }
       function openAddTtUsDetail() {
         openUsDetail(addTtMode === 'link' ? 'US-008' : 'US-007');
       }
 
-      /* ===== 复制完整交互需求说明链接 ===== */
+      /* ===== 复制需求说明页面链接（独立的需求文档页面，而非商务中心页面） ===== */
+      var PRD_PAGE_URL = '../output/prd-doc-fix-20260902/stage2/formatted-business-report.html';
       function prdShareLink() {
-        return location.href.split('#')[0] + '#交互需求说明';
+        try {
+          return new URL(PRD_PAGE_URL, location.href).href;
+        } catch (e) {
+          return PRD_PAGE_URL;
+        }
       }
       function fallbackCopyText(text) {
         var ta = document.createElement('textarea');
@@ -2304,7 +2309,7 @@
         }
         function manualCopy() {
           /* 自动复制均失败（如浏览器权限限制）时，提供手动复制入口 */
-          window.prompt('自动复制失败，请手动复制完整交互需求说明链接：', link);
+          window.prompt('自动复制失败，请手动复制需求说明页面链接：', link);
         }
         if (navigator.clipboard && navigator.clipboard.writeText) {
           navigator.clipboard.writeText(link).then(function () { finish(true); }, function () {
@@ -2329,10 +2334,10 @@
       <div class="prd-panel-header" id="prd-panel-header" title="按住此处可拖动面板，双击可全屏">
         <div>
           <div class="prd-panel-title">商务中心 · 交互需求说明</div>
-          <div class="prd-panel-sub">简洁版 PRD（8 个用户故事 · 展开查看筛选项/表格字段/数据来源/数据流转 · 按住标题栏可拖动，双击或按钮可全屏 · 「复制链接」可分享本说明）</div>
+          <div class="prd-panel-sub">简洁版 PRD（8 个用户故事 · 展开查看筛选项/表格字段/数据来源/数据流转 · 按住标题栏可拖动，双击或按钮可全屏 · 「复制链接」复制需求说明页面链接）</div>
         </div>
         <div class="prd-panel-actions">
-          <button type="button" class="prd-panel-btn" id="prd-copy-link-btn" onclick="copyPrdLink()" title="复制完整交互需求说明的链接，他人打开后将自动展开本说明">复制链接</button>
+          <button type="button" class="prd-panel-btn" id="prd-copy-link-btn" onclick="copyPrdLink()" title="复制需求说明页面（商务中心页面需求文档）的链接">复制链接</button>
           <button type="button" class="prd-panel-btn" id="prd-fullscreen-btn" title="全屏查看">全屏</button>
           <button type="button" class="prd-panel-close" onclick="closePrdPanel()" title="关闭">×</button>
         </div>
@@ -2340,7 +2345,7 @@
       <div class="prd-panel-body" id="prd-panel-body"></div>
     </aside>
     <button type="button" id="prd-float-btn" class="prd-float-btn" title="按住可拖动，点击打开需求说明">📋 需求说明</button>
-    <button type="button" class="us-fab us-fab-page" onclick="openUsDetail('US-001')" title="查看本页面（商务中心列表）用户故事说明">📋 US-001 说明</button>
+    <button type="button" class="us-fab us-fab-page" data-us="US-001" title="按住可拖动，点击查看本页面（商务中心列表）用户故事说明">📋 US-001 说明 · 商务中心列表查询与展示</button>
     <div id="prd-img-viewer" class="prd-img-viewer" role="dialog" aria-label="图片预览">
       <div class="prd-img-viewer-tip">点击任意位置或按 Esc 关闭</div>
       <img id="prd-img-viewer-img" src="" alt="" />
@@ -2349,7 +2354,7 @@
     <!-- ===== 单个用户故事（US）详情面板：抽屉/弹框/页面内悬浮按钮点击后展开 ===== -->
     <div id="us-detail-overlay" class="prd-overlay"></div>
     <aside id="us-detail-panel" class="us-detail-panel" role="dialog" aria-label="用户故事说明">
-      <div class="us-detail-header">
+      <div class="us-detail-header" id="us-detail-header" title="按住此处可拖动面板">
         <div class="us-detail-title" id="us-detail-title"></div>
         <button type="button" class="prd-panel-btn" onclick="openFullPrdFromUs()" title="打开完整交互需求说明">完整说明</button>
         <button type="button" class="prd-panel-close" onclick="closeUsDetail()" title="关闭">×</button>
@@ -2373,6 +2378,100 @@
         document.addEventListener('keydown', function (e) {
           if (e.key === 'Escape' && document.getElementById('us-detail-panel').classList.contains('open')) closeUsDetail();
         });
+
+        /* ===== 单个 US 悬浮按钮：可拖动 + 点击打开（位移小于阈值视为点击） ===== */
+        function triggerUsFab(btn) {
+          var us = btn.getAttribute('data-us');
+          if (!us) return;
+          if (us === 'add-tt') openAddTtUsDetail();
+          else openUsDetail(us);
+        }
+        function makeUsFabDraggable(btn) {
+          var st = { active: false, moved: false, dx: 0, dy: 0, sx: 0, sy: 0 };
+          btn.addEventListener('pointerdown', function (e) {
+            var rect = btn.getBoundingClientRect();
+            st.active = true;
+            st.moved = false;
+            st.sx = e.clientX;
+            st.sy = e.clientY;
+            st.dx = e.clientX - rect.left;
+            st.dy = e.clientY - rect.top;
+            try { btn.setPointerCapture(e.pointerId); } catch (err) { /* 忽略不支持的情况 */ }
+            e.preventDefault();
+          });
+          btn.addEventListener('pointermove', function (e) {
+            if (!st.active) return;
+            if (!st.moved && Math.abs(e.clientX - st.sx) < 5 && Math.abs(e.clientY - st.sy) < 5) return;
+            st.moved = true;
+            btn.classList.add('dragging');
+            var w = btn.offsetWidth;
+            var h = btn.offsetHeight;
+            var host = btn.closest('.us-fab-host');
+            if (btn.classList.contains('us-fab-page') || !host) {
+              /* 主页面固定悬浮按钮：整个视口内拖动 */
+              var left = Math.min(Math.max(0, e.clientX - st.dx), Math.max(0, window.innerWidth - w));
+              var top = Math.min(Math.max(0, e.clientY - st.dy), Math.max(0, window.innerHeight - h));
+              btn.style.right = 'auto';
+              btn.style.bottom = 'auto';
+              btn.style.left = left + 'px';
+              btn.style.top = top + 'px';
+            } else {
+              /* 抽屉/弹框内按钮：宿主卡片范围内拖动（卡片 overflow:hidden 会裁剪超出部分） */
+              var hr = host.getBoundingClientRect();
+              var left2 = Math.min(Math.max(0, e.clientX - st.dx - hr.left), Math.max(0, hr.width - w));
+              var top2 = Math.min(Math.max(0, e.clientY - st.dy - hr.top), Math.max(0, hr.height - h));
+              btn.style.bottom = 'auto';
+              btn.style.left = left2 + 'px';
+              btn.style.top = top2 + 'px';
+            }
+          });
+          function endDrag() {
+            if (!st.active) return;
+            st.active = false;
+            btn.classList.remove('dragging');
+            if (!st.moved) triggerUsFab(btn);
+          }
+          btn.addEventListener('pointerup', endDrag);
+          btn.addEventListener('pointercancel', function () { st.active = false; btn.classList.remove('dragging'); });
+          /* 键盘可达性：聚焦后回车/空格打开 */
+          btn.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); triggerUsFab(btn); }
+          });
+        }
+        Array.prototype.forEach.call(document.querySelectorAll('.us-fab'), makeUsFabDraggable);
+
+        /* ===== 单个 US 详情面板：按住标题栏拖动 ===== */
+        var usPanel = document.getElementById('us-detail-panel');
+        var usHeader = document.getElementById('us-detail-header');
+        var usDrag = { active: false, dx: 0, dy: 0 };
+        usHeader.addEventListener('pointerdown', function (e) {
+          if (e.target.closest('button')) return;
+          var rect = usPanel.getBoundingClientRect();
+          usDrag.active = true;
+          usDrag.dx = e.clientX - rect.left;
+          usDrag.dy = e.clientY - rect.top;
+          usPanel.style.transition = 'none';
+          usPanel.style.right = 'auto';
+          usPanel.style.left = rect.left + 'px';
+          usPanel.style.top = rect.top + 'px';
+          try { usHeader.setPointerCapture(e.pointerId); } catch (err) { /* 忽略不支持的情况 */ }
+          e.preventDefault();
+        });
+        usHeader.addEventListener('pointermove', function (e) {
+          if (!usDrag.active) return;
+          var w = usPanel.offsetWidth;
+          var left = Math.min(Math.max(0, e.clientX - usDrag.dx), Math.max(0, window.innerWidth - w));
+          var top = Math.min(Math.max(0, e.clientY - usDrag.dy), Math.max(0, window.innerHeight - 44));
+          usPanel.style.left = left + 'px';
+          usPanel.style.top = top + 'px';
+        });
+        function endUsPanelDrag() {
+          if (!usDrag.active) return;
+          usDrag.active = false;
+          usPanel.style.transition = '';
+        }
+        usHeader.addEventListener('pointerup', endUsPanelDrag);
+        usHeader.addEventListener('pointercancel', endUsPanelDrag);
 
         /* 通过分享链接打开时（#交互需求说明），自动展开完整交互需求说明 */
         if (decodeURIComponent(location.hash || '') === '#交互需求说明') {
