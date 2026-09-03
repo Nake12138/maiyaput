@@ -1669,6 +1669,99 @@
         }
       }
 
+      /* ===== 自定义素材方案：条件行控件按指标类型动态渲染 ===== */
+      var METRIC_OPTIONS = [
+        { value: 'cost', label: '素材消耗' },
+        { value: 'conversion', label: '素材消耗转化数' },
+        { value: 'quantity', label: '素材数量' },
+        { value: 'create-time', label: '素材创建时间' },
+        { value: 'folder', label: '素材文件夹' },
+        { value: 'duration', label: '素材时长' },
+        { value: 'sort', label: '素材排序' }
+      ];
+      var FOLDER_OPTIONS = ['爆款素材', '新剧首发', '长线素材', '待测试素材', '已淘汰素材', '节日素材'];
+
+      function metricOptionsHtml(selected) {
+        return METRIC_OPTIONS.map(function (m) {
+          return '<option value="' + m.value + '"' + (m.value === selected ? ' selected' : '') + '>' + m.label + '</option>';
+        }).join('');
+      }
+
+      function opSelectHtml() {
+        return '<select class="form-select condition-op" style="width: 80px;" onchange="onConditionOpChange(this)">' +
+          '<option selected>介于</option><option>>=</option><option><=</option></select>';
+      }
+
+      /* 按指标类型渲染条件行右侧控件区 */
+      function renderConditionControls(row) {
+        var typeSelect = row.querySelector('.condition-type');
+        var ctrl = row.querySelector('.condition-controls');
+        if (!typeSelect || !ctrl) return;
+        var type = typeSelect.value;
+        var html = '';
+        if (type === 'cost' || type === 'conversion') {
+          /* 消耗类：时间窗口 + 操作符 + 数值/区间 */
+          html += '<select class="form-select" style="width: 90px;">' +
+            '<option selected>近1天</option><option>近3天</option><option>近7天</option><option>近15天</option><option>近30天</option><option>累计</option>' +
+            '</select>';
+          html += opSelectHtml();
+          html += '<input type="text" class="form-input condition-value-1" placeholder="请输入" style="width: 90px;" oninput="sanitizeIntInput(this)" />';
+          html += '<span class="condition-sep">至</span>';
+          html += '<input type="text" class="form-input condition-value-2" placeholder="请输入" style="width: 90px;" oninput="sanitizeIntInput(this)" />';
+        } else if (type === 'quantity') {
+          /* 素材数量：单输入框，>=0 整数 */
+          html += '<input type="text" class="form-input condition-value-1" placeholder="请输入（≥0 整数）" style="width: 150px;" oninput="sanitizeIntInput(this)" />';
+        } else if (type === 'create-time') {
+          /* 素材创建时间：时间窗口；选【自定义】时显示日期选择器（闭区间，最长不超过180天） */
+          html += '<select class="form-select" style="width: 90px;" onchange="onCreateTimeWindowChange(this)">' +
+            '<option selected>近1天</option><option>近3天</option><option>近7天</option><option>近15天</option><option>近30天</option><option>自定义</option>' +
+            '</select>';
+          html += '<span class="condition-date-range" style="display: none;">' +
+            '<input type="date" class="form-input condition-date condition-date-start" style="width: 140px;" onchange="onConditionDateChange(this)" />' +
+            '<span class="condition-sep">至</span>' +
+            '<input type="date" class="form-input condition-date condition-date-end" style="width: 140px;" onchange="onConditionDateChange(this)" />' +
+            '<span class="condition-error-msg" style="display: none;"></span>' +
+            '</span>';
+        } else if (type === 'folder') {
+          /* 素材文件夹：下拉多选 */
+          html += '<div class="folder-multiselect">' +
+            '<button type="button" class="form-select folder-toggle" onclick="toggleFolderDropdown(this)">' +
+            '<span class="folder-toggle-text">请选择文件夹</span><span class="folder-caret">&#9662;</span></button>' +
+            '<div class="folder-dropdown">' +
+            FOLDER_OPTIONS.map(function (f) {
+              return '<label class="folder-option"><input type="checkbox" data-label="' + f + '" onchange="onFolderCheckChange(this)" />' + f + '</label>';
+            }).join('') +
+            '</div></div>';
+        } else {
+          /* 素材时长 / 素材排序：操作符 + 数值/区间（左框不能大于右框，>=0 整数） */
+          html += opSelectHtml();
+          html += '<input type="text" class="form-input condition-value-1" placeholder="请输入（≥0 整数）" style="width: 120px;" oninput="sanitizeIntInput(this)" />';
+          html += '<span class="condition-sep">至</span>';
+          html += '<input type="text" class="form-input condition-value-2" placeholder="请输入（≥0 整数）" style="width: 120px;" oninput="sanitizeIntInput(this)" />';
+          html += '<span class="condition-range-error" style="display: none;">左框不能大于右框</span>';
+        }
+        ctrl.innerHTML = html;
+      }
+
+      function onConditionTypeChange(select) {
+        var row = select.closest('.condition-row');
+        if (row) renderConditionControls(row);
+      }
+
+      function createConditionRow(metric) {
+        var row = document.createElement('div');
+        row.className = 'condition-row';
+        row.innerHTML =
+          '<select class="form-select condition-type" style="width: 140px;" onchange="onConditionTypeChange(this)">' +
+          metricOptionsHtml(metric) + '</select>' +
+          '<div class="condition-controls"></div>' +
+          '<div class="condition-actions">' +
+          '<button type="button" class="condition-btn remove" onclick="removeCondition(this)" title="删除">-</button>' +
+          '</div>';
+        renderConditionControls(row);
+        return row;
+      }
+
       /* 操作符切换：>= / <= 时只显示一个输入框，介于时显示“至”与两个输入框 */
       function onConditionOpChange(select) {
         var row = select.closest('.condition-row');
@@ -1678,93 +1771,172 @@
         var second = row.querySelector('.condition-value-2');
         if (sep) sep.style.display = isBetween ? '' : 'none';
         if (second) second.style.display = isBetween ? '' : 'none';
+        validateRangeOrder(row);
       }
 
-      function addCondition(schemeIndex) {
-        var body = document.getElementById('scheme-body-' + schemeIndex);
+      /* 整数输入：仅允许 >=0 的整数 */
+      function sanitizeIntInput(input) {
+        input.value = input.value.replace(/[^0-9]/g, '');
+        validateRangeOrder(input.closest('.condition-row'));
+      }
+
+      /* 区间顺序校验：介于时左框不能大于右框（右框隐藏时不校验） */
+      function validateRangeOrder(row) {
+        if (!row) return;
+        var msg = row.querySelector('.condition-range-error');
+        if (!msg) return;
+        var op = row.querySelector('.condition-op');
+        var v1 = row.querySelector('.condition-value-1');
+        var v2 = row.querySelector('.condition-value-2');
+        var invalid = false;
+        var isBetween = !op || op.value === '介于';
+        if (isBetween && v1 && v2 && v1.value !== '' && v2.value !== '' && Number(v1.value) > Number(v2.value)) {
+          invalid = true;
+        }
+        if (v1) v1.classList.toggle('input-error', invalid);
+        if (v2) v2.classList.toggle('input-error', invalid);
+        msg.style.display = invalid ? '' : 'none';
+      }
+
+      /* 素材创建时间：时间窗口切换，选【自定义】时显示日期区间 */
+      function onCreateTimeWindowChange(select) {
+        var row = select.closest('.condition-row');
+        if (!row) return;
+        var range = row.querySelector('.condition-date-range');
+        if (range) range.style.display = select.value === '自定义' ? 'inline-flex' : 'none';
+      }
+
+      /* 素材创建时间：日期区间校验（闭区间，最长不超过180天） */
+      function onConditionDateChange(input) {
+        var wrap = input.closest('.condition-date-range');
+        if (!wrap) return;
+        var sEl = wrap.querySelector('.condition-date-start');
+        var eEl = wrap.querySelector('.condition-date-end');
+        var msg = wrap.querySelector('.condition-error-msg');
+        var s = sEl.value;
+        var e = eEl.value;
+        if (s) {
+          var max = new Date(new Date(s).getTime() + 180 * 86400000);
+          eEl.min = s;
+          eEl.max = max.toISOString().slice(0, 10);
+        }
+        var invalid = false;
+        var text = '';
+        if (s && e) {
+          var days = Math.round((new Date(e) - new Date(s)) / 86400000);
+          if (days < 0) {
+            invalid = true;
+            text = '结束日期不能早于开始日期';
+          } else if (days > 180) {
+            invalid = true;
+            text = '所选区间不能超过180天';
+          }
+        }
+        sEl.classList.toggle('input-error', invalid);
+        eEl.classList.toggle('input-error', invalid);
+        msg.textContent = text;
+        msg.style.display = (invalid && s && e) ? '' : 'none';
+      }
+
+      /* 素材文件夹：下拉多选 */
+      function toggleFolderDropdown(btn) {
+        var dd = btn.closest('.folder-multiselect').querySelector('.folder-dropdown');
+        var wasOpen = dd.classList.contains('open');
+        closeFolderDropdowns();
+        if (!wasOpen) dd.classList.add('open');
+      }
+
+      function closeFolderDropdowns() {
+        document.querySelectorAll('.folder-dropdown.open').forEach(function (d) { d.classList.remove('open'); });
+      }
+
+      function onFolderCheckChange(cb) {
+        var ms = cb.closest('.folder-multiselect');
+        var text = ms.querySelector('.folder-toggle-text');
+        var names = [];
+        ms.querySelectorAll('.folder-option input:checked').forEach(function (c) { names.push(c.getAttribute('data-label')); });
+        text.textContent = names.length ? names.join('、') : '请选择文件夹';
+      }
+
+      document.addEventListener('click', function (e) {
+        if (!e.target.closest('.folder-multiselect')) closeFolderDropdowns();
+      });
+
+      function addCondition(btn) {
+        var body = btn.closest('.scheme-body');
         if (!body) return;
-        var row = document.createElement('div');
-        row.className = 'condition-row';
-        row.innerHTML = '<select class="form-select condition-type" style="width: 140px;">' +
-          '<option value="cost" selected>素材消耗</option>' +
-          '<option value="conversion">素材消耗转化数</option>' +
-          '<option value="quantity">素材数量</option>' +
-          '<option value="create-time">素材创建时间</option>' +
-          '<option value="folder">素材文件夹</option>' +
-          '<option value="duration">素材时长</option>' +
-          '<option value="sort">素材排序</option>' +
-          '</select>' +
-          '<select class="form-select" style="width: 90px;">' +
-          '<option selected>近1天</option><option>近3天</option><option>近7天</option><option>近15天</option><option>近30天</option><option>累计</option>' +
-          '</select>' +
-          '<select class="form-select condition-op" style="width: 80px;" onchange="onConditionOpChange(this)">' +
-          '<option selected>介于</option><option>>=</option><option><=</option>' +
-          '</select>' +
-          '<input type="text" class="form-input condition-value-1" placeholder="请输入" style="width: 90px;" />' +
-          '<span class="condition-sep">至</span>' +
-          '<input type="text" class="form-input condition-value-2" placeholder="请输入" style="width: 90px;" />' +
-          '<div class="condition-actions">' +
-          '<button type="button" class="condition-btn add" onclick="addCondition(' + schemeIndex + ')" title="添加条件">+</button>' +
-          '<button type="button" class="condition-btn remove" onclick="removeCondition(this)" title="删除">-</button>' +
-          '</div>';
-        // 把旧最后一行的添加按钮移除，避免重复
-        var oldAddBtns = body.querySelectorAll('.condition-btn.add');
-        oldAddBtns.forEach(function (btn) { btn.remove(); });
-        body.appendChild(row);
+        body.appendChild(createConditionRow('cost'));
+        refreshConditionButtons(body);
       }
 
       function removeCondition(btn) {
         var row = btn.closest('.condition-row');
         if (!row) return;
-        var body = row.parentElement;
-        var allRows = body.querySelectorAll('.condition-row');
-        if (allRows.length <= 1) {
+        var body = row.closest('.scheme-body');
+        if (body.querySelectorAll('.condition-row').length <= 1) {
           alert('每个方案至少保留一个条件');
           return;
         }
         row.remove();
-        // 确保最后一行仍有添加按钮
-        var remainingRows = body.querySelectorAll('.condition-row');
-        var lastRow = remainingRows[remainingRows.length - 1];
-        if (lastRow && !lastRow.querySelector('.condition-btn.add')) {
-          var actions = lastRow.querySelector('.condition-actions');
-          if (actions) {
-            var schemeIndex = body.id.replace('scheme-body-', '');
-            var addBtn = document.createElement('button');
-            addBtn.type = 'button';
-            addBtn.className = 'condition-btn add';
-            addBtn.title = '添加条件';
-            addBtn.textContent = '+';
-            addBtn.setAttribute('onclick', 'addCondition(' + schemeIndex + ')');
-            actions.insertBefore(addBtn, actions.firstChild);
-          }
-        }
+        refreshConditionButtons(body);
+      }
+
+      /* 仅最后一行保留“添加条件”按钮，避免重复 */
+      function refreshConditionButtons(body) {
+        body.querySelectorAll('.condition-btn.add').forEach(function (b) { b.remove(); });
+        var rows = body.querySelectorAll('.condition-row');
+        var last = rows[rows.length - 1];
+        if (!last) return;
+        var actions = last.querySelector('.condition-actions');
+        if (!actions) return;
+        var addBtn = document.createElement('button');
+        addBtn.type = 'button';
+        addBtn.className = 'condition-btn add';
+        addBtn.title = '添加条件';
+        addBtn.textContent = '+';
+        addBtn.onclick = function () { addCondition(this); };
+        actions.insertBefore(addBtn, actions.firstChild);
       }
 
       function removeScheme(schemeIndex) {
         var card = document.getElementById('scheme-card-' + schemeIndex);
+        if (card) card.style.display = 'none';
         var divider = document.getElementById('scheme-or-divider');
         var addRow = document.getElementById('scheme-add-row');
-        if (card) card.remove();
         if (divider) divider.style.display = 'none';
         if (addRow) addRow.style.display = 'flex';
       }
 
       function addScheme() {
-        var addRow = document.getElementById('scheme-add-row');
-        if (addRow) addRow.style.display = 'none';
-
-        // 重新创建方案2（原型演示：最多2个方案）
-        var schemesContainer = document.querySelector('.custom-schemes');
+        var card = document.getElementById('scheme-card-2');
+        if (!card) return;
+        card.style.display = 'block';
         var divider = document.getElementById('scheme-or-divider');
         if (divider) divider.style.display = 'block';
-
-        var existingCard = document.getElementById('scheme-card-2');
-        if (existingCard) {
-          existingCard.style.display = 'block';
-          return;
+        var addRow = document.getElementById('scheme-add-row');
+        if (addRow) addRow.style.display = 'none';
+        /* 若方案2条件行为空则重建 */
+        var body = document.getElementById('scheme-body-2');
+        if (body && body.querySelectorAll('.condition-row').length === 0) {
+          body.appendChild(createConditionRow('cost'));
+          refreshConditionButtons(body);
         }
       }
+
+      /* 初始化：按默认指标渲染各方案条件行（覆盖静态占位行） */
+      (function initConditionRows() {
+        var defaults = {
+          'scheme-body-1': ['cost', 'conversion'],
+          'scheme-body-2': ['cost', 'create-time']
+        };
+        Object.keys(defaults).forEach(function (id) {
+          var body = document.getElementById(id);
+          if (!body) return;
+          body.innerHTML = '';
+          defaults[id].forEach(function (m) { body.appendChild(createConditionRow(m)); });
+          refreshConditionButtons(body);
+        });
+      })();
 
       /* ===== 抽屉内分段选择器交互 ===== */
       document.querySelectorAll('#drawer-overseas-new-task .segmented-control').forEach(function (group) {
