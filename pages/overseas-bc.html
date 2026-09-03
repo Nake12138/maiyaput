@@ -166,6 +166,7 @@
 
             <!-- BC Table -->
             <div class="table-card">
+              <div class="bc-sync-bar">数据每 <b>30</b> 分钟自动更新一次 · 上次更新：<span id="bc-last-sync">--:--:--</span></div>
               <div class="table-wrapper">
                 <table class="data-table bc-list-table">
                   <colgroup>
@@ -622,6 +623,26 @@
       .bc-list-table {
         table-layout: fixed;
         width: 100%;
+      }
+
+      /* 商务中心列表同步提示：数据每 30 分钟自动更新一次 */
+      .bc-sync-bar {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 4px;
+        padding: 10px 14px 0;
+        font-size: 12px;
+        color: var(--color-text-tertiary, #98a2b3);
+        line-height: 1;
+      }
+      .bc-sync-bar b {
+        color: var(--color-info, #1d4ed8);
+        font-weight: 600;
+      }
+      .bc-sync-bar #bc-last-sync {
+        color: #344054;
+        font-variant-numeric: tabular-nums;
       }
 
       /* 分配 TikTok 账号弹框需在用户列表抽屉之上显示（修正层级错乱） */
@@ -1432,6 +1453,25 @@
         renderBcList();
       }
 
+      /* ===== 商务中心列表数据更新：每 30 分钟自动刷新一次 ===== */
+      var BC_SYNC_INTERVAL = 30 * 60 * 1000; /* 30 分钟 */
+
+      function bcSyncStamp() {
+        var el = document.getElementById('bc-last-sync');
+        if (!el) return;
+        var d = new Date();
+        var p = function (n) { return (n < 10 ? '0' : '') + n; };
+        el.textContent = p(d.getHours()) + ':' + p(d.getMinutes()) + ':' + p(d.getSeconds());
+      }
+
+      function bcAutoSync() {
+        bcSyncStamp();
+        renderBcList(); /* 原型：重新渲染列表（真实环境此处应重新拉取商务中心列表接口） */
+      }
+
+      setInterval(bcAutoSync, BC_SYNC_INTERVAL);
+      bcSyncStamp();
+
       /* ===== 用户数量：点击打开用户列表抽屉 ===== */
       var bcUserKeyword = '';
 
@@ -2010,8 +2050,8 @@
           desc: '作为投放运营，我想要查看并按名称搜索商务中心列表，以便快速定位目标商务中心。',
           filter: '名称筛选：单行文本输入框（占位「请输入商务中心名称」）+「查询」/「重置」按钮。',
           fields: '商务中心名称（文本，BC 名称，来源接口返回）／用户数量（数字，可点击链接，打开用户列表抽屉）／TikTok 账号（数字，可点击链接，打开 TikTok 账号列表抽屉）／操作（按钮组：添加 TikTok 账号、刷新）；表格下方提供分页条（总数、页码、每页条数、跳页）。',
-          source: '主表数据 ← 接口「获取商务中心列表」（<a href="https://business-api.tiktok.com/portal/docs/get-business-centers/v1.3" target="_blank">get-business-centers 官方文档</a>）。',
-          flow: '页面加载 → 调用「获取商务中心列表」→ 返回 BC 列表（名称/用户数/账号数）→ 渲染主表；点击「用户数量」/「TikTok 账号」携带 BC ID 打开对应抽屉；点击「刷新」重新拉取该 BC 数据。',
+          source: '主表数据 ← 接口「获取商务中心列表」（<a href="https://business-api.tiktok.com/portal/docs/get-business-centers/v1.3" target="_blank">get-business-centers 官方文档</a>）；列表数据每 30 分钟自动更新一次（30 分钟定时轮询刷新，也可点击「刷新」手动同步）。',
+          flow: '页面加载 → 调用「获取商务中心列表」→ 返回 BC 列表（名称/用户数/账号数）→ 渲染主表；之后每 30 分钟自动重新拉取一次，保持列表数据最新；点击「用户数量」/「TikTok 账号」携带 BC ID 打开对应抽屉；点击「刷新」立即重新拉取该 BC 数据。',
           ac: [
             '页面加载后展示 BC 列表，列为：商务中心名称 / 用户数量 / TikTok 账号 / 操作',
             '支持按商务中心名称模糊查询与重置；点击「查询」后才执行列表查询，输入过程中不触发查询',
