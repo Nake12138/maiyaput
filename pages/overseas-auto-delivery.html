@@ -1181,14 +1181,14 @@
                               <option>近30天</option>
                               <option>累计</option>
                             </select>
-                            <select class="form-select" style="width: 80px;">
+                            <select class="form-select condition-op" style="width: 80px;" onchange="onConditionOpChange(this)">
                               <option selected>介于</option>
                               <option>>=</option>
                               <option><=</option>
                             </select>
-                            <input type="text" class="form-input" placeholder="请输入" style="width: 90px;" />
+                            <input type="text" class="form-input condition-value-1" placeholder="请输入" style="width: 90px;" />
                             <span class="condition-sep">至</span>
-                            <input type="text" class="form-input" placeholder="请输入" style="width: 90px;" />
+                            <input type="text" class="form-input condition-value-2" placeholder="请输入" style="width: 90px;" />
                             <div class="condition-actions">
                               <button type="button" class="condition-btn remove" onclick="removeCondition(this)" title="删除">-</button>
                             </div>
@@ -1211,14 +1211,14 @@
                               <option>近30天</option>
                               <option selected>累计</option>
                             </select>
-                            <select class="form-select" style="width: 80px;">
+                            <select class="form-select condition-op" style="width: 80px;" onchange="onConditionOpChange(this)">
                               <option selected>介于</option>
                               <option>>=</option>
                               <option><=</option>
                             </select>
-                            <input type="text" class="form-input" placeholder="请输入" style="width: 90px;" />
+                            <input type="text" class="form-input condition-value-1" placeholder="请输入" style="width: 90px;" />
                             <span class="condition-sep">至</span>
-                            <input type="text" class="form-input" placeholder="请输入" style="width: 90px;" />
+                            <input type="text" class="form-input condition-value-2" placeholder="请输入" style="width: 90px;" />
                             <div class="condition-actions">
                               <button type="button" class="condition-btn add" onclick="addCondition(1)" title="添加条件">+</button>
                               <button type="button" class="condition-btn remove" onclick="removeCondition(this)" title="删除">-</button>
@@ -1254,14 +1254,14 @@
                               <option>近30天</option>
                               <option>累计</option>
                             </select>
-                            <select class="form-select" style="width: 80px;">
+                            <select class="form-select condition-op" style="width: 80px;" onchange="onConditionOpChange(this)">
                               <option selected>介于</option>
                               <option>>=</option>
                               <option><=</option>
                             </select>
-                            <input type="text" class="form-input" placeholder="请输入" style="width: 90px;" />
+                            <input type="text" class="form-input condition-value-1" placeholder="请输入" style="width: 90px;" />
                             <span class="condition-sep">至</span>
-                            <input type="text" class="form-input" placeholder="请输入" style="width: 90px;" />
+                            <input type="text" class="form-input condition-value-2" placeholder="请输入" style="width: 90px;" />
                             <div class="condition-actions">
                               <button type="button" class="condition-btn remove" onclick="removeCondition(this)" title="删除">-</button>
                             </div>
@@ -1284,14 +1284,14 @@
                               <option>近30天</option>
                               <option selected>累计</option>
                             </select>
-                            <select class="form-select" style="width: 80px;">
+                            <select class="form-select condition-op" style="width: 80px;" onchange="onConditionOpChange(this)">
                               <option selected>介于</option>
                               <option>>=</option>
                               <option><=</option>
                             </select>
-                            <input type="text" class="form-input" placeholder="请输入" style="width: 90px;" />
+                            <input type="text" class="form-input condition-value-1" placeholder="请输入" style="width: 90px;" />
                             <span class="condition-sep">至</span>
-                            <input type="text" class="form-input" placeholder="请输入" style="width: 90px;" />
+                            <input type="text" class="form-input condition-value-2" placeholder="请输入" style="width: 90px;" />
                             <div class="condition-actions">
                               <button type="button" class="condition-btn remove" onclick="removeCondition(this)" title="删除">-</button>
                             </div>
@@ -1669,6 +1669,17 @@
         }
       }
 
+      /* 操作符切换：>= / <= 时只显示一个输入框，介于时显示“至”与两个输入框 */
+      function onConditionOpChange(select) {
+        var row = select.closest('.condition-row');
+        if (!row) return;
+        var isBetween = select.value === '介于';
+        var sep = row.querySelector('.condition-sep');
+        var second = row.querySelector('.condition-value-2');
+        if (sep) sep.style.display = isBetween ? '' : 'none';
+        if (second) second.style.display = isBetween ? '' : 'none';
+      }
+
       function addCondition(schemeIndex) {
         var body = document.getElementById('scheme-body-' + schemeIndex);
         if (!body) return;
@@ -1686,12 +1697,12 @@
           '<select class="form-select" style="width: 90px;">' +
           '<option selected>近1天</option><option>近3天</option><option>近7天</option><option>近15天</option><option>近30天</option><option>累计</option>' +
           '</select>' +
-          '<select class="form-select" style="width: 80px;">' +
+          '<select class="form-select condition-op" style="width: 80px;" onchange="onConditionOpChange(this)">' +
           '<option selected>介于</option><option>>=</option><option><=</option>' +
           '</select>' +
-          '<input type="text" class="form-input" placeholder="请输入" style="width: 90px;" />' +
+          '<input type="text" class="form-input condition-value-1" placeholder="请输入" style="width: 90px;" />' +
           '<span class="condition-sep">至</span>' +
-          '<input type="text" class="form-input" placeholder="请输入" style="width: 90px;" />' +
+          '<input type="text" class="form-input condition-value-2" placeholder="请输入" style="width: 90px;" />' +
           '<div class="condition-actions">' +
           '<button type="button" class="condition-btn add" onclick="addCondition(' + schemeIndex + ')" title="添加条件">+</button>' +
           '<button type="button" class="condition-btn remove" onclick="removeCondition(this)" title="删除">-</button>' +
