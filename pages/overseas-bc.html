@@ -1450,6 +1450,7 @@
       function closeBcUserDrawer() {
         document.getElementById('bc-user-overlay').classList.remove('open');
         document.getElementById('bc-user-drawer').classList.remove('open');
+        closeUsDetail(); /* 同步关闭 US 说明弹框 */
       }
 
       function searchBcUser() {
@@ -1506,6 +1507,7 @@
         if (e && e.stopPropagation) e.stopPropagation();
         document.getElementById('assign-tt-overlay').classList.remove('open');
         document.getElementById('assign-tt-modal').classList.remove('open');
+        closeUsDetail(); /* 同步关闭 US 说明弹框 */
       }
 
       function searchAssignTt() {
@@ -1602,6 +1604,7 @@
         if (e && e.stopPropagation) e.stopPropagation();
         document.getElementById('batch-assign-overlay').classList.remove('open');
         document.getElementById('batch-assign-modal').classList.remove('open');
+        closeUsDetail(); /* 同步关闭 US 说明弹框 */
       }
 
       function searchBatchAssign() {
@@ -1687,6 +1690,7 @@
       function closeBcTtDrawer() {
         document.getElementById('bc-tt-overlay').classList.remove('open');
         document.getElementById('bc-tt-drawer').classList.remove('open');
+        closeUsDetail(); /* 同步关闭 US 说明弹框 */
       }
 
       function searchBcTt() {
@@ -1750,6 +1754,7 @@
       function closeUserTtDrawer() {
         document.getElementById('user-tt-overlay').classList.remove('open');
         document.getElementById('user-tt-drawer').classList.remove('open');
+        closeUsDetail(); /* 同步关闭 US 说明弹框 */
       }
 
       function searchUserTt() {
@@ -1900,6 +1905,7 @@
       function closeAddTtModal() {
         document.getElementById('add-tt-overlay').classList.remove('open');
         document.getElementById('add-tt-modal').classList.remove('open');
+        closeUsDetail(); /* 同步关闭 US 说明弹框 */
       }
 
       /* 选择添加方式：新建 / 关联，其余字段直接在当前弹框下方展示 */
@@ -2237,10 +2243,17 @@
         return null;
       }
 
+      /* 无遮罩：弹框打开时用户仍可继续点击页面操作；再次点击同一 US 按钮可切换关闭 */
+      var usDetailCurrentId = null;
       function openUsDetail(id) {
         var s = findPrdStory(id);
         var panel = document.getElementById('us-detail-panel');
         if (!s || !panel) return;
+        if (panel.classList.contains('open') && usDetailCurrentId === id) {
+          closeUsDetail();
+          return;
+        }
+        usDetailCurrentId = id;
         document.getElementById('us-detail-title').innerHTML =
           '<span class="prd-story-id">' + s.id + '</span>' +
           '<span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + s.title + '</span>' +
@@ -2249,15 +2262,14 @@
         document.getElementById('us-detail-body').innerHTML =
           '<div class="us-detail-desc">' + s.desc + '</div>' +
           (suppItems ? '<div class="us-detail-supp">' + suppItems + '</div>' : '');
-        document.getElementById('us-detail-overlay').classList.add('open');
         panel.classList.add('open');
       }
 
       function closeUsDetail() {
         var panel = document.getElementById('us-detail-panel');
         if (!panel) return;
-        document.getElementById('us-detail-overlay').classList.remove('open');
         panel.classList.remove('open');
+        usDetailCurrentId = null;
       }
 
       /* 从单个 US 详情跳转到完整交互需求说明 */
@@ -2351,8 +2363,7 @@
       <img id="prd-img-viewer-img" src="" alt="" />
     </div>
 
-    <!-- ===== 单个用户故事（US）详情面板：抽屉/弹框/页面内悬浮按钮点击后展开 ===== -->
-    <div id="us-detail-overlay" class="prd-overlay"></div>
+    <!-- ===== 单个用户故事（US）详情面板：抽屉/弹框/页面内悬浮按钮点击后展开（无遮罩，不影响页面操作） ===== -->
     <aside id="us-detail-panel" class="us-detail-panel" role="dialog" aria-label="用户故事说明">
       <div class="us-detail-header" id="us-detail-header" title="按住此处可拖动面板">
         <div class="us-detail-title" id="us-detail-title"></div>
@@ -2371,10 +2382,7 @@
         });
         renderPrdPanel();
 
-        /* 单个 US 详情面板：点击遮罩或按 Esc 关闭 */
-        document.getElementById('us-detail-overlay').addEventListener('click', function () {
-          closeUsDetail();
-        });
+        /* 单个 US 详情面板：按 Esc 关闭（无遮罩，页面仍可操作；对应抽屉/弹框关闭时同步关闭） */
         document.addEventListener('keydown', function (e) {
           if (e.key === 'Escape' && document.getElementById('us-detail-panel').classList.contains('open')) closeUsDetail();
         });
