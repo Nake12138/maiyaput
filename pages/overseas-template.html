@@ -159,6 +159,7 @@
     <button class="tab active" data-tab="account" onclick="switchTemplateTab('account')">账户包</button>
     <button class="tab" data-tab="copy" onclick="switchTemplateTab('copy')">文案模板</button>
     <button class="tab" data-tab="target" onclick="switchTemplateTab('target')">定向包</button>
+    <button class="tab" data-tab="tiktok" onclick="switchTemplateTab('tiktok')">TikTok账户包</button>
   </div>
 
   <!-- 账户包 -->
@@ -305,6 +306,54 @@
     </div>
   </div>
 
+  <!-- TikTok账户包 -->
+  <div id="template-tab-tiktok" class="template-tab-panel" style="display:none;">
+    <div class="filter-bar">
+      <div class="filter-bar-row">
+        <input type="text" class="filter-input" placeholder="请输入账户包名称/ID" />
+        <select class="filter-select"><option>请选择创建人</option><option>听泉</option><option>魔法七</option><option>橙子</option><option>孤树</option><option>admin</option></select>
+        <div class="filter-actions">
+          <button class="btn btn-primary btn-sm" onclick="searchTemplate('tiktok')">查询</button>
+          <button class="btn btn-outline btn-sm" onclick="resetTemplateFilter('tiktok')">重置</button>
+        </div>
+        <button class="btn btn-primary btn-sm" style="margin-left:auto;" onclick="openTiktokAccountDrawer('add')">新增TikTok账户包</button>
+      </div>
+    </div>
+    <div class="table-card">
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th class="checkbox-col"><input type="checkbox" /></th>
+              <th>ID</th>
+              <th>名称</th>
+              <th>备注</th>
+              <th>TikTok账号数量</th>
+              <th>创建人</th>
+              <th>创建时间</th>
+              <th>更新时间</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="checkbox-col"><input type="checkbox" /></td><td>201</td><td><a href="#" class="link" onclick="openTiktokAccountDrawer('edit','东南亚英语TikTok包')">东南亚英语TikTok包</a></td><td>--</td><td>4</td><td>admin</td><td>2026-09-01 10:22:18</td><td>2026-09-01 10:22:18</td><td><a href="#" class="link" onclick="openTiktokAccountDrawer('copy','东南亚英语TikTok包')">复制</a> <a href="#" class="link" onclick="openTiktokAccountDrawer('edit','东南亚英语TikTok包')">编辑</a> <a href="#" class="link" onclick="deleteTemplateRow(this)">删除</a></td></tr>
+            <tr><td class="checkbox-col"><input type="checkbox" /></td><td>202</td><td><a href="#" class="link" onclick="openTiktokAccountDrawer('edit','欧洲多语言TikTok包')">欧洲多语言TikTok包</a></td><td>--</td><td>3</td><td>admin</td><td>2026-09-02 14:35:42</td><td>2026-09-02 14:35:42</td><td><a href="#" class="link" onclick="openTiktokAccountDrawer('copy','欧洲多语言TikTok包')">复制</a> <a href="#" class="link" onclick="openTiktokAccountDrawer('edit','欧洲多语言TikTok包')">编辑</a> <a href="#" class="link" onclick="deleteTemplateRow(this)">删除</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pagination">
+        <span class="pagination-total">共 2 条</span>
+        <button class="page-btn" disabled>&lt;</button>
+        <button class="page-btn active">1</button>
+        <button class="page-btn" disabled>&gt;</button>
+        <span class="pagination-size">
+          <select class="form-select form-select-sm"><option>10条/页</option><option>20条/页</option><option>50条/页</option></select>
+        </span>
+        <span class="pagination-jumper">跳至 <input type="text" class="form-input form-input-xs" value="1" /> 页</span>
+      </div>
+    </div>
+  </div>
+
   <!-- 账户包 新增/编辑/复制 抽屉 -->
   <div id="template-account-overlay" class="drawer-overlay" onclick="closeAccountDrawer()"></div>
   <div id="template-account-drawer" class="drawer drawer-wide">
@@ -358,6 +407,65 @@
       <div class="drawer-footer">
         <button class="btn btn-outline btn-sm" onclick="closeAccountDrawer()">取消</button>
         <button class="btn btn-primary btn-sm" onclick="closeAccountDrawer()">确定</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TikTok账户包 新增/编辑/复制 抽屉 -->
+  <div id="template-tiktok-overlay" class="drawer-overlay" onclick="closeTiktokAccountDrawer()"></div>
+  <div id="template-tiktok-drawer" class="drawer drawer-wide">
+    <div class="drawer-card">
+      <div class="drawer-header">
+        <span id="template-tiktok-title">新增TikTok账户包</span>
+        <button class="drawer-close" onclick="closeTiktokAccountDrawer()">×</button>
+      </div>
+      <div class="drawer-body">
+        <div class="form-section">
+          <div class="form-row">
+            <div class="form-label required">名称：</div>
+            <div class="form-field form-field-inline" style="width:100%;">
+              <input type="text" id="tiktok-name" class="form-input" placeholder="请输入" style="flex:1;" />
+              <span class="form-counter">0 / 50</span>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-label">备注：</div>
+            <div class="form-field form-field-inline" style="width:100%;">
+              <input type="text" id="tiktok-remark" class="form-input" placeholder="请输入" style="flex:1;" />
+              <span class="form-counter">0 / 100</span>
+            </div>
+          </div>
+          <div class="form-row" style="align-items:flex-start;">
+            <div class="form-label required">账号范围：</div>
+            <div class="form-field" style="flex:1;">
+              <div style="display:flex;gap:8px;margin-bottom:12px;">
+                <button type="button" class="btn btn-info btn-sm">批量添加</button>
+                <select class="form-select" style="width:120px;"><option>账号名称</option><option>语言</option></select>
+                <input type="text" class="form-input" placeholder="请输入" style="flex:1;" />
+                <button type="button" class="btn btn-outline btn-sm">搜索</button>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                <span style="font-size:13px;color:var(--color-text-secondary);">TikTok账号名称</span>
+                <span style="font-size:13px;color:var(--color-text-secondary);">已选：0 <a href="#" class="link">清空</a></span>
+              </div>
+              <div class="table-card" style="border-radius:4px;">
+                <table class="data-table">
+                  <thead><tr><th>TikTok账号名称</th><th>语言</th><th>操作</th></tr></thead>
+                  <tbody>
+                    <tr><td>Sasa ดู</td><td>葡萄牙语</td><td><a href="#" class="link" style="color:var(--color-error);">删除</a></td></tr>
+                    <tr><td>廖廖短剧</td><td>繁体中文</td><td><a href="#" class="link" style="color:var(--color-error);">删除</a></td></tr>
+                    <tr><td>Titi Pendek</td><td>马来西亚语</td><td><a href="#" class="link" style="color:var(--color-error);">删除</a></td></tr>
+                    <tr><td>Yoyo Cortos</td><td>英语</td><td><a href="#" class="link" style="color:var(--color-error);">删除</a></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="drawer-footer">
+        <button class="btn btn-outline btn-sm" onclick="closeTiktokAccountDrawer()">取消</button>
+        <button class="btn btn-primary btn-sm" onclick="closeTiktokAccountDrawer()">确定</button>
       </div>
     </div>
   </div>
@@ -619,6 +727,19 @@
       function closeAccountDrawer() {
         document.getElementById('template-account-overlay').classList.remove('open');
         document.getElementById('template-account-drawer').classList.remove('open');
+      }
+
+      /* TikTok账户包抽屉 */
+      function openTiktokAccountDrawer(mode, name) {
+        var titles = { add: '新增TikTok账户包', edit: '编辑TikTok账户包', copy: '复制TikTok账户包' };
+        document.getElementById('template-tiktok-title').textContent = titles[mode] || '新增TikTok账户包';
+        document.getElementById('tiktok-name').value = (mode === 'edit' || mode === 'copy') ? (name || '') : '';
+        document.getElementById('template-tiktok-overlay').classList.add('open');
+        document.getElementById('template-tiktok-drawer').classList.add('open');
+      }
+      function closeTiktokAccountDrawer() {
+        document.getElementById('template-tiktok-overlay').classList.remove('open');
+        document.getElementById('template-tiktok-drawer').classList.remove('open');
       }
 
       /* 文案弹框 */
