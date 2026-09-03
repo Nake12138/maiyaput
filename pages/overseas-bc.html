@@ -207,7 +207,7 @@
           <!-- 分配 TikTok 账号弹框 -->
           <div id="assign-tt-overlay" class="modal-overlay" onclick="closeAssignTtModal(event)"></div>
           <div id="assign-tt-modal" class="modal">
-            <div class="modal-card" style="width:520px;">
+            <div class="modal-card us-fab-host" style="width:520px;">
               <div class="modal-header">
                 <span id="assign-tt-title">分配 TikTok 账号</span>
                 <button class="modal-close" onclick="closeAssignTtModal()">×</button>
@@ -237,13 +237,14 @@
                 <button class="btn btn-outline btn-sm" onclick="closeAssignTtModal()">取消</button>
                 <button class="btn btn-primary btn-sm" onclick="submitAssignTt()">确定</button>
               </div>
+              <button type="button" class="us-fab" onclick="openUsDetail('US-003')" title="查看本弹框用户故事说明">📋 US-003 说明</button>
             </div>
           </div>
 
           <!-- 用户列表抽屉 -->
           <div id="bc-user-overlay" class="drawer-overlay" onclick="closeBcUserDrawer()"></div>
           <div id="bc-user-drawer" class="drawer drawer-narrow">
-            <div class="drawer-card">
+            <div class="drawer-card us-fab-host">
               <div class="drawer-header">
                 <span id="bc-user-title">用户列表</span>
                 <button class="drawer-close" onclick="closeBcUserDrawer()">×</button>
@@ -279,13 +280,14 @@
               <div class="drawer-footer">
                 <button class="btn btn-outline btn-sm" onclick="closeBcUserDrawer()">关闭</button>
               </div>
+              <button type="button" class="us-fab" onclick="openUsDetail('US-002')" title="查看本抽屉用户故事说明">📋 US-002 说明</button>
             </div>
           </div>
 
           <!-- 批量分配 TikTok 账号弹框 -->
           <div id="batch-assign-overlay" class="modal-overlay" onclick="closeBatchAssignModal(event)"></div>
           <div id="batch-assign-modal" class="modal">
-            <div class="modal-card" style="width:520px;">
+            <div class="modal-card us-fab-host" style="width:520px;">
               <div class="modal-header">
                 <span>分配 TikTok 账号</span>
                 <button class="modal-close" onclick="closeBatchAssignModal()">×</button>
@@ -316,13 +318,14 @@
                 <button class="btn btn-outline btn-sm" onclick="closeBatchAssignModal()">取消</button>
                 <button class="btn btn-primary btn-sm" onclick="submitBatchAssign()">确定</button>
               </div>
+              <button type="button" class="us-fab" onclick="openUsDetail('US-005')" title="查看本弹框用户故事说明">📋 US-005 说明</button>
             </div>
           </div>
 
           <!-- TikTok 账号列表抽屉 -->
           <div id="bc-tt-overlay" class="drawer-overlay" onclick="closeBcTtDrawer()"></div>
           <div id="bc-tt-drawer" class="drawer drawer-wide">
-            <div class="drawer-card">
+            <div class="drawer-card us-fab-host">
               <div class="drawer-header">
                 <span id="bc-tt-title">TikTok 账号列表</span>
                 <button class="drawer-close" onclick="closeBcTtDrawer()">×</button>
@@ -368,13 +371,14 @@
               <div class="drawer-footer">
                 <button class="btn btn-outline btn-sm" onclick="closeBcTtDrawer()">关闭</button>
               </div>
+              <button type="button" class="us-fab" onclick="openUsDetail('US-006')" title="查看本抽屉用户故事说明">📋 US-006 说明</button>
             </div>
           </div>
 
           <!-- 用户已分配 TikTok 账号抽屉 -->
           <div id="user-tt-overlay" class="drawer-overlay" onclick="closeUserTtDrawer()"></div>
           <div id="user-tt-drawer" class="drawer drawer-wide">
-            <div class="drawer-card">
+            <div class="drawer-card us-fab-host">
               <div class="drawer-header">
                 <span id="user-tt-title">TikTok 账号</span>
                 <button class="drawer-close" onclick="closeUserTtDrawer()">×</button>
@@ -421,13 +425,14 @@
               <div class="drawer-footer">
                 <button class="btn btn-outline btn-sm" onclick="closeUserTtDrawer()">关闭</button>
               </div>
+              <button type="button" class="us-fab" onclick="openUsDetail('US-004')" title="查看本抽屉用户故事说明">📋 US-004 说明</button>
             </div>
           </div>
 
           <!-- 添加 TikTok 账号弹框（选择添加方式后，字段直接在弹框下方展开） -->
           <div id="add-tt-overlay" class="modal-overlay" onclick="closeAddTtModal()"></div>
           <div id="add-tt-modal" class="modal">
-            <div class="modal-card" style="width:520px;">
+            <div class="modal-card us-fab-host" style="width:520px;">
               <div class="modal-header">
                 <span>添加 TikTok 账号</span>
                 <button class="modal-close" onclick="closeAddTtModal()">×</button>
@@ -499,6 +504,7 @@
                 <button id="add-tt-submit-btn" class="btn btn-primary btn-sm" onclick="submitAddTtNew()" style="display:none;">确定</button>
                 <button id="add-tt-close-btn" class="btn btn-outline btn-sm" onclick="closeAddTtModal()" style="display:none;">关闭</button>
               </div>
+              <button type="button" class="us-fab" id="add-tt-us-fab" onclick="openAddTtUsDetail()" title="查看本弹框用户故事说明（按添加方式切换 US-007 / US-008）">📋 US-007 说明</button>
             </div>
           </div>
 
@@ -814,6 +820,112 @@
         cursor: grabbing;
         box-shadow: 0 6px 16px rgba(29, 78, 216, 0.55);
       }
+      /* ===== 抽屉/弹框内：单个 US 悬浮说明按钮 ===== */
+      .us-fab-host { position: relative; }
+      .us-fab {
+        position: absolute;
+        left: 14px;
+        bottom: 12px;
+        z-index: 60;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 6px 12px;
+        font-size: 12px;
+        color: #1d4ed8;
+        background: #eff4ff;
+        border: 1px solid #b2ccff;
+        border-radius: 16px;
+        cursor: pointer;
+        transition: background 0.15s, box-shadow 0.15s;
+        user-select: none;
+      }
+      .us-fab:hover {
+        background: #dce7fd;
+        box-shadow: 0 2px 8px rgba(29, 78, 216, 0.25);
+      }
+      /* 主页面 US-001：固定悬浮，叠在「📋 需求说明」按钮上方 */
+      .us-fab-page {
+        position: fixed;
+        left: auto;
+        right: 20px;
+        bottom: 66px;
+        z-index: 1300;
+        color: #fff;
+        background: #1d4ed8;
+        border: 1px solid #1d4ed8;
+        border-radius: 20px;
+        padding: 7px 13px;
+        box-shadow: 0 2px 8px rgba(29, 78, 216, 0.35);
+      }
+      .us-fab-page:hover {
+        background: #1e40af;
+        box-shadow: 0 4px 12px rgba(29, 78, 216, 0.45);
+      }
+      /* ===== 单个 US 详情面板（悬浮按钮点击后展开） ===== */
+      .us-detail-panel {
+        position: fixed;
+        top: 48px;
+        right: 24px;
+        z-index: 1350;
+        width: min(560px, calc(100vw - 32px));
+        max-height: calc(100vh - 96px);
+        background: #fff;
+        border: 1px solid #e4e7ec;
+        border-radius: 10px;
+        box-shadow: 0 10px 32px rgba(16, 24, 40, 0.2);
+        display: flex;
+        flex-direction: column;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(8px);
+        transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
+      }
+      .us-detail-panel.open {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+      .us-detail-header {
+        flex: none;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 12px 14px;
+        border-bottom: 1px solid #e4e7ec;
+        background: #f8fafc;
+        border-radius: 10px 10px 0 0;
+      }
+      .us-detail-title {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #1d2939;
+      }
+      .us-detail-body {
+        flex: 1;
+        overflow-y: auto;
+        padding: 12px 14px 16px;
+      }
+      .us-detail-desc {
+        font-size: 12px;
+        line-height: 1.7;
+        color: #475467;
+        background: #f8fafc;
+        border: 1px solid #eef2f6;
+        border-radius: 6px;
+        padding: 8px 10px;
+        margin-bottom: 10px;
+      }
+      .us-detail-supp {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
       .prd-overlay {
         position: fixed;
         inset: 0;
@@ -1026,35 +1138,6 @@
       .prd-story-supp-list a:hover,
       .prd-story-supp-text a:hover {
         text-decoration: underline;
-      }
-      .prd-story-ac {
-        display: none;
-        padding: 0 12px 12px;
-      }
-      .prd-story.open .prd-story-ac {
-        display: block;
-      }
-      .prd-story-ac-item {
-        position: relative;
-        padding-left: 18px;
-        margin: 5px 0;
-        font-size: 12px;
-        line-height: 1.55;
-        color: #475467;
-      }
-      .prd-story-ac-item::before {
-        content: '☑';
-        position: absolute;
-        left: 0;
-        top: 0;
-        font-size: 12px;
-        color: #1d4ed8;
-      }
-      .prd-story-ac-head {
-        margin: 8px 0 2px;
-        font-size: 12px;
-        font-weight: 600;
-        color: #344054;
       }
       .prd-story-shot {
         display: none;
@@ -1813,6 +1896,7 @@
         document.getElementById('add-tt-cancel-btn').style.display = 'inline-block';
         document.getElementById('add-tt-overlay').classList.add('open');
         document.getElementById('add-tt-modal').classList.add('open');
+        updateAddTtUsFab();
       }
 
       function closeAddTtModal() {
@@ -1835,6 +1919,7 @@
           document.getElementById('add-tt-qr-user').textContent = addTtBcName || '';
           drawTtQrCode(addTtBcName);
         }
+        updateAddTtUsFab();
       }
 
       /* ===== 新建 TikTok 账号字段 ===== */
@@ -2074,13 +2159,20 @@
         return '<div class="prd-story-supp-item"><span class="prd-story-supp-label">' + label + '</span>' + content + '</div>';
       }
 
+      /* 拼接单个 US 的说明条目（筛选项/表格字段/数据来源/数据流转），供完整面板与 US 详情面板共用 */
+      function prdSuppItemsHtml(s) {
+        var items = '';
+        if (s.filter) items += prdSuppItemHtml('筛选项', s.filter);
+        if (s.fields) items += prdSuppItemHtml(s.fieldsLabel || '表格字段', s.fields);
+        if (s.source) items += prdSuppItemHtml('数据来源', s.source);
+        if (s.flow) items += '<div class="prd-story-supp-item"><span class="prd-story-supp-label">数据流转</span><span class="prd-story-supp-text">' + s.flow + '</span></div>';
+        return items;
+      }
+
       function renderPrdPanel() {
         var body = document.getElementById('prd-panel-body');
         if (!body) return;
         body.innerHTML = prdStories.map(function (s, i) {
-          var acItems = s.ac.map(function (item) {
-            return '<div class="prd-story-ac-item">' + item + '</div>';
-          }).join('');
           var shotHtml = '';
           if (s.shot) {
             shotHtml = '<div class="prd-story-shot">' +
@@ -2088,20 +2180,12 @@
               '<img src="' + s.shot + '" alt="' + s.title + '" title="' + s.title + '" />' +
             '</div>';
           }
-          var suppHtml = '';
-          if (s.filter || s.fields || s.source || s.flow) {
-            suppHtml = '<div class="prd-story-supp">' +
-              (s.filter ? prdSuppItemHtml('筛选项', s.filter) : '') +
-              (s.fields ? prdSuppItemHtml(s.fieldsLabel || '表格字段', s.fields) : '') +
-              (s.source ? prdSuppItemHtml('数据来源', s.source) : '') +
-              (s.flow ? '<div class="prd-story-supp-item"><span class="prd-story-supp-label">数据流转</span><span class="prd-story-supp-text">' + s.flow + '</span></div>' : '') +
-            '</div>';
-          }
-          /* 说明区（右栏）：描述 + 筛选项/表格字段/数据来源/数据流转 + 验收标准 */
+          var suppItems = prdSuppItemsHtml(s);
+          var suppHtml = suppItems ? '<div class="prd-story-supp">' + suppItems + '</div>' : '';
+          /* 说明区（右栏）：描述 + 筛选项/表格字段/数据来源/数据流转 */
           var mainHtml = '<div class="prd-story-main">' +
             '<div class="prd-story-desc">' + s.desc + '</div>' +
             suppHtml +
-            '<div class="prd-story-ac"><div class="prd-story-ac-head">验收标准</div>' + acItems + '</div>' +
           '</div>';
           /* 界面示意区（左栏）：有截图时占左侧，无截图时说明区占满整行 */
           var shotColHtml = shotHtml ? '<div class="prd-story-shot-col">' + shotHtml + '</div>' : '';
@@ -2147,6 +2231,94 @@
         }
       }
 
+      /* ===== 抽屉/弹框/页面内：单个 US 详情面板 ===== */
+      function findPrdStory(id) {
+        for (var i = 0; i < prdStories.length; i++) {
+          if (prdStories[i].id === id) return prdStories[i];
+        }
+        return null;
+      }
+
+      function openUsDetail(id) {
+        var s = findPrdStory(id);
+        var panel = document.getElementById('us-detail-panel');
+        if (!s || !panel) return;
+        document.getElementById('us-detail-title').innerHTML =
+          '<span class="prd-story-id">' + s.id + '</span>' +
+          '<span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + s.title + '</span>' +
+          '<span class="prd-story-pri' + (s.priority === 'P1' ? ' p1' : '') + '">' + s.priority + '</span>';
+        var suppItems = prdSuppItemsHtml(s);
+        document.getElementById('us-detail-body').innerHTML =
+          '<div class="us-detail-desc">' + s.desc + '</div>' +
+          (suppItems ? '<div class="us-detail-supp">' + suppItems + '</div>' : '');
+        document.getElementById('us-detail-overlay').classList.add('open');
+        panel.classList.add('open');
+      }
+
+      function closeUsDetail() {
+        var panel = document.getElementById('us-detail-panel');
+        if (!panel) return;
+        document.getElementById('us-detail-overlay').classList.remove('open');
+        panel.classList.remove('open');
+      }
+
+      /* 从单个 US 详情跳转到完整交互需求说明 */
+      function openFullPrdFromUs() {
+        closeUsDetail();
+        openPrdPanel();
+      }
+
+      /* 添加账号弹框：按当前添加方式（新建/关联）切换对应 US */
+      function updateAddTtUsFab() {
+        var fab = document.getElementById('add-tt-us-fab');
+        if (!fab) return;
+        fab.textContent = '📋 ' + (addTtMode === 'link' ? 'US-008' : 'US-007') + ' 说明';
+      }
+      function openAddTtUsDetail() {
+        openUsDetail(addTtMode === 'link' ? 'US-008' : 'US-007');
+      }
+
+      /* ===== 复制完整交互需求说明链接 ===== */
+      function prdShareLink() {
+        return location.href.split('#')[0] + '#交互需求说明';
+      }
+      function fallbackCopyText(text) {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        var ok = false;
+        try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+        document.body.removeChild(ta);
+        return ok;
+      }
+      function copyPrdLink() {
+        var link = prdShareLink();
+        var btn = document.getElementById('prd-copy-link-btn');
+        function finish(ok) {
+          if (!btn) return;
+          btn.textContent = ok ? '已复制' : '复制失败';
+          setTimeout(function () { btn.textContent = '复制链接'; }, 1600);
+        }
+        function manualCopy() {
+          /* 自动复制均失败（如浏览器权限限制）时，提供手动复制入口 */
+          window.prompt('自动复制失败，请手动复制完整交互需求说明链接：', link);
+        }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(link).then(function () { finish(true); }, function () {
+            var ok = fallbackCopyText(link);
+            finish(ok);
+            if (!ok) manualCopy();
+          });
+        } else {
+          var ok = fallbackCopyText(link);
+          finish(ok);
+          if (!ok) manualCopy();
+        }
+      }
+
       /* 初始化商务中心主表 */
       renderBcList();
     </script>
@@ -2157,9 +2329,10 @@
       <div class="prd-panel-header" id="prd-panel-header" title="按住此处可拖动面板，双击可全屏">
         <div>
           <div class="prd-panel-title">商务中心 · 交互需求说明</div>
-          <div class="prd-panel-sub">简洁版 PRD（8 个用户故事 · 展开查看筛选项/表格字段/数据来源/数据流转/验收标准 · 按住标题栏可拖动，双击或按钮可全屏）</div>
+          <div class="prd-panel-sub">简洁版 PRD（8 个用户故事 · 展开查看筛选项/表格字段/数据来源/数据流转 · 按住标题栏可拖动，双击或按钮可全屏 · 「复制链接」可分享本说明）</div>
         </div>
         <div class="prd-panel-actions">
+          <button type="button" class="prd-panel-btn" id="prd-copy-link-btn" onclick="copyPrdLink()" title="复制完整交互需求说明的链接，他人打开后将自动展开本说明">复制链接</button>
           <button type="button" class="prd-panel-btn" id="prd-fullscreen-btn" title="全屏查看">全屏</button>
           <button type="button" class="prd-panel-close" onclick="closePrdPanel()" title="关闭">×</button>
         </div>
@@ -2167,10 +2340,22 @@
       <div class="prd-panel-body" id="prd-panel-body"></div>
     </aside>
     <button type="button" id="prd-float-btn" class="prd-float-btn" title="按住可拖动，点击打开需求说明">📋 需求说明</button>
+    <button type="button" class="us-fab us-fab-page" onclick="openUsDetail('US-001')" title="查看本页面（商务中心列表）用户故事说明">📋 US-001 说明</button>
     <div id="prd-img-viewer" class="prd-img-viewer" role="dialog" aria-label="图片预览">
       <div class="prd-img-viewer-tip">点击任意位置或按 Esc 关闭</div>
       <img id="prd-img-viewer-img" src="" alt="" />
     </div>
+
+    <!-- ===== 单个用户故事（US）详情面板：抽屉/弹框/页面内悬浮按钮点击后展开 ===== -->
+    <div id="us-detail-overlay" class="prd-overlay"></div>
+    <aside id="us-detail-panel" class="us-detail-panel" role="dialog" aria-label="用户故事说明">
+      <div class="us-detail-header">
+        <div class="us-detail-title" id="us-detail-title"></div>
+        <button type="button" class="prd-panel-btn" onclick="openFullPrdFromUs()" title="打开完整交互需求说明">完整说明</button>
+        <button type="button" class="prd-panel-close" onclick="closeUsDetail()" title="关闭">×</button>
+      </div>
+      <div class="us-detail-body" id="us-detail-body"></div>
+    </aside>
 
     <script>
       /* PRD 面板初始化：在 DOM 就绪后执行，避免引用尚未渲染的面板节点 */
@@ -2180,6 +2365,19 @@
           closePrdPanel();
         });
         renderPrdPanel();
+
+        /* 单个 US 详情面板：点击遮罩或按 Esc 关闭 */
+        document.getElementById('us-detail-overlay').addEventListener('click', function () {
+          closeUsDetail();
+        });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && document.getElementById('us-detail-panel').classList.contains('open')) closeUsDetail();
+        });
+
+        /* 通过分享链接打开时（#交互需求说明），自动展开完整交互需求说明 */
+        if (decodeURIComponent(location.hash || '') === '#交互需求说明') {
+          openPrdPanel();
+        }
 
         var panel = document.getElementById('prd-panel');
         var header = document.getElementById('prd-panel-header');
