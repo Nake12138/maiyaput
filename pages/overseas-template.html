@@ -159,7 +159,7 @@
     <button class="tab active" data-tab="account" onclick="switchTemplateTab('account')">账户包</button>
     <button class="tab" data-tab="copy" onclick="switchTemplateTab('copy')">文案模板</button>
     <button class="tab" data-tab="target" onclick="switchTemplateTab('target')">定向包</button>
-    <button class="tab" data-tab="tiktok" onclick="switchTemplateTab('tiktok')">TikTok账户包</button>
+    <button class="tab" data-tab="tiktok" onclick="switchTemplateTab('tiktok')">TikTok 账号包</button>
   </div>
 
   <!-- 账户包 -->
@@ -316,7 +316,7 @@
           <button class="btn btn-primary btn-sm" onclick="searchTemplate('tiktok')">查询</button>
           <button class="btn btn-outline btn-sm" onclick="resetTemplateFilter('tiktok')">重置</button>
         </div>
-        <button class="btn btn-primary btn-sm" style="margin-left:auto;" onclick="openTiktokAccountDrawer('add')">新增TikTok账户包</button>
+        <button class="btn btn-primary btn-sm" style="margin-left:auto;" onclick="openTiktokAccountDrawer('add')">新增TikTok 账号包</button>
       </div>
     </div>
     <div class="table-card">
@@ -411,12 +411,12 @@
     </div>
   </div>
 
-  <!-- TikTok账户包 新增/编辑/复制 抽屉 -->
+  <!-- TikTok 账号包 新增/编辑/复制 抽屉 -->
   <div id="template-tiktok-overlay" class="drawer-overlay" onclick="closeTiktokAccountDrawer()"></div>
   <div id="template-tiktok-drawer" class="drawer drawer-wide">
     <div class="drawer-card">
       <div class="drawer-header">
-        <span id="template-tiktok-title">新增TikTok账户包</span>
+        <span id="template-tiktok-title">新增TikTok 账号包</span>
         <button class="drawer-close" onclick="closeTiktokAccountDrawer()">×</button>
       </div>
       <div class="drawer-body">
@@ -436,28 +436,41 @@
             </div>
           </div>
           <div class="form-row" style="align-items:flex-start;">
-            <div class="form-label required">账号范围：</div>
+            <div class="form-label required">TikTok 账号：</div>
             <div class="form-field" style="flex:1;">
-              <div style="display:flex;gap:8px;margin-bottom:12px;">
-                <button type="button" class="btn btn-info btn-sm">批量添加</button>
-                <select class="form-select" style="width:120px;"><option>账号名称</option><option>语言</option></select>
-                <input type="text" class="form-input" placeholder="请输入" style="flex:1;" />
-                <button type="button" class="btn btn-outline btn-sm">搜索</button>
-              </div>
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-                <span style="font-size:13px;color:var(--color-text-secondary);">TikTok账号名称</span>
-                <span style="font-size:13px;color:var(--color-text-secondary);">已选：0 <a href="#" class="link">清空</a></span>
-              </div>
-              <div class="table-card" style="border-radius:4px;">
-                <table class="data-table">
-                  <thead><tr><th>TikTok账号名称</th><th>语言</th><th>操作</th></tr></thead>
-                  <tbody>
-                    <tr><td>Sasa ดู</td><td>葡萄牙语</td><td><a href="#" class="link" style="color:var(--color-error);">删除</a></td></tr>
-                    <tr><td>廖廖短剧</td><td>繁体中文</td><td><a href="#" class="link" style="color:var(--color-error);">删除</a></td></tr>
-                    <tr><td>Titi Pendek</td><td>马来西亚语</td><td><a href="#" class="link" style="color:var(--color-error);">删除</a></td></tr>
-                    <tr><td>Yoyo Cortos</td><td>英语</td><td><a href="#" class="link" style="color:var(--color-error);">删除</a></td></tr>
-                  </tbody>
-                </table>
+              <div class="drawer-split">
+                <!-- 全量账号 -->
+                <div>
+                  <div class="modal-filter" style="margin-bottom:8px;">
+                    <div style="flex:1;"><input type="text" class="form-input" placeholder="请输入账号名称" style="width:100%;" /></div>
+                    <button type="button" class="btn btn-primary btn-sm">搜索</button>
+                  </div>
+                  <div class="region-select-box">
+                    <div class="region-select-header"><label><input type="checkbox" /> 全选</label><span>账号名称</span><span>语言</span></div>
+                    <div class="region-select-body">
+                      <ul class="region-select-list">
+                        <li><label><input type="checkbox" /> Sasa ดู</label><span>葡萄牙语</span></li>
+                        <li><label><input type="checkbox" /> 廖廖短剧</label><span>繁体中文</span></li>
+                        <li><label><input type="checkbox" /> Titi Pendek</label><span>马来西亚语</span></li>
+                        <li><label><input type="checkbox" /> Yoyo Cortos</label><span>英语</span></li>
+                        <li><label><input type="checkbox" /> Mimi Drama</label><span>泰语</span></li>
+                        <li><label><input type="checkbox" /> Luna Shorts</label><span>西班牙语</span></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <!-- 已选账号 -->
+                <div>
+                  <div class="modal-filter" style="margin-bottom:8px;justify-content:flex-end;">
+                    <span style="font-size:13px;color:var(--color-text-secondary);">已选：0 <a href="#" class="link" onclick="clearSelectedTiktokAccounts();return false;">清空</a></span>
+                  </div>
+                  <div class="region-select-box">
+                    <div class="region-select-header"><span>账号名称</span><span>语言</span><span>操作</span></div>
+                    <div class="region-select-body">
+                      <div class="empty-state" style="padding:60px 20px;"><div class="empty-state-icon">📦</div><span>暂无数据</span></div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -729,9 +742,9 @@
         document.getElementById('template-account-drawer').classList.remove('open');
       }
 
-      /* TikTok账户包抽屉 */
+      /* TikTok 账号包抽屉 */
       function openTiktokAccountDrawer(mode, name) {
-        var titles = { add: '新增TikTok账户包', edit: '编辑TikTok账户包', copy: '复制TikTok账户包' };
+        var titles = { add: '新增TikTok 账号包', edit: '编辑TikTok 账号包', copy: '复制TikTok 账号包' };
         document.getElementById('template-tiktok-title').textContent = titles[mode] || '新增TikTok账户包';
         document.getElementById('tiktok-name').value = (mode === 'edit' || mode === 'copy') ? (name || '') : '';
         document.getElementById('template-tiktok-overlay').classList.add('open');
@@ -740,6 +753,9 @@
       function closeTiktokAccountDrawer() {
         document.getElementById('template-tiktok-overlay').classList.remove('open');
         document.getElementById('template-tiktok-drawer').classList.remove('open');
+      }
+      function clearSelectedTiktokAccounts() {
+        document.querySelectorAll('#template-tiktok-drawer .region-select-body .region-select-list').forEach(function (list) { list.innerHTML = '<div class="empty-state" style="padding:60px 20px;"><div class="empty-state-icon">📦</div><span>暂无数据</span></div>'; });
       }
 
       /* 文案弹框 */
