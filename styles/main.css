@@ -2601,3 +2601,65 @@ body {
   cursor: pointer;
   flex-shrink: 0;
 }
+
+/* ============ 模板管理 - TikTok 账号包穿梭框 ============ */
+.tt-transfer-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.tt-transfer-search {
+  flex: 1;
+  min-width: 0;
+}
+
+.tt-transfer-search input {
+  width: 100%;
+}
+
+.tt-transfer-count {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+.tt-transfer-box {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.tt-transfer-scroll {
+  max-height: 244px;
+  overflow-y: auto;
+}
+
+.tt-transfer-scroll .data-table {
+  border: none;
+}
+
+.tt-transfer-scroll .data-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  padding: 9px 12px;
+  font-size: 13px;
+  background: var(--color-bg-soft);
+}
+
+.tt-transfer-scroll .data-table tbody td {
+  padding: 9px 12px;
+}
+
+.tt-transfer-scroll .data-table .checkbox-col {
+  width: 36px;
+  text-align: center;
+}
+
+.tt-transfer-empty td {
+  padding: 44px 16px !important;
+  text-align: center;
+  color: var(--color-text-tertiary);
+}

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>模板管理 - 海外投放系统</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="../styles/main.css" />
+    <link rel="stylesheet" href="../styles/main.css?v=20260903" />
   </head>
   <body>
     <div class="layout">
@@ -439,35 +439,53 @@
             <div class="form-label required">TikTok 账号：</div>
             <div class="form-field" style="flex:1;">
               <div class="drawer-split">
-                <!-- 全量账号 -->
+                <!-- 左侧：全量 TikTok 账号 -->
                 <div>
-                  <div class="modal-filter" style="margin-bottom:8px;">
-                    <div style="flex:1;"><input type="text" class="form-input" placeholder="请输入账号名称" style="width:100%;" /></div>
+                  <div class="tt-transfer-toolbar">
+                    <div class="tt-transfer-search"><input type="text" class="form-input" placeholder="请输入TikTok账号名称" /></div>
                     <button type="button" class="btn btn-primary btn-sm">搜索</button>
                   </div>
-                  <div class="region-select-box">
-                    <div class="region-select-header"><label><input type="checkbox" /> 全选</label><span>账号名称</span><span>语言</span></div>
-                    <div class="region-select-body">
-                      <ul class="region-select-list">
-                        <li><label><input type="checkbox" /> Sasa ดู</label><span>葡萄牙语</span></li>
-                        <li><label><input type="checkbox" /> 廖廖短剧</label><span>繁体中文</span></li>
-                        <li><label><input type="checkbox" /> Titi Pendek</label><span>马来西亚语</span></li>
-                        <li><label><input type="checkbox" /> Yoyo Cortos</label><span>英语</span></li>
-                        <li><label><input type="checkbox" /> Mimi Drama</label><span>泰语</span></li>
-                        <li><label><input type="checkbox" /> Luna Shorts</label><span>西班牙语</span></li>
-                      </ul>
+                  <div class="tt-transfer-box">
+                    <div class="tt-transfer-scroll">
+                      <table class="data-table tt-transfer-table">
+                        <thead>
+                          <tr>
+                            <th class="checkbox-col"><input type="checkbox" onclick="toggleAllTiktokAvailable(this)" /></th>
+                            <th>TikTok 账号</th>
+                            <th>语言</th>
+                            <th>备注</th>
+                          </tr>
+                        </thead>
+                        <tbody id="tiktok-available-tbody">
+                          <tr><td class="checkbox-col"><input type="checkbox" /></td><td>Sasa ดู</td><td>葡萄牙语</td><td>巴西地区</td></tr>
+                          <tr><td class="checkbox-col"><input type="checkbox" /></td><td>廖廖短剧</td><td>繁体中文</td><td>中国台湾</td></tr>
+                          <tr><td class="checkbox-col"><input type="checkbox" /></td><td>Titi Pendek</td><td>马来西亚语</td><td>马来西亚</td></tr>
+                          <tr><td class="checkbox-col"><input type="checkbox" /></td><td>Yoyo Cortos</td><td>英语</td><td>北美</td></tr>
+                          <tr><td class="checkbox-col"><input type="checkbox" /></td><td>Mimi Drama</td><td>泰语</td><td>泰国</td></tr>
+                          <tr><td class="checkbox-col"><input type="checkbox" /></td><td>Luna Shorts</td><td>西班牙语</td><td>西班牙</td></tr>
+                        </tbody>
+                      </table>
                     </div>
                   </div>
                 </div>
-                <!-- 已选账号 -->
+                <!-- 右侧：已选 TikTok 账号 -->
                 <div>
-                  <div class="modal-filter" style="margin-bottom:8px;justify-content:flex-end;">
-                    <span style="font-size:13px;color:var(--color-text-secondary);">已选：0 <a href="#" class="link" onclick="clearSelectedTiktokAccounts();return false;">清空</a></span>
+                  <div class="tt-transfer-toolbar">
+                    <div class="tt-transfer-search"><input type="text" class="form-input" placeholder="请输入TikTok账号名称" /></div>
+                    <button type="button" class="btn btn-primary btn-sm">搜索</button>
+                    <span class="tt-transfer-count" id="tiktok-selected-count">已选：2 <a href="#" class="link" onclick="clearSelectedTiktokAccounts();return false;">清空</a></span>
                   </div>
-                  <div class="region-select-box">
-                    <div class="region-select-header"><span>账号名称</span><span>语言</span><span>操作</span></div>
-                    <div class="region-select-body">
-                      <div class="empty-state" style="padding:60px 20px;"><div class="empty-state-icon">📦</div><span>暂无数据</span></div>
+                  <div class="tt-transfer-box">
+                    <div class="tt-transfer-scroll">
+                      <table class="data-table tt-transfer-table">
+                        <thead>
+                          <tr><th>TikTok 账号</th><th>语言</th><th>备注</th><th>操作</th></tr>
+                        </thead>
+                        <tbody id="tiktok-selected-tbody">
+                          <tr><td>Sasa ดู</td><td>葡萄牙语</td><td>巴西地区</td><td><a href="#" class="link" style="color:var(--color-error);" onclick="removeSelectedTiktokAccount(this);return false;">删除</a></td></tr>
+                          <tr><td>廖廖短剧</td><td>繁体中文</td><td>中国台湾</td><td><a href="#" class="link" style="color:var(--color-error);" onclick="removeSelectedTiktokAccount(this);return false;">删除</a></td></tr>
+                        </tbody>
+                      </table>
                     </div>
                   </div>
                 </div>
@@ -755,7 +773,33 @@
         document.getElementById('template-tiktok-drawer').classList.remove('open');
       }
       function clearSelectedTiktokAccounts() {
-        document.querySelectorAll('#template-tiktok-drawer .region-select-body .region-select-list').forEach(function (list) { list.innerHTML = '<div class="empty-state" style="padding:60px 20px;"><div class="empty-state-icon">📦</div><span>暂无数据</span></div>'; });
+        var tbody = document.getElementById('tiktok-selected-tbody');
+        if (!tbody) return;
+        tbody.innerHTML = '<tr class="tt-transfer-empty"><td colspan="4"><div class="empty-state" style="padding:30px 20px;"><div class="empty-state-icon">📦</div><span>暂无数据</span></div></td></tr>';
+        updateTiktokSelectedCount();
+      }
+      function updateTiktokSelectedCount() {
+        var tbody = document.getElementById('tiktok-selected-tbody');
+        var count = tbody ? tbody.querySelectorAll('tr:not(.tt-transfer-empty)').length : 0;
+        var el = document.getElementById('tiktok-selected-count');
+        if (el) el.innerHTML = '已选：' + count + ' <a href="#" class="link" onclick="clearSelectedTiktokAccounts();return false;">清空</a>';
+      }
+      function removeSelectedTiktokAccount(link) {
+        var tr = link.closest('tr');
+        if (!tr) return;
+        tr.remove();
+        var tbody = document.getElementById('tiktok-selected-tbody');
+        if (tbody && !tbody.querySelector('tr:not(.tt-transfer-empty)')) {
+          tbody.innerHTML = '<tr class="tt-transfer-empty"><td colspan="4"><div class="empty-state" style="padding:30px 20px;"><div class="empty-state-icon">📦</div><span>暂无数据</span></div></td></tr>';
+        }
+        updateTiktokSelectedCount();
+      }
+      function toggleAllTiktokAvailable(headerCheckbox) {
+        var tbody = document.getElementById('tiktok-available-tbody');
+        if (!tbody) return;
+        Array.prototype.forEach.call(tbody.querySelectorAll('input[type="checkbox"]'), function (cb) {
+          cb.checked = headerCheckbox.checked;
+        });
       }
 
       /* 文案弹框 */
