@@ -1732,8 +1732,13 @@
               return '<label class="folder-option"><input type="checkbox" data-label="' + f + '" onchange="onFolderCheckChange(this)" />' + f + '</label>';
             }).join('') +
             '</div></div>';
+        } else if (type === 'sort') {
+          /* 素材排序：下拉单选 */
+          html += '<select class="form-select condition-sort">' +
+            '<option selected>按消耗(倒序)</option><option>按转化(倒序)</option><option>按创建时间(倒序)</option>' +
+            '</select>';
         } else {
-          /* 素材时长 / 素材排序：操作符 + 数值/区间（左框不能大于右框，>=0 整数） */
+          /* 素材时长：操作符 + 数值/区间（左框不能大于右框，>=0 整数） */
           html += opSelectHtml();
           html += '<input type="text" class="form-input condition-value-1" placeholder="请输入（≥0 整数）" style="width: 120px;" oninput="sanitizeIntInput(this)" />';
           html += '<span class="condition-sep">至</span>';
