@@ -1123,6 +1123,37 @@
         border: 1px dashed #e4e7ec;
         border-radius: 6px;
       }
+      /* ===== 单个 user-story 展开内容：界面示意（左） + 说明（右）左右布局 ===== */
+      .prd-story-body {
+        display: none;
+        padding: 0 12px 12px;
+      }
+      .prd-story.open .prd-story-body {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: flex-start;
+      }
+      .prd-story-shot-col {
+        flex: 0 1 46%;
+        min-width: 300px;
+        align-self: flex-start;
+        position: sticky;
+        top: 0;
+      }
+      .prd-story-main {
+        flex: 1 1 300px;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      /* 左右布局下取消原纵向布局的水平内边距 */
+      .prd-story-body .prd-story-desc { padding: 0; }
+      .prd-story-body .prd-story-supp { padding: 0; }
+      .prd-story-body .prd-story-ac { padding: 0; }
+      .prd-story-body .prd-story-shot { padding: 0; }
+      .prd-story-body .prd-story-ac-head { margin-top: 0; }
     </style>
 
     <script>
@@ -2066,6 +2097,14 @@
               (s.flow ? '<div class="prd-story-supp-item"><span class="prd-story-supp-label">数据流转</span><span class="prd-story-supp-text">' + s.flow + '</span></div>' : '') +
             '</div>';
           }
+          /* 说明区（右栏）：描述 + 筛选项/表格字段/数据来源/数据流转 + 验收标准 */
+          var mainHtml = '<div class="prd-story-main">' +
+            '<div class="prd-story-desc">' + s.desc + '</div>' +
+            suppHtml +
+            '<div class="prd-story-ac"><div class="prd-story-ac-head">验收标准</div>' + acItems + '</div>' +
+          '</div>';
+          /* 界面示意区（左栏）：有截图时占左侧，无截图时说明区占满整行 */
+          var shotColHtml = shotHtml ? '<div class="prd-story-shot-col">' + shotHtml + '</div>' : '';
           return '<div class="prd-story' + (i === 0 ? ' open' : '') + '" id="prd-story-' + s.id + '">' +
             '<div class="prd-story-head" onclick="togglePrdStory(\'' + s.id + '\')">' +
               '<span class="prd-story-id">' + s.id + '</span>' +
@@ -2073,10 +2112,10 @@
               '<span class="prd-story-pri' + (s.priority === 'P1' ? ' p1' : '') + '">' + s.priority + '</span>' +
               '<span class="prd-story-caret">▶</span>' +
             '</div>' +
-            '<div class="prd-story-desc">' + s.desc + '</div>' +
-            suppHtml +
-            shotHtml +
-            '<div class="prd-story-ac"><div class="prd-story-ac-head">验收标准</div>' + acItems + '</div>' +
+            '<div class="prd-story-body">' +
+              shotColHtml +
+              mainHtml +
+            '</div>' +
           '</div>';
         }).join('');
       }
@@ -2145,9 +2184,9 @@
         var panel = document.getElementById('prd-panel');
         var header = document.getElementById('prd-panel-header');
 
-        /* 初始位置：视口右下角悬浮窗 */
+        /* 初始位置：视口右下角悬浮窗（加宽以支持单个 user-story 界面示意+说明左右布局） */
         function initPrdPanelPos() {
-          var w = Math.min(460, Math.round(window.innerWidth * 0.92));
+          var w = Math.min(960, Math.round(window.innerWidth * 0.92));
           var h = Math.min(Math.max(360, Math.round(window.innerHeight * 0.72)), window.innerHeight - 16);
           panel.style.width = w + 'px';
           panel.style.height = h + 'px';
