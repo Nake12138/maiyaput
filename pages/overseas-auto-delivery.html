@@ -1099,52 +1099,235 @@
                     <div class="form-item form-item-inline">
                       <label class="form-label"><span class="form-required">*</span> 素材选择方式</label>
                       <div class="segmented-control" id="material-select-mode">
-                        <button type="button" class="segmented-item active" data-value="time">按时间</button>
-                        <button type="button" class="segmented-item" data-value="sort">按排序</button>
+                        <button type="button" class="segmented-item active" data-value="time" onclick="switchMaterialSelectMode('time')">按时间</button>
+                        <button type="button" class="segmented-item" data-value="sort" onclick="switchMaterialSelectMode('sort')">按排序</button>
+                        <button type="button" class="segmented-item" data-value="custom" onclick="switchMaterialSelectMode('custom')">自定义</button>
                       </div>
                     </div>
                   </div>
-                  <div class="form-row">
-                    <div class="form-item">
-                      <label class="form-label"><span class="form-required">*</span> 素材创建时间</label>
-                      <div class="segmented-control" id="material-create-time">
-                        <button type="button" class="segmented-item" data-value="3h">3小时</button>
-                        <button type="button" class="segmented-item active" data-value="1d">1天</button>
-                        <button type="button" class="segmented-item" data-value="3d">3天</button>
-                        <button type="button" class="segmented-item" data-value="7d">7天</button>
-                        <button type="button" class="segmented-item" data-value="15d">15天</button>
-                        <button type="button" class="segmented-item" data-value="30d">30天</button>
-                        <button type="button" class="segmented-item" data-value="custom">自定义</button>
+
+                  <!-- 简单模式：按时间 / 按排序 -->
+                  <div id="material-simple-mode" class="material-mode-panel">
+                    <div class="form-row">
+                      <div class="form-item">
+                        <label class="form-label"><span class="form-required">*</span> 素材创建时间</label>
+                        <div class="segmented-control" id="material-create-time">
+                          <button type="button" class="segmented-item" data-value="3h">3小时</button>
+                          <button type="button" class="segmented-item active" data-value="1d">1天</button>
+                          <button type="button" class="segmented-item" data-value="3d">3天</button>
+                          <button type="button" class="segmented-item" data-value="7d">7天</button>
+                          <button type="button" class="segmented-item" data-value="15d">15天</button>
+                          <button type="button" class="segmented-item" data-value="30d">30天</button>
+                          <button type="button" class="segmented-item" data-value="custom">自定义</button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="form-item form-item-inline">
+                        <label class="form-label"><span class="form-required">*</span> 素材消耗</label>
+                        <div class="segmented-control" id="material-cost">
+                          <button type="button" class="segmented-item" data-value="unlimited">不限</button>
+                          <button type="button" class="segmented-item active" data-value="custom">自定义</button>
+                        </div>
+                        <select class="form-select" style="width: 100px;"><option>累计</option></select>
+                        <select class="form-select" style="width: 80px;"><option>>=</option></select>
+                        <input type="text" class="form-input" placeholder="请输入" style="width: 120px;" />
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="form-item form-item-inline">
+                        <label class="form-label">素材重复次数</label>
+                        <div class="segmented-control" id="material-repeat">
+                          <button type="button" class="segmented-item" data-value="unlimited">不限</button>
+                          <button type="button" class="segmented-item" data-value="custom">自定义</button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="form-item form-item-inline">
+                        <label class="form-label">素材重复范围</label>
+                        <div class="segmented-control" id="material-repeat-scope">
+                          <button type="button" class="segmented-item" data-value="single">单个账户</button>
+                          <button type="button" class="segmented-item active" data-value="all">全部账户</button>
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <div class="form-row">
-                    <div class="form-item form-item-inline">
-                      <label class="form-label"><span class="form-required">*</span> 素材消耗</label>
-                      <div class="segmented-control" id="material-cost">
-                        <button type="button" class="segmented-item" data-value="unlimited">不限</button>
-                        <button type="button" class="segmented-item active" data-value="custom">自定义</button>
+
+                  <!-- 自定义模式：方案1 / 方案2 -->
+                  <div id="material-custom-mode" class="material-mode-panel" style="display: none;">
+                    <div class="custom-schemes">
+                      <!-- 方案1 -->
+                      <div class="scheme-card scheme-priority" id="scheme-card-1" data-scheme="1">
+                        <div class="scheme-header">
+                          <span class="scheme-title">方案1（优先）</span>
+                        </div>
+                        <div class="scheme-body" id="scheme-body-1">
+                          <div class="condition-row">
+                            <select class="form-select condition-type" style="width: 140px;">
+                              <option value="cost" selected>素材消耗</option>
+                              <option value="conversion">素材消耗转化数</option>
+                              <option value="quantity">素材数量</option>
+                              <option value="create-time">素材创建时间</option>
+                              <option value="folder">素材文件夹</option>
+                              <option value="duration">素材时长</option>
+                              <option value="sort">素材排序</option>
+                            </select>
+                            <select class="form-select" style="width: 90px;">
+                              <option selected>近1天</option>
+                              <option>近3天</option>
+                              <option>近7天</option>
+                              <option>近15天</option>
+                              <option>近30天</option>
+                              <option>累计</option>
+                            </select>
+                            <select class="form-select" style="width: 80px;">
+                              <option selected>介于</option>
+                              <option>>=</option>
+                              <option><=</option>
+                            </select>
+                            <input type="text" class="form-input" placeholder="请输入" style="width: 90px;" />
+                            <span class="condition-sep">至</span>
+                            <input type="text" class="form-input" placeholder="请输入" style="width: 90px;" />
+                            <div class="condition-actions">
+                              <button type="button" class="condition-btn remove" onclick="removeCondition(this)" title="删除">-</button>
+                            </div>
+                          </div>
+                          <div class="condition-row">
+                            <select class="form-select condition-type" style="width: 140px;">
+                              <option value="cost">素材消耗</option>
+                              <option value="conversion" selected>素材消耗转化数</option>
+                              <option value="quantity">素材数量</option>
+                              <option value="create-time">素材创建时间</option>
+                              <option value="folder">素材文件夹</option>
+                              <option value="duration">素材时长</option>
+                              <option value="sort">素材排序</option>
+                            </select>
+                            <select class="form-select" style="width: 90px;">
+                              <option>近1天</option>
+                              <option>近3天</option>
+                              <option>近7天</option>
+                              <option>近15天</option>
+                              <option>近30天</option>
+                              <option selected>累计</option>
+                            </select>
+                            <select class="form-select" style="width: 80px;">
+                              <option selected>介于</option>
+                              <option>>=</option>
+                              <option><=</option>
+                            </select>
+                            <input type="text" class="form-input" placeholder="请输入" style="width: 90px;" />
+                            <span class="condition-sep">至</span>
+                            <input type="text" class="form-input" placeholder="请输入" style="width: 90px;" />
+                            <div class="condition-actions">
+                              <button type="button" class="condition-btn add" onclick="addCondition(1)" title="添加条件">+</button>
+                              <button type="button" class="condition-btn remove" onclick="removeCondition(this)" title="删除">-</button>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      <select class="form-select" style="width: 100px;"><option>累计</option></select>
-                      <select class="form-select" style="width: 80px;"><option>>=</option></select>
-                      <input type="text" class="form-input" placeholder="请输入" style="width: 120px;" />
-                    </div>
-                  </div>
-                  <div class="form-row">
-                    <div class="form-item form-item-inline">
-                      <label class="form-label">素材重复次数</label>
-                      <div class="segmented-control" id="material-repeat">
-                        <button type="button" class="segmented-item" data-value="unlimited">不限</button>
-                        <button type="button" class="segmented-item" data-value="custom">自定义</button>
+
+                      <div class="scheme-or-divider" id="scheme-or-divider">或者</div>
+
+                      <!-- 方案2 -->
+                      <div class="scheme-card" id="scheme-card-2" data-scheme="2">
+                        <div class="scheme-header">
+                          <span class="scheme-title">方案2</span>
+                          <button type="button" class="scheme-delete" onclick="removeScheme(2)">删除</button>
+                        </div>
+                        <div class="scheme-body" id="scheme-body-2">
+                          <div class="condition-row">
+                            <select class="form-select condition-type" style="width: 140px;">
+                              <option value="cost" selected>素材消耗</option>
+                              <option value="conversion">素材消耗转化数</option>
+                              <option value="quantity">素材数量</option>
+                              <option value="create-time">素材创建时间</option>
+                              <option value="folder">素材文件夹</option>
+                              <option value="duration">素材时长</option>
+                              <option value="sort">素材排序</option>
+                            </select>
+                            <select class="form-select" style="width: 90px;">
+                              <option selected>近1天</option>
+                              <option>近3天</option>
+                              <option>近7天</option>
+                              <option>近15天</option>
+                              <option>近30天</option>
+                              <option>累计</option>
+                            </select>
+                            <select class="form-select" style="width: 80px;">
+                              <option selected>介于</option>
+                              <option>>=</option>
+                              <option><=</option>
+                            </select>
+                            <input type="text" class="form-input" placeholder="请输入" style="width: 90px;" />
+                            <span class="condition-sep">至</span>
+                            <input type="text" class="form-input" placeholder="请输入" style="width: 90px;" />
+                            <div class="condition-actions">
+                              <button type="button" class="condition-btn remove" onclick="removeCondition(this)" title="删除">-</button>
+                            </div>
+                          </div>
+                          <div class="condition-row">
+                            <select class="form-select condition-type" style="width: 140px;">
+                              <option value="cost">素材消耗</option>
+                              <option value="conversion" selected>素材消耗转化数</option>
+                              <option value="quantity">素材数量</option>
+                              <option value="create-time">素材创建时间</option>
+                              <option value="folder">素材文件夹</option>
+                              <option value="duration">素材时长</option>
+                              <option value="sort">素材排序</option>
+                            </select>
+                            <select class="form-select" style="width: 90px;">
+                              <option>近1天</option>
+                              <option>近3天</option>
+                              <option>近7天</option>
+                              <option>近15天</option>
+                              <option>近30天</option>
+                              <option selected>累计</option>
+                            </select>
+                            <select class="form-select" style="width: 80px;">
+                              <option selected>介于</option>
+                              <option>>=</option>
+                              <option><=</option>
+                            </select>
+                            <input type="text" class="form-input" placeholder="请输入" style="width: 90px;" />
+                            <span class="condition-sep">至</span>
+                            <input type="text" class="form-input" placeholder="请输入" style="width: 90px;" />
+                            <div class="condition-actions">
+                              <button type="button" class="condition-btn remove" onclick="removeCondition(this)" title="删除">-</button>
+                            </div>
+                          </div>
+                          <div class="condition-row">
+                            <select class="form-select condition-type" style="width: 140px;">
+                              <option value="cost">素材消耗</option>
+                              <option value="conversion">素材消耗转化数</option>
+                              <option value="quantity">素材数量</option>
+                              <option value="create-time" selected>素材创建时间</option>
+                              <option value="folder">素材文件夹</option>
+                              <option value="duration">素材时长</option>
+                              <option value="sort">素材排序</option>
+                            </select>
+                            <select class="form-select" style="width: 90px;">
+                              <option selected>近</option>
+                              <option>昨日</option>
+                              <option>今日</option>
+                              <option>自定义</option>
+                              <option>介于</option>
+                            </select>
+                            <input type="text" class="form-input" placeholder="请输入" style="width: 90px;" />
+                            <select class="form-select" style="width: 70px;">
+                              <option selected>天</option>
+                              <option>小时</option>
+                            </select>
+                            <div class="condition-actions">
+                              <button type="button" class="condition-btn add" onclick="addCondition(2)" title="添加条件">+</button>
+                              <button type="button" class="condition-btn remove" onclick="removeCondition(this)" title="删除">-</button>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                  <div class="form-row">
-                    <div class="form-item form-item-inline">
-                      <label class="form-label">素材重复范围</label>
-                      <div class="segmented-control" id="material-repeat-scope">
-                        <button type="button" class="segmented-item" data-value="single">单个账户</button>
-                        <button type="button" class="segmented-item active" data-value="all">全部账户</button>
+
+                      <div class="scheme-add-row" id="scheme-add-row" style="display: none;">
+                        <button type="button" class="btn btn-outline btn-sm" onclick="addScheme()">+ 添加方案</button>
                       </div>
                     </div>
                   </div>
@@ -1470,6 +1653,106 @@
       function submitOverseasNewTask() {
         alert('新建海外任务已保存');
         closeOverseasNewTaskDrawer();
+      }
+
+      /* ===== 素材选择方式：按时间 / 按排序 / 自定义 切换 ===== */
+      function switchMaterialSelectMode(mode) {
+        var simplePanel = document.getElementById('material-simple-mode');
+        var customPanel = document.getElementById('material-custom-mode');
+        if (!simplePanel || !customPanel) return;
+        if (mode === 'custom') {
+          simplePanel.style.display = 'none';
+          customPanel.style.display = 'block';
+        } else {
+          simplePanel.style.display = 'block';
+          customPanel.style.display = 'none';
+        }
+      }
+
+      function addCondition(schemeIndex) {
+        var body = document.getElementById('scheme-body-' + schemeIndex);
+        if (!body) return;
+        var row = document.createElement('div');
+        row.className = 'condition-row';
+        row.innerHTML = '<select class="form-select condition-type" style="width: 140px;">' +
+          '<option value="cost" selected>素材消耗</option>' +
+          '<option value="conversion">素材消耗转化数</option>' +
+          '<option value="quantity">素材数量</option>' +
+          '<option value="create-time">素材创建时间</option>' +
+          '<option value="folder">素材文件夹</option>' +
+          '<option value="duration">素材时长</option>' +
+          '<option value="sort">素材排序</option>' +
+          '</select>' +
+          '<select class="form-select" style="width: 90px;">' +
+          '<option selected>近1天</option><option>近3天</option><option>近7天</option><option>近15天</option><option>近30天</option><option>累计</option>' +
+          '</select>' +
+          '<select class="form-select" style="width: 80px;">' +
+          '<option selected>介于</option><option>>=</option><option><=</option>' +
+          '</select>' +
+          '<input type="text" class="form-input" placeholder="请输入" style="width: 90px;" />' +
+          '<span class="condition-sep">至</span>' +
+          '<input type="text" class="form-input" placeholder="请输入" style="width: 90px;" />' +
+          '<div class="condition-actions">' +
+          '<button type="button" class="condition-btn add" onclick="addCondition(' + schemeIndex + ')" title="添加条件">+</button>' +
+          '<button type="button" class="condition-btn remove" onclick="removeCondition(this)" title="删除">-</button>' +
+          '</div>';
+        // 把旧最后一行的添加按钮移除，避免重复
+        var oldAddBtns = body.querySelectorAll('.condition-btn.add');
+        oldAddBtns.forEach(function (btn) { btn.remove(); });
+        body.appendChild(row);
+      }
+
+      function removeCondition(btn) {
+        var row = btn.closest('.condition-row');
+        if (!row) return;
+        var body = row.parentElement;
+        var allRows = body.querySelectorAll('.condition-row');
+        if (allRows.length <= 1) {
+          alert('每个方案至少保留一个条件');
+          return;
+        }
+        row.remove();
+        // 确保最后一行仍有添加按钮
+        var remainingRows = body.querySelectorAll('.condition-row');
+        var lastRow = remainingRows[remainingRows.length - 1];
+        if (lastRow && !lastRow.querySelector('.condition-btn.add')) {
+          var actions = lastRow.querySelector('.condition-actions');
+          if (actions) {
+            var schemeIndex = body.id.replace('scheme-body-', '');
+            var addBtn = document.createElement('button');
+            addBtn.type = 'button';
+            addBtn.className = 'condition-btn add';
+            addBtn.title = '添加条件';
+            addBtn.textContent = '+';
+            addBtn.setAttribute('onclick', 'addCondition(' + schemeIndex + ')');
+            actions.insertBefore(addBtn, actions.firstChild);
+          }
+        }
+      }
+
+      function removeScheme(schemeIndex) {
+        var card = document.getElementById('scheme-card-' + schemeIndex);
+        var divider = document.getElementById('scheme-or-divider');
+        var addRow = document.getElementById('scheme-add-row');
+        if (card) card.remove();
+        if (divider) divider.style.display = 'none';
+        if (addRow) addRow.style.display = 'flex';
+      }
+
+      function addScheme() {
+        var addRow = document.getElementById('scheme-add-row');
+        if (addRow) addRow.style.display = 'none';
+
+        // 重新创建方案2（原型演示：最多2个方案）
+        var schemesContainer = document.querySelector('.custom-schemes');
+        var divider = document.getElementById('scheme-or-divider');
+        if (divider) divider.style.display = 'block';
+
+        var existingCard = document.getElementById('scheme-card-2');
+        if (existingCard) {
+          existingCard.style.display = 'block';
+          return;
+        }
       }
 
       /* ===== 抽屉内分段选择器交互 ===== */

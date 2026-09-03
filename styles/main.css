@@ -1853,6 +1853,12 @@ body {
   margin-left: auto;
 }
 
+/* 自动化任务抽屉：内容含自定义素材方案等多列表单，适当加宽以完整显示指标文字 */
+#drawer-overseas-new-task.drawer-narrow .drawer-card {
+  width: min(960px, calc(100vw - 80px));
+  margin-left: auto;
+}
+
 .drawer-header {
   display: flex;
   align-items: center;
@@ -2364,4 +2370,132 @@ body {
   .filter-select {
     min-width: 120px;
   }
+}
+
+/* ============ 自定义素材选择方式 - 方案与条件指标 ============ */
+.material-mode-panel {
+  display: block;
+}
+
+.custom-schemes {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.scheme-card {
+  background: var(--color-bg-soft);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  padding: 16px;
+}
+
+.scheme-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.scheme-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.scheme-delete {
+  font-size: 13px;
+  color: var(--color-error);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 2px 4px;
+}
+
+.scheme-delete:hover {
+  color: #ff7875;
+}
+
+.scheme-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.condition-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.condition-row .form-select,
+.condition-row .form-input {
+  flex-shrink: 0;
+}
+
+/* 条件指标下拉：预留宽度以完整展示「素材消耗转化数」等指标文字 */
+.condition-row .condition-type {
+  min-width: 140px;
+}
+
+.condition-sep {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+.condition-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.condition-btn {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+}
+
+.condition-btn.add {
+  color: var(--color-info);
+  border-color: var(--color-info);
+}
+
+.condition-btn.add:hover {
+  background: var(--color-info-bg);
+}
+
+.condition-btn.remove {
+  color: var(--color-error);
+  border-color: var(--color-error);
+}
+
+.condition-btn.remove:hover {
+  background: var(--color-error-bg);
+}
+
+.scheme-or-divider {
+  font-size: 13px;
+  color: var(--color-info);
+  font-weight: 500;
+}
+
+.scheme-add-row {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.scheme-add-row .btn {
+  border-style: dashed;
 }
