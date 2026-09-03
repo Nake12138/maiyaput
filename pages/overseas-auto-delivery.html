@@ -1166,7 +1166,6 @@
                           <div class="condition-row">
                             <select class="form-select condition-type" style="width: 140px;">
                               <option value="cost" selected>素材消耗</option>
-                              <option value="conversion">素材消耗转化数</option>
                               <option value="quantity">素材数量</option>
                               <option value="create-time">素材创建时间</option>
                               <option value="folder">素材文件夹</option>
@@ -1196,7 +1195,6 @@
                           <div class="condition-row">
                             <select class="form-select condition-type" style="width: 140px;">
                               <option value="cost">素材消耗</option>
-                              <option value="conversion" selected>素材消耗转化数</option>
                               <option value="quantity">素材数量</option>
                               <option value="create-time">素材创建时间</option>
                               <option value="folder">素材文件夹</option>
@@ -1239,7 +1237,6 @@
                           <div class="condition-row">
                             <select class="form-select condition-type" style="width: 140px;">
                               <option value="cost" selected>素材消耗</option>
-                              <option value="conversion">素材消耗转化数</option>
                               <option value="quantity">素材数量</option>
                               <option value="create-time">素材创建时间</option>
                               <option value="folder">素材文件夹</option>
@@ -1269,7 +1266,6 @@
                           <div class="condition-row">
                             <select class="form-select condition-type" style="width: 140px;">
                               <option value="cost">素材消耗</option>
-                              <option value="conversion" selected>素材消耗转化数</option>
                               <option value="quantity">素材数量</option>
                               <option value="create-time">素材创建时间</option>
                               <option value="folder">素材文件夹</option>
@@ -1299,7 +1295,6 @@
                           <div class="condition-row">
                             <select class="form-select condition-type" style="width: 140px;">
                               <option value="cost">素材消耗</option>
-                              <option value="conversion">素材消耗转化数</option>
                               <option value="quantity">素材数量</option>
                               <option value="create-time" selected>素材创建时间</option>
                               <option value="folder">素材文件夹</option>
@@ -1672,7 +1667,6 @@
       /* ===== 自定义素材方案：条件行控件按指标类型动态渲染 ===== */
       var METRIC_OPTIONS = [
         { value: 'cost', label: '素材消耗' },
-        { value: 'conversion', label: '素材消耗转化数' },
         { value: 'quantity', label: '素材数量' },
         { value: 'create-time', label: '素材创建时间' },
         { value: 'folder', label: '素材文件夹' },
@@ -1699,8 +1693,8 @@
         if (!typeSelect || !ctrl) return;
         var type = typeSelect.value;
         var html = '';
-        if (type === 'cost' || type === 'conversion') {
-          /* 消耗类：时间窗口 + 操作符 + 数值/区间 */
+        if (type === 'cost') {
+          /* 素材消耗：时间窗口 + 操作符 + 数值/区间 */
           html += '<select class="form-select" style="width: 90px;">' +
             '<option selected>近1天</option><option>近3天</option><option>近7天</option><option>近15天</option><option>近30天</option><option>累计</option>' +
             '</select>';
@@ -1931,7 +1925,7 @@
       /* 初始化：按默认指标渲染各方案条件行（覆盖静态占位行） */
       (function initConditionRows() {
         var defaults = {
-          'scheme-body-1': ['cost', 'conversion'],
+          'scheme-body-1': ['cost', 'sort'],
           'scheme-body-2': ['cost', 'create-time']
         };
         Object.keys(defaults).forEach(function (id) {
