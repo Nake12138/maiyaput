@@ -1438,17 +1438,20 @@
                           <!-- 方式一：选择 TikTok 账号包 -->
                           <div id="identity-package-mode" style="margin-top:10px;">
                             <div class="inline-field">
-                              <button type="button" class="btn btn-outline btn-sm" onclick="openTiktokPackagePicker()">选择</button>
+                              <button type="button" class="btn btn-outline btn-sm" onclick="openTiktokPackagePicker()">选择TT账号包</button>
                             </div>
                             <div class="identity-tags" id="identity-package-tags"></div>
                           </div>
                           <!-- 方式二：手动选择 TikTok 账号 -->
                           <div id="identity-manual-mode" style="display:none;margin-top:10px;">
                             <div class="identity-dropdown" id="identity-manual-dropdown">
-                              <button type="button" class="identity-dropdown-trigger" onclick="toggleIdentityManualDropdown(event)">
-                                <span id="identity-manual-label">请选择TikTok账号</span>
-                                <span class="identity-dropdown-caret">▾</span>
-                              </button>
+                              <div class="identity-dropdown-field">
+                                <button type="button" class="identity-dropdown-trigger" onclick="toggleIdentityManualDropdown(event)">
+                                  <span id="identity-manual-label">请选择TikTok账号</span>
+                                  <span class="identity-dropdown-caret">▾</span>
+                                </button>
+                                <button type="button" class="identity-dropdown-clear" onclick="clearIdentityManualSelection(event)" title="清空已选">×</button>
+                              </div>
                               <div class="identity-dropdown-panel" id="identity-manual-panel" style="display:none;">
                                 <div class="identity-dropdown-search">
                                   <input type="text" class="form-input" placeholder="请输入名称" oninput="filterIdentityManualOptions(this.value)" />
@@ -1729,6 +1732,11 @@
       ];
       var identitySelectedPackages = [];
       var identitySelectedAccounts = [];
+      /* 历史任务投放身份回显：历史数据统一按手动选择处理并回显已选账号 */
+      var HISTORY_TASKS = {
+        295: { identityMode: 'manual', identityAccounts: ['Sasa ดู', '廖廖短剧'] },
+        294: { identityMode: 'manual', identityAccounts: ['Yoyo Cortos', 'Mimi Drama'] }
+      };
 
       function switchIdentityMode(mode) {
         var group = document.getElementById('identity-mode');
@@ -1907,6 +1915,13 @@
             cb.checked = identitySelectedAccounts.indexOf(cb.value) >= 0;
           });
         }
+        syncIdentityManualSelection();
+      }
+
+      function clearIdentityManualSelection(event) {
+        if (event) event.stopPropagation();
+        identitySelectedAccounts = [];
+        renderIdentityManualOptions('');
         syncIdentityManualSelection();
       }
 
@@ -2231,12 +2246,32 @@
         alert('查看任务详情：' + id);
       }
 
+      function prefillTaskIdentity(id) {
+        var history = HISTORY_TASKS[id];
+        if (!history) return;
+        if (history.identityMode === 'manual') {
+          switchIdentityMode('manual');
+          identitySelectedAccounts = (history.identityAccounts || []).slice();
+          syncIdentityManualSelection();
+        } else {
+          switchIdentityMode('package');
+          identitySelectedPackages = [];
+          (history.identityPackages || []).forEach(function (name) {
+            var p = IDENTITY_PACKAGES.filter(function (x) { return x.name === name; })[0];
+            if (p) identitySelectedPackages.push(p);
+          });
+          renderIdentityPackageTags();
+        }
+      }
+
       function editOverseasTask(id) {
         openOverseasNewTaskModal('编辑TikTok自动化任务');
+        prefillTaskIdentity(id);
       }
 
       function copyOverseasTask(id) {
         openOverseasNewTaskModal('复制TikTok自动化任务');
+        prefillTaskIdentity(id);
       }
 
       function showOverseasTaskLog(id) {

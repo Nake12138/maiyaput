@@ -2632,7 +2632,8 @@ body {
 }
 
 .tt-transfer-scroll {
-  max-height: 244px;
+  max-height: calc(100vh - 360px);
+  min-height: 200px;
   overflow-y: auto;
 }
 
@@ -2647,6 +2648,12 @@ body {
   padding: 9px 12px;
   font-size: 13px;
   background: var(--color-bg-soft);
+  white-space: nowrap;
+}
+
+.tt-transfer-left .tt-transfer-table th:nth-child(2),
+.tt-transfer-right .tt-transfer-table th:nth-child(1) {
+  min-width: 160px;
 }
 
 .tt-transfer-scroll .data-table tbody td {
@@ -2662,6 +2669,47 @@ body {
   padding: 44px 16px !important;
   text-align: center;
   color: var(--color-text-tertiary);
+}
+
+/* 穿梭框左右列表对齐资产管理-TikTok账号页：抽屉加宽、紧凑筛选条、右栏状态行 */
+#template-tiktok-drawer .drawer-card {
+  width: min(1380px, calc(100vw - 60px));
+}
+
+.tt-asset-filter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  margin-bottom: 8px;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-soft);
+}
+
+.tt-asset-filter .filter-input {
+  flex: 1;
+  min-width: 90px;
+  height: 30px;
+}
+
+.tt-asset-filter .filter-select {
+  height: 30px;
+  padding: 0 8px;
+  min-width: 0;
+  font-size: 13px;
+}
+
+.tt-asset-filter .btn {
+  height: 30px;
+  flex-shrink: 0;
+}
+
+.tt-transfer-status {
+  display: flex;
+  justify-content: flex-end;
+  margin: -2px 2px 8px;
 }
 
 /* ============ 投放身份（TikTok 账号）选择器 ============ */
@@ -2701,6 +2749,37 @@ body {
 .identity-dropdown {
   position: relative;
   max-width: 420px;
+}
+
+.identity-dropdown-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.identity-dropdown-field .identity-dropdown-trigger {
+  flex: 1;
+}
+
+.identity-dropdown-clear {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-white);
+  color: var(--color-text-secondary);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.identity-dropdown-clear:hover {
+  border-color: var(--color-error);
+  color: var(--color-error);
 }
 
 .identity-dropdown-trigger {
