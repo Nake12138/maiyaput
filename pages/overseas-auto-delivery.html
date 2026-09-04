@@ -6,6 +6,7 @@
     <title>自动化任务 - 海外投放系统</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="../styles/main.css?v=20260904" />
+    <link rel="stylesheet" href="../styles/prd.css?v=20260904" />
   </head>
   <body>
     <div class="layout">
@@ -978,7 +979,7 @@
             <!-- New Task Drawer -->
             <div id="drawer-overlay-overseas-new-task" class="drawer-overlay" onclick="closeOverseasNewTaskDrawer(event)"></div>
             <div id="drawer-overseas-new-task" class="drawer drawer-narrow">
-              <div class="drawer-card">
+              <div class="drawer-card us-fab-host">
                 <div class="drawer-header">
                   <h3 class="drawer-title">新建TikTok自动化任务</h3>
                   <button class="drawer-close" onclick="closeOverseasNewTaskDrawer()">×</button>
@@ -1443,7 +1444,8 @@
                             <div class="identity-tags" id="identity-package-tags"></div>
                           </div>
                           <!-- 方式二：手动选择 TikTok 账号 -->
-                          <div id="identity-manual-mode" style="display:none;margin-top:10px;">
+                          <div id="identity-manual-mode" style="display:none;margin-top:10px;position:relative;">
+                            <button type="button" class="us-fab" data-us="US-003" title="按住可拖动，点击查看手动选择用户故事说明" style="left:auto;right:10px;bottom:auto;top:6px;z-index:55;padding:5px 10px;font-size:11px;">📋 US-003 说明 · 手动选择 TikTok 账号</button>
                             <div class="identity-dropdown" id="identity-manual-dropdown">
                               <div class="identity-dropdown-field">
                                 <button type="button" class="identity-dropdown-trigger" onclick="toggleIdentityManualDropdown(event)">
@@ -1502,6 +1504,7 @@
                 <button class="btn btn-outline btn-sm" onclick="closeOverseasNewTaskDrawer()">取消</button>
                 <button class="btn btn-primary btn-sm" onclick="submitOverseasNewTask()">确定</button>
               </div>
+              <button type="button" class="us-fab" data-us="US-001" title="按住可拖动，点击查看本抽屉用户故事说明">📋 US-001 说明 · 投放身份（TikTok 账号）模式切换与回显</button>
               </div>
             </div>
           </div>
@@ -1512,7 +1515,7 @@
     <!-- 投放身份 - 选择 TikTok 账号包 弹窗 -->
     <div id="tiktok-package-picker-overlay" class="modal-overlay" style="z-index:1150;" onclick="closeTiktokPackagePicker()"></div>
     <div id="tiktok-package-picker" class="modal" style="z-index:1151;">
-      <div class="modal-card" style="width:600px;">
+      <div class="modal-card us-fab-host" style="width:600px;">
         <div class="modal-header">
           <span>选择TikTok账号包</span>
           <button class="modal-close" onclick="closeTiktokPackagePicker()">×</button>
@@ -1542,6 +1545,7 @@
           <button class="btn btn-outline btn-sm" onclick="closeTiktokPackagePicker()">取消</button>
           <button class="btn btn-primary btn-sm" onclick="confirmTiktokPackages()">确定</button>
         </div>
+        <button type="button" class="us-fab" data-us="US-002" title="按住可拖动，点击查看本弹框用户故事说明">📋 US-002 说明 · TikTok 账号包选择弹窗</button>
       </div>
     </div>
 
@@ -1710,6 +1714,7 @@
         var drawer = document.getElementById('drawer-overseas-new-task');
         if (overlay) overlay.classList.remove('open');
         if (drawer) drawer.classList.remove('open');
+        if (window.prd && window.prd.closeUsDetail) window.prd.closeUsDetail();
       }
 
       function submitOverseasNewTask() {
@@ -1782,6 +1787,7 @@
         var modal = document.getElementById('tiktok-package-picker');
         if (overlay) overlay.classList.remove('open');
         if (modal) modal.classList.remove('open');
+        if (window.prd && window.prd.closeUsDetail) window.prd.closeUsDetail();
       }
 
       function renderTiktokPackagePickerRows() {
@@ -2383,5 +2389,96 @@
         }
       });
     </script>
+
+    <!-- ===== 需求说明（简洁版 PRD）入口 ===== -->
+    <div id="prd-overlay" class="prd-overlay"></div>
+    <aside id="prd-panel" class="prd-panel" role="dialog" aria-label="交互需求说明">
+      <div class="prd-panel-header" id="prd-panel-header" title="按住此处可拖动面板，双击可全屏">
+        <div>
+          <div class="prd-panel-title">自动化任务 · 投放身份（TikTok 账号）· 交互需求说明</div>
+          <div class="prd-panel-sub">简洁版 PRD（3 个用户故事 · 展开查看筛选项/表格字段/数据来源/数据流转 · 按住标题栏可拖动，双击或按钮可全屏 · 「复制链接」复制需求说明页面链接）</div>
+        </div>
+        <div class="prd-panel-actions">
+          <button type="button" class="prd-panel-btn" id="prd-copy-link-btn" onclick="window.prd.copyPrdLink()" title="复制需求说明页面链接">复制链接</button>
+          <button type="button" class="prd-panel-btn" id="prd-fullscreen-btn" title="全屏查看">全屏</button>
+          <button type="button" class="prd-panel-close" onclick="window.prd.closePrdPanel()" title="关闭">×</button>
+        </div>
+      </div>
+      <div class="prd-panel-body" id="prd-panel-body"></div>
+    </aside>
+    <button type="button" id="prd-float-btn" class="prd-float-btn" title="按住可拖动，点击打开需求说明">📋 需求说明</button>
+    <button type="button" class="us-fab us-fab-page" data-us="US-001" title="按住可拖动，点击查看本页面用户故事说明">📋 US-001 说明 · 投放身份（TikTok 账号）模式切换与回显</button>
+    <div id="prd-img-viewer" class="prd-img-viewer" role="dialog" aria-label="图片预览">
+      <div class="prd-img-viewer-tip">点击任意位置或按 Esc 关闭</div>
+      <img id="prd-img-viewer-img" src="" alt="" />
+    </div>
+
+    <!-- ===== 单个用户故事（US）详情面板 ===== -->
+    <aside id="us-detail-panel" class="us-detail-panel" role="dialog" aria-label="用户故事说明">
+      <div class="us-detail-header" id="us-detail-header" title="按住此处可拖动面板">
+        <div class="us-detail-title" id="us-detail-title"></div>
+        <button type="button" class="prd-panel-btn" onclick="window.prd.openFullPrdFromUs()" title="打开完整交互需求说明">完整说明</button>
+        <button type="button" class="prd-panel-close" onclick="window.prd.closeUsDetail()" title="关闭">×</button>
+      </div>
+      <div class="us-detail-body" id="us-detail-body"></div>
+    </aside>
+
+    <script>
+      window.prdPageTitle = '自动化任务 · 投放身份（TikTok 账号）· 交互需求说明';
+      window.prdPageSub = '简洁版 PRD（3 个用户故事 · 展开查看筛选项/表格字段/数据来源/数据流转 · 按住标题栏可拖动，双击或按钮可全屏 · 「复制链接」复制需求说明页面链接）';
+      window.PRD_PAGE_URL = '../output/prd-doc-fix-20260902/stage2/formatted-auto-delivery-identity-report.html';
+
+      window.prdStories = [
+        {
+          id: 'US-001', title: '投放身份（TikTok 账号）模式切换与回显', priority: 'P0',
+          desc: '作为投放运营，我想要在创建/编辑自动化任务时选择投放身份方式，并正确回显历史任务的投放身份数据。历史任务中已保存的投放身份统一按「手动选择」模式处理，并正常回显用户已选选项。',
+          fieldsLabel: '交互控件',
+          fields: '投放身份（TikTok 账号）分段选择器（选项：TikTok 账号包 / 手动选择）；TikTok 账号包模式下显示「选择TT账号包」按钮与已选账号包标签；手动选择模式下显示下拉多选框（支持搜索、一键清除）与已选账号标签。',
+          source: 'TikTok 账号包列表 ← 模板管理-TikTok账号包页面列表数据；手动选择账号列表 ← 资产管理-TikTok账号列表数据。',
+          flow: '新建任务默认选中「TikTok 账号包」模式；用户点击分段项切换模式；选择账号包模式时点击「选择TT账号包」打开弹窗多选；手动选择模式时点击下拉勾选账号，点击一键清除按钮可清空全部已选项；编辑/复制历史任务时，历史投放身份数据统一按「手动选择」模式处理，并回显用户已选账号。',
+          ac: [
+            '投放身份字段标题为「投放身份（TikTok 账号）」',
+            '默认选中「TikTok 账号包」模式',
+            '切换模式时下方展示对应选择控件，已选结果互不影响',
+            '历史任务（编辑/复制）统一按手动选择模式回显已选账号',
+            '手动选择模式下提供一键清除全部已选项功能'
+          ]
+        },
+        {
+          id: 'US-002', title: 'TikTok 账号包选择弹窗', priority: 'P0',
+          desc: '作为投放运营，我想要从已有的 TikTok 账号包中选择多个包作为投放身份，以便批量使用沉淀好的账号组合。',
+          filter: '名称（单行文本输入框，占位「请输入名称」）+「查询」/「重置」按钮；点击「查询」后按名称过滤，点击「重置」恢复全量列表。',
+          fields: '选择列（复选框，表头支持全选）／名称（文本）／TikTok账号数量（数字）／备注（文本）。',
+          source: '模板管理-TikTok账号包页面列表数据。',
+          flow: '点击「选择TT账号包」打开弹窗 → 渲染账号包列表并回显已选项 → 用户勾选/取消勾选 → 底部显示已选数量 → 点击「确定」保存当前选择（允许空选）并关闭弹窗，在抽屉内展示已选账号包标签 → 点击「取消」不保存并关闭。',
+          ac: [
+            '弹窗标题为「选择TikTok账号包」',
+            '支持按账号包名称模糊查询',
+            '列表支持多选，表头全选仅对当前过滤结果生效',
+            '底部实时显示已选数量',
+            '未选择任何数据时点击「确定」仍可保存（即允许清空已选）',
+            '点击「确定」后已选账号包以标签形式展示在抽屉内',
+            '点击标签上的移除按钮可取消选择'
+          ]
+        },
+        {
+          id: 'US-003', title: '手动选择 TikTok 账号', priority: 'P0',
+          desc: '作为投放运营，我想要手动从全部 TikTok 账号中多选具体账号作为投放身份，并支持一键清除全部已选项。',
+          filter: '下拉面板顶部搜索框（单行文本输入框，占位「请输入名称」，输入时实时过滤下拉选项）。',
+          fieldsLabel: '下拉与已选展示',
+          fields: '触发按钮（显示当前已选数量或默认占位「请选择TikTok账号」）／一键清除按钮（×）／下拉选项（复选框 + 账号名称 + 语言）／已选标签（账号名称（语言）+ 移除按钮）。',
+          source: '资产管理-TikTok账号列表数据。',
+          flow: '点击触发按钮展开下拉面板 → 展示全部可选项并回显已选状态 → 输入关键词实时过滤 → 勾选/取消勾选更新已选账号标签与触发按钮文案 → 点击一键清除按钮清空全部已选项 → 点击面板外部或按 Esc 收起下拉。',
+          ac: [
+            '下拉框展示全部可选项，并按名称/语言实时过滤',
+            '已选账号以标签形式展示在触发按钮下方',
+            '点击标签上的移除按钮可取消对应账号选择',
+            '点击一键清除按钮可一次性清空所有已选账号',
+            '点击下拉外部区域或按 Esc 收起下拉面板'
+          ]
+        }
+      ];
+    </script>
+    <script src="../scripts/prd.js?v=20260904"></script>
   </body>
 </html>

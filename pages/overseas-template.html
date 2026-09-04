@@ -6,6 +6,7 @@
     <title>模板管理 - 海外投放系统</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="../styles/main.css?v=20260904" />
+    <link rel="stylesheet" href="../styles/prd.css?v=20260904" />
   </head>
   <body>
     <div class="layout">
@@ -192,20 +193,22 @@
             </tr>
           </thead>
           <tbody>
-            <tr><td class="checkbox-col"><input type="checkbox" /></td><td>72</td><td><a href="#" class="link" onclick="openAccountDrawer('edit','vivi')">vivi</a></td><td>--</td><td>5</td><td>听泉</td><td>2026-08-23 10:14:13</td><td>2026-08-23 16:35:54</td><td><a href="#" class="link" onclick="openAccountDrawer('copy','vivi')">复制</a> <a href="#" class="link" onclick="openAccountDrawer('edit','vivi')">编辑</a> <a href="#" class="link" onclick="deleteTemplateRow(this)">删除</a></td></tr>
-            <tr><td class="checkbox-col"><input type="checkbox" /></td><td>73</td><td><a href="#" class="link" onclick="openAccountDrawer('edit','vivi')">vivi</a></td><td>--</td><td>5</td><td>听泉</td><td>2026-08-23 11:37:30</td><td>2026-08-23 16:35:44</td><td><a href="#" class="link" onclick="openAccountDrawer('copy','vivi')">复制</a> <a href="#" class="link" onclick="openAccountDrawer('edit','vivi')">编辑</a> <a href="#" class="link" onclick="deleteTemplateRow(this)">删除</a></td></tr>
+            <tr><td class="checkbox-col"><input type="checkbox" /></td><td>72</td><td><a href="#" class="link" onclick="openAccountDrawer('edit','vivi')">vivi</a></td><td>--</td><td>5</td><td>听泉</td><td>2026-08-23 10:14:13</td><td>2026-08-23 16:35:54</td><td><a href="#" class="link" onclick="openAccountDrawer('copy','vivi')">复制</a> <a href="#" class="link" onclick="openAccountDrawer('edit','vivi')">编辑</a> <a href="#" class="link link-danger" onclick="deleteTemplateRow(this)">删除</a></td></tr>
+            <tr><td class="checkbox-col"><input type="checkbox" /></td><td>73</td><td><a href="#" class="link" onclick="openAccountDrawer('edit','vivi')">vivi</a></td><td>--</td><td>5</td><td>听泉</td><td>2026-08-23 11:37:30</td><td>2026-08-23 16:35:44</td><td><a href="#" class="link" onclick="openAccountDrawer('copy','vivi')">复制</a> <a href="#" class="link" onclick="openAccountDrawer('edit','vivi')">编辑</a> <a href="#" class="link link-danger" onclick="deleteTemplateRow(this)">删除</a></td></tr>
           </tbody>
         </table>
       </div>
       <div class="pagination">
-        <span class="pagination-total">共 2 条</span>
-        <button class="page-btn" disabled>&lt;</button>
-        <button class="page-btn active">1</button>
-        <button class="page-btn" disabled>&gt;</button>
-        <span class="pagination-size">
-          <select class="form-select form-select-sm"><option>10条/页</option><option>20条/页</option><option>50条/页</option></select>
-        </span>
-        <span class="pagination-jumper">跳至 <input type="text" class="form-input form-input-xs" value="1" /> 页</span>
+        <span class="pagination-info">共 2 条</span>
+        <div class="pagination-pages">
+          <button class="page-btn" disabled>&lt;</button>
+          <button class="page-btn active">1</button>
+          <button class="page-btn" disabled>&gt;</button>
+        </div>
+        <select class="page-size-select"><option>10条/页</option><option>20条/页</option><option>50条/页</option></select>
+        <span>跳至</span>
+        <input type="text" class="jump-input" value="1" />
+        <span>页</span>
       </div>
     </div>
   </div>
@@ -244,18 +247,22 @@
             </tr>
           </thead>
           <tbody>
-            <tr><td class="checkbox-col"><input type="checkbox" /></td><td>1578</td><td>Endless drama, zero cost!</td><td>产品卖点</td><td>免费</td><td>英语</td><td>听泉</td><td>2026-08-23 16:48:59</td><td>2026-08-23 16:48:59</td><td><a href="#" class="link" onclick="openCopyModal('edit','Endless drama, zero cost!')">编辑</a> <a href="#" class="link" onclick="deleteTemplateRow(this)">删除</a></td></tr>
-            <tr><td class="checkbox-col"><input type="checkbox" /></td><td>1577</td><td>Everyone's watching — FREE!</td><td>产品卖点</td><td>免费</td><td>英语</td><td>听泉</td><td>2026-08-23 16:48:59</td><td>2026-08-23 16:48:59</td><td><a href="#" class="link" onclick="openCopyModal('edit','Everyone\'s watching — FREE!')">编辑</a> <a href="#" class="link" onclick="deleteTemplateRow(this)">删除</a></td></tr>
+            <tr><td class="checkbox-col"><input type="checkbox" /></td><td>1578</td><td>Endless drama, zero cost!</td><td>产品卖点</td><td>免费</td><td>英语</td><td>听泉</td><td>2026-08-23 16:48:59</td><td>2026-08-23 16:48:59</td><td><a href="#" class="link" onclick="openCopyModal('edit','Endless drama, zero cost!')">编辑</a> <a href="#" class="link link-danger" onclick="deleteTemplateRow(this)">删除</a></td></tr>
+            <tr><td class="checkbox-col"><input type="checkbox" /></td><td>1577</td><td>Everyone's watching — FREE!</td><td>产品卖点</td><td>免费</td><td>英语</td><td>听泉</td><td>2026-08-23 16:48:59</td><td>2026-08-23 16:48:59</td><td><a href="#" class="link" onclick="openCopyModal('edit','Everyone\'s watching — FREE!')">编辑</a> <a href="#" class="link link-danger" onclick="deleteTemplateRow(this)">删除</a></td></tr>
           </tbody>
         </table>
       </div>
       <div class="pagination">
-        <span class="pagination-total">共 2 条</span>
-        <button class="page-btn" disabled>&lt;</button>
-        <button class="page-btn active">1</button>
-        <button class="page-btn" disabled>&gt;</button>
-        <span class="pagination-size"><select class="form-select form-select-sm"><option>10条/页</option><option>20条/页</option><option>50条/页</option></select></span>
-        <span class="pagination-jumper">跳至 <input type="text" class="form-input form-input-xs" value="1" /> 页</span>
+        <span class="pagination-info">共 2 条</span>
+        <div class="pagination-pages">
+          <button class="page-btn" disabled>&lt;</button>
+          <button class="page-btn active">1</button>
+          <button class="page-btn" disabled>&gt;</button>
+        </div>
+        <select class="page-size-select"><option>10条/页</option><option>20条/页</option><option>50条/页</option></select>
+        <span>跳至</span>
+        <input type="text" class="jump-input" value="1" />
+        <span>页</span>
       </div>
     </div>
   </div>
@@ -290,18 +297,22 @@
             </tr>
           </thead>
           <tbody>
-            <tr><td class="checkbox-col"><input type="checkbox" /></td><td>56</td><td><a href="#" class="link" onclick="openTargetDrawer('edit','意大利')">意大利</a></td><td>意大利语</td><td>娜可</td><td>2026-08-17 11:15:15</td><td>2026-08-17 11:15:15</td><td><a href="#" class="link" onclick="openTargetDrawer('copy','意大利')">复制</a> <a href="#" class="link" onclick="openTargetDrawer('edit','意大利')">编辑</a> <a href="#" class="link" onclick="deleteTemplateRow(this)">删除</a></td></tr>
-            <tr><td class="checkbox-col"><input type="checkbox" /></td><td>49</td><td><a href="#" class="link" onclick="openTargetDrawer('edit','日语')">日语</a></td><td>日语</td><td>娜可</td><td>2026-08-14 22:40:54</td><td>2026-08-14 22:40:54</td><td><a href="#" class="link" onclick="openTargetDrawer('copy','日语')">复制</a> <a href="#" class="link" onclick="openTargetDrawer('edit','日语')">编辑</a> <a href="#" class="link" onclick="deleteTemplateRow(this)">删除</a></td></tr>
+            <tr><td class="checkbox-col"><input type="checkbox" /></td><td>56</td><td><a href="#" class="link" onclick="openTargetDrawer('edit','意大利')">意大利</a></td><td>意大利语</td><td>娜可</td><td>2026-08-17 11:15:15</td><td>2026-08-17 11:15:15</td><td><a href="#" class="link" onclick="openTargetDrawer('copy','意大利')">复制</a> <a href="#" class="link" onclick="openTargetDrawer('edit','意大利')">编辑</a> <a href="#" class="link link-danger" onclick="deleteTemplateRow(this)">删除</a></td></tr>
+            <tr><td class="checkbox-col"><input type="checkbox" /></td><td>49</td><td><a href="#" class="link" onclick="openTargetDrawer('edit','日语')">日语</a></td><td>日语</td><td>娜可</td><td>2026-08-14 22:40:54</td><td>2026-08-14 22:40:54</td><td><a href="#" class="link" onclick="openTargetDrawer('copy','日语')">复制</a> <a href="#" class="link" onclick="openTargetDrawer('edit','日语')">编辑</a> <a href="#" class="link link-danger" onclick="deleteTemplateRow(this)">删除</a></td></tr>
           </tbody>
         </table>
       </div>
       <div class="pagination">
-        <span class="pagination-total">共 2 条</span>
-        <button class="page-btn" disabled>&lt;</button>
-        <button class="page-btn active">1</button>
-        <button class="page-btn" disabled>&gt;</button>
-        <span class="pagination-size"><select class="form-select form-select-sm"><option>10条/页</option></select></span>
-        <span class="pagination-jumper">跳至 <input type="text" class="form-input form-input-xs" value="1" /> 页</span>
+        <span class="pagination-info">共 2 条</span>
+        <div class="pagination-pages">
+          <button class="page-btn" disabled>&lt;</button>
+          <button class="page-btn active">1</button>
+          <button class="page-btn" disabled>&gt;</button>
+        </div>
+        <select class="page-size-select"><option>10条/页</option></select>
+        <span>跳至</span>
+        <input type="text" class="jump-input" value="1" />
+        <span>页</span>
       </div>
     </div>
   </div>
@@ -336,20 +347,22 @@
             </tr>
           </thead>
           <tbody>
-            <tr><td class="checkbox-col"><input type="checkbox" /></td><td>201</td><td><a href="#" class="link" onclick="openTiktokAccountDrawer('edit','东南亚英语TikTok包')">东南亚英语TikTok包</a></td><td>--</td><td>4</td><td>admin</td><td>2026-09-01 10:22:18</td><td>2026-09-01 10:22:18</td><td><a href="#" class="link" onclick="openTiktokAccountDrawer('copy','东南亚英语TikTok包')">复制</a> <a href="#" class="link" onclick="openTiktokAccountDrawer('edit','东南亚英语TikTok包')">编辑</a> <a href="#" class="link" onclick="deleteTemplateRow(this)">删除</a></td></tr>
-            <tr><td class="checkbox-col"><input type="checkbox" /></td><td>202</td><td><a href="#" class="link" onclick="openTiktokAccountDrawer('edit','欧洲多语言TikTok包')">欧洲多语言TikTok包</a></td><td>--</td><td>3</td><td>admin</td><td>2026-09-02 14:35:42</td><td>2026-09-02 14:35:42</td><td><a href="#" class="link" onclick="openTiktokAccountDrawer('copy','欧洲多语言TikTok包')">复制</a> <a href="#" class="link" onclick="openTiktokAccountDrawer('edit','欧洲多语言TikTok包')">编辑</a> <a href="#" class="link" onclick="deleteTemplateRow(this)">删除</a></td></tr>
+            <tr><td class="checkbox-col"><input type="checkbox" /></td><td>201</td><td><a href="#" class="link" onclick="openTiktokAccountDrawer('edit','东南亚英语TikTok包')">东南亚英语TikTok包</a></td><td>--</td><td>4</td><td>admin</td><td>2026-09-01 10:22:18</td><td>2026-09-01 10:22:18</td><td><a href="#" class="link" onclick="openTiktokAccountDrawer('copy','东南亚英语TikTok包')">复制</a> <a href="#" class="link" onclick="openTiktokAccountDrawer('edit','东南亚英语TikTok包')">编辑</a> <a href="#" class="link link-danger" onclick="deleteTemplateRow(this)">删除</a></td></tr>
+            <tr><td class="checkbox-col"><input type="checkbox" /></td><td>202</td><td><a href="#" class="link" onclick="openTiktokAccountDrawer('edit','欧洲多语言TikTok包')">欧洲多语言TikTok包</a></td><td>--</td><td>3</td><td>admin</td><td>2026-09-02 14:35:42</td><td>2026-09-02 14:35:42</td><td><a href="#" class="link" onclick="openTiktokAccountDrawer('copy','欧洲多语言TikTok包')">复制</a> <a href="#" class="link" onclick="openTiktokAccountDrawer('edit','欧洲多语言TikTok包')">编辑</a> <a href="#" class="link link-danger" onclick="deleteTemplateRow(this)">删除</a></td></tr>
           </tbody>
         </table>
       </div>
       <div class="pagination">
-        <span class="pagination-total">共 2 条</span>
-        <button class="page-btn" disabled>&lt;</button>
-        <button class="page-btn active">1</button>
-        <button class="page-btn" disabled>&gt;</button>
-        <span class="pagination-size">
-          <select class="form-select form-select-sm"><option>10条/页</option><option>20条/页</option><option>50条/页</option></select>
-        </span>
-        <span class="pagination-jumper">跳至 <input type="text" class="form-input form-input-xs" value="1" /> 页</span>
+        <span class="pagination-info">共 2 条</span>
+        <div class="pagination-pages">
+          <button class="page-btn" disabled>&lt;</button>
+          <button class="page-btn active">1</button>
+          <button class="page-btn" disabled>&gt;</button>
+        </div>
+        <select class="page-size-select"><option>10条/页</option><option>20条/页</option><option>50条/页</option></select>
+        <span>跳至</span>
+        <input type="text" class="jump-input" value="1" />
+        <span>页</span>
       </div>
     </div>
   </div>
@@ -414,7 +427,7 @@
   <!-- TikTok 账号包 新增/编辑/复制 抽屉 -->
   <div id="template-tiktok-overlay" class="drawer-overlay" onclick="closeTiktokAccountDrawer()"></div>
   <div id="template-tiktok-drawer" class="drawer drawer-wide">
-    <div class="drawer-card">
+    <div class="drawer-card us-fab-host">
       <div class="drawer-header">
         <span id="template-tiktok-title">新增TikTok 账号包</span>
         <button class="drawer-close" onclick="closeTiktokAccountDrawer()">×</button>
@@ -515,6 +528,7 @@
         <button class="btn btn-outline btn-sm" onclick="closeTiktokAccountDrawer()">取消</button>
         <button class="btn btn-primary btn-sm" onclick="closeTiktokAccountDrawer()">确定</button>
       </div>
+      <button type="button" class="us-fab" data-us="US-002" title="按住可拖动，点击查看本抽屉用户故事说明">📋 US-002 说明 · 新增/编辑/复制 TikTok 账号包</button>
     </div>
   </div>
 
@@ -932,7 +946,13 @@
       function openTiktokAccountDrawer(mode, name) {
         var titles = { add: '新增TikTok 账号包', edit: '编辑TikTok 账号包', copy: '复制TikTok 账号包' };
         document.getElementById('template-tiktok-title').textContent = titles[mode] || '新增TikTok 账号包';
-        document.getElementById('tiktok-name').value = (mode === 'edit' || mode === 'copy') ? (name || '') : '';
+        if (mode === 'copy') {
+          document.getElementById('tiktok-name').value = name ? '复制-' + name : '';
+        } else if (mode === 'edit') {
+          document.getElementById('tiktok-name').value = name || '';
+        } else {
+          document.getElementById('tiktok-name').value = '';
+        }
         document.getElementById('tiktok-remark').value = '';
         tiktokSelectedNames = [];
         if ((mode === 'edit' || mode === 'copy') && name && TT_PACKAGE_PRESETS[name]) {
@@ -946,6 +966,7 @@
       function closeTiktokAccountDrawer() {
         document.getElementById('template-tiktok-overlay').classList.remove('open');
         document.getElementById('template-tiktok-drawer').classList.remove('open');
+        if (window.prd && window.prd.closeUsDetail) window.prd.closeUsDetail();
       }
 
       /* 文案弹框 */
@@ -974,5 +995,82 @@
         document.getElementById('template-target-drawer').classList.remove('open');
       }
     </script>
+
+    <!-- ===== 需求说明（简洁版 PRD）入口 ===== -->
+    <div id="prd-overlay" class="prd-overlay"></div>
+    <aside id="prd-panel" class="prd-panel" role="dialog" aria-label="交互需求说明">
+      <div class="prd-panel-header" id="prd-panel-header" title="按住此处可拖动面板，双击可全屏">
+        <div>
+          <div class="prd-panel-title">模板管理 · TikTok 账号包 · 交互需求说明</div>
+          <div class="prd-panel-sub">简洁版 PRD（2 个用户故事 · 展开查看筛选项/表格字段/数据来源/数据流转 · 按住标题栏可拖动，双击或按钮可全屏 · 「复制链接」复制需求说明页面链接）</div>
+        </div>
+        <div class="prd-panel-actions">
+          <button type="button" class="prd-panel-btn" id="prd-copy-link-btn" onclick="window.prd.copyPrdLink()" title="复制需求说明页面链接">复制链接</button>
+          <button type="button" class="prd-panel-btn" id="prd-fullscreen-btn" title="全屏查看">全屏</button>
+          <button type="button" class="prd-panel-close" onclick="window.prd.closePrdPanel()" title="关闭">×</button>
+        </div>
+      </div>
+      <div class="prd-panel-body" id="prd-panel-body"></div>
+    </aside>
+    <button type="button" id="prd-float-btn" class="prd-float-btn" title="按住可拖动，点击打开需求说明">📋 需求说明</button>
+    <button type="button" class="us-fab us-fab-page" data-us="US-001" title="按住可拖动，点击查看本页面用户故事说明">📋 US-001 说明 · TikTok 账号包列表查询与展示</button>
+    <div id="prd-img-viewer" class="prd-img-viewer" role="dialog" aria-label="图片预览">
+      <div class="prd-img-viewer-tip">点击任意位置或按 Esc 关闭</div>
+      <img id="prd-img-viewer-img" src="" alt="" />
+    </div>
+
+    <!-- ===== 单个用户故事（US）详情面板 ===== -->
+    <aside id="us-detail-panel" class="us-detail-panel" role="dialog" aria-label="用户故事说明">
+      <div class="us-detail-header" id="us-detail-header" title="按住此处可拖动面板">
+        <div class="us-detail-title" id="us-detail-title"></div>
+        <button type="button" class="prd-panel-btn" onclick="window.prd.openFullPrdFromUs()" title="打开完整交互需求说明">完整说明</button>
+        <button type="button" class="prd-panel-close" onclick="window.prd.closeUsDetail()" title="关闭">×</button>
+      </div>
+      <div class="us-detail-body" id="us-detail-body"></div>
+    </aside>
+
+    <script>
+      window.prdPageTitle = '模板管理 · TikTok 账号包 · 交互需求说明';
+      window.prdPageSub = '简洁版 PRD（2 个用户故事 · 展开查看筛选项/表格字段/数据来源/数据流转 · 按住标题栏可拖动，双击或按钮可全屏 · 「复制链接」复制需求说明页面链接）';
+      window.PRD_PAGE_URL = '../output/prd-doc-fix-20260902/stage2/formatted-template-tiktok-report.html';
+
+      window.prdStories = [
+        {
+          id: 'US-001', title: 'TikTok 账号包列表查询与展示', priority: 'P0',
+          desc: '作为投放运营，我想要查看并按名称/创建人搜索 TikTok 账号包列表，以便快速定位目标账号包并在自动化任务中引用。数据权限按组织架构控制：组长可查看组员数据，组员仅可查看自己的数据；拥有「全部数据」权限的用户可查看全部数据。',
+          filter: '名称（单行文本输入框，占位「请输入名称」）／创建人（下拉选择，占位「请选择创建人」）+「查询」/「重置」按钮；点击「查询」后按条件过滤，点击「重置」清空全部条件并恢复全量列表。',
+          fields: '选择列（复选框，表头支持全选）／ID（数字）／名称（文本，可点击链接，打开编辑抽屉；无论数据归属均可点击名称查看详情）／备注（文本）／TikTok账号数量（数字）／创建人（文本）／创建时间（文本，格式 yyyy-MM-dd HH:mm）／更新时间（文本，格式 yyyy-MM-dd HH:mm）／操作（按钮组：复制、编辑、删除；仅当前用户自己创建的数据展示可点击按钮，非本人数据按钮置灰不可点击）。',
+          source: '模板管理-TikTok账号包列表数据 ← 后端接口返回。',
+          flow: '页面加载 → 调用「获取 TikTok 账号包列表」→ 渲染主表；用户在筛选栏输入名称或选择创建人后点击「查询」执行过滤；点击「重置」恢复全量；点击「新增TikTok 账号包」打开新增抽屉；点击名称链接打开编辑抽屉查看详情。',
+          ac: [
+            '页面加载后默认展示 TikTok 账号包 Tab 列表',
+            '支持按名称模糊查询与按创建人精确筛选，点击「查询」后才执行过滤',
+            '名称列以链接形式展示，任何权限下均可点击打开编辑抽屉查看详情',
+            '操作列提供「复制」「编辑」「删除」入口；仅本人创建的数据可操作，非本人数据按钮置灰不可点击',
+            '表格下方提供分页条（总数、页码、每页条数、跳页）'
+          ]
+        },
+        {
+          id: 'US-002', title: '新增/编辑/复制 TikTok 账号包', priority: 'P0',
+          desc: '作为投放运营，我想要新建、编辑或复制 TikTok 账号包，以便将常用账号组合沉淀为模板，供自动化任务快速引用。',
+          filter: '左侧待选区：TT账号名称（单行文本输入框，占位「请输入TT账号名称」）／语言（下拉选择，占位「请选择语言」，枚举与短剧管理页面语言筛选项保持一致）／备注（单行文本输入框，占位「请输入备注」）+「查询」/「重置」按钮。右侧已选区：TT账号名称／语言／备注 +「查询」/「重置」按钮，并在工具条右侧显示「已选：N <清空>」。',
+          fieldsLabel: '表单与穿梭框字段',
+          fields: '名称（单行文本输入框，必填，占位「请输入」，限制 50 字符；复制时自动在名称前拼接「复制-」）／备注（单行文本输入框，占位「请输入」，限制 100 字符）／TikTok 账号（左右穿梭框；左侧表格列：选择列（复选框，表头支持全选）、TikTok账号名称（头像 + 账号名称组合展示）、语言、备注；右侧表格列：TikTok账号名称（头像 + 账号名称组合展示）、语言、备注、操作（删除按钮））。',
+          source: '左侧待选 TikTok 账号列表 ← 资产管理-TikTok账号页面列表数据（接口返回）；右侧已选账号集合 ← 当前 TikTok 账号包维护的数据（新增时为空，编辑/复制时回显原包已选账号）。',
+          flow: '点击「新增/编辑/复制」→ 打开右侧宽抽屉（标题分别为「新增TikTok 账号包」「编辑TikTok 账号包」「复制TikTok 账号包」）→ 编辑时回显原名称、备注与已选账号，复制时名称前自动拼接「复制-」并回显原备注与已选账号 → 用户在左侧筛选并勾选账号 → 勾选账号自动移入右侧已选区 → 在右侧点击「删除」后，左侧对应账号自动取消勾选 → 点击「确定」保存账号包并关闭抽屉。',
+          ac: [
+            '新增时名称与备注为空，已选区为空',
+            '编辑时回显原包名称、备注与已选账号；复制时名称前自动拼接「复制-」，备注与已选账号回显原包数据',
+            '名称必填，最长 50 字符；备注可选，最长 100 字符',
+            '左侧账号列表样式与资产管理-TikTok账号页一致（头像 + 账号名），不含更新人/更新时间/操作字段',
+            '左侧勾选账号后，该账号立即出现在右侧已选区；右侧删除账号后，左侧对应复选框自动取消勾选',
+            '左侧表头全选/半选仅对当前过滤后的可见行生效',
+            '右侧已选区支持按名称、语言、备注筛选，并显示「已选：N」与「清空」链接',
+            '点击「确定」保存并关闭抽屉；点击「取消」不保存并关闭抽屉'
+          ]
+        }
+      ];
+    </script>
+    <script src="../scripts/prd.js?v=20260904"></script>
   </body>
 </html>
