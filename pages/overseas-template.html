@@ -310,7 +310,7 @@
   <div id="template-tab-tiktok" class="template-tab-panel" style="display:none;">
     <div class="filter-bar">
       <div class="filter-bar-row">
-        <input type="text" class="filter-input" placeholder="请输入账户包名称/ID" />
+        <input type="text" class="filter-input" placeholder="请输入名称" />
         <select class="filter-select"><option>请选择创建人</option><option>听泉</option><option>魔法七</option><option>橙子</option><option>孤树</option><option>admin</option></select>
         <div class="filter-actions">
           <button class="btn btn-primary btn-sm" onclick="searchTemplate('tiktok')">查询</button>
@@ -442,7 +442,7 @@
                 <!-- 左侧：全量 TikTok 账号 -->
                 <div>
                   <div class="tt-transfer-toolbar">
-                    <div class="tt-transfer-search"><input type="text" class="form-input" placeholder="请输入TikTok账号名称" /></div>
+                    <div class="tt-transfer-search"><input type="text" class="form-input" placeholder="请输入名称" /></div>
                     <button type="button" class="btn btn-primary btn-sm">搜索</button>
                   </div>
                   <div class="tt-transfer-box">
@@ -450,19 +450,19 @@
                       <table class="data-table tt-transfer-table">
                         <thead>
                           <tr>
-                            <th class="checkbox-col"><input type="checkbox" onclick="toggleAllTiktokAvailable(this)" /></th>
+                            <th class="checkbox-col"><input type="checkbox" id="tiktok-available-header-checkbox" onclick="toggleAllTiktokAvailable(this)" /></th>
                             <th>TikTok 账号</th>
                             <th>语言</th>
                             <th>备注</th>
                           </tr>
                         </thead>
                         <tbody id="tiktok-available-tbody">
-                          <tr><td class="checkbox-col"><input type="checkbox" /></td><td>Sasa ดู</td><td>葡萄牙语</td><td>巴西地区</td></tr>
-                          <tr><td class="checkbox-col"><input type="checkbox" /></td><td>廖廖短剧</td><td>繁体中文</td><td>中国台湾</td></tr>
-                          <tr><td class="checkbox-col"><input type="checkbox" /></td><td>Titi Pendek</td><td>马来西亚语</td><td>马来西亚</td></tr>
-                          <tr><td class="checkbox-col"><input type="checkbox" /></td><td>Yoyo Cortos</td><td>英语</td><td>北美</td></tr>
-                          <tr><td class="checkbox-col"><input type="checkbox" /></td><td>Mimi Drama</td><td>泰语</td><td>泰国</td></tr>
-                          <tr><td class="checkbox-col"><input type="checkbox" /></td><td>Luna Shorts</td><td>西班牙语</td><td>西班牙</td></tr>
+                          <tr data-name="Sasa ดู"><td class="checkbox-col"><input type="checkbox" onchange="toggleTiktokAvailable(this)" /></td><td>Sasa ดู</td><td>葡萄牙语</td><td>巴西地区</td></tr>
+                          <tr data-name="廖廖短剧"><td class="checkbox-col"><input type="checkbox" onchange="toggleTiktokAvailable(this)" /></td><td>廖廖短剧</td><td>繁体中文</td><td>中国台湾</td></tr>
+                          <tr data-name="Titi Pendek"><td class="checkbox-col"><input type="checkbox" onchange="toggleTiktokAvailable(this)" /></td><td>Titi Pendek</td><td>马来西亚语</td><td>马来西亚</td></tr>
+                          <tr data-name="Yoyo Cortos"><td class="checkbox-col"><input type="checkbox" onchange="toggleTiktokAvailable(this)" /></td><td>Yoyo Cortos</td><td>英语</td><td>北美</td></tr>
+                          <tr data-name="Mimi Drama"><td class="checkbox-col"><input type="checkbox" onchange="toggleTiktokAvailable(this)" /></td><td>Mimi Drama</td><td>泰语</td><td>泰国</td></tr>
+                          <tr data-name="Luna Shorts"><td class="checkbox-col"><input type="checkbox" onchange="toggleTiktokAvailable(this)" /></td><td>Luna Shorts</td><td>西班牙语</td><td>西班牙</td></tr>
                         </tbody>
                       </table>
                     </div>
@@ -471,9 +471,9 @@
                 <!-- 右侧：已选 TikTok 账号 -->
                 <div>
                   <div class="tt-transfer-toolbar">
-                    <div class="tt-transfer-search"><input type="text" class="form-input" placeholder="请输入TikTok账号名称" /></div>
+                    <div class="tt-transfer-search"><input type="text" class="form-input" placeholder="请输入名称" /></div>
                     <button type="button" class="btn btn-primary btn-sm">搜索</button>
-                    <span class="tt-transfer-count" id="tiktok-selected-count">已选：2 <a href="#" class="link" onclick="clearSelectedTiktokAccounts();return false;">清空</a></span>
+                    <span class="tt-transfer-count" id="tiktok-selected-count">已选：0 <a href="#" class="link" onclick="clearSelectedTiktokAccounts();return false;">清空</a></span>
                   </div>
                   <div class="tt-transfer-box">
                     <div class="tt-transfer-scroll">
@@ -482,8 +482,7 @@
                           <tr><th>TikTok 账号</th><th>语言</th><th>备注</th><th>操作</th></tr>
                         </thead>
                         <tbody id="tiktok-selected-tbody">
-                          <tr><td>Sasa ดู</td><td>葡萄牙语</td><td>巴西地区</td><td><a href="#" class="link" style="color:var(--color-error);" onclick="removeSelectedTiktokAccount(this);return false;">删除</a></td></tr>
-                          <tr><td>廖廖短剧</td><td>繁体中文</td><td>中国台湾</td><td><a href="#" class="link" style="color:var(--color-error);" onclick="removeSelectedTiktokAccount(this);return false;">删除</a></td></tr>
+                          <tr class="tt-transfer-empty"><td colspan="4"><div class="empty-state" style="padding:30px 20px;"><div class="empty-state-icon">📦</div><span>暂无数据</span></div></td></tr>
                         </tbody>
                       </table>
                     </div>
@@ -772,10 +771,86 @@
         document.getElementById('template-tiktok-overlay').classList.remove('open');
         document.getElementById('template-tiktok-drawer').classList.remove('open');
       }
+      function getTiktokAccountData(tr) {
+        return {
+          name: tr.getAttribute('data-name'),
+          lang: tr.cells[2].textContent,
+          remark: tr.cells[3].textContent
+        };
+      }
+      function addSelectedTiktokRow(data) {
+        var tbody = document.getElementById('tiktok-selected-tbody');
+        if (!tbody || !data.name) return;
+        var empty = tbody.querySelector('.tt-transfer-empty');
+        if (empty) empty.remove();
+        if (tbody.querySelector('tr[data-name="' + data.name + '"]')) return;
+        var tr = document.createElement('tr');
+        tr.setAttribute('data-name', data.name);
+        tr.innerHTML = '<td>' + data.name + '</td><td>' + data.lang + '</td><td>' + data.remark + '</td><td><a href="#" class="link" style="color:var(--color-error);" onclick="removeSelectedTiktokAccount(this);return false;">删除</a></td>';
+        tbody.appendChild(tr);
+        updateTiktokSelectedCount();
+      }
+      function removeSelectedTiktokRow(name) {
+        var tbody = document.getElementById('tiktok-selected-tbody');
+        if (!tbody) return;
+        var tr = tbody.querySelector('tr[data-name="' + name + '"]');
+        if (tr) tr.remove();
+        if (!tbody.querySelector('tr:not(.tt-transfer-empty)')) {
+          tbody.innerHTML = '<tr class="tt-transfer-empty"><td colspan="4"><div class="empty-state" style="padding:30px 20px;"><div class="empty-state-icon">📦</div><span>暂无数据</span></div></td></tr>';
+        }
+        updateTiktokSelectedCount();
+      }
+      function toggleTiktokAvailable(checkbox) {
+        var tr = checkbox.closest('tr');
+        if (!tr) return;
+        var data = getTiktokAccountData(tr);
+        if (checkbox.checked) {
+          addSelectedTiktokRow(data);
+        } else {
+          removeSelectedTiktokRow(data.name);
+        }
+        updateTiktokAvailableHeaderState();
+      }
+      function toggleAllTiktokAvailable(headerCheckbox) {
+        var tbody = document.getElementById('tiktok-available-tbody');
+        if (!tbody) return;
+        Array.prototype.forEach.call(tbody.querySelectorAll('tr'), function (tr) {
+          var cb = tr.querySelector('input[type="checkbox"]');
+          if (cb) cb.checked = headerCheckbox.checked;
+          var data = getTiktokAccountData(tr);
+          if (headerCheckbox.checked) {
+            addSelectedTiktokRow(data);
+          } else {
+            removeSelectedTiktokRow(data.name);
+          }
+        });
+      }
+      function removeSelectedTiktokAccount(link) {
+        var tr = link.closest('tr');
+        if (!tr) return;
+        var name = tr.getAttribute('data-name');
+        tr.remove();
+        var leftTr = document.querySelector('#tiktok-available-tbody tr[data-name="' + name + '"]');
+        if (leftTr) {
+          var cb = leftTr.querySelector('input[type="checkbox"]');
+          if (cb) cb.checked = false;
+        }
+        var tbody = document.getElementById('tiktok-selected-tbody');
+        if (tbody && !tbody.querySelector('tr:not(.tt-transfer-empty)')) {
+          tbody.innerHTML = '<tr class="tt-transfer-empty"><td colspan="4"><div class="empty-state" style="padding:30px 20px;"><div class="empty-state-icon">📦</div><span>暂无数据</span></div></td></tr>';
+        }
+        updateTiktokSelectedCount();
+        updateTiktokAvailableHeaderState();
+      }
       function clearSelectedTiktokAccounts() {
         var tbody = document.getElementById('tiktok-selected-tbody');
         if (!tbody) return;
         tbody.innerHTML = '<tr class="tt-transfer-empty"><td colspan="4"><div class="empty-state" style="padding:30px 20px;"><div class="empty-state-icon">📦</div><span>暂无数据</span></div></td></tr>';
+        var availTbody = document.getElementById('tiktok-available-tbody');
+        if (availTbody) {
+          Array.prototype.forEach.call(availTbody.querySelectorAll('input[type="checkbox"]'), function (cb) { cb.checked = false; });
+        }
+        updateTiktokAvailableHeaderState();
         updateTiktokSelectedCount();
       }
       function updateTiktokSelectedCount() {
@@ -784,22 +859,13 @@
         var el = document.getElementById('tiktok-selected-count');
         if (el) el.innerHTML = '已选：' + count + ' <a href="#" class="link" onclick="clearSelectedTiktokAccounts();return false;">清空</a>';
       }
-      function removeSelectedTiktokAccount(link) {
-        var tr = link.closest('tr');
-        if (!tr) return;
-        tr.remove();
-        var tbody = document.getElementById('tiktok-selected-tbody');
-        if (tbody && !tbody.querySelector('tr:not(.tt-transfer-empty)')) {
-          tbody.innerHTML = '<tr class="tt-transfer-empty"><td colspan="4"><div class="empty-state" style="padding:30px 20px;"><div class="empty-state-icon">📦</div><span>暂无数据</span></div></td></tr>';
-        }
-        updateTiktokSelectedCount();
-      }
-      function toggleAllTiktokAvailable(headerCheckbox) {
+      function updateTiktokAvailableHeaderState() {
         var tbody = document.getElementById('tiktok-available-tbody');
         if (!tbody) return;
-        Array.prototype.forEach.call(tbody.querySelectorAll('input[type="checkbox"]'), function (cb) {
-          cb.checked = headerCheckbox.checked;
-        });
+        var rows = tbody.querySelectorAll('tr');
+        var checked = tbody.querySelectorAll('input[type="checkbox"]:checked');
+        var header = document.getElementById('tiktok-available-header-checkbox');
+        if (header) header.checked = rows.length > 0 && checked.length === rows.length;
       }
 
       /* 文案弹框 */
