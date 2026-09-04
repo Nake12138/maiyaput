@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="docx-page-size" content="A4">
-<title>模板管理 · TikTok 账号包 · 页面需求文档</title>
+<title>批量投放 · TikTok 账号包与投放身份 · 页面需求文档</title>
 <style>
 :root {
   --primary: #1d4ed8;
@@ -79,34 +79,31 @@ blockquote {
 </style>
 </head>
 <body>
-<h1 id="_1">模板管理 · TikTok 账号包 · 页面需求文档</h1>
+<h1 id="_1">批量投放 · TikTok 账号包与投放身份 · 页面需求文档</h1>
 <blockquote>
-<p><strong>原型来源</strong>：<code>pages/overseas-template.html</code>（海外投放系统 - 批量投放 - 模板管理 - TikTok 账号包）<br />
-<strong>文档版本</strong>：v1.0<br />
+<p><strong>原型来源</strong>：<code>pages/overseas-template.html</code>（模板管理 - TikTok 账号包）、<code>pages/overseas-auto-delivery.html</code>（自动化任务 - 投放身份）<br />
+<strong>文档版本</strong>：v1.1<br />
 <strong>生成日期</strong>：2026-09-04<br />
 <strong>文档格式</strong>：HTML（浏览器查看）</p>
 </blockquote>
 <hr />
+
 <h2 id="1">1. 项目背景与目标</h2>
 <h3 id="11">1.1 项目背景</h3>
-<p>海外投放系统面向短剧出海投放场景，基于 TikTok Business API 管理广告投放基础设施。模板管理模块沉淀常用投放配置，其中 TikTok 账号包用于将多个 TikTok 账号组合为模板，供自动化任务快速引用。</p>
+<p>海外投放系统面向短剧出海投放场景，基于 TikTok Business API 管理广告投放基础设施。模板管理模块沉淀常用投放配置，其中 TikTok 账号包用于将多个 TikTok 账号组合为模板，供自动化任务快速引用；自动化任务模块支持按规则自动创建广告，投放身份（TikTok 账号）决定广告以哪些 TikTok 账号进行投放。系统提供「TikTok 账号包」与「手动选择」两种投放身份选择方式，并需兼容历史任务数据的回显。</p>
 <h3 id="12">1.2 文档目标</h3>
-<p>本文档定义 TikTok 账号包页面的功能需求、交互逻辑、数据筛选、表格字段、数据权限与接口依赖，作为原型评审、研发排期与测试验收的依据。文档覆盖 2 个核心用户故事，明确每个表格的字段说明、数据来源与数据流转路径。</p>
+<p>本文档定义批量投放模块中 TikTok 账号包与自动化任务投放身份的功能需求、交互逻辑、数据筛选、表格字段、数据权限与接口依赖，作为原型评审、研发排期与测试验收的依据。文档覆盖 5 个核心用户故事，明确每个表格的字段说明、数据来源与数据流转路径。</p>
 <h3 id="13">1.3 适用范围</h3>
 <ul>
-<li>所属模块：海外投放系统 → 批量投放 → 模板管理 → TikTok 账号包</li>
-<li>页面文件：<code>pages/overseas-template.html</code></li>
+<li>所属模块：海外投放系统 → 批量投放 → 模板管理 / 自动化任务</li>
+<li>页面文件：<code>pages/overseas-template.html</code>、<code>pages/overseas-auto-delivery.html</code></li>
 <li>复用样式：<code>styles/main.css</code>、<code>styles/prd.css</code>、<code>scripts/prd.js</code></li>
 </ul>
-<hr />
+
 <h2 id="2">2. 目标用户</h2>
 <table>
 <thead>
-<tr>
-<th>角色</th>
-<th>说明</th>
-<th>使用场景</th>
-</tr>
+<tr><th>角色</th><th>说明</th><th>使用场景</th></tr>
 </thead>
 <tbody>
 <tr>
@@ -124,9 +121,18 @@ blockquote {
 <td>系统级数据查看与维护</td>
 <td>查看全部 TikTok 账号包数据</td>
 </tr>
+<tr>
+<td>投放运营</td>
+<td>配置自动化任务的投放身份</td>
+<td>选择 TikTok 账号包或手动选择具体账号</td>
+</tr>
+<tr>
+<td>投放管理员</td>
+<td>审核与调整任务配置</td>
+<td>查看历史任务投放身份回显</td>
+</tr>
 </tbody>
 </table>
-<hr />
 <h2 id="3">3. 核心业务流程</h2>
 <h3 id="31">3.1 流程概述</h3>
 <pre><code>进入模板管理 - TikTok 账号包 Tab
@@ -148,16 +154,25 @@ blockquote {
 <li>点击「确定」保存账号包并关闭抽屉；点击「取消」不保存并关闭抽屉。</li>
 </ol>
 <hr />
+<h3 id="33">3.3 流程概述</h3>
+<pre><code>打开新建/编辑自动化任务抽屉
+  └─→ 定位到「投放身份（TikTok 账号）」字段
+        ├─→ 方式一：TikTok 账号包
+        │      ├─→ 点击「选择TT账号包」打开弹窗
+        │      ├─→ 勾选/取消勾选账号包（支持空选）
+        │      └─→ 点击「确定」保存并展示已选账号包标签
+        └─→ 方式二：手动选择
+               ├─→ 点击触发按钮展开下拉多选
+               ├─→ 勾选/取消勾选账号
+               ├─→ 点击一键清除按钮清空全部已选
+               └─→ 点击外部区域或按 Esc 收起下拉
+</code></pre>
+
+<hr />
 <h2 id="4">4. 功能清单</h2>
 <table>
 <thead>
-<tr>
-<th>功能点 ID</th>
-<th>功能名称</th>
-<th>所属页面/组件</th>
-<th>优先级</th>
-<th>说明</th>
-</tr>
+<tr><th>功能点 ID</th><th>功能名称</th><th>所属页面/组件</th><th>优先级</th><th>说明</th></tr>
 </thead>
 <tbody>
 <tr>
@@ -181,9 +196,29 @@ blockquote {
 <td>P0</td>
 <td>通过左右穿梭框维护账号包内的账号；复制时名称前自动拼接「复制-」</td>
 </tr>
+<tr>
+<td>F-004</td>
+<td>投放身份模式切换</td>
+<td>自动化任务抽屉</td>
+<td>P0</td>
+<td>支持「TikTok 账号包」/「手动选择」两种模式切换与回显</td>
+</tr>
+<tr>
+<td>F-005</td>
+<td>TikTok 账号包选择弹窗</td>
+<td>自动化任务抽屉</td>
+<td>P0</td>
+<td>多选账号包，未选择时也可点击确定保存</td>
+</tr>
+<tr>
+<td>F-006</td>
+<td>手动选择 TikTok 账号</td>
+<td>自动化任务抽屉</td>
+<td>P0</td>
+<td>下拉多选，支持搜索与一键清除</td>
+</tr>
 </tbody>
 </table>
-<hr />
 <h2 id="5">5. 用户故事</h2>
 <h3 id="51-us-001-p0">5.1 US-001 TikTok 账号包列表查询与展示（P0）</h3>
 <p><strong>故事描述</strong>：作为投放运营，我想要查看并按名称/创建人搜索 TikTok 账号包列表，以便快速定位目标账号包并在自动化任务中引用。数据权限按组织架构控制：组长可查看组员数据，组员仅可查看自己的数据；拥有「全部数据」权限的用户可查看全部数据。</p>
@@ -273,6 +308,94 @@ blockquote {
 <li>点击「确定」保存并关闭抽屉；点击「取消」不保存并关闭抽屉。</li>
 </ol>
 <hr />
+<h3 id="53-us-003-p0">5.3 US-003 投放身份（TikTok 账号）模式切换与回显（P0）</h3>
+<p><strong>故事描述</strong>：作为投放运营，我想要在创建/编辑自动化任务时选择投放身份方式，并正确回显历史任务的投放身份数据。历史任务中已保存的投放身份统一按「手动选择」模式处理，并正常回显用户已选选项。</p>
+<p><strong>交互控件</strong></p>
+<ul>
+<li>投放身份（TikTok 账号）分段选择器：选项为「TikTok 账号包」/「手动选择」。</li>
+<li>TikTok 账号包模式下显示「选择TT账号包」按钮与已选账号包标签。</li>
+<li>手动选择模式下显示下拉多选框（支持搜索、一键清除）与已选账号标签。</li>
+</ul>
+<p><strong>数据来源</strong></p>
+<ul>
+<li>TikTok 账号包列表 ← 模板管理-TikTok账号包页面列表数据。</li>
+<li>手动选择账号列表 ← 资产管理-TikTok账号列表数据。</li>
+</ul>
+<p><strong>数据流转</strong></p>
+<p>新建任务默认选中「TikTok 账号包」模式；用户点击分段项切换模式；选择账号包模式时点击「选择TT账号包」打开弹窗多选；手动选择模式时点击下拉勾选账号，点击一键清除按钮可清空全部已选项；编辑/复制历史任务时，历史投放身份数据统一按「手动选择」模式处理，并回显用户已选账号。</p>
+<p><strong>界面示意</strong></p>
+<p><img src="./images/auto-delivery-identity-default.png" alt="投放身份模式切换" /></p>
+<p><strong>验收标准</strong></p>
+<ol>
+<li>投放身份字段标题为「投放身份（TikTok 账号）」。</li>
+<li>默认选中「TikTok 账号包」模式。</li>
+<li>切换模式时下方展示对应选择控件，已选结果互不影响。</li>
+<li>历史任务（编辑/复制）统一按手动选择模式回显已选账号。</li>
+<li>手动选择模式下提供一键清除全部已选项功能。</li>
+</ol>
+<hr />
+<h3 id="54-us-004-p0">5.4 US-004 TikTok 账号包选择弹窗（P0）</h3>
+<p><strong>故事描述</strong>：作为投放运营，我想要从已有的 TikTok 账号包中选择多个包作为投放身份，以便批量使用沉淀好的账号组合。</p>
+<p><strong>筛选项（组件类型）</strong></p>
+<ul>
+<li>名称：单行文本输入框（占位「请输入名称」）+「查询」/「重置」按钮；点击「查询」后按名称过滤，点击「重置」恢复全量列表。</li>
+</ul>
+<p><strong>表格字段</strong></p>
+<ul>
+<li>选择列：复选框，表头支持全选。</li>
+<li>名称：文本。</li>
+<li>TikTok账号数量：数字。</li>
+<li>备注：文本。</li>
+</ul>
+<p><strong>数据来源</strong></p>
+<ul>
+<li>模板管理-TikTok账号包页面列表数据。</li>
+</ul>
+<p><strong>数据流转</strong></p>
+<p>点击「选择TT账号包」打开弹窗 → 渲染账号包列表并回显已选项 → 用户勾选/取消勾选 → 底部显示已选数量 → 点击「确定」保存当前选择（允许空选）并关闭弹窗，在抽屉内展示已选账号包标签 → 点击「取消」不保存并关闭。</p>
+<p><strong>界面示意</strong></p>
+<p><img src="./images/auto-delivery-package-picker.png" alt="账号包选择弹窗" /></p>
+<p><strong>验收标准</strong></p>
+<ol>
+<li>弹窗标题为「选择TikTok账号包」。</li>
+<li>支持按账号包名称模糊查询。</li>
+<li>列表支持多选，表头全选仅对当前过滤结果生效。</li>
+<li>底部实时显示已选数量。</li>
+<li>未选择任何数据时点击「确定」仍可保存（即允许清空已选）。</li>
+<li>点击「确定」后已选账号包以标签形式展示在抽屉内。</li>
+<li>点击标签上的移除按钮可取消选择。</li>
+</ol>
+<hr />
+<h3 id="55-us-005-p0">5.5 US-005 手动选择 TikTok 账号（P0）</h3>
+<p><strong>故事描述</strong>：作为投放运营，我想要手动从全部 TikTok 账号中多选具体账号作为投放身份，并支持一键清除全部已选项。</p>
+<p><strong>筛选项（组件类型）</strong></p>
+<ul>
+<li>下拉面板顶部搜索框：单行文本输入框（占位「请输入名称」，输入时实时过滤下拉选项）。</li>
+</ul>
+<p><strong>下拉与已选展示</strong></p>
+<ul>
+<li>触发按钮：显示当前已选数量或默认占位「请选择TikTok账号」。</li>
+<li>一键清除按钮：×，点击后清空全部已选项。</li>
+<li>下拉选项：复选框 + 账号名称 + 语言。</li>
+<li>已选标签：账号名称（语言）+ 移除按钮。</li>
+</ul>
+<p><strong>数据来源</strong></p>
+<ul>
+<li>资产管理-TikTok账号列表数据。</li>
+</ul>
+<p><strong>数据流转</strong></p>
+<p>点击触发按钮展开下拉面板 → 展示全部可选项并回显已选状态 → 输入关键词实时过滤 → 勾选/取消勾选更新已选账号标签与触发按钮文案 → 点击一键清除按钮清空全部已选项 → 点击面板外部或按 Esc 收起下拉。</p>
+<p><strong>界面示意</strong></p>
+<p><img src="./images/auto-delivery-manual-tags.png" alt="手动选择账号" /></p>
+<p><strong>验收标准</strong></p>
+<ol>
+<li>下拉框展示全部可选项，并按名称/语言实时过滤。</li>
+<li>已选账号以标签形式展示在触发按钮下方。</li>
+<li>点击标签上的移除按钮可取消对应账号选择。</li>
+<li>点击一键清除按钮可一次性清空所有已选账号。</li>
+<li>点击下拉外部区域或按 Esc 收起下拉面板。</li>
+</ol>
+<hr />
 <h2 id="6">6. 数据权限</h2>
 <table>
 <thead>
@@ -301,15 +424,15 @@ blockquote {
 </tbody>
 </table>
 <hr />
-<h2 id="7">7. 筛选项组件类型汇总</h2>
+<h2 id="7">7. 历史数据处理</h2>
+<h3 id="71">7.1 历史数据处理</h3>
+<p>对于早期已创建的自动化任务，其投放身份数据统一按「手动选择」模式处理。编辑或复制历史任务时，系统按手动选择模式回显用户已选的 TikTok 账号，不强制切换为账号包模式。</p>
+<hr />
+
+<h2 id="8">8. 筛选项组件类型汇总</h2>
 <table>
 <thead>
-<tr>
-<th>所属 US</th>
-<th>筛选项名称</th>
-<th>组件类型</th>
-<th>交互说明</th>
-</tr>
+<tr><th>所属 US</th><th>筛选项名称</th><th>组件类型</th><th>交互说明</th></tr>
 </thead>
 <tbody>
 <tr>
@@ -347,6 +470,18 @@ blockquote {
 <td>TT账号名称/语言/备注（右侧）</td>
 <td>单行文本/下拉选择 + 按钮</td>
 <td>对右侧已选账号进行筛选，并显示「已选：N」与「清空」</td>
+</tr>
+<tr>
+<td>US-004</td>
+<td>账号包名称</td>
+<td>单行文本输入框 + 按钮</td>
+<td>占位「请输入名称」，点击「查询」后执行过滤，「重置」恢复全量</td>
+</tr>
+<tr>
+<td>US-005</td>
+<td>账号搜索</td>
+<td>单行文本输入框</td>
+<td>占位「请输入名称」，输入时实时过滤下拉选项</td>
 </tr>
 </tbody>
 </table>

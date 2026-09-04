@@ -1445,7 +1445,7 @@
                           </div>
                           <!-- 方式二：手动选择 TikTok 账号 -->
                           <div id="identity-manual-mode" style="display:none;margin-top:10px;position:relative;">
-                            <button type="button" class="us-fab" data-us="US-003" title="按住可拖动，点击查看手动选择用户故事说明" style="left:auto;right:10px;bottom:auto;top:6px;z-index:55;padding:5px 10px;font-size:11px;">📋 US-003 说明 · 手动选择 TikTok 账号</button>
+                            <button type="button" class="us-fab" data-us="US-005" title="按住可拖动，点击查看手动选择用户故事说明" style="left:auto;right:10px;bottom:auto;top:6px;z-index:55;padding:5px 10px;font-size:11px;">📋 US-005 说明 · 手动选择 TikTok 账号</button>
                             <div class="identity-dropdown" id="identity-manual-dropdown">
                               <div class="identity-dropdown-field">
                                 <button type="button" class="identity-dropdown-trigger" onclick="toggleIdentityManualDropdown(event)">
@@ -1504,7 +1504,7 @@
                 <button class="btn btn-outline btn-sm" onclick="closeOverseasNewTaskDrawer()">取消</button>
                 <button class="btn btn-primary btn-sm" onclick="submitOverseasNewTask()">确定</button>
               </div>
-              <button type="button" class="us-fab" data-us="US-001" title="按住可拖动，点击查看本抽屉用户故事说明">📋 US-001 说明 · 投放身份（TikTok 账号）模式切换与回显</button>
+              <button type="button" class="us-fab" data-us="US-003" title="按住可拖动，点击查看本抽屉用户故事说明">📋 US-003 说明 · 投放身份（TikTok 账号）模式切换与回显</button>
               </div>
             </div>
           </div>
@@ -1545,7 +1545,7 @@
           <button class="btn btn-outline btn-sm" onclick="closeTiktokPackagePicker()">取消</button>
           <button class="btn btn-primary btn-sm" onclick="confirmTiktokPackages()">确定</button>
         </div>
-        <button type="button" class="us-fab" data-us="US-002" title="按住可拖动，点击查看本弹框用户故事说明">📋 US-002 说明 · TikTok 账号包选择弹窗</button>
+        <button type="button" class="us-fab" data-us="US-004" title="按住可拖动，点击查看本弹框用户故事说明">📋 US-004 说明 · TikTok 账号包选择弹窗</button>
       </div>
     </div>
 
@@ -2424,12 +2424,12 @@
 
     <script>
       window.prdPageTitle = '自动化任务 · 投放身份（TikTok 账号）· 交互需求说明';
-      window.prdPageSub = '简洁版 PRD（3 个用户故事 · 展开查看筛选项/表格字段/数据来源/数据流转 · 按住标题栏可拖动，双击或按钮可全屏 · 「复制链接」复制需求说明页面链接）';
-      window.PRD_PAGE_URL = '../output/prd-doc-fix-20260902/stage2/formatted-auto-delivery-identity-report.html';
+      window.prdPageSub = '简洁版 PRD（本页 3 个用户故事：US-003~US-005 · 展开查看筛选项/表格字段/数据来源/数据流转 · 按住标题栏可拖动，双击或按钮可全屏 · 「复制链接」复制需求说明页面链接）';
+      window.PRD_PAGE_URL = '../output/prd-doc-fix-20260902/stage2/formatted-overseas-batch-delivery-identity-report.html';
 
       window.prdStories = [
         {
-          id: 'US-001', title: '投放身份（TikTok 账号）模式切换与回显', priority: 'P0',
+          id: 'US-003', title: '投放身份（TikTok 账号）模式切换与回显', priority: 'P0',
           shot: '../assets/prd/auto-delivery-identity-default.png',
           desc: '作为投放运营，我想要在创建/编辑自动化任务时选择投放身份方式，并正确回显历史任务的投放身份数据。历史任务中已保存的投放身份统一按「手动选择」模式处理，并正常回显用户已选选项。',
           fieldsLabel: '交互控件',
@@ -2445,7 +2445,7 @@
           ]
         },
         {
-          id: 'US-002', title: 'TikTok 账号包选择弹窗', priority: 'P0',
+          id: 'US-004', title: 'TikTok 账号包选择弹窗', priority: 'P0',
           shot: '../assets/prd/auto-delivery-package-picker.png',
           desc: '作为投放运营，我想要从已有的 TikTok 账号包中选择多个包作为投放身份，以便批量使用沉淀好的账号组合。',
           filter: '名称（单行文本输入框，占位「请输入名称」）+「查询」/「重置」按钮；点击「查询」后按名称过滤，点击「重置」恢复全量列表。',
@@ -2463,7 +2463,7 @@
           ]
         },
         {
-          id: 'US-003', title: '手动选择 TikTok 账号', priority: 'P0',
+          id: 'US-005', title: '手动选择 TikTok 账号', priority: 'P0',
           shot: '../assets/prd/auto-delivery-manual-tags.png',
           desc: '作为投放运营，我想要手动从全部 TikTok 账号中多选具体账号作为投放身份，并支持一键清除全部已选项。',
           filter: '下拉面板顶部搜索框（单行文本输入框，占位「请输入名称」，输入时实时过滤下拉选项）。',
