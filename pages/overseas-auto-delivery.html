@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>自动化任务 - 海外投放系统</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="../styles/main.css" />
+    <link rel="stylesheet" href="../styles/main.css?v=20260904" />
   </head>
   <body>
     <div class="layout">
@@ -1429,8 +1429,36 @@
                     <div class="form-sub-section-title">广告</div>
                     <div class="form-row">
                       <div class="form-item">
-                        <label class="form-label"><span class="form-required">*</span> 投放身份</label>
-                        <input type="text" class="form-input" placeholder="请选择" />
+                        <label class="form-label"><span class="form-required">*</span> 投放身份（TikTok 账号）</label>
+                        <div style="width:100%;">
+                          <div class="segmented-control" id="identity-mode">
+                            <button type="button" class="segmented-item active" data-value="package" onclick="switchIdentityMode('package')">TikTok 账号包</button>
+                            <button type="button" class="segmented-item" data-value="manual" onclick="switchIdentityMode('manual')">手动选择</button>
+                          </div>
+                          <!-- 方式一：选择 TikTok 账号包 -->
+                          <div id="identity-package-mode" style="margin-top:10px;">
+                            <div class="inline-field">
+                              <button type="button" class="btn btn-outline btn-sm" onclick="openTiktokPackagePicker()">选择</button>
+                            </div>
+                            <div class="identity-tags" id="identity-package-tags"></div>
+                          </div>
+                          <!-- 方式二：手动选择 TikTok 账号 -->
+                          <div id="identity-manual-mode" style="display:none;margin-top:10px;">
+                            <div class="identity-dropdown" id="identity-manual-dropdown">
+                              <button type="button" class="identity-dropdown-trigger" onclick="toggleIdentityManualDropdown(event)">
+                                <span id="identity-manual-label">请选择TikTok账号</span>
+                                <span class="identity-dropdown-caret">▾</span>
+                              </button>
+                              <div class="identity-dropdown-panel" id="identity-manual-panel" style="display:none;">
+                                <div class="identity-dropdown-search">
+                                  <input type="text" class="form-input" placeholder="请输入名称" oninput="filterIdentityManualOptions(this.value)" />
+                                </div>
+                                <div class="identity-dropdown-list" id="identity-manual-options"></div>
+                              </div>
+                            </div>
+                            <div class="identity-tags" id="identity-manual-tags"></div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -1476,6 +1504,42 @@
           </div>
         </div>
       </main>
+    </div>
+
+    <!-- 投放身份 - 选择 TikTok 账号包 弹窗 -->
+    <div id="tiktok-package-picker-overlay" class="modal-overlay" style="z-index:1150;" onclick="closeTiktokPackagePicker()"></div>
+    <div id="tiktok-package-picker" class="modal" style="z-index:1151;">
+      <div class="modal-card" style="width:600px;">
+        <div class="modal-header">
+          <span>选择TikTok账号包</span>
+          <button class="modal-close" onclick="closeTiktokPackagePicker()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-filter">
+            <input type="text" class="form-input" id="tiktok-package-search" placeholder="请输入名称" style="flex:1;" />
+            <button class="btn btn-primary btn-sm" onclick="filterTiktokPackages()">查询</button>
+            <button class="btn btn-outline btn-sm" onclick="resetTiktokPackagePicker()">重置</button>
+          </div>
+          <div class="table-card" style="border-radius:4px;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th class="checkbox-col"><input type="checkbox" onclick="toggleAllTiktokPackages(this)" /></th>
+                  <th>名称</th>
+                  <th>TikTok账号数量</th>
+                  <th>备注</th>
+                </tr>
+              </thead>
+              <tbody id="tiktok-package-picker-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <span style="margin-right:auto;font-size:13px;color:var(--color-text-secondary);" id="tiktok-package-picker-count">已选：0</span>
+          <button class="btn btn-outline btn-sm" onclick="closeTiktokPackagePicker()">取消</button>
+          <button class="btn btn-primary btn-sm" onclick="confirmTiktokPackages()">确定</button>
+        </div>
+      </div>
     </div>
 
     <script>
@@ -1649,6 +1713,210 @@
         alert('新建海外任务已保存');
         closeOverseasNewTaskDrawer();
       }
+
+      /* ===== 投放身份（TikTok 账号）：TikTok 账号包 / 手动选择 ===== */
+      var IDENTITY_PACKAGES = [
+        { name: '东南亚英语TikTok包', count: 4, remark: '--' },
+        { name: '欧洲多语言TikTok包', count: 3, remark: '--' }
+      ];
+      var IDENTITY_ACCOUNTS = [
+        { name: 'Sasa ดู', lang: '葡萄牙语' },
+        { name: '廖廖短剧', lang: '繁体中文' },
+        { name: 'Titi Pendek', lang: '马来西亚语' },
+        { name: 'Yoyo Cortos', lang: '英语' },
+        { name: 'Mimi Drama', lang: '泰语' },
+        { name: 'Luna Shorts', lang: '西班牙语' }
+      ];
+      var identitySelectedPackages = [];
+      var identitySelectedAccounts = [];
+
+      function switchIdentityMode(mode) {
+        var group = document.getElementById('identity-mode');
+        var packageMode = document.getElementById('identity-package-mode');
+        var manualMode = document.getElementById('identity-manual-mode');
+        if (!group || !packageMode || !manualMode) return;
+        Array.prototype.forEach.call(group.querySelectorAll('.segmented-item'), function (btn) {
+          btn.classList.toggle('active', btn.getAttribute('data-value') === mode);
+        });
+        packageMode.style.display = mode === 'package' ? 'block' : 'none';
+        manualMode.style.display = mode === 'manual' ? 'block' : 'none';
+        if (mode === 'manual') renderIdentityManualOptions('');
+      }
+
+      function renderIdentityPackageTags() {
+        var box = document.getElementById('identity-package-tags');
+        if (!box) return;
+        if (!identitySelectedPackages.length) {
+          box.innerHTML = '';
+          return;
+        }
+        box.innerHTML = identitySelectedPackages.map(function (p) {
+          return '<span class="identity-tag">' + p.name + '<button type="button" onclick="removeIdentityPackage(\'' + p.name + '\')" title="移除">&times;</button></span>';
+        }).join('');
+      }
+
+      function removeIdentityPackage(name) {
+        identitySelectedPackages = identitySelectedPackages.filter(function (p) { return p.name !== name; });
+        renderIdentityPackageTags();
+      }
+
+      function openTiktokPackagePicker() {
+        renderTiktokPackagePickerRows();
+        var overlay = document.getElementById('tiktok-package-picker-overlay');
+        var modal = document.getElementById('tiktok-package-picker');
+        if (overlay) overlay.classList.add('open');
+        if (modal) modal.classList.add('open');
+        updateTiktokPackagePickerCount();
+      }
+
+      function closeTiktokPackagePicker() {
+        var overlay = document.getElementById('tiktok-package-picker-overlay');
+        var modal = document.getElementById('tiktok-package-picker');
+        if (overlay) overlay.classList.remove('open');
+        if (modal) modal.classList.remove('open');
+      }
+
+      function renderTiktokPackagePickerRows() {
+        var tbody = document.getElementById('tiktok-package-picker-tbody');
+        if (!tbody) return;
+        var kw = (document.getElementById('tiktok-package-search') || {}).value || '';
+        kw = kw.trim();
+        tbody.innerHTML = IDENTITY_PACKAGES.filter(function (p) {
+          return !kw || p.name.indexOf(kw) >= 0;
+        }).map(function (p) {
+          var checked = identitySelectedPackages.some(function (s) { return s.name === p.name; });
+          return '<tr data-name="' + p.name + '">' +
+            '<td class="checkbox-col"><input type="checkbox" value="' + p.name + '"' + (checked ? ' checked' : '') + ' onchange="updateTiktokPackagePickerCount()" /></td>' +
+            '<td>' + p.name + '</td><td>' + p.count + '</td><td>' + p.remark + '</td></tr>';
+        }).join('') || '<tr><td colspan="4" style="text-align:center;color:var(--color-text-tertiary);padding:24px 0;">暂无数据</td></tr>';
+      }
+
+      function updateTiktokPackagePickerCount() {
+        var tbody = document.getElementById('tiktok-package-picker-tbody');
+        if (!tbody) return;
+        var checked = tbody.querySelectorAll('input[type="checkbox"]:checked').length;
+        var total = tbody.querySelectorAll('input[type="checkbox"]').length;
+        var countEl = document.getElementById('tiktok-package-picker-count');
+        if (countEl) countEl.textContent = '已选：' + checked;
+        var header = tbody.previousElementSibling ? tbody.previousElementSibling.querySelector('input[type="checkbox"]') : null;
+        if (!header) header = document.querySelector('#tiktok-package-picker .data-table thead input[type="checkbox"]');
+        if (header) {
+          header.checked = total > 0 && checked === total;
+        }
+      }
+
+      function toggleAllTiktokPackages(header) {
+        var tbody = document.getElementById('tiktok-package-picker-tbody');
+        if (!tbody) return;
+        Array.prototype.forEach.call(tbody.querySelectorAll('input[type="checkbox"]'), function (cb) {
+          cb.checked = header.checked;
+        });
+        updateTiktokPackagePickerCount();
+      }
+
+      function filterTiktokPackages() {
+        renderTiktokPackagePickerRows();
+        updateTiktokPackagePickerCount();
+      }
+
+      function resetTiktokPackagePicker() {
+        var search = document.getElementById('tiktok-package-search');
+        if (search) search.value = '';
+        renderTiktokPackagePickerRows();
+        updateTiktokPackagePickerCount();
+      }
+
+      function confirmTiktokPackages() {
+        var tbody = document.getElementById('tiktok-package-picker-tbody');
+        if (!tbody) return;
+        identitySelectedPackages = [];
+        Array.prototype.forEach.call(tbody.querySelectorAll('input[type="checkbox"]:checked'), function (cb) {
+          var name = cb.value;
+          var p = IDENTITY_PACKAGES.filter(function (x) { return x.name === name; })[0];
+          if (p) identitySelectedPackages.push(p);
+        });
+        renderIdentityPackageTags();
+        closeTiktokPackagePicker();
+      }
+
+      /* 手动选择：多选下拉 */
+      function renderIdentityManualOptions(kw) {
+        var box = document.getElementById('identity-manual-options');
+        if (!box) return;
+        kw = (kw || '').trim();
+        var list = IDENTITY_ACCOUNTS.filter(function (a) {
+          return !kw || a.name.indexOf(kw) >= 0 || a.lang.indexOf(kw) >= 0;
+        });
+        if (!list.length) {
+          box.innerHTML = '<div class="identity-dropdown-empty">暂无数据</div>';
+          return;
+        }
+        box.innerHTML = list.map(function (a) {
+          var checked = identitySelectedAccounts.indexOf(a.name) >= 0;
+          return '<label class="identity-dropdown-option">' +
+            '<input type="checkbox" value="' + a.name + '"' + (checked ? ' checked' : '') + ' onchange="syncIdentityManualSelection()" />' +
+            '<span>' + a.name + '</span>' +
+            '<span class="opt-meta">' + a.lang + '</span>' +
+            '</label>';
+        }).join('');
+      }
+
+      function toggleIdentityManualDropdown(event) {
+        if (event) event.stopPropagation();
+        var panel = document.getElementById('identity-manual-panel');
+        if (!panel) return;
+        panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+        if (panel.style.display === 'block') {
+          renderIdentityManualOptions('');
+          var input = document.querySelector('#identity-manual-panel .form-input');
+          if (input) input.value = '';
+        }
+      }
+
+      function filterIdentityManualOptions(value) {
+        renderIdentityManualOptions(value);
+      }
+
+      function syncIdentityManualSelection() {
+        var box = document.getElementById('identity-manual-options');
+        if (!box) return;
+        identitySelectedAccounts = [];
+        Array.prototype.forEach.call(box.querySelectorAll('input[type="checkbox"]:checked'), function (cb) {
+          identitySelectedAccounts.push(cb.value);
+        });
+        var label = document.getElementById('identity-manual-label');
+        if (label) {
+          label.textContent = identitySelectedAccounts.length ? '已选：' + identitySelectedAccounts.length + ' 个TikTok账号' : '请选择TikTok账号';
+        }
+        var tags = document.getElementById('identity-manual-tags');
+        if (tags) {
+          tags.innerHTML = identitySelectedAccounts.map(function (name) {
+            var lang = '';
+            IDENTITY_ACCOUNTS.forEach(function (a) { if (a.name === name) lang = a.lang; });
+            return '<span class="identity-tag">' + name + '（' + lang + '）<button type="button" onclick="removeIdentityManualAccount(\'' + name + '\')" title="移除">&times;</button></span>';
+          }).join('');
+        }
+      }
+
+      function removeIdentityManualAccount(name) {
+        identitySelectedAccounts = identitySelectedAccounts.filter(function (n) { return n !== name; });
+        renderIdentityManualOptions('');
+        var box = document.getElementById('identity-manual-options');
+        if (box) {
+          Array.prototype.forEach.call(box.querySelectorAll('input[type="checkbox"]'), function (cb) {
+            cb.checked = identitySelectedAccounts.indexOf(cb.value) >= 0;
+          });
+        }
+        syncIdentityManualSelection();
+      }
+
+      /* 点击下拉外部区域时收起 */
+      document.addEventListener('click', function (e) {
+        var dropdown = document.getElementById('identity-manual-dropdown');
+        var panel = document.getElementById('identity-manual-panel');
+        if (!dropdown || !panel) return;
+        if (!dropdown.contains(e.target)) panel.style.display = 'none';
+      });
 
       /* ===== 素材选择方式：按时间 / 按排序 / 自定义 切换 ===== */
       function switchMaterialSelectMode(mode) {
