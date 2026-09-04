@@ -2407,7 +2407,6 @@
       <div class="prd-panel-body" id="prd-panel-body"></div>
     </aside>
     <button type="button" id="prd-float-btn" class="prd-float-btn" title="按住可拖动，点击打开需求说明">📋 需求说明</button>
-    <button type="button" class="us-fab us-fab-page" data-us="US-001" title="按住可拖动，点击查看本页面用户故事说明">📋 US-001 说明 · 投放身份（TikTok 账号）模式切换与回显</button>
     <div id="prd-img-viewer" class="prd-img-viewer" role="dialog" aria-label="图片预览">
       <div class="prd-img-viewer-tip">点击任意位置或按 Esc 关闭</div>
       <img id="prd-img-viewer-img" src="" alt="" />
@@ -2431,6 +2430,7 @@
       window.prdStories = [
         {
           id: 'US-001', title: '投放身份（TikTok 账号）模式切换与回显', priority: 'P0',
+          shot: '../assets/prd/auto-delivery-identity-default.png',
           desc: '作为投放运营，我想要在创建/编辑自动化任务时选择投放身份方式，并正确回显历史任务的投放身份数据。历史任务中已保存的投放身份统一按「手动选择」模式处理，并正常回显用户已选选项。',
           fieldsLabel: '交互控件',
           fields: '投放身份（TikTok 账号）分段选择器（选项：TikTok 账号包 / 手动选择）；TikTok 账号包模式下显示「选择TT账号包」按钮与已选账号包标签；手动选择模式下显示下拉多选框（支持搜索、一键清除）与已选账号标签。',
@@ -2446,6 +2446,7 @@
         },
         {
           id: 'US-002', title: 'TikTok 账号包选择弹窗', priority: 'P0',
+          shot: '../assets/prd/auto-delivery-package-picker.png',
           desc: '作为投放运营，我想要从已有的 TikTok 账号包中选择多个包作为投放身份，以便批量使用沉淀好的账号组合。',
           filter: '名称（单行文本输入框，占位「请输入名称」）+「查询」/「重置」按钮；点击「查询」后按名称过滤，点击「重置」恢复全量列表。',
           fields: '选择列（复选框，表头支持全选）／名称（文本）／TikTok账号数量（数字）／备注（文本）。',
@@ -2463,6 +2464,7 @@
         },
         {
           id: 'US-003', title: '手动选择 TikTok 账号', priority: 'P0',
+          shot: '../assets/prd/auto-delivery-manual-tags.png',
           desc: '作为投放运营，我想要手动从全部 TikTok 账号中多选具体账号作为投放身份，并支持一键清除全部已选项。',
           filter: '下拉面板顶部搜索框（单行文本输入框，占位「请输入名称」，输入时实时过滤下拉选项）。',
           fieldsLabel: '下拉与已选展示',
