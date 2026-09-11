@@ -1514,23 +1514,23 @@
       /* ===== BC 页面逻辑 ===== */
       var bcUserData = {
         '1001': [
-          { user: '听泉', userId: '1001001' },
-          { user: '娜可', userId: '1001002' },
-          { user: '橙子', userId: '1001003' },
-          { user: '孤树', userId: '1001004' },
-          { user: '魔法七', userId: '1001005' },
-          { user: '阿澈', userId: '1001006' }
+          { user: '听泉' },
+          { user: '娜可' },
+          { user: '橙子' },
+          { user: '孤树' },
+          { user: '魔法七' },
+          { user: '阿澈' }
         ],
         '1002': [
-          { user: '听泉', userId: '1002001' },
-          { user: '橙子', userId: '1002002' },
-          { user: '小鹿', userId: '1002003' },
-          { user: '青栀', userId: '1002004' }
+          { user: '听泉' },
+          { user: '橙子' },
+          { user: '小鹿' },
+          { user: '青栀' }
         ],
         '1003': [
-          { user: '娜可', userId: '1003001' },
-          { user: '魔法七', userId: '1003002' },
-          { user: '阿澈', userId: '1003003' }
+          { user: '娜可' },
+          { user: '魔法七' },
+          { user: '阿澈' }
         ]
       };
       var bcTtData = {
@@ -1630,7 +1630,7 @@
             return '<div class="bc-side-item' + (sel ? ' selected' : '') + '" onclick="toggleBcSelect(\'' + b.id + '\')">' +
               '<span class="bc-side-item-radio">' + (sel ? '●' : '○') + '</span>' +
               '<span class="bc-side-item-name" title="' + b.name + '">' + b.name + '</span>' +
-              '<span class="bc-side-item-meta">' + b.userCount + ' 人 · ' + b.ttCount + ' 账号</span>' +
+              '<span class="bc-side-item-meta">' + b.userCount + ' 人 · ' + b.ttCount + ' TT账号</span>' +
             '</div>';
           }).join('');
         }
@@ -1678,9 +1678,8 @@
         getSelectedBcs().forEach(function (bc) {
           (bcUserData[bc.id] || []).forEach(function (item) {
             var userName = typeof item === 'string' ? item : item.user;
-            var userId = (typeof item === 'object' && item.userId) ? item.userId : (bc.id + '-' + userName);
             var cnt = (bcUserTtCount[bc.id] && bcUserTtCount[bc.id][userName] != null) ? bcUserTtCount[bc.id][userName] : 0;
-            rows.push({ key: bcUserRowKey(bc.id, userName), bcId: bc.id, bcName: bc.name, user: userName, userId: userId, ttCount: cnt });
+            rows.push({ key: bcUserRowKey(bc.id, userName), bcId: bc.id, bcName: bc.name, user: userName, ttCount: cnt });
           });
         });
         return rows;
@@ -1700,12 +1699,11 @@
       function renderBcUserThead() {
         var tr = document.getElementById('bc-user-thead-row');
         if (!tr) return;
-        /* 列序：选择 | BC用户名 | TikTok账号 | 所属商务中心 | BC用户ID | 操作 */
+        /* 列序：选择 | BC用户名 | TikTok账号 | 所属商务中心 | 操作 */
         tr.innerHTML = '<th style="width:36px;text-align:center;"><input type="checkbox" id="bc-user-checkall" onchange="toggleBcUserAll(this)" /></th>' +
           '<th>BC用户名</th>' +
           '<th style="width:110px;">TikTok 账号</th>' +
           '<th style="width:180px;">所属商务中心</th>' +
-          '<th style="width:120px;">BC用户ID</th>' +
           '<th style="width:140px;">操作</th>';
       }
 
@@ -1719,7 +1717,7 @@
         var filtered = keyword ? rows.filter(function (r) { return r.user.toLowerCase().indexOf(keyword) !== -1; }) : rows;
         if (!filtered.length) {
           var tip = selected.length ? '暂无数据' : '请先在左侧选择商务中心';
-          tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#999;padding:32px 0;">' + tip + '</td></tr>';
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#999;padding:32px 0;">' + tip + '</td></tr>';
           updateBcUserSelected();
           return;
         }
@@ -1732,7 +1730,6 @@
             '<td>' + r.user + '</td>' +
             '<td>' + ttCountLink + '</td>' +
             '<td>' + r.bcName + '</td>' +
-            '<td>' + r.userId + '</td>' +
             '<td>' + action + '</td>' +
           '</tr>';
         }).join('');
@@ -2194,15 +2191,9 @@
           names: userTtSelected.slice()
         };
         var q = document.getElementById('unauth-tt-question');
-        if (q) q.textContent = '是否批量取消授权该BC用户以下 TikTok 账号？';
+        if (q) q.textContent = '是否确认取消授权？';
         var detail = document.getElementById('unauth-tt-detail');
-        if (detail) {
-          var preview = userTtSelected.slice(0, 5).join('、');
-          var more = userTtSelected.length > 5 ? ' 等共 ' + userTtSelected.length + ' 个' : '';
-          detail.innerHTML = 'BC用户：' + currentUserTtName +
-            '　即将批量取消授权：<b>' + preview + '</b>' + more +
-            '<br /><span style="color:#98a2b3;">该操作不可恢复，请谨慎。</span>';
-        }
+        if (detail) detail.textContent = 'BC用户：' + currentUserTtName + '　共 ' + userTtSelected.length + ' 个 TikTok 账号';
         document.getElementById('unauth-tt-overlay').classList.add('open');
         document.getElementById('unauth-tt-modal').classList.add('open');
       }
@@ -2470,11 +2461,11 @@
           shot: '../assets/prd/us-001-main.png',
           desc: '作为投放运营，我想要在左侧查看商务中心列表并单选目标 BC，以便切换查看该 BC 下的BC用户和 TikTok 账号。',
           filter: '左侧「商务中心」面板：顶部「商务中心」标题；搜索框（占位「请输入商务中心名称」，输入即时过滤列表）。',
-          fields: '左侧每行：单选指示符（实心圆 ● 为当前选中，空心圆 ○ 为未选中）+ 商务中心名称（文本，单行截断显示）+ 「N 人 · N 账号」元信息。',
+          fields: '左侧每行：单选指示符（实心圆 ● 为当前选中，空心圆 ○ 为未选中）+ 商务中心名称（文本，单行截断显示）+ 「N 人 · N TT账号」元信息。',
           source: '左侧列表数据 ← 接口「获取商务中心列表」（<a href="https://business-api.tiktok.com/portal/docs/get-business-centers/v1.3" target="_blank">get-business-centers 官方文档</a>）；列表数据每 30 分钟自动轮询刷新一次，无需手动操作。',
           flow: '页面加载 → 调用「获取商务中心列表」→ 渲染左侧商务中心列表（默认选中第一个 BC）→ 用户可点击切换当前所选 BC / 搜索；切换选中后右侧两个页签（BC用户、TikTok账号）同时按所选 BC 刷新；每 30 分钟自动重新拉取一次列表数据。',
           ac: [
-            '页面左侧展示「商务中心」面板，列为：单选指示符 / 商务中心名称 / N 人 · N 账号',
+            '页面左侧展示「商务中心」面板，列为：单选指示符 / 商务中心名称 / N 人 · N TT账号',
             '支持按商务中心名称即时模糊搜索（包含匹配、不区分大小写），无结果显示「暂无数据」',
             '面板内单选语义：同一时间仅一个 BC 处于选中状态，点击任意行即切换当前所选 BC',
             '默认选中第一个 BC；切换选中后右侧两个页签同步刷新，按所选 BC 展示对应内容',
@@ -2487,13 +2478,13 @@
           shot: '../assets/prd/us-002-user-tab.png',
           desc: '作为投放运营，我想要查看当前所选 BC 下的BC用户列表并搜索BC用户，以便定位目标BC用户。',
           filter: 'BC用户名筛选：单行文本输入框（占位「请输入BC用户名搜索」）+「查询」/「重置」按钮 +「刷新」按钮；点击「查询」后按BC用户名查询列表（包含匹配、不区分大小写），点击「重置」清空条件并恢复全量列表，点击「刷新」调用接口重新拉取当前所选 BC 下的BC用户并刷新表格与时间戳。',
-          fields: '选择列（复选框，表头支持全选/半选，勾选用于批量分配）／BC用户名（文本，BC BC用户账号名称）／TikTok 账号（数字，可点击链接，打开该BC用户已分配账号抽屉）／所属商务中心（文本，固定展示在「TikTok 账号」列之后，取值恒为当前所选 BC 名称）／BC用户ID（文本，固定展示在「所属商务中心」列之后，取值恒为该 BC 用户在 BC 内的唯一 ID）／操作（按钮：分配 TikTok 账号）；工具条左侧显示「已选择 X 个BC用户」与「分配TikTok」按钮；工具条右侧显示「上次更新 HH:MM:SS」时间戳，与 TikTok账号页签的时间戳相互独立。',
+          fields: '选择列（复选框，表头支持全选/半选，勾选用于批量分配）／BC用户名（文本，BC BC用户账号名称）／TikTok 账号（数字，可点击链接，打开该BC用户已分配账号抽屉）／所属商务中心（文本，固定展示在「TikTok 账号」列之后，取值恒为当前所选 BC 名称）／操作（按钮：分配 TikTok 账号）；工具条左侧显示「已选择 X 个BC用户」与「分配TikTok」按钮；工具条右侧显示「上次更新 HH:MM:SS」时间戳，与 TikTok账号页签的时间戳相互独立。',
           source: '页签表格 ← 接口「获取商务中心BC用户列表」（<a href="https://business-api.tiktok.com/portal/docs/get-the-members-of-a-bc/v1.3" target="_blank">get-the-members-of-a-bc 官方文档</a>），入参为左侧当前所选 BC ID。',
           flow: '左侧切换 BC 后右侧「BC用户」页签直接展示该 BC 下的BC用户；搜索框在本地过滤可见行，勾选状态独立于可见列表保留；点击「刷新」调用接口重新拉取并独立刷新本页签的时间戳。',
           ac: [
             '右侧默认显示「BC用户」页签，标题：BC用户',
             '支持按BC用户名实时搜索（包含匹配、不区分大小写），无结果显示「暂无数据」空态',
-            '表格列序：选择 / BC用户名 / TikTok 账号 / 所属商务中心 / BC用户ID / 操作；其中「所属商务中心」「BC用户ID」固定展示，每次切换左侧 BC 后跟随刷新',
+            '表格列序：选择 / BC用户名 / TikTok 账号 / 所属商务中心 / 操作；其中「所属商务中心」固定展示（取值恒为当前所选 BC 名称），每次切换左侧 BC 后跟随刷新',
             '顶部「刷新」按钮：点击后置灰为「刷新中…」，调用接口重新拉取当前所选 BC 下的BC用户，结束后恢复并独立更新本页签的时间戳',
             '工具条右侧显示「上次更新 HH:MM:SS」；页面初始化时即写入一次，刷新按钮触发后再写入一次；该时间戳与 TikTok账号页签互不干扰',
             '每次切换左侧 BC 后，自动按新 BC 刷新页签'
@@ -2593,14 +2584,13 @@
           desc: '作为投放运营，我想要通过扫码关联已有 TikTok 账号，以便复用已有资产。',
           filter: '无列表筛选；二维码展示组件 + 文本提示 + 授权对象信息（{BC名称}，只读）。',
           fieldsLabel: '展示字段',
-          fields: '授权二维码（图片，由授权链接渲染生成，使用 TikTok App 扫码完成授权）／提示文案（只读文本：「请使用 TikTok App 扫描二维码完成账号授权」）／授权对象（只读文本，显示当前 BC 名称）；底部按钮为「关闭」。切换商务中心名称后，需自动刷新二维码。',
+          fields: '授权二维码（图片，由授权链接渲染生成，使用 TikTok App 扫码完成授权）／提示文案（只读文本：「请使用 TikTok App 扫描二维码完成账号授权」）／授权对象（只读文本，显示当前 BC 名称）；底部按钮为「关闭」。',
           source: '二维码 ← 接口「获取 TikTok 账号授权链接」（<a href="https://business-api.tiktok.com/portal/docs/obtain-a-tiktok-account-ad-delivery-authorization-url/v1.3" target="_blank">obtain-a-tiktok-account-ad-delivery-authorization-url 官方文档</a>）返回的授权链接渲染生成。',
-          flow: '弹框选择「关联」卡片 → 携带当前 BC ID 调用「获取 TikTok 账号授权链接」→ 渲染二维码 → 用户使用 TikTok App 扫码授权 → 授权完成后系统回传结果 → 关闭弹框 → 刷新后账号出现在资产列表。切换商务中心名称后，需自动刷新二维码与「授权对象」展示。',
+          flow: '弹框选择「关联」卡片 → 携带当前 BC ID 调用「获取 TikTok 账号授权链接」→ 渲染二维码 → 用户使用 TikTok App 扫码授权 → 授权完成后系统回传结果 → 关闭弹框 → 刷新后账号出现在资产列表。',
           ac: [
             '在添加弹框中选择「关联 TikTok 账号」卡片',
             '弹框内展开二维码区域：二维码 + 提示「请使用 TikTok App 扫描二维码完成账号授权」+ 授权对象 {BC名称}',
-            '底部按钮切换为「关闭」',
-            '切换商务中心名称后，需自动刷新二维码与「授权对象」展示'
+            '底部按钮切换为「关闭」'
           ]
         },
         {
@@ -2608,15 +2598,15 @@
           shot: '../assets/prd/us-009-batch-remove.png',
           desc: '作为投放运营，我想要在抽屉内一次性勾选多个 TikTok 账号并批量取消授权，以便快速收回资产权限。',
           filter: '无独立筛选条件，依赖 US-004 抽屉自身的名称/语言/备注筛选项；当前可见行（受筛选过滤后的行）支持表头全选与逐行勾选。',
-          fields: '表格首列复选框（单条勾选，可保留已过滤掉的勾选项）／表头复选框（全选/取消全选，半选态表示部分可见行被选中）／表格下方工具条：左侧「已选择 X 个 TikTok 账号」+ 右侧红色「批量删除」按钮（勾选为空时置灰）；二次确认弹框内明细区显示「即将批量取消授权：账号1、账号2、账号3、账号4、账号5 等共 N 个 + 该操作不可恢复，请谨慎」。',
+          fields: '表格首列复选框（单条勾选，可保留已过滤掉的勾选项）／表头复选框（全选/取消全选，半选态表示部分可见行被选中）／表格下方工具条：左侧「已选择 X 个 TikTok 账号」+ 右侧红色「批量删除」按钮（勾选为空时置灰）；二次确认弹框仅问「是否确认取消授权？」+ 明细区显示「BC用户：{user}　共 N 个 TikTok 账号」，不再展开账号名预览。',
           source: '批量删除调用「撤销用户对资产的权限」（<a href="https://business-api.tiktok.com/portal/docs/unassign-an-asset/v1.3" target="_blank">unassign-an-asset 官方文档</a>），按勾选账号名串行执行；执行完成后同步刷新抽屉列表与底层「BC用户」页签的账号数量。',
-          flow: '打开抽屉（US-004）→ 通过名称/语言/备注筛选缩小目标范围 → 在表格首列勾选多个账号（可表头全选当前可见行）→ 工具条实时显示「已选择 X 个」→ 点击红色「批量删除」→ 弹出二次确认「取消授权」弹框（展示账号清单与总数）→ 用户点「确定」→ 串行调用「撤销用户对资产的权限」逐条撤销 → 全部完成后一次性刷新抽屉与 BC用户列表 → 提示「已批量取消授权 N 个 TikTok 账号：账号1、账号2、…」。',
+          flow: '打开抽屉（US-004）→ 通过名称/语言/备注筛选缩小目标范围 → 在表格首列勾选多个账号（可表头全选当前可见行）→ 工具条实时显示「已选择 X 个」→ 点击红色「批量删除」→ 弹出二次确认「取消授权」弹框（问句「是否确认取消授权？」+ 明细仅显示 BC用户与总数）→ 用户点「确定」→ 串行调用「撤销用户对资产的权限」逐条撤销 → 全部完成后一次性刷新抽屉与 BC用户列表 → 提示「已批量取消授权 N 个 TikTok 账号」。',
           ac: [
             '抽屉内表格首列复选框，每行独立可控；表头复选框支持全选当前可见行，并出现半选态',
             '工具条实时显示「已选择 X 个 TikTok 账号」；未勾选时「批量删除」按钮置灰、不可点击',
-            '点击「批量删除」复用「取消授权」二次确认弹框，明细区显示前 5 个账号名 + 「等共 N 个」+ 红色提示「该操作不可恢复，请谨慎」',
+            '点击「批量删除」复用「取消授权」二次确认弹框，仅问「是否确认取消授权？」，明细区只显示当前 BC用户与账号总数（不展开账号名清单，不展示「该操作不可恢复，请谨慎」提示）',
             '用户确认后批量调用「撤销用户对资产的权限」，按勾选顺序串行撤销；执行结束后一次性刷新抽屉列表与底层 BC用户列表的账号数量，避免单条重绘造成多次抖动',
-            '执行成功后弹窗提示「已批量取消授权 N 个 TikTok 账号：账号1、账号2、…」，并自动清空批量勾选状态、关闭抽屉时同样清空',
+            '执行成功后弹窗提示「已批量取消授权 N 个 TikTok 账号」，并自动清空批量勾选状态、关闭抽屉时同样清空',
             '勾选项在被单条删除 / 批量删除后自动收敛：已撤销授权或已不在分配关系中的账号会从勾选集合中剔除，计数与按钮置灰状态随之更新'
           ]
         }
