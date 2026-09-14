@@ -1543,6 +1543,8 @@
                   <th>备注</th>
                   <th>TikTok账号数量</th>
                   <th>创建人</th>
+                  <th>创建时间</th>
+                  <th>更新时间</th>
                 </tr>
               </thead>
               <tbody id="tiktok-package-picker-tbody"></tbody>
@@ -1734,8 +1736,8 @@
       /* ===== 投放身份（TikTok 账号）：TikTok 账号包 / 手动选择 ===== */
       var CURRENT_USER = 'admin';
       var IDENTITY_PACKAGES = [
-        { name: '东南亚英语TikTok包', count: 4, remark: '--', creator: 'admin' },
-        { name: '欧洲多语言TikTok包', count: 3, remark: '--', creator: '听泉' }
+        { name: '东南亚英语TikTok包', count: 4, remark: '--', creator: 'admin', createTime: '2026-09-01 10:00', updateTime: '2026-09-10 15:30' },
+        { name: '欧洲多语言TikTok包', count: 3, remark: '--', creator: '听泉', createTime: '2026-09-05 14:20', updateTime: '2026-09-12 09:15' }
       ];
       var IDENTITY_ACCOUNTS = [
         { name: 'Sasa ดู', lang: '葡萄牙语' },
@@ -1816,8 +1818,8 @@
           var checked = identitySelectedPackages.some(function (s) { return s.name === p.name; });
           return '<tr data-name="' + p.name + '">' +
             '<td class="checkbox-col"><input type="checkbox" value="' + p.name + '"' + (checked ? ' checked' : '') + ' onchange="updateTiktokPackagePickerCount()" /></td>' +
-            '<td>' + p.name + '</td><td>' + p.remark + '</td><td>' + p.count + '</td><td>' + (p.creator || '--') + '</td></tr>';
-        }).join('') || '<tr><td colspan="5" style="text-align:center;color:var(--color-text-tertiary);padding:24px 0;">暂无数据</td></tr>';
+            '<td>' + p.name + '</td><td>' + p.remark + '</td><td>' + p.count + '</td><td>' + (p.creator || '--') + '</td><td>' + (p.createTime || '--') + '</td><td>' + (p.updateTime || '--') + '</td></tr>';
+        }).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--color-text-tertiary);padding:24px 0;">暂无数据</td></tr>';
       }
 
       function updateTiktokPackagePickerCount() {
@@ -2466,14 +2468,14 @@
           shot: '../assets/prd/auto-delivery-package-picker.png',
           desc: '作为投放运营，我想要从已有的 TikTok 账号包中选择多个包作为投放身份，以便批量使用沉淀好的账号组合。',
           filter: '名称（单行文本输入框，占位「请输入名称」）／创建人（下拉选择，占位「请选择创建人」，枚举：admin、听泉、魔法七、橙子、孤树）+「查询」/「重置」按钮；点击「查询」后按条件过滤，点击「重置」清空全部条件并恢复全量列表；弹窗打开时创建人默认选中当前登录用户。',
-          fields: '选择列（复选框，表头支持全选）／名称（文本）／备注（文本）／TikTok账号数量（数字）／创建人（文本）。',
+          fields: '选择列（复选框，表头支持全选）／名称（文本）／备注（文本）／TikTok账号数量（数字）／创建人（文本）／创建时间（文本，格式 yyyy-MM-dd HH:mm）／更新时间（文本，格式 yyyy-MM-dd HH:mm）。',
           source: '模板管理-TikTok账号包页面列表数据。',
           flow: '点击「选择TT账号包」打开弹窗 → 创建人筛选项默认选中当前登录用户并渲染列表 → 用户可按名称/创建人过滤 → 勾选/取消勾选 → 底部显示已选数量 → 点击「确定」保存当前选择（允许空选）并关闭弹窗，在抽屉内展示已选账号包标签 → 点击「取消」不保存并关闭。',
           ac: [
             '弹窗标题为「选择TikTok账号包」',
             '支持按账号包名称模糊查询、按创建人精确筛选',
             '弹窗打开时创建人筛选项默认选中当前登录用户',
-            '列表字段与模板管理-TikTok账号包页面保持一致：名称、备注、TikTok账号数量、创建人',
+            '列表字段与模板管理-TikTok账号包页面保持一致：名称、备注、TikTok账号数量、创建人、创建时间、更新时间',
             '列表支持多选，表头全选仅对当前过滤结果生效',
             '底部实时显示已选数量',
             '未选择任何数据时点击「确定」仍可保存（即允许清空已选）',
