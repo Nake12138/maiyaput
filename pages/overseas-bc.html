@@ -124,15 +124,105 @@
         <header class="top-header">
           <div class="top-header-left"></div>
           <div class="top-header-right">
-            <div class="notification">
-              <span>消息</span>
-              <span class="notification-badge">88</span>
+            <!-- 时区切换器 -->
+            <div class="tz-switcher">
+              <select class="tz-select" aria-label="时区切换">
+                <option value="UTC+8" selected>UTC+8</option>
+                <option value="UTC+0">UTC+0</option>
+                <option value="UTC+7">UTC+7</option>
+                <option value="UTC+9">UTC+9</option>
+                <option value="UTC-5">UTC-5</option>
+              </select>
+              <svg class="tz-caret" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+                <path d="M2 3.75L5 6.75L8 3.75" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
             </div>
-            <div class="avatar">M</div>
-            <div class="user-info">
-              <span>UTC+8</span>
+
+            <!-- 文档下载 -->
+            <button type="button" class="header-icon-btn" title="文档下载" aria-label="文档下载" onclick="alert('下载文档')">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                <path d="M9 2.75V10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                <path d="M5.75 7.5L9 10.75L12.25 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M3.25 12.25V13.5C3.25 14.47 4.03 15.25 5 15.25H13C13.97 15.25 14.75 14.47 14.75 13.5V12.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+              </svg>
+            </button>
+
+            <!-- 用户信息 -->
+            <div class="user-profile-wrap" id="userProfileWrap">
+              <button type="button" class="user-profile" id="userProfileTrigger" aria-haspopup="true" aria-expanded="false">
+                <span class="user-profile-avatar" aria-hidden="true">
+                  <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="20" cy="20" r="20" fill="#dce5ef" />
+                  <circle cx="20" cy="25.5" r="9.5" fill="#2f3d56" />
+                  <rect x="17.4" y="17.5" width="5.2" height="6" rx="2.6" fill="#e0a97f" />
+                  <ellipse cx="20" cy="15.6" rx="6.4" ry="7" fill="#f0c19b" />
+                  <path d="M20 6.8c4.6 0 7.8 3.1 7.8 7.4 0 .6-.06 1.2-.18 1.75-.9-1.5-2.3-2.2-3.9-3.1-1.9 1.05-4.1 1.55-6.4 1.55-.8 0-1.5-.06-2.2-.18-.5.6-.9 1.3-1.15 2.05-.12-.6-.18-1.2-.18-1.85C12.2 9.9 15.4 6.8 20 6.8z" fill="#e8562a" />
+                </svg>
+                </span>
+                <span class="user-profile-meta">
+                  <span class="user-profile-name">娜可 <em>(nake)</em></span>
+                  <span class="user-profile-email">nake06870@maiyawx.com</span>
+                </span>
+                <svg class="user-profile-caret" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+                  <path d="M2 3.75L5 6.75L8 3.75" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+
+              <div class="user-dropdown" id="userDropdown" role="menu">
+                <!-- 账号信息 + 复制邮箱 -->
+                <div class="user-dropdown-head">
+                  <span class="user-dropdown-avatar" aria-hidden="true">
+                    <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="20" cy="20" r="20" fill="#dce5ef" />
+                    <circle cx="20" cy="25.5" r="9.5" fill="#2f3d56" />
+                    <rect x="17.4" y="17.5" width="5.2" height="6" rx="2.6" fill="#e0a97f" />
+                    <ellipse cx="20" cy="15.6" rx="6.4" ry="7" fill="#f0c19b" />
+                    <path d="M20 6.8c4.6 0 7.8 3.1 7.8 7.4 0 .6-.06 1.2-.18 1.75-.9-1.5-2.3-2.2-3.9-3.1-1.9 1.05-4.1 1.55-6.4 1.55-.8 0-1.5-.06-2.2-.18-.5.6-.9 1.3-1.15 2.05-.12-.6-.18-1.2-.18-1.85C12.2 9.9 15.4 6.8 20 6.8z" fill="#e8562a" />
+                  </svg>
+                  </span>
+                  <span class="user-dropdown-meta">
+                    <span class="user-dropdown-name">娜可 <em>(nake)</em></span>
+                    <span class="user-dropdown-email" title="nake06870@maiyawx.com">nake06870@maiyawx.com</span>
+                  </span>
+                  <button type="button" class="copy-mail-btn" id="copyMailBtn" title="复制邮箱" aria-label="复制邮箱">
+                    <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                      <rect x="5.9" y="5.9" width="7.35" height="7.35" rx="1.7" stroke="currentColor" stroke-width="1.3" />
+                      <path d="M10.3 3.95V3.1c0-.88-.72-1.6-1.6-1.6H3.9c-.88 0-1.6.72-1.6 1.6v4.8c0 .88.72 1.6 1.6 1.6h.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                    </svg>
+                  </button>
+                </div>
+                <div class="user-dropdown-sep"></div>
+                <!-- 帮助指南 -->
+                <button type="button" class="user-dropdown-item" data-action="help" role="menuitem">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <circle cx="8" cy="8" r="6.25" stroke="currentColor" stroke-width="1.3" />
+                    <path d="M6.35 6.1c.1-.88.85-1.5 1.68-1.5.9 0 1.62.6 1.62 1.47 0 .78-.5 1.1-1.05 1.48-.5.35-.75.62-.75 1.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                    <circle cx="7.87" cy="11.35" r=".85" fill="currentColor" />
+                  </svg>
+                  帮助指南
+                </button>
+                <!-- 清除缓存 -->
+                <button type="button" class="user-dropdown-item" data-action="clear-cache" role="menuitem">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path d="M2.75 4.5h10.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                    <path d="M6.25 4.5V3.4c0-.47.38-.85.85-.85h1.8c.47 0 .85.38.85.85V4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                    <path d="M4.4 4.5l.55 8.05c.03.5.45.9.95.9h4.2c.5 0 .92-.4.95-.9l.55-8.05" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                    <path d="M6.9 7v4M9.1 7v4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                  </svg>
+                  清除缓存
+                </button>
+                <div class="user-dropdown-sep"></div>
+                <!-- 退出登录 -->
+                <button type="button" class="user-dropdown-item danger" data-action="logout" role="menuitem">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path d="M6.5 13.25H3.9c-.64 0-1.15-.51-1.15-1.15V3.9c0-.64.51-1.15 1.15-1.15h2.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                    <path d="M10.4 10.8L13.25 8 10.4 5.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M13 8H6.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                  </svg>
+                  退出登录
+                </button>
+              </div>
             </div>
-            <button class="btn btn-outline btn-sm" onclick="alert('打开帮助指南')">帮助指南</button>
           </div>
         </header>
 
@@ -1663,9 +1753,9 @@
         if (!tr) return;
         /* 列序：选择 | BC用户名 | TikTok账号 | 所属商务中心 | 操作 */
         tr.innerHTML = '<th style="width:36px;text-align:center;"><input type="checkbox" id="bc-user-checkall" onchange="toggleBcUserAll(this)" /></th>' +
-          '<th>BC用户名</th>' +
+          '<th style="width:180px;">BC用户名</th>' +
           '<th style="width:110px;">TikTok 账号</th>' +
-          '<th style="width:180px;">所属商务中心</th>' +
+          '<th>所属商务中心</th>' +
           '<th style="width:140px;">操作</th>';
       }
 
@@ -2432,7 +2522,7 @@
           flow: '左侧切换 BC 后右侧「BC用户」页签直接展示该 BC 下的BC用户；搜索框在本地过滤可见行，勾选状态独立于可见列表保留；点击「刷新」调用接口重新拉取并独立刷新本页签的时间戳。',
           ac: [
             '右侧默认显示「BC用户」页签，标题：BC用户',
-            '支持按BC用户名实时搜索（包含匹配、不区分大小写），无结果显示「暂无数据」空态',
+            '支持按BC用户名搜索（点击「查询」按钮或输入框内回车执行，包含匹配、不区分大小写），无结果显示「暂无数据」空态',
             '表格列序：选择 / BC用户名 / TikTok 账号 / 所属商务中心 / 操作；其中「所属商务中心」固定展示（取值恒为当前所选 BC 名称），每次切换左侧 BC 后跟随刷新',
             '顶部「刷新」按钮：点击后置灰为「刷新中…」，调用接口重新拉取当前所选 BC 下的BC用户，结束后恢复并独立更新本页签的时间戳',
             '工具条右侧显示「上次更新 HH:MM:SS」；页面初始化时即写入一次，刷新按钮触发后再写入一次；该时间戳与 TikTok账号页签互不干扰',
@@ -2495,7 +2585,7 @@
           shot: '../assets/prd/us-006-tt-tab.png',
           desc: '作为投放运营，我想要查看当前所选 BC 下的 TikTok 账号资产明细，以便了解资产情况。',
           filter: '筛选项与「资产管理 - TikTok账号」页面保持一致。TT账号名称（单行文本输入框，占位「请输入TT账号名称」）／语言（下拉选择，占位「请选择语言」，枚举与短剧管理页面的语言枚举一致）／备注（单行文本输入框，占位「请输入备注」）+「查询」/「重置」按钮 +「刷新」按钮 +「添加 TikTok 账号」按钮；点击「查询」后按条件查询，点击「重置」清空全部条件并恢复全量列表，点击「刷新」调用接口重新拉取当前所选 BC 下的 TikTok 账号并刷新表格与时间戳。',
-          fields: 'TikTok账号名称（头像 + 账号名称组合展示）／语言（文本，账号语言）／备注（文本，账号备注，可为空）／所属商务中心（文本，固定展示在「备注」之后，取值恒为当前所选 BC 名称）／更新人（文本，最近操作人）／更新时间（文本，格式 yyyy-MM-dd HH:mm）；展示当前所选 BC 下全部 TikTok 账号资产，无操作列；工具条右侧显示「上次更新 HH:MM:SS」时间戳，与 BC用户页签的时间戳相互独立。',
+          fields: 'TikTok账号名称（头像 + 账号名称组合展示）／语言（文本，账号语言）／备注（文本，账号备注，可为空）／所属商务中心（文本，固定展示在「备注」之后，取值恒为当前所选 BC 名称）／更新人（文本，最近操作人）／更新时间（文本，格式 yyyy-MM-dd HH:mm）；展示当前所选 BC 下全部 TikTok 账号资产，无操作列；表格上方工具条左侧显示「上次更新 HH:MM:SS」时间戳，与 BC用户页签的时间戳相互独立。',
           source: '页签表格 ← 接口「获取资产列表」（<a href="https://business-api.tiktok.com/portal/docs/get-assets/v1.3" target="_blank">get-assets 官方文档</a>），入参为左侧当前所选 BC ID。',
           flow: '左侧切换 BC 后右侧「TikTok账号」页签直接展示该 BC 下的 TikTok 账号→「所属商务中心」列固定展示在「备注」之后，取值恒为当前所选 BC 名称；筛选项在本地过滤可见行；点击「刷新」重新拉取并独立刷新本页签的时间戳；点击「添加 TikTok 账号」在当前所选 BC 上打开添加弹框，商务中心字段自动带入并锁定。',
           ac: [
@@ -2503,7 +2593,7 @@
             '支持按账号名称、语言、备注组合查询（点击「查询」后执行，「重置」恢复全量），无结果显示空态',
             '「所属商务中心」列固定展示在「备注」列之后，取值恒为当前所选左侧 BC 名称，不展开该账号在其他 BC 下的归属',
             '顶部「刷新」按钮：点击后置灰为「刷新中…」，调用接口重新拉取当前所选 BC 下的 TikTok 账号，结束后恢复并独立更新本页签的时间戳',
-            '工具条右侧显示「上次更新 HH:MM:SS」；页面初始化时即写入一次，刷新按钮触发后再写入一次；该时间戳与 BC用户页签互不干扰',
+            '工具条左侧显示「上次更新 HH:MM:SS」；页面初始化时即写入一次，刷新按钮触发后再写入一次；该时间戳与 BC用户页签互不干扰',
             '顶部「添加 TikTok 账号」按钮：点击后直接打开弹框并锁定当前所选 BC',
             '每次切换左侧 BC 后，自动按新 BC 刷新页签'
           ]
@@ -2548,13 +2638,13 @@
           filter: '无独立筛选条件，依赖 US-004 抽屉自身的名称/语言/备注筛选项；当前可见行（受筛选过滤后的行）支持表头全选与逐行勾选。',
           fields: '表格首列复选框（单条勾选，可保留已过滤掉的勾选项）／表头复选框（全选/取消全选，半选态表示部分可见行被选中）／表格上方工具条：「已选择 X 个 TikTok 账号」+ 红色「批量删除」按钮并排位于表格左上方（勾选为空时置灰，布局与 BC用户页签的「已选择 + 分配TikTok」工具条一致）；二次确认弹框仅问「是否确认取消授权？」+ 明细区显示「BC用户：{user}　共 N 个 TikTok 账号」，不再展开账号名预览。',
           source: '批量删除调用「撤销用户对资产的权限」（<a href="https://business-api.tiktok.com/portal/docs/unassign-an-asset/v1.3" target="_blank">unassign-an-asset 官方文档</a>），按勾选账号名串行执行；执行完成后同步刷新抽屉列表与底层「BC用户」页签的账号数量。',
-          flow: '打开抽屉（US-004）→ 通过名称/语言/备注筛选缩小目标范围 → 在表格首列勾选多个账号（可表头全选当前可见行）→ 工具条实时显示「已选择 X 个」→ 点击红色「批量删除」→ 弹出二次确认「取消授权」弹框（问句「是否确认取消授权？」+ 明细仅显示 BC用户与总数）→ 用户点「确定」→ 串行调用「撤销用户对资产的权限」逐条撤销 → 全部完成后一次性刷新抽屉与 BC用户列表 → 提示「已批量取消授权 N 个 TikTok 账号」。',
+          flow: '打开抽屉（US-004）→ 通过名称/语言/备注筛选缩小目标范围 → 在表格首列勾选多个账号（可表头全选当前可见行）→ 工具条实时显示「已选择 X 个」→ 点击红色「批量删除」→ 弹出二次确认「取消授权」弹框（问句「是否确认取消授权？」+ 明细仅显示 BC用户与总数）→ 用户点「确定」→ 串行调用「撤销用户对资产的权限」逐条撤销 → 全部完成后一次性刷新抽屉与 BC用户列表 → 提示「已批量取消授权 N 个 TikTok 账号：{账号名清单}」。',
           ac: [
             '抽屉内表格首列复选框，每行独立可控；表头复选框支持全选当前可见行，并出现半选态',
             '工具条实时显示「已选择 X 个 TikTok 账号」；未勾选时「批量删除」按钮置灰、不可点击',
             '点击「批量删除」复用「取消授权」二次确认弹框，仅问「是否确认取消授权？」，明细区只显示当前 BC用户与账号总数（不展开账号名清单，不展示「该操作不可恢复，请谨慎」提示）',
             '用户确认后批量调用「撤销用户对资产的权限」，按勾选顺序串行撤销；执行结束后一次性刷新抽屉列表与底层 BC用户列表的账号数量，避免单条重绘造成多次抖动',
-            '执行成功后弹窗提示「已批量取消授权 N 个 TikTok 账号」，并自动清空批量勾选状态、关闭抽屉时同样清空',
+            '执行成功后弹窗提示「已批量取消授权 N 个 TikTok 账号：{账号名清单}」（账号名以「、」分隔），并自动清空批量勾选状态、关闭抽屉时同样清空',
             '勾选项在被单条删除 / 批量删除后自动收敛：已撤销授权或已不在分配关系中的账号会从勾选集合中剔除，计数与按钮置灰状态随之更新'
           ]
         }
@@ -3055,5 +3145,6 @@
         });
       })();
     </script>
+  <script src="../scripts/header-user.js?v=20260916"></script>
   </body>
 </html>
