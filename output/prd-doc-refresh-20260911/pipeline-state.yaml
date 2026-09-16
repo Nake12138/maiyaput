@@ -1,0 +1,27 @@
+request_id: prd-doc-refresh-20260911
+entry_type: full_pipeline
+current_stage: stage_3
+status: in_progress
+created_at: 2026-09-11T18:30:00+08:00
+updated_at: 2026-09-11T18:38:00+08:00
+stage_chain: [stage_1, stage_2, stage_3]
+stages:
+  stage_0:
+    status: completed
+    decision: full_pipeline
+    reason: prd_doc_outdated_vs_current_page_rebuild_with_new_screenshots
+    completed_at: 2026-09-11T18:30:00+08:00
+  stage_1:
+    status: completed
+    started_at: 2026-09-11T18:30:00+08:00
+    completed_at: 2026-09-11T18:38:00+08:00
+    output_path: stage1/final_draft.md
+    genre: business-report
+    expert_used: general-writer
+    route_tag: general_writing
+    critic_decision: null
+    detail: 按当前页面交互重写 US-001 ~ US-009，替换旧「主表+抽屉」结构；9 张界面示意图引用 images/ 相对路径
+  stage_2:
+    status: pending
+  stage_3:
+    status: pending
