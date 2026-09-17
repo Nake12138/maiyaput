@@ -106,6 +106,10 @@
               <span>系统设置</span>
               <span class="nav-item-caret">▶</span>
             </div>
+            <div class="nav-children">
+              <span class="nav-child-item" data-page="overseas-system-org">组织架构</span>
+              <span class="nav-child-item" data-page="overseas-system-user">用户管理</span>
+            </div>
           </div>
 
           <div class="nav-section">
@@ -459,6 +463,14 @@
         }
         if (pageName === 'overseas-template') {
           window.location.href = navUrl('pages/overseas-template.html');
+          return;
+        }
+        if (pageName === 'overseas-system-user') {
+          window.location.href = navUrl('pages/overseas-system-user.html');
+          return;
+        }
+        if (pageName === 'overseas-system-org') {
+          window.location.href = navUrl('pages/overseas-system-user.html');
           return;
         }
         window.location.href = navUrl('index.html') + '#' + pageName;

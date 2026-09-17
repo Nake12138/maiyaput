@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>用户管理 - 海外投放系统</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../styles/main.css?v=20260916" />
+    <style>
+      /* 用户管理页面专用样式 */
+      .system-user-tabs {
+        margin-bottom: var(--space-4);
+      }
+
+      .system-user-toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: var(--space-3);
+      }
+
+      .system-user-toolbar-left {
+        font-size: 13px;
+        color: var(--color-text-secondary);
+      }
+
+      .system-user-toolbar-right {
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
+      }
+
+      #panel-system-user .filter-actions {
+        gap: 10px;
+      }
+
+      #panel-system-user .data-table th,
+      #panel-system-user .data-table td {
+        padding: 10px 8px;
+        font-size: 12px;
+      }
+
+      #panel-system-user .data-table .row-actions {
+        gap: 2px;
+      }
+
+      #panel-system-user .row-action-btn {
+        padding: 2px 4px;
+        font-size: 12px;
+      }
+
+      .btn-add-user {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 12px;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-pill);
+        background: var(--color-white);
+        font-size: 12px;
+        color: var(--color-info);
+        cursor: pointer;
+        font-family: inherit;
+      }
+
+      .btn-add-user:hover {
+        border-color: var(--color-info);
+        background: var(--color-info-bg);
+      }
+
+      .btn-add-user::before {
+        content: "+";
+        font-size: 14px;
+        line-height: 1;
+      }
+
+      .tag-permission-all {
+        background: var(--color-success-bg);
+        color: var(--color-success);
+      }
+
+      .tag-permission-partial {
+        background: var(--color-warning-bg);
+        color: var(--color-warning);
+      }
+
+      .tag-period-today {
+        background: var(--color-warning-bg);
+        color: var(--color-warning);
+      }
+
+      .tag-period-all {
+        background: var(--color-success-bg);
+        color: var(--color-success);
+      }
+
+      /* 用户表单抽屉 */
+      #drawer-system-user {
+        z-index: 1101;
+      }
+
+      #drawer-system-user.drawer-narrow .drawer-card {
+        width: min(520px, calc(100vw - 80px));
+        margin-left: auto;
+      }
+
+      .user-form-body {
+        padding: 24px 32px;
+      }
+
+      .user-form-item {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 20px;
+      }
+
+      .user-form-label {
+        width: 100px;
+        flex-shrink: 0;
+        font-size: 13px;
+        color: var(--color-text-primary);
+        line-height: 32px;
+        text-align: right;
+        padding-right: 12px;
+      }
+
+      .user-form-label.required::before {
+        content: "*";
+        color: var(--color-error);
+        margin-right: 4px;
+      }
+
+      .user-form-field {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .user-form-field .form-input,
+      .user-form-field .form-select {
+        width: 100%;
+      }
+
+      .user-form-radio-group {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        height: 32px;
+      }
+
+      .user-form-radio {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        color: var(--color-text-primary);
+        cursor: pointer;
+      }
+
+      .user-form-radio input[type="radio"] {
+        width: 14px;
+        height: 14px;
+        accent-color: var(--color-info);
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="layout">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="logo" style="padding: 16px 20px 12px;">
+          <div class="logo-icon">海</div>
+          <div class="logo-info">
+            <span class="logo-name">海外投放系统</span>
+            <span class="system-switch-trigger" onclick="toggleSystemMenu(event)">切换系统 <span class="system-switch-caret">▾</span></span>
+          </div>
+          <div class="system-switch-menu" id="systemSwitchMenu">
+            <div class="system-switch-item" data-system="cn" onclick="switchSystem('cn')">国内投放系统</div>
+            <div class="system-switch-item active" data-system="overseas" onclick="switchSystem('overseas')">海外投放系统<span class="check">✓</span></div>
+          </div>
+        </div>
+        <nav class="nav">
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">⊟</span>
+              <span>项目管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">📊</span>
+              <span>数据统计</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">▶</span>
+              <span>短剧管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">▣</span>
+              <span>素材管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">▦</span>
+              <span>批量投放</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+            <div class="nav-children">
+              <span class="nav-child-item" data-page="overseas-batch-delivery">批量投放</span>
+              <span class="nav-child-item" data-page="overseas-auto-delivery">自动化任务</span>
+              <span class="nav-child-item" data-page="overseas-template">模板管理</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">👤</span>
+              <span>账号管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+            <div class="nav-children">
+              <span class="nav-child-item" data-page="overseas-account">账户</span>
+              <span class="nav-child-item" data-page="overseas-app">应用</span>
+              <span class="nav-child-item" data-page="overseas-bc">商务中心</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">🗂️</span>
+              <span>资产管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+            <div class="nav-children">
+              <span class="nav-child-item" data-page="overseas-tiktok-account">TikTok账号</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">🛡️</span>
+              <span>控损管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children expanded">
+              <span class="nav-item-icon">⚙️</span>
+              <span>系统设置</span>
+              <span class="nav-item-caret">▼</span>
+            </div>
+            <div class="nav-children">
+              <span class="nav-child-item" data-page="overseas-system-org">组织架构</span>
+              <span class="nav-child-item active" data-page="overseas-system-user">用户管理</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">🔗</span>
+              <span>关联绑定</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+        </nav>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main">
+        <!-- Top Header -->
+        <header class="top-header">
+          <div class="top-header-left"></div>
+          <div class="top-header-right">
+            <!-- 时区切换器 -->
+            <div class="tz-switcher">
+              <select class="tz-select" aria-label="时区切换">
+                <option value="UTC+8" selected>UTC+8</option>
+                <option value="UTC+0">UTC+0</option>
+                <option value="UTC+7">UTC+7</option>
+                <option value="UTC+9">UTC+9</option>
+                <option value="UTC-5">UTC-5</option>
+              </select>
+              <svg class="tz-caret" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+                <path d="M2 3.75L5 6.75L8 3.75" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </div>
+
+            <!-- 文档下载 -->
+            <button type="button" class="header-icon-btn" title="文档下载" aria-label="文档下载" onclick="alert('下载文档')">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                <path d="M9 2.75V10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                <path d="M5.75 7.5L9 10.75L12.25 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M3.25 12.25V13.5C3.25 14.47 4.03 15.25 5 15.25H13C13.97 15.25 14.75 14.47 14.75 13.5V12.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+              </svg>
+            </button>
+
+            <!-- 用户信息 -->
+            <div class="user-profile-wrap" id="userProfileWrap">
+              <button type="button" class="user-profile" id="userProfileTrigger" aria-haspopup="true" aria-expanded="false">
+                <span class="user-profile-avatar" aria-hidden="true">
+                  <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="20" cy="20" r="20" fill="#dce5ef" />
+                    <circle cx="20" cy="25.5" r="9.5" fill="#2f3d56" />
+                    <rect x="17.4" y="17.5" width="5.2" height="6" rx="2.6" fill="#e0a97f" />
+                    <ellipse cx="20" cy="15.6" rx="6.4" ry="7" fill="#f0c19b" />
+                    <path d="M20 6.8c4.6 0 7.8 3.1 7.8 7.4 0 .6-.06 1.2-.18 1.75-.9-1.5-2.3-2.2-3.9-3.1-1.9 1.05-4.1 1.55-6.4 1.55-.8 0-1.5-.06-2.2-.18-.5.6-.9 1.3-1.15 2.05-.12-.6-.18-1.2-.18-1.85C12.2 9.9 15.4 6.8 20 6.8z" fill="#e8562a" />
+                  </svg>
+                </span>
+                <span class="user-profile-meta">
+                  <span class="user-profile-name">娜可 <em>(nake)</em></span>
+                  <span class="user-profile-email">nake06870@maiyawx.com</span>
+                </span>
+                <svg class="user-profile-caret" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+                  <path d="M2 3.75L5 6.75L8 3.75" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+
+              <div class="user-dropdown" id="userDropdown" role="menu">
+                <div class="user-dropdown-head">
+                  <span class="user-dropdown-avatar" aria-hidden="true">
+                    <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="20" cy="20" r="20" fill="#dce5ef" />
+                      <circle cx="20" cy="25.5" r="9.5" fill="#2f3d56" />
+                      <rect x="17.4" y="17.5" width="5.2" height="6" rx="2.6" fill="#e0a97f" />
+                      <ellipse cx="20" cy="15.6" rx="6.4" ry="7" fill="#f0c19b" />
+                      <path d="M20 6.8c4.6 0 7.8 3.1 7.8 7.4 0 .6-.06 1.2-.18 1.75-.9-1.5-2.3-2.2-3.9-3.1-1.9 1.05-4.1 1.55-6.4 1.55-.8 0-1.5-.06-2.2-.18-.5.6-.9 1.3-1.15 2.05-.12-.6-.18-1.2-.18-1.85C12.2 9.9 15.4 6.8 20 6.8z" fill="#e8562a" />
+                    </svg>
+                  </span>
+                  <span class="user-dropdown-meta">
+                    <span class="user-dropdown-name">娜可 <em>(nake)</em></span>
+                    <span class="user-dropdown-email" title="nake06870@maiyawx.com">nake06870@maiyawx.com</span>
+                  </span>
+                  <button type="button" class="copy-mail-btn" id="copyMailBtn" title="复制邮箱" aria-label="复制邮箱">
+                    <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                      <rect x="5.9" y="5.9" width="7.35" height="7.35" rx="1.7" stroke="currentColor" stroke-width="1.3" />
+                      <path d="M10.3 3.95V3.1c0-.88-.72-1.6-1.6-1.6H3.9c-.88 0-1.6.72-1.6 1.6v4.8c0 .88.72 1.6 1.6 1.6h.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                    </svg>
+                  </button>
+                </div>
+                <div class="user-dropdown-sep"></div>
+                <button type="button" class="user-dropdown-item" data-action="help" role="menuitem">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <circle cx="8" cy="8" r="6.25" stroke="currentColor" stroke-width="1.3" />
+                    <path d="M6.35 6.1c.1-.88.85-1.5 1.68-1.5.9 0 1.62.6 1.62 1.47 0 .78-.5 1.1-1.05 1.48-.5.35-.75.62-.75 1.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                    <circle cx="7.87" cy="11.35" r=".85" fill="currentColor" />
+                  </svg>
+                  帮助指南
+                </button>
+                <button type="button" class="user-dropdown-item" data-action="clear-cache" role="menuitem">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path d="M2.75 4.5h10.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                    <path d="M6.25 4.5V3.4c0-.47.38-.85.85-.85h1.8c.47 0 .85.38.85.85V4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                    <path d="M4.4 4.5l.55 8.05c.03.5.45.9.95.9h4.2c.5 0 .92-.4.95-.9l.55-8.05" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                    <path d="M6.9 7v4M9.1 7v4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                  </svg>
+                  清除缓存
+                </button>
+                <div class="user-dropdown-sep"></div>
+                <button type="button" class="user-dropdown-item danger" data-action="logout" role="menuitem">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path d="M6.5 13.25H3.9c-.64 0-1.15-.51-1.15-1.15V3.9c0-.64.51-1.15 1.15-1.15h2.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                    <path d="M10.4 10.8L13.25 8 10.4 5.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M13 8H6.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                  </svg>
+                  退出登录
+                </button>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <!-- Content -->
+        <div class="content">
+          <div id="page-overseas-system-user" class="page active">
+            <!-- Breadcrumb -->
+            <div class="breadcrumb">
+              <a href="#" onclick="goHome()">首页</a>
+              <span class="breadcrumb-sep">/</span>
+              <span>系统设置</span>
+              <span class="breadcrumb-sep">/</span>
+              <span>用户管理</span>
+            </div>
+
+            <!-- Page Header -->
+            <div class="page-header">
+              <h2 class="page-title">用户管理</h2>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs system-user-tabs">
+              <button type="button" class="tab" id="tab-system-org" onclick="switchSystemTab('org')">组织架构</button>
+              <button type="button" class="tab active" id="tab-system-user" onclick="switchSystemTab('user')">用户管理</button>
+            </div>
+
+            <!-- 用户管理 -->
+            <div id="panel-system-user">
+              <div class="filter-bar">
+                <select class="filter-select" id="filter-region" style="min-width: 160px;">
+                  <option value="">请选择所属地区</option>
+                  <option value="chongqing">重庆</option>
+                  <option value="beijing">北京</option>
+                  <option value="shanghai">上海</option>
+                </select>
+                <select class="filter-select" id="filter-permission" style="min-width: 140px;">
+                  <option value="">数据权限</option>
+                  <option value="all">全部</option>
+                  <option value="partial">部分</option>
+                </select>
+                <select class="filter-select" id="filter-status" style="min-width: 120px;">
+                  <option value="">状态</option>
+                  <option value="active">在职</option>
+                  <option value="inactive">离职</option>
+                </select>
+                <input type="text" class="filter-input" id="filter-keyword" placeholder="选择用户 / 团队" style="min-width: 180px;" />
+                <div class="filter-actions">
+                  <button type="button" class="btn btn-info btn-sm" onclick="searchSystemUsers()">查询</button>
+                  <button type="button" class="btn-add-user" onclick="openSystemUserDrawer()">新增用户</button>
+                </div>
+              </div>
+
+              <div class="system-user-toolbar">
+                <div class="system-user-toolbar-left">已选择 0 个用户</div>
+                <div class="system-user-toolbar-right"></div>
+              </div>
+
+              <div class="table-card">
+                <div class="table-wrapper">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th class="checkbox-col"><input type="checkbox" onclick="toggleSelectAllSystemUsers(this)" /></th>
+                        <th>用户ID</th>
+                        <th>花名</th>
+                        <th>花名简写</th>
+                        <th>所属地区</th>
+                        <th>手机号</th>
+                        <th>数据权限</th>
+                        <th>周期代扣</th>
+                        <th>部门</th>
+                        <th>角色</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                      </tr>
+                    </thead>
+                    <tbody id="system-user-tbody">
+                      <tr>
+                        <td><input type="checkbox" class="system-user-checkbox" /></td>
+                        <td>2141</td>
+                        <td>满儿</td>
+                        <td>xiaoer</td>
+                        <td>重庆</td>
+                        <td>134****3460</td>
+                        <td><span class="tag tag-permission-all">全部</span></td>
+                        <td><span class="tag tag-period-all">全部</span></td>
+                        <td>技术部</td>
+                        <td>管理员</td>
+                        <td><span class="tag tag-success">在职</span></td>
+                        <td>
+                          <div class="row-actions">
+                            <button class="row-action-btn" onclick="bindAlias(2141)">关联别名</button>
+                            <button class="row-action-btn" onclick="editSystemUser(2141)">编辑</button>
+                            <button class="row-action-btn danger" onclick="deleteSystemUser(2141)">删除</button>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td><input type="checkbox" class="system-user-checkbox" /></td>
+                        <td>2140</td>
+                        <td>紫鸢</td>
+                        <td>ziyuan</td>
+                        <td>重庆</td>
+                        <td>182****4793</td>
+                        <td><span class="tag tag-permission-all">全部</span></td>
+                        <td><span class="tag tag-period-today">当日</span></td>
+                        <td>技术部</td>
+                        <td>管理员</td>
+                        <td><span class="tag tag-success">在职</span></td>
+                        <td>
+                          <div class="row-actions">
+                            <button class="row-action-btn" onclick="bindAlias(2140)">关联别名</button>
+                            <button class="row-action-btn" onclick="editSystemUser(2140)">编辑</button>
+                            <button class="row-action-btn danger" onclick="deleteSystemUser(2140)">删除</button>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td><input type="checkbox" class="system-user-checkbox" /></td>
+                        <td>2139</td>
+                        <td>知杨</td>
+                        <td>zhiyang</td>
+                        <td>重庆</td>
+                        <td>156****3136</td>
+                        <td><span class="tag tag-permission-all">全部</span></td>
+                        <td><span class="tag tag-period-today">当日</span></td>
+                        <td>技术部</td>
+                        <td>管理员</td>
+                        <td><span class="tag tag-success">在职</span></td>
+                        <td>
+                          <div class="row-actions">
+                            <button class="row-action-btn" onclick="bindAlias(2139)">关联别名</button>
+                            <button class="row-action-btn" onclick="editSystemUser(2139)">编辑</button>
+                            <button class="row-action-btn danger" onclick="deleteSystemUser(2139)">删除</button>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td><input type="checkbox" class="system-user-checkbox" /></td>
+                        <td>2138</td>
+                        <td>冷吃兔</td>
+                        <td>lct</td>
+                        <td>重庆</td>
+                        <td>186****4344</td>
+                        <td><span class="tag tag-permission-all">全部</span></td>
+                        <td><span class="tag tag-period-all">全部</span></td>
+                        <td>技术部</td>
+                        <td>管理员</td>
+                        <td><span class="tag tag-success">在职</span></td>
+                        <td>
+                          <div class="row-actions">
+                            <button class="row-action-btn" onclick="bindAlias(2138)">关联别名</button>
+                            <button class="row-action-btn" onclick="editSystemUser(2138)">编辑</button>
+                            <button class="row-action-btn danger" onclick="deleteSystemUser(2138)">删除</button>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td><input type="checkbox" class="system-user-checkbox" /></td>
+                        <td>2137</td>
+                        <td>春光</td>
+                        <td>chunguang02</td>
+                        <td>重庆</td>
+                        <td>177****6895</td>
+                        <td><span class="tag tag-permission-all">全部</span></td>
+                        <td><span class="tag tag-period-all">全部</span></td>
+                        <td>麦芽传媒·技术部</td>
+                        <td>管理员,投手</td>
+                        <td><span class="tag tag-success">在职</span></td>
+                        <td>
+                          <div class="row-actions">
+                            <button class="row-action-btn" onclick="bindAlias(2137)">关联别名</button>
+                            <button class="row-action-btn" onclick="editSystemUser(2137)">编辑</button>
+                            <button class="row-action-btn danger" onclick="deleteSystemUser(2137)">删除</button>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td><input type="checkbox" class="system-user-checkbox" /></td>
+                        <td>2135</td>
+                        <td>大卡</td>
+                        <td>18</td>
+                        <td>重庆</td>
+                        <td>132****2315</td>
+                        <td><span class="tag tag-permission-all">全部</span></td>
+                        <td><span class="tag tag-period-today">当日</span></td>
+                        <td>技术部</td>
+                        <td>管理员</td>
+                        <td><span class="tag tag-success">在职</span></td>
+                        <td>
+                          <div class="row-actions">
+                            <button class="row-action-btn" onclick="bindAlias(2135)">关联别名</button>
+                            <button class="row-action-btn" onclick="editSystemUser(2135)">编辑</button>
+                            <button class="row-action-btn danger" onclick="deleteSystemUser(2135)">删除</button>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td><input type="checkbox" class="system-user-checkbox" /></td>
+                        <td>2134</td>
+                        <td>立方</td>
+                        <td>17</td>
+                        <td>重庆</td>
+                        <td>151****9840</td>
+                        <td><span class="tag tag-permission-all">全部</span></td>
+                        <td><span class="tag tag-period-all">全部</span></td>
+                        <td>技术部</td>
+                        <td>管理员</td>
+                        <td><span class="tag tag-success">在职</span></td>
+                        <td>
+                          <div class="row-actions">
+                            <button class="row-action-btn" onclick="bindAlias(2134)">关联别名</button>
+                            <button class="row-action-btn" onclick="editSystemUser(2134)">编辑</button>
+                            <button class="row-action-btn danger" onclick="deleteSystemUser(2134)">删除</button>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td><input type="checkbox" class="system-user-checkbox" /></td>
+                        <td>2133</td>
+                        <td>绿豆冰</td>
+                        <td>16</td>
+                        <td>重庆</td>
+                        <td>159****1320</td>
+                        <td><span class="tag tag-permission-all">全部</span></td>
+                        <td><span class="tag tag-period-all">全部</span></td>
+                        <td>技术部·投放三组</td>
+                        <td>管理员</td>
+                        <td><span class="tag tag-success">在职</span></td>
+                        <td>
+                          <div class="row-actions">
+                            <button class="row-action-btn" onclick="bindAlias(2133)">关联别名</button>
+                            <button class="row-action-btn" onclick="editSystemUser(2133)">编辑</button>
+                            <button class="row-action-btn danger" onclick="deleteSystemUser(2133)">删除</button>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="pagination">
+                  <span class="pagination-info">共 51 项</span>
+                  <div class="pagination-pages">
+                    <button class="page-btn" onclick="changeSystemUserPage('prev')">&lt;</button>
+                    <button class="page-btn active" onclick="changeSystemUserPage(1)">1</button>
+                    <button class="page-btn" onclick="changeSystemUserPage(2)">2</button>
+                    <button class="page-btn" onclick="changeSystemUserPage(3)">3</button>
+                    <button class="page-btn" onclick="changeSystemUserPage(4)">4</button>
+                    <button class="page-btn" onclick="changeSystemUserPage('next')">&gt;</button>
+                  </div>
+                  <select class="page-size-select">
+                    <option value="15">15 条/页</option>
+                    <option value="20">20 条/页</option>
+                    <option value="50">50 条/页</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- 组织架构占位 -->
+            <div id="panel-system-org" style="display: none;">
+              <div class="table-card" style="padding: 60px 20px; text-align: center; color: var(--color-text-tertiary);">
+                组织架构内容 - 待后续截图补充
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- 新增/编辑用户抽屉 -->
+    <div id="drawer-overlay-system-user" class="drawer-overlay" onclick="closeSystemUserDrawer(event)"></div>
+    <div id="drawer-system-user" class="drawer drawer-narrow">
+      <div class="drawer-card">
+        <div class="drawer-header">
+          <h3 class="drawer-title" id="system-user-drawer-title">新增</h3>
+          <button class="drawer-close" onclick="closeSystemUserDrawer()">×</button>
+        </div>
+        <div class="drawer-body user-form-body">
+          <form id="system-user-form" onsubmit="return false;">
+            <input type="hidden" id="user-id" />
+            <div class="user-form-item">
+              <label class="user-form-label required">姓名</label>
+              <div class="user-form-field">
+                <input type="text" class="form-input" id="user-name" placeholder="请输入姓名" />
+              </div>
+            </div>
+            <div class="user-form-item">
+              <label class="user-form-label required">花名简写</label>
+              <div class="user-form-field">
+                <input type="text" class="form-input" id="user-alias" placeholder="请输入花名简写" />
+              </div>
+            </div>
+            <div class="user-form-item">
+              <label class="user-form-label required">手机号</label>
+              <div class="user-form-field">
+                <input type="text" class="form-input" id="user-phone" placeholder="请输入手机号" />
+              </div>
+            </div>
+            <div class="user-form-item">
+              <label class="user-form-label">数据权限</label>
+              <div class="user-form-field">
+                <div class="user-form-radio-group">
+                  <label class="user-form-radio">
+                    <input type="radio" name="user-permission" value="partial" checked />
+                    <span>部分</span>
+                  </label>
+                  <label class="user-form-radio">
+                    <input type="radio" name="user-permission" value="all" />
+                    <span>全部</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="user-form-item">
+              <label class="user-form-label required">周期代扣</label>
+              <div class="user-form-field">
+                <div class="user-form-radio-group">
+                  <label class="user-form-radio">
+                    <input type="radio" name="user-period" value="today" checked />
+                    <span>当日</span>
+                  </label>
+                  <label class="user-form-radio">
+                    <input type="radio" name="user-period" value="all" />
+                    <span>全部</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="user-form-item">
+              <label class="user-form-label required">状态</label>
+              <div class="user-form-field">
+                <div class="user-form-radio-group">
+                  <label class="user-form-radio">
+                    <input type="radio" name="user-status" value="active" checked />
+                    <span>在职</span>
+                  </label>
+                  <label class="user-form-radio">
+                    <input type="radio" name="user-status" value="inactive" />
+                    <span>离职</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="user-form-item">
+              <label class="user-form-label required">所属地区</label>
+              <div class="user-form-field">
+                <select class="form-select" id="user-region">
+                  <option value="">请选择所属地区</option>
+                  <option value="chongqing" selected>重庆</option>
+                  <option value="beijing">北京</option>
+                  <option value="shanghai">上海</option>
+                </select>
+              </div>
+            </div>
+            <div class="user-form-item">
+              <label class="user-form-label">团队</label>
+              <div class="user-form-field">
+                <select class="form-select" id="user-team">
+                  <option value="">请选择团队</option>
+                  <option value="tech">技术部</option>
+                  <option value="tech-ops">技术部·投放三组</option>
+                  <option value="maiya">麦芽传媒·技术部</option>
+                </select>
+              </div>
+            </div>
+            <div class="user-form-item">
+              <label class="user-form-label required">角色</label>
+              <div class="user-form-field">
+                <input type="text" class="form-input" id="user-role" placeholder="请输入角色" />
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="drawer-footer">
+          <button type="button" class="btn btn-outline btn-sm" onclick="closeSystemUserDrawer()">取消</button>
+          <button type="button" class="btn btn-primary btn-sm" onclick="submitSystemUser()">确定</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="../scripts/main.js?v=20260916"></script>
+    <script src="../scripts/header-user.js?v=20260916"></script>
+    <script>
+      // pages/ 下的子页面必须各自覆盖 navUrl：把仓库根相对路径转为同目录相对路径
+      function navUrl(rootPath) {
+        if (window.location.hostname === 'htmlpreview.github.io') {
+          return 'https://htmlpreview.github.io/?https://github.com/Nake12138/maiyaput/blob/main/' + rootPath;
+        }
+        if (rootPath === 'index.html') return '../index.html';
+        return './' + rootPath.replace(/^pages\//, '');
+      }
+
+      function showPage(pageName) {
+        if (pageName === 'overseas-tiktok-account') {
+          window.location.href = navUrl('pages/overseas-tiktok-account.html');
+          return;
+        }
+        if (pageName === 'overseas-account') {
+          window.location.href = navUrl('pages/overseas-account.html');
+          return;
+        }
+        if (pageName === 'overseas-app') {
+          window.location.href = navUrl('pages/overseas-app.html');
+          return;
+        }
+        if (pageName === 'overseas-bc') {
+          window.location.href = navUrl('pages/overseas-bc.html');
+          return;
+        }
+        if (pageName === 'overseas-batch-delivery') {
+          window.location.href = navUrl('pages/overseas-batch-delivery.html');
+          return;
+        }
+        if (pageName === 'overseas-auto-delivery') {
+          window.location.href = navUrl('pages/overseas-auto-delivery.html');
+          return;
+        }
+        if (pageName === 'overseas-template') {
+          window.location.href = navUrl('pages/overseas-template.html');
+          return;
+        }
+        if (pageName === 'overseas-system-user') {
+          switchSystemTab('user');
+          return;
+        }
+        if (pageName === 'overseas-system-org') {
+          switchSystemTab('org');
+          return;
+        }
+        window.location.href = navUrl('index.html') + '#' + pageName;
+      }
+
+      function goHome() {
+        window.location.href = navUrl('index.html');
+      }
+
+      function switchSystemTab(tabName) {
+        document.getElementById('panel-system-user').style.display = tabName === 'user' ? 'block' : 'none';
+        document.getElementById('panel-system-org').style.display = tabName === 'org' ? 'block' : 'none';
+        document.getElementById('tab-system-user').classList.toggle('active', tabName === 'user');
+        document.getElementById('tab-system-org').classList.toggle('active', tabName === 'org');
+      }
+
+      function searchSystemUsers() {
+        var region = document.getElementById('filter-region').value;
+        var permission = document.getElementById('filter-permission').value;
+        var status = document.getElementById('filter-status').value;
+        var keyword = document.getElementById('filter-keyword').value;
+        alert('查询用户：' + JSON.stringify({ region: region, permission: permission, status: status, keyword: keyword }));
+      }
+
+      function toggleSelectAllSystemUsers(checkbox) {
+        var checked = checkbox.checked;
+        document.querySelectorAll('.system-user-checkbox').forEach(function (cb) {
+          cb.checked = checked;
+        });
+      }
+
+      function bindAlias(userId) {
+        alert('关联别名：' + userId);
+      }
+
+      function editSystemUser(userId) {
+        openSystemUserDrawer('编辑用户', userId);
+      }
+
+      function deleteSystemUser(userId) {
+        if (confirm('确定删除该用户吗？')) {
+          alert('已删除用户：' + userId);
+        }
+      }
+
+      function changeSystemUserPage(page) {
+        if (page === 'prev') {
+          alert('上一页');
+        } else if (page === 'next') {
+          alert('下一页');
+        } else {
+          alert('跳转到第 ' + page + ' 页');
+        }
+      }
+
+      function openSystemUserDrawer(title, userId) {
+        var overlay = document.getElementById('drawer-overlay-system-user');
+        var drawer = document.getElementById('drawer-system-user');
+        var titleEl = document.getElementById('system-user-drawer-title');
+        titleEl.textContent = title || '新增';
+        document.getElementById('user-id').value = userId || '';
+        if (overlay) overlay.classList.add('open');
+        if (drawer) drawer.classList.add('open');
+      }
+
+      function closeSystemUserDrawer(event) {
+        if (event && event.target !== document.getElementById('drawer-overlay-system-user')) return;
+        var overlay = document.getElementById('drawer-overlay-system-user');
+        var drawer = document.getElementById('drawer-system-user');
+        if (overlay) overlay.classList.remove('open');
+        if (drawer) drawer.classList.remove('open');
+      }
+
+      function submitSystemUser() {
+        var userId = document.getElementById('user-id').value;
+        var name = document.getElementById('user-name').value;
+        if (!name) {
+          alert('请输入姓名');
+          return;
+        }
+        if (userId) {
+          alert('用户已更新：' + userId);
+        } else {
+          alert('新增用户成功');
+        }
+        closeSystemUserDrawer();
+      }
+    </script>
+  </body>
+</html>

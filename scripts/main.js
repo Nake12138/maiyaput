@@ -2,6 +2,7 @@
 
 /* ===== 跨环境页面跳转：兼容本地 / GitHub Pages / htmlpreview.github.io ===== */
 /* rootPath 为仓库根相对路径，如 'pages/overseas-batch-delivery.html'、'index.html' */
+/* 在 pages/ 下的页面会自动剥离 'pages/' 前缀，转为 './xxx.html' 相对路径 */
 function navUrl(rootPath) {
   if (window.location.hostname === 'htmlpreview.github.io') {
     return (
@@ -9,6 +10,12 @@ function navUrl(rootPath) {
       'https://github.com/Nake12138/maiyaput/blob/main/' +
       rootPath
     );
+  }
+  // 当前页面位于 pages/ 下时，去掉 'pages/' 前缀并加上 './'
+  var inPages = window.location.pathname.replace(/\\/g, '/').indexOf('/pages/') !== -1;
+  if (inPages) {
+    if (rootPath === 'index.html') return '../index.html';
+    return './' + rootPath.replace(/^pages\//, '');
   }
   return rootPath;
 }
@@ -52,6 +59,10 @@ function showPage(pageName) {
   }
   if (pageName === 'overseas-auto-delivery') {
     window.location.href = navUrl('pages/overseas-auto-delivery.html');
+    return;
+  }
+  if (pageName === 'overseas-system-user') {
+    window.location.href = navUrl('pages/overseas-system-user.html');
     return;
   }
 
@@ -117,8 +128,10 @@ function switchSystem(system) {
   } catch (err) {}
   if (system === 'overseas') {
     window.location.href = navUrl('pages/overseas-batch-delivery.html');
+  } else {
+    // 切回国内投放系统：跳转到 index.html
+    window.location.href = navUrl('index.html');
   }
-  // 国内投放系统：停留在当前 index.html
 }
 
 document.addEventListener('click', function (e) {
