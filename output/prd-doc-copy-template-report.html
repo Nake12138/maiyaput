@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="docx-page-size" content="A4">
+<title>海外投放系统 - 模板管理 · 文案模板 · 需求文档</title>
+<style>
+:root {
+  --primary: #1d4ed8;
+  --text-main: #101828;
+  --text-secondary: #475467;
+  --border: #d0d5dd;
+  --bg-light: #f8fafc;
+}
+body {
+  font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-size: 11pt;
+  line-height: 1.6;
+  color: var(--text-main);
+  margin: 0;
+  padding: 2cm 2.5cm;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2.5cm 3cm;
+}
+h1 { font-size: 20pt; color: var(--primary); border-bottom: 2px solid var(--primary); padding-bottom: 8px; margin-top: 0; }
+h2 { font-size: 16pt; color: var(--text-main); margin-top: 28px; margin-bottom: 12px; border-left: 4px solid var(--primary); padding-left: 10px; }
+h3 { font-size: 13pt; color: var(--text-main); margin-top: 22px; margin-bottom: 10px; }
+h4 { font-size: 12pt; color: var(--text-main); margin-top: 16px; margin-bottom: 8px; }
+p { margin: 8px 0; }
+a { color: var(--primary); text-decoration: underline; }
+ul, ol {
+  margin: 6px 0;
+  padding-left: 24px;
+}
+li {
+  margin: 2px 0;
+  line-height: 1.5;
+}
+li > p {
+  margin: 2px 0;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 12px 0;
+  font-size: 10pt;
+}
+th, td {
+  border: 1px solid var(--border);
+  padding: 6px 8px;
+  text-align: left;
+  vertical-align: top;
+}
+th {
+  background: var(--bg-light);
+  font-weight: 600;
+}
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 12px 0;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+pre {
+  background: var(--bg-light);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 10px;
+  overflow-x: auto;
+  font-size: 10pt;
+}
+blockquote {
+  margin: 10px 0;
+  padding: 8px 12px;
+  background: var(--bg-light);
+  border-left: 4px solid var(--primary);
+  color: var(--text-secondary);
+}
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 20px 0;
+}
+.meta {
+  color: var(--text-secondary);
+  font-size: 10pt;
+  margin-bottom: 20px;
+}
+.priority-P0 {
+  color: #b91c1c;
+  font-weight: 600;
+}
+.priority-P1 {
+  color: #b45309;
+  font-weight: 600;
+}
+</style>
+</head>
+<body>
+
+<h1>海外投放系统 · 模板管理 / 文案模板 · 交互需求说明</h1>
+
+<div class="meta">
+  <div><strong>页面：</strong>海外投放系统 → 模板管理 → 文案模板 Tab</div>
+  <div><strong>页面路径：</strong><code>pages/overseas-template.html</code> · 文案模板 Tab（<code>#template-tab-copy</code>）</div>
+  <div><strong>版本：</strong>v1.0 · 2026-09-18</div>
+  <div><strong>关联 PRD 文档：</strong>海外投放系统商务中心 PRD（oct）、自动化任务投放身份 PRD（oct）</div>
+  <div><strong>说明：</strong>本 PRD 由原型页面内嵌的浮动需求说明面板导出，对应 4 个用户故事（US）。每个 US 包含描述、筛选项、字段、数据来源、数据流转、验收标准六段内容。</div>
+</div>
+
+<hr>
+
+<h2>US-001 · 文案模板列表查询与展示</h2>
+<p><span class="priority-P0">P0</span></p>
+
+<h3>描述</h3>
+<p>作为投放运营，我想要按文案内容、类型、付费类型、语言和创建人筛选文案模板列表，以便在海量素材中快速定位目标文案并在自动化任务中引用。</p>
+
+<h3>界面示意</h3>
+<p><img src="../assets/prd/template-copy-list.png" alt="文案模板列表" /></p>
+
+<h3>筛选项</h3>
+<ul>
+  <li>文案内容（单行文本输入框，占位「文案内容」，支持模糊搜索）</li>
+  <li>文案类型（下拉选择，占位「请选择文案类型」，枚举：标题、产品卖点）</li>
+  <li>付费类型（下拉选择，占位「请选择付费类型」，枚举：付费、免费）</li>
+  <li>语言（下拉选择，占位「请选择语言」，枚举：英语、中文、德语、意大利语等）</li>
+  <li>创建人（下拉选择，占位「请选择创建人」）</li>
+  <li>操作按钮：「查询」「重置」「新增文案」</li>
+</ul>
+<p>点击「查询」后按条件过滤，点击「重置」清空全部条件并恢复全量列表。</p>
+
+<h3>表格字段</h3>
+<ul>
+  <li>选择列（复选框，表头支持全选）</li>
+  <li>ID（数字）</li>
+  <li>文案内容（文本，展示原始文案，过长时折行或截断显示）</li>
+  <li>文案类型（文本：标题、产品卖点）</li>
+  <li>付费类型（文本：付费、免费）</li>
+  <li>语言（文本）</li>
+  <li>创建人（文本）</li>
+  <li>创建时间（文本，格式 yyyy-MM-dd HH:mm）</li>
+  <li>更新时间（文本，格式 yyyy-MM-dd HH:mm）</li>
+  <li>操作（按钮组：编辑、删除）</li>
+</ul>
+
+<h3>数据来源</h3>
+<p>模板管理 - 文案模板列表数据 ← 后端接口返回；筛选项枚举值（语言、文案类型、付费类型）可来自全局字典配置。</p>
+
+<h3>数据流转</h3>
+<p>页面加载 → 默认进入「文案模板」Tab → 调用「获取文案模板列表」接口 → 渲染主表；用户在筛选栏输入/选择条件后点击「查询」执行过滤；点击「重置」恢复全量；点击「新增文案」打开新增弹框。</p>
+
+<h3>验收标准（AC）</h3>
+<ul>
+  <li>页面加载后默认展示文案模板 Tab 列表</li>
+  <li>支持按文案内容模糊查询，以及按文案类型、付费类型、语言、创建人精确筛选</li>
+  <li>列表支持表头全选/半选，选中行后顶部显示批量操作条</li>
+  <li>表格下方提供分页条（总数、页码、每页条数、跳页）</li>
+  <li>文案内容过长时应保证列宽自适应或提供 tooltip，避免破坏表格布局</li>
+</ul>
+
+<hr>
+
+<h2>US-002 · 批量删除文案模板</h2>
+<p><span class="priority-P1">P1</span></p>
+
+<h3>描述</h3>
+<p>作为投放运营，我想要一次性删除多条不再使用的文案模板，以便批量清理过期素材。</p>
+
+<h3>界面示意</h3>
+<p><img src="../assets/prd/template-copy-batch.png" alt="批量删除文案模板" /></p>
+
+<h3>筛选项</h3>
+<p>通过列表选择列勾选目标文案，顶部批量操作条实时显示已选项数并提供「批量删除」入口。</p>
+
+<h3>表格字段</h3>
+<ul>
+  <li>选择列（复选框，表头支持全选）</li>
+  <li>已选择数量（数字，批量操作条展示）</li>
+</ul>
+
+<h3>数据来源</h3>
+<p>删除动作提交选中的文案模板 ID 列表 ← 当前列表已勾选行。</p>
+
+<h3>数据流转</h3>
+<p>在列表中勾选一条或多条文案 → 顶部出现「已选择 N 项 批量删除」操作条 → 点击「批量删除」→ 二次确认弹窗 → 确认后调用删除接口 → 刷新列表并清空选中状态。</p>
+
+<h3>验收标准（AC）</h3>
+<ul>
+  <li>未勾选任何行时，批量操作条隐藏</li>
+  <li>勾选任意行后即时显示批量操作条，并准确统计已选项数</li>
+  <li>点击「批量删除」必须二次确认，确认文案包含选中数量</li>
+  <li>删除成功后刷新当前列表并清空所有勾选状态</li>
+  <li>删除失败时保留勾选状态并提示错误原因</li>
+</ul>
+
+<hr>
+
+<h2>US-003 · 新增/编辑文案模板</h2>
+<p><span class="priority-P0">P0</span></p>
+
+<h3>描述</h3>
+<p>作为投放运营，我想要新建或编辑一条文案模板，以便沉淀常用广告语供自动化任务调用。</p>
+
+<h3>界面示意</h3>
+<p><img src="../assets/prd/template-copy-modal.png" alt="新增/编辑文案模板" /></p>
+
+<h3>筛选项</h3>
+<p>无（弹框内表单即为操作入口）。</p>
+
+<h3>表格字段</h3>
+<ul>
+  <li>文案类型（下拉选择，必填，枚举：标题、产品卖点）</li>
+  <li>付费类型（下拉选择，必填，枚举：付费、免费）</li>
+  <li>语言（下拉选择，必填，枚举与列表筛选保持一致）</li>
+  <li>文案（多行文本框，必填，占位「请粘贴或者输入文案，回车换行」）</li>
+</ul>
+
+<h3>数据来源</h3>
+<p>编辑时回显当前文案模板详情 ← 后端接口；新增时表单为空。</p>
+
+<h3>数据流转</h3>
+<p>点击「新增文案」打开新增弹框（标题「新增文案」）→ 选择文案类型、付费类型、语言并填写文案 → 点击「确定」保存；点击「编辑」打开编辑弹框（标题「编辑文案」）→ 回显原字段 → 修改后点击「确定」保存。</p>
+
+<h3>验收标准（AC）</h3>
+<ul>
+  <li>新增时所有字段为空，编辑时回显原数据</li>
+  <li>文案类型、付费类型、语言为必填项</li>
+  <li>文案为必填项，支持多行输入</li>
+  <li>点击「确定」后关闭弹框并刷新列表；点击「取消」不保存并关闭弹框</li>
+  <li>保存失败时在对应表单项下方提示错误信息</li>
+</ul>
+
+<hr>
+
+<h2>US-004 · 删除单条文案模板</h2>
+<p><span class="priority-P1">P1</span></p>
+
+<h3>描述</h3>
+<p>作为投放运营，我想要删除单条文案模板，以便及时清理错误或过时的文案。</p>
+
+<h3>界面示意</h3>
+<p><img src="../assets/prd/template-copy-delete.png" alt="删除单条文案模板" /></p>
+
+<h3>筛选项</h3>
+<p>无。</p>
+
+<h3>表格字段</h3>
+<p>操作列提供「删除」链接。</p>
+
+<h3>数据来源</h3>
+<p>删除目标 ID ← 当前行数据。</p>
+
+<h3>数据流转</h3>
+<p>在列表操作列点击「删除」→ 二次确认弹窗 → 确认后调用删除接口 → 刷新列表。</p>
+
+<h3>验收标准（AC）</h3>
+<ul>
+  <li>删除前必须二次确认</li>
+  <li>删除成功后从列表中移除该行并更新总数</li>
+  <li>删除失败时保留该行并提示错误原因</li>
+</ul>
+
+<hr>
+
+<h2>附录</h2>
+<h3>术语约定</h3>
+<table>
+  <tr><th>术语</th><th>说明</th></tr>
+  <tr><td>文案模板</td><td>投放广告的标题或产品卖点等文案素材，可在自动化任务中作为投放内容引用</td></tr>
+  <tr><td>文案类型</td><td>当前枚举：标题、产品卖点。后续可按业务需要扩展</td></tr>
+  <tr><td>付费类型</td><td>投放方式分类：付费（投流广告）、免费（自然流量）</td></tr>
+  <tr><td>批量删除</td><td>通过列表复选框选择多条记录，统一执行删除操作</td></tr>
+</table>
+
+<h3>原型文件</h3>
+<ul>
+  <li>HTML 原型：<code>pages/overseas-template.html</code>（文案模板 Tab，<code>#template-tab-copy</code>）</li>
+  <li>样式：<code>styles/main.css</code>、<code>styles/prd.css</code></li>
+  <li>脚本：<code>scripts/main.js</code>、<code>scripts/prd.js</code>、<code>scripts/header-user.js</code></li>
+</ul>
+
+</body>
+</html>
