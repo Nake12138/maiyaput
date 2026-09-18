@@ -21,6 +21,7 @@
 
 - 已存在项目仓库，包含入口页 + 子页面 + 全局样式 + 公共脚本（典型结构：`index.html + pages/*.html + styles/main.css + scripts/main.js`）。
 - 项目已接入 GitHub remote，目标分支为 `main`。
+- **首次使用本 Skill**：若项目尚未接入 GitHub remote（或未确认过推送意向），不要自行假设仓库地址；需在完成原型与需求文档后（阶段 7 之前）先询问用户是否需要推送到 GitHub，如需要，再向用户询问 GitHub 仓库地址与目标分支，然后配置 remote 再执行阶段 7。后续使用时直接沿用已配置的 remote，无需重复询问。
 - 本 Skill 不替代 `prototype-design`、`proto-to-prd`、`prototype-prd-integration` 等底层 Skill，而是把它们串联成可复用的 workflow。
 
 ## 执行流程
@@ -122,6 +123,13 @@ window.prdStories = [
 
 ### 阶段 7：提交并推送 GitHub（10 分钟）
 
+**首次使用检查**：进入本阶段前，先执行 `git remote -v`。若无 remote（即首次使用本 Skill），必须先向用户确认两件事，得到明确答复后再继续：
+
+1. **是否需要推送到 GitHub？** —— 用户可选择仅本地保存，此时跳过 push，只做本地 commit。
+2. **如需推送，GitHub 仓库地址是什么？** —— 由用户提供完整地址（如 `https://github.com/<用户名>/<仓库名>.git`）与目标分支，执行 `git remote add origin <地址>` 配置后再提交推送。
+
+禁止自行猜测或硬编码仓库地址。配置成功后本次及后续使用均沿用该 remote，不再重复询问。
+
 1. 提交信息规范：`feat(scope): 简短描述`，多个主题分开提交。
 2. 排除无关改动：需求文档截图如与本次无关则单独提交，中间产物按项目既有惯例处理（如加 .gitignore）。
 3. **PRD 文档与原型代码必须同步提交**：页面 `window.PRD_PAGE_URL` 指向的 HTML 必须和 `pages/*.html` 一并 git add，否则「复制链接」按钮产生的链接就是死链。每次新增/修改页面后用以下命令快速校验：
@@ -141,7 +149,7 @@ window.prdStories = [
      mkdir -p .git/refs/remotes/origin
      printf '<完整sha>\n' > .git/refs/remotes/origin/main
      ```
-4. GitHub Pages 缓存：修改 CSS 后必须同步更新所有页面的 `?v=YYYYMMDD` 版本号，否则 10 分钟内普通窗口仍渲染旧样式。
+5. GitHub Pages 缓存：修改 CSS 后必须同步更新所有页面的 `?v=YYYYMMDD` 版本号，否则 10 分钟内普通窗口仍渲染旧样式。
 
 ## 关键提示词模板
 
