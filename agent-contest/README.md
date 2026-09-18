@@ -2,7 +2,8 @@
 
 > 案例背景：短剧海外广告自动化投放系统原型开发  
 > 涉及需求：TikTok 账号包选择弹窗、商务中心（BC）用户与 TikTok 账号管理  
-> 代码仓库：https://github.com/Nake12138/maiyaput
+> 代码仓库：`<请填写您的 GitHub 仓库地址，如 https://github.com/<your-org>/<your-repo>>`  
+> 在线预览（GitHub Pages）：`<请填写您的 GitHub Pages 地址，如 https://<your-org>.github.io/<your-repo>/>`
 
 ---
 
@@ -35,7 +36,7 @@
 | **WorkBuddy 视觉化原型 Skill**（prototype-design） | 根据参考截图输出高保真 HTML 原型，保持项目既定黑白灰主色、顶栏三件套、表格/弹窗/抽屉等组件风格。 |
 | **proto-to-prd / prototype-prd-integration Skill** | 从原型代码反向梳理页面结构，生成/嵌入用户故事（US）与需求说明；或以浮动入口+侧滑面板形式把 PRD 接入页面。 |
 | **agent-browser** | 自动打开本地页面、执行 JS 校验、截图对比，验证导航、弹窗、PRD 面板、批量操作等关键路径。 |
-| **Git + GitHub Pages** | 版本管理与在线预览，提交后自动部署到 `https://nake12138.github.io/maiyaput/`。 |
+| **Git + GitHub Pages** | 版本管理与在线预览，提交后自动部署到您的 GitHub Pages 地址（`<请填写>`）。 |
 | **Python 脚本（辅助）** | 多页面批量替换相同结构（如顶栏三件套、CSS 版本号），按注释锚点+`<div>` 配对定位，避免漏改。 |
 
 ### 2.2 核心功能
@@ -167,7 +168,7 @@
 | **人力成本** | PM 写 PRD + 前端画原型，2 人协作 | 1 人独立产出可运行原型与 PRD | 评审时即可在线预览交互 |
 | **质量/准确率** | PRD 与界面经常出现字段/列序不一致 | 48 次相关迭代中，US 描述、截图、代码字段保持同步 | 每次界面调整同步更新 PRD 截图与 US 说明 |
 | **验证效率** | 依赖人工逐个页面点击验证 | agent-browser 自动跑导航矩阵 + 关键交互截图 | 批量操作、弹窗层级、缓存问题可被提前发现 |
-| **版本管理** | 文档与代码分开维护，容易遗漏 | 代码、PRD、截图统一提交 GitHub，GitHub Pages 自动部署 | 在线地址：https://nake12138.github.io/maiyaput/ |
+| **版本管理** | 文档与代码分开维护，容易遗漏 | 代码、PRD、截图统一提交 GitHub，GitHub Pages 自动部署 | 在线地址：`<请填写您的 GitHub Pages 地址>` |
 
 ---
 
