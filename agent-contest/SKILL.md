@@ -124,7 +124,17 @@ window.prdStories = [
 
 1. 提交信息规范：`feat(scope): 简短描述`，多个主题分开提交。
 2. 排除无关改动：需求文档截图如与本次无关则单独提交，中间产物按项目既有惯例处理（如加 .gitignore）。
-3. Push 后验证：
+3. **PRD 文档与原型代码必须同步提交**：页面 `window.PRD_PAGE_URL` 指向的 HTML 必须和 `pages/*.html` 一并 git add，否则「复制链接」按钮产生的链接就是死链。每次新增/修改页面后用以下命令快速校验：
+   ```bash
+   # 列出所有页面配置的 PRD_PAGE_URL 与目标文件可访问性
+   for f in pages/*.html; do
+     url=$(grep -oE "PRD_PAGE_URL\\s*=\\s*['\"][^'\"]+['\"]" "$f" | head -1 | sed -E "s/.*['\"]([^'\"]+)['\"]/\1/")
+     [ -z "$url" ] && continue
+     target="${url#../}"
+     [ -f "$target" ] && echo "[OK] $f -> $url" || echo "[MISS] $f -> $url"
+   done
+   ```
+4. Push 后验证：
    - `git ls-remote origin main` 确认远程 HEAD 正确；
    - 若仓库存在 `fetch` 不更新远程跟踪引用的异常（本地 `git status` 持续显示 ahead N），手动修复：
      ```bash
