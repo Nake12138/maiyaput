@@ -107,80 +107,19 @@
 
 ## 模块 3 · 操作步骤（必填）
 
-### 步骤 1：上传参考截图，让 Agent 绘制高保真原型
-
-**输入**：业务方提供的参考图或手绘稿（如商务中心左侧面板、账号包弹窗）。  
-**Agent 动作**：
-
-- 调用 `prototype-design` Skill，按参考图输出 HTML 页面；
-- 保持项目既定组件库（表格、抽屉、弹窗、分页、筛选栏）；
-- 自动接入左侧导航与 `showPage` 路由覆盖。
-
-**关键截图**：商务中心主表与左侧面板单选。
-
-![商务中心列表与单选](./screenshots/us-001-main.png)
-
-### 步骤 2：需求确认后，补充用户故事与验收标准
-
-**输入**：与业务方确认后的字段、筛选项、数据来源、操作流程。  
-**Agent 动作**：
-
-- 按模块拆分 US（如 US-001 商务中心列表、US-002 BC 用户列表、US-005 批量分配等）；
-- 每个 US 包含完整的描述、筛选项、字段、数据来源、操作流程与验收标准六段内容；
-- 标注 TikTok Business API 官方文档链接（如 get-business-centers、get-assets、assign-an-asset 等）。
-
-**关键截图**：自动化任务投放身份模式切换与 TikTok 账号包选择。
-
-![投放身份模式切换](./screenshots/auto-delivery-identity-default.png)
-
-![TikTok 账号包选择弹窗](./screenshots/auto-delivery-package-picker.png)
-
-### 步骤 3：将 PRD 以浮动入口 + 侧滑面板形式接入页面
-
-**输入**：已确认的用户故事数组。  
-**Agent 动作**：
-
-- 在每个关键模块旁挂载 `📋 US-XXX 说明` 悬浮按钮；
-- 点击按钮从右侧滑出 PRD 面板，展示该 US 的完整说明与界面截图；
-- 页面右下角保留全局「需求说明」入口，可查看全部 US。
-
-**关键截图**：BC 用户列表页签旁的 US-002 说明按钮，以及批量分配弹窗的 US-005 说明。
-
-![BC 用户列表与 US-002 说明](./screenshots/us-002-user-tab.png)
-
-![批量分配 TikTok 账号（US-005）](./screenshots/us-004-batch-assign.png)
-
-### 步骤 4：复杂交互实现与自动化验证
-
-**典型场景**：
-
-- BC 用户已分配 TikTok 账号抽屉支持批量删除（US-004 / US-009）；
-- 批量分配弹窗与资产管理-TikTok 账号页字段保持一致；
-- 左侧 BC 改单选后，右侧两页签独立显示更新时间。
-
-**Agent 动作**：
-
-- 用原生 JS 实现勾选状态管理、批量操作、二次确认、空态提示；
-- 用 `agent-browser` 打开本地文件，执行关键路径验证并截图；
-- 修复验证中发现的问题（如 `var` 提升导致初始化中断、alert 阻塞自动化流程、孤儿勾选状态未清理等）。
-
-**关键截图**：已分配账号抽屉与批量删除确认。
-
-![已分配 TikTok 账号抽屉（US-004）](./screenshots/us-004-user-tt.png)
-
-![批量删除确认（US-009）](./screenshots/us-009-batch-remove.png)
-
-### 步骤 5：多页面同步检查并推送 GitHub
-
-**Agent 动作**：
-
-- 用 Python 脚本统一更新 9 个页面的 CSS/JS 版本号（如 `?v=20260916`），绕过 GitHub Pages 的 `max-age=600` 强缓存；
-- 逐页 grep 校验顶栏三件套、导航、PRD 入口是否一致；
-- 提交并推送；修复该仓库 `git fetch` 不更新远程跟踪引用的问题，确保 `git status` 干净。
-
-**关键截图**：TikTok 账号列表页签。
-
-![TikTok 账号列表（US-006）](./screenshots/us-006-tt-tab.png)
+1. **上传参考截图，让 Agent 绘制高保真原型**。
+   ![商务中心列表与单选](./screenshots/us-001-main.png)
+2. **确认需求范围**，让 Agent 按模块补充用户故事（US）与验收标准（AC）。
+   ![投放身份模式切换](./screenshots/auto-delivery-identity-default.png)
+   ![TikTok 账号包选择弹窗](./screenshots/auto-delivery-package-picker.png)
+3. **将 PRD 以浮动入口 + 侧滑面板接入页面**，方便评审时随点随看。
+   ![BC 用户列表与 US-002 说明](./screenshots/us-002-user-tab.png)
+   ![批量分配 TikTok 账号（US-005）](./screenshots/us-004-batch-assign.png)
+4. **运行关键交互测试**（批量删除、批量分配、多页签同步等），并更新 PRD 截图。
+   ![已分配 TikTok 账号抽屉（US-004）](./screenshots/us-004-user-tt.png)
+   ![批量删除确认（US-009）](./screenshots/us-009-batch-remove.png)
+5. **多页面同步检查并推送 GitHub**（顶栏、版本号、远程引用）。
+   ![TikTok 账号列表（US-006）](./screenshots/us-006-tt-tab.png)
 
 ---
 
