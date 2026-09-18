@@ -48,3 +48,11 @@
 4. **页面原 PRD 数据与当前需求不匹配**（已修复）
    - 现象：`overseas-template.html` 原本挂载的是「TikTok 账号包」的 US 故事与截图。
    - 修复：替换为文案模板相关 US，并新增对应 `assets/prd/` 配图；同步 `prd.js` 版本号到 `v=20260916`。
+
+5. **US 截图与页面内容不一致**（已修复）
+   - 现象：`template-copy-delete.png` 原图异常（仅 166 字节，几乎空白）；`template-copy-list.png` 等截图与当前页面字段不完全对齐；US-003 描述写「下拉选择」但弹框内为「单选按钮」。
+   - 修复：在 1600–1920px 视口下重新截取 4 张 US 配图并替换 `assets/prd/`；修正 US-003 字段描述为「文案类型（单选按钮）/ 付费类型（单选按钮）」；同步修正 PRD 面板静态标题为「文案模板」。
+
+6. **PRD 复制链接指向缺失文件**（已修复）
+   - 现象：`overseas-template.html` 的 `PRD_PAGE_URL` 指向 `output/prd-doc-copy-template-report.html`，但该文件未提交。
+   - 修复：生成包含 4 个 US 的 PRD HTML 文档并提交；Skill 阶段 7 增加「PRD 文档与原型代码必须同步提交」校验。

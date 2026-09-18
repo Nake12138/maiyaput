@@ -1164,8 +1164,8 @@
     <aside id="prd-panel" class="prd-panel" role="dialog" aria-label="交互需求说明">
       <div class="prd-panel-header" id="prd-panel-header" title="按住此处可拖动面板，双击可全屏">
         <div>
-          <div class="prd-panel-title">模板管理 · TikTok 账号包 · 交互需求说明</div>
-          <div class="prd-panel-sub">简洁版 PRD（2 个用户故事 · 展开查看筛选项/表格字段/数据来源/数据流转 · 按住标题栏可拖动，双击或按钮可全屏 · 「复制链接」复制需求说明页面链接）</div>
+          <div class="prd-panel-title">模板管理 · 文案模板 · 交互需求说明</div>
+          <div class="prd-panel-sub">简洁版 PRD（4 个用户故事 · 展开查看筛选项/表格字段/数据来源/数据流转 · 按住标题栏可拖动，双击或按钮可全屏 · 「复制链接」复制需求说明页面链接）</div>
         </div>
         <div class="prd-panel-actions">
           <button type="button" class="prd-panel-btn" id="prd-copy-link-btn" onclick="window.prd.copyPrdLink()" title="复制需求说明页面链接">复制链接</button>
@@ -1235,7 +1235,7 @@
           shot: '../assets/prd/template-copy-modal.png',
           desc: '作为投放运营，我想要新建或编辑一条文案模板，以便沉淀常用广告语供自动化任务调用。',
           filter: '无（弹框内表单即为操作入口）。',
-          fields: '文案类型（下拉选择，必填，枚举：标题、产品卖点）／付费类型（下拉选择，必填，枚举：付费、免费）／语言（下拉选择，必填，枚举与列表筛选保持一致）／文案（多行文本框，必填，占位「请粘贴或者输入文案，回车换行」）。',
+          fields: '文案类型（单选按钮，必填，枚举：标题、产品卖点）／付费类型（单选按钮，必填，枚举：付费、免费）／语言（下拉选择，必填，枚举与列表筛选保持一致）／文案（多行文本框，必填，占位「请粘贴或者输入文案，回车换行」）。',
           source: '编辑时回显当前文案模板详情 ← 后端接口；新增时表单为空。',
           flow: '点击「新增文案」打开新增弹框（标题「新增文案」）→ 选择文案类型、付费类型、语言并填写文案 → 点击「确定」保存；点击「编辑」打开编辑弹框（标题「编辑文案」）→ 回显原字段 → 修改后点击「确定」保存。',
           ac: [
