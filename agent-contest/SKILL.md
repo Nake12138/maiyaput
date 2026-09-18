@@ -56,16 +56,19 @@
    - 弹窗类：US-003 单个 BC 用户分配 TikTok 账号
    - 抽屉类：US-004 BC 用户已分配 TikTok 账号抽屉
    - 批量类：US-005 批量分配 TikTok 账号、US-009 批量删除
-2. 每个 US 必须包含以下字段：
-   - `id`：US-XXX
-   - `title`：一句话标题
-   - `priority`：P0 / P1 / P2
-   - `desc`：作为… 我想要… 以便…
-   - `filter`：筛选项与交互控件
-   - `fields`：表格/表单字段
-   - `source`：数据来源与官方 API 链接
-   - `flow`：完整操作流程
-   - `ac`：验收标准数组
+2. 每个 US 必须包含以下字段（US = 用户故事，字段即标识）：
+
+   | 缩写 | 字段含义 | 中文说明 |
+   | --- | --- | --- |
+   | `id` | Identifier | US 编号，US-XXX 格式 |
+   | `title` | Title | 一句话标题 |
+   | `priority` | Priority | 优先级，P0 / P1 / P2 |
+   | `desc` | Description | 描述（作为… 我想要… 以便…） |
+   | `filter` | Filter | 筛选项与交互控件 |
+   | `fields` | Fields | 表格/表单字段 |
+   | `source` | Source | 数据来源与官方 API 链接 |
+   | `flow` | Flow | 完整操作流程 |
+   | `ac` | Acceptance Criteria | 验收标准数组 |
 3. 如涉及 TikTok Business API，附上官方文档链接（如 get-business-centers、get-assets、assign-an-asset、unassign-an-asset）。
 
 ### 阶段 4：将 PRD 接入页面（15–30 分钟）
@@ -150,7 +153,7 @@ window.prdStories = [
 
 要求：
 1. 关键模块（列表、弹窗、抽屉、批量操作）各一个 US。
-2. 每个 US 包含 desc、filter、fields、source、flow、ac。
+2. 每个 US 包含「描述（desc）、筛选项（filter）、字段（fields）、数据来源（source）、操作流程（flow）、验收标准（ac）」六段内容。
 3. source 中如涉及 TikTok Business API，请附上官方文档链接。
 4. 输出为 JavaScript 数组格式，方便直接嵌入页面。
 ```
