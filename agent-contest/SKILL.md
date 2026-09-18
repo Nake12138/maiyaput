@@ -161,7 +161,7 @@ window.prdStories = [
 ### 模板 C：批量同步多页面
 
 ```text
-请将【具体改动，如顶栏三件套】同步到项目所有 9 个 HTML 页面（index.html + pages/*.html）。
+请将【具体改动，如顶栏三件套】按注释锚点整块同步到项目内所有 HTML 页面（index.html + pages/*.html）。
 
 要求：
 1. 使用 Python 脚本按注释锚点 + <div class="top-header-right"> 整块替换。
