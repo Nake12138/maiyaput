@@ -1,250 +1,233 @@
 {
   "docTitle": "商务中心页面 PRD 需求说明文档",
-  "version": "v1.0",
-  "confirmationStatus": "11 个功能点待确认",
+  "version": "v2.2",
+  "confirmationStatus": "8 个用户故事待确认",
   "source": {
     "page": "pages/overseas-bc.html",
     "system": "海外投放系统",
-    "module": "账号管理 - 商务中心"
+    "module": "账号管理 - 商务中心",
+    "layout": "左侧商务中心单选面板 + 右侧 BC用户 / TikTok账号 双页签"
   },
-  "pages": [
+  "updateNotes": [
+    "BC 页面所有涉及 TikTok 账号的列表与弹框去除「语言」「备注」字段，筛选项统一仅保留 TT账号名称",
+    "TikTok 账号各类列表展示去除头像，仅以账号名称文本呈现",
+    "分配 TikTok 账号弹框（单个/批量）统一 4 列结构：选择 / TikTok 账号 / 更新人 / 更新时间，复用同一行渲染组件",
+    "TikTok 账号列表页签新增「已分配 BC 用户」列：数量 + 悬浮逐行显示 BC 用户名清单",
+    "添加 TikTok 账号弹框：「新建 TikTok 账号」禁选（接口暂不可用需加白），默认选中「关联 TikTok 账号」",
+    "关联授权完成后弹框不自动关闭；提供「刷新二维码」按钮（如二维码失效可重新拉取授权链接）",
+    "表格列宽整体优化：账号名称列弹性，编号/时间/操作列固定宽度",
+    "去除 US-007「添加 TikTok 账号（新建方式）」需求说明：新建入口本版本禁选（接口暂不可用需加白），添加账号统一由 US-008（关联方式）承载"
+  ],
+  "userStories": [
     {
-      "id": "P-001",
-      "name": "商务中心",
-      "route": "pages/overseas-bc.html",
-      "menu": "账号管理 > 商务中心",
-      "functions": [
-        {
-          "id": "F-001",
-          "name": "商务中心列表查询",
-          "priority": "P0",
-          "confidence": "🟢",
-          "flows": {
-            "main": [
-              "用户在筛选栏输入商务中心名称关键字",
-              "点击「查询」按名称过滤并展示列表",
-              "点击「重置」清空筛选输入，恢复默认列表"
-            ],
-            "result": "列表按条件刷新展示"
-          },
-          "rules": ["查询条件：商务中心名称，模糊匹配", "重置仅清空本页筛选输入"],
-          "codeTraces": ["pages/overseas-bc.html:156-165 筛选栏", "pages/overseas-bc.html:848-852 searchBC/resetBCFilter"]
-        },
-        {
-          "id": "F-002",
-          "name": "商务中心主表展示",
-          "priority": "P0",
-          "confidence": "🟢",
-          "flows": {
-            "main": [
-              "页面加载后渲染商务中心列表（数据驱动 bcListData）",
-              "表格列：商务中心名称 / 用户数量 / TikTok 账号 / 操作",
-              "用户数量、TikTok 账号为链接样式，点击打开对应抽屉",
-              "操作列提供「添加 TikTok 账号」「刷新」链接"
-            ],
-            "result": "主表完整展示，分页区静态展示总数/页码/每页条数"
-          },
-          "rules": ["列宽固定：32%/15%/15%/38%", "数量与抽屉内列表条数一致", "分页为静态展示（原型）"],
-          "fields": [
-            {"key": "name", "name": "商务中心名称", "type": "text", "editable": false, "required": true},
-            {"key": "userCount", "name": "用户数量", "type": "number-link", "editable": false, "required": true},
-            {"key": "ttCount", "name": "TikTok 账号", "type": "number-link", "editable": false, "required": true},
-            {"key": "actions", "name": "操作", "type": "actions", "editable": false}
-          ],
-          "codeTraces": ["pages/overseas-bc.html:167-204 主表", "pages/overseas-bc.html:837-841 bcListData", "pages/overseas-bc.html:855-869 renderBcList"]
-        },
-        {
-          "id": "F-003",
-          "name": "打开用户列表抽屉",
-          "priority": "P0",
-          "confidence": "🟢",
-          "flows": {
-            "main": [
-              "点击主表「用户数量」链接",
-              "右侧弹出用户列表抽屉（窄版约720px）",
-              "标题：用户列表 - {商务中心名称}（{用户数}）",
-              "加载该BC成员列表，勾选状态重置为空"
-            ],
-            "result": "抽屉打开并展示成员列表"
-          },
-          "rules": ["每次打开重置搜索与批量勾选", "关闭抽屉不影响主表状态"],
-          "codeTraces": ["pages/overseas-bc.html:241-279 抽屉", "pages/overseas-bc.html:877-886 openBcUserDrawer"]
-        },
-        {
-          "id": "F-004",
-          "name": "用户列表搜索",
-          "priority": "P1",
-          "confidence": "🟢",
-          "flows": {
-            "main": ["在用户列表抽屉顶部输入用户名关键字", "输入即实时过滤（oninput）"],
-            "result": "仅展示匹配用户，无匹配显示空态"
-          },
-          "rules": ["用户名包含关键字（不区分大小写）", "过滤不影响已勾选用户选中状态"],
-          "codeTraces": ["pages/overseas-bc.html:250-252 搜索框", "pages/overseas-bc.html:893-916 renderBcUserList"]
-        },
-        {
-          "id": "F-005",
-          "name": "单用户分配 TikTok 账号",
-          "priority": "P0",
-          "confidence": "🟢",
-          "flows": {
-            "main": [
-              "用户列表行内点击「分配 TikTok 账号」",
-              "弹出分配弹框（520px），标题：分配 TikTok 账号 - {用户名}",
-              "列出该BC全部TikTok账号（头像+名称+handle+语言），支持搜索与全选",
-              "勾选未分配账号后点「确定」，提示分配结果并关闭"
-            ],
-            "alternative": ["已分配账号复选框禁用+「已分配」标签", "未勾选时提示「请至少选择一个未分配的 TikTok 账号」"],
-            "result": "提示已为「X」分配 N 个 TikTok 账号"
-          },
-          "rules": ["弹框z-index 1200/1201高于抽屉", "关闭弹框不影响底层抽屉（stopPropagation）", "已分配数据源 bcUserAssignedTt"],
-          "relatedFunctions": [
-            {"id": "F-002", "relation": "before", "note": "进入路径"},
-            {"id": "F-006", "relation": "after", "note": "共享账号数据源"},
-            {"id": "F-007", "relation": "after", "note": "账号资产数据源一致"}
-          ],
-          "codeTraces": ["pages/overseas-bc.html:207-239 弹框", "pages/overseas-bc.html:918-970 openAssignTtModal等"]
-        },
-        {
-          "id": "F-006",
-          "name": "批量分配 TikTok 账号",
-          "priority": "P0",
-          "confidence": "🟢",
-          "flows": {
-            "main": [
-              "用户列表勾选一个或多个用户（表头全选支持半选态）",
-              "工具条实时显示「已选择 X 个用户」，无勾选时按钮置灰",
-              "点击「分配TikTok」弹出批量分配弹框（520px）",
-              "顶部提示：已选择 N 个用户，请勾选要分配的 TikTok 账号",
-              "勾选账号后点「确定」，提示批量分配结果并关闭"
-            ],
-            "result": "提示已为 N 个用户分配 M 个 TikTok 账号"
-          },
-          "rules": [
-            "勾选状态在搜索/重渲染后保留，打开抽屉时重置",
-            "批量弹框第一列固定复选框，不展示「已分配」状态（是否已分配由后端自动判断）",
-            "未勾选时提示「请至少选择一个 TikTok 账号」",
-            "关闭弹框不影响底层用户列表抽屉"
-          ],
-          "relatedFunctions": [
-            {"id": "F-004", "relation": "before", "note": "勾选范围"},
-            {"id": "F-005", "relation": "before", "note": "共享账号数据源"}
-          ],
-          "codeTraces": ["pages/overseas-bc.html:281-314 弹框", "pages/overseas-bc.html:253-258 工具条", "pages/overseas-bc.html:972-1049 批量逻辑"]
-        },
-        {
-          "id": "F-007",
-          "name": "查看 TikTok 账号列表",
-          "priority": "P0",
-          "confidence": "🟢",
-          "flows": {
-            "main": [
-              "点击主表或用户列表「TikTok 账号」数量",
-              "右侧弹出 TikTok 账号列表抽屉（宽版）",
-              "标题：TikTok 账号列表 - {商务中心名称}（{数量}）",
-              "表格：账号名称（头像+handle）/语言/备注/更新人/更新时间，无操作列"
-            ],
-            "result": "抽屉展示账号资产明细"
-          },
-          "rules": [
-            "从用户列表进入时叠加在用户抽屉之上，关闭后回到用户列表",
-            "账号名称复用 .tt-account-info 样式（头像颜色由名称哈希生成）",
-            "无匹配显示空态"
-          ],
-          "relatedFunctions": [
-            {"id": "F-002", "relation": "before", "note": "进入路径"},
-            {"id": "F-003", "relation": "before", "note": "进入路径"},
-            {"id": "F-005", "relation": "after", "note": "账号数据源一致"}
-          ],
-          "codeTraces": ["pages/overseas-bc.html:316-349 抽屉", "pages/overseas-bc.html:1062-1071 renderTtAccountCell", "pages/overseas-bc.html:1073-1081 openBcTtDrawer"]
-        },
-        {
-          "id": "F-008",
-          "name": "TikTok 账号列表搜索",
-          "priority": "P1",
-          "confidence": "🟢",
-          "flows": {
-            "main": ["输入账号名称关键字", "输入即实时过滤"],
-            "result": "仅展示匹配账号"
-          },
-          "rules": ["账号名称包含关键字（不区分大小写）"],
-          "codeTraces": ["pages/overseas-bc.html:325-327 搜索框", "pages/overseas-bc.html:1088-1106 renderBcTtList"]
-        },
-        {
-          "id": "F-009",
-          "name": "添加 TikTok 账号（新建方式）",
-          "priority": "P0",
-          "confidence": "🟢",
-          "flows": {
-            "main": [
-              "点击主表「添加 TikTok 账号」弹出添加弹框（520px）",
-              "商务中心名称自动带入且不可编辑",
-              "添加方式左右并排两卡片：「新建 TikTok 账号」「关联 TikTok 账号」",
-              "选择「新建」→ 卡片高亮，下方展开新建字段（名称/头像/国家地区）",
-              "点「确定」→ 依次校验 → 提示创建成功并关闭"
-            ],
-            "alternative": [
-              "校验失败分别提示：请输入TikTok账号名称 / TikTok账号名称长度不能超过30个字符 / 请上传头像 / 请选择国家/地区",
-              "未选择方式时底部仅显示「取消」",
-              "可随时切换添加方式，字段区随之切换"
-            ],
-            "result": "提示创建成功：{名称}（{商务中心} / {地区}）"
-          },
-          "rules": [
-            "每次打开弹框重置：方式未选、字段清空、头像清空、按钮初始态",
-            "TikTok账号名称长度限制：最多 30 个字符（输入框 maxlength=30，提交前二次校验，后端同步校验）",
-            "国家/地区下拉框枚举值取对应接口（如创建账号接口的 region 枚举定义）动态下发，前端不硬编码；原型中 20 项为接口返回的示例枚举：中国大陆、中国香港、中国台湾、美国、英国、日本、韩国、新加坡、马来西亚、泰国、印尼、菲律宾、越南、巴西、德国、法国、意大利、葡萄牙、澳大利亚、加拿大",
-            "商务中心名称 disabled 不可编辑"
-          ],
-          "fields": [
-            {"key": "bcName", "name": "商务中心名称", "type": "input", "required": true, "editable": false, "note": "自动带入当前BC"},
-            {"key": "mode", "name": "添加方式", "type": "radio-card", "required": true, "options": ["新建 TikTok 账号", "关联 TikTok 账号"]},
-            {"key": "ttName", "name": "TikTok账号名称", "type": "input", "required": true, "placeholder": "请输入TikTok账号名称", "maxLength": 30, "note": "长度限制 30 个字符"},
-            {"key": "avatar", "name": "头像", "type": "file-upload", "required": true},
-            {"key": "region", "name": "国家/地区", "type": "select", "required": true, "source": "api-enum", "note": "枚举值由接口动态下发，前端不硬编码", "options": ["中国大陆","中国香港","中国台湾","美国","英国","日本","韩国","新加坡","马来西亚","泰国","印尼","菲律宾","越南","巴西","德国","法国","意大利","葡萄牙","澳大利亚","加拿大"]}
-          ],
-          "relatedFunctions": [{"id": "F-002", "relation": "before", "note": "进入路径"}],
-          "codeTraces": ["pages/overseas-bc.html:351-445 弹框", "pages/overseas-bc.html:1146-1222 openAddTtModal/selectAddTtMode/submitAddTtNew", "pages/overseas-bc.html fetchTtRegionOptions/loadTtRegionOptions 地区枚举动态加载"]
-        },
-        {
-          "id": "F-010",
-          "name": "添加 TikTok 账号（关联方式）",
-          "priority": "P0",
-          "confidence": "🟢",
-          "flows": {
-            "main": [
-              "在添加弹框中选择「关联 TikTok 账号」卡片",
-              "下方展开二维码区域：二维码 + 提示文案 + 授权对象「{商务中心名称}」",
-              "底部按钮切换为「关闭」，点击关闭弹框"
-            ],
-            "result": "关闭弹框，等待扫码授权"
-          },
-          "rules": ["授权对象自动带入当前商务中心名称", "二维码为原型示意（确定性伪随机图案）"],
-          "relatedFunctions": [{"id": "F-002", "relation": "before", "note": "进入路径"}],
-          "codeTraces": ["pages/overseas-bc.html:432-437 关联字段区", "pages/overseas-bc.html:1175-1189 selectAddTtMode", "pages/overseas-bc.html:1109-1144 drawTtQrCode"]
-        },
-        {
-          "id": "F-011",
-          "name": "商务中心列表刷新",
-          "priority": "P1",
-          "confidence": "🟢",
-          "flows": {
-            "main": ["点击主表操作列「刷新」", "重新渲染商务中心列表"],
-            "result": "列表刷新完成"
-          },
-          "rules": ["原型为本地重绘，真实环境重新拉取该商务中心数据", "不影响已打开的抽屉/弹框"],
-          "codeTraces": ["pages/overseas-bc.html:864-865 操作列", "pages/overseas-bc.html:871-874 refreshBC"]
-        }
+      "id": "US-001",
+      "name": "商务中心列表展示与单选",
+      "component": "左侧商务中心面板",
+      "priority": "P0",
+      "screenshot": "assets/prd/us-001-main.png",
+      "story": "作为投放运营，我想要在左侧查看商务中心列表并单选目标 BC，以便切换查看该 BC 下的 BC用户和 TikTok 账号。",
+      "filter": "搜索框（占位「请输入商务中心名称」，输入即时过滤列表）",
+      "fields": [
+        {"key": "radio", "name": "单选指示符", "type": "indicator", "note": "实心圆 ● 选中 / 空心圆 ○ 未选中"},
+        {"key": "name", "name": "商务中心名称", "type": "text", "note": "单行截断显示"},
+        {"key": "meta", "name": "元信息", "type": "text", "note": "N 人 · N TT账号"}
+      ],
+      "api": [{"name": "获取商务中心列表", "doc": "https://business-api.tiktok.com/portal/docs/get-business-centers/v1.3"}],
+      "flow": "页面加载 → 调用接口渲染左侧列表（默认选中第一个 BC）→ 点击切换/搜索 → 右侧两个页签同步刷新 → 每 30 分钟自动轮询",
+      "acceptanceCriteria": [
+        "页面左侧展示「商务中心」面板，列为：单选指示符 / 商务中心名称 / N 人 · N TT账号",
+        "支持按商务中心名称即时模糊搜索（包含匹配、不区分大小写），无结果显示「暂无数据」",
+        "面板内单选语义：同一时间仅一个 BC 选中，点击任意行即切换",
+        "默认选中第一个 BC；切换后右侧两个页签同步刷新",
+        "左侧不展示运维类时间提示，时间戳只在右侧两个页签工具条独立显示",
+        "列表数据每 30 分钟自动重新拉取一次"
+      ]
+    },
+    {
+      "id": "US-002",
+      "name": "BC用户列表页签与搜索",
+      "component": "右侧 BC用户页签",
+      "priority": "P0",
+      "screenshot": "assets/prd/us-002-user-tab.png",
+      "story": "作为投放运营，我想要查看当前所选 BC 下的 BC用户列表并搜索 BC用户，以便定位目标 BC用户。",
+      "filter": "BC用户名（单行文本，占位「请输入BC用户名搜索」）+ 查询 / 重置 / 刷新",
+      "fields": [
+        {"key": "check", "name": "选择列", "type": "checkbox", "note": "表头全选/半选，用于批量分配"},
+        {"key": "userName", "name": "BC用户名", "type": "text"},
+        {"key": "ttCount", "name": "TikTok 账号", "type": "number-link", "note": "点击打开已分配账号抽屉"},
+        {"key": "bcName", "name": "所属商务中心", "type": "text", "note": "恒为当前所选 BC 名称"},
+        {"key": "action", "name": "操作", "type": "button", "note": "分配 TikTok 账号"}
+      ],
+      "api": [{"name": "获取商务中心BC用户列表", "doc": "https://business-api.tiktok.com/portal/docs/get-the-members-of-a-bc/v1.3"}],
+      "flow": "切换 BC → 展示该 BC 的 BC用户 → 本地过滤 → 刷新按钮重新拉取并独立刷新本页签时间戳",
+      "acceptanceCriteria": [
+        "右侧默认显示「BC用户」页签，标题：BC用户",
+        "支持按 BC用户名搜索（查询按钮或回车执行，包含匹配、不区分大小写），无结果显示「暂无数据」",
+        "表格列序：选择 / BC用户名 / TikTok 账号 / 所属商务中心 / 操作",
+        "顶部「刷新」按钮：置灰「刷新中…」→ 重新拉取 → 恢复并独立更新本页签时间戳",
+        "工具条右侧「上次更新 HH:MM:SS」，与 TikTok账号页签互不干扰",
+        "每次切换左侧 BC 后自动按新 BC 刷新页签"
+      ]
+    },
+    {
+      "id": "US-003",
+      "name": "单个BC用户分配 TikTok 账号",
+      "component": "分配 TikTok 账号弹框",
+      "priority": "P0",
+      "screenshot": "assets/prd/us-003-single-assign.png",
+      "story": "作为投放运营，我想要为单个BC用户分配 TikTok 账号，以便授予其投放资产权限。",
+      "filter": "TT账号名称（占位「搜索 TikTok 账号名称」）+ 查询 / 重置；表头全选",
+      "fields": [
+        {"key": "check", "name": "选择列", "type": "checkbox", "note": "已分配账号禁用并标注「已分配」，全选自动跳过"},
+        {"key": "accountName", "name": "TikTok 账号", "type": "text", "note": "账号名称"},
+        {"key": "updater", "name": "更新人", "type": "text"},
+        {"key": "updateTime", "name": "更新时间", "type": "text", "format": "yyyy-MM-dd HH:mm"}
+      ],
+      "api": [
+        {"name": "获取资产列表", "doc": "https://business-api.tiktok.com/portal/docs/get-assets/v1.3"},
+        {"name": "将资产分配给用户", "doc": "https://business-api.tiktok.com/portal/docs/assign-an-asset/v1.3"}
+      ],
+      "flow": "行内「分配 TikTok 账号」→ 弹框 → 调用资产列表并标注已分配 → 勾选未分配账号 → 确定 → 提交分配 → 成功提示并关闭",
+      "acceptanceCriteria": [
+        "BC用户行内「分配 TikTok 账号」打开弹框，标题：分配 TikTok 账号 - {BC用户名}",
+        "弹框列出该 BC 全部 TikTok 账号（仅账号名称），支持按名称搜索与表头全选",
+        "已分配给该BC用户的账号复选框禁用并标注「已分配」，全选自动跳过",
+        "未勾选可用账号时点「确定」→ 提示「请至少选择一个未分配的 TikTok 账号」",
+        "弹框层级高于页签，关闭弹框不影响底层页签"
+      ]
+    },
+    {
+      "id": "US-004",
+      "name": "BC用户已分配 TikTok 账号抽屉",
+      "component": "已分配账号抽屉",
+      "priority": "P0",
+      "screenshot": "assets/prd/us-004-user-tt.png",
+      "story": "作为投放运营，我想要查看某个BC用户已分配的 TikTok 账号明细，以便确认其资产权限。",
+      "filter": "TT账号名称（占位「请输入TT账号名称」）+ 查询 / 重置",
+      "fields": [
+        {"key": "check", "name": "选择列", "type": "checkbox", "note": "表头全选/半选，用于批量删除"},
+        {"key": "accountName", "name": "TikTok账号名称", "type": "text"},
+        {"key": "updater", "name": "更新人", "type": "text"},
+        {"key": "updateTime", "name": "更新时间", "type": "text", "format": "yyyy-MM-dd HH:mm"},
+        {"key": "action", "name": "操作", "type": "button", "note": "删除（二次确认后撤销授权）"}
+      ],
+      "api": [
+        {"name": "获取资产列表", "doc": "https://business-api.tiktok.com/portal/docs/get-assets/v1.3"},
+        {"name": "撤销用户对资产的权限", "doc": "https://business-api.tiktok.com/portal/docs/unassign-an-asset/v1.3"}
+      ],
+      "flow": "行内点击「TikTok 账号」数量 → 宽抽屉 → 仅展示该BC用户已分配账号 → 单条删除二次确认后撤销授权并刷新",
+      "acceptanceCriteria": [
+        "点击BC用户行内「TikTok 账号」数量打开宽抽屉，标题：TikTok 账号 - {BC用户名}（{BC名称}）",
+        "抽屉仅列出该BC用户已被分配的 TikTok 账号（仅账号名称）",
+        "表格列序：选择 / TikTok账号名称 / 更新人 / 更新时间 / 操作（删除）",
+        "单条「删除」二次确认「是否取消授权该BC用户该 TikTok 账号？」后调用撤销接口",
+        "支持按账号名称查询（查询后执行，重置恢复全量）",
+        "抽屉叠加在BC用户列表之上，关闭后回到BC用户列表",
+        "表格上方工具条：「已选择 X 个 TikTok 账号」+ 红色「批量删除」（勾选为空置灰）"
+      ]
+    },
+    {
+      "id": "US-005",
+      "name": "批量分配 TikTok 账号",
+      "component": "批量分配弹框",
+      "priority": "P0",
+      "screenshot": "assets/prd/us-004-batch-assign.png",
+      "story": "作为投放运营，我想要勾选多个BC用户后批量分配 TikTok 账号，以便提高分配效率。",
+      "filter": "TT账号名称（占位「请输入TT账号名称」）+ 查询 / 重置",
+      "fields": [
+        {"key": "check", "name": "选择列", "type": "checkbox", "note": "表头全选；不展示「已分配」状态（后端自动判断）"},
+        {"key": "accountName", "name": "TikTok账号名称", "type": "text"},
+        {"key": "updater", "name": "更新人", "type": "text"},
+        {"key": "updateTime", "name": "更新时间", "type": "text", "format": "yyyy-MM-dd HH:mm"}
+      ],
+      "api": [{"name": "将资产分配给用户", "doc": "https://business-api.tiktok.com/portal/docs/assign-an-asset/v1.3"}],
+      "flow": "勾选 N 个BC用户 → 分配TikTok → 批量弹框（顶部提示已选 N 个BC用户）→ 复用本地账号列表 → 勾选 → 确定提交 → 成功提示并关闭",
+      "acceptanceCriteria": [
+        "BC用户页签首列复选框（表头全选半选态），工具条实时显示「已选择 X 个BC用户」",
+        "未勾选BC用户时「分配TikTok」按钮置灰",
+        "点击「分配TikTok」打开弹框，顶部提示「已选择 N 个BC用户，请勾选要分配的 TikTok 账号」",
+        "弹框筛选项：TT账号名称 + 查询 / 重置",
+        "表格列序：选择 / TikTok账号名称 / 更新人 / 更新时间；不展示「已分配」状态",
+        "未勾选账号时点「确定」→ 提示「请至少选择一个 TikTok 账号」"
+      ]
+    },
+    {
+      "id": "US-006",
+      "name": "TikTok 账号列表页签与搜索",
+      "component": "右侧 TikTok账号页签",
+      "priority": "P0",
+      "screenshot": "assets/prd/us-006-tt-tab.png",
+      "story": "作为投放运营，我想要查看当前所选 BC 下的 TikTok 账号资产明细，以便了解资产情况。",
+      "filter": "TT账号名称（占位「请输入TT账号名称」）+ 查询 / 重置 / 刷新 / 添加 TikTok 账号",
+      "fields": [
+        {"key": "accountName", "name": "TikTok账号名称", "type": "text"},
+        {"key": "assignedUserCount", "name": "已分配 BC 用户", "type": "number", "note": "数量；鼠标悬浮逐行显示 BC 用户名清单；未分配显示 0"},
+        {"key": "bcName", "name": "所属商务中心", "type": "text", "note": "固定在「TikTok账号名称」之后，恒为当前所选 BC 名称"},
+        {"key": "updater", "name": "更新人", "type": "text"},
+        {"key": "updateTime", "name": "更新时间", "type": "text", "format": "yyyy-MM-dd HH:mm"}
+      ],
+      "api": [{"name": "获取资产列表", "doc": "https://business-api.tiktok.com/portal/docs/get-assets/v1.3"}],
+      "flow": "切换 BC → 页签展示该 BC 下全部 TikTok 账号 → 本地过滤 → 刷新独立时间戳 → 「添加 TikTok 账号」锁定当前 BC 打开弹框",
+      "acceptanceCriteria": [
+        "右侧提供「TikTok账号」页签，标题：TikTok账号",
+        "支持按账号名称查询（查询后执行，重置恢复全量），无结果显示空态",
+        "「已分配 BC 用户」列：显示当前 BC 下已分配该账号的 BC 用户数量；悬浮浮层逐行展示 BC 用户名清单；未分配显示 0",
+        "「所属商务中心」列固定在「TikTok账号名称」之后，取值恒为当前所选 BC 名称",
+        "顶部「刷新」按钮：置灰「刷新中…」→ 重新拉取 → 恢复并独立更新本页签时间戳",
+        "工具条左侧「上次更新 HH:MM:SS」，与 BC用户页签互不干扰",
+        "顶部「添加 TikTok 账号」按钮：直接打开弹框并锁定当前所选 BC",
+        "每次切换左侧 BC 后自动按新 BC 刷新页签"
+      ]
+    },
+    {
+      "id": "US-008",
+      "name": "添加 TikTok 账号（关联方式）",
+      "component": "添加 TikTok 账号弹框",
+      "priority": "P0",
+      "screenshot": "assets/prd/us-007-add-link.png",
+      "story": "作为投放运营，我想要通过扫码关联已有 TikTok 账号，以便复用已有资产。",
+      "filter": "无列表筛选；二维码展示 + 文本提示 + 授权对象 + 刷新二维码",
+      "fields": [
+        {"key": "qr", "name": "授权二维码", "type": "image", "note": "由授权链接渲染生成"},
+        {"key": "tip", "name": "提示文案", "type": "readonly", "note": "请使用 TikTok App 扫描二维码完成账号授权"},
+        {"key": "target", "name": "授权对象", "type": "readonly", "note": "当前 BC 名称"},
+        {"key": "refreshBtn", "name": "刷新二维码", "type": "button", "note": "点击置灰「刷新中…」重新拉取授权链接并刷新画布；完成后恢复"},
+        {"key": "note", "name": "提示文案", "type": "readonly", "note": "授权完成后弹框不会自动关闭；如二维码失效，可点击『刷新二维码』"}
+      ],
+      "api": [{"name": "获取 TikTok 账号授权链接", "doc": "https://business-api.tiktok.com/portal/docs/obtain-a-tiktok-account-ad-delivery-authorization-url/v1.3"}],
+      "flow": "弹框默认选中关联卡片 → 调用授权链接接口渲染二维码 → 用户扫码授权 → 弹框不自动关闭；二维码失效可点击刷新二维码重新拉取 → 用户手动关闭后新账号出现在列表",
+      "acceptanceCriteria": [
+        "打开添加弹框默认选中「关联 TikTok 账号」卡片，二维码区域直接展开",
+        "二维码区域：二维码 + 授权提示 + 授权对象 {BC名称} + 「刷新二维码」按钮 + 「授权完成后弹框不会自动关闭；如二维码失效，可点击『刷新二维码』」提示",
+        "底部按钮为「关闭」；授权完成后弹框不自动关闭",
+        "点击「刷新二维码」：置灰「刷新中…」→ 重新拉取授权链接并刷新画布 → 按钮恢复",
+        "关闭弹框后，TikTok账号列表中能看到所有已成功授权的账号"
+      ]
+    },
+    {
+      "id": "US-009",
+      "name": "BC用户已分配 TikTok 账号批量删除",
+      "component": "已分配账号抽屉",
+      "priority": "P0",
+      "screenshot": "assets/prd/us-009-batch-remove.png",
+      "story": "作为投放运营，我想要在抽屉内一次性勾选多个 TikTok 账号并批量取消授权，以便快速收回资产权限。",
+      "filter": "无独立筛选条件，依赖 US-004 抽屉自身的账号名称筛选项",
+      "fields": [
+        {"key": "rowCheck", "name": "行复选框", "type": "checkbox", "note": "单条勾选，可保留已过滤掉的勾选项"},
+        {"key": "headCheck", "name": "表头复选框", "type": "checkbox", "note": "全选/取消全选，半选态"},
+        {"key": "toolbar", "name": "工具条", "type": "toolbar", "note": "「已选择 X 个 TikTok 账号」+ 红色「批量删除」（表格左上方，勾选为空置灰）"},
+        {"key": "confirm", "name": "二次确认弹框", "type": "dialog", "note": "仅问「是否确认取消授权？」，明细显示 BC用户与总数"}
+      ],
+      "api": [{"name": "撤销用户对资产的权限", "doc": "https://business-api.tiktok.com/portal/docs/unassign-an-asset/v1.3"}],
+      "flow": "打开抽屉 → 账号名称筛选 → 勾选多个账号 → 批量删除 → 二次确认 → 串行撤销授权 → 一次性刷新抽屉与 BC用户列表 → 提示已批量取消授权",
+      "acceptanceCriteria": [
+        "抽屉内表格首列复选框，每行独立可控；表头复选框支持全选当前可见行并出现半选态",
+        "工具条实时显示「已选择 X 个 TikTok 账号」；未勾选时「批量删除」置灰不可点击",
+        "点击「批量删除」复用「取消授权」二次确认弹框，仅问「是否确认取消授权？」",
+        "确认后按勾选顺序串行调用撤销接口；完成后一次性刷新抽屉与底层 BC用户列表账号数量",
+        "成功提示「已批量取消授权 N 个 TikTok 账号：{账号名清单}」（账号名以「、」分隔），并清空勾选",
+        "已撤销授权的账号自动从勾选集合剔除，计数与按钮置灰状态随之更新"
       ]
     }
-  ],
-  "apiLinks": {
-    "F-001/F-002/F-011 获取商务中心列表": "https://business-api.tiktok.com/portal/docs/get-business-centers/v1.3",
-    "F-003/F-004 获取商务中心成员列表": "https://business-api.tiktok.com/portal/docs/get-the-members-of-a-bc/v1.3",
-    "F-007/F-008/F-005/F-006 获取资产列表": "https://business-api.tiktok.com/portal/docs/get-assets/v1.3",
-    "F-005/F-006 将资产分配给用户": "https://business-api.tiktok.com/portal/docs/assign-an-asset/v1.3",
-    "F-005 撤销用户对资产的权限": "https://business-api.tiktok.com/portal/docs/unassign-an-asset/v1.3",
-    "F-010 获取TikTok账号授权链接": "https://business-api.tiktok.com/portal/docs/obtain-a-tiktok-account-ad-delivery-authorization-url/v1.3",
-    "F-009 在商务中心创建Tiktok账号": "https://business-api.tiktok.com/portal/docs/create-an-organization-account-in-a-business-center/v1.3"
-  }
+  ]
 }

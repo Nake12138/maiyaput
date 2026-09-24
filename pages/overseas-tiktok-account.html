@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TikTok账号 - 海外投放系统</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="../styles/main.css?v=20260916" />
+    <link rel="stylesheet" href="../styles/main.css?v=20260924" />
   </head>
   <body>
     <div class="layout">
@@ -515,13 +515,8 @@
       }
 
       function renderTtAccountCell(name, handle) {
-        var initial = String(name || '').replace(/^\s+/, '').charAt(0).toUpperCase() || '#';
-        return '<div class="tt-account-info">' +
-          '<div class="tt-avatar" style="background:' + stringToColor(name) + ';">' + initial + '</div>' +
-          '<div class="tt-account-meta">' +
-            '<div class="tt-account-name">' + (name || '') + '</div>' +
-          '</div>' +
-        '</div>';
+        /* 此版本不再展示账号头像，仅展示账号名 */
+        return '<span class="tt-account-name">' + (name || '') + '</span>';
       }
 
       (function renderTiktokAccountCells() {
@@ -533,6 +528,6 @@
         });
       })();
     </script>
-  <script src="../scripts/header-user.js?v=20260916"></script>
+  <script src="../scripts/header-user.js?v=20260924"></script>
   </body>
 </html>

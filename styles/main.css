@@ -2697,6 +2697,34 @@ body {
   text-overflow: ellipsis;
 }
 
+/* TikTok 账号列表 - 「已分配 BC 用户」列；hover 时展示 BC 用户名单 */
+.bc-tt-assigned {
+  display: inline-block;
+  min-width: 24px;
+  padding: 1px 8px;
+  border-radius: 10px;
+  background: var(--color-bg-elevated, #f3f4f6);
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  line-height: 18px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.bc-tt-assigned.has-users {
+  cursor: help;
+  background: #eef2ff;
+  color: #3730a3;
+  border: 1px solid #c7d2fe;
+}
+.bc-tt-assigned.has-users:hover {
+  background: #e0e7ff;
+}
+.bc-tt-assigned.is-empty {
+  color: var(--color-text-tertiary);
+  background: transparent;
+  border: 1px dashed var(--color-border-light, #e5e7eb);
+}
+
 /* ============ Responsive ============ */
 @media (max-width: 1280px) {
   .filter-bar {

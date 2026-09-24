@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BC - 海外投放系统</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="../styles/main.css?v=20260916" />
+    <link rel="stylesheet" href="../styles/main.css?v=20260924" />
   </head>
   <body>
     <div class="layout">
@@ -305,17 +305,6 @@
                   <div class="filter-bar" style="margin-bottom:12px;">
                     <div class="filter-bar-row">
                       <input type="text" class="filter-input" id="bc-tt-search" placeholder="请输入TT账号名称" style="width:180px;" onkeydown="if(event.key==='Enter')searchBcTt()" />
-                      <select class="filter-select" id="bc-tt-lang">
-                        <option value="">请选择语言</option>
-                        <option>葡萄牙语</option>
-                        <option>繁体中文</option>
-                        <option>马来西亚语</option>
-                        <option>英语</option>
-                        <option>德语</option>
-                        <option>意大利语</option>
-                        <option>法语</option>
-                      </select>
-                      <input type="text" class="filter-input" id="bc-tt-remark" placeholder="请输入备注" style="width:160px;" onkeydown="if(event.key==='Enter')searchBcTt()" />
                       <div class="filter-actions">
                         <button type="button" class="btn btn-primary btn-sm" onclick="searchBcTt()">查询</button>
                         <button type="button" class="btn btn-outline btn-sm" onclick="resetBcTtFilter()">重置</button>
@@ -362,9 +351,10 @@
                     <table class="data-table">
                       <thead>
                         <tr>
-                          <th style="width:48px;"><input type="checkbox" id="assign-tt-checkall" onchange="toggleAssignTtAll(this)" /></th>
+                          <th style="width:44px;"><input type="checkbox" id="assign-tt-checkall" onchange="toggleAssignTtAll(this)" /></th>
                           <th>TikTok 账号</th>
-                          <th>语言</th>
+                          <th style="width:80px;">更新人</th>
+                          <th style="width:150px;">更新时间</th>
                         </tr>
                       </thead>
                       <tbody id="assign-tt-tbody"></tbody>
@@ -392,17 +382,6 @@
                 <div class="batch-assign-info" id="batch-assign-info"></div>
                 <div class="modal-filter">
                   <input type="text" id="batch-assign-name" class="form-input" placeholder="请输入TT账号名称" style="flex:1;" onkeydown="if(event.key==='Enter')searchBatchAssign()" />
-                  <select class="filter-select" id="batch-assign-lang">
-                    <option value="">请选择语言</option>
-                    <option>葡萄牙语</option>
-                    <option>繁体中文</option>
-                    <option>马来西亚语</option>
-                    <option>英语</option>
-                    <option>德语</option>
-                    <option>意大利语</option>
-                    <option>法语</option>
-                  </select>
-                  <input type="text" id="batch-assign-remark" class="form-input" placeholder="请输入备注" style="width:160px;" onkeydown="if(event.key==='Enter')searchBatchAssign()" />
                   <button type="button" class="btn btn-primary btn-sm" onclick="searchBatchAssign()">查询</button>
                   <button type="button" class="btn btn-outline btn-sm" onclick="resetBatchAssignFilter()">重置</button>
                 </div>
@@ -411,12 +390,10 @@
                     <table class="data-table">
                       <thead>
                         <tr id="batch-assign-thead-row">
-                          <th style="width:48px;"><input type="checkbox" id="batch-assign-checkall" onchange="toggleBatchAssignAll(this)" /></th>
+                          <th style="width:44px;"><input type="checkbox" id="batch-assign-checkall" onchange="toggleBatchAssignAll(this)" /></th>
                           <th>TikTok账号名称</th>
-                          <th style="width:100px;">语言</th>
-                          <th>备注</th>
-                          <th style="width:90px;">更新人</th>
-                          <th style="width:160px;">更新时间</th>
+                          <th style="width:80px;">更新人</th>
+                          <th style="width:150px;">更新时间</th>
                         </tr>
                       </thead>
                       <tbody id="batch-assign-tbody"></tbody>
@@ -444,17 +421,6 @@
                 <div class="filter-bar" style="margin-bottom:16px;">
                   <div class="filter-bar-row">
                     <input type="text" class="filter-input" id="user-tt-search" placeholder="请输入TT账号名称" style="width:180px;" onkeydown="if(event.key==='Enter')searchUserTt()" />
-                    <select class="filter-select" id="user-tt-lang">
-                      <option value="">请选择语言</option>
-                      <option>葡萄牙语</option>
-                      <option>繁体中文</option>
-                      <option>马来西亚语</option>
-                      <option>英语</option>
-                      <option>德语</option>
-                      <option>意大利语</option>
-                      <option>法语</option>
-                    </select>
-                    <input type="text" class="filter-input" id="user-tt-remark" placeholder="请输入备注" style="width:160px;" onkeydown="if(event.key==='Enter')searchUserTt()" />
                     <div class="filter-actions">
                       <button type="button" class="btn btn-primary btn-sm" onclick="searchUserTt()">查询</button>
                       <button type="button" class="btn btn-outline btn-sm" onclick="resetUserTtFilter()">重置</button>
@@ -475,11 +441,9 @@
                         <tr>
                           <th style="width:36px;text-align:center;"><input type="checkbox" id="user-tt-checkall" onchange="toggleUserTtAll(this)" /></th>
                           <th>TikTok账号名称</th>
-                          <th>语言</th>
-                          <th>备注</th>
-                          <th>更新人</th>
-                          <th>更新时间</th>
-                          <th>操作</th>
+                          <th style="width:80px;">更新人</th>
+                          <th style="width:150px;">更新时间</th>
+                          <th style="width:70px;">操作</th>
                         </tr>
                       </thead>
                       <tbody id="user-tt-tbody"></tbody>
@@ -512,12 +476,12 @@
                 <div class="form-item">
                   <label class="form-label"><span class="form-required">*</span> 添加方式：</label>
                   <div class="add-tt-options">
-                    <div class="add-tt-option" id="add-tt-mode-new" onclick="selectAddTtMode('new')">
+                    <div class="add-tt-option disabled" id="add-tt-mode-new" title="目前接口暂不可用，需加白。此版本暂不做此功能" aria-disabled="true">
                       <span class="add-tt-option-check">✓</span>
                       <div class="add-tt-option-icon">＋</div>
                       <div class="add-tt-option-meta">
                         <div class="add-tt-option-name">新建 TikTok 账号</div>
-                        <div class="add-tt-option-desc">在当前商务中心下创建一个新的 TikTok 账号</div>
+                        <div class="add-tt-option-desc">在当前商务中心下创建一个新的 TikTok 账号（暂不可用）</div>
                       </div>
                     </div>
                     <div class="add-tt-option" id="add-tt-mode-link" onclick="selectAddTtMode('link')">
@@ -563,6 +527,8 @@
                   <canvas id="add-tt-qr-canvas" width="168" height="168" style="border:1px solid #e5e7eb;border-radius:4px;background:#fff;"></canvas>
                   <div class="add-tt-qr-tip">请使用 TikTok App 扫描二维码完成账号授权</div>
                   <div class="add-tt-qr-sub">授权对象：<span id="add-tt-qr-user" style="color:#344054;font-weight:600;"></span></div>
+                  <button type="button" class="btn btn-outline btn-sm add-tt-qr-refresh" id="add-tt-qr-refresh-btn" onclick="refreshAddTtQrCode()">刷新二维码</button>
+                  <div class="add-tt-qr-note">授权完成后弹框不会自动关闭；如二维码失效，可点击「刷新二维码」</div>
                 </div>
               </div>
               <div class="modal-footer">
@@ -570,7 +536,7 @@
                 <button id="add-tt-submit-btn" class="btn btn-primary btn-sm" onclick="submitAddTtNew()" style="display:none;">确定</button>
                 <button id="add-tt-close-btn" class="btn btn-outline btn-sm" onclick="closeAddTtModal()" style="display:none;">关闭</button>
               </div>
-              <button type="button" class="us-fab" id="add-tt-us-fab" data-us="add-tt" title="按住可拖动，点击查看本弹框用户故事说明（按添加方式切换 US-007 / US-008）">📋 US-007 说明 · 添加 TikTok 账号（新建方式）</button>
+              <button type="button" class="us-fab" id="add-tt-us-fab" data-us="add-tt" title="按住可拖动，点击查看本弹框用户故事说明（US-008 关联方式）">📋 US-008 说明 · 添加 TikTok 账号（关联方式）</button>
             </div>
           </div>
 
@@ -902,7 +868,7 @@
         border-radius: 3px;
         vertical-align: middle;
       }
-      .assign-tt-check:disabled {
+      .tt-assign-check:disabled {
         cursor: not-allowed;
       }
 
@@ -946,6 +912,22 @@
         border-color: var(--color-info, #1d4ed8);
         background: #f5f8ff;
         box-shadow: inset 0 0 0 1px var(--color-info, #1d4ed8);
+      }
+      .add-tt-option.disabled {
+        cursor: not-allowed;
+        background: var(--color-bg-soft, #f9fafb);
+        opacity: 0.55;
+      }
+      .add-tt-option.disabled:hover {
+        border-color: var(--color-border, #d0d5dd);
+        box-shadow: none;
+      }
+      .add-tt-option.disabled .add-tt-option-icon {
+        background: #f2f4f7;
+        color: #98a2b3;
+      }
+      .add-tt-option.disabled .add-tt-option-name {
+        color: #98a2b3;
       }
       .add-tt-option-check {
         position: absolute;
@@ -1015,6 +997,25 @@
         margin-top: 6px;
         font-size: 12px;
         color: #98a2b3;
+      }
+      .add-tt-qr-refresh {
+        margin-top: 14px;
+      }
+      .add-tt-qr-refresh[disabled] {
+        cursor: not-allowed;
+        opacity: 0.6;
+      }
+      .add-tt-qr-note {
+        margin-top: 10px;
+        padding: 8px 10px;
+        font-size: 12px;
+        line-height: 1.55;
+        color: #667085;
+        background: var(--color-bg-soft, #f9fafb);
+        border: 1px dashed var(--color-border, #d0d5dd);
+        border-radius: 4px;
+        max-width: 320px;
+        text-align: left;
       }
 
       /* ===== 需求说明（简洁版 PRD）面板 ===== */
@@ -1765,10 +1766,10 @@
         if (!tr) return;
         /* 列序：选择 | BC用户名 | TikTok账号 | 所属商务中心 | 操作 */
         tr.innerHTML = '<th style="width:36px;text-align:center;"><input type="checkbox" id="bc-user-checkall" onchange="toggleBcUserAll(this)" /></th>' +
-          '<th style="width:180px;">BC用户名</th>' +
-          '<th style="width:110px;">TikTok 账号</th>' +
+          '<th>BC用户名</th>' +
+          '<th style="width:100px;">TikTok 账号</th>' +
           '<th>所属商务中心</th>' +
-          '<th style="width:140px;">操作</th>';
+          '<th style="width:110px;">操作</th>';
       }
 
       function renderBcUserList() {
@@ -1833,6 +1834,30 @@
         closeUsDetail(); /* 同步关闭 US 说明弹框 */
       }
 
+      /* ===== 分配 / 批量分配 TikTok 账号 公共行渲染（4 列：选择 / TikTok账号 / 更新人 / 更新时间） =====
+         传入 assignedMap（已分配账号 Set）则在第一列展示「已分配」置灰标记；不传则视为批量分配（后端判断已分配）。
+         后续若需新增字段、列或单元格样式，仅需修改此处一处即可同步两个弹框。 */
+      function renderTtAssignRowHTML(a, assignedMap) {
+        var name = a.name || '';
+        var isAssigned = assignedMap ? (assignedMap.indexOf(name) !== -1) : false;
+        var checkboxCell;
+        if (isAssigned) {
+          checkboxCell = '<input type="checkbox" class="tt-assign-check" value="' + name + '" checked disabled /> <span class="tag-assigned">已分配</span>';
+        } else if (assignedMap) {
+          /* 单分配：未分配的账号可选 */
+          checkboxCell = '<input type="checkbox" class="tt-assign-check" value="' + name + '" />';
+        } else {
+          /* 批量分配：是否已分配由后端判断，前端不做置灰 */
+          checkboxCell = '<input type="checkbox" class="tt-assign-check" value="' + name + '" />';
+        }
+        return '<tr>' +
+          '<td>' + checkboxCell + '</td>' +
+          '<td>' + renderTtAccountCell(a.name, a.handle) + '</td>' +
+          '<td>' + (a.updater || '') + '</td>' +
+          '<td>' + (a.updateTime || '') + '</td>' +
+        '</tr>';
+      }
+
       function searchAssignTt() {
         assignTtKeyword = (document.getElementById('assign-tt-search').value || '').trim().toLowerCase();
         renderAssignTtList();
@@ -1851,30 +1876,23 @@
         var filtered = keyword ? accounts.filter(function (a) { return (a.name || '').toLowerCase().indexOf(keyword) !== -1; }) : accounts;
         var tbody = document.getElementById('assign-tt-tbody');
         if (!filtered.length) {
-          tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#999;padding:24px 0;">暂无可选 TikTok 账号</td></tr>';
+          tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#999;padding:24px 0;">暂无可选 TikTok 账号</td></tr>';
           return;
         }
+        /* 单分配：传 assignedMap，公用函数会标注「已分配」置灰 */
         tbody.innerHTML = filtered.map(function (a) {
-          var isAssigned = assignedMap.indexOf(a.name) !== -1;
-          var checkboxHtml = isAssigned
-            ? '<input type="checkbox" class="assign-tt-check" value="' + (a.name || '') + '" checked disabled /> <span class="tag-assigned">已分配</span>'
-            : '<input type="checkbox" class="assign-tt-check" value="' + (a.name || '') + '" />';
-          return '<tr>' +
-            '<td>' + checkboxHtml + '</td>' +
-            '<td>' + renderTtAccountCell(a.name, a.handle) + '</td>' +
-            '<td>' + (a.lang || '') + '</td>' +
-          '</tr>';
+          return renderTtAssignRowHTML(a, assignedMap);
         }).join('');
       }
 
       function toggleAssignTtAll(src) {
-        document.querySelectorAll('#assign-tt-tbody .assign-tt-check').forEach(function (c) {
+        document.querySelectorAll('#assign-tt-tbody .tt-assign-check').forEach(function (c) {
           if (!c.disabled) c.checked = src.checked;
         });
       }
 
       function submitAssignTt() {
-        var checks = document.querySelectorAll('#assign-tt-tbody .assign-tt-check:checked:not(:disabled)');
+        var checks = document.querySelectorAll('#assign-tt-tbody .tt-assign-check:checked:not(:disabled)');
         var names = Array.prototype.map.call(checks, function (c) { return c.value; });
         if (!names.length) { alert('请至少选择一个未分配的 TikTok 账号'); return; }
         alert('已为「' + assignTtUser + '」分配 ' + names.length + ' 个 TikTok 账号：\n' + names.join('、'));
@@ -1883,8 +1901,8 @@
 
       /* ===== BC用户列表批量勾选 + 批量分配 TikTok 账号 ===== */
       var batchSelectedUsers = [];
-      /* 筛选项与「资产管理 - TikTok账号」页面保持一致：名称/语言/备注 */
-      var batchAssignFilter = { name: '', lang: '', remark: '' };
+      /* 仅保留 TT账号名称 单一筛选项 */
+      var batchAssignFilter = { name: '' };
 
       function toggleBcUserAll(src) {
         document.querySelectorAll('#bc-user-tbody .bc-user-check').forEach(function (c) { c.checked = src.checked; });
@@ -1918,9 +1936,7 @@
         var info = document.getElementById('batch-assign-info');
         if (info) info.innerHTML = '已选择 <span class="count">' + batchSelectedUsers.length + '</span> 个BC用户，请勾选要分配的 TikTok 账号：';
         document.getElementById('batch-assign-name').value = '';
-        document.getElementById('batch-assign-lang').selectedIndex = 0;
-        document.getElementById('batch-assign-remark').value = '';
-        batchAssignFilter = { name: '', lang: '', remark: '' };
+        batchAssignFilter = { name: '' };
         renderBatchAssignList();
         document.getElementById('batch-assign-overlay').classList.add('open');
         document.getElementById('batch-assign-modal').classList.add('open');
@@ -1935,16 +1951,12 @@
 
       function searchBatchAssign() {
         batchAssignFilter.name = (document.getElementById('batch-assign-name').value || '').trim().toLowerCase();
-        batchAssignFilter.lang = (document.getElementById('batch-assign-lang').value || '').trim();
-        batchAssignFilter.remark = (document.getElementById('batch-assign-remark').value || '').trim().toLowerCase();
         renderBatchAssignList();
       }
 
       function resetBatchAssignFilter() {
         document.getElementById('batch-assign-name').value = '';
-        document.getElementById('batch-assign-lang').selectedIndex = 0;
-        document.getElementById('batch-assign-remark').value = '';
-        batchAssignFilter = { name: '', lang: '', remark: '' };
+        batchAssignFilter = { name: '' };
         renderBatchAssignList();
       }
 
@@ -1958,42 +1970,34 @@
           (bcTtData[bcId] || []).forEach(function (a) {
             var key = a.name || '';
             if (!byName[key]) {
-              byName[key] = { key: key, name: a.name, handle: a.handle, lang: a.lang, remark: a.remark, updater: a.updater, updateTime: a.updateTime };
+              byName[key] = { key: key, name: a.name, handle: a.handle, updater: a.updater, updateTime: a.updateTime };
             }
           });
         });
         var rows = Object.keys(byName).map(function (k) { return byName[k]; });
         var filtered = rows.filter(function (a) {
           if (batchAssignFilter.name && (a.name || '').toLowerCase().indexOf(batchAssignFilter.name) === -1) return false;
-          if (batchAssignFilter.lang && (a.lang || '') !== batchAssignFilter.lang) return false;
-          if (batchAssignFilter.remark && (a.remark || '').toLowerCase().indexOf(batchAssignFilter.remark) === -1) return false;
           return true;
         });
         var tbody = document.getElementById('batch-assign-tbody');
         if (!filtered.length) {
-          tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#999;padding:24px 0;">暂无可分配的 TikTok 账号</td></tr>';
+          tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#999;padding:24px 0;">暂无可分配的 TikTok 账号</td></tr>';
           return;
         }
+        /* 批量分配：不传 assignedMap，由公用函数按批量语义渲染（不显示「已分配」置灰） */
         tbody.innerHTML = filtered.map(function (a) {
-          return '<tr>' +
-            '<td><input type="checkbox" class="batch-assign-check" value="' + (a.name || '') + '" /></td>' +
-            '<td>' + renderTtAccountCell(a.name, a.handle) + '</td>' +
-            '<td>' + (a.lang || '') + '</td>' +
-            '<td>' + (a.remark || '') + '</td>' +
-            '<td>' + (a.updater || '') + '</td>' +
-            '<td>' + (a.updateTime || '') + '</td>' +
-          '</tr>';
+          return renderTtAssignRowHTML(a);
         }).join('');
       }
 
       function toggleBatchAssignAll(src) {
-        document.querySelectorAll('#batch-assign-tbody .batch-assign-check').forEach(function (c) {
+        document.querySelectorAll('#batch-assign-tbody .tt-assign-check').forEach(function (c) {
           c.checked = src.checked;
         });
       }
 
       function submitBatchAssign() {
-        var checks = document.querySelectorAll('#batch-assign-tbody .batch-assign-check:checked');
+        var checks = document.querySelectorAll('#batch-assign-tbody .tt-assign-check:checked');
         var names = Array.prototype.map.call(checks, function (c) { return c.value; });
         if (!names.length) { alert('请至少选择一个 TikTok 账号'); return; }
         alert('已为 ' + batchSelectedUsers.length + ' 个BC用户分配 ' + names.length + ' 个 TikTok 账号：\n' + names.join('、'));
@@ -2001,8 +2005,8 @@
       }
 
       /* ===== TikTok 账号列表（右侧页签 2） ===== */
-      /* 筛选项与「资产管理 - TikTok账号」页面保持一致：名称/语言/备注，点击查询后生效 */
-      var bcTtFilter = { name: '', lang: '', remark: '' };
+      /* 仅保留 TT账号名称 单一筛选项，点击查询后生效 */
+      var bcTtFilter = { name: '' };
       function stringToColor(str) {
         var colors = ['#1d4ed8','#059669','#b45309','#be123c','#7c3aed','#0891b2','#4338ca','#c2410c'];
         var hash = 0;
@@ -2014,13 +2018,8 @@
       }
 
       function renderTtAccountCell(name, handle) {
-        var initial = String(name || '').replace(/^\s+/, '').charAt(0).toUpperCase() || '#';
-        return '<div class="tt-account-info">' +
-          '<div class="tt-avatar" style="background:' + stringToColor(name) + ';">' + initial + '</div>' +
-          '<div class="tt-account-meta">' +
-            '<div class="tt-account-name">' + (name || '') + '</div>' +
-          '</div>' +
-        '</div>';
+        /* 此版本不再展示账号头像，仅展示账号名（行内上下文：TT账号列表/分配弹框/抽屉等） */
+        return '<span class="tt-account-name">' + (name || '') + '</span>';
       }
 
       /* 聚合所选商务中心下的 TikTok 账号（单选语义：仅当前所选 BC 的账号）。
@@ -2029,45 +2028,59 @@
         var selected = getSelectedBcs();
         if (!selected.length) return [];
         var bc = selected[0];
+        /* 在 BC 维度下，聚合本 BC 中"已分配本行 TikTok 账号"的 BC 用户清单 */
+        var assignedMap = bcUserAssignedTt[bc.id] || {};
         return (bcTtData[bc.id] || []).map(function (a) {
+          var assignedUsers = [];
+          Object.keys(assignedMap).forEach(function (u) {
+            if ((assignedMap[u] || []).indexOf(a.name) !== -1) assignedUsers.push(u);
+          });
           return {
             key: a.name || '',
             name: a.name,
             handle: a.handle,
-            lang: a.lang,
-            remark: a.remark,
             updater: a.updater,
             updateTime: a.updateTime,
             bcId: bc.id,
-            bcName: bc.name
+            bcName: bc.name,
+            assignedUsers: assignedUsers,
+            assignedUserCount: assignedUsers.length
           };
         });
+      }
+
+      function escapeHtmlAttr(s) {
+        return String(s == null ? '' : s)
+          .replace(/&/g, '&amp;')
+          .replace(/"/g, '&quot;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;');
+      }
+
+      function renderAssignedUsersCell(users) {
+        if (!users || !users.length) return '<span class="bc-tt-assigned is-empty">0</span>';
+        var title = users.map(function (u) { return '• ' + u; }).join('\n');
+        return '<span class="bc-tt-assigned has-users" title="' + escapeHtmlAttr(title) + '">' + users.length + '</span>';
       }
 
       function renderBcTtThead() {
         var tr = document.getElementById('bc-tt-thead-row');
         if (!tr) return;
-        /* 「所属商务中心」固定展示在「备注」后面，取值恒为当前所选 BC 名称 */
         tr.innerHTML = '<th>TikTok账号名称</th>' +
-          '<th style="width:100px;">语言</th>' +
-          '<th>备注</th>' +
-          '<th style="width:250px;">所属商务中心</th>' +
-          '<th style="width:90px;">更新人</th>' +
-          '<th style="width:160px;">更新时间</th>';
+          '<th style="width:90px;">已分配 BC 用户</th>' +
+          '<th style="width:150px;">所属商务中心</th>' +
+          '<th style="width:80px;">更新人</th>' +
+          '<th style="width:150px;">更新时间</th>';
       }
 
       function searchBcTt() {
         bcTtFilter.name = (document.getElementById('bc-tt-search').value || '').trim().toLowerCase();
-        bcTtFilter.lang = (document.getElementById('bc-tt-lang').value || '').trim();
-        bcTtFilter.remark = (document.getElementById('bc-tt-remark').value || '').trim().toLowerCase();
         renderBcTtList();
       }
 
       function resetBcTtFilter() {
         document.getElementById('bc-tt-search').value = '';
-        document.getElementById('bc-tt-lang').selectedIndex = 0;
-        document.getElementById('bc-tt-remark').value = '';
-        bcTtFilter = { name: '', lang: '', remark: '' };
+        bcTtFilter = { name: '' };
         renderBcTtList();
       }
 
@@ -2077,21 +2090,18 @@
         var rows = collectBcTtRows();
         var filtered = rows.filter(function (a) {
           if (bcTtFilter.name && (a.name || '').toLowerCase().indexOf(bcTtFilter.name) === -1) return false;
-          if (bcTtFilter.lang && (a.lang || '') !== bcTtFilter.lang) return false;
-          if (bcTtFilter.remark && (a.remark || '').toLowerCase().indexOf(bcTtFilter.remark) === -1) return false;
           return true;
         });
         var tbody = document.getElementById('bc-tt-tbody');
         if (!filtered.length) {
           var tip = selected.length ? '暂无数据' : '请先在左侧选择商务中心';
-          tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#999;padding:32px 0;">' + tip + '</td></tr>';
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#999;padding:32px 0;">' + tip + '</td></tr>';
           return;
         }
         tbody.innerHTML = filtered.map(function (a) {
           return '<tr>' +
             '<td>' + renderTtAccountCell(a.name, a.handle) + '</td>' +
-            '<td>' + (a.lang || '') + '</td>' +
-            '<td>' + (a.remark || '') + '</td>' +
+            '<td>' + renderAssignedUsersCell(a.assignedUsers) + '</td>' +
             '<td>' + (a.bcName || '') + '</td>' +
             '<td>' + (a.updater || '') + '</td>' +
             '<td>' + (a.updateTime || '') + '</td>' +
@@ -2124,8 +2134,8 @@
       /* ===== BC用户已分配 TikTok 账号抽屉 ===== */
       var currentUserTtBcId = '';
       var currentUserTtName = '';
-      /* 筛选项与「资产管理 - TikTok账号」页面保持一致：名称/语言/备注，点击查询后生效 */
-      var userTtFilter = { name: '', lang: '', remark: '' };
+      /* 仅保留 TT账号名称 单一筛选项，点击查询后生效 */
+      var userTtFilter = { name: '' };
       /* 抽屉内多选框已被勾选的 TikTok 账号集合（用于批量删除） */
       var userTtSelected = [];
       var unauthTtPending = null; // {bcId, user, accountName} 单条；或 {bcId, user, names:[], batch:true} 批量
@@ -2135,9 +2145,7 @@
         currentUserTtName = user;
         document.getElementById('user-tt-title').textContent = 'TikTok 账号 - ' + user + '（' + bcName + '）';
         document.getElementById('user-tt-search').value = '';
-        document.getElementById('user-tt-lang').selectedIndex = 0;
-        document.getElementById('user-tt-remark').value = '';
-        userTtFilter = { name: '', lang: '', remark: '' };
+        userTtFilter = { name: '' };
         userTtSelected = [];
         renderUserTtList();
         document.getElementById('user-tt-overlay').classList.add('open');
@@ -2154,16 +2162,12 @@
 
       function searchUserTt() {
         userTtFilter.name = (document.getElementById('user-tt-search').value || '').trim().toLowerCase();
-        userTtFilter.lang = (document.getElementById('user-tt-lang').value || '').trim();
-        userTtFilter.remark = (document.getElementById('user-tt-remark').value || '').trim().toLowerCase();
         renderUserTtList();
       }
 
       function resetUserTtFilter() {
         document.getElementById('user-tt-search').value = '';
-        document.getElementById('user-tt-lang').selectedIndex = 0;
-        document.getElementById('user-tt-remark').value = '';
-        userTtFilter = { name: '', lang: '', remark: '' };
+        userTtFilter = { name: '' };
         renderUserTtList();
       }
 
@@ -2174,13 +2178,11 @@
         var assignedAccounts = accounts.filter(function (a) { return assignedNames.indexOf(a.name) !== -1; });
         var filtered = assignedAccounts.filter(function (a) {
           if (userTtFilter.name && (a.name || '').toLowerCase().indexOf(userTtFilter.name) === -1) return false;
-          if (userTtFilter.lang && (a.lang || '') !== userTtFilter.lang) return false;
-          if (userTtFilter.remark && (a.remark || '').toLowerCase().indexOf(userTtFilter.remark) === -1) return false;
           return true;
         });
         var tbody = document.getElementById('user-tt-tbody');
         if (!filtered.length) {
-          tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#999;padding:32px 0;">该BC用户暂无已分配 TikTok 账号</td></tr>';
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#999;padding:32px 0;">该BC用户暂无已分配 TikTok 账号</td></tr>';
           updateUserTtSelected();
           return;
         }
@@ -2190,8 +2192,6 @@
           return '<tr>' +
             '<td style="text-align:center;"><input type="checkbox" class="user-tt-check" value="' + (a.name || '') + '"' + checked + ' onchange="updateUserTtSelected()" /></td>' +
             '<td>' + renderTtAccountCell(a.name, a.handle) + '</td>' +
-            '<td>' + (a.lang || '') + '</td>' +
-            '<td>' + (a.remark || '') + '</td>' +
             '<td>' + (a.updater || '') + '</td>' +
             '<td>' + (a.updateTime || '') + '</td>' +
             '<td>' + action + '</td>' +
@@ -2377,20 +2377,15 @@
           if (input) { input.value = ''; input.style.display = ''; }
           if (select) select.style.display = 'none';
         }
-        /* 重置弹框状态 */
+        /* 重置新建字段 */
         document.getElementById('add-tt-new-name').value = '';
         document.getElementById('add-tt-new-region').selectedIndex = 0;
         clearAddTtNewAvatar();
-        document.getElementById('add-tt-mode-new').classList.remove('selected');
-        document.getElementById('add-tt-mode-link').classList.remove('selected');
-        document.getElementById('add-tt-new-fields').style.display = 'none';
-        document.getElementById('add-tt-link-fields').style.display = 'none';
-        document.getElementById('add-tt-submit-btn').style.display = 'none';
-        document.getElementById('add-tt-close-btn').style.display = 'none';
-        document.getElementById('add-tt-cancel-btn').style.display = 'inline-block';
+        /* 默认进入「关联 TikTok 账号」模式（接口可用），二维码字段直接展开；
+           「新建」方式接口暂不可用，作为禁选卡片存在 */
+        selectAddTtMode('link');
         document.getElementById('add-tt-overlay').classList.add('open');
         document.getElementById('add-tt-modal').classList.add('open');
-        updateAddTtUsFab();
       }
 
       function onAddTtBcChange() {
@@ -2406,6 +2401,21 @@
         }
       }
 
+      /* 重新拉取并渲染关联二维码：成功后弹框保持打开，用户可继续在 TikTokApp 中发起新一轮授权 */
+      function refreshAddTtQrCode() {
+        var btn = document.getElementById('add-tt-qr-refresh-btn');
+        if (!btn || btn.disabled) return;
+        btn.disabled = true;
+        var origText = btn.textContent;
+        btn.textContent = '刷新中…';
+        /* 模拟接口拉取：实际项目调用「获取 TikTok 账号授权链接」 */
+        setTimeout(function () {
+          drawTtQrCode(addTtBcName + '|' + Date.now());
+          btn.disabled = false;
+          btn.textContent = origText;
+        }, 600);
+      }
+
       function closeAddTtModal() {
         document.getElementById('add-tt-overlay').classList.remove('open');
         document.getElementById('add-tt-modal').classList.remove('open');
@@ -2414,6 +2424,8 @@
 
       /* 选择添加方式：新建 / 关联，其余字段直接在当前弹框下方展示 */
       function selectAddTtMode(mode) {
+        /* 新建 TikTok 账号：接口暂不可用（需加白），本版本禁用该方式 */
+        if (mode === 'new') return;
         addTtMode = mode;
         var isNew = mode === 'new';
         document.getElementById('add-tt-mode-new').classList.toggle('selected', isNew);
@@ -2546,12 +2558,12 @@
           shot: '../assets/prd/us-003-single-assign.png',
           desc: '作为投放运营，我想要为单个BC用户分配 TikTok 账号，以便授予其投放资产权限。',
           filter: '账号筛选：单行文本输入框（占位「搜索 TikTok 账号名称」）+「查询」/「重置」按钮，点击「查询」后按账号名称查询；列表首列复选框支持表头全选。',
-          fields: '选择列（复选框；已分配给该BC用户的账号禁用并标注「已分配」，全选自动跳过）／TikTok 账号（头像 + 账号名称组合展示）／语言（文本，账号语言）。',
+          fields: '选择列（复选框；已分配给该BC用户的账号禁用并标注「已分配」，全选自动跳过）／TikTok 账号（文本，账号名称）。',
           source: '弹框账号列表 ← 接口「获取资产列表」（<a href="https://business-api.tiktok.com/portal/docs/get-assets/v1.3" target="_blank">get-assets 官方文档</a>），入参为当前 BC ID；已分配状态来自分配关系数据。提交调用「将资产分配给用户」（<a href="https://business-api.tiktok.com/portal/docs/assign-an-asset/v1.3" target="_blank">assign-an-asset 官方文档</a>），撤销调用「撤销用户对资产的权限」（<a href="https://business-api.tiktok.com/portal/docs/unassign-an-asset/v1.3" target="_blank">unassign-an-asset 官方文档</a>）。',
           flow: 'BC用户行内点击「分配 TikTok 账号」→ 携带 BC ID + BC用户名打开弹框 → 调用「获取资产列表」→ 展示该 BC 下全部账号并标注已分配 → 勾选未分配账号 → 点「确定」→ 调用「将资产分配给用户」→ 成功提示并关闭；弹框层级高于页面其他元素，关闭不影响底层页签。',
           ac: [
             'BC用户行内「分配 TikTok 账号」打开弹框，标题：分配 TikTok 账号 - {BC用户名}',
-            '弹框列出该 BC 全部 TikTok 账号（头像 + 名称 + 语言），支持按名称搜索与表头全选',
+            '弹框列出该 BC 全部 TikTok 账号（仅账号名称），支持按名称搜索与表头全选',
             '已分配给该BC用户的账号复选框禁用并标注「已分配」，全选自动跳过',
             '未勾选可用账号时点「确定」→ 提示「请至少选择一个未分配的 TikTok 账号」',
             '弹框层级高于页签，关闭弹框不影响底层页签'
@@ -2561,16 +2573,16 @@
           id: 'US-004', title: 'BC用户已分配 TikTok 账号抽屉', priority: 'P0',
           shot: '../assets/prd/us-004-user-tt.png',
           desc: '作为投放运营，我想要查看某个BC用户已分配的 TikTok 账号明细，以便确认其资产权限。',
-          filter: '筛选项与「资产管理 - TikTok账号」页面保持一致。TT账号名称（单行文本输入框，占位「请输入TT账号名称」）／语言（下拉选择，占位「请选择语言」，枚举与短剧管理页面的语言枚举一致）／备注（单行文本输入框，占位「请输入备注」）+「查询」/「重置」按钮；点击「查询」后按条件查询，点击「重置」清空全部条件并恢复全量列表。',
-          fields: '选择列（复选框，固定显示，表头支持全选/半选，勾选用于批量删除）／TikTok账号名称（头像 + 账号名称组合展示）／语言（文本，账号语言）／备注（文本，账号备注，可为空）／更新人（文本，最近操作人）／更新时间（文本，格式 yyyy-MM-dd HH:mm）／操作（按钮：删除，点击后二次确认并调用「撤销用户对资产的权限」接口取消授权）；仅展示该BC用户已分配的账号。表格上方工具条显示「已选择 X 个 TikTok 账号」+「批量删除」按钮（红色，勾选为空时置灰）。',
+          filter: '筛选项仅保留 TT账号名称（单行文本输入框，占位「请输入TT账号名称」）+「查询」/「重置」按钮；点击「查询」后按账号名称查询，点击「重置」清空全部条件并恢复全量列表。',
+          fields: '选择列（复选框，固定显示，表头支持全选/半选，勾选用于批量删除）／TikTok账号名称（文本，账号名称）／更新人（文本，最近操作人）／更新时间（文本，格式 yyyy-MM-dd HH:mm）／操作（按钮：删除，点击后二次确认并调用「撤销用户对资产的权限」接口取消授权）；仅展示该BC用户已分配的账号。表格上方工具条显示「已选择 X 个 TikTok 账号」+「批量删除」按钮（红色，勾选为空时置灰）。',
           source: '抽屉内账号列表 ← 该BC用户与资产的分配关系；可调用「获取资产列表」（<a href="https://business-api.tiktok.com/portal/docs/get-assets/v1.3" target="_blank">get-assets 官方文档</a>）后按BC用户名过滤出已分配账号。单条删除与批量删除均调用「撤销用户对资产的权限」（<a href="https://business-api.tiktok.com/portal/docs/unassign-an-asset/v1.3" target="_blank">unassign-an-asset 官方文档</a>）。',
           flow: 'BC用户列表行内点击「TikTok 账号」数量 → 携带 BC ID + BC用户名打开宽抽屉 → 调用「获取资产列表」→ 仅展示该BC用户已被分配的 TikTok 账号 → 渲染账号明细（含选择列、操作列「删除」）；点击「删除」→ 二次确认「是否取消授权该BC用户该 TikTok 账号？」→ 用户确认后调用「撤销用户对资产的权限」→ 成功从列表移除该账号并同步BC用户账号数；抽屉叠加在BC用户抽屉之上，关闭后回到BC用户列表。',
           ac: [
             '点击BC用户行内「TikTok 账号」数量，打开右侧宽抽屉，标题：TikTok 账号 - {BC用户名}（{BC名称}）',
-            '抽屉仅列出该BC用户已被分配的 TikTok 账号（头像 + 名称），不展示 BC 下未分配给该BC用户的账号',
-            '表格列序：选择 / TikTok账号名称（头像+名称）/ 语言 / 备注 / 更新人 / 更新时间 / 操作（删除按钮），无已分配账号时显示空态「该BC用户暂无已分配 TikTok 账号」',
+            '抽屉仅列出该BC用户已被分配的 TikTok 账号（仅账号名称），不展示 BC 下未分配给该BC用户的账号',
+            '表格列序：选择 / TikTok账号名称（账号名称）/ 更新人 / 更新时间 / 操作（删除按钮），无已分配账号时显示空态「该BC用户暂无已分配 TikTok 账号」',
             '点击单条「删除」弹出二次确认「是否取消授权该BC用户该 TikTok 账号？」，用户确认后调用「撤销用户对资产的权限」接口取消授权，成功后移除该账号并刷新列表；点击「取消」则不执行',
-            '支持按账号名称、语言、备注组合查询（点击「查询」后执行，「重置」恢复全量）',
+            '支持按账号名称查询（点击「查询」后执行，「重置」恢复全量）',
             '抽屉叠加在BC用户抽屉之上，关闭后回到BC用户列表',
             '表格上方工具条：实时显示「已选择 X 个 TikTok 账号」与红色「批量删除」按钮；勾选为空时按钮置灰、不可点击；勾选项受搜索过滤影响（被过滤掉的勾选保留）'
           ]
@@ -2579,16 +2591,16 @@
           id: 'US-005', title: '批量分配 TikTok 账号', priority: 'P0',
           shot: '../assets/prd/us-004-batch-assign.png',
           desc: '作为投放运营，我想要勾选多个BC用户后批量分配 TikTok 账号，以便提高分配效率。',
-          filter: '筛选项与「资产管理 - TikTok账号」页面保持一致。TT账号名称（单行文本输入框，占位「请输入TT账号名称」）／语言（下拉选择，占位「请选择语言」，枚举与短剧管理页面的语言枚举一致）／备注（单行文本输入框，占位「请输入备注」）+「查询」/「重置」按钮；点击「查询」后按条件查询，点击「重置」清空全部条件并恢复全量列表。',
-          fields: '选择列（复选框，固定显示，表头支持全选；不展示「已分配」状态，是否已分配由后端自动判断）／TikTok账号名称（头像 + 账号名称组合展示）／语言（文本，账号语言）／备注（文本，账号备注，可为空）／更新人（文本，最近操作人）／更新时间（文本，格式 yyyy-MM-dd HH:mm）；弹框顶部显示提示条「已选择 N 个BC用户，请勾选要分配的 TikTok 账号」。',
+          filter: '筛选项仅保留 TT账号名称（单行文本输入框，占位「请输入TT账号名称」）+「查询」/「重置」按钮；点击「查询」后按账号名称查询，点击「重置」清空全部条件并恢复全量列表。',
+          fields: '选择列（复选框，固定显示，表头支持全选；不展示「已分配」状态，是否已分配由后端自动判断）／TikTok账号名称（文本，账号名称）／更新人（文本，最近操作人）／更新时间（文本，格式 yyyy-MM-dd HH:mm）；弹框顶部显示提示条「已选择 N 个BC用户，请勾选要分配的 TikTok 账号」。',
           source: '弹框账号列表 ← 取本地 tiktok 账号列表（页面进入时已通过「获取资产列表」拉取并缓存在本地 bcTtData，直接复用避免重复请求）；同一账号可能同属多个 BC，按账号名去重展示一次。提交调用「将资产分配给用户」（<a href="https://business-api.tiktok.com/portal/docs/assign-an-asset/v1.3" target="_blank">assign-an-asset 官方文档</a>）。',
           flow: 'BC用户页签勾选 N 个BC用户（本地状态）→ 点「分配TikTok」→ 打开批量弹框 → 直接复用本地 TikTok 账号列表渲染 → 勾选账号 → 点「确定」→ 提交「将资产分配给用户」→ 是否已分配由后端逐一自动判断 → 成功提示并关闭。',
           ac: [
             'BC用户页签首列复选框（表头全选支持半选态），工具条实时显示「已选择 X 个BC用户」',
             '未勾选BC用户时「分配TikTok」按钮置灰',
             '点击「分配TikTok」打开弹框，顶部提示「已选择 N 个BC用户，请勾选要分配的 TikTok 账号」',
-            '弹框筛选项：TT账号名称 / 语言 / 备注 + 查询 / 重置；与「资产管理 - TikTok账号」页保持一致',
-            '表格列序：选择 / TikTok账号名称 / 语言 / 备注 / 更新人 / 更新时间；第一列固定显示复选框，不展示「已分配」状态（是否已分配由后端自动判断）',
+            '弹框筛选项：TT账号名称 + 查询 / 重置',
+            '表格列序：选择 / TikTok账号名称 / 更新人 / 更新时间；第一列固定显示复选框，不展示「已分配」状态（是否已分配由后端自动判断）',
             '未勾选账号时点「确定」→ 提示「请至少选择一个 TikTok 账号」'
           ]
         },
@@ -2596,36 +2608,19 @@
           id: 'US-006', title: 'TikTok 账号列表页签与搜索', priority: 'P0',
           shot: '../assets/prd/us-006-tt-tab.png',
           desc: '作为投放运营，我想要查看当前所选 BC 下的 TikTok 账号资产明细，以便了解资产情况。',
-          filter: '筛选项与「资产管理 - TikTok账号」页面保持一致。TT账号名称（单行文本输入框，占位「请输入TT账号名称」）／语言（下拉选择，占位「请选择语言」，枚举与短剧管理页面的语言枚举一致）／备注（单行文本输入框，占位「请输入备注」）+「查询」/「重置」按钮 +「刷新」按钮 +「添加 TikTok 账号」按钮；点击「查询」后按条件查询，点击「重置」清空全部条件并恢复全量列表，点击「刷新」调用接口重新拉取当前所选 BC 下的 TikTok 账号并刷新表格与时间戳。',
-          fields: 'TikTok账号名称（头像 + 账号名称组合展示）／语言（文本，账号语言）／备注（文本，账号备注，可为空）／所属商务中心（文本，固定展示在「备注」之后，取值恒为当前所选 BC 名称）／更新人（文本，最近操作人）／更新时间（文本，格式 yyyy-MM-dd HH:mm）；展示当前所选 BC 下全部 TikTok 账号资产，无操作列；表格上方工具条左侧显示「上次更新 HH:MM:SS」时间戳，与 BC用户页签的时间戳相互独立。',
+          filter: '筛选项仅保留 TT账号名称（单行文本输入框，占位「请输入TT账号名称」）+「查询」/「重置」按钮 +「刷新」按钮 +「添加 TikTok 账号」按钮；点击「查询」后按账号名称查询，点击「重置」清空全部条件并恢复全量列表，点击「刷新」调用接口重新拉取当前所选 BC 下的 TikTok 账号并刷新表格与时间戳。',
+          fields: 'TikTok账号名称（文本，账号名称）／已分配 BC 用户（文本，本 BC 下被分配该 TikTok 账号的 BC 用户数量，鼠标悬浮逐行显示 BC 用户名清单）／所属商务中心（文本，固定展示在「TikTok账号名称」之后，取值恒为当前所选 BC 名称）／更新人（文本，最近操作人）／更新时间（文本，格式 yyyy-MM-dd HH:mm）；展示当前所选 BC 下全部 TikTok 账号资产，无操作列；表格上方工具条左侧显示「上次更新 HH:MM:SS」时间戳，与 BC用户页签的时间戳相互独立。',
           source: '页签表格 ← 接口「获取资产列表」（<a href="https://business-api.tiktok.com/portal/docs/get-assets/v1.3" target="_blank">get-assets 官方文档</a>），入参为左侧当前所选 BC ID。',
-          flow: '左侧切换 BC 后右侧「TikTok账号」页签直接展示该 BC 下的 TikTok 账号→「所属商务中心」列固定展示在「备注」之后，取值恒为当前所选 BC 名称；筛选项在本地过滤可见行；点击「刷新」重新拉取并独立刷新本页签的时间戳；点击「添加 TikTok 账号」在当前所选 BC 上打开添加弹框，商务中心字段自动带入并锁定。',
+          flow: '左侧切换 BC 后右侧「TikTok账号」页签直接展示该 BC 下的 TikTok 账号→「所属商务中心」列固定展示在「TikTok账号名称」之后，取值恒为当前所选 BC 名称；筛选项在本地过滤可见行；点击「刷新」重新拉取并独立刷新本页签的时间戳；点击「添加 TikTok 账号」在当前所选 BC 上打开添加弹框，商务中心字段自动带入并锁定。',
           ac: [
             '右侧提供「TikTok账号」页签，点击切换进入，标题：TikTok账号',
-            '支持按账号名称、语言、备注组合查询（点击「查询」后执行，「重置」恢复全量），无结果显示空态',
-            '「所属商务中心」列固定展示在「备注」列之后，取值恒为当前所选左侧 BC 名称，不展开该账号在其他 BC 下的归属',
+            '支持按账号名称查询（点击「查询」后执行，「重置」恢复全量），无结果显示空态',
+            '「已分配 BC 用户」列：默认显示当前所选 BC 下已分配该 TikTok 账号的 BC 用户数量；鼠标悬浮在该单元格上时浮层逐行展示 BC 用户名清单；未分配时显示 0',
+            '「所属商务中心」列固定展示在「TikTok账号名称」列之后，取值恒为当前所选左侧 BC 名称，不展开该账号在其他 BC 下的归属',
             '顶部「刷新」按钮：点击后置灰为「刷新中…」，调用接口重新拉取当前所选 BC 下的 TikTok 账号，结束后恢复并独立更新本页签的时间戳',
             '工具条左侧显示「上次更新 HH:MM:SS」；页面初始化时即写入一次，刷新按钮触发后再写入一次；该时间戳与 BC用户页签互不干扰',
             '顶部「添加 TikTok 账号」按钮：点击后直接打开弹框并锁定当前所选 BC',
             '每次切换左侧 BC 后，自动按新 BC 刷新页签'
-          ]
-        },
-        {
-          id: 'US-007', title: '添加 TikTok 账号（新建方式）', priority: 'P0',
-          shot: '../assets/prd/us-006-add-new.png',
-          desc: '作为投放运营，我想要在 BC 下新建 TikTok 账号，以便扩充资产。',
-          filter: '无列表筛选；表单控件类型：单行文本输入框（账号名称，最长 30 字符）、文件上传 + 本地预览（头像）、下拉选择（国家/地区，必选）。',
-          fieldsLabel: '表单字段',
-          fields: '商务中心名称（只读文本，由主表行自动带入，不可编辑）／添加方式（卡片单选：新建 TikTok 账号 / 关联 TikTok 账号，选中高亮）／TikTok账号名称（文本，必填，最长 30 字符）／头像（文件上传，必传，支持本地预览与清除）／国家地区（必选下拉）。',
-          source: '商务中心名称由主表行带入（后端注入、前端不可编辑）；提交调用接口「在商务中心创建 TikTok 账号」（<a href="https://business-api.tiktok.com/portal/docs/create-an-organization-account-in-a-business-center/v1.3" target="_blank">create-an-organization-account-in-a-business-center 官方文档</a>）。',
-          flow: '点击右侧「TikTok账号」页签的「添加 TikTok 账号」按钮 → 打开弹框，商务中心名称由左侧当前所选 BC 自动带入并锁定（不可编辑）→ 选择「新建」卡片 → 弹框内展开字段（名称/头像/地区）→ 前端校验（名称非空且 ≤30 字符、头像必传、地区必选）→ 点「确定」→ 调用创建接口 → 成功提示并关闭 → 刷新后新账号出现在 TikTok账号列表。',
-          ac: [
-            '点击右侧「TikTok账号」页签的「添加 TikTok 账号」按钮打开弹框；商务中心名称由左侧当前所选 BC 自动带入且不可编辑',
-            '添加方式为左右两张卡片：「新建 TikTok 账号」「关联 TikTok 账号」，选中卡片高亮',
-            '选择「新建」后在弹框内直接展开字段：TikTok账号名称（必填，最长 30 个字符）/ 头像（必传，支持预览与清除）/ 国家地区（必选下拉）',
-            'TikTok账号名称输入框限制 30 个字符，超长提交提示「TikTok账号名称长度不能超过30个字符」',
-            '校验失败分别提示「请输入TikTok账号名称 / TikTok账号名称长度不能超过30个字符 / 请上传头像 / 请选择国家/地区」；成功提示「创建成功：{名称}（{BC} / {地区}）」',
-            '未选择方式时底部仅显示「取消」；每次打开弹框重置全部状态'
           ]
         },
         {
@@ -2634,23 +2629,25 @@
           desc: '作为投放运营，我想要通过扫码关联已有 TikTok 账号，以便复用已有资产。',
           filter: '无列表筛选；二维码展示组件 + 文本提示 + 授权对象信息（{BC名称}，只读）。',
           fieldsLabel: '展示字段',
-          fields: '授权二维码（图片，由授权链接渲染生成，使用 TikTok App 扫码完成授权）／提示文案（只读文本：「请使用 TikTok App 扫描二维码完成账号授权」）／授权对象（只读文本，显示当前 BC 名称）；底部按钮为「关闭」。',
-          source: '二维码 ← 接口「获取 TikTok 账号授权链接」（<a href="https://business-api.tiktok.com/portal/docs/obtain-a-tiktok-account-ad-delivery-authorization-url/v1.3" target="_blank">obtain-a-tiktok-account-ad-delivery-authorization-url 官方文档</a>）返回的授权链接渲染生成。',
-          flow: '弹框选择「关联」卡片 → 携带当前 BC ID 调用「获取 TikTok 账号授权链接」→ 渲染二维码 → 用户使用 TikTok App 扫码授权 → 授权完成后系统回传结果 → 关闭弹框 → 刷新后账号出现在资产列表。',
+          fields: '授权二维码（图片，由授权链接渲染生成，使用 TikTok App 扫码完成授权）／提示文案（只读文本：「请使用 TikTok App 扫描二维码完成账号授权」）／授权对象（只读文本，显示当前 BC 名称）／「刷新二维码」按钮（点击后置灰为「刷新中…」，调用接口重新拉取授权链接并刷新画布；完成后恢复）／提示文案（只读文本：「授权完成后弹框不会自动关闭；如二维码失效，可点击『刷新二维码』」）；底部按钮为「关闭」，仅在用户主动操作时关闭弹框。',
+          source: '二维码 ← 接口「获取 TikTok 账号授权链接」（<a href="https://business-api.tiktok.com/portal/docs/obtain-a-tiktok-account-ad-delivery-authorization-url/v1.3" target="_blank">obtain-a-tiktok-account-ad-delivery-authorization-url 官方文档</a>）返回的授权链接渲染生成；刷新二维码按钮调用同一接口重新拉取。',
+          flow: '弹框选择「关联」卡片 → 携带当前 BC ID 调用「获取 TikTok 账号授权链接」→ 渲染二维码 → 用户使用 TikTok App 扫码授权 → **弹框不自动关闭**；若二维码失效，在弹框内点击「刷新二维码」重新拉取授权链接并刷新二维码，用户继续在 TikTokApp 中完成新账号授权；用户手动点「关闭」才退出弹框，刷新 TikTok账号列表后新账号出现。',
           ac: [
             '在添加弹框中选择「关联 TikTok 账号」卡片',
-            '弹框内展开二维码区域：二维码 + 提示「请使用 TikTok App 扫描二维码完成账号授权」+ 授权对象 {BC名称}',
-            '底部按钮切换为「关闭」'
+            '弹框内展开二维码区域：二维码 + 提示「请使用 TikTok App 扫描二维码完成账号授权」+ 授权对象 {BC名称} + 「刷新二维码」按钮 + 提示「授权完成后弹框不会自动关闭；如二维码失效，可点击『刷新二维码』」',
+            '底部按钮切换为「关闭」；授权完成后弹框不自动关闭，由用户主动决定退出时机',
+            '点击「刷新二维码」：按钮置灰为「刷新中…」，调用「获取 TikTok 账号授权链接」接口重新拉取授权链接并刷新二维码画布；接口返回后按钮恢复正常文案',
+            '关闭弹框后，TikTok账号列表中能看到所有已成功授权的账号'
           ]
         },
         {
           id: 'US-009', title: 'BC用户已分配 TikTok 账号批量删除', priority: 'P0',
           shot: '../assets/prd/us-009-batch-remove.png',
           desc: '作为投放运营，我想要在抽屉内一次性勾选多个 TikTok 账号并批量取消授权，以便快速收回资产权限。',
-          filter: '无独立筛选条件，依赖 US-004 抽屉自身的名称/语言/备注筛选项；当前可见行（受筛选过滤后的行）支持表头全选与逐行勾选。',
+          filter: '无独立筛选条件，依赖 US-004 抽屉自身的账号名称筛选项；当前可见行（受筛选过滤后的行）支持表头全选与逐行勾选。',
           fields: '表格首列复选框（单条勾选，可保留已过滤掉的勾选项）／表头复选框（全选/取消全选，半选态表示部分可见行被选中）／表格上方工具条：「已选择 X 个 TikTok 账号」+ 红色「批量删除」按钮并排位于表格左上方（勾选为空时置灰，布局与 BC用户页签的「已选择 + 分配TikTok」工具条一致）；二次确认弹框仅问「是否确认取消授权？」+ 明细区显示「BC用户：{user}　共 N 个 TikTok 账号」，不再展开账号名预览。',
           source: '批量删除调用「撤销用户对资产的权限」（<a href="https://business-api.tiktok.com/portal/docs/unassign-an-asset/v1.3" target="_blank">unassign-an-asset 官方文档</a>），按勾选账号名串行执行；执行完成后同步刷新抽屉列表与底层「BC用户」页签的账号数量。',
-          flow: '打开抽屉（US-004）→ 通过名称/语言/备注筛选缩小目标范围 → 在表格首列勾选多个账号（可表头全选当前可见行）→ 工具条实时显示「已选择 X 个」→ 点击红色「批量删除」→ 弹出二次确认「取消授权」弹框（问句「是否确认取消授权？」+ 明细仅显示 BC用户与总数）→ 用户点「确定」→ 串行调用「撤销用户对资产的权限」逐条撤销 → 全部完成后一次性刷新抽屉与 BC用户列表 → 提示「已批量取消授权 N 个 TikTok 账号：{账号名清单}」。',
+          flow: '打开抽屉（US-004）→ 通过账号名称筛选缩小目标范围 → 在表格首列勾选多个账号（可表头全选当前可见行）→ 工具条实时显示「已选择 X 个」→ 点击红色「批量删除」→ 弹出二次确认「取消授权」弹框（问句「是否确认取消授权？」+ 明细仅显示 BC用户与总数）→ 用户点「确定」→ 串行调用「撤销用户对资产的权限」逐条撤销 → 全部完成后一次性刷新抽屉与 BC用户列表 → 提示「已批量取消授权 N 个 TikTok 账号：{账号名清单}」。',
           ac: [
             '抽屉内表格首列复选框，每行独立可控；表头复选框支持全选当前可见行，并出现半选态',
             '工具条实时显示「已选择 X 个 TikTok 账号」；未勾选时「批量删除」按钮置灰、不可点击',
@@ -2808,20 +2805,19 @@
         openPrdPanel();
       }
 
-      /* 添加账号弹框：按当前添加方式（新建/关联）切换对应 US */
+      /* 添加账号弹框：固定展示 US-008（关联方式；新建方式本版本禁选，已去除 US-007 需求说明） */
       function updateAddTtUsFab() {
         var fab = document.getElementById('add-tt-us-fab');
         if (!fab) return;
-        var id = addTtMode === 'link' ? 'US-008' : 'US-007';
-        var s = findPrdStory(id);
-        fab.textContent = '📋 ' + id + ' 说明' + (s ? ' · ' + s.title : '');
+        var s = findPrdStory('US-008');
+        fab.textContent = '📋 US-008 说明' + (s ? ' · ' + s.title : '');
       }
       function openAddTtUsDetail() {
-        openUsDetail(addTtMode === 'link' ? 'US-008' : 'US-007');
+        openUsDetail('US-008');
       }
 
       /* ===== 复制需求说明页面链接（独立的需求文档页面，而非商务中心页面） ===== */
-      var PRD_PAGE_URL = '../output/prd-doc-fix-20260902/stage2/formatted-business-report.html';
+      var PRD_PAGE_URL = '../output/prd-doc-refresh-20260911/stage2/formatted-business-report.html';
       function prdShareLink() {
         try {
           return new URL(PRD_PAGE_URL, location.href).href;
@@ -2882,7 +2878,7 @@
       <div class="prd-panel-header" id="prd-panel-header" title="按住此处可拖动面板，双击可全屏">
         <div>
           <div class="prd-panel-title">商务中心 · 交互需求说明</div>
-          <div class="prd-panel-sub">简洁版 PRD（9 个用户故事 · 展开查看筛选项/表格字段/数据来源/数据流转 · 按住标题栏可拖动，双击或按钮可全屏 · 「复制链接」复制需求说明页面链接）</div>
+          <div class="prd-panel-sub">简洁版 PRD（8 个用户故事 · 展开查看筛选项/表格字段/数据来源/数据流转 · 按住标题栏可拖动，双击或按钮可全屏 · 「复制链接」复制需求说明页面链接）</div>
         </div>
         <div class="prd-panel-actions">
           <button type="button" class="prd-panel-btn" id="prd-copy-link-btn" onclick="copyPrdLink()" title="复制需求说明页面（商务中心页面需求文档）的链接">复制链接</button>
@@ -3157,6 +3153,6 @@
         });
       })();
     </script>
-  <script src="../scripts/header-user.js?v=20260916"></script>
+  <script src="../scripts/header-user.js?v=20260924"></script>
   </body>
 </html>

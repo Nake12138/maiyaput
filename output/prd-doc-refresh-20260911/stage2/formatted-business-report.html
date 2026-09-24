@@ -340,9 +340,9 @@
   <section class="report-cover">
     <div class="cover-logo-placeholder"></div>
     <h1 class="cover-title">商务中心页面需求说明文档</h1>
-    <p class="cover-subtitle">海外投放系统 · 账号管理 · 商务中心（v2.0）</p>
+    <p class="cover-subtitle">海外投放系统 · 账号管理 · 商务中心（v2.2）</p>
     <div class="cover-meta">
-      <p>海外投放系统项目组 | 2026-09-11 | v2.0</p>
+      <p>海外投放系统项目组 | 2026-09-24 | v2.2</p>
     </div>
   </section>
 
@@ -353,7 +353,7 @@
       <li>2. 目标用户</li>
       <li>3. 核心业务流程</li>
       <li>4. 用户故事清单</li>
-      <li>5. 用户故事详细说明（US-001 ~ US-009）</li>
+      <li>5. 用户故事详细说明（US-001 ~ US-009，不含 US-007）</li>
       <li>6. 接口需求</li>
       <li>7. 安全需求</li>
       <li>附录：修订记录</li>
@@ -368,16 +368,16 @@
     <table class="summary-highlights-table">
       <tbody>
       <tr>
-        <td><span class="highlight-num">9</span><span class="highlight-label">用户故事（US-001 ~ US-009）</span></td>
+        <td><span class="highlight-num">8</span><span class="highlight-label">用户故事（US-001 ~ US-009，不含 US-007）</span></td>
         <td><span class="highlight-num">P0</span><span class="highlight-label">全部故事优先级</span></td>
         <td><span class="highlight-num">2</span><span class="highlight-label">右侧功能页签</span></td>
-        <td><span class="highlight-num">7</span><span class="highlight-label">依赖的 TikTok API</span></td>
+        <td><span class="highlight-num">6</span><span class="highlight-label">依赖的 TikTok API</span></td>
       </tr>
       </tbody>
     </table>
     <div class="summary-body">
-      <p>本文档定义商务中心页面的功能需求、交互逻辑与接口依赖，作为原型评审、研发排期与测试验收的依据。本版（v2.0）依据页面最新交互重写全部用户故事：页面结构调整为「左侧商务中心单选面板 + 右侧 BC用户 / TikTok账号 双页签」，左侧点击即切换当前 BC 并同步刷新右侧；已分配账号抽屉新增批量取消授权能力；添加 TikTok 账号弹框由 TikTok账号页签发起，商务中心字段自动带入并锁定。</p>
-      <p>接口文档细节本次暂不展开，仅提供 TikTok Business API 官方文档链接供研发对照；各用户故事均已随本版更新最新界面示意图。</p>
+      <p>本文档定义商务中心页面的功能需求、交互逻辑与接口依赖，作为原型评审、研发排期与测试验收的依据。本版（v2.2）依据页面最新交互同步修订：BC 页面所有涉及 TikTok 账号的列表与弹框去除「语言」「备注」字段，筛选项统一仅保留 TT账号名称；各类账号列表去除头像；分配弹框（单个/批量）统一为「选择 / TikTok 账号 / 更新人 / 更新时间」四列结构；TikTok 账号页签新增「已分配 BC 用户」列（数量 + 悬浮展示清单）。</p>
+      <p>添加 TikTok 账号弹框中「新建」方式因接口暂不可用而禁选，弹框默认进入「关联」方式展示授权二维码；授权完成后弹框不自动关闭，并提供「刷新二维码」按钮支持二维码失效后重新拉取授权链接。本版去除 US-007「添加 TikTok 账号（新建方式）」需求说明，添加账号相关需求统一由 US-008（关联方式）承载。各用户故事均已随本版更新最新界面示意图。</p>
     </div>
   </section>
 
@@ -400,13 +400,16 @@
     </ul>
 
     <h3>1.4 本次更新要点</h3>
-    <p>相对上一版文档，页面交互已调整为「左侧商务中心单选面板 + 右侧 BC用户 / TikTok账号 双页签」结构，本版据此重写全部用户故事，并同步刷新各 US 的界面示意图：</p>
+    <p>相对上一版文档，页面交互与字段已完成如下调整，本版据此同步修订全部用户故事，并刷新各 US 的界面示意图：</p>
     <ul>
-      <li>左侧商务中心面板改为单选语义，点击即切换当前 BC，右侧两个页签同步刷新。</li>
-      <li>去除左侧面板的「更新时间 / 自动更新频率」说明与顶部刷新按钮，更新时间下放到右侧两个页签，且两页签的时间戳互不干扰。</li>
-      <li>BC用户列表去除「BC用户ID」字段；「所属商务中心」列取值恒为当前所选 BC 名称，不再展开账号在多个 BC 下的归属标签。</li>
-      <li>BC用户已分配 TikTok 账号抽屉支持批量取消授权（US-009），批量操作工具条置于表格上方。</li>
-      <li>添加 TikTok 账号弹框由 TikTok账号页签进入，商务中心字段由左侧当前所选 BC 自动带入并锁定。</li>
+      <li>左侧商务中心面板为单选语义，点击即切换当前 BC，右侧两个页签同步刷新；更新时间下放到右侧两个页签的工具条，且两页签的时间戳互不干扰。</li>
+      <li>BC 页面所有涉及 TikTok 账号的列表与弹框<strong>去除「语言」「备注」字段</strong>，筛选项统一仅保留 TT账号名称。</li>
+      <li>TikTok 账号各类列表展示<strong>去除头像</strong>，仅以账号名称文本呈现。</li>
+      <li>分配 TikTok 账号弹框（单个 / 批量）统一为 4 列结构：选择 / TikTok 账号 / 更新人 / 更新时间，两个弹框复用同一行渲染组件。</li>
+      <li>TikTok 账号列表页签新增<strong>「已分配 BC 用户」列</strong>：显示当前 BC 下已分配该账号的 BC 用户数量，鼠标悬浮逐行显示 BC 用户名清单。</li>
+      <li>添加 TikTok 账号弹框：<strong>「新建 TikTok 账号」卡片禁选</strong>（悬浮提示「目前接口暂不可用，需加白。此版本暂不做此功能」），<strong>默认选中「关联 TikTok 账号」</strong>并直接展开二维码。</li>
+      <li>关联 TikTok 账号授权完成后<strong>弹框不自动关闭</strong>；二维码区域提供<strong>「刷新二维码」按钮</strong>（如二维码失效可重新拉取授权链接）。</li>
+      <li>表格列宽整体优化：账号名称等长内容列弹性伸展，编号/时间/操作列固定宽度。</li>
     </ul>
 
     <h2>2. 目标用户</h2>
@@ -446,22 +449,23 @@
               <ul>
                 <li><strong>BC用户页签</strong>
                   <ul>
-                    <li>搜索 / 刷新（本页签独立时间戳）</li>
-                    <li>行内「分配 TikTok 账号」→ 单个分配弹框（多选，已分配禁选）</li>
+                    <li>BC用户名搜索 + 查询 / 重置 / 刷新（本页签独立时间戳）</li>
+                    <li>行内「分配 TikTok 账号」→ 单个分配弹框（4 列，已分配禁选）</li>
                     <li>行内「TikTok 账号」数量 → 打开已分配账号抽屉
                       <ul>
-                        <li>名称/语言/备注筛选 + 查询 / 重置</li>
+                        <li>TT账号名称筛选 + 查询 / 重置</li>
                         <li>行内「删除」→ 二次确认「是否取消授权该BC用户该 TikTok 账号？」</li>
                         <li>勾选多行 → 表格上方「批量删除」→ 二次确认「是否确认取消授权？」</li>
                       </ul>
                     </li>
-                    <li>勾选多个 BC用户 → 工具条「分配TikTok」→ 批量分配弹框（不区分已分配）</li>
+                    <li>勾选多个 BC用户 → 工具条「分配TikTok」→ 批量分配弹框（4 列，不区分已分配）</li>
                   </ul>
                 </li>
                 <li><strong>TikTok账号页签</strong>
                   <ul>
-                    <li>名称 / 语言 / 备注筛选 + 查询 / 重置 / 刷新（本页签独立时间戳）</li>
-                    <li>「添加 TikTok 账号」→ 添加弹框（新建 / 关联，字段与二维码在弹框内展开）</li>
+                    <li>TT账号名称筛选 + 查询 / 重置 / 刷新（本页签独立时间戳）</li>
+                    <li>「已分配 BC 用户」列：数字 + 悬浮展示 BC 用户名清单</li>
+                    <li>「添加 TikTok 账号」→ 添加弹框（新建禁选；默认关联方式，二维码 + 刷新二维码）</li>
                   </ul>
                 </li>
               </ul>
@@ -476,21 +480,22 @@
       <li>用户进入商务中心页面，左侧加载商务中心列表（原型为 3 条示例数据），默认选中第一个 BC。</li>
       <li>可按商务中心名称即时过滤左侧列表；点击任意 BC 行即切换当前所选 BC。</li>
       <li>右侧「BC用户」页签展示该 BC 下的 BC用户列表，支持按 BC用户名搜索、刷新，展示「TikTok 账号」数量与「所属商务中心」。</li>
-      <li>在 BC用户列表中可进行单个分配（行内「分配 TikTok 账号」）或批量分配（勾选多个 BC用户后点「分配TikTok」）。</li>
-      <li>点击 BC用户行内「TikTok 账号」数量，打开该 BC用户已分配账号抽屉，可筛选、单条删除或批量取消授权。</li>
-      <li>切换到「TikTok账号」页签可查看该 BC 下全部 TikTok 账号资产，并从这里发起「添加 TikTok 账号」。</li>
+      <li>在 BC用户列表中可进行单个分配（行内「分配 TikTok 账号」）或批量分配（勾选多个 BC用户后点「分配TikTok」）；两类弹框结构一致（选择 / TikTok 账号 / 更新人 / 更新时间）。</li>
+      <li>点击 BC用户行内「TikTok 账号」数量，打开该 BC用户已分配账号抽屉，可按账号名称筛选、单条删除或批量取消授权。</li>
+      <li>切换到「TikTok账号」页签可查看该 BC 下全部 TikTok 账号资产（含「已分配 BC 用户」列），并从这里发起「添加 TikTok 账号」。</li>
+      <li>添加 TikTok 账号弹框默认进入「关联」方式展示授权二维码；「新建」方式当前版本禁用。</li>
       <li>左侧切换 BC 后，右侧两个页签同时按新 BC 刷新。</li>
     </ol>
 
     <h2>4. 用户故事清单</h2>
-    <p class="section-lead">本版共定义 9 个用户故事（US-001 ~ US-009），全部为 P0 优先级，覆盖左侧面板、双页签、分配/撤销、添加账号四类能力。</p>
+    <p class="section-lead">本版共定义 8 个用户故事（US-001 ~ US-009，不含 US-007），全部为 P0 优先级，覆盖左侧面板、双页签、分配/撤销、添加账号四类能力。</p>
     <table class="data-table">
       <thead>
       <tr>
         <th style="width: 16%;">用户故事 ID</th>
         <th style="width: 34%;">用户故事名称</th>
         <th style="width: 32%;">所属页面/组件</th>
-        <th style="width: 10%;">优先级</th>
+        <th>优先级</th>
       </tr>
       </thead>
       <tbody>
@@ -500,7 +505,6 @@
       <tr><td>US-004</td><td>BC用户已分配 TikTok 账号抽屉</td><td>已分配账号抽屉</td><td>P0</td></tr>
       <tr><td>US-005</td><td>批量分配 TikTok 账号</td><td>批量分配弹框</td><td>P0</td></tr>
       <tr><td>US-006</td><td>TikTok 账号列表页签与搜索</td><td>右侧 TikTok账号页签</td><td>P0</td></tr>
-      <tr><td>US-007</td><td>添加 TikTok 账号（新建方式）</td><td>添加 TikTok 账号弹框</td><td>P0</td></tr>
       <tr><td>US-008</td><td>添加 TikTok 账号（关联方式）</td><td>添加 TikTok 账号弹框</td><td>P0</td></tr>
       <tr><td>US-009</td><td>BC用户已分配 TikTok 账号批量删除</td><td>已分配账号抽屉</td><td>P0</td></tr>
       </tbody>
@@ -523,7 +527,7 @@
     </ul>
     <h4>数据来源</h4>
     <ul>
-      <li>左侧列表数据来自接口「获取商务中心列表」，官方文档：<span class="api-url">business-api.tiktok.com/portal/docs/get-business-centers/v1.3</span>。</li>
+      <li>左侧列表数据来自接口「获取商务中心列表」（<a href="https://business-api.tiktok.com/portal/docs/get-business-centers/v1.3" target="_blank">get-business-centers 官方文档</a>）。</li>
       <li>列表数据每 30 分钟自动轮询刷新一次，无需手动操作。</li>
     </ul>
     <h4>数据流转</h4>
@@ -561,7 +565,7 @@
     <p>工具条左侧显示「已选择 X 个BC用户」与「分配TikTok」按钮；工具条右侧显示「上次更新 HH:MM:SS」时间戳，与 TikTok账号页签的时间戳相互独立。</p>
     <h4>数据来源</h4>
     <ul>
-      <li>页签表格数据来自接口「获取商务中心BC用户列表」，官方文档：<span class="api-url">business-api.tiktok.com/portal/docs/get-the-members-of-a-bc/v1.3</span>，入参为左侧当前所选 BC ID。</li>
+      <li>页签表格数据来自接口「获取商务中心BC用户列表」（<a href="https://business-api.tiktok.com/portal/docs/get-the-members-of-a-bc/v1.3" target="_blank">get-the-members-of-a-bc 官方文档</a>），入参为左侧当前所选 BC ID。</li>
     </ul>
     <h4>数据流转</h4>
     <p>左侧切换 BC 后右侧「BC用户」页签直接展示该 BC 下的 BC用户 → 搜索框在本地过滤可见行，勾选状态独立于可见列表保留 → 点击「刷新」调用接口重新拉取并独立刷新本页签的时间戳。</p>
@@ -590,20 +594,21 @@
     <h4>表格字段</h4>
     <ul>
       <li>选择列：复选框；已分配给该 BC用户的账号禁用并标注「已分配」，全选自动跳过。</li>
-      <li>TikTok 账号：头像 + 账号名称组合展示。</li>
-      <li>语言：文本，账号语言。</li>
+      <li>TikTok 账号：文本，账号名称。</li>
+      <li>更新人：文本，最近操作人。</li>
+      <li>更新时间：文本，格式 <code>yyyy-MM-dd HH:mm</code>。</li>
     </ul>
     <h4>数据来源</h4>
     <ul>
-      <li>弹框账号列表来自接口「获取资产列表」，官方文档：<span class="api-url">business-api.tiktok.com/portal/docs/get-assets/v1.3</span>，入参为当前 BC ID；已分配状态来自分配关系数据。</li>
-      <li>提交调用「将资产分配给用户」，官方文档：<span class="api-url">business-api.tiktok.com/portal/docs/assign-an-asset/v1.3</span>；撤销调用「撤销用户对资产的权限」，官方文档：<span class="api-url">business-api.tiktok.com/portal/docs/unassign-an-asset/v1.3</span>。</li>
+      <li>弹框账号列表来自接口「获取资产列表」（<a href="https://business-api.tiktok.com/portal/docs/get-assets/v1.3" target="_blank">get-assets 官方文档</a>），入参为当前 BC ID；已分配状态来自分配关系数据。</li>
+      <li>提交调用「将资产分配给用户」（<a href="https://business-api.tiktok.com/portal/docs/assign-an-asset/v1.3" target="_blank">assign-an-asset 官方文档</a>）；撤销调用「撤销用户对资产的权限」（<a href="https://business-api.tiktok.com/portal/docs/unassign-an-asset/v1.3" target="_blank">unassign-an-asset 官方文档</a>）。</li>
     </ul>
     <h4>数据流转</h4>
     <p>BC用户行内点击「分配 TikTok 账号」→ 携带 BC ID + BC用户名打开弹框 → 调用「获取资产列表」→ 展示该 BC 下全部账号并标注已分配 → 勾选未分配账号 → 点「确定」→ 调用「将资产分配给用户」→ 成功提示并关闭；弹框层级高于页面其他元素，关闭不影响底层页签。</p>
     <h4>验收标准</h4>
     <ul class="ac-list">
       <li><span class="ac-box">□</span>BC用户行内「分配 TikTok 账号」打开弹框，标题：<code>分配 TikTok 账号 - {BC用户名}</code></li>
-      <li><span class="ac-box">□</span>弹框列出该 BC 全部 TikTok 账号（头像 + 名称 + 语言），支持按名称搜索与表头全选</li>
+      <li><span class="ac-box">□</span>弹框列出该 BC 全部 TikTok 账号（仅账号名称），支持按名称搜索与表头全选</li>
       <li><span class="ac-box">□</span>已分配给该 BC用户的账号复选框禁用并标注「已分配」，全选自动跳过</li>
       <li><span class="ac-box">□</span>未勾选可用账号时点「确定」→ 提示「请至少选择一个未分配的 TikTok 账号」</li>
       <li><span class="ac-box">□</span>弹框层级高于页签，关闭弹框不影响底层页签</li>
@@ -618,15 +623,13 @@
     <p><strong>用户故事</strong>：作为投放运营，我想要查看某个 BC用户已分配的 TikTok 账号明细，以便确认其资产权限。</p>
     <h4>筛选项</h4>
     <ul>
-      <li>与「资产管理 - TikTok账号」页面保持一致：TT账号名称（单行文本输入框，占位「请输入TT账号名称」）／语言（下拉选择，占位「请选择语言」，枚举与短剧管理页面一致）／备注（单行文本输入框，占位「请输入备注」）。</li>
-      <li>操作按钮：「查询」按条件查询；「重置」清空全部条件并恢复全量列表。</li>
+      <li>TT账号名称：单行文本输入框，占位「请输入TT账号名称」。</li>
+      <li>操作按钮：「查询」按账号名称查询；「重置」清空条件并恢复全量列表。</li>
     </ul>
     <h4>表格字段</h4>
     <ul>
       <li>选择列：复选框，固定显示，表头支持全选/半选，勾选用于批量删除。</li>
-      <li>TikTok账号名称：头像 + 账号名称组合展示。</li>
-      <li>语言：文本，账号语言。</li>
-      <li>备注：文本，账号备注，可为空。</li>
+      <li>TikTok账号名称：文本，账号名称。</li>
       <li>更新人：文本，最近操作人。</li>
       <li>更新时间：文本，格式 <code>yyyy-MM-dd HH:mm</code>。</li>
       <li>操作：按钮「删除」，点击后二次确认并调用「撤销用户对资产的权限」接口取消授权。</li>
@@ -634,18 +637,18 @@
     <p>仅展示该 BC用户已分配的账号。表格上方工具条显示「已选择 X 个 TikTok 账号」+ 红色「批量删除」按钮（勾选为空时置灰）。</p>
     <h4>数据来源</h4>
     <ul>
-      <li>抽屉内账号列表来自该 BC用户与资产的分配关系；可调用「获取资产列表」，官方文档：<span class="api-url">business-api.tiktok.com/portal/docs/get-assets/v1.3</span>，后按 BC用户名过滤出已分配账号。</li>
-      <li>单条删除与批量删除均调用「撤销用户对资产的权限」，官方文档：<span class="api-url">business-api.tiktok.com/portal/docs/unassign-an-asset/v1.3</span>。</li>
+      <li>抽屉内账号列表来自该 BC用户与资产的分配关系；可调用「获取资产列表」（<a href="https://business-api.tiktok.com/portal/docs/get-assets/v1.3" target="_blank">get-assets 官方文档</a>）后按 BC用户名过滤出已分配账号。</li>
+      <li>单条删除与批量删除均调用「撤销用户对资产的权限」（<a href="https://business-api.tiktok.com/portal/docs/unassign-an-asset/v1.3" target="_blank">unassign-an-asset 官方文档</a>）。</li>
     </ul>
     <h4>数据流转</h4>
     <p>BC用户列表行内点击「TikTok 账号」数量 → 携带 BC ID + BC用户名打开宽抽屉 → 调用「获取资产列表」→ 仅展示该 BC用户已被分配的 TikTok 账号 → 渲染账号明细（含选择列、操作列「删除」）；点击「删除」→ 二次确认「是否取消授权该BC用户该 TikTok 账号？」→ 用户确认后调用「撤销用户对资产的权限」→ 成功从列表移除该账号并同步 BC用户账号数；抽屉叠加在 BC用户列表之上，关闭后回到 BC用户列表。</p>
     <h4>验收标准</h4>
     <ul class="ac-list">
       <li><span class="ac-box">□</span>点击 BC用户行内「TikTok 账号」数量，打开右侧宽抽屉，标题：<code>TikTok 账号 - {BC用户名}（{BC名称}）</code></li>
-      <li><span class="ac-box">□</span>抽屉仅列出该 BC用户已被分配的 TikTok 账号（头像 + 名称），不展示 BC 下未分配给该 BC用户的账号</li>
-      <li><span class="ac-box">□</span>表格列序：选择 / TikTok账号名称（头像+名称）/ 语言 / 备注 / 更新人 / 更新时间 / 操作（删除按钮），无已分配账号时显示空态「该BC用户暂无已分配 TikTok 账号」</li>
+      <li><span class="ac-box">□</span>抽屉仅列出该 BC用户已被分配的 TikTok 账号（仅账号名称），不展示 BC 下未分配给该 BC用户的账号</li>
+      <li><span class="ac-box">□</span>表格列序：选择 / TikTok账号名称 / 更新人 / 更新时间 / 操作（删除按钮），无已分配账号时显示空态「该BC用户暂无已分配 TikTok 账号」</li>
       <li><span class="ac-box">□</span>点击单条「删除」弹出二次确认「是否取消授权该BC用户该 TikTok 账号？」，用户确认后调用「撤销用户对资产的权限」接口取消授权，成功后移除该账号并刷新列表；点击「取消」则不执行</li>
-      <li><span class="ac-box">□</span>支持按账号名称、语言、备注组合查询（点击「查询」后执行，「重置」恢复全量）</li>
+      <li><span class="ac-box">□</span>支持按账号名称查询（点击「查询」后执行，「重置」恢复全量）</li>
       <li><span class="ac-box">□</span>抽屉叠加在 BC用户列表之上，关闭后回到 BC用户列表</li>
       <li><span class="ac-box">□</span>表格上方工具条：实时显示「已选择 X 个 TikTok 账号」与红色「批量删除」按钮；勾选为空时按钮置灰、不可点击；勾选项受搜索过滤影响（被过滤掉的勾选保留）</li>
     </ul>
@@ -659,15 +662,13 @@
     <p><strong>用户故事</strong>：作为投放运营，我想要勾选多个 BC用户后批量分配 TikTok 账号，以便提高分配效率。</p>
     <h4>筛选项</h4>
     <ul>
-      <li>与「资产管理 - TikTok账号」页面保持一致：TT账号名称（单行文本输入框，占位「请输入TT账号名称」）／语言（下拉选择，占位「请选择语言」，枚举与短剧管理页面一致）／备注（单行文本输入框，占位「请输入备注」）。</li>
-      <li>操作按钮：「查询」按条件查询；「重置」清空全部条件并恢复全量列表。</li>
+      <li>TT账号名称：单行文本输入框，占位「请输入TT账号名称」。</li>
+      <li>操作按钮：「查询」按账号名称查询；「重置」清空条件并恢复全量列表。</li>
     </ul>
     <h4>表格字段</h4>
     <ul>
       <li>选择列：复选框，固定显示，表头支持全选；不展示「已分配」状态，是否已分配由后端自动判断。</li>
-      <li>TikTok账号名称：头像 + 账号名称组合展示。</li>
-      <li>语言：文本，账号语言。</li>
-      <li>备注：文本，账号备注，可为空。</li>
+      <li>TikTok账号名称：文本，账号名称。</li>
       <li>更新人：文本，最近操作人。</li>
       <li>更新时间：文本，格式 <code>yyyy-MM-dd HH:mm</code>。</li>
     </ul>
@@ -675,7 +676,7 @@
     <h4>数据来源</h4>
     <ul>
       <li>弹框账号列表取本地 TikTok 账号列表（页面进入时已通过「获取资产列表」拉取并缓存），直接复用避免重复请求；同一账号可能同属多个 BC，按账号名去重展示一次。</li>
-      <li>提交调用「将资产分配给用户」，官方文档：<span class="api-url">business-api.tiktok.com/portal/docs/assign-an-asset/v1.3</span>。</li>
+      <li>提交调用「将资产分配给用户」（<a href="https://business-api.tiktok.com/portal/docs/assign-an-asset/v1.3" target="_blank">assign-an-asset 官方文档</a>）。</li>
     </ul>
     <h4>数据流转</h4>
     <p>BC用户页签勾选 N 个 BC用户（本地状态）→ 点「分配TikTok」→ 打开批量弹框 → 直接复用本地 TikTok 账号列表渲染 → 勾选账号 → 点「确定」→ 提交「将资产分配给用户」→ 是否已分配由后端逐一自动判断 → 成功提示并关闭。</p>
@@ -684,8 +685,8 @@
       <li><span class="ac-box">□</span>BC用户页签首列复选框（表头全选支持半选态），工具条实时显示「已选择 X 个BC用户」</li>
       <li><span class="ac-box">□</span>未勾选 BC用户时「分配TikTok」按钮置灰</li>
       <li><span class="ac-box">□</span>点击「分配TikTok」打开弹框，顶部提示「已选择 N 个BC用户，请勾选要分配的 TikTok 账号」</li>
-      <li><span class="ac-box">□</span>弹框筛选项：TT账号名称 / 语言 / 备注 + 查询 / 重置，与「资产管理 - TikTok账号」页保持一致</li>
-      <li><span class="ac-box">□</span>表格列序：选择 / TikTok账号名称 / 语言 / 备注 / 更新人 / 更新时间；第一列固定显示复选框，不展示「已分配」状态（是否已分配由后端自动判断）</li>
+      <li><span class="ac-box">□</span>弹框筛选项：TT账号名称 + 查询 / 重置</li>
+      <li><span class="ac-box">□</span>表格列序：选择 / TikTok账号名称 / 更新人 / 更新时间；第一列固定显示复选框，不展示「已分配」状态（是否已分配由后端自动判断）</li>
       <li><span class="ac-box">□</span>未勾选账号时点「确定」→ 提示「请至少选择一个 TikTok 账号」</li>
     </ul>
     <h4>界面示意</h4>
@@ -698,30 +699,30 @@
     <p><strong>用户故事</strong>：作为投放运营，我想要查看当前所选 BC 下的 TikTok 账号资产明细，以便了解资产情况。</p>
     <h4>筛选项</h4>
     <ul>
-      <li>与「资产管理 - TikTok账号」页面保持一致：TT账号名称（单行文本输入框，占位「请输入TT账号名称」）／语言（下拉选择，占位「请选择语言」，枚举与短剧管理页面一致）／备注（单行文本输入框，占位「请输入备注」）。</li>
-      <li>操作按钮：「查询」按条件查询；「重置」清空全部条件并恢复全量列表；「刷新」调用接口重新拉取当前所选 BC 下的 TikTok 账号并刷新表格与时间戳；「添加 TikTok 账号」在当前所选 BC 上打开添加弹框。</li>
+      <li>TT账号名称：单行文本输入框，占位「请输入TT账号名称」。</li>
+      <li>操作按钮：「查询」按账号名称查询；「重置」清空条件并恢复全量列表；「刷新」调用接口重新拉取当前所选 BC 下的 TikTok 账号并刷新表格与时间戳；「添加 TikTok 账号」在当前所选 BC 上打开添加弹框。</li>
     </ul>
     <h4>表格字段</h4>
     <ul>
-      <li>TikTok账号名称：头像 + 账号名称组合展示。</li>
-      <li>语言：文本，账号语言。</li>
-      <li>备注：文本，账号备注，可为空。</li>
-      <li>所属商务中心：文本，固定展示在「备注」之后，取值恒为当前所选 BC 名称。</li>
+      <li>TikTok账号名称：文本，账号名称。</li>
+      <li>已分配 BC 用户：数字，当前 BC 下被分配该 TikTok 账号的 BC 用户数量；鼠标悬浮逐行显示 BC 用户名清单。</li>
+      <li>所属商务中心：文本，固定展示在「TikTok账号名称」之后，取值恒为当前所选 BC 名称。</li>
       <li>更新人：文本，最近操作人。</li>
       <li>更新时间：文本，格式 <code>yyyy-MM-dd HH:mm</code>。</li>
     </ul>
     <p>展示当前所选 BC 下全部 TikTok 账号资产，无操作列；表格上方工具条左侧显示「上次更新 HH:MM:SS」时间戳，与 BC用户页签的时间戳相互独立。</p>
     <h4>数据来源</h4>
     <ul>
-      <li>页签表格数据来自接口「获取资产列表」，官方文档：<span class="api-url">business-api.tiktok.com/portal/docs/get-assets/v1.3</span>，入参为左侧当前所选 BC ID。</li>
+      <li>页签表格数据来自接口「获取资产列表」（<a href="https://business-api.tiktok.com/portal/docs/get-assets/v1.3" target="_blank">get-assets 官方文档</a>），入参为左侧当前所选 BC ID。</li>
     </ul>
     <h4>数据流转</h4>
-    <p>左侧切换 BC 后右侧「TikTok账号」页签直接展示该 BC 下的 TikTok 账号 → 「所属商务中心」列固定展示在「备注」之后，取值恒为当前所选 BC 名称；筛选项在本地过滤可见行；点击「刷新」重新拉取并独立刷新本页签的时间戳；点击「添加 TikTok 账号」在当前所选 BC 上打开添加弹框，商务中心字段自动带入并锁定。</p>
+    <p>左侧切换 BC 后右侧「TikTok账号」页签直接展示该 BC 下的 TikTok 账号 → 「所属商务中心」列固定展示在「TikTok账号名称」之后，取值恒为当前所选 BC 名称；筛选项在本地过滤可见行；点击「刷新」重新拉取并独立刷新本页签的时间戳；点击「添加 TikTok 账号」在当前所选 BC 上打开添加弹框，商务中心字段自动带入并锁定。</p>
     <h4>验收标准</h4>
     <ul class="ac-list">
       <li><span class="ac-box">□</span>右侧提供「TikTok账号」页签，点击切换进入，标题：TikTok账号</li>
-      <li><span class="ac-box">□</span>支持按账号名称、语言、备注组合查询（点击「查询」后执行，「重置」恢复全量），无结果显示空态</li>
-      <li><span class="ac-box">□</span>「所属商务中心」列固定展示在「备注」列之后，取值恒为当前所选左侧 BC 名称，不展开该账号在其他 BC 下的归属</li>
+      <li><span class="ac-box">□</span>支持按账号名称查询（点击「查询」后执行，「重置」恢复全量），无结果显示空态</li>
+      <li><span class="ac-box">□</span>「已分配 BC 用户」列：默认显示当前所选 BC 下已分配该 TikTok 账号的 BC 用户数量；鼠标悬浮在该单元格上时浮层逐行展示 BC 用户名清单；未分配时显示 0</li>
+      <li><span class="ac-box">□</span>「所属商务中心」列固定展示在「TikTok账号名称」列之后，取值恒为当前所选左侧 BC 名称，不展开该账号在其他 BC 下的归属</li>
       <li><span class="ac-box">□</span>顶部「刷新」按钮：点击后置灰为「刷新中…」，调用接口重新拉取当前所选 BC 下的 TikTok 账号，结束后恢复并独立更新本页签的时间戳</li>
       <li><span class="ac-box">□</span>工具条左侧显示「上次更新 HH:MM:SS」；页面初始化时即写入一次，刷新按钮触发后再写入一次；该时间戳与 BC用户页签互不干扰</li>
       <li><span class="ac-box">□</span>顶部「添加 TikTok 账号」按钮：点击后直接打开弹框并锁定当前所选 BC</li>
@@ -733,58 +734,30 @@
       <p class="figure-caption">US-006 TikTok 账号列表页签与搜索</p>
     </div>
 
-    <h3>5.7 US-007 添加 TikTok 账号（新建方式）</h3>
-    <p><strong>用户故事</strong>：作为投放运营，我想要在 BC 下新建 TikTok 账号，以便扩充资产。</p>
-    <h4>表单项</h4>
-    <ul>
-      <li>商务中心名称：只读文本，由左侧当前所选 BC 自动带入，不可编辑。</li>
-      <li>添加方式：卡片单选（新建 TikTok 账号 / 关联 TikTok 账号），选中高亮。</li>
-      <li>TikTok账号名称：文本，必填，最长 30 字符。</li>
-      <li>头像：文件上传，必传，支持本地预览与清除。</li>
-      <li>国家地区：必选下拉。</li>
-    </ul>
-    <h4>数据来源</h4>
-    <ul>
-      <li>商务中心名称由左侧当前所选 BC 带入（后端注入、前端不可编辑）。</li>
-      <li>提交调用接口「在商务中心创建 TikTok 账号」，官方文档：<span class="api-url">business-api.tiktok.com/portal/docs/create-an-organization-account-in-a-business-center/v1.3</span>。</li>
-    </ul>
-    <h4>数据流转</h4>
-    <p>点击右侧「TikTok账号」页签的「添加 TikTok 账号」按钮 → 打开弹框，商务中心名称由左侧当前所选 BC 自动带入并锁定（不可编辑）→ 选择「新建」卡片 → 弹框内展开字段（名称/头像/地区）→ 前端校验（名称非空且 ≤30 字符、头像必传、地区必选）→ 点「确定」→ 调用创建接口 → 成功提示并关闭 → 刷新后新账号出现在 TikTok账号列表。</p>
-    <h4>验收标准</h4>
-    <ul class="ac-list">
-      <li><span class="ac-box">□</span>点击右侧「TikTok账号」页签的「添加 TikTok 账号」按钮打开弹框；商务中心名称由左侧当前所选 BC 自动带入且不可编辑</li>
-      <li><span class="ac-box">□</span>添加方式为左右两张卡片：「新建 TikTok 账号」「关联 TikTok 账号」，选中卡片高亮</li>
-      <li><span class="ac-box">□</span>选择「新建」后在弹框内直接展开字段：TikTok账号名称（必填，最长 30 个字符）/ 头像（必传，支持预览与清除）/ 国家地区（必选下拉）</li>
-      <li><span class="ac-box">□</span>TikTok账号名称输入框限制 30 个字符，超长提交提示「TikTok账号名称长度不能超过30个字符」</li>
-      <li><span class="ac-box">□</span>校验失败分别提示「请输入TikTok账号名称 / TikTok账号名称长度不能超过30个字符 / 请上传头像 / 请选择国家/地区」；成功提示「创建成功：{名称}（{BC} / {地区}）」</li>
-      <li><span class="ac-box">□</span>未选择方式时底部仅显示「取消」；每次打开弹框重置全部状态</li>
-    </ul>
-    <h4>界面示意</h4>
-    <div class="figure-block">
-      <img src="images/us-006-add-new.png" alt="US-007 添加 TikTok 账号（新建方式）">
-      <p class="figure-caption">US-007 添加 TikTok 账号（新建方式）</p>
-    </div>
-
-    <h3>5.8 US-008 添加 TikTok 账号（关联方式）</h3>
+    <h3>5.7 US-008 添加 TikTok 账号（关联方式）</h3>
     <p><strong>用户故事</strong>：作为投放运营，我想要通过扫码关联已有 TikTok 账号，以便复用已有资产。</p>
     <h4>展示项</h4>
     <ul>
       <li>授权二维码：图片，由授权链接渲染生成，使用 TikTok App 扫码完成授权。</li>
       <li>提示文案：只读文本「请使用 TikTok App 扫描二维码完成账号授权」。</li>
       <li>授权对象：只读文本，显示当前 BC 名称。</li>
-      <li>底部按钮为「关闭」。</li>
+      <li>「刷新二维码」按钮：点击后置灰为「刷新中…」，调用接口重新拉取授权链接并刷新画布；完成后恢复。</li>
+      <li>提示文案：只读文本「授权完成后弹框不会自动关闭；如二维码失效，可点击『刷新二维码』」。</li>
+      <li>底部按钮为「关闭」，仅在用户主动操作时关闭弹框。</li>
     </ul>
     <h4>数据来源</h4>
     <ul>
-      <li>二维码来自接口「获取 TikTok 账号授权链接」返回的授权链接渲染生成，官方文档：<span class="api-url">business-api.tiktok.com/portal/docs/obtain-a-tiktok-account-ad-delivery-authorization-url/v1.3</span>。</li>
+      <li>二维码来自接口「获取 TikTok 账号授权链接」（<a href="https://business-api.tiktok.com/portal/docs/obtain-a-tiktok-account-ad-delivery-authorization-url/v1.3" target="_blank">obtain-a-tiktok-account-ad-delivery-authorization-url 官方文档</a>）返回的授权链接渲染生成；刷新二维码按钮调用同一接口重新拉取。</li>
     </ul>
     <h4>数据流转</h4>
-    <p>弹框选择「关联」卡片 → 携带当前 BC ID 调用「获取 TikTok 账号授权链接」→ 渲染二维码 → 用户使用 TikTok App 扫码授权 → 授权完成后系统回传结果 → 关闭弹框 → 刷新后账号出现在资产列表。</p>
+    <p>打开弹框默认选中「关联」卡片 → 携带当前 BC ID 调用「获取 TikTok 账号授权链接」→ 渲染二维码 → 用户使用 TikTok App 扫码授权 → <strong>弹框不自动关闭</strong>；若二维码失效，在弹框内点击「刷新二维码」重新拉取授权链接并刷新二维码，用户继续在 TikTok App 中完成新账号授权；用户手动点「关闭」才退出弹框，刷新 TikTok账号列表后新账号出现。</p>
     <h4>验收标准</h4>
     <ul class="ac-list">
-      <li><span class="ac-box">□</span>在添加弹框中选择「关联 TikTok 账号」卡片</li>
-      <li><span class="ac-box">□</span>弹框内展开二维码区域：二维码 + 提示「请使用 TikTok App 扫描二维码完成账号授权」+ 授权对象 <code>{BC名称}</code></li>
-      <li><span class="ac-box">□</span>底部按钮切换为「关闭」</li>
+      <li><span class="ac-box">□</span>打开添加弹框默认选中「关联 TikTok 账号」卡片，二维码区域直接展开</li>
+      <li><span class="ac-box">□</span>弹框内展开二维码区域：二维码 + 提示「请使用 TikTok App 扫描二维码完成账号授权」+ 授权对象 <code>{BC名称}</code> + 「刷新二维码」按钮 + 提示「授权完成后弹框不会自动关闭；如二维码失效，可点击『刷新二维码』」</li>
+      <li><span class="ac-box">□</span>底部按钮切换为「关闭」；授权完成后弹框不自动关闭，由用户主动决定退出时机</li>
+      <li><span class="ac-box">□</span>点击「刷新二维码」：按钮置灰为「刷新中…」，调用「获取 TikTok 账号授权链接」接口重新拉取授权链接并刷新二维码画布；接口返回后按钮恢复正常文案</li>
+      <li><span class="ac-box">□</span>关闭弹框后，TikTok账号列表中能看到所有已成功授权的账号</li>
     </ul>
     <h4>界面示意</h4>
     <div class="figure-block">
@@ -792,11 +765,11 @@
       <p class="figure-caption">US-008 添加 TikTok 账号（关联方式）</p>
     </div>
 
-    <h3>5.9 US-009 BC用户已分配 TikTok 账号批量删除</h3>
+    <h3>5.8 US-009 BC用户已分配 TikTok 账号批量删除</h3>
     <p><strong>用户故事</strong>：作为投放运营，我想要在抽屉内一次性勾选多个 TikTok 账号并批量取消授权，以便快速收回资产权限。</p>
     <h4>筛选项</h4>
     <ul>
-      <li>无独立筛选条件，依赖 US-004 抽屉自身的名称/语言/备注筛选项；当前可见行（受筛选过滤后的行）支持表头全选与逐行勾选。</li>
+      <li>无独立筛选条件，依赖 US-004 抽屉自身的账号名称筛选项；当前可见行（受筛选过滤后的行）支持表头全选与逐行勾选。</li>
     </ul>
     <h4>表格字段</h4>
     <ul>
@@ -807,10 +780,10 @@
     </ul>
     <h4>数据来源</h4>
     <ul>
-      <li>批量删除调用「撤销用户对资产的权限」，官方文档：<span class="api-url">business-api.tiktok.com/portal/docs/unassign-an-asset/v1.3</span>，按勾选账号名串行执行；执行完成后同步刷新抽屉列表与底层「BC用户」页签的账号数量。</li>
+      <li>批量删除调用「撤销用户对资产的权限」（<a href="https://business-api.tiktok.com/portal/docs/unassign-an-asset/v1.3" target="_blank">unassign-an-asset 官方文档</a>），按勾选账号名串行执行；执行完成后同步刷新抽屉列表与底层「BC用户」页签的账号数量。</li>
     </ul>
     <h4>数据流转</h4>
-    <p>打开抽屉（US-004）→ 通过名称/语言/备注筛选缩小目标范围 → 在表格首列勾选多个账号（可表头全选当前可见行）→ 工具条实时显示「已选择 X 个」→ 点击红色「批量删除」→ 弹出二次确认「取消授权」弹框（问句「是否确认取消授权？」+ 明细仅显示 BC用户与总数）→ 用户点「确定」→ 串行调用「撤销用户对资产的权限」逐条撤销 → 全部完成后一次性刷新抽屉与 BC用户列表 → 提示「已批量取消授权 N 个 TikTok 账号：{账号名清单}」。</p>
+    <p>打开抽屉（US-004）→ 通过账号名称筛选缩小目标范围 → 在表格首列勾选多个账号（可表头全选当前可见行）→ 工具条实时显示「已选择 X 个」→ 点击红色「批量删除」→ 弹出二次确认「取消授权」弹框（问句「是否确认取消授权？」+ 明细仅显示 BC用户与总数）→ 用户点「确定」→ 串行调用「撤销用户对资产的权限」逐条撤销 → 全部完成后一次性刷新抽屉与 BC用户列表 → 提示「已批量取消授权 N 个 TikTok 账号：{账号名清单}」。</p>
     <h4>验收标准</h4>
     <ul class="ac-list">
       <li><span class="ac-box">□</span>抽屉内表格首列复选框，每行独立可控；表头复选框支持全选当前可见行，并出现半选态</li>
@@ -830,23 +803,22 @@
     <p class="section-lead">本章汇总各用户故事依赖的 TikTok Business API 官方文档链接及依赖关系，供研发阶段对照实现。</p>
 
     <h3>6.1 API 清单</h3>
-    <p class="table-note">说明：接口细节暂不梳理，下表列出各用户故事对应的 TikTok Business API 官方文档链接，研发阶段按链接对照实现。</p>
+    <p>说明：接口细节暂不梳理，下表列出各用户故事对应的 TikTok Business API 官方文档链接，研发阶段按链接对照实现。</p>
     <table class="data-table">
       <thead>
       <tr>
-        <th style="width: 24%;">用户故事</th>
-        <th style="width: 32%;">接口用途</th>
+        <th style="width: 26%;">用户故事</th>
+        <th style="width: 30%;">接口用途</th>
         <th>官方文档链接</th>
       </tr>
       </thead>
       <tbody>
-      <tr><td>US-001</td><td>获取商务中心列表</td><td><span class="api-url">business-api.tiktok.com/portal/docs/get-business-centers/v1.3</span></td></tr>
-      <tr><td>US-002</td><td>获取商务中心 BC用户列表</td><td><span class="api-url">business-api.tiktok.com/portal/docs/get-the-members-of-a-bc/v1.3</span></td></tr>
-      <tr><td>US-003 / US-005 / US-006</td><td>获取资产（TikTok 账号）列表</td><td><span class="api-url">business-api.tiktok.com/portal/docs/get-assets/v1.3</span></td></tr>
-      <tr><td>US-003 / US-005</td><td>将资产分配给用户</td><td><span class="api-url">business-api.tiktok.com/portal/docs/assign-an-asset/v1.3</span></td></tr>
-      <tr><td>US-004 / US-009</td><td>撤销用户对资产的权限</td><td><span class="api-url">business-api.tiktok.com/portal/docs/unassign-an-asset/v1.3</span></td></tr>
-      <tr><td>US-007</td><td>在商务中心创建 TikTok 账号</td><td><span class="api-url">business-api.tiktok.com/portal/docs/create-an-organization-account-in-a-business-center/v1.3</span></td></tr>
-      <tr><td>US-008</td><td>获取 TikTok 账号授权链接</td><td><span class="api-url">business-api.tiktok.com/portal/docs/obtain-a-tiktok-account-ad-delivery-authorization-url/v1.3</span></td></tr>
+      <tr><td>US-001</td><td>获取商务中心列表</td><td><a href="https://business-api.tiktok.com/portal/docs/get-business-centers/v1.3" target="_blank">get-business-centers</a></td></tr>
+      <tr><td>US-002</td><td>获取商务中心 BC用户列表</td><td><a href="https://business-api.tiktok.com/portal/docs/get-the-members-of-a-bc/v1.3" target="_blank">get-the-members-of-a-bc</a></td></tr>
+      <tr><td>US-003 / US-005 / US-006</td><td>获取资产（TikTok 账号）列表</td><td><a href="https://business-api.tiktok.com/portal/docs/get-assets/v1.3" target="_blank">get-assets</a></td></tr>
+      <tr><td>US-003 / US-005</td><td>将资产分配给用户</td><td><a href="https://business-api.tiktok.com/portal/docs/assign-an-asset/v1.3" target="_blank">assign-an-asset</a></td></tr>
+      <tr><td>US-004 / US-009</td><td>撤销用户对资产的权限</td><td><a href="https://business-api.tiktok.com/portal/docs/unassign-an-asset/v1.3" target="_blank">unassign-an-asset</a></td></tr>
+      <tr><td>US-008</td><td>获取 TikTok 账号授权链接</td><td><a href="https://business-api.tiktok.com/portal/docs/obtain-a-tiktok-account-ad-delivery-authorization-url/v1.3" target="_blank">obtain-a-tiktok-account-ad-delivery-authorization-url</a></td></tr>
       </tbody>
     </table>
 
@@ -856,7 +828,7 @@
       <li>BC用户列表（US-002）依赖「获取商务中心 BC用户列表」；TikTok 账号列表（US-006）依赖「获取资产列表」。</li>
       <li>分配（US-003 / US-005）依赖资产列表与 BC用户列表的数据组合，已分配状态需结合「将资产分配给用户」/「撤销用户对资产的权限」的结果维护。</li>
       <li>撤销（US-004 / US-009）依赖 BC用户与资产的分配关系，单条与批量走同一接口。</li>
-      <li>添加账号（US-007 / US-008）为新增资产入口：新建走组织账号创建接口，关联走授权链接接口。</li>
+      <li>添加账号（US-008）为新增资产入口：关联走授权链接接口；「新建」方式本版本禁选（接口暂不可用、需加白），已去除 US-007 需求说明。</li>
     </ul>
 
     <h2>7. 安全需求</h2>
@@ -870,7 +842,6 @@
 
     <h3>7.2 数据校验</h3>
     <ul>
-      <li>新建 TikTok 账号：名称非空且不超过 30 个字符、头像必传、国家/地区必选，提交前前端校验，后端二次校验。</li>
       <li>分配操作：至少选择一个账号；批量分配时是否已分配由后端自动判断，避免前端状态不一致。</li>
       <li>撤销操作：单条与批量删除均需二次确认，防止误操作。</li>
     </ul>
@@ -880,11 +851,8 @@
       <li>搜索关键字仅作本地过滤展示，不携带权限信息；提交类请求需对输入做长度与注入防护。</li>
     </ul>
 
-  </main>
-
-  <section class="appendix">
     <h2>附录：修订记录</h2>
-    <p class="section-lead">本文档的版本演进情况如下表所示，v2.0 为当前生效版本。</p>
+    <p class="section-lead">本文档的版本演进情况如下表所示，v2.2 为当前生效版本。</p>
     <table class="data-table">
       <thead>
       <tr>
@@ -897,15 +865,26 @@
       <tr>
         <td>v1.0</td>
         <td>2026-09-02</td>
-        <td>初版：按「主表 + 抽屉」页面结构编写（已废弃，页面交互已调整）。</td>
+        <td>初版：商务中心主表 + 抽屉结构，11 个功能点。</td>
       </tr>
       <tr>
         <td>v2.0</td>
         <td>2026-09-11</td>
-        <td>按当前页面交互重写：左侧商务中心单选面板 + 右侧 BC用户 / TikTok账号 双页签结构；新增 US-009 批量取消授权；同步刷新全部 US 界面示意图（截图规格 1258×566）。</td>
+        <td>重写为「左侧商务中心单选面板 + 右侧 BC用户 / TikTok账号 双页签」结构，9 个用户故事；抽屉支持批量取消授权。</td>
+      </tr>
+      <tr>
+        <td>v2.1</td>
+        <td>2026-09-24</td>
+        <td>去除 TikTok 账号列表/弹框的「语言」「备注」字段与头像；分配弹框统一 4 列并复用组件；TikTok 账号页签新增「已分配 BC 用户」列；添加弹框新建禁选、关联默认选中并支持刷新二维码；授权后弹框不自动关闭；刷新全部界面示意图。</td>
+      </tr>
+      <tr>
+        <td>v2.2</td>
+        <td>2026-09-24</td>
+        <td>去除 US-007「添加 TikTok 账号（新建方式）」需求说明（新建入口本版本禁选、接口暂不可用需加白），用户故事调整为 8 个，接口清单同步移除「在商务中心创建 TikTok 账号」。</td>
       </tr>
       </tbody>
     </table>
-  </section>
+
+  </main>
 </body>
 </html>
