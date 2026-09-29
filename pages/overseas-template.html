@@ -251,8 +251,7 @@
 
   <!-- Tabs -->
   <div class="tabs" id="template-tabs">
-    <button class="tab" data-tab="account" onclick="switchTemplateTab('account')">账户包</button>
-    <button class="tab active" data-tab="copy" onclick="switchTemplateTab('copy')">文案模板</button>
+    <button class="tab active" data-tab="account" onclick="switchTemplateTab('account')">账户包</button>
     <button class="tab" data-tab="target" onclick="switchTemplateTab('target')">定向包</button>
     <button class="tab" data-tab="material" onclick="switchTemplateTab('material')">创意素材</button>
     <button class="tab" data-tab="tiktok" onclick="switchTemplateTab('tiktok')">TikTok 账号包</button>
@@ -445,7 +444,7 @@
 
   <!-- TikTok账户包 -->
   <div id="template-tab-tiktok" class="template-tab-panel" style="display:none;">
-    <div class="filter-bar">
+    <div class="filter-bar us-fab-host" style="position:relative;padding-top:44px;">
       <div class="filter-bar-row">
         <input type="text" class="filter-input" placeholder="请输入名称" />
         <select class="filter-select"><option>请选择创建人</option><option>听泉</option><option>魔法七</option><option>橙子</option><option>孤树</option><option>admin</option></select>
@@ -455,8 +454,9 @@
         </div>
         <button class="btn btn-primary btn-sm" style="margin-left:auto;" onclick="openTiktokAccountDrawer('add')">新增TikTok 账号包</button>
       </div>
+      <button type="button" class="us-fab" data-us="US-001" style="top:8px;left:14px;bottom:auto;right:auto;" title="点击查看 TikTok 账号包列表 US 说明">📋 US-001 说明</button>
     </div>
-    <div class="table-card">
+    <div class="table-card us-fab-host" style="position:relative;">
       <div class="table-wrapper">
         <table class="data-table">
           <thead>
@@ -490,6 +490,7 @@
         <input type="text" class="jump-input" value="1" />
         <span>页</span>
       </div>
+      <button type="button" class="us-fab" data-us="US-002" title="点击查看新增/编辑/复制 TikTok 账号包 US 说明">📋 US-002 说明</button>
     </div>
   </div>
 
@@ -654,6 +655,7 @@
         <button class="btn btn-outline btn-sm" onclick="closeTiktokAccountDrawer()">取消</button>
         <button class="btn btn-primary btn-sm" onclick="closeTiktokAccountDrawer()">确定</button>
       </div>
+      <button type="button" class="us-fab" data-us="US-002" title="按住可拖动，点击查看本抽屉用户故事说明">📋 US-002 说明 · 新增/编辑/复制 TikTok 账号包</button>
     </div>
   </div>
 
@@ -892,12 +894,52 @@
       });
 
       /* ===== 模板管理 Tab 切换 ===== */
+      function applyTemplatePrd(tabName) {
+        var configs = {
+          copy: {
+            title: '模板管理 · 文案模板 · 交互需求说明',
+            sub: '简洁版 PRD（4 个用户故事 · 展开查看筛选项/表格字段/数据来源/数据流转 · 按住标题栏可拖动，双击或按钮可全屏 · 「复制链接」复制需求说明页面链接）',
+            url: '../output/prd-doc-copy-template-report.html',
+            stories: window.prdStoriesCopy,
+            pageUs: { id: 'US-001', title: '文案模板列表查询与展示' }
+          },
+          tiktok: {
+            title: '模板管理 · TikTok 账号包 · 交互需求说明',
+            sub: '简洁版 PRD（2 个用户故事 · 展开查看筛选项/表格字段/数据来源/数据流转 · 按住标题栏可拖动，双击或按钮可全屏 · 「复制链接」复制需求说明页面链接）',
+            url: '../output/prd-doc-fix-20260902/stage2/formatted-overseas-batch-delivery-identity-report.html',
+            stories: window.prdStoriesTiktok,
+            pageUs: { id: 'US-001', title: 'TikTok 账号包列表查询与展示' }
+          }
+        };
+        var cfg = configs[tabName] || configs.copy;
+        window.prdPageTitle = cfg.title;
+        window.prdPageSub = cfg.sub;
+        window.PRD_PAGE_URL = cfg.url;
+        window.prdStories = cfg.stories;
+
+        var titleEl = document.querySelector('.prd-panel-title');
+        var subEl = document.querySelector('.prd-panel-sub');
+        if (titleEl) titleEl.textContent = cfg.title;
+        if (subEl) subEl.textContent = cfg.sub;
+
+        var pageFab = document.querySelector('.us-fab-page');
+        if (pageFab) {
+          pageFab.setAttribute('data-us', cfg.pageUs.id);
+          pageFab.setAttribute('title', '按住可拖动，点击查看本页面用户故事说明');
+          pageFab.textContent = '📋 ' + cfg.pageUs.id + ' 说明 · ' + cfg.pageUs.title;
+        }
+
+        if (window.prd && window.prd.renderPrdPanel) window.prd.renderPrdPanel();
+        if (window.prd && window.prd.refreshUsFab) window.prd.refreshUsFab();
+      }
+
       function switchTemplateTab(tabName) {
         document.querySelectorAll('#page-overseas-template .template-tab-panel').forEach(function (p) { p.style.display = 'none'; });
         document.getElementById('template-tab-' + tabName).style.display = 'block';
         document.querySelectorAll('#template-tabs .tab').forEach(function (t) {
           t.classList.toggle('active', t.getAttribute('data-tab') === tabName);
         });
+        applyTemplatePrd(tabName);
       }
 
       function searchTemplate(tab) { alert('查询：' + tab); }
@@ -1197,7 +1239,7 @@
       window.prdPageSub = '简洁版 PRD（4 个用户故事 · 展开查看筛选项/表格字段/数据来源/数据流转 · 按住标题栏可拖动，双击或按钮可全屏 · 「复制链接」复制需求说明页面链接）';
       window.PRD_PAGE_URL = '../output/prd-doc-copy-template-report.html';
 
-      window.prdStories = [
+      window.prdStoriesCopy = [
         {
           id: 'US-001', title: '文案模板列表查询与展示', priority: 'P0',
           shot: '../assets/prd/template-copy-list.png',
@@ -1261,8 +1303,49 @@
           ]
         }
       ];
+
+      window.prdStoriesTiktok = [
+        {
+          id: 'US-001', title: 'TikTok 账号包列表查询与展示', priority: 'P0',
+          shot: '../assets/prd/template-tiktok-list.png',
+          desc: '作为投放运营，我想要查看并按名称/创建人搜索 TikTok 账号包列表，以便快速定位目标账号包并在自动化任务中引用。数据权限按组织架构控制：组长可查看组员数据，组员仅可查看自己的数据；拥有「全部数据」权限的用户可查看全部数据。',
+          filter: '名称（单行文本输入框，占位「请输入名称」）／创建人（下拉选择，占位「请选择创建人」）+「查询」/「重置」按钮；点击「查询」后按条件过滤，点击「重置」清空全部条件并恢复全量列表。',
+          fields: '选择列（复选框，表头支持全选）／ID（数字）／名称（文本，可点击链接，打开编辑抽屉；无论数据归属均可点击名称查看详情）／备注（文本）／TikTok账号数量（数字）／创建人（文本）／创建时间（文本，格式 yyyy-MM-dd HH:mm）／更新时间（文本，格式 yyyy-MM-dd HH:mm）／操作（按钮组：复制、编辑、删除；仅当前用户自己创建的数据展示可点击按钮，非本人数据按钮置灰不可点击）。',
+          source: '模板管理-TikTok账号包列表数据 ← 后端接口返回。',
+          flow: '页面加载 → 调用「获取 TikTok 账号包列表」→ 渲染主表；用户在筛选栏输入名称或选择创建人后点击「查询」执行过滤；点击「重置」恢复全量；点击「新增TikTok 账号包」打开新增抽屉；点击名称链接打开编辑抽屉查看详情。',
+          ac: [
+            '页面加载后默认展示 TikTok 账号包 Tab 列表',
+            '支持按名称模糊查询与按创建人精确筛选，点击「查询」后才执行过滤',
+            '名称列以链接形式展示，任何权限下均可点击打开编辑抽屉查看详情',
+            '操作列提供「复制」「编辑」「删除」入口；仅本人创建的数据可操作，非本人数据按钮置灰不可点击',
+            '表格下方提供分页条（总数、页码、每页条数、跳页）'
+          ]
+        },
+        {
+          id: 'US-002', title: '新增/编辑/复制 TikTok 账号包', priority: 'P0',
+          shot: '../assets/prd/template-tiktok-drawer.png',
+          desc: '作为投放运营，我想要新建、编辑或复制 TikTok 账号包，以便将常用账号组合沉淀为模板，供自动化任务快速引用。',
+          filter: '左侧待选区：TT账号名称（单行文本输入框，占位「请输入TT账号名称」）／语言（下拉选择，占位「请选择语言」，枚举与短剧管理页面语言筛选项保持一致）／备注（单行文本输入框，占位「请输入备注」）+「查询」/「重置」按钮。右侧已选区：TT账号名称／语言／备注 +「查询」/「重置」按钮，并在工具条右侧显示「已选：N <清空>」。',
+          fieldsLabel: '表单与穿梭框字段',
+          fields: '名称（单行文本输入框，必填，占位「请输入」，限制 50 字符；复制时自动在名称前拼接「复制-」）／备注（单行文本输入框，占位「请输入」，限制 100 字符）／TikTok 账号（左右穿梭框；左侧表格列：选择列（复选框，表头支持全选）、TikTok账号名称（头像 + 账号名称组合展示）、语言、备注；右侧表格列：TikTok账号名称（头像 + 账号名称组合展示）、语言、备注、操作（删除按钮））。',
+          source: '左侧待选 TikTok 账号列表 ← 资产管理-TikTok账号页面列表数据（接口返回）；右侧已选账号集合 ← 当前 TikTok 账号包维护的数据（新增时为空，编辑/复制时回显原包已选账号）。',
+          flow: '点击「新增/编辑/复制」→ 打开右侧宽抽屉（标题分别为「新增TikTok 账号包」「编辑TikTok 账号包」「复制TikTok 账号包」）→ 编辑时回显原名称、备注与已选账号，复制时名称前自动拼接「复制-」并回显原备注与已选账号 → 用户在左侧筛选并勾选账号 → 勾选账号自动移入右侧已选区 → 在右侧点击「删除」后，左侧对应账号自动取消勾选 → 点击「确定」保存账号包并关闭抽屉。',
+          ac: [
+            '新增时名称与备注为空，已选区为空',
+            '编辑时回显原包名称、备注与已选账号；复制时名称前自动拼接「复制-」，备注与已选账号回显原包数据',
+            '名称必填，最长 50 字符；备注可选，最长 100 字符',
+            '左侧账号列表样式与资产管理-TikTok账号页一致（头像 + 账号名），不含更新人/更新时间/操作字段',
+            '左侧勾选账号后，该账号立即出现在右侧已选区；右侧删除账号后，左侧对应复选框自动取消勾选',
+            '左侧表头全选/半选仅对当前过滤后的可见行生效',
+            '右侧已选区支持按名称、语言、备注筛选，并显示「已选：N」与「清空」链接',
+            '点击「确定」保存并关闭抽屉；点击「取消」不保存并关闭抽屉'
+          ]
+        }
+      ];
+
+      window.prdStories = window.prdStoriesCopy;
     </script>
-    <script src="../scripts/prd.js?v=20260924"></script>
-    <script src="../scripts/header-user.js?v=20260924"></script>
+    <script src="../scripts/prd.js?v=20260929"></script>
+    <script src="../scripts/header-user.js?v=20260929"></script>
   </body>
 </html>

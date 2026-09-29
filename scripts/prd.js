@@ -197,6 +197,15 @@
     }
   }
 
+  /* 重新初始化页面上的 US 悬浮按钮（用于 Tab 切换后动态显示/隐藏的按钮） */
+  function refreshUsFab() {
+    Array.prototype.forEach.call(document.querySelectorAll('.us-fab'), function (btn) {
+      if (btn.classList.contains('prd-fab-ready')) return;
+      btn.classList.add('prd-fab-ready');
+      makeUsFabDraggable(btn);
+    });
+  }
+
   /* 让 US 悬浮按钮可拖动并可点击 */
   function triggerUsFab(btn) {
     var us = btn.getAttribute('data-us');
@@ -278,7 +287,7 @@
     });
 
     /* US 悬浮按钮 */
-    Array.prototype.forEach.call(document.querySelectorAll('.us-fab'), makeUsFabDraggable);
+    refreshUsFab();
 
     /* 单个 US 详情面板拖动 */
     var usPanel = document.getElementById('us-detail-panel');
@@ -477,7 +486,8 @@
     openUsDetail: openUsDetail,
     closeUsDetail: closeUsDetail,
     openFullPrdFromUs: openFullPrdFromUs,
-    copyPrdLink: copyPrdLink
+    copyPrdLink: copyPrdLink,
+    refreshUsFab: refreshUsFab
   };
 
   if (document.readyState === 'loading') {
