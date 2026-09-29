@@ -307,81 +307,6 @@
     </div>
   </div>
 
-  <!-- 文案模板 -->
-  <div id="template-tab-copy" class="template-tab-panel">
-    <div class="filter-bar us-fab-host" style="position:relative;padding-top:44px;">
-      <div class="filter-bar-row">
-        <input type="text" class="filter-input" placeholder="文案内容" />
-        <select class="filter-select"><option>请选择文案类型</option><option>标题</option><option>产品卖点</option></select>
-        <select class="filter-select"><option>请选择付费类型</option><option>付费</option><option>免费</option></select>
-        <select class="filter-select"><option>请选择语言</option><option>英语</option><option>中文</option><option>德语</option><option>意大利语</option></select>
-        <select class="filter-select"><option>请选择创建人</option><option>缪可</option><option>乐普</option><option>冷吃兔</option><option>春光</option><option>admin</option></select>
-        <div class="filter-actions">
-          <button class="btn btn-primary btn-sm" onclick="searchTemplate('copy')">查询</button>
-          <button class="btn btn-outline btn-sm" onclick="resetTemplateFilter('copy')">重置</button>
-        </div>
-        <button class="btn btn-primary btn-sm" style="margin-left:auto;" onclick="openCopyModal('add')">新增文案</button>
-      </div>
-      <button type="button" class="us-fab" data-us="US-001" style="top:8px;left:14px;bottom:auto;right:auto;" title="点击查看文案模板列表 US 说明">📋 US-001 说明</button>
-    </div>
-    <div class="table-card us-fab-host" style="position:relative;">
-      <div class="batch-action-bar" id="copy-batch-bar" style="display:none;padding:8px 16px;border-bottom:1px solid var(--color-border-light,#e4e7ec);background:#f8fafc;">
-        <span>已选择 <strong id="copy-batch-count">0</strong> 项</span>
-        <a href="#" class="link link-danger" style="margin-left:12px;" onclick="batchDeleteCopy()">批量删除</a>
-      </div>
-      <div class="table-wrapper">
-        <table class="data-table" id="copy-table">
-          <thead>
-            <tr>
-              <th class="checkbox-col"><input type="checkbox" id="copy-check-all" onclick="toggleCopyCheckAll()" /></th>
-              <th>ID</th>
-              <th>文案内容</th>
-              <th>文案类型</th>
-              <th>付费类型</th>
-              <th>语言</th>
-              <th>创建人</th>
-              <th>创建时间</th>
-              <th>更新时间</th>
-              <th>操作</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td class="checkbox-col"><input type="checkbox" /></td><td>153</td><td>6666666</td><td>标题</td><td>付费</td><td>德语</td><td>缪可</td><td>2026-09-18 14:28:48</td><td>2026-09-18 14:28:48</td><td><a href="#" class="link" onclick="openCopyModal('edit','6666666')">编辑</a> <a href="#" class="link link-danger" onclick="deleteTemplateRow(this)">删除</a></td></tr>
-            <tr><td class="checkbox-col"><input type="checkbox" /></td><td>152</td><td>付费卖点</td><td>产品卖点</td><td>付费</td><td>英语</td><td>缪可</td><td>2026-09-18 12:09:02</td><td>2026-09-18 12:09:02</td><td><a href="#" class="link" onclick="openCopyModal('edit','付费卖点')">编辑</a> <a href="#" class="link link-danger" onclick="deleteTemplateRow(this)">删除</a></td></tr>
-            <tr><td class="checkbox-col"><input type="checkbox" /></td><td>151</td><td>付费标题</td><td>标题</td><td>付费</td><td>英语</td><td>缪可</td><td>2026-09-18 12:08:54</td><td>2026-09-18 12:08:54</td><td><a href="#" class="link" onclick="openCopyModal('edit','付费标题')">编辑</a> <a href="#" class="link link-danger" onclick="deleteTemplateRow(this)">删除</a></td></tr>
-            <tr><td class="checkbox-col"><input type="checkbox" /></td><td>149</td><td>意大利语付费标题意大利语付费标题意大利语付费标题意大利语付费标题意大利语付费标题意大利语付费标题</td><td>标题</td><td>付费</td><td>英语</td><td>乐普</td><td>2026-09-18 10:34:34</td><td>2026-09-18 10:39:45</td><td><a href="#" class="link" onclick="openCopyModal('edit','意大利语付费标题...')">编辑</a> <a href="#" class="link link-danger" onclick="deleteTemplateRow(this)">删除</a></td></tr>
-            <tr><td class="checkbox-col"><input type="checkbox" /></td><td>150</td><td>1234567890123456789012300</td><td>产品卖点</td><td>付费</td><td>英语</td><td>乐普</td><td>2026-09-18 10:39:00</td><td>2026-09-18 10:39:00</td><td><a href="#" class="link" onclick="openCopyModal('edit','1234567890...')">编辑</a> <a href="#" class="link link-danger" onclick="deleteTemplateRow(this)">删除</a></td></tr>
-            <tr><td class="checkbox-col"><input type="checkbox" /></td><td>148</td><td>32443</td><td>标题</td><td>免费</td><td>英语</td><td>乐普</td><td>2026-09-17 19:53:28</td><td>2026-09-17 19:53:28</td><td><a href="#" class="link" onclick="openCopyModal('edit','32443')">编辑</a> <a href="#" class="link link-danger" onclick="deleteTemplateRow(this)">删除</a></td></tr>
-            <tr><td class="checkbox-col"><input type="checkbox" /></td><td>147</td><td>意大利语付费产品卖点</td><td>产品卖点</td><td>付费</td><td>意大利语</td><td>冷吃兔</td><td>2026-09-17 19:29:41</td><td>2026-09-17 19:29:41</td><td><a href="#" class="link" onclick="openCopyModal('edit','意大利语付费产品卖点')">编辑</a> <a href="#" class="link link-danger" onclick="deleteTemplateRow(this)">删除</a></td></tr>
-            <tr><td class="checkbox-col"><input type="checkbox" /></td><td>146</td><td>意大利语付费标题</td><td>标题</td><td>付费</td><td>意大利语</td><td>冷吃兔</td><td>2026-09-17 19:29:28</td><td>2026-09-17 19:29:28</td><td><a href="#" class="link" onclick="openCopyModal('edit','意大利语付费标题')">编辑</a> <a href="#" class="link link-danger" onclick="deleteTemplateRow(this)">删除</a></td></tr>
-            <tr><td class="checkbox-col"><input type="checkbox" /></td><td>145</td><td>快来看剧</td><td>标题</td><td>付费</td><td>意大利语</td><td>春光</td><td>2026-09-17 18:42:15</td><td>2026-09-17 18:42:15</td><td><a href="#" class="link" onclick="openCopyModal('edit','快来看剧')">编辑</a> <a href="#" class="link link-danger" onclick="deleteTemplateRow(this)">删除</a></td></tr>
-            <tr><td class="checkbox-col"><input type="checkbox" /></td><td>144</td><td>1对1的是放送</td><td>标题</td><td>付费</td><td>英语</td><td>admin</td><td>2026-09-17 14:53:45</td><td>2026-09-17 14:53:45</td><td><a href="#" class="link" onclick="openCopyModal('edit','1对1的是放送')">编辑</a> <a href="#" class="link link-danger" onclick="deleteTemplateRow(this)">删除</a></td></tr>
-          </tbody>
-        </table>
-      </div>
-      <button type="button" class="us-fab" data-us="US-002" title="点击查看批量操作 US 说明">📋 US-002 说明</button>
-      <button type="button" class="us-fab" data-us="US-004" style="left:auto;right:14px;" title="点击查看单条删除 US 说明">📋 US-004 说明</button>
-      <div class="pagination">
-        <span class="pagination-info">共 127 项</span>
-        <div class="pagination-pages">
-          <button class="page-btn">&lt;</button>
-          <button class="page-btn active">1</button>
-          <button class="page-btn">2</button>
-          <button class="page-btn">3</button>
-          <button class="page-btn">4</button>
-          <button class="page-btn">5</button>
-          <span class="page-ellipsis">...</span>
-          <button class="page-btn">13</button>
-          <button class="page-btn">&gt;</button>
-        </div>
-        <select class="page-size-select"><option>10条/页</option><option>20条/页</option><option>50条/页</option></select>
-        <span>跳至</span>
-        <input type="text" class="jump-input" value="1" />
-        <span>页</span>
-      </div>
-    </div>
-  </div>
-
   <!-- 定向包 -->
   <div id="template-tab-target" class="template-tab-panel" style="display:none;">
     <div class="filter-bar">
@@ -659,51 +584,6 @@
     </div>
   </div>
 
-  <!-- 文案 新增/编辑 弹框 -->
-  <div id="template-copy-overlay" class="modal-overlay" onclick="closeCopyModal()"></div>
-  <div id="template-copy-modal" class="modal">
-    <div class="modal-card us-fab-host" style="width:560px;max-height:85vh;position:relative;">
-      <div class="modal-header">
-        <span id="template-copy-title">新增文案</span>
-        <button class="modal-close" onclick="closeCopyModal()">×</button>
-      </div>
-      <div class="modal-body">
-        <div class="form-row">
-          <div class="form-label required">文案类型：</div>
-          <div class="form-field">
-            <label class="radio-label"><input type="radio" name="copy-type" checked /> 标题</label>
-            <label class="radio-label"><input type="radio" name="copy-type" /> 产品卖点</label>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-label required">付费类型：</div>
-          <div class="form-field">
-            <label class="radio-label"><input type="radio" name="copy-pay" checked /> 付费</label>
-            <label class="radio-label"><input type="radio" name="copy-pay" /> 免费</label>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-label required">语言：</div>
-          <div class="form-field">
-            <select class="form-select" style="width:100%;"><option>请选择语言</option><option>英语</option><option>中文</option></select>
-          </div>
-        </div>
-        <div class="form-row" style="align-items:flex-start;">
-          <div class="form-label required">文案：</div>
-          <div class="form-field form-field-inline" style="width:100%;">
-            <textarea id="copy-content" rows="6" class="form-textarea" placeholder="请粘贴或者输入文案，回车换行" style="flex:1;"></textarea>
-            <span class="form-counter">0 / 5</span>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-outline btn-sm" onclick="closeCopyModal()">取消</button>
-        <button class="btn btn-primary btn-sm" onclick="closeCopyModal()">确定</button>
-      </div>
-      <button type="button" class="us-fab" data-us="US-003" title="点击查看新增/编辑文案 US 说明">📋 US-003 说明</button>
-    </div>
-  </div>
-
   <!-- 定向包 新增/编辑/复制 抽屉 -->
   <div id="template-target-overlay" class="drawer-overlay" onclick="closeTargetDrawer()"></div>
   <div id="template-target-drawer" class="drawer drawer-narrow">
@@ -895,27 +775,16 @@
 
       /* ===== 模板管理 Tab 切换 ===== */
       function applyTemplatePrd(tabName) {
-        var configs = {
-          copy: {
-            title: '模板管理 · 文案模板 · 交互需求说明',
-            sub: '简洁版 PRD（4 个用户故事 · 展开查看筛选项/表格字段/数据来源/数据流转 · 按住标题栏可拖动，双击或按钮可全屏 · 「复制链接」复制需求说明页面链接）',
-            url: '../output/prd-doc-copy-template-report.html',
-            stories: window.prdStoriesCopy,
-            pageUs: { id: 'US-001', title: '文案模板列表查询与展示' }
-          },
-          tiktok: {
-            title: '模板管理 · TikTok 账号包 · 交互需求说明',
-            sub: '简洁版 PRD（2 个用户故事 · 展开查看筛选项/表格字段/数据来源/数据流转 · 按住标题栏可拖动，双击或按钮可全屏 · 「复制链接」复制需求说明页面链接）',
-            url: '../output/prd-doc-fix-20260902/stage2/formatted-overseas-batch-delivery-identity-report.html',
-            stories: window.prdStoriesTiktok,
-            pageUs: { id: 'US-001', title: 'TikTok 账号包列表查询与展示' }
-          }
+        if (tabName !== 'tiktok') return;
+        var cfg = {
+          title: '模板管理 · TikTok 账号包 · 交互需求说明',
+          sub: '简洁版 PRD（2 个用户故事 · 展开查看筛选项/表格字段/数据来源/数据流转 · 按住标题栏可拖动，双击或按钮可全屏 · 「复制链接」复制需求说明页面链接）',
+          url: '../output/prd-doc-fix-20260902/stage2/formatted-overseas-batch-delivery-identity-report.html',
+          pageUs: { id: 'US-001', title: 'TikTok 账号包列表查询与展示' }
         };
-        var cfg = configs[tabName] || configs.copy;
         window.prdPageTitle = cfg.title;
         window.prdPageSub = cfg.sub;
         window.PRD_PAGE_URL = cfg.url;
-        window.prdStories = cfg.stories;
 
         var titleEl = document.querySelector('.prd-panel-title');
         var subEl = document.querySelector('.prd-panel-sub');
@@ -953,35 +822,6 @@
         var tr = link.closest('tr');
         if (tr && confirm('确定删除？')) tr.remove();
       }
-
-      /* 文案模板批量选择 */
-      function toggleCopyCheckAll() {
-        var root = document.getElementById('template-tab-copy');
-        var allChecked = document.getElementById('copy-check-all').checked;
-        root.querySelectorAll('#copy-table tbody input[type="checkbox"]').forEach(function (cb) { cb.checked = allChecked; });
-        updateCopyBatchBar();
-      }
-      function updateCopyBatchBar() {
-        var root = document.getElementById('template-tab-copy');
-        var checked = root.querySelectorAll('#copy-table tbody input[type="checkbox"]:checked').length;
-        document.getElementById('copy-batch-count').textContent = checked;
-        document.getElementById('copy-batch-bar').style.display = checked > 0 ? 'flex' : 'none';
-        var allCb = document.getElementById('copy-check-all');
-        var total = root.querySelectorAll('#copy-table tbody input[type="checkbox"]').length;
-        if (allCb) allCb.checked = checked > 0 && checked === total;
-      }
-      function batchDeleteCopy() {
-        var checked = document.querySelectorAll('#copy-table tbody input[type="checkbox"]:checked');
-        if (!checked.length) return alert('请先选择要删除的文案');
-        if (!confirm('确定批量删除选中的 ' + checked.length + ' 条文案？')) return;
-        checked.forEach(function (cb) { var tr = cb.closest('tr'); if (tr) tr.remove(); });
-        updateCopyBatchBar();
-      }
-      document.addEventListener('change', function (e) {
-        if (e.target.closest('#copy-table') && e.target.type === 'checkbox' && e.target.id !== 'copy-check-all') {
-          updateCopyBatchBar();
-        }
-      });
 
       /* 账户包抽屉 */
       function openAccountDrawer(mode, name) {
@@ -1174,19 +1014,6 @@
         if (window.prd && window.prd.closeUsDetail) window.prd.closeUsDetail();
       }
 
-      /* 文案弹框 */
-      function openCopyModal(mode, text) {
-        var titles = { add: '新增文案', edit: '编辑文案' };
-        document.getElementById('template-copy-title').textContent = titles[mode] || '新增文案';
-        document.getElementById('copy-content').value = mode === 'edit' ? (text || '') : '';
-        document.getElementById('template-copy-overlay').classList.add('open');
-        document.getElementById('template-copy-modal').classList.add('open');
-      }
-      function closeCopyModal() {
-        document.getElementById('template-copy-overlay').classList.remove('open');
-        document.getElementById('template-copy-modal').classList.remove('open');
-      }
-
       /* 定向包抽屉 */
       function openTargetDrawer(mode, name) {
         var titles = { add: '新增定向包', edit: '编辑定向包', copy: '复制定向包' };
@@ -1206,8 +1033,8 @@
     <aside id="prd-panel" class="prd-panel" role="dialog" aria-label="交互需求说明">
       <div class="prd-panel-header" id="prd-panel-header" title="按住此处可拖动面板，双击可全屏">
         <div>
-          <div class="prd-panel-title">模板管理 · 文案模板 · 交互需求说明</div>
-          <div class="prd-panel-sub">简洁版 PRD（4 个用户故事 · 展开查看筛选项/表格字段/数据来源/数据流转 · 按住标题栏可拖动，双击或按钮可全屏 · 「复制链接」复制需求说明页面链接）</div>
+          <div class="prd-panel-title">模板管理 · TikTok 账号包 · 交互需求说明</div>
+          <div class="prd-panel-sub">简洁版 PRD（2 个用户故事 · 展开查看筛选项/表格字段/数据来源/数据流转 · 按住标题栏可拖动，双击或按钮可全屏 · 「复制链接」复制需求说明页面链接）</div>
         </div>
         <div class="prd-panel-actions">
           <button type="button" class="prd-panel-btn" id="prd-copy-link-btn" onclick="window.prd.copyPrdLink()" title="复制需求说明页面链接">复制链接</button>
@@ -1218,7 +1045,7 @@
       <div class="prd-panel-body" id="prd-panel-body"></div>
     </aside>
     <button type="button" id="prd-float-btn" class="prd-float-btn" title="按住可拖动，点击打开需求说明">📋 需求说明</button>
-    <button type="button" class="us-fab us-fab-page" data-us="US-001" title="按住可拖动，点击查看本页面用户故事说明">📋 US-001 说明 · 文案模板列表查询与展示</button>
+    <button type="button" class="us-fab us-fab-page" data-us="US-001" title="按住可拖动，点击查看本页面用户故事说明">📋 US-001 说明 · TikTok 账号包列表查询与展示</button>
     <div id="prd-img-viewer" class="prd-img-viewer" role="dialog" aria-label="图片预览">
       <div class="prd-img-viewer-tip">点击任意位置或按 Esc 关闭</div>
       <img id="prd-img-viewer-img" src="" alt="" />
@@ -1235,76 +1062,11 @@
     </aside>
 
     <script>
-      window.prdPageTitle = '模板管理 · 文案模板 · 交互需求说明';
-      window.prdPageSub = '简洁版 PRD（4 个用户故事 · 展开查看筛选项/表格字段/数据来源/数据流转 · 按住标题栏可拖动，双击或按钮可全屏 · 「复制链接」复制需求说明页面链接）';
-      window.PRD_PAGE_URL = '../output/prd-doc-copy-template-report.html';
+      window.prdPageTitle = '模板管理 · TikTok 账号包 · 交互需求说明';
+      window.prdPageSub = '简洁版 PRD（2 个用户故事 · 展开查看筛选项/表格字段/数据来源/数据流转 · 按住标题栏可拖动，双击或按钮可全屏 · 「复制链接」复制需求说明页面链接）';
+      window.PRD_PAGE_URL = '../output/prd-doc-fix-20260902/stage2/formatted-overseas-batch-delivery-identity-report.html';
 
-      window.prdStoriesCopy = [
-        {
-          id: 'US-001', title: '文案模板列表查询与展示', priority: 'P0',
-          shot: '../assets/prd/template-copy-list.png',
-          desc: '作为投放运营，我想要按文案内容、类型、付费类型、语言和创建人筛选文案模板列表，以便在海量素材中快速定位目标文案并在自动化任务中引用。',
-          filter: '文案内容（单行文本输入框，占位「文案内容」，支持模糊搜索）／文案类型（下拉选择，占位「请选择文案类型」，枚举：标题、产品卖点）／付费类型（下拉选择，占位「请选择付费类型」，枚举：付费、免费）／语言（下拉选择，占位「请选择语言」，枚举：英语、中文、德语、意大利语等）／创建人（下拉选择，占位「请选择创建人」）+「查询」/「重置」按钮；点击「查询」后按条件过滤，点击「重置」清空全部条件并恢复全量列表。',
-          fields: '选择列（复选框，表头支持全选）／ID（数字）／文案内容（文本，展示原始文案，过长时折行或截断显示）／文案类型（文本：标题、产品卖点）／付费类型（文本：付费、免费）／语言（文本）／创建人（文本）／创建时间（文本，格式 yyyy-MM-dd HH:mm）／更新时间（文本，格式 yyyy-MM-dd HH:mm）／操作（按钮组：编辑、删除）。',
-          source: '模板管理-文案模板列表数据 ← 后端接口返回；筛选项枚举值（语言、文案类型、付费类型）可来自全局字典配置。',
-          flow: '页面加载 → 默认进入「文案模板」Tab → 调用「获取文案模板列表」接口 → 渲染主表；用户在筛选栏输入/选择条件后点击「查询」执行过滤；点击「重置」恢复全量；点击「新增文案」打开新增弹框。',
-          ac: [
-            '页面加载后默认展示文案模板 Tab 列表',
-            '支持按文案内容模糊查询，以及按文案类型、付费类型、语言、创建人精确筛选',
-            '列表支持表头全选/半选，选中行后顶部显示批量操作条',
-            '表格下方提供分页条（总数、页码、每页条数、跳页）',
-            '文案内容过长时应保证列宽自适应或提供 tooltip，避免破坏表格布局'
-          ]
-        },
-        {
-          id: 'US-002', title: '批量删除文案模板', priority: 'P1',
-          shot: '../assets/prd/template-copy-batch.png',
-          desc: '作为投放运营，我想要一次性删除多条不再使用的文案模板，以便批量清理过期素材。',
-          filter: '通过列表选择列勾选目标文案，顶部批量操作条实时显示已选项数并提供「批量删除」入口。',
-          fields: '选择列（复选框，表头支持全选）／已选择数量（数字，批量操作条展示）。',
-          source: '删除动作提交选中的文案模板 ID 列表 ← 当前列表已勾选行。',
-          flow: '在列表中勾选一条或多条文案 → 顶部出现「已选择 N 项 批量删除」操作条 → 点击「批量删除」→ 二次确认弹窗 → 确认后调用删除接口 → 刷新列表并清空选中状态。',
-          ac: [
-            '未勾选任何行时，批量操作条隐藏',
-            '勾选任意行后即时显示批量操作条，并准确统计已选项数',
-            '点击「批量删除」必须二次确认，确认文案包含选中数量',
-            '删除成功后刷新当前列表并清空所有勾选状态',
-            '删除失败时保留勾选状态并提示错误原因'
-          ]
-        },
-        {
-          id: 'US-003', title: '新增/编辑文案模板', priority: 'P0',
-          shot: '../assets/prd/template-copy-modal.png',
-          desc: '作为投放运营，我想要新建或编辑一条文案模板，以便沉淀常用广告语供自动化任务调用。',
-          filter: '无（弹框内表单即为操作入口）。',
-          fields: '文案类型（单选按钮，必填，枚举：标题、产品卖点）／付费类型（单选按钮，必填，枚举：付费、免费）／语言（下拉选择，必填，枚举与列表筛选保持一致）／文案（多行文本框，必填，占位「请粘贴或者输入文案，回车换行」）。',
-          source: '编辑时回显当前文案模板详情 ← 后端接口；新增时表单为空。',
-          flow: '点击「新增文案」打开新增弹框（标题「新增文案」）→ 选择文案类型、付费类型、语言并填写文案 → 点击「确定」保存；点击「编辑」打开编辑弹框（标题「编辑文案」）→ 回显原字段 → 修改后点击「确定」保存。',
-          ac: [
-            '新增时所有字段为空，编辑时回显原数据',
-            '文案类型、付费类型、语言为必填项',
-            '文案为必填项，支持多行输入',
-            '点击「确定」后关闭弹框并刷新列表；点击「取消」不保存并关闭弹框',
-            '保存失败时在对应表单项下方提示错误信息'
-          ]
-        },
-        {
-          id: 'US-004', title: '删除单条文案模板', priority: 'P1',
-          shot: '../assets/prd/template-copy-delete.png',
-          desc: '作为投放运营，我想要删除单条文案模板，以便及时清理错误或过时的文案。',
-          filter: '无。',
-          fields: '操作列提供「删除」链接。',
-          source: '删除目标 ID ← 当前行数据。',
-          flow: '在列表操作列点击「删除」→ 二次确认弹窗 → 确认后调用删除接口 → 刷新列表。',
-          ac: [
-            '删除前必须二次确认',
-            '删除成功后从列表中移除该行并更新总数',
-            '删除失败时保留该行并提示错误原因'
-          ]
-        }
-      ];
-
-      window.prdStoriesTiktok = [
+      window.prdStories = [
         {
           id: 'US-001', title: 'TikTok 账号包列表查询与展示', priority: 'P0',
           shot: '../assets/prd/template-tiktok-list.png',
@@ -1342,8 +1104,6 @@
           ]
         }
       ];
-
-      window.prdStories = window.prdStoriesCopy;
     </script>
     <script src="../scripts/prd.js?v=20260929"></script>
     <script src="../scripts/header-user.js?v=20260929"></script>
