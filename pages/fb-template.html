@@ -3,18 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>模板管理 - 海外投放系统</title>
+    <title>模板管理 · FaceBook - 海外投放系统</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="../styles/main.css?v=20261008b" />
     <link rel="stylesheet" href="../styles/theme-antd.css?v=20261008b" />
-    <link rel="stylesheet" href="../styles/prd.css?v=20261008b" />
     <link rel="stylesheet" href="../styles/multi-select.css?v=20261008b" />
   </head>
   <body class="theme-antd">
-        <!-- Top Bar（全宽：品牌 + 用户） -->
+    <!-- Top Bar（全宽：品牌 + 用户） -->
     <header class="app-bar">
       <div class="app-bar-left">
-<div class="logo">
+        <div class="logo">
           <div class="logo-icon">海</div>
           <div class="logo-info">
             <span class="logo-name">海外投放系统</span>
@@ -130,28 +129,27 @@
       </div>
     </header>
 
-<div class="layout">
+    <div class="layout">
       <!-- Sidebar -->
       <aside class="sidebar">
-        
-        <nav class="nav">
+                <nav class="nav">
           <div class="nav-section">
-            <div class="nav-item has-children expanded">
+            <div class="nav-item has-children">
               <span class="nav-item-icon">🎵</span>
               <span>TikTok</span>
-              <span class="nav-item-caret">▼</span>
+              <span class="nav-item-caret">▶</span>
             </div>
             <div class="nav-children">
               <span class="nav-child-item">项目管理</span>
               <span class="nav-child-item">数据统计</span>
-              <span class="nav-child-item has-children expanded active">
+              <span class="nav-child-item has-children">
                 <span>批量投放</span>
-                <span class="nav-child-caret">▼</span>
+                <span class="nav-child-caret">▶</span>
               </span>
               <div class="nav-grandchildren">
                 <span class="nav-grandchild-item" data-page="overseas-batch-delivery">批量投放</span>
                 <span class="nav-grandchild-item" data-page="overseas-auto-delivery">自动化任务</span>
-                <span class="nav-grandchild-item active" data-page="overseas-template">模板管理</span>
+                <span class="nav-grandchild-item" data-page="overseas-template">模板管理</span>
               </div>
               <span class="nav-child-item has-children">
                 <span>账号管理</span>
@@ -168,22 +166,22 @@
           </div>
 
           <div class="nav-section">
-            <div class="nav-item has-children">
+            <div class="nav-item has-children expanded">
               <span class="nav-item-icon">📘</span>
               <span>FaceBook</span>
-              <span class="nav-item-caret">▶</span>
+              <span class="nav-item-caret">▼</span>
             </div>
             <div class="nav-children">
               <span class="nav-child-item">项目管理</span>
               <span class="nav-child-item">数据统计</span>
-              <span class="nav-child-item has-children">
+              <span class="nav-child-item has-children expanded active">
                 <span>批量投放</span>
-                <span class="nav-child-caret">▶</span>
+                <span class="nav-child-caret">▼</span>
               </span>
               <div class="nav-grandchildren">
                 <span class="nav-grandchild-item" data-page="fb-batch-delivery">批量投放</span>
                 <span class="nav-grandchild-item" data-page="fb-auto-delivery">自动化任务</span>
-                <span class="nav-grandchild-item" data-page="fb-template">模板管理</span>
+                <span class="nav-grandchild-item active" data-page="fb-template">模板管理</span>
               </div>
               <span class="nav-child-item has-children">
                 <span>账号管理</span>
@@ -238,13 +236,11 @@
               <span class="nav-child-item" data-page="overseas-system-user">用户管理</span>
             </div>
           </div>
-
         </nav>
       </aside>
 
       <!-- Main Content -->
       <main class="main">
-        
 
         <!-- Content -->
         <div class="content">
@@ -258,8 +254,8 @@
     <span class="breadcrumb-sep">/</span>
     <span>模板管理</span>
   </div>
-  <div class="content-card">
   <!-- Tabs -->
+  <div class="content-card">
   <div class="tabs" id="template-tabs">
     <button class="tab active" data-tab="account" onclick="switchTemplateTab('account')">账户包</button>
     <button class="tab" data-tab="target" onclick="switchTemplateTab('target')">定向包</button>
@@ -502,6 +498,8 @@
     </div>
   </div>
 
+  </div>
+
   <!-- 账户包 新增/编辑/复制 抽屉 -->
   <div id="template-account-overlay" class="drawer-overlay" onclick="closeAccountDrawer()"></div>
   <div id="template-account-drawer" class="drawer drawer-wide">
@@ -634,7 +632,7 @@
                 <input type="number" class="form-input form-input-md" placeholder="起始集" value="1" />
                 <span>至</span>
                 <input type="number" class="form-input form-input-md" placeholder="结束集" value="6" />
-                <span style="color:var(--color-text-secondary);">$</span>
+                <span class="currency" style="color:var(--color-text-secondary);">$</span>
                 <input type="number" class="form-input form-input-md" placeholder="金额" step="0.01" value="0.99" />
                 <a href="#" class="link link-danger">删除</a>
               </div>
@@ -642,7 +640,7 @@
                 <input type="number" class="form-input form-input-md" placeholder="起始集" value="7" />
                 <span>至</span>
                 <input type="number" class="form-input form-input-md" placeholder="结束集" value="25" />
-                <span style="color:var(--color-text-secondary);">$</span>
+                <span class="currency" style="color:var(--color-text-secondary);">$</span>
                 <input type="number" class="form-input form-input-md" placeholder="金额" step="0.01" value="0.66" />
                 <a href="#" class="link link-danger">删除</a>
               </div>
@@ -725,14 +723,15 @@
   <!-- 定向包 新增/编辑/复制 抽屉 -->
   <div id="template-target-overlay" class="drawer-overlay" onclick="closeTargetDrawer()"></div>
   <div id="template-target-drawer" class="drawer drawer-narrow">
-    <div class="drawer-card">
+    <div class="drawer-card page-fb-template">
       <div class="drawer-header">
         <span id="template-target-title">新增定向包</span>
         <button class="drawer-close" onclick="closeTargetDrawer()">×</button>
       </div>
       <div class="drawer-body">
+        <!-- 基础人口属性 -->
         <div class="form-section">
-          <div class="form-section-title">定向信息</div>
+          <div class="form-section-title">基础人口属性</div>
           <div class="form-row">
             <div class="form-label required">定向包名称：</div>
             <div class="form-field form-field-inline" style="width:100%;">
@@ -742,11 +741,25 @@
           </div>
           <div class="form-row">
             <div class="form-label">性别：</div>
-            <div class="form-field"><select class="form-select form-input-md"><option>不限</option><option>男</option><option>女</option></select></div>
+            <div class="form-field">
+              <div class="radio-group">
+                <label class="radio-item"><input type="radio" name="target-gender" value="all" checked /> 不限</label>
+                <label class="radio-item"><input type="radio" name="target-gender" value="1" /> 男</label>
+                <label class="radio-item"><input type="radio" name="target-gender" value="2" /> 女</label>
+              </div>
+            </div>
           </div>
           <div class="form-row">
             <div class="form-label required">年龄：</div>
-            <div class="form-field"><select class="form-select form-input-md"><option>请选择</option></select></div>
+            <div class="form-field form-field-inline" style="width:100%;">
+              <select id="target-age-min" class="form-select form-input-md">
+                <option value="">最小年龄</option>
+              </select>
+              <span class="form-sep">至</span>
+              <select id="target-age-max" class="form-select form-input-md">
+                <option value="">最大年龄</option>
+              </select>
+            </div>
           </div>
           <div class="form-row">
             <div class="form-label">语言：</div>
@@ -755,32 +768,37 @@
             </div>
           </div>
         </div>
+
+        <!-- 地理位置 -->
         <div class="form-section">
-          <div class="form-section-title">地区定向信息</div>
+          <div class="form-section-title">地理位置</div>
           <div class="drawer-split">
             <div>
+              <div class="geo-tabs" id="target-geo-tabs">
+                <button class="geo-tab active" data-level="country" onclick="switchGeoTab('country')">国家</button>
+                <button class="geo-tab" data-level="region" onclick="switchGeoTab('region')">区域</button>
+                <button class="geo-tab" data-level="city" onclick="switchGeoTab('city')">城市</button>
+              </div>
               <div class="modal-filter" style="margin-bottom:8px;">
-                <input type="text" class="form-input" placeholder="请输入关键字搜索" style="flex:1;" />
-                <button class="btn btn-outline btn-sm">搜索</button>
+                <select id="target-geo-country" class="form-select form-input-md" style="max-width:160px;" onchange="reloadGeoList()">
+                  <option value="">所有国家</option>
+                </select>
+                <input type="text" id="target-geo-search" class="form-input" placeholder="请输入关键字搜索" style="flex:1;" />
+                <button class="btn btn-outline btn-sm" onclick="reloadGeoList()">搜索</button>
               </div>
               <div class="region-select-box">
-                <div class="region-select-header"><label><input type="checkbox" /> 全选</label><span>名称</span><span>操作</span></div>
+                <div class="region-select-header"><label><input type="checkbox" id="target-geo-all" onclick="toggleSelectAll(this)" /> 全选</label><span>名称</span><span>操作</span></div>
                 <div class="region-select-body">
-                  <ul class="region-select-list">
-                    <li><label><input type="checkbox" /> 意大利</label><span class="region-select-action">定向</span></li>
-                    <li><label><input type="checkbox" /> 阿根廷</label><span class="region-select-action">定向</span></li>
-                    <li><label><input type="checkbox" /> 希腊</label><span class="region-select-action">定向</span></li>
-                    <li><label><input type="checkbox" /> 巴西</label><span class="region-select-action">定向</span></li>
-                    <li><label><input type="checkbox" /> 科威特</label><span class="region-select-action">定向</span></li>
-                    <li><label><input type="checkbox" /> 巴拿马</label><span class="region-select-action">定向</span></li>
+                  <ul class="region-select-list" id="target-geo-list">
+                    <!-- 由 JS 渲染 -->
                   </ul>
                 </div>
               </div>
             </div>
             <div>
-              <div class="region-select-header" style="border-radius:4px 4px 0 0;"><span>已选</span><span class="region-select-action">批量导入</span><span class="region-select-action">清除</span></div>
+              <div class="region-select-header" style="border-radius:4px 4px 0 0;"><span>已选（<em id="target-geo-count">0</em>）</span><span class="region-select-action" onclick="importGeoBatch()">批量导入</span><span class="region-select-action" onclick="clearTargetGeo()">清除</span></div>
               <div class="region-select-box" style="border-top:none;border-radius:0 0 4px 4px;">
-                <div class="region-select-body">
+                <div class="region-select-body" id="target-geo-selected">
                   <div class="empty-state" style="padding:60px 20px;"><div class="empty-state-icon">📍</div><span>暂无数据</span></div>
                 </div>
               </div>
@@ -790,16 +808,16 @@
       </div>
       <div class="drawer-footer">
         <button class="btn btn-outline btn-sm" onclick="closeTargetDrawer()">取消</button>
-        <button class="btn btn-primary btn-sm" onclick="closeTargetDrawer()">确定</button>
+        <button class="btn btn-primary btn-sm" onclick="saveTarget()">确定</button>
       </div>
     </div>
   </div>
 </div>
 
-  </div>
         </div>
       </main>
     </div>
+
 
     <!-- 定向包共享数据模块（必须在所有内联脚本之前加载，否则 IIFE 中调用不到 filterTargetingPackages） -->
     <script src="../scripts/targeting-packages.js?v=20260930"></script>
@@ -816,7 +834,9 @@
 
       function showPage(pageName) {
         if (pageName.indexOf('fb-') === 0) {
-          window.location.href = navUrl('pages/' + pageName + '.html');
+          if (pageName !== 'fb-template') {
+            window.location.href = navUrl('pages/' + pageName + '.html');
+          }
           return;
         }
         if (pageName === 'overseas-tiktok-account') {
@@ -831,7 +851,10 @@
           window.location.href = navUrl('pages/overseas-app.html');
           return;
         }
-        if (pageName === 'overseas-template') return;
+        if (pageName === 'overseas-template') {
+          window.location.href = navUrl('pages/overseas-template.html');
+          return;
+        }
         if (pageName === 'overseas-batch-delivery') {
           window.location.href = navUrl('pages/overseas-batch-delivery.html');
           return;
@@ -969,13 +992,13 @@
         root.querySelectorAll('.filter-select').forEach(function (s) { s.selectedIndex = 0; });
       }
 
-      // 模板列表 API 配置：当前页面属于 TikTok 渠道
+      // 模板列表 API 配置：当前页面属于 FaceBook 渠道
       var TEMPLATE_API = {
         account: '/api/templates/account',
         recharge: '/api/templates/recharge',
         callback: '/api/templates/callback'
       };
-      var TEMPLATE_CHANNEL = 'tiktok';
+      var TEMPLATE_CHANNEL = 'fb';
 
       function getTemplateFilter(tab) {
         var root = document.getElementById('template-tab-' + tab);
@@ -1210,8 +1233,8 @@
       }
       function confirmBatchAdd() {
         var ids = getBatchAddIds();
-        if (ids.length === 0) { showToast('请输入账户ID', 'error'); return; }
-        if (ids.length > BATCH_ADD_MAX) { showToast('最多可添加 ' + BATCH_ADD_MAX + ' 个账户ID', 'error'); return; }
+        if (ids.length === 0) { alert('请输入账户ID'); return; }
+        if (ids.length > BATCH_ADD_MAX) { alert('最多可添加 ' + BATCH_ADD_MAX + ' 个账户ID'); return; }
         var tbody = document.getElementById('account-selected-tbody');
         if (!tbody) return;
         // 去掉空态占位行
@@ -1232,7 +1255,7 @@
         updateSelectedAccountCount();
         closeBatchAddModal();
         clearBatchAddTextarea();
-        if (dup > 0) showToast('已添加 ' + added + ' 个账户ID，' + dup + ' 个重复ID已忽略', 'success');
+        if (dup > 0) alert('已添加 ' + added + ' 个账户ID，' + dup + ' 个重复ID已忽略');
       }
 
       /* ===== 充值模板 / 回传模板 抽屉 ===== */
@@ -1265,6 +1288,20 @@
       }
 
       /* 定向包抽屉 */
+      function openTargetDrawer(mode, name) {
+        var titles = { add: '新增定向包', edit: '编辑定向包', copy: '复制定向包' };
+        document.getElementById('template-target-title').textContent = titles[mode] || '新增定向包';
+        document.getElementById('target-name').value = (mode === 'edit' || mode === 'copy') ? (name || '') : '';
+        document.getElementById('template-target-overlay').classList.add('open');
+        document.getElementById('template-target-drawer').classList.add('open');
+        initTargetDrawer();
+      }
+      function closeTargetDrawer() {
+        document.getElementById('template-target-overlay').classList.remove('open');
+        document.getElementById('template-target-drawer').classList.remove('open');
+      }
+
+      /* ===== 定向包：年龄 / 语言 / 地区 数据源 ===== */
       var TARGET_LOCALES = [
         { id: 6,  name: '英语 (English)' }, { id: 1,  name: '中文 (简体)' },
         { id: 2,  name: '中文 (繁体)' },    { id: 17, name: '西班牙语' },
@@ -1277,8 +1314,77 @@
         { id: 18, name: '土耳其语' }
       ];
 
-      /* 语言字段：公用多选下拉组件（styles/multi-select.css + scripts/multi-select.js） */
-      var targetLocaleMs = null;
+      var TARGET_COUNTRIES = [
+        { code: 'US', name: '美国' },     { code: 'GB', name: '英国' },
+        { code: 'JP', name: '日本' },     { code: 'KR', name: '韩国' },
+        { code: 'DE', name: '德国' },     { code: 'FR', name: '法国' },
+        { code: 'IT', name: '意大利' },   { code: 'ES', name: '西班牙' },
+        { code: 'PT', name: '葡萄牙' },   { code: 'BR', name: '巴西' },
+        { code: 'AR', name: '阿根廷' },   { code: 'MX', name: '墨西哥' },
+        { code: 'CA', name: '加拿大' },   { code: 'AU', name: '澳大利亚' },
+        { code: 'IN', name: '印度' },     { code: 'ID', name: '印尼' },
+        { code: 'TH', name: '泰国' },     { code: 'VN', name: '越南' },
+        { code: 'PH', name: '菲律宾' },   { code: 'MY', name: '马来西亚' },
+        { code: 'SG', name: '新加坡' },   { code: 'AE', name: '阿联酋' },
+        { code: 'SA', name: '沙特' },     { code: 'TR', name: '土耳其' },
+        { code: 'EG', name: '埃及' },     { code: 'NG', name: '尼日利亚' },
+        { code: 'ZA', name: '南非' },     { code: 'GR', name: '希腊' },
+        { code: 'KW', name: '科威特' },   { code: 'PA', name: '巴拿马' }
+      ];
+
+      var TARGET_REGIONS = [
+        { id: 'US-CA', name: '加利福尼亚', country: 'US' },
+        { id: 'US-NY', name: '纽约',       country: 'US' },
+        { id: 'US-TX', name: '得克萨斯',   country: 'US' },
+        { id: 'JP-13', name: '东京都',     country: 'JP' },
+        { id: 'JP-27', name: '大阪府',     country: 'JP' },
+        { id: 'KR-11', name: '首尔',       country: 'KR' },
+        { id: 'GB-LND', name: '伦敦',      country: 'GB' },
+        { id: 'DE-BE', name: '柏林',       country: 'DE' },
+        { id: 'FR-IDF', name: '巴黎',      country: 'FR' },
+        { id: 'IT-MI', name: '米兰',       country: 'IT' },
+        { id: 'BR-SP', name: '圣保罗',     country: 'BR' },
+        { id: 'AU-NSW', name: '新南威尔士',country: 'AU' }
+      ];
+
+      var TARGET_CITIES = [
+        { id: '2418779', name: '伦敦 (London)', country: 'GB' },
+        { id: '2334456', name: '纽约 (New York)', country: 'US' },
+        { id: '2487610', name: '巴黎 (Paris)', country: 'FR' },
+        { id: '2442047', name: '东京 (Tokyo)', country: 'JP' },
+        { id: '2339945', name: '柏林 (Berlin)', country: 'DE' },
+        { id: '2385029', name: '米兰 (Milan)', country: 'IT' },
+        { id: '2391279', name: '首尔 (Seoul)', country: 'KR' }
+      ];
+
+      var targetGeoLevel = 'country';
+      var targetGeoSelected = []; /* {id, name, level} */
+      var targetLocaleMs = null;  /* 语言多选下拉组件实例（MultiSelect） */
+
+      function initTargetDrawer() {
+        // 年龄 13–65
+        var ageMin = document.getElementById('target-age-min');
+        var ageMax = document.getElementById('target-age-max');
+        if (ageMin.options.length <= 1) {
+          for (var i = 13; i <= 65; i++) {
+            ageMin.add(new Option(i, i));
+            ageMax.add(new Option(i, i));
+          }
+        }
+        // 语言：公用多选下拉组件（面板内带复选框）
+        initLocaleMultiSelect();
+        // 国家下拉（用于筛选 region/city）
+        var cSel = document.getElementById('target-geo-country');
+        if (cSel.options.length <= 1) {
+          TARGET_COUNTRIES.forEach(function (c) {
+            cSel.add(new Option(c.code + ' ' + c.name, c.code));
+          });
+        }
+        reloadGeoList();
+        renderTargetGeoSelected();
+      }
+
+      /* 语言字段：初始化公用多选下拉组件（styles/multi-select.css + scripts/multi-select.js） */
       function initLocaleMultiSelect() {
         if (targetLocaleMs) return;
         var field = document.getElementById('target-locale-field');
@@ -1294,21 +1400,152 @@
         });
       }
 
-      function openTargetDrawer(mode, name) {
-        var titles = { add: '新增定向包', edit: '编辑定向包', copy: '复制定向包' };
-        document.getElementById('template-target-title').textContent = titles[mode] || '新增定向包';
-        document.getElementById('target-name').value = (mode === 'edit' || mode === 'copy') ? (name || '') : '';
-        document.getElementById('template-target-overlay').classList.add('open');
-        document.getElementById('template-target-drawer').classList.add('open');
-        initLocaleMultiSelect();
+      function switchGeoTab(level) {
+        targetGeoLevel = level;
+        document.querySelectorAll('#target-geo-tabs .geo-tab').forEach(function (b) {
+          b.classList.toggle('active', b.dataset.level === level);
+        });
+        reloadGeoList();
       }
-      function closeTargetDrawer() {
-        document.getElementById('template-target-overlay').classList.remove('open');
-        document.getElementById('template-target-drawer').classList.remove('open');
-      }
-    </script>
 
-    <script>
+      function getGeoList() {
+        var country = document.getElementById('target-geo-country').value;
+        var kw = (document.getElementById('target-geo-search').value || '').trim().toLowerCase();
+        var list = (targetGeoLevel === 'country') ? TARGET_COUNTRIES
+                  : (targetGeoLevel === 'region')  ? TARGET_REGIONS
+                  :                                 TARGET_CITIES;
+        var filtered = list.filter(function (x) {
+          if (country && targetGeoLevel !== 'country' && x.country !== country) return false;
+          if (kw && x.name.toLowerCase().indexOf(kw) < 0 && (x.id || '').toString().toLowerCase().indexOf(kw) < 0) return false;
+          return true;
+        });
+        return filtered;
+      }
+
+      function reloadGeoList() {
+        var ul = document.getElementById('target-geo-list');
+        ul.innerHTML = '';
+        var list = getGeoList();
+        if (!list.length) {
+          ul.innerHTML = '<li style="padding:14px;color:#909399;text-align:center;">暂无数据</li>';
+          return;
+        }
+        list.forEach(function (x) {
+          var key = targetGeoLevel + ':' + x.id;
+          var li = document.createElement('li');
+          li.innerHTML = '<label><input type="checkbox" data-key="' + key + '" /> '
+            + (x.name || x.code) + '</label><span class="region-select-action" data-add="' + key + '">定向</span>';
+          li.querySelector('[data-add]').onclick = function () {
+            addTargetGeo(x.id, x.name || x.code, targetGeoLevel);
+          };
+          li.querySelector('input').onchange = function (e) {
+            if (e.target.checked) addTargetGeo(x.id, x.name || x.code, targetGeoLevel);
+            else removeTargetGeo(key);
+          };
+          ul.appendChild(li);
+        });
+        // 同步已选的勾选状态
+        targetGeoSelected.forEach(function (s) {
+          var cb = ul.querySelector('input[data-key="' + s.key + '"]');
+          if (cb) cb.checked = true;
+        });
+      }
+
+      function addTargetGeo(id, name, level) {
+        var key = level + ':' + id;
+        if (targetGeoSelected.some(function (s) { return s.key === key; })) return;
+        targetGeoSelected.push({ key: key, id: id, name: name, level: level });
+        renderTargetGeoSelected();
+        var cb = document.querySelector('#target-geo-list input[data-key="' + key + '"]');
+        if (cb) cb.checked = true;
+      }
+      function removeTargetGeo(key) {
+        targetGeoSelected = targetGeoSelected.filter(function (s) { return s.key !== key; });
+        renderTargetGeoSelected();
+        var cb = document.querySelector('#target-geo-list input[data-key="' + key + '"]');
+        if (cb) cb.checked = false;
+      }
+      function clearTargetGeo() {
+        targetGeoSelected = [];
+        renderTargetGeoSelected();
+        document.querySelectorAll('#target-geo-list input[type=checkbox]').forEach(function (cb) { cb.checked = false; });
+        document.getElementById('target-geo-all').checked = false;
+      }
+      function toggleSelectAll(master) {
+        var list = getGeoList();
+        list.forEach(function (x) {
+          var key = targetGeoLevel + ':' + x.id;
+          var has = targetGeoSelected.some(function (s) { return s.key === key; });
+          if (master.checked && !has) addTargetGeo(x.id, x.name || x.code, targetGeoLevel);
+          if (!master.checked && has) removeTargetGeo(key);
+        });
+      }
+      function importGeoBatch() {
+        var ta = prompt('批量导入：每行一个名称/代码/ID，例如：US / JP / 2442047', '');
+        if (!ta) return;
+        ta.split(/\r?\n/).map(function (s) { return s.trim(); }).filter(Boolean).forEach(function (raw) {
+          var hit = TARGET_COUNTRIES.find(function (x) { return x.code === raw || x.name === raw; })
+                 || TARGET_REGIONS.find(function (x)   { return x.id === raw || x.name === raw; })
+                 || TARGET_CITIES.find(function (x)   { return x.id === raw || x.name === raw; });
+          if (hit) {
+            var lvl = TARGET_COUNTRIES.indexOf(hit) >= 0 ? 'country'
+                    : TARGET_REGIONS.indexOf(hit)   >= 0 ? 'region'
+                    : 'city';
+            addTargetGeo(hit.id, hit.name || hit.code, lvl);
+          }
+        });
+      }
+      function renderTargetGeoSelected() {
+        var box = document.getElementById('target-geo-selected');
+        document.getElementById('target-geo-count').textContent = targetGeoSelected.length;
+        if (!targetGeoSelected.length) {
+          box.innerHTML = '<div class="empty-state" style="padding:60px 20px;"><div class="empty-state-icon">📍</div><span>暂无数据</span></div>';
+          return;
+        }
+        var html = '<ul class="region-select-list">';
+        targetGeoSelected.forEach(function (s) {
+          var lvlLabel = ({ country: '国家', region: '区域', city: '城市' })[s.level] || s.level;
+          html += '<li><label><span class="region-tag">' + lvlLabel + '</span>' + s.name + '</label><span class="region-select-action" data-rm="' + s.key + '">移除</span></li>';
+        });
+        html += '</ul>';
+        box.innerHTML = html;
+        box.querySelectorAll('[data-rm]').forEach(function (el) {
+          el.onclick = function () { removeTargetGeo(el.dataset.rm); };
+        });
+      }
+
+      function saveTarget() {
+        var name = (document.getElementById('target-name').value || '').trim();
+        if (!name) { alert('请输入定向包名称'); return; }
+        var ageMin = document.getElementById('target-age-min').value;
+        var ageMax = document.getElementById('target-age-max').value;
+        if (ageMin && ageMax && parseInt(ageMin) > parseInt(ageMax)) {
+          alert('最小年龄不能大于最大年龄'); return;
+        }
+        var gender = (document.querySelector('input[name="target-gender"]:checked') || {}).value;
+        var localeIds = targetLocaleMs ? targetLocaleMs.getSelectedIds().map(function (id) { return parseInt(id, 10); }) : [];
+        var geo = { countries: [], regions: [], cities: [] };
+        targetGeoSelected.forEach(function (s) {
+          var key = s.level === 'country' ? 'countries' : s.level === 'region' ? 'regions' : 'cities';
+          geo[key].push(s.id);
+        });
+        var targeting = {};
+        if (gender === '1') targeting.genders = [1];
+        else if (gender === '2') targeting.genders = [2];
+        if (ageMin) targeting.age_min = parseInt(ageMin, 10);
+        if (ageMax) targeting.age_max = parseInt(ageMax, 10);
+        if (localeIds.length) targeting.locales = localeIds;
+        if (geo.countries.length || geo.regions.length || geo.cities.length) {
+          targeting.geo_locations = {};
+          if (geo.countries.length) targeting.geo_locations.countries = geo.countries;
+          if (geo.regions.length)   targeting.geo_locations.regions   = geo.regions.map(function (id) { return { id: id }; });
+          if (geo.cities.length)    targeting.geo_locations.cities    = geo.cities.map(function (id) { return { id: id }; });
+        }
+        console.log('保存定向包', { name: name, targeting: targeting });
+        alert('已保存\n' + JSON.stringify({ name: name, targeting: targeting }, null, 2));
+        closeTargetDrawer();
+      }
+
       /* ===== 定向包 tab 渲染（数据源：localStorage['delivery_targeting_packages']，由 scripts/targeting-packages.js 维护） ===== */
       function rerenderTemplateTarget() {
         var tbody = document.getElementById('template-target-tbody');

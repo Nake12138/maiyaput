@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>应用 - 海外投放系统</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../styles/main.css?v=20261008b" />
+    <link rel="stylesheet" href="../styles/theme-antd.css?v=20261008b" />
+    <style>
+      /* ===== 资产管理-应用 页面局部样式 ===== */
+      .cell-main { display: block; }
+      .cell-sub { display: block; font-size: 12px; color: #9ca3af; margin-top: 2px; white-space: nowrap; }
+      /* 操作列间距与删除色由全站规范统一接管（原 gap:14px 与 link-danger 局部覆盖已移除） */
+    </style>
+  </head>
+  <body class="theme-antd">
+        <!-- Top Bar（全宽：品牌 + 用户） -->
+    <header class="app-bar">
+      <div class="app-bar-left">
+<div class="logo">
+          <div class="logo-icon">海</div>
+          <div class="logo-info">
+            <span class="logo-name">海外投放系统</span>
+            <span class="system-switch-trigger" onclick="toggleSystemMenu(event)">切换系统 <span class="system-switch-caret">▾</span></span>
+          </div>
+          <div class="system-switch-menu" id="systemSwitchMenu">
+            <div class="system-switch-item" data-system="cn" onclick="switchSystem('cn')">国内投放系统</div>
+            <div class="system-switch-item active" data-system="overseas" onclick="switchSystem('overseas')">海外投放系统<span class="check">✓</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="app-bar-right">
+        <!-- 时区切换器 -->
+        <div class="tz-switcher">
+          <select class="tz-select" aria-label="时区切换">
+            <option value="UTC+8" selected>UTC+8</option>
+            <option value="UTC+0">UTC+0</option>
+            <option value="UTC+7">UTC+7</option>
+            <option value="UTC+9">UTC+9</option>
+            <option value="UTC-5">UTC-5</option>
+          </select>
+          <svg class="tz-caret" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+            <path d="M2 3.75L5 6.75L8 3.75" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+
+        <!-- 文档下载 -->
+        <button type="button" class="header-icon-btn" title="文档下载" aria-label="文档下载" onclick="alert('下载文档')">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+            <path d="M9 2.75V10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+            <path d="M5.75 7.5L9 10.75L12.25 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M3.25 12.25V13.5C3.25 14.47 4.03 15.25 5 15.25H13C13.97 15.25 14.75 14.47 14.75 13.5V12.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+          </svg>
+        </button>
+
+        <!-- 用户信息 -->
+        <div class="user-profile-wrap" id="userProfileWrap">
+          <button type="button" class="user-profile" id="userProfileTrigger" aria-haspopup="true" aria-expanded="false">
+            <span class="user-profile-avatar" aria-hidden="true">
+              <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="20" cy="20" r="20" fill="#dce5ef" />
+              <circle cx="20" cy="25.5" r="9.5" fill="#2f3d56" />
+              <rect x="17.4" y="17.5" width="5.2" height="6" rx="2.6" fill="#e0a97f" />
+              <ellipse cx="20" cy="15.6" rx="6.4" ry="7" fill="#f0c19b" />
+              <path d="M20 6.8c4.6 0 7.8 3.1 7.8 7.4 0 .6-.06 1.2-.18 1.75-.9-1.5-2.3-2.2-3.9-3.1-1.9 1.05-4.1 1.55-6.4 1.55-.8 0-1.5-.06-2.2-.18-.5.6-.9 1.3-1.15 2.05-.12-.6-.18-1.2-.18-1.85C12.2 9.9 15.4 6.8 20 6.8z" fill="#e8562a" />
+            </svg>
+            </span>
+            <span class="user-profile-meta">
+              <span class="user-profile-name">娜可 <em>(nake)</em></span>
+              <span class="user-profile-email">nake06870@maiyawx.com</span>
+            </span>
+            <svg class="user-profile-caret" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+              <path d="M2 3.75L5 6.75L8 3.75" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+
+          <div class="user-dropdown" id="userDropdown" role="menu">
+            <!-- 账号信息 + 复制邮箱 -->
+            <div class="user-dropdown-head">
+              <span class="user-dropdown-avatar" aria-hidden="true">
+                <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="20" cy="20" r="20" fill="#dce5ef" />
+                <circle cx="20" cy="25.5" r="9.5" fill="#2f3d56" />
+                <rect x="17.4" y="17.5" width="5.2" height="6" rx="2.6" fill="#e0a97f" />
+                <ellipse cx="20" cy="15.6" rx="6.4" ry="7" fill="#f0c19b" />
+                <path d="M20 6.8c4.6 0 7.8 3.1 7.8 7.4 0 .6-.06 1.2-.18 1.75-.9-1.5-2.3-2.2-3.9-3.1-1.9 1.05-4.1 1.55-6.4 1.55-.8 0-1.5-.06-2.2-.18-.5.6-.9 1.3-1.15 2.05-.12-.6-.18-1.2-.18-1.85C12.2 9.9 15.4 6.8 20 6.8z" fill="#e8562a" />
+              </svg>
+              </span>
+              <span class="user-dropdown-meta">
+                <span class="user-dropdown-name">娜可 <em>(nake)</em></span>
+                <span class="user-dropdown-email" title="nake06870@maiyawx.com">nake06870@maiyawx.com</span>
+              </span>
+              <button type="button" class="copy-mail-btn" id="copyMailBtn" title="复制邮箱" aria-label="复制邮箱">
+                <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <rect x="5.9" y="5.9" width="7.35" height="7.35" rx="1.7" stroke="currentColor" stroke-width="1.3" />
+                  <path d="M10.3 3.95V3.1c0-.88-.72-1.6-1.6-1.6H3.9c-.88 0-1.6.72-1.6 1.6v4.8c0 .88.72 1.6 1.6 1.6h.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                </svg>
+              </button>
+            </div>
+            <div class="user-dropdown-sep"></div>
+            <!-- 帮助指南 -->
+            <button type="button" class="user-dropdown-item" data-action="help" role="menuitem">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <circle cx="8" cy="8" r="6.25" stroke="currentColor" stroke-width="1.3" />
+                <path d="M6.35 6.1c.1-.88.85-1.5 1.68-1.5.9 0 1.62.6 1.62 1.47 0 .78-.5 1.1-1.05 1.48-.5.35-.75.62-.75 1.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                <circle cx="7.87" cy="11.35" r=".85" fill="currentColor" />
+              </svg>
+              帮助指南
+            </button>
+            <!-- 清除缓存 -->
+            <button type="button" class="user-dropdown-item" data-action="clear-cache" role="menuitem">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M2.75 4.5h10.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                <path d="M6.25 4.5V3.4c0-.47.38-.85.85-.85h1.8c.47 0 .85.38.85.85V4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                <path d="M4.4 4.5l.55 8.05c.03.5.45.9.95.9h4.2c.5 0 .92-.4.95-.9l.55-8.05" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                <path d="M6.9 7v4M9.1 7v4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+              </svg>
+              清除缓存
+            </button>
+            <div class="user-dropdown-sep"></div>
+            <!-- 退出登录 -->
+            <button type="button" class="user-dropdown-item danger" data-action="logout" role="menuitem">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M6.5 13.25H3.9c-.64 0-1.15-.51-1.15-1.15V3.9c0-.64.51-1.15 1.15-1.15h2.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                <path d="M10.4 10.8L13.25 8 10.4 5.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M13 8H6.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+              </svg>
+              退出登录
+            </button>
+          </div>
+        </div>
+      
+      </div>
+    </header>
+
+<div class="layout">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        
+        <nav class="nav">
+          <div class="nav-section">
+            <div class="nav-item has-children expanded">
+              <span class="nav-item-icon">🎵</span>
+              <span>TikTok</span>
+              <span class="nav-item-caret">▼</span>
+            </div>
+            <div class="nav-children">
+              <span class="nav-child-item">项目管理</span>
+              <span class="nav-child-item">数据统计</span>
+              <span class="nav-child-item has-children">
+                <span>批量投放</span>
+                <span class="nav-child-caret">▶</span>
+              </span>
+              <div class="nav-grandchildren">
+                <span class="nav-grandchild-item" data-page="overseas-batch-delivery">批量投放</span>
+                <span class="nav-grandchild-item" data-page="overseas-auto-delivery">自动化任务</span>
+                <span class="nav-grandchild-item" data-page="overseas-template">模板管理</span>
+              </div>
+              <span class="nav-child-item has-children">
+                <span>账号管理</span>
+                <span class="nav-child-caret">▶</span>
+              </span>
+              <div class="nav-grandchildren">
+                <span class="nav-grandchild-item" data-page="overseas-account">账户</span>
+                <span class="nav-grandchild-item" data-page="overseas-app">BC应用</span>
+                <span class="nav-grandchild-item" data-page="overseas-bc">商务中心</span>
+              </div>
+              <span class="nav-child-item">控损管理</span>
+              <span class="nav-child-item">关联绑定</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">📘</span>
+              <span>FaceBook</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+            <div class="nav-children">
+              <span class="nav-child-item">项目管理</span>
+              <span class="nav-child-item">数据统计</span>
+              <span class="nav-child-item has-children">
+                <span>批量投放</span>
+                <span class="nav-child-caret">▶</span>
+              </span>
+              <div class="nav-grandchildren">
+                <span class="nav-grandchild-item" data-page="fb-batch-delivery">批量投放</span>
+                <span class="nav-grandchild-item" data-page="fb-auto-delivery">自动化任务</span>
+                <span class="nav-grandchild-item" data-page="fb-template">模板管理</span>
+              </div>
+              <span class="nav-child-item has-children">
+                <span>账号管理</span>
+                <span class="nav-child-caret">▶</span>
+              </span>
+              <div class="nav-grandchildren">
+                <span class="nav-grandchild-item" data-page="fb-account">账户</span>
+                <span class="nav-grandchild-item" data-page="fb-app">BC应用</span>
+              </div>
+              <span class="nav-child-item">控损管理</span>
+              <span class="nav-child-item" data-page="fb-binding">关联绑定</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">▶</span>
+              <span>短剧管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">▣</span>
+              <span>素材管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children expanded active">
+              <span class="nav-item-icon">🗂️</span>
+              <span>资产管理</span>
+              <span class="nav-item-caret">▼</span>
+            </div>
+            <div class="nav-children">
+              <span class="nav-child-item active" data-page="overseas-asset-app">应用</span>
+              <span class="nav-child-item" data-page="overseas-tiktok-account">TikTok账号</span>
+              <span class="nav-child-item" data-page="overseas-fb-page">公共主页</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">⚙️</span>
+              <span>系统设置</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+            <div class="nav-children">
+              <span class="nav-child-item" data-page="overseas-system-org">组织架构</span>
+              <span class="nav-child-item" data-page="overseas-system-user">用户管理</span>
+            </div>
+          </div>
+
+        </nav>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main">
+        
+
+        <div class="content">
+          <div id="page-overseas-asset-app" class="page active">
+            <div class="breadcrumb">
+              <a href="#" onclick="showPage('dashboard')">首页</a>
+              <span class="breadcrumb-sep">/</span>
+              <span>资产管理</span>
+              <span class="breadcrumb-sep">/</span>
+              <span>应用</span>
+            </div>
+
+            <div class="content-card">
+            <!-- Filter Bar -->
+            <div class="filter-bar">
+              <div class="filter-bar-row">
+                <div class="filter-combo" style="min-width:300px;">
+                  <select class="filter-combo-select"><option>应用名称</option></select>
+                  <input type="text" class="filter-combo-input" id="f-app-name" placeholder="请输入" />
+                </div>
+                <input type="text" class="filter-input" id="f-dist-app-id" placeholder="请输入分销平台应用ID" style="width:220px;" />
+                <div class="filter-combo" style="min-width:300px;">
+                  <select class="filter-combo-select" id="f-pixel-key" onchange="syncAssetPixelPlaceholder()">
+                    <option value="name">Pixel 名称</option>
+                    <option value="id">Pixel ID</option>
+                  </select>
+                  <input type="text" class="filter-combo-input" id="f-pixel-name" placeholder="请输入Pixel名称" />
+                </div>
+                <select class="filter-select" id="f-app-type" style="width:160px;">
+                  <option value="">请选择应用类型</option>
+                  <option value="小程序">小程序</option>
+                  <option value="APP">APP</option>
+                </select>
+                <select class="filter-select" id="f-pay-type" style="width:160px;">
+                  <option value="">请选择付费类型</option>
+                  <option value="免费">免费</option>
+                  <option value="付费">付费</option>
+                </select>
+                <select class="filter-select" id="f-platform" style="width:160px;">
+                  <option value="">请选择平台</option>
+                  <option value="织光">织光</option>
+                  <option value="司南">司南</option>
+                </select>
+              </div>
+
+              <div class="filter-bar-row">
+                <button class="btn btn-primary btn-sm" onclick="searchAssetApps()">查询</button>
+                <button class="btn btn-outline btn-sm" onclick="resetAssetAppFilters()">重置</button>
+                <button class="btn btn-primary btn-sm" onclick="openAssetAppModal()">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                    <path d="M6 1.5v9M1.5 6h9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+                  </svg>
+                  新增
+                </button>
+                <button class="btn btn-sm btn-text" onclick="refreshAssetAppList()">刷新列表</button>
+              </div>
+            </div>
+
+            <!-- App Table -->
+            <div class="table-card">
+              <div class="table-wrapper">
+                <table class="data-table" id="asset-app-table">
+                  <thead>
+                    <tr>
+                      <th>应用名称</th>
+                      <th>分销平台应用ID</th>
+                      <th>Pixel 名称</th>
+                      <th>备注</th>
+                      <th>应用类型</th>
+                      <th>付费类型</th>
+                      <th>平台</th>
+                      <th>更新人</th>
+                      <th>更新时间</th>
+                      <th>操作</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr data-name="3" data-dist-id="" data-pixel="" data-pixel-id="" data-remark="" data-app-type="小程序" data-pay-type="免费" data-platform="织光" data-updater="admin" data-updated="2026-09-21 16:30:44">
+                      <td>
+                        <span class="cell-main">3</span>
+                        <span class="cell-sub">ID: 7672334517253233533</span>
+                      </td>
+                      <td>--</td>
+                      <td>
+                        <span class="cell-main">--</span>
+                        <span class="cell-sub">ID:--</span>
+                      </td>
+                      <td>--</td>
+                      <td>小程序</td>
+                      <td>免费</td>
+                      <td>织光</td>
+                      <td>admin</td>
+                      <td>2026-09-21 16:30:44</td>
+                      <td>
+                        <div class="row-actions">
+                          <a href="#" class="link" onclick="editAssetApp(this);return false;">编辑</a>
+                          <a href="#" class="link link-danger" onclick="openDeleteAssetApp(this);return false;">删除</a>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr data-name="TT_VigoShort" data-dist-id="" data-pixel="" data-pixel-id="" data-remark="" data-app-type="小程序" data-pay-type="免费" data-platform="织光" data-updater="admin" data-updated="2026-09-21 16:30:44">
+                      <td>
+                        <span class="cell-main">TT_VigoShort</span>
+                        <span class="cell-sub">ID: 7672304517253232137</span>
+                      </td>
+                      <td>--</td>
+                      <td>
+                        <span class="cell-main">--</span>
+                        <span class="cell-sub">ID:--</span>
+                      </td>
+                      <td>--</td>
+                      <td>小程序</td>
+                      <td>免费</td>
+                      <td>织光</td>
+                      <td>admin</td>
+                      <td>2026-09-21 16:30:44</td>
+                      <td>
+                        <div class="row-actions">
+                          <a href="#" class="link" onclick="editAssetApp(this);return false;">编辑</a>
+                          <a href="#" class="link link-danger" onclick="openDeleteAssetApp(this);return false;">删除</a>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr data-name="TT_MagoShort" data-dist-id="" data-pixel="" data-pixel-id="" data-remark="" data-app-type="小程序" data-pay-type="免费" data-platform="织光" data-updater="admin" data-updated="2026-09-21 16:30:44">
+                      <td>
+                        <span class="cell-main">TT_MagoShort</span>
+                        <span class="cell-sub">ID: 7672303938922725136</span>
+                      </td>
+                      <td>--</td>
+                      <td>
+                        <span class="cell-main">--</span>
+                        <span class="cell-sub">ID:--</span>
+                      </td>
+                      <td>--</td>
+                      <td>小程序</td>
+                      <td>免费</td>
+                      <td>织光</td>
+                      <td>admin</td>
+                      <td>2026-09-21 16:30:44</td>
+                      <td>
+                        <div class="row-actions">
+                          <a href="#" class="link" onclick="editAssetApp(this);return false;">编辑</a>
+                          <a href="#" class="link link-danger" onclick="openDeleteAssetApp(this);return false;">删除</a>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr data-name="TT_EagoShort" data-dist-id="" data-pixel="" data-pixel-id="" data-remark="" data-app-type="小程序" data-pay-type="免费" data-platform="织光" data-updater="admin" data-updated="2026-09-21 16:30:44">
+                      <td>
+                        <span class="cell-main">TT_EagoShort</span>
+                        <span class="cell-sub">ID: 7672835893022741520</span>
+                      </td>
+                      <td>--</td>
+                      <td>
+                        <span class="cell-main">--</span>
+                        <span class="cell-sub">ID:--</span>
+                      </td>
+                      <td>--</td>
+                      <td>小程序</td>
+                      <td>免费</td>
+                      <td>织光</td>
+                      <td>admin</td>
+                      <td>2026-09-21 16:30:44</td>
+                      <td>
+                        <div class="row-actions">
+                          <a href="#" class="link" onclick="editAssetApp(this);return false;">编辑</a>
+                          <a href="#" class="link link-danger" onclick="openDeleteAssetApp(this);return false;">删除</a>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr data-name="Popkon_app" data-dist-id="689543" data-pixel="默认TikTok Pixel" data-pixel-id="D6I8KD8C7CU7C9MB39AHQ" data-remark="像素aid:D6I8KD8C7CU..." data-app-type="APP" data-pay-type="付费" data-platform="司南" data-updater="冷吃兔" data-updated="2026-09-11 16:52:47">
+                      <td>
+                        <span class="cell-main">Popkon_app</span>
+                        <span class="cell-sub">ID: 689543</span>
+                      </td>
+                      <td>689543</td>
+                      <td>
+                        <span class="cell-main">默认TikTok Pixel</span>
+                        <span class="cell-sub">ID: D6I8KD8C7CU7C9MB39AHQ</span>
+                      </td>
+                      <td>像素aid:D6I8KD8C7CU...</td>
+                      <td>APP</td>
+                      <td>付费</td>
+                      <td>司南</td>
+                      <td>冷吃兔</td>
+                      <td>2026-09-11 16:52:47</td>
+                      <td>
+                        <div class="row-actions">
+                          <a href="#" class="link" onclick="editAssetApp(this);return false;">编辑</a>
+                          <a href="#" class="link link-danger" onclick="openDeleteAssetApp(this);return false;">删除</a>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr data-name="TEST_SN_APP" data-dist-id="1212312.1" data-pixel="Popkon_Pixel_AI解剖剂" data-pixel-id="181819419034709" data-remark="test" data-app-type="APP" data-pay-type="免费" data-platform="司南" data-updater="冷吃兔" data-updated="2026-09-10 18:44:12">
+                      <td>
+                        <span class="cell-main">TEST_SN_APP</span>
+                        <span class="cell-sub">ID: 455465465465</span>
+                      </td>
+                      <td>1212312.1</td>
+                      <td>
+                        <span class="cell-main">Popkon_Pixel_AI解剖剂</span>
+                        <span class="cell-sub">ID: 181819419034709</span>
+                      </td>
+                      <td>test</td>
+                      <td>APP</td>
+                      <td>免费</td>
+                      <td>司南</td>
+                      <td>冷吃兔</td>
+                      <td>2026-09-10 18:44:12</td>
+                      <td>
+                        <div class="row-actions">
+                          <a href="#" class="link" onclick="editAssetApp(this);return false;">编辑</a>
+                          <a href="#" class="link link-danger" onclick="openDeleteAssetApp(this);return false;">删除</a>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr data-name="lct_test_p" data-dist-id="1513123121" data-pixel="默认TikTok Pixel" data-pixel-id="D6I8KD8C7CU7C9MB39AHQ" data-remark="test_pixel_name:关联pr..." data-app-type="APP" data-pay-type="免费" data-platform="司南" data-updater="冷吃兔" data-updated="2026-09-09 17:49:23">
+                      <td>
+                        <span class="cell-main">lct_test_p</span>
+                        <span class="cell-sub">ID: 845612312</span>
+                      </td>
+                      <td>1513123121</td>
+                      <td>
+                        <span class="cell-main">默认TikTok Pixel</span>
+                        <span class="cell-sub">ID: D6I8KD8C7CU7C9MB39AHQ</span>
+                      </td>
+                      <td>test_pixel_name:关联pr...</td>
+                      <td>APP</td>
+                      <td>免费</td>
+                      <td>司南</td>
+                      <td>冷吃兔</td>
+                      <td>2026-09-09 17:49:23</td>
+                      <td>
+                        <div class="row-actions">
+                          <a href="#" class="link" onclick="editAssetApp(this);return false;">编辑</a>
+                          <a href="#" class="link link-danger" onclick="openDeleteAssetApp(this);return false;">删除</a>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr data-name="Fctic_ttmin_baa" data-dist-id="3000006" data-pixel="默认Pixel" data-pixel-id="7608550448794830493" data-remark="" data-app-type="小程序" data-pay-type="免费" data-platform="司南" data-updater="春光" data-updated="2026-09-09 17:49:23">
+                      <td>
+                        <span class="cell-main">Fctic_ttmin_baa</span>
+                        <span class="cell-sub">ID: 7672304517253240001</span>
+                      </td>
+                      <td>3000006</td>
+                      <td>
+                        <span class="cell-main">默认Pixel</span>
+                        <span class="cell-sub">ID: 7608550448794830493</span>
+                      </td>
+                      <td>--</td>
+                      <td>小程序</td>
+                      <td>免费</td>
+                      <td>司南</td>
+                      <td>春光</td>
+                      <td>2026-09-09 17:49:23</td>
+                      <td>
+                        <div class="row-actions">
+                          <a href="#" class="link" onclick="editAssetApp(this);return false;">编辑</a>
+                          <a href="#" class="link link-danger" onclick="openDeleteAssetApp(this);return false;">删除</a>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr id="asset-app-empty" style="display:none;">
+                      <td colspan="10" style="text-align:center;color:#999;padding:48px 0;">暂无数据</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="pagination">
+                <span class="pagination-info">共 <span id="asset-app-total">55</span> 项</span>
+                <div class="pagination-pages">
+                  <button class="page-btn" disabled>&lt;</button>
+                  <button class="page-btn active">1</button>
+                  <button class="page-btn">2</button>
+                  <button class="page-btn">&gt;</button>
+                </div>
+                <select class="page-size-select">
+                  <option>30 条/页</option>
+                  <option>50 条/页</option>
+                  <option>100 条/页</option>
+                </select>
+                <span>跳至</span>
+                <input type="text" class="jump-input" value="" />
+                <span>页</span>
+              </div>
+            </div>
+
+            <!-- 新增/编辑应用弹框 -->
+            <div id="asset-app-edit-overlay" class="modal-overlay" onclick="closeAssetAppModal()"></div>
+            <div id="asset-app-edit-modal" class="modal">
+              <div class="modal-card" style="width:560px;">
+                <div class="modal-header">
+                  <span id="asset-app-edit-title">新增应用</span>
+                  <button class="modal-close" onclick="closeAssetAppModal()">×</button>
+                </div>
+                <div class="modal-body">
+                  <div class="form-item" style="margin-bottom:16px;">
+                    <label class="form-label required">应用名称：</label>
+                    <input type="text" class="form-input" id="asset-app-name" placeholder="请输入应用名称" />
+                  </div>
+                  <div class="form-item" style="margin-bottom:16px;">
+                    <label class="form-label required">应用类型：</label>
+                    <select class="form-select" id="asset-app-type">
+                      <option value="">请选择应用类型</option>
+                      <option value="小程序">小程序</option>
+                      <option value="APP">APP</option>
+                    </select>
+                  </div>
+                  <div class="form-item" style="margin-bottom:16px;">
+                    <label class="form-label">分销平台应用ID：</label>
+                    <input type="text" class="form-input" id="asset-app-dist-id" placeholder="请输入分销平台应用ID" />
+                  </div>
+                  <div class="form-item" style="margin-bottom:16px;">
+                    <label class="form-label required">付费类型：</label>
+                    <select class="form-select" id="asset-app-pay-type">
+                      <option value="">请选择付费类型</option>
+                      <option value="免费">免费</option>
+                      <option value="付费">付费</option>
+                    </select>
+                  </div>
+                  <div class="form-item" style="margin-bottom:16px;">
+                    <label class="form-label">Pixel 名称：</label>
+                    <select class="form-select" id="asset-app-pixel">
+                      <option value="">请选择Pixel 名称</option>
+                      <option value="默认TikTok Pixel">默认TikTok Pixel</option>
+                      <option value="默认Pixel">默认Pixel</option>
+                      <option value="Popkon_Pixel_AI解剖剂">Popkon_Pixel_AI解剖剂</option>
+                    </select>
+                  </div>
+                  <div class="form-item" style="margin-bottom:16px;">
+                    <label class="form-label required">平台：</label>
+                    <select class="form-select" id="asset-app-platform">
+                      <option value="">请选择平台</option>
+                      <option value="织光">织光</option>
+                      <option value="司南">司南</option>
+                    </select>
+                  </div>
+                  <div class="form-item" style="margin-bottom:0;">
+                    <label class="form-label">备注：</label>
+                    <input type="text" class="form-input" id="asset-app-remark" placeholder="请输入备注" />
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-outline btn-sm" onclick="closeAssetAppModal()">取消</button>
+                  <button class="btn btn-primary btn-sm" onclick="submitAssetApp()">确定</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 删除确认弹框 -->
+            <div id="asset-app-delete-overlay" class="modal-overlay" onclick="closeDeleteAssetApp()"></div>
+            <div id="asset-app-delete-modal" class="modal">
+              <div class="modal-card" style="width:400px;">
+                <div class="modal-header">
+                  <span>删除确认</span>
+                  <button class="modal-close" onclick="closeDeleteAssetApp()">×</button>
+                </div>
+                <div class="modal-body">
+                  <div style="font-size:13px;color:#4b5563;line-height:1.7;">
+                    确定删除应用 <strong id="asset-app-delete-name">--</strong> 吗？删除后不可恢复。
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-outline btn-sm" onclick="closeDeleteAssetApp()">取消</button>
+                  <button class="btn btn-primary btn-sm" onclick="doDeleteAssetApp()">确定</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+            </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      /* ===== 跨环境页面跳转 ===== */
+      function navUrl(rootPath) {
+        if (window.location.hostname === 'htmlpreview.github.io') {
+          return 'https://htmlpreview.github.io/?https://github.com/Nake12138/maiyaput/blob/main/' + rootPath;
+        }
+        if (rootPath === 'index.html') return '../index.html';
+        return './' + rootPath.replace(/^pages\//, '');
+      }
+
+      function showPage(pageName) {
+        if (pageName.indexOf('fb-') === 0) {
+          window.location.href = navUrl('pages/' + pageName + '.html');
+          return;
+        }
+        if (pageName === 'overseas-tiktok-account') {
+          window.location.href = navUrl('pages/overseas-tiktok-account.html');
+          return;
+        }
+        if (pageName === 'overseas-asset-app') return;
+        if (pageName === 'overseas-app') {
+          window.location.href = navUrl('pages/overseas-app.html');
+          return;
+        }
+        if (pageName === 'overseas-account') {
+          window.location.href = navUrl('pages/overseas-account.html');
+          return;
+        }
+        if (pageName === 'overseas-bc') {
+          window.location.href = navUrl('pages/overseas-bc.html');
+          return;
+        }
+        if (pageName === 'overseas-batch-delivery') {
+          window.location.href = navUrl('pages/overseas-batch-delivery.html');
+          return;
+        }
+        if (pageName === 'overseas-auto-delivery') {
+          window.location.href = navUrl('pages/overseas-auto-delivery.html');
+          return;
+        }
+        if (pageName === 'overseas-template') {
+          window.location.href = navUrl('pages/overseas-template.html');
+          return;
+        }
+        if (pageName === 'overseas-system-user') {
+          window.location.href = navUrl('pages/overseas-system-user.html');
+          return;
+        }
+        if (pageName === 'overseas-fb-page') {
+          window.location.href = navUrl('pages/overseas-fb-page.html');
+          return;
+        }
+        if (pageName === 'overseas-system-org') {
+          window.location.href = navUrl('pages/overseas-system-user.html');
+          return;
+        }
+        window.location.href = navUrl('index.html') + '#' + pageName;
+      }
+
+      function switchSystem(system) {
+        try { localStorage.setItem('delivery_system', system); } catch (err) {}
+        if (system === 'overseas') {
+          window.location.href = navUrl('pages/overseas-batch-delivery.html');
+        } else {
+          window.location.href = navUrl('index.html');
+        }
+      }
+
+      function toggleSystemMenu(e) {
+        if (e) e.stopPropagation();
+        var menu = document.getElementById('systemSwitchMenu');
+        if (menu) menu.classList.toggle('open');
+      }
+
+      document.addEventListener('click', function (e) {
+        var menu = document.getElementById('systemSwitchMenu');
+        if (!menu || !menu.classList.contains('open')) return;
+        if (menu.contains(e.target)) return;
+        if (e.target.closest && e.target.closest('.system-switch-trigger')) return;
+        menu.classList.remove('open');
+      });
+
+      (function highlightCurrentSystem() {
+        var current = 'overseas';
+        try { current = localStorage.getItem('delivery_system') || 'overseas'; } catch (err) {}
+        document.querySelectorAll('.system-switch-item').forEach(function (item) {
+          item.classList.toggle('active', item.getAttribute('data-system') === current);
+        });
+      })();
+
+      /* ===== 侧边栏展开/收起 ===== */
+      document.querySelectorAll('.nav-item.has-children').forEach(function (item) {
+        item.addEventListener('click', function (e) {
+          e.stopPropagation();
+          this.classList.toggle('expanded');
+          var caret = this.querySelector('.nav-item-caret');
+          if (caret) caret.textContent = this.classList.contains('expanded') ? '▼' : '▶';
+        });
+      });
+
+      /* ===== 二级分组（批量投放 / 账号管理）展开收起 ===== */
+      document.querySelectorAll('.nav-child-item.has-children').forEach(function (item) {
+        item.addEventListener('click', function (e) {
+          e.stopPropagation();
+          this.classList.toggle('expanded');
+          var caret = this.querySelector('.nav-child-caret');
+          if (caret) caret.textContent = this.classList.contains('expanded') ? '▼' : '▶';
+        });
+      });
+
+      document.querySelectorAll('.nav-child-item[data-page], .nav-item[data-page], .nav-grandchild-item[data-page]').forEach(function (item) {
+        item.addEventListener('click', function () {
+          showPage(this.getAttribute('data-page'));
+        });
+      });
+
+      /* ===== 遮罩点击关闭弹框 ===== */
+      document.addEventListener('click', function (e) {
+        var t = e.target;
+        if (!t || !t.classList) return;
+        if (t.classList.contains('drawer') || t.classList.contains('modal')) {
+          if (t.classList.contains('open')) {
+            t.classList.remove('open');
+            document.querySelectorAll('.drawer-overlay.open, .modal-overlay.open').forEach(function (o) { o.classList.remove('open'); });
+          }
+          return;
+        }
+        if (t.classList.contains('drawer-overlay') || t.classList.contains('modal-overlay')) {
+          t.classList.remove('open');
+          document.querySelectorAll('.drawer.open, .modal.open').forEach(function (m) { m.classList.remove('open'); });
+        }
+      });
+
+      /* ===== 应用列表：筛选 / 重置 / 刷新 ===== */
+      function assetAppRows() {
+        return Array.prototype.slice.call(document.querySelectorAll('#asset-app-table tbody tr[data-name]'));
+      }
+
+      /* Pixel 筛选字段切换：Pixel 名称 / Pixel ID */
+      function syncAssetPixelPlaceholder() {
+        var key = document.getElementById('f-pixel-key').value;
+        var input = document.getElementById('f-pixel-name');
+        input.placeholder = key === 'id' ? '请输入Pixel ID' : '请输入Pixel名称';
+        input.value = '';
+      }
+
+      function searchAssetApps() {
+        var name = (document.getElementById('f-app-name').value || '').trim().toLowerCase();
+        var distId = (document.getElementById('f-dist-app-id').value || '').trim().toLowerCase();
+        var pixel = (document.getElementById('f-pixel-name').value || '').trim().toLowerCase();
+        var pixelAttr = document.getElementById('f-pixel-key').value === 'id' ? 'data-pixel-id' : 'data-pixel';
+        var appType = document.getElementById('f-app-type').value;
+        var payType = document.getElementById('f-pay-type').value;
+        var platform = document.getElementById('f-platform').value;
+
+        var hit = 0;
+        assetAppRows().forEach(function (row) {
+          var ok =
+            (!name || (row.getAttribute('data-name') || '').toLowerCase().indexOf(name) !== -1) &&
+            (!distId || (row.getAttribute('data-dist-id') || '').toLowerCase().indexOf(distId) !== -1) &&
+            (!pixel || (row.getAttribute(pixelAttr) || '').toLowerCase().indexOf(pixel) !== -1) &&
+            (!appType || row.getAttribute('data-app-type') === appType) &&
+            (!payType || row.getAttribute('data-pay-type') === payType) &&
+            (!platform || row.getAttribute('data-platform') === platform);
+          row.style.display = ok ? '' : 'none';
+          if (ok) hit += 1;
+        });
+        document.getElementById('asset-app-empty').style.display = hit ? 'none' : '';
+      }
+
+      function resetAssetAppFilters() {
+        var wrap = document.getElementById('page-overseas-asset-app');
+        wrap.querySelectorAll('.filter-combo-input, .filter-input').forEach(function (i) { i.value = ''; });
+        wrap.querySelectorAll('.filter-select').forEach(function (s) { s.selectedIndex = 0; });
+        var pixelKey = document.getElementById('f-pixel-key');
+        if (pixelKey) { pixelKey.selectedIndex = 0; }
+        syncAssetPixelPlaceholder();
+        searchAssetApps();
+      }
+
+      function refreshAssetAppList() {
+        resetAssetAppFilters();
+      }
+
+      /* ===== 新增 / 编辑应用 ===== */
+      var editingAssetAppRow = null;
+
+      function openAssetAppModal() {
+        editingAssetAppRow = null;
+        document.getElementById('asset-app-edit-title').textContent = '新增应用';
+        document.getElementById('asset-app-name').value = '';
+        document.getElementById('asset-app-type').selectedIndex = 0;
+        document.getElementById('asset-app-dist-id').value = '';
+        document.getElementById('asset-app-pay-type').selectedIndex = 0;
+        document.getElementById('asset-app-pixel').selectedIndex = 0;
+        document.getElementById('asset-app-platform').selectedIndex = 0;
+        document.getElementById('asset-app-remark').value = '';
+        document.getElementById('asset-app-edit-overlay').classList.add('open');
+        document.getElementById('asset-app-edit-modal').classList.add('open');
+      }
+
+      function editAssetApp(el) {
+        var row = el.closest('tr');
+        editingAssetAppRow = row;
+        document.getElementById('asset-app-edit-title').textContent = '编辑应用';
+        document.getElementById('asset-app-name').value = row.getAttribute('data-name') || '';
+        setSelect('asset-app-type', row.getAttribute('data-app-type'));
+        document.getElementById('asset-app-dist-id').value = row.getAttribute('data-dist-id') || '';
+        setSelect('asset-app-pay-type', row.getAttribute('data-pay-type'));
+        setSelect('asset-app-pixel', row.getAttribute('data-pixel'));
+        setSelect('asset-app-platform', row.getAttribute('data-platform'));
+        document.getElementById('asset-app-remark').value = row.getAttribute('data-remark') || '';
+        document.getElementById('asset-app-edit-overlay').classList.add('open');
+        document.getElementById('asset-app-edit-modal').classList.add('open');
+      }
+
+      function setSelect(id, value) {
+        var sel = document.getElementById(id);
+        sel.value = value || '';
+        if (sel.selectedIndex === -1) sel.selectedIndex = 0;
+      }
+
+      function closeAssetAppModal() {
+        document.getElementById('asset-app-edit-overlay').classList.remove('open');
+        document.getElementById('asset-app-edit-modal').classList.remove('open');
+      }
+
+      function submitAssetApp() {
+        var name = document.getElementById('asset-app-name').value.trim();
+        var appType = document.getElementById('asset-app-type').value;
+        var payType = document.getElementById('asset-app-pay-type').value;
+        var platform = document.getElementById('asset-app-platform').value;
+        if (!name) { alert('请填写应用名称'); return; }
+        if (!appType) { alert('请选择应用类型'); return; }
+        if (!payType) { alert('请选择付费类型'); return; }
+        if (!platform) { alert('请选择平台'); return; }
+
+        if (editingAssetAppRow) {
+          var row = editingAssetAppRow;
+          row.setAttribute('data-name', name);
+          row.setAttribute('data-app-type', appType);
+          row.setAttribute('data-pay-type', payType);
+          row.setAttribute('data-platform', platform);
+          row.setAttribute('data-dist-id', document.getElementById('asset-app-dist-id').value.trim());
+          row.setAttribute('data-pixel', document.getElementById('asset-app-pixel').value);
+          row.setAttribute('data-remark', document.getElementById('asset-app-remark').value.trim());
+          var cells = row.children;
+          cells[0].innerHTML = '<span class="cell-main">' + name + '</span><span class="cell-sub">ID: ' + (row.getAttribute('data-dist-id') || '--') + '</span>';
+          cells[1].textContent = row.getAttribute('data-dist-id') || '--';
+          var pixelName = row.getAttribute('data-pixel') || '--';
+          var pixelId = row.getAttribute('data-pixel-id') || '';
+          cells[2].innerHTML = '<span class="cell-main">' + pixelName + '</span><span class="cell-sub">ID:' + (pixelId || '--') + '</span>';
+          cells[3].textContent = row.getAttribute('data-remark') || '--';
+          cells[4].textContent = appType;
+          cells[5].textContent = payType;
+          cells[6].textContent = platform;
+          alert('保存成功');
+        } else {
+          alert('新增成功');
+        }
+        closeAssetAppModal();
+        searchAssetApps();
+      }
+
+      /* ===== 删除应用 ===== */
+      var deletingAssetAppRow = null;
+
+      function openDeleteAssetApp(el) {
+        deletingAssetAppRow = el.closest('tr');
+        document.getElementById('asset-app-delete-name').textContent = deletingAssetAppRow.getAttribute('data-name');
+        document.getElementById('asset-app-delete-overlay').classList.add('open');
+        document.getElementById('asset-app-delete-modal').classList.add('open');
+      }
+
+      function closeDeleteAssetApp() {
+        document.getElementById('asset-app-delete-overlay').classList.remove('open');
+        document.getElementById('asset-app-delete-modal').classList.remove('open');
+      }
+
+      function doDeleteAssetApp() {
+        if (deletingAssetAppRow) {
+          deletingAssetAppRow.remove();
+          var total = document.getElementById('asset-app-total');
+          total.textContent = Math.max(0, parseInt(total.textContent, 10) - 1);
+        }
+        closeDeleteAssetApp();
+        searchAssetApps();
+      }
+    </script>
+  <script src="../scripts/header-user.js?v=20261008"></script>
+  </body>
+</html>

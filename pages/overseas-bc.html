@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BC - 海外投放系统</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="../styles/main.css?v=20260924" />
+    <link rel="stylesheet" href="../styles/main.css?v=20261008b" />
+    <link rel="stylesheet" href="../styles/theme-antd.css?v=20261008b" />
   </head>
-  <body>
-    <div class="layout">
-      <!-- Sidebar -->
-      <aside class="sidebar">
-        <div class="logo" style="padding: 16px 20px 12px;">
+  <body class="theme-antd">
+        <!-- Top Bar（全宽：品牌 + 用户） -->
+    <header class="app-bar">
+      <div class="app-bar-left">
+<div class="logo">
           <div class="logo-icon">海</div>
           <div class="logo-info">
             <span class="logo-name">海外投放系统</span>
@@ -22,20 +23,176 @@
             <div class="system-switch-item active" data-system="overseas" onclick="switchSystem('overseas')">海外投放系统<span class="check">✓</span></div>
           </div>
         </div>
+      </div>
+      <div class="app-bar-right">
+        <!-- 时区切换器 -->
+        <div class="tz-switcher">
+          <select class="tz-select" aria-label="时区切换">
+            <option value="UTC+8" selected>UTC+8</option>
+            <option value="UTC+0">UTC+0</option>
+            <option value="UTC+7">UTC+7</option>
+            <option value="UTC+9">UTC+9</option>
+            <option value="UTC-5">UTC-5</option>
+          </select>
+          <svg class="tz-caret" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+            <path d="M2 3.75L5 6.75L8 3.75" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+
+        <!-- 文档下载 -->
+        <button type="button" class="header-icon-btn" title="文档下载" aria-label="文档下载" onclick="alert('下载文档')">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+            <path d="M9 2.75V10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+            <path d="M5.75 7.5L9 10.75L12.25 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M3.25 12.25V13.5C3.25 14.47 4.03 15.25 5 15.25H13C13.97 15.25 14.75 14.47 14.75 13.5V12.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+          </svg>
+        </button>
+
+        <!-- 用户信息 -->
+        <div class="user-profile-wrap" id="userProfileWrap">
+          <button type="button" class="user-profile" id="userProfileTrigger" aria-haspopup="true" aria-expanded="false">
+            <span class="user-profile-avatar" aria-hidden="true">
+              <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="20" cy="20" r="20" fill="#dce5ef" />
+              <circle cx="20" cy="25.5" r="9.5" fill="#2f3d56" />
+              <rect x="17.4" y="17.5" width="5.2" height="6" rx="2.6" fill="#e0a97f" />
+              <ellipse cx="20" cy="15.6" rx="6.4" ry="7" fill="#f0c19b" />
+              <path d="M20 6.8c4.6 0 7.8 3.1 7.8 7.4 0 .6-.06 1.2-.18 1.75-.9-1.5-2.3-2.2-3.9-3.1-1.9 1.05-4.1 1.55-6.4 1.55-.8 0-1.5-.06-2.2-.18-.5.6-.9 1.3-1.15 2.05-.12-.6-.18-1.2-.18-1.85C12.2 9.9 15.4 6.8 20 6.8z" fill="#e8562a" />
+            </svg>
+            </span>
+            <span class="user-profile-meta">
+              <span class="user-profile-name">娜可 <em>(nake)</em></span>
+              <span class="user-profile-email">nake06870@maiyawx.com</span>
+            </span>
+            <svg class="user-profile-caret" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+              <path d="M2 3.75L5 6.75L8 3.75" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+
+          <div class="user-dropdown" id="userDropdown" role="menu">
+            <!-- 账号信息 + 复制邮箱 -->
+            <div class="user-dropdown-head">
+              <span class="user-dropdown-avatar" aria-hidden="true">
+                <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="20" cy="20" r="20" fill="#dce5ef" />
+                <circle cx="20" cy="25.5" r="9.5" fill="#2f3d56" />
+                <rect x="17.4" y="17.5" width="5.2" height="6" rx="2.6" fill="#e0a97f" />
+                <ellipse cx="20" cy="15.6" rx="6.4" ry="7" fill="#f0c19b" />
+                <path d="M20 6.8c4.6 0 7.8 3.1 7.8 7.4 0 .6-.06 1.2-.18 1.75-.9-1.5-2.3-2.2-3.9-3.1-1.9 1.05-4.1 1.55-6.4 1.55-.8 0-1.5-.06-2.2-.18-.5.6-.9 1.3-1.15 2.05-.12-.6-.18-1.2-.18-1.85C12.2 9.9 15.4 6.8 20 6.8z" fill="#e8562a" />
+              </svg>
+              </span>
+              <span class="user-dropdown-meta">
+                <span class="user-dropdown-name">娜可 <em>(nake)</em></span>
+                <span class="user-dropdown-email" title="nake06870@maiyawx.com">nake06870@maiyawx.com</span>
+              </span>
+              <button type="button" class="copy-mail-btn" id="copyMailBtn" title="复制邮箱" aria-label="复制邮箱">
+                <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <rect x="5.9" y="5.9" width="7.35" height="7.35" rx="1.7" stroke="currentColor" stroke-width="1.3" />
+                  <path d="M10.3 3.95V3.1c0-.88-.72-1.6-1.6-1.6H3.9c-.88 0-1.6.72-1.6 1.6v4.8c0 .88.72 1.6 1.6 1.6h.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                </svg>
+              </button>
+            </div>
+            <div class="user-dropdown-sep"></div>
+            <!-- 帮助指南 -->
+            <button type="button" class="user-dropdown-item" data-action="help" role="menuitem">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <circle cx="8" cy="8" r="6.25" stroke="currentColor" stroke-width="1.3" />
+                <path d="M6.35 6.1c.1-.88.85-1.5 1.68-1.5.9 0 1.62.6 1.62 1.47 0 .78-.5 1.1-1.05 1.48-.5.35-.75.62-.75 1.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                <circle cx="7.87" cy="11.35" r=".85" fill="currentColor" />
+              </svg>
+              帮助指南
+            </button>
+            <!-- 清除缓存 -->
+            <button type="button" class="user-dropdown-item" data-action="clear-cache" role="menuitem">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M2.75 4.5h10.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                <path d="M6.25 4.5V3.4c0-.47.38-.85.85-.85h1.8c.47 0 .85.38.85.85V4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                <path d="M4.4 4.5l.55 8.05c.03.5.45.9.95.9h4.2c.5 0 .92-.4.95-.9l.55-8.05" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                <path d="M6.9 7v4M9.1 7v4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+              </svg>
+              清除缓存
+            </button>
+            <div class="user-dropdown-sep"></div>
+            <!-- 退出登录 -->
+            <button type="button" class="user-dropdown-item danger" data-action="logout" role="menuitem">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M6.5 13.25H3.9c-.64 0-1.15-.51-1.15-1.15V3.9c0-.64.51-1.15 1.15-1.15h2.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                <path d="M10.4 10.8L13.25 8 10.4 5.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M13 8H6.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+              </svg>
+              退出登录
+            </button>
+          </div>
+        </div>
+      
+      </div>
+    </header>
+
+<div class="layout">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        
         <nav class="nav">
           <div class="nav-section">
-            <div class="nav-item has-children">
-              <span class="nav-item-icon">⊟</span>
-              <span>项目管理</span>
-              <span class="nav-item-caret">▶</span>
+            <div class="nav-item has-children expanded">
+              <span class="nav-item-icon">🎵</span>
+              <span>TikTok</span>
+              <span class="nav-item-caret">▼</span>
+            </div>
+            <div class="nav-children">
+              <span class="nav-child-item">项目管理</span>
+              <span class="nav-child-item">数据统计</span>
+              <span class="nav-child-item has-children">
+                <span>批量投放</span>
+                <span class="nav-child-caret">▶</span>
+              </span>
+              <div class="nav-grandchildren">
+                <span class="nav-grandchild-item" data-page="overseas-batch-delivery">批量投放</span>
+                <span class="nav-grandchild-item" data-page="overseas-auto-delivery">自动化任务</span>
+                <span class="nav-grandchild-item" data-page="overseas-template">模板管理</span>
+              </div>
+              <span class="nav-child-item has-children expanded active">
+                <span>账号管理</span>
+                <span class="nav-child-caret">▼</span>
+              </span>
+              <div class="nav-grandchildren">
+                <span class="nav-grandchild-item" data-page="overseas-account">账户</span>
+                <span class="nav-grandchild-item" data-page="overseas-app">BC应用</span>
+                <span class="nav-grandchild-item active" data-page="overseas-bc">商务中心</span>
+              </div>
+              <span class="nav-child-item">控损管理</span>
+              <span class="nav-child-item">关联绑定</span>
             </div>
           </div>
 
           <div class="nav-section">
             <div class="nav-item has-children">
-              <span class="nav-item-icon">📊</span>
-              <span>数据统计</span>
+              <span class="nav-item-icon">📘</span>
+              <span>FaceBook</span>
               <span class="nav-item-caret">▶</span>
+            </div>
+            <div class="nav-children">
+              <span class="nav-child-item">项目管理</span>
+              <span class="nav-child-item">数据统计</span>
+              <span class="nav-child-item has-children">
+                <span>批量投放</span>
+                <span class="nav-child-caret">▶</span>
+              </span>
+              <div class="nav-grandchildren">
+                <span class="nav-grandchild-item" data-page="fb-batch-delivery">批量投放</span>
+                <span class="nav-grandchild-item" data-page="fb-auto-delivery">自动化任务</span>
+                <span class="nav-grandchild-item" data-page="fb-template">模板管理</span>
+              </div>
+              <span class="nav-child-item has-children">
+                <span>账号管理</span>
+                <span class="nav-child-caret">▶</span>
+              </span>
+              <div class="nav-grandchildren">
+                <span class="nav-grandchild-item" data-page="fb-account">账户</span>
+                <span class="nav-grandchild-item" data-page="fb-app">BC应用</span>
+              </div>
+              <span class="nav-child-item">控损管理</span>
+              <span class="nav-child-item" data-page="fb-binding">关联绑定</span>
             </div>
           </div>
 
@@ -57,46 +214,14 @@
 
           <div class="nav-section">
             <div class="nav-item has-children">
-              <span class="nav-item-icon">▦</span>
-              <span>批量投放</span>
-              <span class="nav-item-caret">▶</span>
-            </div>
-            <div class="nav-children">
-              <span class="nav-child-item" data-page="overseas-batch-delivery">批量投放</span>
-              <span class="nav-child-item" data-page="overseas-auto-delivery">自动化任务</span>
-              <span class="nav-child-item" data-page="overseas-template">模板管理</span>
-            </div>
-          </div>
-
-          <div class="nav-section">
-            <div class="nav-item has-children expanded">
-              <span class="nav-item-icon">👤</span>
-              <span>账号管理</span>
-              <span class="nav-item-caret">▼</span>
-            </div>
-            <div class="nav-children">
-              <span class="nav-child-item" data-page="overseas-account">账户</span>
-              <span class="nav-child-item" data-page="overseas-app">应用</span>
-              <span class="nav-child-item active" data-page="overseas-bc">商务中心</span>
-            </div>
-          </div>
-
-          <div class="nav-section">
-            <div class="nav-item has-children">
               <span class="nav-item-icon">🗂️</span>
               <span>资产管理</span>
               <span class="nav-item-caret">▶</span>
             </div>
             <div class="nav-children">
+              <span class="nav-child-item" data-page="overseas-asset-app">应用</span>
               <span class="nav-child-item" data-page="overseas-tiktok-account">TikTok账号</span>
-            </div>
-          </div>
-
-          <div class="nav-section">
-            <div class="nav-item has-children">
-              <span class="nav-item-icon">🛡️</span>
-              <span>控损管理</span>
-              <span class="nav-item-caret">▶</span>
+              <span class="nav-child-item" data-page="overseas-fb-page">公共主页</span>
             </div>
           </div>
 
@@ -112,123 +237,12 @@
             </div>
           </div>
 
-          <div class="nav-section">
-            <div class="nav-item has-children">
-              <span class="nav-item-icon">🔗</span>
-              <span>关联绑定</span>
-              <span class="nav-item-caret">▶</span>
-            </div>
-          </div>
         </nav>
       </aside>
 
       <!-- Main Content -->
       <main class="main">
-        <!-- Top Header -->
-        <header class="top-header">
-          <div class="top-header-left"></div>
-          <div class="top-header-right">
-            <!-- 时区切换器 -->
-            <div class="tz-switcher">
-              <select class="tz-select" aria-label="时区切换">
-                <option value="UTC+8" selected>UTC+8</option>
-                <option value="UTC+0">UTC+0</option>
-                <option value="UTC+7">UTC+7</option>
-                <option value="UTC+9">UTC+9</option>
-                <option value="UTC-5">UTC-5</option>
-              </select>
-              <svg class="tz-caret" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
-                <path d="M2 3.75L5 6.75L8 3.75" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            </div>
-
-            <!-- 文档下载 -->
-            <button type="button" class="header-icon-btn" title="文档下载" aria-label="文档下载" onclick="alert('下载文档')">
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-                <path d="M9 2.75V10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                <path d="M5.75 7.5L9 10.75L12.25 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                <path d="M3.25 12.25V13.5C3.25 14.47 4.03 15.25 5 15.25H13C13.97 15.25 14.75 14.47 14.75 13.5V12.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-              </svg>
-            </button>
-
-            <!-- 用户信息 -->
-            <div class="user-profile-wrap" id="userProfileWrap">
-              <button type="button" class="user-profile" id="userProfileTrigger" aria-haspopup="true" aria-expanded="false">
-                <span class="user-profile-avatar" aria-hidden="true">
-                  <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="20" cy="20" r="20" fill="#dce5ef" />
-                  <circle cx="20" cy="25.5" r="9.5" fill="#2f3d56" />
-                  <rect x="17.4" y="17.5" width="5.2" height="6" rx="2.6" fill="#e0a97f" />
-                  <ellipse cx="20" cy="15.6" rx="6.4" ry="7" fill="#f0c19b" />
-                  <path d="M20 6.8c4.6 0 7.8 3.1 7.8 7.4 0 .6-.06 1.2-.18 1.75-.9-1.5-2.3-2.2-3.9-3.1-1.9 1.05-4.1 1.55-6.4 1.55-.8 0-1.5-.06-2.2-.18-.5.6-.9 1.3-1.15 2.05-.12-.6-.18-1.2-.18-1.85C12.2 9.9 15.4 6.8 20 6.8z" fill="#e8562a" />
-                </svg>
-                </span>
-                <span class="user-profile-meta">
-                  <span class="user-profile-name">娜可 <em>(nake)</em></span>
-                  <span class="user-profile-email">nake06870@maiyawx.com</span>
-                </span>
-                <svg class="user-profile-caret" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
-                  <path d="M2 3.75L5 6.75L8 3.75" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-              </button>
-
-              <div class="user-dropdown" id="userDropdown" role="menu">
-                <!-- 账号信息 + 复制邮箱 -->
-                <div class="user-dropdown-head">
-                  <span class="user-dropdown-avatar" aria-hidden="true">
-                    <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="20" cy="20" r="20" fill="#dce5ef" />
-                    <circle cx="20" cy="25.5" r="9.5" fill="#2f3d56" />
-                    <rect x="17.4" y="17.5" width="5.2" height="6" rx="2.6" fill="#e0a97f" />
-                    <ellipse cx="20" cy="15.6" rx="6.4" ry="7" fill="#f0c19b" />
-                    <path d="M20 6.8c4.6 0 7.8 3.1 7.8 7.4 0 .6-.06 1.2-.18 1.75-.9-1.5-2.3-2.2-3.9-3.1-1.9 1.05-4.1 1.55-6.4 1.55-.8 0-1.5-.06-2.2-.18-.5.6-.9 1.3-1.15 2.05-.12-.6-.18-1.2-.18-1.85C12.2 9.9 15.4 6.8 20 6.8z" fill="#e8562a" />
-                  </svg>
-                  </span>
-                  <span class="user-dropdown-meta">
-                    <span class="user-dropdown-name">娜可 <em>(nake)</em></span>
-                    <span class="user-dropdown-email" title="nake06870@maiyawx.com">nake06870@maiyawx.com</span>
-                  </span>
-                  <button type="button" class="copy-mail-btn" id="copyMailBtn" title="复制邮箱" aria-label="复制邮箱">
-                    <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                      <rect x="5.9" y="5.9" width="7.35" height="7.35" rx="1.7" stroke="currentColor" stroke-width="1.3" />
-                      <path d="M10.3 3.95V3.1c0-.88-.72-1.6-1.6-1.6H3.9c-.88 0-1.6.72-1.6 1.6v4.8c0 .88.72 1.6 1.6 1.6h.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
-                    </svg>
-                  </button>
-                </div>
-                <div class="user-dropdown-sep"></div>
-                <!-- 帮助指南 -->
-                <button type="button" class="user-dropdown-item" data-action="help" role="menuitem">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                    <circle cx="8" cy="8" r="6.25" stroke="currentColor" stroke-width="1.3" />
-                    <path d="M6.35 6.1c.1-.88.85-1.5 1.68-1.5.9 0 1.62.6 1.62 1.47 0 .78-.5 1.1-1.05 1.48-.5.35-.75.62-.75 1.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
-                    <circle cx="7.87" cy="11.35" r=".85" fill="currentColor" />
-                  </svg>
-                  帮助指南
-                </button>
-                <!-- 清除缓存 -->
-                <button type="button" class="user-dropdown-item" data-action="clear-cache" role="menuitem">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                    <path d="M2.75 4.5h10.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
-                    <path d="M6.25 4.5V3.4c0-.47.38-.85.85-.85h1.8c.47 0 .85.38.85.85V4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
-                    <path d="M4.4 4.5l.55 8.05c.03.5.45.9.95.9h4.2c.5 0 .92-.4.95-.9l.55-8.05" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
-                    <path d="M6.9 7v4M9.1 7v4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
-                  </svg>
-                  清除缓存
-                </button>
-                <div class="user-dropdown-sep"></div>
-                <!-- 退出登录 -->
-                <button type="button" class="user-dropdown-item danger" data-action="logout" role="menuitem">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                    <path d="M6.5 13.25H3.9c-.64 0-1.15-.51-1.15-1.15V3.9c0-.64.51-1.15 1.15-1.15h2.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
-                    <path d="M10.4 10.8L13.25 8 10.4 5.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" />
-                    <path d="M13 8H6.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
-                  </svg>
-                  退出登录
-                </button>
-              </div>
-            </div>
-          </div>
-        </header>
+        
 
         <!-- Content -->
         <div class="content">
@@ -241,12 +255,7 @@
               <span class="breadcrumb-sep">/</span>
               <span>商务中心</span>
             </div>
-
-            <!-- Page Header -->
-            <div class="page-header" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
-              <h2 class="page-title">商务中心</h2>
-            </div>
-
+            <div class="content-card">
             <!-- 左右分栏：左 = 商务中心列表（单选），右 = 页签明细 -->
             <div class="bc-layout">
               <!-- 左：商务中心列表 -->
@@ -304,7 +313,7 @@
                 <div class="bc-tab-panel us-fab-host" id="bc-tab-panel-tt" style="display:none;">
                   <div class="filter-bar" style="margin-bottom:12px;">
                     <div class="filter-bar-row">
-                      <input type="text" class="filter-input" id="bc-tt-search" placeholder="请输入TT账号名称" style="width:180px;" onkeydown="if(event.key==='Enter')searchBcTt()" />
+                      <input type="text" class="filter-input" id="bc-tt-search" placeholder="请输入TikTok账号名称" style="width:180px;" onkeydown="if(event.key==='Enter')searchBcTt()" />
                       <div class="filter-actions">
                         <button type="button" class="btn btn-primary btn-sm" onclick="searchBcTt()">查询</button>
                         <button type="button" class="btn btn-outline btn-sm" onclick="resetBcTtFilter()">重置</button>
@@ -381,7 +390,7 @@
               <div class="modal-body">
                 <div class="batch-assign-info" id="batch-assign-info"></div>
                 <div class="modal-filter">
-                  <input type="text" id="batch-assign-name" class="form-input" placeholder="请输入TT账号名称" style="flex:1;" onkeydown="if(event.key==='Enter')searchBatchAssign()" />
+                  <input type="text" id="batch-assign-name" class="form-input" placeholder="请输入TikTok账号名称" style="flex:1;" onkeydown="if(event.key==='Enter')searchBatchAssign()" />
                   <button type="button" class="btn btn-primary btn-sm" onclick="searchBatchAssign()">查询</button>
                   <button type="button" class="btn btn-outline btn-sm" onclick="resetBatchAssignFilter()">重置</button>
                 </div>
@@ -420,7 +429,7 @@
               <div class="drawer-body">
                 <div class="filter-bar" style="margin-bottom:16px;">
                   <div class="filter-bar-row">
-                    <input type="text" class="filter-input" id="user-tt-search" placeholder="请输入TT账号名称" style="width:180px;" onkeydown="if(event.key==='Enter')searchUserTt()" />
+                    <input type="text" class="filter-input" id="user-tt-search" placeholder="请输入TikTok账号名称" style="width:180px;" onkeydown="if(event.key==='Enter')searchUserTt()" />
                     <div class="filter-actions">
                       <button type="button" class="btn btn-primary btn-sm" onclick="searchUserTt()">查询</button>
                       <button type="button" class="btn btn-outline btn-sm" onclick="resetUserTtFilter()">重置</button>
@@ -560,6 +569,7 @@
               </div>
             </div>
           </div>
+            </div>
         </div>
       </main>
     </div>
@@ -801,7 +811,7 @@
         font-size: 12px;
         color: var(--color-text-tertiary, #98a2b3);
         font-variant-numeric: tabular-nums;
-        /* 工具条内自动右对齐：BC用户页签与「分配TikTok」区分为左右两端，TT账号页签单独靠右 */
+        /* 工具条内自动右对齐：BC用户页签与「分配TikTok」区分为左右两端，TikTok账号页签单独靠右 */
         margin-left: auto;
       }
 
@@ -861,7 +871,7 @@
       .tag-assigned {
         display: inline-block;
         padding: 1px 6px;
-        font-size: 11px;
+        font-size: 12px;
         line-height: 16px;
         color: #667085;
         background: #f2f4f7;
@@ -1475,6 +1485,10 @@
       }
 
       function showPage(pageName) {
+        if (pageName.indexOf('fb-') === 0) {
+          window.location.href = navUrl('pages/' + pageName + '.html');
+          return;
+        }
         if (pageName === 'overseas-tiktok-account') {
           window.location.href = navUrl('pages/overseas-tiktok-account.html');
           return;
@@ -1506,6 +1520,10 @@
         }
         if (pageName === 'overseas-system-org') {
           window.location.href = navUrl('pages/overseas-system-user.html');
+          return;
+        }
+        if (pageName === 'overseas-asset-app') {
+          window.location.href = navUrl('pages/overseas-asset-app.html');
           return;
         }
         window.location.href = navUrl('index.html') + '#' + pageName;
@@ -1553,7 +1571,17 @@
       });
 
       /* ===== 子菜单项跳转 ===== */
-      document.querySelectorAll('.nav-child-item[data-page], .nav-item[data-page]').forEach(function (item) {
+      /* ===== 二级分组（批量投放 / 账号管理）展开收起 ===== */
+      document.querySelectorAll('.nav-child-item.has-children').forEach(function (item) {
+        item.addEventListener('click', function (e) {
+          e.stopPropagation();
+          this.classList.toggle('expanded');
+          var caret = this.querySelector('.nav-child-caret');
+          if (caret) caret.textContent = this.classList.contains('expanded') ? '▼' : '▶';
+        });
+      });
+
+      document.querySelectorAll('.nav-child-item[data-page], .nav-item[data-page], .nav-grandchild-item[data-page]').forEach(function (item) {
         item.addEventListener('click', function () {
           showPage(this.getAttribute('data-page'));
         });
@@ -1695,7 +1723,7 @@
             return '<div class="bc-side-item' + (sel ? ' selected' : '') + '" onclick="toggleBcSelect(\'' + b.id + '\')">' +
               '<span class="bc-side-item-radio">' + (sel ? '●' : '○') + '</span>' +
               '<span class="bc-side-item-name" title="' + b.name + '">' + b.name + '</span>' +
-              '<span class="bc-side-item-meta">' + b.userCount + ' 人 · ' + b.ttCount + ' TT账号</span>' +
+              '<span class="bc-side-item-meta">' + b.userCount + ' 人 · ' + b.ttCount + ' TikTok账号</span>' +
             '</div>';
           }).join('');
         }
@@ -1901,7 +1929,7 @@
 
       /* ===== BC用户列表批量勾选 + 批量分配 TikTok 账号 ===== */
       var batchSelectedUsers = [];
-      /* 仅保留 TT账号名称 单一筛选项 */
+      /* 仅保留 TikTok账号名称 单一筛选项 */
       var batchAssignFilter = { name: '' };
 
       function toggleBcUserAll(src) {
@@ -2005,7 +2033,7 @@
       }
 
       /* ===== TikTok 账号列表（右侧页签 2） ===== */
-      /* 仅保留 TT账号名称 单一筛选项，点击查询后生效 */
+      /* 仅保留 TikTok账号名称 单一筛选项，点击查询后生效 */
       var bcTtFilter = { name: '' };
       function stringToColor(str) {
         var colors = ['#1d4ed8','#059669','#b45309','#be123c','#7c3aed','#0891b2','#4338ca','#c2410c'];
@@ -2018,7 +2046,7 @@
       }
 
       function renderTtAccountCell(name, handle) {
-        /* 此版本不再展示账号头像，仅展示账号名（行内上下文：TT账号列表/分配弹框/抽屉等） */
+        /* 此版本不再展示账号头像，仅展示账号名（行内上下文：TikTok账号列表/分配弹框/抽屉等） */
         return '<span class="tt-account-name">' + (name || '') + '</span>';
       }
 
@@ -2134,7 +2162,7 @@
       /* ===== BC用户已分配 TikTok 账号抽屉 ===== */
       var currentUserTtBcId = '';
       var currentUserTtName = '';
-      /* 仅保留 TT账号名称 单一筛选项，点击查询后生效 */
+      /* 仅保留 TikTok账号名称 单一筛选项，点击查询后生效 */
       var userTtFilter = { name: '' };
       /* 抽屉内多选框已被勾选的 TikTok 账号集合（用于批量删除） */
       var userTtSelected = [];
@@ -2187,7 +2215,7 @@
           return;
         }
         tbody.innerHTML = filtered.map(function (a) {
-          var action = '<button type="button" class="inline-link" style="color:var(--color-error, #d92d20);" onclick="askRemoveUserTtAuth(\'' + currentUserTtBcId + '\',\'' + currentUserTtName + '\',\'' + a.name + '\')">删除</button>';
+          var action = '<button type="button" class="row-action-btn danger" onclick="askRemoveUserTtAuth(\'' + currentUserTtBcId + '\',\'' + currentUserTtName + '\',\'' + a.name + '\')">删除</button>';
           var checked = userTtSelected.indexOf(a.name) !== -1 ? ' checked' : '';
           return '<tr>' +
             '<td style="text-align:center;"><input type="checkbox" class="user-tt-check" value="' + (a.name || '') + '"' + checked + ' onchange="updateUserTtSelected()" /></td>' +
@@ -2524,11 +2552,11 @@
           shot: '../assets/prd/us-001-main.png',
           desc: '作为投放运营，我想要在左侧查看商务中心列表并单选目标 BC，以便切换查看该 BC 下的BC用户和 TikTok 账号。',
           filter: '左侧「商务中心」面板：顶部「商务中心」标题；搜索框（占位「请输入商务中心名称」，输入即时过滤列表）。',
-          fields: '左侧每行：单选指示符（实心圆 ● 为当前选中，空心圆 ○ 为未选中）+ 商务中心名称（文本，单行截断显示）+ 「N 人 · N TT账号」元信息。',
+          fields: '左侧每行：单选指示符（实心圆 ● 为当前选中，空心圆 ○ 为未选中）+ 商务中心名称（文本，单行截断显示）+ 「N 人 · N TikTok账号」元信息。',
           source: '左侧列表数据 ← 接口「获取商务中心列表」（<a href="https://business-api.tiktok.com/portal/docs/get-business-centers/v1.3" target="_blank">get-business-centers 官方文档</a>）；列表数据每 30 分钟自动轮询刷新一次，无需手动操作。',
           flow: '页面加载 → 调用「获取商务中心列表」→ 渲染左侧商务中心列表（默认选中第一个 BC）→ 用户可点击切换当前所选 BC / 搜索；切换选中后右侧两个页签（BC用户、TikTok账号）同时按所选 BC 刷新；每 30 分钟自动重新拉取一次列表数据。',
           ac: [
-            '页面左侧展示「商务中心」面板，列为：单选指示符 / 商务中心名称 / N 人 · N TT账号',
+            '页面左侧展示「商务中心」面板，列为：单选指示符 / 商务中心名称 / N 人 · N TikTok账号',
             '支持按商务中心名称即时模糊搜索（包含匹配、不区分大小写），无结果显示「暂无数据」',
             '面板内单选语义：同一时间仅一个 BC 处于选中状态，点击任意行即切换当前所选 BC',
             '默认选中第一个 BC；切换选中后右侧两个页签同步刷新，按所选 BC 展示对应内容',
@@ -2573,7 +2601,7 @@
           id: 'US-004', title: 'BC用户已分配 TikTok 账号抽屉', priority: 'P0',
           shot: '../assets/prd/us-004-user-tt.png',
           desc: '作为投放运营，我想要查看某个BC用户已分配的 TikTok 账号明细，以便确认其资产权限。',
-          filter: '筛选项仅保留 TT账号名称（单行文本输入框，占位「请输入TT账号名称」）+「查询」/「重置」按钮；点击「查询」后按账号名称查询，点击「重置」清空全部条件并恢复全量列表。',
+          filter: '筛选项仅保留 TikTok账号名称（单行文本输入框，占位「请输入TikTok账号名称」）+「查询」/「重置」按钮；点击「查询」后按账号名称查询，点击「重置」清空全部条件并恢复全量列表。',
           fields: '选择列（复选框，固定显示，表头支持全选/半选，勾选用于批量删除）／TikTok账号名称（文本，账号名称）／更新人（文本，最近操作人）／更新时间（文本，格式 yyyy-MM-dd HH:mm）／操作（按钮：删除，点击后二次确认并调用「撤销用户对资产的权限」接口取消授权）；仅展示该BC用户已分配的账号。表格上方工具条显示「已选择 X 个 TikTok 账号」+「批量删除」按钮（红色，勾选为空时置灰）。',
           source: '抽屉内账号列表 ← 该BC用户与资产的分配关系；可调用「获取资产列表」（<a href="https://business-api.tiktok.com/portal/docs/get-assets/v1.3" target="_blank">get-assets 官方文档</a>）后按BC用户名过滤出已分配账号。单条删除与批量删除均调用「撤销用户对资产的权限」（<a href="https://business-api.tiktok.com/portal/docs/unassign-an-asset/v1.3" target="_blank">unassign-an-asset 官方文档</a>）。',
           flow: 'BC用户列表行内点击「TikTok 账号」数量 → 携带 BC ID + BC用户名打开宽抽屉 → 调用「获取资产列表」→ 仅展示该BC用户已被分配的 TikTok 账号 → 渲染账号明细（含选择列、操作列「删除」）；点击「删除」→ 二次确认「是否取消授权该BC用户该 TikTok 账号？」→ 用户确认后调用「撤销用户对资产的权限」→ 成功从列表移除该账号并同步BC用户账号数；抽屉叠加在BC用户抽屉之上，关闭后回到BC用户列表。',
@@ -2591,7 +2619,7 @@
           id: 'US-005', title: '批量分配 TikTok 账号', priority: 'P0',
           shot: '../assets/prd/us-004-batch-assign.png',
           desc: '作为投放运营，我想要勾选多个BC用户后批量分配 TikTok 账号，以便提高分配效率。',
-          filter: '筛选项仅保留 TT账号名称（单行文本输入框，占位「请输入TT账号名称」）+「查询」/「重置」按钮；点击「查询」后按账号名称查询，点击「重置」清空全部条件并恢复全量列表。',
+          filter: '筛选项仅保留 TikTok账号名称（单行文本输入框，占位「请输入TikTok账号名称」）+「查询」/「重置」按钮；点击「查询」后按账号名称查询，点击「重置」清空全部条件并恢复全量列表。',
           fields: '选择列（复选框，固定显示，表头支持全选；不展示「已分配」状态，是否已分配由后端自动判断）／TikTok账号名称（文本，账号名称）／更新人（文本，最近操作人）／更新时间（文本，格式 yyyy-MM-dd HH:mm）；弹框顶部显示提示条「已选择 N 个BC用户，请勾选要分配的 TikTok 账号」。',
           source: '弹框账号列表 ← 取本地 tiktok 账号列表（页面进入时已通过「获取资产列表」拉取并缓存在本地 bcTtData，直接复用避免重复请求）；同一账号可能同属多个 BC，按账号名去重展示一次。提交调用「将资产分配给用户」（<a href="https://business-api.tiktok.com/portal/docs/assign-an-asset/v1.3" target="_blank">assign-an-asset 官方文档</a>）。',
           flow: 'BC用户页签勾选 N 个BC用户（本地状态）→ 点「分配TikTok」→ 打开批量弹框 → 直接复用本地 TikTok 账号列表渲染 → 勾选账号 → 点「确定」→ 提交「将资产分配给用户」→ 是否已分配由后端逐一自动判断 → 成功提示并关闭。',
@@ -2599,7 +2627,7 @@
             'BC用户页签首列复选框（表头全选支持半选态），工具条实时显示「已选择 X 个BC用户」',
             '未勾选BC用户时「分配TikTok」按钮置灰',
             '点击「分配TikTok」打开弹框，顶部提示「已选择 N 个BC用户，请勾选要分配的 TikTok 账号」',
-            '弹框筛选项：TT账号名称 + 查询 / 重置',
+            '弹框筛选项：TikTok账号名称 + 查询 / 重置',
             '表格列序：选择 / TikTok账号名称 / 更新人 / 更新时间；第一列固定显示复选框，不展示「已分配」状态（是否已分配由后端自动判断）',
             '未勾选账号时点「确定」→ 提示「请至少选择一个 TikTok 账号」'
           ]
@@ -2608,7 +2636,7 @@
           id: 'US-006', title: 'TikTok 账号列表页签与搜索', priority: 'P0',
           shot: '../assets/prd/us-006-tt-tab.png',
           desc: '作为投放运营，我想要查看当前所选 BC 下的 TikTok 账号资产明细，以便了解资产情况。',
-          filter: '筛选项仅保留 TT账号名称（单行文本输入框，占位「请输入TT账号名称」）+「查询」/「重置」按钮 +「刷新」按钮 +「添加 TikTok 账号」按钮；点击「查询」后按账号名称查询，点击「重置」清空全部条件并恢复全量列表，点击「刷新」调用接口重新拉取当前所选 BC 下的 TikTok 账号并刷新表格与时间戳。',
+          filter: '筛选项仅保留 TikTok账号名称（单行文本输入框，占位「请输入TikTok账号名称」）+「查询」/「重置」按钮 +「刷新」按钮 +「添加 TikTok 账号」按钮；点击「查询」后按账号名称查询，点击「重置」清空全部条件并恢复全量列表，点击「刷新」调用接口重新拉取当前所选 BC 下的 TikTok 账号并刷新表格与时间戳。',
           fields: 'TikTok账号名称（文本，账号名称）／已分配 BC 用户（文本，本 BC 下被分配该 TikTok 账号的 BC 用户数量，鼠标悬浮逐行显示 BC 用户名清单）／所属商务中心（文本，固定展示在「TikTok账号名称」之后，取值恒为当前所选 BC 名称）／更新人（文本，最近操作人）／更新时间（文本，格式 yyyy-MM-dd HH:mm）；展示当前所选 BC 下全部 TikTok 账号资产，无操作列；表格上方工具条左侧显示「上次更新 HH:MM:SS」时间戳，与 BC用户页签的时间戳相互独立。',
           source: '页签表格 ← 接口「获取资产列表」（<a href="https://business-api.tiktok.com/portal/docs/get-assets/v1.3" target="_blank">get-assets 官方文档</a>），入参为左侧当前所选 BC ID。',
           flow: '左侧切换 BC 后右侧「TikTok账号」页签直接展示该 BC 下的 TikTok 账号→「所属商务中心」列固定展示在「TikTok账号名称」之后，取值恒为当前所选 BC 名称；筛选项在本地过滤可见行；点击「刷新」重新拉取并独立刷新本页签的时间戳；点击「添加 TikTok 账号」在当前所选 BC 上打开添加弹框，商务中心字段自动带入并锁定。',

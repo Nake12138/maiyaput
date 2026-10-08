@@ -3,11 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>自动化任务 - 海外投放系统</title>
+    <title>自动化任务 · FaceBook - 海外投放系统</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="../styles/main.css?v=20261008b" />
     <link rel="stylesheet" href="../styles/theme-antd.css?v=20261008b" />
-    <link rel="stylesheet" href="../styles/prd.css?v=20261008b" />
     <link rel="stylesheet" href="../styles/multi-select.css?v=20261008b" />
   </head>
   <body class="theme-antd">
@@ -134,23 +133,23 @@
       <!-- Sidebar -->
       <aside class="sidebar">
         
-        <nav class="nav">
+                <nav class="nav">
           <div class="nav-section">
-            <div class="nav-item has-children expanded">
+            <div class="nav-item has-children">
               <span class="nav-item-icon">🎵</span>
               <span>TikTok</span>
-              <span class="nav-item-caret">▼</span>
+              <span class="nav-item-caret">▶</span>
             </div>
             <div class="nav-children">
               <span class="nav-child-item">项目管理</span>
               <span class="nav-child-item">数据统计</span>
-              <span class="nav-child-item has-children expanded active">
+              <span class="nav-child-item has-children">
                 <span>批量投放</span>
-                <span class="nav-child-caret">▼</span>
+                <span class="nav-child-caret">▶</span>
               </span>
               <div class="nav-grandchildren">
                 <span class="nav-grandchild-item" data-page="overseas-batch-delivery">批量投放</span>
-                <span class="nav-grandchild-item active" data-page="overseas-auto-delivery">自动化任务</span>
+                <span class="nav-grandchild-item" data-page="overseas-auto-delivery">自动化任务</span>
                 <span class="nav-grandchild-item" data-page="overseas-template">模板管理</span>
               </div>
               <span class="nav-child-item has-children">
@@ -168,21 +167,21 @@
           </div>
 
           <div class="nav-section">
-            <div class="nav-item has-children">
+            <div class="nav-item has-children expanded">
               <span class="nav-item-icon">📘</span>
               <span>FaceBook</span>
-              <span class="nav-item-caret">▶</span>
+              <span class="nav-item-caret">▼</span>
             </div>
             <div class="nav-children">
               <span class="nav-child-item">项目管理</span>
               <span class="nav-child-item">数据统计</span>
-              <span class="nav-child-item has-children">
+              <span class="nav-child-item has-children expanded active">
                 <span>批量投放</span>
-                <span class="nav-child-caret">▶</span>
+                <span class="nav-child-caret">▼</span>
               </span>
               <div class="nav-grandchildren">
                 <span class="nav-grandchild-item" data-page="fb-batch-delivery">批量投放</span>
-                <span class="nav-grandchild-item" data-page="fb-auto-delivery">自动化任务</span>
+                <span class="nav-grandchild-item active" data-page="fb-auto-delivery">自动化任务</span>
                 <span class="nav-grandchild-item" data-page="fb-template">模板管理</span>
               </div>
               <span class="nav-child-item has-children">
@@ -238,7 +237,6 @@
               <span class="nav-child-item" data-page="overseas-system-user">用户管理</span>
             </div>
           </div>
-
         </nav>
       </aside>
 
@@ -297,7 +295,13 @@
                 </select>
                 <select class="filter-select">
                   <option value="">请选择竞价策略</option>
-                  <option value="target-roas">目标ROAS</option>
+                  <option value="lowest">最高数量或价值</option>
+                  <option value="roas">广告花费回报目标</option>
+                </select>
+                <select class="filter-select">
+                  <option value="">请选择归因模型</option>
+                  <option value="standard">标准</option>
+                  <option value="increment">增量</option>
                 </select>
                 <select class="filter-select">
                   <option value="">请选择创建人</option>
@@ -310,7 +314,15 @@
                 </div>
               </div>
 
-              <div class="filter-status">已选择0个任务 任务状态</div>
+              <div class="filter-status" id="fb-task-selection-bar">
+                <span>已选择<span id="fb-task-selected-count">0</span>个任务</span>
+                <a href="javascript:void(0)" id="fb-task-status-link" onclick="toggleFbTaskStatusPopover(event)" style="margin-left:16px;color:var(--color-text-tertiary);pointer-events:none;text-decoration:none;">任务状态</a>
+              </div>
+              <!-- 任务状态 批量操作弹出层（fixed 定位，避免被 overflow 裁剪） -->
+              <div id="fb-task-status-popover">
+                <button type="button" class="fb-pop-btn fb-pop-open" onclick="applyFbTaskStatus(true)">开启</button>
+                <button type="button" class="fb-pop-btn fb-pop-close" onclick="applyFbTaskStatus(false)">关闭</button>
+              </div>
 
               <!-- Data Table -->
               <div class="table-card">
@@ -328,27 +340,35 @@
                         <th>推广系列预算(USD)</th>
                         <th>是否使用商品库</th>
                         <th>竞价策略</th>
-                        <th>目标ROAS</th>
-                        <th>广告组日预算(USD)</th>
+                        <th>广告花费回报目标</th>
+                        <th>归因模型</th>
                         <th>创建人</th>
                         <th>操作</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
-                        <td><input type="checkbox" class="overseas-task-checkbox" /></td>
+                        <td><input type="checkbox" class="overseas-task-checkbox" onchange="syncFbTaskSelection()" /></td>
                         <td>295</td>
                         <td><span class="link" onclick="drillTaskToAccount(295)">TW:自动复制:测试</span></td>
-                        <td><span class="tag tag-success">生效</span></td>
+                        <td>
+                          <div style="display:inline-flex;align-items:center;gap:8px;">
+                            <span class="tag tag-success" data-fb-task-status-tag>生效</span>
+                            <label class="toggle-switch" style="transform:scale(0.85);" title="快捷开关">
+                              <input type="checkbox" checked onchange="onFbTaskQuickToggle(this)" />
+                              <span class="toggle-slider"></span>
+                            </label>
+                          </div>
+                        </td>
                         <td>60</td>
                         <td>2026-08-20 11:20:15</td>
                         <td>推广系列预算</td>
                         <td>1000</td>
                         <td>否</td>
-                        <td>目标ROAS</td>
+                        <td>广告花费回报目标</td>
                         <td>1.12</td>
-                        <td>--</td>
-                        <td>挪可</td>
+                        <td>标准</td>
+                        <td>娜可</td>
                         <td>
                           <div class="row-actions">
                             <button class="row-action-btn" onclick="editOverseasTask(295)">编辑</button>
@@ -358,7 +378,7 @@
                         </td>
                       </tr>
                       <tr>
-                        <td><input type="checkbox" class="overseas-task-checkbox" /></td>
+                        <td><input type="checkbox" class="overseas-task-checkbox" disabled title="仅可操作自己创建的任务" /></td>
                         <td>294</td>
                         <td><span class="link" onclick="drillTaskToAccount(294)">复制:复制:复制-...</span></td>
                         <td><span class="tag tag-error">停用</span></td>
@@ -367,9 +387,9 @@
                         <td>推广系列预算</td>
                         <td>20</td>
                         <td>是</td>
-                        <td>目标ROAS</td>
-                        <td>1</td>
+                        <td>最高数量或价值</td>
                         <td>--</td>
+                        <td>增量</td>
                         <td>卡豆</td>
                         <td>
                           <div class="row-actions">
@@ -819,7 +839,7 @@
                         <th>操作</th>
                         <th>小程序</th>
                         <th>竞价策略</th>
-                        <th>目标ROAS</th>
+                        <th>广告花费回报目标</th>
                         <th>日预算</th>
                         <th>推广系列信息</th>
                         <th>账户信息</th>
@@ -842,7 +862,7 @@
                         <td><span class="link">2</span><div style="font-size:12px;"><span class="stat-success-text">成功2</span> <span style="color:var(--color-error);">失败2</span></div></td>
                         <td><div class="row-actions"><button class="row-action-btn">刷新</button> <button class="row-action-btn">重试</button></div></td>
                         <td>TT_ZeroDrama</td>
-                        <td>目标ROAS</td>
+                        <td>广告花费回报目标</td>
                         <td>1</td>
                         <td>--</td>
                         <td>娜可广告瓶广告系列_使用商..<br /><span style="color:var(--color-text-tertiary);">ID:1873745963104514</span></td>
@@ -864,7 +884,7 @@
                         <td><span class="link">2</span><div style="font-size:12px;"><span class="stat-success-text">成功2</span> <span style="color:var(--color-error);">失败2</span></div></td>
                         <td><div class="row-actions"><button class="row-action-btn">刷新</button> <button class="row-action-btn">重试</button></div></td>
                         <td>TT_ZeroDrama</td>
-                        <td>目标ROAS</td>
+                        <td>广告花费回报目标</td>
                         <td>1</td>
                         <td>--</td>
                         <td>娜可广告瓶广告系列_使用商..<br /><span style="color:var(--color-text-tertiary);">ID:1873745963104514</span></td>
@@ -997,7 +1017,7 @@
                         <th>ID</th>
                         <th>广告信息</th>
                         <th>创意素材</th>
-                        <th>TikTok账号</th>
+                        <th>FaceBook账号</th>
                         <th>上传状态</th>
                         <th>操作</th>
                         <th>推广链接ID</th>
@@ -1083,9 +1103,9 @@
             <!-- New Task Drawer -->
             <div id="drawer-overlay-overseas-new-task" class="drawer-overlay" onclick="closeOverseasNewTaskDrawer(event)"></div>
             <div id="drawer-overseas-new-task" class="drawer drawer-narrow">
-              <div class="drawer-card us-fab-host">
+              <div class="drawer-card">
                 <div class="drawer-header">
-                  <h3 class="drawer-title">新建TikTok自动化任务</h3>
+                  <h3 class="drawer-title">新建fb自动化任务</h3>
                   <button class="drawer-close" onclick="closeOverseasNewTaskDrawer()">×</button>
                 </div>
               <div class="drawer-body">
@@ -1106,15 +1126,22 @@
                     </div>
                   </div>
                   <div class="form-row">
-                    <div class="form-item">
-                      <label class="form-label"><span class="form-required">*</span> 生效时间</label>
-                      <div class="filter-range" style="width: 100%; box-sizing: border-box;">
-                        <input type="text" value="00:00:00" />
-                        <span class="filter-range-tilde">-</span>
-                        <input type="text" value="23:59:59" />
-                        <button type="button" class="filter-range-pick">⏰</button>
+                    <div class="form-item form-item-top">
+                      <label class="form-label"><span class="form-required">*</span> 生效时间（东八区）</label>
+                      <div style="flex:1; min-width:0;">
+                        <div id="effective-time-rows">
+                          <div class="effective-time-row">
+                            <div class="filter-range" style="width: 300px; box-sizing: border-box;">
+                              <input type="text" value="00:00:00" />
+                              <span class="filter-range-tilde">-</span>
+                              <input type="text" value="23:59:59" />
+                              <button type="button" class="filter-range-pick">⏰</button>
+                            </div>
+                            <button type="button" class="effective-time-remove" onclick="removeEffectiveTimeRow(this)" title="删除">−</button>
+                          </div>
+                        </div>
+                        <div style="margin-top:6px;"><span class="form-link" onclick="addNewTaskTimeRange()">添加时间范围</span></div>
                       </div>
-                      <div><span class="form-link" onclick="addNewTaskTimeRange()">添加时间范围</span></div>
                     </div>
                     <div class="form-item">
                       <label class="form-label"><span class="form-required">*</span> 执行频率</label>
@@ -1137,7 +1164,7 @@
                     <div class="form-item" style="flex: 0 0 160px; min-width: 140px;">
                       <select class="form-select"><option>包含</option></select>
                     </div>
-                    <div class="form-item">
+                    <div class="form-item" style="flex: 1 1 240px;">
                       <input type="text" class="form-input" placeholder="请选择" />
                     </div>
                   </div>
@@ -1156,7 +1183,7 @@
                         <button type="button" class="segmented-item" data-value="unlimited">不限</button>
                         <button type="button" class="segmented-item active" data-value="custom">自定义</button>
                       </div>
-                      <input type="text" class="form-input" value="1" style="width: 80px;" />
+                      <input type="text" class="form-input" id="infra-times-day-input" value="1" style="width: 80px;" />
                     </div>
                   </div>
                   <div class="form-row">
@@ -1447,30 +1474,43 @@
                 <!-- 投放配置 -->
                 <div class="form-section">
                   <h4 class="form-section-title">投放配置</h4>
-                  <!-- 推广系列 -->
+                  <!-- 投放内容 -->
+                  <div class="form-row">
+                    <div class="form-item">
+                      <label class="form-label">投放内容</label>
+                      <div class="segmented-control" id="delivery-content">
+                        <button type="button" class="segmented-item active" data-value="app-iap">APP-IAP</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- 广告系列 -->
                   <div class="form-sub-section">
-                    <div class="form-sub-section-title">推广系列</div>
+                    <div class="form-sub-section-title">广告系列</div>
                     <div class="form-row">
                       <div class="form-item">
-                        <label class="form-label">推广目标</label>
-                        <input type="text" class="form-input" value="TikTok 应用增长" readonly />
-                      </div>
-                      <div class="form-item">
-                        <label class="form-label">价值类型</label>
-                        <input type="text" class="form-input" value="广告收入价值" readonly />
+                        <label class="form-label"><span class="form-required">*</span> 预算策略</label>
+                        <div class="segmented-control" id="budget-strategy">
+                          <button type="button" class="segmented-item active" data-value="campaign">广告系列预算</button>
+                        </div>
                       </div>
                     </div>
                     <div class="form-row">
                       <div class="form-item">
-                        <label class="form-label"><span class="form-required">*</span> 预算分配策略</label>
-                        <div class="segmented-control" id="budget-strategy">
-                          <button type="button" class="segmented-item active" data-value="campaign">推广系列预算</button>
-                          <button type="button" class="segmented-item" data-value="adgroup">广告组预算</button>
+                        <label class="form-label"><span class="form-required">*</span> 日预算</label>
+                        <div style="flex:1; min-width:0;">
+                          <input type="text" class="form-input" placeholder="请输入" style="max-width:280px;" />
+                          <div class="form-hint-error">限制填写：20.00-9,999,999.99</div>
                         </div>
                       </div>
-                      <div class="form-item">
-                        <label class="form-label"><span class="form-required">*</span> 日预算</label>
-                        <input type="text" class="form-input" placeholder="请输入" />
+                    </div>
+                    <div class="form-row">
+                      <div class="form-item form-item-full">
+                        <label class="form-label">广告系列竞价策略</label>
+                        <div class="segmented-control" id="bid-strategy">
+                          <button type="button" class="segmented-item" data-value="lowest">最高数量或价值</button>
+                          <button type="button" class="segmented-item active" data-value="roas">广告花费回报目标</button>
+                        </div>
                       </div>
                     </div>
                     <div class="form-row">
@@ -1489,42 +1529,36 @@
                     <div class="form-sub-section-title">广告组</div>
                     <div class="form-row">
                       <div class="form-item">
-                        <label class="form-label"><span class="form-required">*</span> 竞价策略</label>
-                        <div class="segmented-control" id="bid-strategy">
-                          <button type="button" class="segmented-item active" data-value="roas">目标ROAS</button>
-                          <button type="button" class="segmented-item" data-value="highest">最高价值</button>
+                        <label class="form-label"><span class="form-required">*</span> 归因模型</label>
+                        <div class="segmented-control" id="attribution-model">
+                          <button type="button" class="segmented-item" data-value="standard">标准</button>
+                          <button type="button" class="segmented-item active" data-value="incremental">增量</button>
                         </div>
                       </div>
+                    </div>
+                    <div class="form-row" id="roas-target-row">
                       <div class="form-item">
-                        <label class="form-label"><span class="form-required">*</span> 目标ROAS</label>
-                        <input type="text" class="form-input" placeholder="请输入" />
+                        <label class="form-label"><span class="form-required">*</span> 广告花费回报目标</label>
+                        <input type="text" class="form-input" placeholder="请输入" style="max-width:280px;" />
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="form-item form-item-full">
+                        <label class="form-label"><span class="form-warn-icon" title="每个广告组轮流选取此处的定向包">!</span><span class="form-required">*</span> 定向包</label>
+                        <div style="flex:1; min-width:0;">
+                          <div class="inline-field" id="targeting-tags-field">
+                            <button type="button" class="btn btn-outline btn-sm" onclick="openTargetingPicker()">选择定向包</button>
+                            <span class="config-tag">定向包1 <span class="config-tag-remove" onclick="this.parentElement.remove()" title="移除">✕</span></span>
+                            <span class="config-tag">定向包2 <span class="config-tag-remove" onclick="this.parentElement.remove()" title="移除">✕</span></span>
+                          </div>
+                          <div class="form-hint">每个广告组轮流选取此处的定向包</div>
+                        </div>
                       </div>
                     </div>
                     <div class="form-row">
                       <div class="form-item">
-                        <label class="form-label">广告位</label>
-                        <div class="checkbox-group">
-                          <label class="checkbox-label"><input type="checkbox" checked /> 允许自然评论</label>
-                          <label class="checkbox-label"><input type="checkbox" checked /> 允许评论</label>
-                          <label class="checkbox-label"><input type="checkbox" checked /> 允许共享视频</label>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="form-row">
-                      <div class="form-item">
-                        <label class="form-label"><span class="form-required">*</span> 定向包</label>
-                        <div class="inline-field">
-                          <button type="button" class="btn btn-outline btn-sm">选择定向包</button>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="form-row">
-                      <div class="form-item">
-                        <label class="form-label"><span class="form-required">*</span> 小程序</label>
-                        <div class="inline-field" style="width: 100%;">
-                          <select class="form-select" style="flex: 1;"><option>请选择小程序</option></select>
-                          <select class="form-select" style="flex: 1;"><option>请先选择小程序</option></select>
-                        </div>
+                        <label class="form-label"><span class="form-required">*</span> APP</label>
+                        <select class="form-select" id="promo-app-select" style="max-width:280px;" onchange="onPromoAppChange()"><option value="">请选择</option><option>短剧APP-A</option><option>短剧APP-B</option></select>
                       </div>
                     </div>
                   </div>
@@ -1533,24 +1567,71 @@
                   <div class="form-sub-section">
                     <div class="form-sub-section-title">广告</div>
                     <div class="form-row">
-                      <div class="form-item">
-                        <label class="form-label"><span class="form-required">*</span> 投放身份（TikTok 账号）</label>
-                        <div style="width:100%;">
-                          <div class="segmented-control" id="identity-mode">
-                            <button type="button" class="segmented-item active" data-value="package" onclick="switchIdentityMode('package')">TikTok 账号包</button>
-                            <button type="button" class="segmented-item" data-value="manual" onclick="switchIdentityMode('manual')">手动选择</button>
-                          </div>
-                          <!-- 方式一：选择 TikTok 账号包 -->
-                          <div id="identity-package-mode" style="margin-top:10px;">
-                            <div class="inline-field">
-                              <button type="button" class="btn btn-outline btn-sm" onclick="openTiktokPackagePicker()">选择TikTok账号包</button>
-                            </div>
-                            <div class="ms-tags" id="identity-package-tags"></div>
-                          </div>
-                          <!-- 方式二：手动选择 TikTok 账号（公用多选下拉组件 MultiSelect） -->
-                          <div id="identity-manual-mode" style="display:none;margin-top:10px;position:relative;">
-                            <button type="button" class="us-fab" data-us="US-005" title="按住可拖动，点击查看手动选择用户故事说明" style="left:auto;right:10px;bottom:auto;top:6px;z-index:55;padding:5px 10px;font-size:11px;">📋 US-005 说明 · 手动选择 TikTok 账号</button>
-                            <div id="identity-manual-field"></div>
+                      <div class="form-item form-item-full">
+                        <label class="form-label"><span class="form-required">*</span> 身份（公共主页）</label>
+                        <div style="flex:1; min-width:0;">
+                          <!-- 手动选择公共主页：公用多选下拉组件 MultiSelect -->
+                          <div id="identity-manual-field"></div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- 推广链接 -->
+                    <div class="form-sub-section">
+                      <div class="form-sub-section-title">推广链接</div>
+                      <div class="form-row">
+                        <div class="form-item">
+                          <label class="form-label"><span class="form-required">*</span> 投放目标</label>
+                          <select class="form-select" id="promo-goal" style="max-width:280px;">
+                            <option value="">请选择</option>
+                            <option>购物</option>
+                            <option>购物-转化量</option>
+                            <option>购物-转化价值</option>
+                            <option>购物-其他优化目标</option>
+                            <option>订阅-转化量</option>
+                            <option>订阅-转化价值</option>
+                            <option>订阅-其他优化目标</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-item">
+                          <label class="form-label"><span class="form-required">*</span> 跳转方式</label>
+                          <select class="form-select" id="promo-jump" style="max-width:280px;" onchange="onPromoJumpChange()">
+                            <option value="">请选择</option>
+                            <option>W2A</option>
+                            <option>直投</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="form-row" id="promo-landing-row" style="display:none;">
+                        <div class="form-item">
+                          <label class="form-label"><span class="form-required">*</span> 落地页类型</label>
+                          <select class="form-select" id="promo-landing" style="max-width:280px;">
+                            <option value="">请选择</option>
+                            <option>有感</option>
+                            <option>无感</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-item">
+                          <label class="form-label"><span class="form-required">*</span> 回传模板</label>
+                          <select class="form-select" id="promo-retention" style="max-width:280px;"><option value="">请选择</option></select>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-item">
+                          <label class="form-label"><span class="form-required">*</span> 充值模板</label>
+                          <select class="form-select" id="promo-recharge" style="max-width:280px;"><option value="">请选择</option></select>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-item">
+                          <label class="form-label"><span class="form-required">*</span><span class="form-warn-icon" data-tip="单位美元。1美元=100代币">!</span> 单集价格</label>
+                          <div class="inline-field" style="max-width:280px;">
+                            <input type="text" class="form-input" id="promo-episode-price" placeholder="请输入" style="flex:1; min-width:0;" oninput="filterEpisodePrice(this)" onblur="validateEpisodePrice(this)" />
+                            <span class="input-addon">$</span>
                           </div>
                         </div>
                       </div>
@@ -1593,7 +1674,6 @@
                 <button class="btn btn-outline btn-sm" onclick="closeOverseasNewTaskDrawer()">取消</button>
                 <button class="btn btn-primary btn-sm" onclick="submitOverseasNewTask()">确定</button>
               </div>
-              <button type="button" class="us-fab" data-us="US-003" title="按住可拖动，点击查看本抽屉用户故事说明">📋 US-003 说明 · 投放身份（TikTok 账号）模式切换与回显</button>
               </div>
             </div>
           </div>
@@ -1602,18 +1682,336 @@
       </main>
     </div>
 
-    <!-- 投放身份 - 选择 TikTok 账号包 弹窗 -->
-    <div id="tiktok-package-picker-overlay" class="modal-overlay" style="z-index:1150;" onclick="closeTiktokPackagePicker()"></div>
-    <div id="tiktok-package-picker" class="modal" style="z-index:1151;">
-      <div class="modal-card us-fab-host" style="width:900px;max-width:92vw;">
+    <!-- 布局样式：FB自动化任务抽屉（与截图保持一致，仅调整布局） -->
+    <style>
+      /* ========== 新建fb自动化任务抽屉布局 ========== */
+      #drawer-overseas-new-task.drawer-narrow .drawer-card {
+        width: min(880px, calc(100vw - 60px));
+      }
+      #drawer-overseas-new-task .drawer-body {
+        padding: 20px 24px;
+        background: #f2f3f5;
+      }
+
+      /* 分组容器：白底圆角卡片 + 深色标题条 */
+      #drawer-overseas-new-task .form-section {
+        border: none;
+        border-radius: 6px;
+        padding: 0;
+        margin-bottom: 16px;
+        background: var(--color-white);
+        overflow: hidden;
+      }
+      #drawer-overseas-new-task .form-section-title {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--color-text-primary);
+        margin: 0;
+        padding: 10px 20px;
+        background: #e8ebf1;
+        border-bottom: 1px solid var(--color-border);
+        text-align: left;
+      }
+      #drawer-overseas-new-task .form-section-title::before {
+        display: none;
+      }
+      #drawer-overseas-new-task .form-sub-section-title {
+        margin: 0 0 4px;
+        font-size: 14px;
+        font-weight: 500;
+      }
+
+      /* 行与项：左标签 / 右控件 */
+      #drawer-overseas-new-task .form-section .form-row {
+        padding: 8px 20px;
+        margin-bottom: 0;
+        gap: 12px;
+      }
+      #drawer-overseas-new-task .form-section .form-item {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        min-width: 0;
+        margin-bottom: 0;
+        width: 100%;
+        flex: 1 1 100%;
+      }
+      #drawer-overseas-new-task .form-section .form-item.form-item-inline {
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+      #drawer-overseas-new-task .form-section .form-label {
+        width: 140px;
+        min-width: 140px;
+        flex-shrink: 0;
+        text-align: left;
+        color: var(--color-text-secondary);
+        line-height: 32px;
+        margin-bottom: 0;
+        white-space: nowrap;
+      }
+      #drawer-overseas-new-task .form-section .form-label .form-required {
+        margin-right: 4px;
+      }
+      #drawer-overseas-new-task .form-section .form-item > .segmented-control,
+      #drawer-overseas-new-task .form-section .form-item > .inline-field,
+      #drawer-overseas-new-task .form-section .form-item > .filter-range {
+        flex: 0 0 auto;
+      }
+      /* 输入框/下拉框：跟随标签同行并自适应填充剩余宽度 */
+      #drawer-overseas-new-task .form-section .form-item > .form-input,
+      #drawer-overseas-new-task .form-section .form-item > .form-select {
+        flex: 1 1 120px;
+        width: auto;
+        min-width: 0;
+      }
+      /* 生效时间（东八区）：多行时间范围 + 删除按钮 */
+      #drawer-overseas-new-task .form-section .form-item.form-item-top {
+        align-items: flex-start;
+      }
+      #drawer-overseas-new-task .form-section .form-item.form-item-top > .form-label {
+        line-height: 32px;
+      }
+      #drawer-overseas-new-task .effective-time-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 8px;
+      }
+      #drawer-overseas-new-task .effective-time-row:last-child {
+        margin-bottom: 0;
+      }
+      #drawer-overseas-new-task .effective-time-remove {
+        flex: 0 0 auto;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        border: 1px solid var(--color-error);
+        color: var(--color-error);
+        background: #fff;
+        font-size: 15px;
+        line-height: 1;
+        padding: 0;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+      /* 推广链接：输入框 $ 后缀 */
+      #drawer-overseas-new-task .input-addon {
+        flex: 0 0 auto;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 34px;
+        height: 32px;
+        border: 1px solid var(--color-border);
+        border-left: none;
+        border-radius: 0 4px 4px 0;
+        background: var(--color-bg-soft);
+        color: var(--color-text-secondary);
+        font-size: 13px;
+      }
+      #drawer-overseas-new-task .inline-field .form-input {
+        border-radius: 4px 0 0 4px;
+      }
+      #drawer-overseas-new-task .form-select[disabled] {
+        background: var(--color-bg-soft);
+        color: var(--color-text-tertiary);
+        cursor: not-allowed;
+      }
+      /* 提示图标悬浮 tip */
+      #drawer-overseas-new-task .form-warn-icon {
+        position: relative;
+        cursor: help;
+      }
+      #drawer-overseas-new-task .form-warn-icon::after {
+        content: attr(data-tip);
+        position: absolute;
+        left: 0;
+        bottom: calc(100% + 6px);
+        background: rgba(0, 0, 0, 0.78);
+        color: #fff;
+        font-size: 12px;
+        line-height: 1.4;
+        padding: 6px 10px;
+        border-radius: 4px;
+        white-space: nowrap;
+        display: none;
+        z-index: 1400;
+      }
+      #drawer-overseas-new-task .form-warn-icon:hover::after {
+        display: block;
+      }
+      #drawer-overseas-new-task .form-section .form-link {
+        color: var(--color-info);
+      }
+
+      /* 提示文案 / 定向包标签 / 警示图标 */
+      #drawer-overseas-new-task .form-hint-error {
+        color: var(--color-error);
+        font-size: 12px;
+        line-height: 1.4;
+        margin-top: 6px;
+      }
+      #drawer-overseas-new-task .form-hint {
+        color: var(--color-text-secondary);
+        font-size: 12px;
+        line-height: 1.4;
+        margin-top: 6px;
+      }
+      #drawer-overseas-new-task .config-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 10px;
+        border: 1px solid var(--color-border);
+        border-radius: 4px;
+        font-size: 13px;
+        color: var(--color-text-primary);
+        background: var(--color-white);
+        white-space: nowrap;
+      }
+      #drawer-overseas-new-task .config-tag-remove {
+        cursor: pointer;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: var(--color-error);
+        color: #fff;
+        font-size: 10px;
+        line-height: 14px;
+        text-align: center;
+        display: inline-block;
+      }
+      #drawer-overseas-new-task .form-warn-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        background: #c0c4cc;
+        color: #fff;
+        font-size: 11px;
+        font-style: normal;
+        margin-right: 2px;
+        cursor: help;
+      }
+
+      /* 短剧范围：语言 / 包含 / 请选择 同行 */
+      #drawer-overseas-new-task .form-section .form-row .form-item[style*="160px"] {
+        flex: 0 0 160px !important;
+        width: 160px;
+      }
+      #drawer-overseas-new-task .form-section .form-row .form-item[style*="160px"] .form-select {
+        width: 100%;
+      }
+
+      /* 投放配置：推广系列 / 广告组 / 广告 内容缩进与列间距 */
+      #drawer-overseas-new-task .form-section .form-sub-section {
+        margin-bottom: 4px;
+        padding: 12px 0;
+      }
+      #drawer-overseas-new-task .form-section .form-sub-section .form-row .form-item {
+        flex: 1 1 calc(50% - 6px);
+        max-width: calc(50% - 6px);
+        margin-bottom: 12px;
+      }
+      #drawer-overseas-new-task .form-section .form-sub-section .form-row .form-item.form-item-inline {
+        flex-wrap: nowrap;
+      }
+      /* 占满整行的项（广告位 / 投放身份 / 小程序） */
+      #drawer-overseas-new-task .form-section .form-sub-section .form-row .form-item.form-item-full {
+        flex: 1 1 100%;
+        max-width: 100%;
+        align-items: flex-start;
+      }
+      #drawer-overseas-new-task .form-item-full > .form-label {
+        line-height: 32px;
+      }
+
+      /* 素材配置：简单模式单列、自定义方案宽度自适应 */
+      #drawer-overseas-new-task .material-mode-panel .form-row .form-item {
+        flex: 1 1 100%;
+        max-width: 100%;
+        margin-bottom: 8px;
+      }
+      #drawer-overseas-new-task .material-mode-panel .form-row {
+        padding-bottom: 0;
+      }
+      #drawer-overseas-new-task .custom-schemes {
+        padding: 0 20px 12px;
+      }
+      #drawer-overseas-new-task .scheme-card {
+        border-color: var(--color-border);
+      }
+      #drawer-overseas-new-task .condition-row {
+        gap: 6px;
+      }
+                      #drawer-overseas-new-task .scheme-add-row {
+        padding: 0 20px 12px;
+      }
+      /* 素材配置 / 投放配置 分区标题下的第一行去掉多余上间距 */
+      #drawer-overseas-new-task .form-section > .form-row:first-of-type {
+        padding-top: 10px;
+      }
+      #drawer-overseas-new-task .form-sub-section .form-sub-section-title {
+        padding: 0 20px;
+      }
+
+      /* ========== 任务状态批量操作 ========== */
+      /* 任务状态 弹出层：fixed 定位避免被 overflow 裁剪 */
+      #fb-task-status-popover {
+        position: fixed;
+        z-index: 3000;
+        display: none;
+        gap: 24px;
+        align-items: center;
+        background: #fff;
+        border: 1px solid var(--color-border-light, #e5e6eb);
+        border-radius: 8px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        padding: 14px 22px;
+      }
+      #fb-task-status-popover .fb-pop-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 14px;
+        padding: 2px 4px;
+      }
+      #fb-task-status-popover .fb-pop-open { color: var(--color-info, #1677ff); }
+      #fb-task-status-popover .fb-pop-close { color: var(--color-error, #f5222d); }
+      /* 无权限（他人数据）复选框置灰 */
+      #page-overseas-auto-delivery input[type="checkbox"]:disabled {
+        opacity: 0.35;
+        cursor: not-allowed;
+      }
+    </style>
+
+    <!-- 定向包 - 选择定向包 弹窗 -->
+    <div id="targeting-picker-overlay" class="modal-overlay" style="z-index:1150;" onclick="closeTargetingPicker()"></div>
+    <div id="targeting-picker" class="modal" style="z-index:1151;">
+      <div class="modal-card" style="width:900px;max-width:92vw;">
         <div class="modal-header">
-          <span>选择TikTok账号包</span>
-          <button class="modal-close" onclick="closeTiktokPackagePicker()">×</button>
+          <span>选择定向包</span>
+          <button class="modal-close" onclick="closeTargetingPicker()">×</button>
         </div>
         <div class="modal-body">
           <div class="modal-filter">
-            <input type="text" class="form-input" id="tiktok-package-search" placeholder="请输入名称" style="flex:1;" />
-            <select class="form-input" id="tiktok-package-creator" style="width:150px;min-width:120px;">
+            <input type="text" class="form-input" id="targeting-search" placeholder="请输入定向包名称" style="flex:1;" />
+            <select class="form-input" id="targeting-lang" style="width:150px;min-width:120px;">
+              <option value="">请选择语言</option>
+              <option>英语</option>
+              <option>西班牙语</option>
+              <option>日语</option>
+              <option>韩语</option>
+              <option>印尼语</option>
+            </select>
+            <select class="form-input" id="targeting-creator" style="width:150px;min-width:120px;">
               <option value="">请选择创建人</option>
               <option>娜可</option>
               <option>听泉</option>
@@ -1621,36 +2019,106 @@
               <option>橙子</option>
               <option>孤树</option>
             </select>
-            <button class="btn btn-primary btn-sm" onclick="filterTiktokPackages()">查询</button>
-            <button class="btn btn-outline btn-sm" onclick="resetTiktokPackagePicker()">重置</button>
+            <button class="btn btn-primary btn-sm" onclick="renderTargetingPickerRows()">查询</button>
           </div>
+          <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:8px;" id="targeting-picker-count">已选择定向包: 0 项</div>
           <div class="table-card" style="border-radius:4px;">
             <table class="data-table">
               <thead>
                 <tr>
-                  <th class="checkbox-col"><input type="checkbox" onclick="toggleAllTiktokPackages(this)" /></th>
-                  <th>名称</th>
-                  <th>备注</th>
-                  <th>TikTok账号数量</th>
+                  <th class="checkbox-col"><input type="checkbox" onclick="toggleAllTargetingPackages(this)" /></th>
+                  <th>ID</th>
+                  <th>定向包名称</th>
+                  <th>语言</th>
                   <th>创建人</th>
                   <th>创建时间</th>
                   <th>更新时间</th>
                 </tr>
               </thead>
-              <tbody id="tiktok-package-picker-tbody"></tbody>
+              <tbody id="targeting-picker-tbody"></tbody>
             </table>
+          </div>
+          <div style="display:flex;justify-content:flex-end;align-items:center;gap:6px;padding:10px 4px 0;">
+            <button type="button" class="btn btn-primary btn-sm" style="min-width:32px;">1</button>
+            <button type="button" class="btn btn-outline btn-sm" onclick="alert('仅一页演示数据')">›</button>
           </div>
         </div>
         <div class="modal-footer">
-          <span style="margin-right:auto;font-size:13px;color:var(--color-text-secondary);" id="tiktok-package-picker-count">已选：0</span>
-          <button class="btn btn-outline btn-sm" onclick="closeTiktokPackagePicker()">取消</button>
-          <button class="btn btn-primary btn-sm" onclick="confirmTiktokPackages()">确定</button>
+          <button class="btn btn-outline btn-sm" onclick="closeTargetingPicker()">取消</button>
+          <button class="btn btn-primary btn-sm" onclick="confirmTargetingPicker()">确定</button>
         </div>
-        <button type="button" class="us-fab" data-us="US-004" title="按住可拖动，点击查看本弹框用户故事说明">📋 US-004 说明 · TikTok 账号包选择弹窗</button>
       </div>
     </div>
 
-    <!-- 定向包共享数据模块（必须在所有内联脚本之前加载） -->
+    <!-- 任务日志抽屉 -->
+    <style>
+      #drawer-task-log .drawer-body {
+        padding: 20px 24px;
+        background: #f2f3f5;
+      }
+      #drawer-task-log .modal-filter {
+        margin-bottom: 12px;
+      }
+    </style>
+    <div id="task-log-overlay" class="drawer-overlay" onclick="closeTaskLogDrawer()"></div>
+    <div id="drawer-task-log" class="drawer drawer-wide">
+      <div class="drawer-card">
+        <div class="drawer-header">
+          <h3 class="drawer-title" id="task-log-title">任务日志</h3>
+          <button class="drawer-close" onclick="closeTaskLogDrawer()">×</button>
+        </div>
+        <div class="drawer-body">
+          <div class="modal-filter">
+            <span id="task-log-drama-select" style="width:300px;display:block;"></span>
+            <input type="text" class="form-input" id="task-log-script-input" placeholder="剧本名称" style="width:180px;" />
+            <select class="form-input" id="task-log-error-select" style="width:170px;min-width:130px;">
+              <option value="">请选择错误类型</option>
+              <option>达基建次数</option>
+              <option>无可投放短剧</option>
+              <option>无可投素材</option>
+              <option>无可用标题/产品卖点</option>
+              <option>无可投账户</option>
+              <option>无可用抖音号</option>
+              <option>无可用应用</option>
+              <option>执行报错</option>
+              <option>短剧执行异常</option>
+            </select>
+            <button class="btn btn-primary btn-sm" onclick="renderTaskLogRows()">查询</button>
+            <button class="btn btn-outline btn-sm" onclick="resetTaskLogFilters()">重置</button>
+          </div>
+          <div class="table-card" style="border-radius:4px;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>短剧名称</th>
+                  <th>剧集名称</th>
+                  <th>语言</th>
+                  <th>错误类型</th>
+                  <th>执行结果</th>
+                  <th>执行时间</th>
+                </tr>
+              </thead>
+              <tbody id="task-log-tbody"></tbody>
+            </table>
+          </div>
+          <div style="display:flex;justify-content:flex-end;align-items:center;gap:10px;padding:10px 4px 0;font-size:13px;color:var(--color-text-secondary);">
+            <span>共 <span id="task-log-total">5</span> 条</span>
+            <span style="display:inline-flex;gap:4px;">
+              <button type="button" class="btn btn-primary btn-sm" style="min-width:32px;">1</button>
+            </span>
+            <select class="form-input" style="width:auto;padding:2px 6px;height:28px;" onchange="alert('每页条数演示：' + this.value + '条/页')">
+              <option>20 条/页</option>
+              <option>50 条/页</option>
+            </select>
+            <span>跳至</span>
+            <input type="text" class="form-input" style="width:44px;padding:2px 6px;height:28px;text-align:center;" value="1" />
+            <span>页</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 定向包共享数据模块（必须在所有内联脚本之前加载，否则 IIFE 中调用不到 filterTargetingPackages） -->
     <script src="../scripts/targeting-packages.js?v=20260930"></script>
 
     <script>
@@ -1671,7 +2139,9 @@
       /* ===== 独立页面导航：本页停留 / 海外页面互跳 / 国内页面跳回 index ===== */
       function showPage(pageName) {
         if (pageName.indexOf('fb-') === 0) {
-          window.location.href = navUrl('pages/' + pageName + '.html');
+          if (pageName !== 'fb-auto-delivery') {
+            window.location.href = navUrl('pages/' + pageName + '.html');
+          }
           return;
         }
         if (pageName === 'overseas-tiktok-account') {
@@ -1686,7 +2156,10 @@
           window.location.href = navUrl('pages/overseas-app.html');
           return;
         }
-        if (pageName === 'overseas-auto-delivery') return;
+        if (pageName === 'overseas-auto-delivery') {
+          window.location.href = navUrl('pages/overseas-auto-delivery.html');
+          return;
+        }
         if (pageName === 'overseas-batch-delivery') {
           window.location.href = navUrl('pages/overseas-batch-delivery.html');
           return;
@@ -1701,6 +2174,10 @@
         }
         if (pageName === 'overseas-system-user') {
           window.location.href = navUrl('pages/overseas-system-user.html');
+          return;
+        }
+        if (pageName === 'overseas-fb-page') {
+          window.location.href = navUrl('pages/overseas-fb-page.html');
           return;
         }
         if (pageName === 'overseas-system-org') {
@@ -1772,7 +2249,7 @@
       });
 
       /* ===== 子菜单项跳转 ===== */
-      /* ===== 二级分组（批量投放 / 账号管理）展开收起 ===== */
+            /* ===== 二级分组（批量投放 / 账号管理）展开收起 ===== */
       document.querySelectorAll('.nav-child-item.has-children').forEach(function (item) {
         item.addEventListener('click', function (e) {
           e.stopPropagation();
@@ -1817,8 +2294,95 @@
         var checked = document.getElementById('selectAllOverseasTasks').checked;
         document
           .querySelectorAll('#page-overseas-auto-delivery .overseas-task-checkbox')
-          .forEach(function (cb) { cb.checked = checked; });
+          .forEach(function (cb) { if (!cb.disabled) cb.checked = checked; });
+        syncFbTaskSelection();
       }
+
+      /* ===== 任务状态批量操作：选中计数 / 开启关闭弹层 / 权限限制 ===== */
+      var FB_CURRENT_USER = '娜可';
+
+      function syncFbTaskSelection() {
+        var count = 0;
+        document
+          .querySelectorAll('#page-overseas-auto-delivery .overseas-task-checkbox')
+          .forEach(function (cb) { if (!cb.disabled && cb.checked) count++; });
+        var countEl = document.getElementById('fb-task-selected-count');
+        var link = document.getElementById('fb-task-status-link');
+        if (countEl) countEl.textContent = count;
+        if (link) {
+          if (count > 0) {
+            link.style.color = 'var(--color-info)';
+            link.style.pointerEvents = 'auto';
+          } else {
+            link.style.color = 'var(--color-text-tertiary)';
+            link.style.pointerEvents = 'none';
+            hideFbTaskStatusPopover();
+          }
+        }
+        // 全选框状态：仅按可操作行计算
+        var master = document.getElementById('selectAllOverseasTasks');
+        if (master) {
+          var all = document.querySelectorAll('#page-overseas-auto-delivery .overseas-task-checkbox:not(:disabled)');
+          var checkedAll = all.length > 0 && Array.prototype.every.call(all, function (cb) { return cb.checked; });
+          master.checked = checkedAll;
+        }
+      }
+
+      function toggleFbTaskStatusPopover(event) {
+        if (event) event.stopPropagation();
+        var link = document.getElementById('fb-task-status-link');
+        var pop = document.getElementById('fb-task-status-popover');
+        if (!link || !pop) return;
+        if (pop.style.display === 'flex') { hideFbTaskStatusPopover(); return; }
+        var rect = link.getBoundingClientRect();
+        pop.style.left = rect.left + 'px';
+        pop.style.top = (rect.bottom + 6) + 'px';
+        pop.style.display = 'flex';
+      }
+
+      function hideFbTaskStatusPopover() {
+        var pop = document.getElementById('fb-task-status-popover');
+        if (pop) pop.style.display = 'none';
+      }
+
+      function applyFbTaskStatus(enable) {
+        var rows = document.querySelectorAll('#page-overseas-auto-delivery .overseas-task-checkbox:not(:disabled):checked');
+        if (rows.length === 0) { hideFbTaskStatusPopover(); return; }
+        rows.forEach(function (cb) {
+          var tr = cb.closest('tr');
+          if (!tr) return;
+          var tag = tr.querySelector('[data-fb-task-status-tag]');
+          var sw = tr.querySelector('input[type="checkbox"][onchange="onFbTaskQuickToggle(this)"]');
+          if (tag) {
+            tag.textContent = enable ? '生效' : '停用';
+            tag.classList.toggle('tag-success', enable);
+            tag.classList.toggle('tag-error', !enable);
+          }
+          if (sw) sw.checked = enable;
+        });
+        hideFbTaskStatusPopover();
+      }
+
+      function onFbTaskQuickToggle(input) {
+        var td = input.closest('td');
+        var tag = td ? td.querySelector('[data-fb-task-status-tag]') : null;
+        if (!tag) return;
+        tag.textContent = input.checked ? '生效' : '停用';
+        tag.classList.toggle('tag-success', input.checked);
+        tag.classList.toggle('tag-error', !input.checked);
+      }
+
+      // 点击弹层外部时关闭
+      (function () {
+        document.addEventListener('click', function (e) {
+          var pop = document.getElementById('fb-task-status-popover');
+          if (!pop || pop.style.display !== 'flex') return;
+          if (pop.contains(e.target)) return;
+          var link = document.getElementById('fb-task-status-link');
+          if (link && link.contains(e.target)) return;
+          hideFbTaskStatusPopover();
+        });
+      })();
 
       function toggleSelectAllOverseasRows(masterId, childClass) {
         var master = document.getElementById(masterId);
@@ -1833,7 +2397,7 @@
         var overlay = document.getElementById('drawer-overlay-overseas-new-task');
         var drawer = document.getElementById('drawer-overseas-new-task');
         var titleEl = drawer ? drawer.querySelector('.drawer-title') : null;
-        if (titleEl) titleEl.textContent = title || '新建TikTok自动化任务';
+        if (titleEl) titleEl.textContent = title || '新建fb自动化任务';
         if (overlay) overlay.classList.add('open');
         if (drawer) drawer.classList.add('open');
       }
@@ -1844,7 +2408,6 @@
         var drawer = document.getElementById('drawer-overseas-new-task');
         if (overlay) overlay.classList.remove('open');
         if (drawer) drawer.classList.remove('open');
-        if (window.prd && window.prd.closeUsDetail) window.prd.closeUsDetail();
       }
 
       function submitOverseasNewTask() {
@@ -1852,12 +2415,8 @@
         closeOverseasNewTaskDrawer();
       }
 
-      /* ===== 投放身份（TikTok 账号）：TikTok 账号包 / 手动选择 =====
-       当前登录人：由 scripts/targeting-packages.js 注入（默认娜可），此处不再覆盖 */
-      var IDENTITY_PACKAGES = [
-        { name: '东南亚英语TikTok包', count: 4, remark: '--', creator: '娜可', createTime: '2026-09-01 10:00', updateTime: '2026-09-10 15:30' },
-        { name: '欧洲多语言TikTok包', count: 3, remark: '--', creator: '娜可', createTime: '2026-09-05 14:20', updateTime: '2026-09-12 09:15' }
-      ];
+      /* ===== 身份（公共主页）：手动选择 ===== */
+      /* 当前登录人：由 scripts/targeting-packages.js 注入（默认娜可），此处不再覆盖 */
       var IDENTITY_ACCOUNTS = [
         { name: 'Sasa ดู', lang: '葡萄牙语' },
         { name: '廖廖短剧', lang: '繁体中文' },
@@ -1866,128 +2425,11 @@
         { name: 'Mimi Drama', lang: '泰语' },
         { name: 'Luna Shorts', lang: '西班牙语' }
       ];
-      var identitySelectedPackages = [];
       /* 历史任务投放身份回显：历史数据统一按手动选择处理并回显已选账号 */
       var HISTORY_TASKS = {
         295: { identityMode: 'manual', identityAccounts: ['Sasa ดู', '廖廖短剧'] },
         294: { identityMode: 'manual', identityAccounts: ['Yoyo Cortos', 'Mimi Drama'] }
       };
-
-      function switchIdentityMode(mode) {
-        var group = document.getElementById('identity-mode');
-        var packageMode = document.getElementById('identity-package-mode');
-        var manualMode = document.getElementById('identity-manual-mode');
-        if (!group || !packageMode || !manualMode) return;
-        Array.prototype.forEach.call(group.querySelectorAll('.segmented-item'), function (btn) {
-          btn.classList.toggle('active', btn.getAttribute('data-value') === mode);
-        });
-        packageMode.style.display = mode === 'package' ? 'block' : 'none';
-        manualMode.style.display = mode === 'manual' ? 'block' : 'none';
-      }
-
-      function renderIdentityPackageTags() {
-        var box = document.getElementById('identity-package-tags');
-        if (!box) return;
-        if (!identitySelectedPackages.length) {
-          box.innerHTML = '';
-          return;
-        }
-        box.innerHTML = identitySelectedPackages.map(function (p) {
-          return '<span class="ms-tag">' + p.name + '<button type="button" onclick="removeIdentityPackage(\'' + p.name + '\')" title="移除">&times;</button></span>';
-        }).join('');
-      }
-
-      function removeIdentityPackage(name) {
-        identitySelectedPackages = identitySelectedPackages.filter(function (p) { return p.name !== name; });
-        renderIdentityPackageTags();
-      }
-
-      function openTiktokPackagePicker() {
-        var creatorSelect = document.getElementById('tiktok-package-creator');
-        if (creatorSelect) creatorSelect.value = CURRENT_USER || '';
-        renderTiktokPackagePickerRows();
-        var overlay = document.getElementById('tiktok-package-picker-overlay');
-        var modal = document.getElementById('tiktok-package-picker');
-        if (overlay) overlay.classList.add('open');
-        if (modal) modal.classList.add('open');
-        updateTiktokPackagePickerCount();
-      }
-
-      function closeTiktokPackagePicker() {
-        var overlay = document.getElementById('tiktok-package-picker-overlay');
-        var modal = document.getElementById('tiktok-package-picker');
-        if (overlay) overlay.classList.remove('open');
-        if (modal) modal.classList.remove('open');
-        if (window.prd && window.prd.closeUsDetail) window.prd.closeUsDetail();
-      }
-
-      function renderTiktokPackagePickerRows() {
-        var tbody = document.getElementById('tiktok-package-picker-tbody');
-        if (!tbody) return;
-        var kw = (document.getElementById('tiktok-package-search') || {}).value || '';
-        kw = kw.trim();
-        var creator = (document.getElementById('tiktok-package-creator') || {}).value || '';
-        tbody.innerHTML = IDENTITY_PACKAGES.filter(function (p) {
-          var matchKw = !kw || p.name.indexOf(kw) >= 0;
-          var matchCreator = !creator || p.creator === creator;
-          return matchKw && matchCreator;
-        }).map(function (p) {
-          var checked = identitySelectedPackages.some(function (s) { return s.name === p.name; });
-          return '<tr data-name="' + p.name + '">' +
-            '<td class="checkbox-col"><input type="checkbox" value="' + p.name + '"' + (checked ? ' checked' : '') + ' onchange="updateTiktokPackagePickerCount()" /></td>' +
-            '<td>' + p.name + '</td><td>' + p.remark + '</td><td>' + p.count + '</td><td>' + (p.creator || '--') + '</td><td>' + (p.createTime || '--') + '</td><td>' + (p.updateTime || '--') + '</td></tr>';
-        }).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--color-text-tertiary);padding:24px 0;">暂无数据</td></tr>';
-      }
-
-      function updateTiktokPackagePickerCount() {
-        var tbody = document.getElementById('tiktok-package-picker-tbody');
-        if (!tbody) return;
-        var checked = tbody.querySelectorAll('input[type="checkbox"]:checked').length;
-        var total = tbody.querySelectorAll('input[type="checkbox"]').length;
-        var countEl = document.getElementById('tiktok-package-picker-count');
-        if (countEl) countEl.textContent = '已选：' + checked;
-        var header = tbody.previousElementSibling ? tbody.previousElementSibling.querySelector('input[type="checkbox"]') : null;
-        if (!header) header = document.querySelector('#tiktok-package-picker .data-table thead input[type="checkbox"]');
-        if (header) {
-          header.checked = total > 0 && checked === total;
-        }
-      }
-
-      function toggleAllTiktokPackages(header) {
-        var tbody = document.getElementById('tiktok-package-picker-tbody');
-        if (!tbody) return;
-        Array.prototype.forEach.call(tbody.querySelectorAll('input[type="checkbox"]'), function (cb) {
-          cb.checked = header.checked;
-        });
-        updateTiktokPackagePickerCount();
-      }
-
-      function filterTiktokPackages() {
-        renderTiktokPackagePickerRows();
-        updateTiktokPackagePickerCount();
-      }
-
-      function resetTiktokPackagePicker() {
-        var search = document.getElementById('tiktok-package-search');
-        if (search) search.value = '';
-        var creator = document.getElementById('tiktok-package-creator');
-        if (creator) creator.value = '';
-        renderTiktokPackagePickerRows();
-        updateTiktokPackagePickerCount();
-      }
-
-      function confirmTiktokPackages() {
-        var tbody = document.getElementById('tiktok-package-picker-tbody');
-        if (!tbody) return;
-        identitySelectedPackages = [];
-        Array.prototype.forEach.call(tbody.querySelectorAll('input[type="checkbox"]:checked'), function (cb) {
-          var name = cb.value;
-          var p = IDENTITY_PACKAGES.filter(function (x) { return x.name === name; })[0];
-          if (p) identitySelectedPackages.push(p);
-        });
-        renderIdentityPackageTags();
-        closeTiktokPackagePicker();
-      }
 
       /* 手动选择：公用多选下拉组件（scripts/multi-select.js） */
       var identityMs = null;
@@ -1995,8 +2437,8 @@
         if (identityMs) return identityMs;
         if (!window.MultiSelect || !document.getElementById('identity-manual-field')) return null;
         identityMs = MultiSelect.init(document.getElementById('identity-manual-field'), {
-          placeholder: '请选择TikTok账号',
-          countLabel: '已选：{n} 个TikTok账号',
+          placeholder: '请选择公共主页',
+          countLabel: '已选：{n} 个公共主页',
           searchPlaceholder: '请输入名称',
           options: IDENTITY_ACCOUNTS.map(function (a) { return { id: a.name, name: a.name, meta: a.lang }; })
         });
@@ -2301,9 +2743,239 @@
         });
       });
 
-      function addNewTaskTimeRange() {
-        alert('添加时间范围');
+      /* ===== 基建次数/天：选中【不限】时隐藏后面的输入框 ===== */
+      (function () {
+        var group = document.getElementById('infra-times-day');
+        var input = document.getElementById('infra-times-day-input');
+        if (!group || !input) return;
+        var sync = function () {
+          var act = group.querySelector('.segmented-item.active');
+          input.style.display = (act && act.getAttribute('data-value') === 'unlimited') ? 'none' : '';
+        };
+        group.addEventListener('click', sync);
+        sync();
+      })();
+
+      /* ===== 广告系列竞价策略：选中【广告花费回报目标】时显示对应字段 ===== */
+      (function () {
+        var group = document.getElementById('bid-strategy');
+        var row = document.getElementById('roas-target-row');
+        if (!group || !row) return;
+        var sync = function () {
+          var act = group.querySelector('.segmented-item.active');
+          row.style.display = (act && act.getAttribute('data-value') === 'roas') ? '' : 'none';
+        };
+        group.addEventListener('click', sync);
+        sync();
+      })();
+
+      /* ===== 推广链接子区交互 ===== */
+      var RETENTION_TEMPLATES = [
+        { name: '回传模板A', creator: 'admin' },
+        { name: '回传模板B', creator: 'admin' },
+        { name: '回传模板C', creator: '听泉' },
+        { name: '回传模板D', creator: '橙子' }
+      ];
+      var RECHARGE_TEMPLATES = [
+        { name: '充值模板A1', app: '短剧APP-A', creator: 'admin' },
+        { name: '充值模板A2', app: '短剧APP-A', creator: '听泉' },
+        { name: '充值模板B1', app: '短剧APP-B', creator: 'admin' },
+        { name: '充值模板B2', app: '短剧APP-B', creator: '橙子' }
+      ];
+
+      function fillPromoSelect(sel, items, placeholder) {
+        sel.innerHTML = '';
+        var ph = document.createElement('option');
+        ph.value = '';
+        ph.textContent = placeholder;
+        sel.appendChild(ph);
+        items.forEach(function (t) {
+          var opt = document.createElement('option');
+          opt.value = t.name;
+          opt.textContent = t.name + '（' + t.creator + '）';
+          sel.appendChild(opt);
+        });
       }
+
+      function initPromoLink() {
+        var rt = document.getElementById('promo-retention');
+        if (!rt) return;
+        /* 回传模板：仅本人数据（组长只可选自己的） */
+        fillPromoSelect(rt, RETENTION_TEMPLATES.filter(function (t) { return t.creator === CURRENT_USER; }), '请选择');
+        onPromoAppChange();
+      }
+
+      /* 充值模板：跟随所选 APP 过滤（仅本人数据），始终可选 */
+      function onPromoAppChange() {
+        var appSel = document.getElementById('promo-app-select');
+        var sel = document.getElementById('promo-recharge');
+        if (!appSel || !sel) return;
+        var app = appSel.value;
+        sel.disabled = false;
+        fillPromoSelect(sel, RECHARGE_TEMPLATES.filter(function (t) { return (!app || t.app === app) && t.creator === CURRENT_USER; }), '请选择');
+      }
+
+      /* 跳转方式选 W2A 时显示落地页类型 */
+      function onPromoJumpChange() {
+        var jump = document.getElementById('promo-jump');
+        var row = document.getElementById('promo-landing-row');
+        if (!jump || !row) return;
+        row.style.display = jump.value === 'W2A' ? '' : 'none';
+        if (jump.value !== 'W2A') {
+          var land = document.getElementById('promo-landing');
+          if (land) land.value = '';
+        }
+      }
+
+      /* 单集价格：仅数字、最多2位小数，失焦校验大于0 */
+      function filterEpisodePrice(input) {
+        var v = input.value.replace(/[^\d.]/g, '');
+        var parts = v.split('.');
+        if (parts.length > 2) v = parts[0] + '.' + parts.slice(1).join('');
+        var dot = v.indexOf('.');
+        if (dot > -1 && v.length - dot - 1 > 2) v = v.slice(0, dot + 3);
+        input.value = v;
+      }
+      function validateEpisodePrice(input) {
+        var n = parseFloat(input.value);
+        if (input.value !== '' && (!(n > 0))) input.value = '';
+      }
+      initPromoLink();
+
+      /* ===== 选择定向包 弹窗（数据来源：模板管理-定向包页面 → scripts/targeting-packages.js → localStorage） ===== */
+      var targetingSelectedNames = [];
+
+      function openTargetingPicker() {
+        var creator = document.getElementById('targeting-creator');
+        if (creator) creator.value = CURRENT_USER || '';
+        // 仅打开弹窗，不自动查询；列表置为空，等用户点击「查询」再加载
+        var tbody = document.getElementById('targeting-picker-tbody');
+        if (tbody) tbody.innerHTML = '';
+        updateTargetingPickerCount();
+        var overlay = document.getElementById('targeting-picker-overlay');
+        var modal = document.getElementById('targeting-picker');
+        if (overlay) overlay.classList.add('open');
+        if (modal) modal.classList.add('open');
+      }
+
+      function closeTargetingPicker() {
+        var overlay = document.getElementById('targeting-picker-overlay');
+        var modal = document.getElementById('targeting-picker');
+        if (overlay) overlay.classList.remove('open');
+        if (modal) modal.classList.remove('open');
+      }
+
+      function renderTargetingPickerRows() {
+        var tbody = document.getElementById('targeting-picker-tbody');
+        if (!tbody) return;
+        var kw = ((document.getElementById('targeting-search') || {}).value || '').trim();
+        var lang = (document.getElementById('targeting-lang') || {}).value || '';
+        var creator = (document.getElementById('targeting-creator') || {}).value || '';
+        var rows = filterTargetingPackages({ keyword: kw, lang: lang, creator: creator });
+        tbody.innerHTML = rows.map(function (p) {
+          var checked = targetingSelectedNames.indexOf(p.name) >= 0;
+          return '<tr data-name="' + p.name + '">' +
+            '<td class="checkbox-col"><input type="checkbox" value="' + p.name + '"' + (checked ? ' checked' : '') + ' onchange="onTargetingCheck(this)" /></td>' +
+            '<td>' + p.id + '</td>' +
+            '<td><a href="javascript:void(0)" style="color:var(--color-info);text-decoration:none;">' + p.name + '</a></td>' +
+            '<td>' + p.lang + '</td><td>' + p.creator + '</td><td>' + p.createTime + '</td><td>' + p.updateTime + '</td></tr>';
+        }).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--color-text-tertiary);padding:24px 0;">暂无数据</td></tr>';
+        updateTargetingPickerCount();
+      }
+
+      /* 勾选即记录选中项，切换筛选/翻页不丢失 */
+      function onTargetingCheck(cb) {
+        var name = cb.value;
+        if (cb.checked) {
+          if (targetingSelectedNames.indexOf(name) < 0) targetingSelectedNames.push(name);
+        } else {
+          targetingSelectedNames = targetingSelectedNames.filter(function (n) { return n !== name; });
+        }
+        updateTargetingPickerCount();
+      }
+
+      function updateTargetingPickerCount() {
+        var tbody = document.getElementById('targeting-picker-tbody');
+        if (!tbody) return;
+        var countEl = document.getElementById('targeting-picker-count');
+        if (countEl) countEl.textContent = '已选择定向包: ' + targetingSelectedNames.length + ' 项';
+        var header = document.querySelector('#targeting-picker .data-table thead input[type="checkbox"]');
+        var cbs = tbody.querySelectorAll('input[type="checkbox"]');
+        var checked = 0;
+        Array.prototype.forEach.call(cbs, function (cb) { if (cb.checked) checked++; });
+        if (header) header.checked = cbs.length > 0 && checked === cbs.length;
+      }
+
+      function toggleAllTargetingPackages(header) {
+        var tbody = document.getElementById('targeting-picker-tbody');
+        if (!tbody) return;
+        Array.prototype.forEach.call(tbody.querySelectorAll('input[type="checkbox"]'), function (cb) {
+          cb.checked = header.checked;
+          onTargetingCheck(cb);
+        });
+        updateTargetingPickerCount();
+      }
+
+      function confirmTargetingPicker() {
+        renderTargetingTags();
+        closeTargetingPicker();
+      }
+
+      function renderTargetingTags() {
+        var field = document.getElementById('targeting-tags-field');
+        if (!field) return;
+        Array.prototype.forEach.call(field.querySelectorAll('.config-tag'), function (tag) {
+          tag.parentNode.removeChild(tag);
+        });
+        var btn = field.querySelector('.btn');
+        targetingSelectedNames.forEach(function (name) {
+          var span = document.createElement('span');
+          span.className = 'config-tag';
+          span.innerHTML = name + ' <span class="config-tag-remove" onclick="removeTargetingTag(this)" title="移除">✕</span>';
+          field.insertBefore(span, btn.nextSibling);
+        });
+      }
+
+      function removeTargetingTag(el) {
+        var tag = el.parentElement;
+        var name = tag.textContent.replace('✕', '').trim();
+        targetingSelectedNames = targetingSelectedNames.filter(function (n) { return n !== name; });
+        tag.remove();
+      }
+
+      function addNewTaskTimeRange() {
+        var box = document.getElementById('effective-time-rows');
+        if (!box) return;
+        var row = document.createElement('div');
+        row.className = 'effective-time-row';
+        row.innerHTML =
+          '<div class="filter-range" style="width: 300px; box-sizing: border-box;">' +
+            '<input type="text" placeholder="开始时间" />' +
+            '<span class="filter-range-tilde">-</span>' +
+            '<input type="text" placeholder="结束时间" />' +
+            '<button type="button" class="filter-range-pick">⏰</button>' +
+          '</div>' +
+          '<button type="button" class="effective-time-remove" onclick="removeEffectiveTimeRow(this)" title="删除">−</button>';
+        box.appendChild(row);
+        syncEffectiveTimeRemove();
+      }
+
+      function removeEffectiveTimeRow(btn) {
+        var row = btn.closest('.effective-time-row');
+        if (!row) return;
+        row.parentNode.removeChild(row);
+        syncEffectiveTimeRemove();
+      }
+
+      function syncEffectiveTimeRemove() {
+        var rows = document.querySelectorAll('#effective-time-rows .effective-time-row');
+        var hide = rows.length <= 1;
+        Array.prototype.forEach.call(rows, function (r) {
+          var btn = r.querySelector('.effective-time-remove');
+          if (btn) btn.style.display = hide ? 'none' : '';
+        });
+      }
+      syncEffectiveTimeRemove();
 
       function addDramaRange() {
         alert('添加短剧范围');
@@ -2320,33 +2992,182 @@
       function prefillTaskIdentity(id) {
         var history = HISTORY_TASKS[id];
         if (!history) return;
-        if (history.identityMode === 'manual') {
-          switchIdentityMode('manual');
-          var ms = initIdentityMultiSelect();
-          if (ms) ms.setSelected(history.identityAccounts || []);
-        } else {
-          switchIdentityMode('package');
-          identitySelectedPackages = [];
-          (history.identityPackages || []).forEach(function (name) {
-            var p = IDENTITY_PACKAGES.filter(function (x) { return x.name === name; })[0];
-            if (p) identitySelectedPackages.push(p);
-          });
-          renderIdentityPackageTags();
-        }
+        /* 仅保留手动选择：统一回显已选公共主页 */
+        var ms = initIdentityMultiSelect();
+        if (ms) ms.setSelected(history.identityAccounts || []);
       }
 
       function editOverseasTask(id) {
-        openOverseasNewTaskModal('编辑TikTok自动化任务');
+        openOverseasNewTaskModal('编辑fb自动化任务');
         prefillTaskIdentity(id);
       }
 
       function copyOverseasTask(id) {
-        openOverseasNewTaskModal('复制TikTok自动化任务');
+        openOverseasNewTaskModal('复制fb自动化任务');
         prefillTaskIdentity(id);
       }
 
+      /* ===== 任务日志弹框（示例数据仅保留 5 条） ===== */
+      var FB_TASK_LOG_SAMPLE = [
+        { drama: '天下第一帅哥-蒙中', episode: '天下第一帅哥', lang: '繁体中文', error: '达基建次数', result: '短剧已达总创建次数上限（1/1）', time: '2026-09-29 17:00:00' },
+        { drama: '天下第一帅哥1', episode: '天下第一帅哥', lang: '英语', error: '无可投素材', result: '没有可投放的素材', time: '2026-09-29 17:00:00' },
+        { drama: 'TLA FEMME ES TU AS TRAHI EST TU...', episode: '剧e80702', lang: '法语', error: '无可用抖音号', result: '没有与短剧语言匹配的TikTok账号，跳过投放', time: '2026-09-29 17:00:00' },
+        { drama: '龙七新试短剧', episode: '111', lang: '英语', error: '无可投素材', result: '没有可投放的素材', time: '2026-09-29 17:00:00' },
+        { drama: 'She Fights, She Risks', episode: '千金赘婿破荣林', lang: '英语', error: '无可投素材', result: '没有可投放的素材', time: '2026-09-29 17:00:00' }
+      ];
+
+      /* 短剧单选下拉（模糊查询，复用 multi-select.css 的 ms-* 样式） */
+      function initTaskLogDramaSelect() {
+        var host = document.getElementById('task-log-drama-select');
+        if (!host || host._inited) return;
+        host._inited = true;
+
+        var dramas = [];
+        FB_TASK_LOG_SAMPLE.forEach(function (r) {
+          if (dramas.indexOf(r.drama) < 0) dramas.push(r.drama);
+        });
+        var state = { value: '', open: false, kw: '' };
+
+        host.innerHTML =
+          '<div class="ms-field">' +
+            '<button type="button" class="ms-trigger" style="width:100%;">' +
+              '<span class="ms-label">请选择短剧</span>' +
+              '<span class="ms-caret">▾</span>' +
+            '</button>' +
+            '<button type="button" class="ms-clear" title="清空">×</button>' +
+          '</div>';
+        var trigger = host.querySelector('.ms-trigger');
+        var label = host.querySelector('.ms-label');
+        var clearBtn = host.querySelector('.ms-clear');
+
+        var panel = document.createElement('div');
+        panel.className = 'ms-panel';
+        panel.innerHTML =
+          '<div class="ms-search"><input type="text" class="form-input" placeholder="请输入短剧名称" /></div>' +
+          '<div class="ms-list"></div>';
+        document.body.appendChild(panel);
+        var search = panel.querySelector('input');
+        var list = panel.querySelector('.ms-list');
+
+        function renderList() {
+          var kw = state.kw.trim().toLowerCase();
+          var items = dramas.filter(function (d) { return !kw || d.toLowerCase().indexOf(kw) >= 0; });
+          list.innerHTML = items.length
+            ? items.map(function (d) {
+                return '<div class="ms-option" data-v="' + d + '">' + d + '</div>';
+              }).join('')
+            : '<div class="ms-empty">暂无数据</div>';
+        }
+        function position() {
+          if (!state.open) return;
+          var r = trigger.getBoundingClientRect();
+          panel.style.width = r.width + 'px';
+          panel.style.left = r.left + 'px';
+          panel.style.top = (r.bottom + 4) + 'px';
+        }
+        function sync() {
+          label.textContent = state.value || '请选择短剧';
+          label.style.color = state.value ? 'var(--color-text-primary)' : 'var(--color-text-tertiary)';
+        }
+        function openPanel() {
+          state.open = true; state.kw = ''; search.value = '';
+          renderList(); panel.classList.add('is-open'); host.classList.add('is-open'); position();
+          setTimeout(function () { search.focus(); }, 0);
+        }
+        function closePanel() {
+          state.open = false;
+          panel.classList.remove('is-open'); host.classList.remove('is-open');
+        }
+
+        trigger.addEventListener('click', function (e) { e.stopPropagation(); state.open ? closePanel() : openPanel(); });
+        clearBtn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          state.value = ''; sync(); closePanel();
+        });
+        search.addEventListener('input', function () { state.kw = this.value; renderList(); });
+        panel.addEventListener('click', function (e) {
+          e.stopPropagation();
+          var opt = e.target.closest ? e.target.closest('.ms-option') : null;
+          if (!opt) return;
+          state.value = opt.getAttribute('data-v');
+          sync(); closePanel();
+        });
+        document.addEventListener('click', function (e) {
+          if (state.open && !panel.contains(e.target) && !trigger.contains(e.target)) closePanel();
+        });
+        window.addEventListener('resize', position);
+        window.addEventListener('scroll', position, true);
+
+        host._getDrama = function () { return state.value; };
+        host._resetDrama = function () { state.value = ''; sync(); };
+      }
+
+      function renderTaskLogRows() {
+        var tbody = document.getElementById('task-log-tbody');
+        if (!tbody) return;
+        initTaskLogDramaSelect();
+        var dramaHost = document.getElementById('task-log-drama-select');
+        var drama = dramaHost && dramaHost._getDrama ? dramaHost._getDrama() : '';
+        var script = ((document.getElementById('task-log-script-input') || {}).value || '').trim();
+        var errType = (document.getElementById('task-log-error-select') || {}).value || '';
+        var rows = FB_TASK_LOG_SAMPLE.filter(function (r) {
+          if (drama && r.drama !== drama) return false;
+          if (script && r.episode.indexOf(script) < 0) return false;
+          if (errType && r.error !== errType) return false;
+          return true;
+        });
+        tbody.innerHTML = rows.length
+          ? rows
+              .map(function (r) {
+                return (
+                  '<tr>' +
+                  '<td>' + r.drama + '</td>' +
+                  '<td>' + r.episode + '</td>' +
+                  '<td>' + r.lang + '</td>' +
+                  '<td>' + r.error + '</td>' +
+                  '<td style="color:var(--color-error);">' + r.result + '</td>' +
+                  '<td>' + r.time + '</td>' +
+                  '</tr>'
+                );
+              })
+              .join('')
+          : '<tr><td colspan="6" style="text-align:center;padding:24px 0;color:var(--color-text-secondary);">暂无数据</td></tr>';
+        var total = document.getElementById('task-log-total');
+        if (total) total.textContent = rows.length;
+      }
+
+      function resetTaskLogFilters() {
+        var dramaHost = document.getElementById('task-log-drama-select');
+        if (dramaHost && dramaHost._resetDrama) dramaHost._resetDrama();
+        var input = document.getElementById('task-log-script-input');
+        var err = document.getElementById('task-log-error-select');
+        if (input) input.value = '';
+        if (err) err.value = '';
+        renderTaskLogRows();
+      }
+
       function showOverseasTaskLog(id) {
-        alert('查看任务日志：' + id);
+        var name = '';
+        document.querySelectorAll('#overseas-auto-delivery-task tbody tr').forEach(function (tr) {
+          if (!tr.querySelector('button[onclick*="showOverseasTaskLog(' + id + ')"]')) return;
+          var nameCell = tr.querySelector('td:nth-child(3)');
+          if (nameCell) name = (nameCell.textContent || '').trim();
+        });
+        var titleEl = document.getElementById('task-log-title');
+        if (titleEl) titleEl.textContent = (name || '任务') + '(ID:' + id + ')';
+        resetTaskLogFilters();
+        renderTaskLogRows();
+        var overlay = document.getElementById('task-log-overlay');
+        var drawer = document.getElementById('drawer-task-log');
+        if (overlay) overlay.classList.add('open');
+        if (drawer) drawer.classList.add('open');
+      }
+
+      function closeTaskLogDrawer() {
+        var overlay = document.getElementById('task-log-overlay');
+        var drawer = document.getElementById('drawer-task-log');
+        if (overlay) overlay.classList.remove('open');
+        if (drawer) drawer.classList.remove('open');
       }
 
       function changeOverseasPage(page) {
@@ -2454,102 +3275,7 @@
         }
       });
     </script>
-
-    <!-- ===== 需求说明（简洁版 PRD）入口 ===== -->
-    <div id="prd-overlay" class="prd-overlay"></div>
-    <aside id="prd-panel" class="prd-panel" role="dialog" aria-label="交互需求说明">
-      <div class="prd-panel-header" id="prd-panel-header" title="按住此处可拖动面板，双击可全屏">
-        <div>
-          <div class="prd-panel-title">自动化任务 · 投放身份（TikTok 账号）· 交互需求说明</div>
-          <div class="prd-panel-sub">简洁版 PRD（3 个用户故事 · 展开查看筛选项/表格字段/数据来源/数据流转 · 按住标题栏可拖动，双击或按钮可全屏 · 「复制链接」复制需求说明页面链接）</div>
-        </div>
-        <div class="prd-panel-actions">
-          <button type="button" class="prd-panel-btn" id="prd-copy-link-btn" onclick="window.prd.copyPrdLink()" title="复制需求说明页面链接">复制链接</button>
-          <button type="button" class="prd-panel-btn" id="prd-fullscreen-btn" title="全屏查看">全屏</button>
-          <button type="button" class="prd-panel-close" onclick="window.prd.closePrdPanel()" title="关闭">×</button>
-        </div>
-      </div>
-      <div class="prd-panel-body" id="prd-panel-body"></div>
-    </aside>
-    <button type="button" id="prd-float-btn" class="prd-float-btn" title="按住可拖动，点击打开需求说明">📋 需求说明</button>
-    <div id="prd-img-viewer" class="prd-img-viewer" role="dialog" aria-label="图片预览">
-      <div class="prd-img-viewer-tip">点击任意位置或按 Esc 关闭</div>
-      <img id="prd-img-viewer-img" src="" alt="" />
-    </div>
-
-    <!-- ===== 单个用户故事（US）详情面板 ===== -->
-    <aside id="us-detail-panel" class="us-detail-panel" role="dialog" aria-label="用户故事说明">
-      <div class="us-detail-header" id="us-detail-header" title="按住此处可拖动面板">
-        <div class="us-detail-title" id="us-detail-title"></div>
-        <button type="button" class="prd-panel-btn" onclick="window.prd.openFullPrdFromUs()" title="打开完整交互需求说明">完整说明</button>
-        <button type="button" class="prd-panel-close" onclick="window.prd.closeUsDetail()" title="关闭">×</button>
-      </div>
-      <div class="us-detail-body" id="us-detail-body"></div>
-    </aside>
-
-    <script>
-      window.prdPageTitle = '自动化任务 · 投放身份（TikTok 账号）· 交互需求说明';
-      window.prdPageSub = '简洁版 PRD（本页 3 个用户故事：US-003~US-005 · 展开查看筛选项/表格字段/数据来源/数据流转 · 按住标题栏可拖动，双击或按钮可全屏 · 「复制链接」复制需求说明页面链接）';
-      window.PRD_PAGE_URL = '../output/prd-doc-fix-20260902/stage2/formatted-overseas-batch-delivery-identity-report.html';
-
-      window.prdStories = [
-        {
-          id: 'US-003', title: '投放身份（TikTok 账号）模式切换与回显', priority: 'P0',
-          shot: '../assets/prd/auto-delivery-identity-default.png',
-          desc: '作为投放运营，我想要在创建/编辑自动化任务时选择投放身份方式，并正确回显历史任务的投放身份数据。历史任务中已保存的投放身份统一按「手动选择」模式处理，并正常回显用户已选选项。',
-          fieldsLabel: '交互控件',
-          fields: '投放身份（TikTok 账号）分段选择器（选项：TikTok 账号包 / 手动选择）；TikTok 账号包模式下显示「选择TikTok账号包」按钮与已选账号包标签；手动选择模式下显示下拉多选框（支持搜索、一键清除）与已选账号标签。',
-          source: 'TikTok 账号包列表 ← 模板管理-TikTok账号包页面列表数据；手动选择账号列表 ← 资产管理-TikTok账号列表数据。',
-          flow: '新建任务默认选中「TikTok 账号包」模式；用户点击分段项切换模式；选择账号包模式时点击「选择TikTok账号包」打开弹窗多选；手动选择模式时点击下拉勾选账号，点击一键清除按钮可清空全部已选项；编辑/复制历史任务时，历史投放身份数据统一按「手动选择」模式处理，并回显用户已选账号。',
-          ac: [
-            '投放身份字段标题为「投放身份（TikTok 账号）」',
-            '默认选中「TikTok 账号包」模式',
-            '切换模式时下方展示对应选择控件，已选结果互不影响',
-            '历史任务（编辑/复制）统一按手动选择模式回显已选账号',
-            '手动选择模式下提供一键清除全部已选项功能'
-          ]
-        },
-        {
-          id: 'US-004', title: 'TikTok 账号包选择弹窗', priority: 'P0',
-          shot: '../assets/prd/auto-delivery-package-picker.png',
-          desc: '作为投放运营，我想要从已有的 TikTok 账号包中选择多个包作为投放身份，以便批量使用沉淀好的账号组合。',
-          filter: '名称（单行文本输入框，占位「请输入名称」）／创建人（下拉选择，占位「请选择创建人」）+「查询」/「重置」按钮；点击「查询」后按条件过滤，点击「重置」清空全部条件并恢复全量列表；弹窗打开时创建人默认选中当前登录用户。',
-          fields: '选择列（复选框，表头支持全选）／名称（文本）／备注（文本）／TikTok账号数量（数字）／创建人（文本）／创建时间（文本，格式 yyyy-MM-dd HH:mm）／更新时间（文本，格式 yyyy-MM-dd HH:mm）。',
-          source: '模板管理-TikTok账号包页面列表数据。',
-          flow: '点击「选择TikTok账号包」打开弹窗 → 创建人筛选项默认选中当前登录用户并渲染列表 → 用户可按名称/创建人过滤 → 勾选/取消勾选 → 底部显示已选数量 → 点击「确定」保存当前选择（允许空选）并关闭弹窗，在抽屉内展示已选账号包标签 → 点击「取消」不保存并关闭。',
-          ac: [
-            '弹窗标题为「选择TikTok账号包」',
-            '支持按账号包名称模糊查询、按创建人精确筛选',
-            '弹窗打开时创建人筛选项默认选中当前登录用户',
-            '列表字段与模板管理-TikTok账号包页面保持一致：名称、备注、TikTok账号数量、创建人、创建时间、更新时间',
-            '列表支持多选，表头全选仅对当前过滤结果生效',
-            '底部实时显示已选数量',
-            '未选择任何数据时点击「确定」仍可保存（即允许清空已选）',
-            '点击「确定」后已选账号包以标签形式展示在抽屉内',
-            '点击标签上的移除按钮可取消选择'
-          ]
-        },
-        {
-          id: 'US-005', title: '手动选择 TikTok 账号', priority: 'P0',
-          shot: '../assets/prd/auto-delivery-manual-tags.png',
-          desc: '作为投放运营，我想要手动从全部 TikTok 账号中多选具体账号作为投放身份，并支持一键清除全部已选项。',
-          filter: '下拉面板顶部搜索框（单行文本输入框，占位「请输入名称」，输入时实时过滤下拉选项）。',
-          fieldsLabel: '下拉与已选展示',
-          fields: '触发按钮（显示当前已选数量或默认占位「请选择TikTok账号」）／一键清除按钮（×）／下拉选项（复选框 + 账号名称 + 语言）／已选标签（账号名称（语言）+ 移除按钮）。',
-          source: '资产管理-TikTok账号列表数据。',
-          flow: '点击触发按钮展开下拉面板 → 展示全部可选项并回显已选状态 → 输入关键词实时过滤 → 勾选/取消勾选更新已选账号标签与触发按钮文案 → 点击一键清除按钮清空全部已选项 → 点击面板外部或按 Esc 收起下拉。',
-          ac: [
-            '下拉框展示全部可选项，并按名称/语言实时过滤',
-            '已选账号以标签形式展示在触发按钮下方',
-            '点击标签上的移除按钮可取消对应账号选择',
-            '点击一键清除按钮可一次性清空所有已选账号',
-            '点击下拉外部区域或按 Esc 收起下拉面板'
-          ]
-        }
-      ];
-    </script>
     <script src="../scripts/multi-select.js?v=20260930"></script>
-    <script src="../scripts/prd.js?v=20260924"></script>
     <script src="../scripts/header-user.js?v=20260924"></script>
   </body>
 </html>

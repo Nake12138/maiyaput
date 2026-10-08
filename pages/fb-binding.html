@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>关联绑定 · FaceBook - 海外投放系统</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../styles/main.css?v=20261008b" />
+    <link rel="stylesheet" href="../styles/theme-antd.css?v=20261008b" />
+    <style>
+      /* ===== 关联绑定页面局部样式 ===== */
+      .cell-main { display: block; }
+      .cell-sub { display: block; font-size: 12px; color: #9ca3af; margin-top: 2px; white-space: nowrap; }
+
+      /* 认领广告组抽屉：加宽让表格字段完整显示 */
+      .drawer-xwide .drawer-card { width: min(1320px, calc(100vw - 60px)); margin-left: auto; }
+
+      /* 认领广告组抽屉：批量操作按钮 */
+      .claim-batch-btn { border: none; background: none; padding: 2px 4px; font-size: 13px; color: #bfbfbf; cursor: not-allowed; }
+      .claim-batch-btn:not(:disabled) { color: #1890ff; cursor: pointer; }
+      .claim-batch-btn:not(:disabled):hover { text-decoration: underline; }
+
+      /* 分配用户浮层 */
+      .claim-status-wrap { position: relative; display: inline-block; }
+      .assign-popover { display: none; position: absolute; top: 30px; left: 96px; z-index: 30; width: 240px; padding: 14px 16px 12px; background: #fff; border: 1px solid #e5e7eb; border-radius: 6px; box-shadow: 0 6px 16px rgba(0,0,0,0.08); }
+      .assign-popover.open { display: block; }
+      .assign-popover .popover-label { display: block; font-size: 13px; color: #374151; margin-bottom: 8px; }
+      .assign-popover .popover-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px; }
+
+      /* 表格右上角工具图标 */
+      .table-tools { display: flex; justify-content: flex-end; gap: 10px; padding-bottom: 8px; }
+      .table-tools button { border: none; background: none; cursor: pointer; color: #6b7280; font-size: 14px; padding: 2px; }
+      .table-tools button:hover { color: #1890ff; }
+
+      /* 全局 Toast（顶部居中） */
+      .page-toast { position: fixed; left: 50%; top: 24px; transform: translateX(-50%) translateY(-8px); padding: 10px 18px; background: rgba(0, 0, 0, 0.78); color: #fff; border-radius: 4px; font-size: 14px; z-index: 2000; opacity: 0; pointer-events: none; transition: opacity 0.2s ease, transform 0.2s ease; }
+      .page-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    </style>
+  </head>
+  <body class="theme-antd">
+        <!-- Top Bar（全宽：品牌 + 用户） -->
+    <header class="app-bar">
+      <div class="app-bar-left">
+<div class="logo">
+          <div class="logo-icon">海</div>
+          <div class="logo-info">
+            <span class="logo-name">海外投放系统</span>
+            <span class="system-switch-trigger" onclick="toggleSystemMenu(event)">切换系统 <span class="system-switch-caret">▾</span></span>
+          </div>
+          <div class="system-switch-menu" id="systemSwitchMenu">
+            <div class="system-switch-item" data-system="cn" onclick="switchSystem('cn')">国内投放系统</div>
+            <div class="system-switch-item active" data-system="overseas" onclick="switchSystem('overseas')">海外投放系统<span class="check">✓</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="app-bar-right">
+        <!-- 时区切换器 -->
+        <div class="tz-switcher">
+          <select class="tz-select" aria-label="时区切换">
+            <option value="UTC+8" selected>UTC+8</option>
+            <option value="UTC+0">UTC+0</option>
+            <option value="UTC+7">UTC+7</option>
+            <option value="UTC+9">UTC+9</option>
+            <option value="UTC-5">UTC-5</option>
+          </select>
+          <svg class="tz-caret" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+            <path d="M2 3.75L5 6.75L8 3.75" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+
+        <!-- 文档下载 -->
+        <button type="button" class="header-icon-btn" title="文档下载" aria-label="文档下载" onclick="alert('下载文档')">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+            <path d="M9 2.75V10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+            <path d="M5.75 7.5L9 10.75L12.25 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M3.25 12.25V13.5C3.25 14.47 4.03 15.25 5 15.25H13C13.97 15.25 14.75 14.47 14.75 13.5V12.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+          </svg>
+        </button>
+
+        <!-- 用户信息 -->
+        <div class="user-profile-wrap" id="userProfileWrap">
+          <button type="button" class="user-profile" id="userProfileTrigger" aria-haspopup="true" aria-expanded="false">
+            <span class="user-profile-avatar" aria-hidden="true">
+              <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="20" cy="20" r="20" fill="#dce5ef" />
+              <circle cx="20" cy="25.5" r="9.5" fill="#2f3d56" />
+              <rect x="17.4" y="17.5" width="5.2" height="6" rx="2.6" fill="#e0a97f" />
+              <ellipse cx="20" cy="15.6" rx="6.4" ry="7" fill="#f0c19b" />
+              <path d="M20 6.8c4.6 0 7.8 3.1 7.8 7.4 0 .6-.06 1.2-.18 1.75-.9-1.5-2.3-2.2-3.9-3.1-1.9 1.05-4.1 1.55-6.4 1.55-.8 0-1.5-.06-2.2-.18-.5.6-.9 1.3-1.15 2.05-.12-.6-.18-1.2-.18-1.85C12.2 9.9 15.4 6.8 20 6.8z" fill="#e8562a" />
+            </svg>
+            </span>
+            <span class="user-profile-meta">
+              <span class="user-profile-name">娜可 <em>(nake)</em></span>
+              <span class="user-profile-email">nake06870@maiyawx.com</span>
+            </span>
+            <svg class="user-profile-caret" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+              <path d="M2 3.75L5 6.75L8 3.75" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+
+          <div class="user-dropdown" id="userDropdown" role="menu">
+            <!-- 账号信息 + 复制邮箱 -->
+            <div class="user-dropdown-head">
+              <span class="user-dropdown-avatar" aria-hidden="true">
+                <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="20" cy="20" r="20" fill="#dce5ef" />
+                <circle cx="20" cy="25.5" r="9.5" fill="#2f3d56" />
+                <rect x="17.4" y="17.5" width="5.2" height="6" rx="2.6" fill="#e0a97f" />
+                <ellipse cx="20" cy="15.6" rx="6.4" ry="7" fill="#f0c19b" />
+                <path d="M20 6.8c4.6 0 7.8 3.1 7.8 7.4 0 .6-.06 1.2-.18 1.75-.9-1.5-2.3-2.2-3.9-3.1-1.9 1.05-4.1 1.55-6.4 1.55-.8 0-1.5-.06-2.2-.18-.5.6-.9 1.3-1.15 2.05-.12-.6-.18-1.2-.18-1.85C12.2 9.9 15.4 6.8 20 6.8z" fill="#e8562a" />
+              </svg>
+              </span>
+              <span class="user-dropdown-meta">
+                <span class="user-dropdown-name">娜可 <em>(nake)</em></span>
+                <span class="user-dropdown-email" title="nake06870@maiyawx.com">nake06870@maiyawx.com</span>
+              </span>
+              <button type="button" class="copy-mail-btn" id="copyMailBtn" title="复制邮箱" aria-label="复制邮箱">
+                <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <rect x="5.9" y="5.9" width="7.35" height="7.35" rx="1.7" stroke="currentColor" stroke-width="1.3" />
+                  <path d="M10.3 3.95V3.1c0-.88-.72-1.6-1.6-1.6H3.9c-.88 0-1.6.72-1.6 1.6v4.8c0 .88.72 1.6 1.6 1.6h.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                </svg>
+              </button>
+            </div>
+            <div class="user-dropdown-sep"></div>
+            <!-- 帮助指南 -->
+            <button type="button" class="user-dropdown-item" data-action="help" role="menuitem">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <circle cx="8" cy="8" r="6.25" stroke="currentColor" stroke-width="1.3" />
+                <path d="M6.35 6.1c.1-.88.85-1.5 1.68-1.5.9 0 1.62.6 1.62 1.47 0 .78-.5 1.1-1.05 1.48-.5.35-.75.62-.75 1.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                <circle cx="7.87" cy="11.35" r=".85" fill="currentColor" />
+              </svg>
+              帮助指南
+            </button>
+            <!-- 清除缓存 -->
+            <button type="button" class="user-dropdown-item" data-action="clear-cache" role="menuitem">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M2.75 4.5h10.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                <path d="M6.25 4.5V3.4c0-.47.38-.85.85-.85h1.8c.47 0 .85.38.85.85V4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                <path d="M4.4 4.5l.55 8.05c.03.5.45.9.95.9h4.2c.5 0 .92-.4.95-.9l.55-8.05" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                <path d="M6.9 7v4M9.1 7v4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+              </svg>
+              清除缓存
+            </button>
+            <div class="user-dropdown-sep"></div>
+            <!-- 退出登录 -->
+            <button type="button" class="user-dropdown-item danger" data-action="logout" role="menuitem">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M6.5 13.25H3.9c-.64 0-1.15-.51-1.15-1.15V3.9c0-.64.51-1.15 1.15-1.15h2.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                <path d="M10.4 10.8L13.25 8 10.4 5.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M13 8H6.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+              </svg>
+              退出登录
+            </button>
+          </div>
+        </div>
+      
+      </div>
+    </header>
+
+<div class="layout">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        
+                <nav class="nav">
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">🎵</span>
+              <span>TikTok</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+            <div class="nav-children">
+              <span class="nav-child-item">项目管理</span>
+              <span class="nav-child-item">数据统计</span>
+              <span class="nav-child-item has-children">
+                <span>批量投放</span>
+                <span class="nav-child-caret">▶</span>
+              </span>
+              <div class="nav-grandchildren">
+                <span class="nav-grandchild-item" data-page="overseas-batch-delivery">批量投放</span>
+                <span class="nav-grandchild-item" data-page="overseas-auto-delivery">自动化任务</span>
+                <span class="nav-grandchild-item" data-page="overseas-template">模板管理</span>
+              </div>
+              <span class="nav-child-item has-children">
+                <span>账号管理</span>
+                <span class="nav-child-caret">▶</span>
+              </span>
+              <div class="nav-grandchildren">
+                <span class="nav-grandchild-item" data-page="overseas-account">账户</span>
+                <span class="nav-grandchild-item" data-page="overseas-app">BC应用</span>
+                <span class="nav-grandchild-item" data-page="overseas-bc">商务中心</span>
+              </div>
+              <span class="nav-child-item">控损管理</span>
+              <span class="nav-child-item">关联绑定</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children expanded">
+              <span class="nav-item-icon">📘</span>
+              <span>FaceBook</span>
+              <span class="nav-item-caret">▼</span>
+            </div>
+            <div class="nav-children">
+              <span class="nav-child-item">项目管理</span>
+              <span class="nav-child-item">数据统计</span>
+              <span class="nav-child-item has-children">
+                <span>批量投放</span>
+                <span class="nav-child-caret">▶</span>
+              </span>
+              <div class="nav-grandchildren">
+                <span class="nav-grandchild-item" data-page="fb-batch-delivery">批量投放</span>
+                <span class="nav-grandchild-item" data-page="fb-auto-delivery">自动化任务</span>
+                <span class="nav-grandchild-item" data-page="fb-template">模板管理</span>
+              </div>
+              <span class="nav-child-item has-children">
+                <span>账号管理</span>
+                <span class="nav-child-caret">▶</span>
+              </span>
+              <div class="nav-grandchildren">
+                <span class="nav-grandchild-item" data-page="fb-account">账户</span>
+                <span class="nav-grandchild-item" data-page="fb-app">BC应用</span>
+              </div>
+              <span class="nav-child-item">控损管理</span>
+              <span class="nav-child-item active" data-page="fb-binding">关联绑定</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">▶</span>
+              <span>短剧管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">▣</span>
+              <span>素材管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">🗂️</span>
+              <span>资产管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+            <div class="nav-children">
+              <span class="nav-child-item" data-page="overseas-asset-app">应用</span>
+              <span class="nav-child-item" data-page="overseas-tiktok-account">TikTok账号</span>
+              <span class="nav-child-item" data-page="overseas-fb-page">公共主页</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">⚙️</span>
+              <span>系统设置</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+            <div class="nav-children">
+              <span class="nav-child-item" data-page="overseas-system-org">组织架构</span>
+              <span class="nav-child-item" data-page="overseas-system-user">用户管理</span>
+            </div>
+          </div>
+        </nav>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main">
+        
+
+        <div class="content">
+          <div id="page-fb-binding" class="page active">
+            <div class="breadcrumb">
+              <a href="#" onclick="showPage('dashboard')">首页</a>
+              <span class="breadcrumb-sep">/</span>
+              <span>关联绑定</span>
+            </div>
+            <div class="content-card">
+            <!-- Filter Bar -->
+            <div class="filter-bar">
+              <div class="filter-bar-row">
+                <div class="filter-range">
+                  <span class="filter-range-label">创建时间</span>
+                  <input type="text" value="2026-09-24" />
+                  <span class="filter-range-tilde">-</span>
+                  <input type="text" value="2026-09-30" />
+                  <button type="button" class="filter-range-pick" title="选择日期">📅</button>
+                  <button type="button" class="filter-range-pick" title="按月选择">月</button>
+                </div>
+                <select class="filter-select" id="filter-completeness" onchange="applyCompletenessFilter()">
+                  <option value="">请选择是否填写完整</option>
+                  <option value="complete">完整</option>
+                  <option value="incomplete" selected>不完整</option>
+                </select>
+                <div class="filter-combo">
+                  <select class="filter-combo-select"><option>账户名称</option><option>账户ID</option></select>
+                  <input type="text" class="filter-combo-input" placeholder="请输入" />
+                </div>
+                <div class="filter-combo">
+                  <select class="filter-combo-select"><option>推广系列名称</option><option>推广系列ID</option></select>
+                  <input type="text" class="filter-combo-input" placeholder="请输入" />
+                </div>
+                <div class="filter-combo">
+                  <select class="filter-combo-select"><option>广告组名称</option><option>广告组ID</option></select>
+                  <input type="text" class="filter-combo-input" placeholder="请输入" />
+                </div>
+                <select class="filter-select"><option>请选择应用</option><option>TT_PearlDrama</option><option>TT_ZeroDrama</option><option>Fictc_ttminl_iaa</option></select>
+              </div>
+              <div class="filter-bar-row">
+                <div class="filter-combo">
+                  <select class="filter-combo-select"><option>剧本名称</option><option>剧本ID</option></select>
+                  <input type="text" class="filter-combo-input" placeholder="请输入" />
+                </div>
+                <div class="filter-combo">
+                  <select class="filter-combo-select"><option>短剧名称</option><option>短剧ID</option></select>
+                  <input type="text" class="filter-combo-input" placeholder="请输入" />
+                </div>
+                <select class="filter-select"><option>请选择语言</option><option>英语</option><option>粤语</option><option>繁体中文</option></select>
+                <div class="filter-actions">
+                  <button class="btn btn-primary btn-sm" onclick="searchBindings()">查询</button>
+                  <button class="btn btn-outline btn-sm" onclick="resetBindingFilters()">重置</button>
+                  <button class="btn btn-primary btn-sm" onclick="openClaimDrawer()">认领广告组</button>
+                  <button class="btn btn-outline btn-sm" onclick="alert('导入')">导入</button>
+                  <button class="btn btn-outline btn-sm" onclick="alert('导出')">导出</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Selected status + 批量操作按钮 -->
+            <div class="filter-status-bar">
+              <span>已选 <strong id="selected-count">0</strong> 个</span>
+              <button type="button" class="claim-batch-btn" id="btn-edit-link" disabled onclick="batchEditLink()">修改链接</button>
+              <button type="button" class="claim-batch-btn" id="btn-release" disabled onclick="batchRelease()">释放</button>
+            </div>
+
+            <!-- Binding Table -->
+            <div class="table-card">
+              <div class="table-tools">
+                <button type="button" title="列设置" onclick="alert('列设置')">⚙</button>
+                <button type="button" title="全屏" onclick="alert('全屏')">⛶</button>
+              </div>
+              <div class="table-wrapper">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th class="checkbox-col"><input type="checkbox" id="select-all-bindings" onclick="toggleSelectAllBindings(this)" /></th>
+                      <th>广告组ID</th>
+                      <th>推广链接</th>
+                      <th>版权方</th>
+                      <th>应用</th>
+                      <th>短剧</th>
+                      <th>创建时间</th>
+                      <th>用户</th>
+                      <th>语言</th>
+                      <th>剧本</th>
+                      <th>推广系列</th>
+                      <th>账户</th>
+                      <th>操作</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="checkbox-col"><input type="checkbox" class="binding-checkbox" value="2076158198191665534" /></td>
+                      <td>
+                        <span class="cell-main">2076158198191665534-...</span>
+                        <span class="cell-sub">ID: 18174808812356476</span>
+                      </td>
+                      <td>--</td>
+                      <td>--</td>
+                      <td>--</td>
+                      <td>--</td>
+                      <td>2026-07-12 05:12:02</td>
+                      <td>阿七</td>
+                      <td>--</td>
+                      <td>--</td>
+                      <td>
+                        <span class="cell-main">2076158198191665534-...</span>
+                        <span class="cell-sub">ID: 18734097742960665</span>
+                      </td>
+                      <td>--</td>
+                      <td><div class="row-actions"><a href="#" class="link" onclick="editBindingRow(this);return false;">编辑</a>
+                        <a href="#" class="link" onclick="releaseSingle(this);return false;">释放</a></div></td>
+                    </tr>
+                    <tr>
+                      <td class="checkbox-col"><input type="checkbox" class="binding-checkbox" value="2105199969800708097" /></td>
+                      <td>
+                        <span class="cell-main">2105199969800708097...</span>
+                        <span class="cell-sub">ID: 1873474144116671357</span>
+                      </td>
+                      <td>2105199969800708...</td>
+                      <td>启光</td>
+                      <td>TT_TimberDrama</td>
+                      <td>
+                        <span class="cell-main">凤逆乾坤（AI配音）</span>
+                        <span class="cell-sub">ID: 236493</span>
+                      </td>
+                      <td>2026-09-30 15:36:10</td>
+                      <td>冷吃兔</td>
+                      <td>英语</td>
+                      <td>
+                        <span class="cell-main">金龙腾世：凤逆乾坤...</span>
+                        <span class="cell-sub">ID: 2070303480357031239</span>
+                      </td>
+                      <td>
+                        <span class="cell-main">2105199969800708097...</span>
+                        <span class="cell-sub">ID: 1873474144116671357</span>
+                      </td>
+                      <td>
+                        <span class="cell-main">TT-MAD-IAA-二喵-苙斯...</span>
+                        <span class="cell-sub">ID: 764821520888673362</span>
+                      </td>
+                      <td><div class="row-actions"><a href="#" class="link" onclick="editBindingRow(this);return false;">编辑</a>
+                        <a href="#" class="link" onclick="releaseSingle(this);return false;">释放</a></div></td>
+                    </tr>
+                    <tr>
+                      <td class="checkbox-col"><input type="checkbox" class="binding-checkbox" value="2105199969979665179" /></td>
+                      <td>
+                        <span class="cell-main">2105199969979665179...</span>
+                        <span class="cell-sub">ID: 1873409774129500</span>
+                      </td>
+                      <td>2105199969979665...</td>
+                      <td>启光</td>
+                      <td>TT_TimberDrama</td>
+                      <td>
+                        <span class="cell-main">凤逆乾坤（AI配音）</span>
+                        <span class="cell-sub">ID: 236493</span>
+                      </td>
+                      <td>2026-09-30 15:36:09</td>
+                      <td>冷吃兔</td>
+                      <td>英语</td>
+                      <td>
+                        <span class="cell-main">金龙腾世：凤逆乾坤...</span>
+                        <span class="cell-sub">ID: 2070303480357031239</span>
+                      </td>
+                      <td>
+                        <span class="cell-main">2105199969979665179...</span>
+                        <span class="cell-sub">ID: 1873409774129500</span>
+                      </td>
+                      <td>
+                        <span class="cell-main">TT-MAD-IAA-二喵-苙斯...</span>
+                        <span class="cell-sub">ID: 764821520888673362</span>
+                      </td>
+                      <td><div class="row-actions"><a href="#" class="link" onclick="editBindingRow(this);return false;">编辑</a>
+                        <a href="#" class="link" onclick="releaseSingle(this);return false;">释放</a></div></td>
+                    </tr>
+                    <tr>
+                      <td class="checkbox-col"><input type="checkbox" class="binding-checkbox" value="21051974351193142273" /></td>
+                      <td>
+                        <span class="cell-main">21051974351193142273...</span>
+                        <span class="cell-sub">ID: 1873409774288713</span>
+                      </td>
+                      <td>21051974351193142...</td>
+                      <td>启光</td>
+                      <td>TT_TimberDrama</td>
+                      <td>
+                        <span class="cell-main">凤逆乾坤（AI配音）</span>
+                        <span class="cell-sub">ID: 236493</span>
+                      </td>
+                      <td>2026-09-30 15:26:09</td>
+                      <td>冷吃兔</td>
+                      <td>英语</td>
+                      <td>
+                        <span class="cell-main">金龙腾世：凤逆乾坤...</span>
+                        <span class="cell-sub">ID: 2070303480357031239</span>
+                      </td>
+                      <td>
+                        <span class="cell-main">21051974351193142273...</span>
+                        <span class="cell-sub">ID: 1873409774288713</span>
+                      </td>
+                      <td>
+                        <span class="cell-main">TT-MAD-IAA-二喵-苙斯...</span>
+                        <span class="cell-sub">ID: 764821520888673362</span>
+                      </td>
+                      <td><div class="row-actions"><a href="#" class="link" onclick="editBindingRow(this);return false;">编辑</a>
+                        <a href="#" class="link" onclick="releaseSingle(this);return false;">释放</a></div></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="pagination">
+                <span class="pagination-info">共 4 条</span>
+                <div class="pagination-pages">
+                  <button class="page-btn" disabled>&lt;</button>
+                  <button class="page-btn active">1</button>
+                  <button class="page-btn" disabled>&gt;</button>
+                </div>
+                <select class="page-size-select">
+                  <option>10 条/页</option>
+                  <option>20 条/页</option>
+                  <option>50 条/页</option>
+                </select>
+                <span>跳至</span>
+                <input type="text" class="jump-input" value="1" />
+                <span>页</span>
+              </div>
+            </div>
+
+            <!-- 认领广告组抽屉 -->
+            <div id="claim-drawer-overlay" class="drawer-overlay" onclick="closeClaimDrawer()"></div>
+            <div id="claim-drawer" class="drawer drawer-xwide">
+              <div class="drawer-card">
+                <div class="drawer-header">
+                  <span class="drawer-title">认领广告组</span>
+                  <button class="drawer-close" onclick="closeClaimDrawer()">×</button>
+                </div>
+                <div class="drawer-body">
+                  <!-- 抽屉筛选 -->
+                  <div class="filter-bar" style="padding:12px;margin-bottom:12px;">
+                    <div class="filter-bar-row">
+                      <div class="filter-range">
+                        <span class="filter-range-label">创建时间</span>
+                        <input type="text" value="2026-09-01" />
+                        <span class="filter-range-tilde">-</span>
+                        <input type="text" value="2026-09-30" />
+                        <button type="button" class="filter-range-pick" title="选择日期">📅</button>
+                        <button type="button" class="filter-range-pick" title="按月选择">月</button>
+                      </div>
+                      <div class="filter-combo">
+                        <select class="filter-combo-select"><option>账户名称</option><option>账户ID</option></select>
+                        <input type="text" class="filter-combo-input" placeholder="请输入" />
+                      </div>
+                      <div class="filter-combo">
+                        <select class="filter-combo-select"><option>推广系列名称</option><option>推广系列ID</option></select>
+                        <input type="text" class="filter-combo-input" placeholder="请输入" />
+                      </div>
+                      <div class="filter-combo">
+                        <select class="filter-combo-select"><option>广告组名称</option><option>广告组ID</option></select>
+                        <input type="text" class="filter-combo-input" placeholder="请输入" />
+                      </div>
+                      <div class="filter-actions">
+                        <button class="btn btn-primary btn-sm" onclick="searchClaimAdsets()">查询</button>
+                        <button class="btn btn-outline btn-sm" onclick="resetClaimAdsetFilters()">重置</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- 已选数量 + 批量操作按钮 -->
+                  <div class="filter-status-bar claim-status-wrap" style="padding-top:0;">
+                    <span>已选 <strong id="claim-selected-count">0</strong> 个</span>
+                    <button type="button" class="claim-batch-btn" id="btn-batch-claim" disabled onclick="batchClaimAdsets()">认领广告组</button>
+                    <button type="button" class="claim-batch-btn" id="btn-batch-assign" disabled onclick="openAssignPopover()">分配用户</button>
+                    <!-- 分配用户浮层 -->
+                    <div class="assign-popover" id="assign-popover">
+                      <label class="popover-label">请选择用户</label>
+                      <select class="form-select" id="assign-user-select" style="width:100%;">
+                        <option value="">请选择用户</option>
+                        <option>春光</option>
+                        <option>冷吃兔</option>
+                        <option>大卡</option>
+                        <option>听泉</option>
+                        <option>娜可</option>
+                      </select>
+                      <div class="popover-actions">
+                        <button class="btn btn-outline btn-sm" onclick="closeAssignPopover()">取消</button>
+                        <button class="btn btn-primary btn-sm" onclick="submitAssignUser()">确定</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- 可认领广告组表格 -->
+                  <div class="table-card" style="border-radius:4px;">
+                    <div class="table-wrapper">
+                      <table class="data-table">
+                        <thead>
+                          <tr>
+                            <th class="checkbox-col"><input type="checkbox" id="select-all-claim" onclick="toggleSelectAllClaim(this)" /></th>
+                            <th>广告组</th>
+                            <th>推广系列</th>
+                            <th>账户名称</th>
+                            <th>创建时间</th>
+                            <th>操作</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td class="checkbox-col"><input type="checkbox" class="claim-checkbox" value="2076159895013760002-TH-YS-207615902" /></td>
+                            <td>
+                              <span class="cell-main">2076159895013760002-TH-YS-207615902...</span>
+                              <span class="cell-sub">ID: 187340817373569893</span>
+                            </td>
+                            <td>
+                              <span class="cell-main">2076159895013760002-minisaa-P284-07...</span>
+                              <span class="cell-sub">ID: 187340871868536949</span>
+                            </td>
+                            <td>
+                              <span class="cell-main">TT-MAD-IAA-AvoShort-(UTC+8)-苙斯-1</span>
+                              <span class="cell-sub">ID: 7654061089965195282</span>
+                            </td>
+                            <td>2026-07-12 05:05:23</td>
+                            <td><div class="row-actions"><a href="#" class="link" onclick="claimSingleAdset('2076159895013760002-TH-YS-207615902');return false;">认领</a></div></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="pagination" style="justify-content:flex-end;">
+                      <span class="pagination-info">共 47 条</span>
+                      <div class="pagination-pages">
+                        <button class="page-btn" disabled>&lt;</button>
+                        <button class="page-btn active">1</button>
+                        <button class="page-btn">2</button>
+                        <button class="page-btn">3</button>
+                        <button class="page-btn">4</button>
+                        <button class="page-btn">5</button>
+                        <button class="page-btn">&gt;</button>
+                      </div>
+                      <select class="page-size-select"><option>10 条/页</option></select>
+                      <span>跳至</span>
+                      <input type="text" class="jump-input" value="1" />
+                      <span>页</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 批量修改链接抽屉 -->
+            <div id="edit-link-drawer-overlay" class="drawer-overlay" onclick="closeEditLinkDrawer()"></div>
+            <div id="edit-link-drawer" class="drawer drawer-wide">
+              <div class="drawer-card">
+                <div class="drawer-header">
+                  <span class="drawer-title">批量修改链接</span>
+                  <button class="drawer-close" onclick="closeEditLinkDrawer()">×</button>
+                </div>
+                <div class="drawer-body">
+                  <div class="filter-status-bar" style="padding:0 0 12px;">
+                    <span>已选择 <strong id="editlink-selected-count">0</strong></span>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+                    <span style="font-size:14px;color:#374151;white-space:nowrap;">批量修改</span>
+                    <input type="text" id="editlink-batch-input" class="form-input" style="width:240px;" placeholder="请输入投放链接" />
+                    <button class="btn btn-primary btn-sm" onclick="applyBatchLink()">确定</button>
+                  </div>
+                  <div class="table-card" style="border-radius:4px;">
+                    <div class="table-wrapper">
+                      <table class="data-table">
+                        <thead>
+                          <tr>
+                            <th class="checkbox-col"><input type="checkbox" id="select-all-editlink" onclick="toggleSelectAllEditLink(this)" /></th>
+                            <th>广告组</th>
+                            <th>推广链接</th>
+                            <th>版权方</th>
+                            <th>应用</th>
+                            <th>短剧</th>
+                            <th>语言</th>
+                            <th>操作</th>
+                          </tr>
+                        </thead>
+                        <tbody id="editlink-tbody"></tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <div class="drawer-footer">
+                  <button class="btn btn-outline btn-sm" onclick="closeEditLinkDrawer()">取消</button>
+                  <button class="btn btn-primary btn-sm" onclick="submitEditLinkDrawer()">确定</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 确认认领弹框 -->
+            <div id="claim-confirm-overlay" class="modal-overlay" onclick="closeClaimConfirmModal()"></div>
+            <div id="claim-confirm-modal" class="modal">
+              <div class="modal-card" style="width:380px;">
+                <div class="modal-body" style="display:flex;align-items:flex-start;gap:16px;padding:24px;">
+                  <div style="width:40px;height:40px;border-radius:50%;background:#fff7e6;display:flex;align-items:center;justify-content:center;font-size:20px;color:#faad14;flex-shrink:0;">!</div>
+                  <div>
+                    <div style="font-size:16px;font-weight:600;margin-bottom:8px;">是否确认认领?</div>
+                    <div style="font-size:13px;color:#5c5c5c;line-height:1.6;">已选择 <strong id="claim-confirm-count">1</strong> 个广告组</div>
+                  </div>
+                </div>
+                <div class="modal-footer" style="justify-content:flex-end;">
+                  <button class="btn btn-outline btn-sm" onclick="closeClaimConfirmModal()">取消</button>
+                  <button class="btn btn-primary btn-sm" onclick="submitClaimAdset()">确定</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+            </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      /* ===== 跨环境页面跳转 ===== */
+      function navUrl(rootPath) {
+        if (window.location.hostname === 'htmlpreview.github.io') {
+          return 'https://htmlpreview.github.io/?https://github.com/Nake12138/maiyaput/blob/main/' + rootPath;
+        }
+        if (rootPath === 'index.html') return '../index.html';
+        return './' + rootPath.replace(/^pages\//, '');
+      }
+
+      function showPage(pageName) {
+        if (pageName.indexOf('fb-') === 0) {
+          if (pageName !== 'fb-binding') {
+            window.location.href = navUrl('pages/' + pageName + '.html');
+          }
+          return;
+        }
+        if (pageName === 'overseas-tiktok-account') {
+          window.location.href = navUrl('pages/overseas-tiktok-account.html');
+          return;
+        }
+        if (pageName === 'overseas-account') {
+          window.location.href = navUrl('pages/overseas-account.html');
+          return;
+        }
+        if (pageName === 'overseas-app') {
+          window.location.href = navUrl('pages/overseas-app.html');
+          return;
+        }
+        if (pageName === 'overseas-bc') {
+          window.location.href = navUrl('pages/overseas-bc.html');
+          return;
+        }
+        if (pageName === 'overseas-batch-delivery') {
+          window.location.href = navUrl('pages/overseas-batch-delivery.html');
+          return;
+        }
+        if (pageName === 'overseas-auto-delivery') {
+          window.location.href = navUrl('pages/overseas-auto-delivery.html');
+          return;
+        }
+        if (pageName === 'overseas-template') {
+          window.location.href = navUrl('pages/overseas-template.html');
+          return;
+        }
+        if (pageName === 'overseas-system-user') {
+          window.location.href = navUrl('pages/overseas-system-user.html');
+          return;
+        }
+        if (pageName === 'overseas-fb-page') {
+          window.location.href = navUrl('pages/overseas-fb-page.html');
+          return;
+        }
+        if (pageName === 'overseas-system-org') {
+          window.location.href = navUrl('pages/overseas-system-user.html');
+          return;
+        }
+        if (pageName === 'overseas-asset-app') {
+          window.location.href = navUrl('pages/overseas-asset-app.html');
+          return;
+        }
+        window.location.href = navUrl('index.html') + '#' + pageName;
+      }
+
+      function switchSystem(system) {
+        try { localStorage.setItem('delivery_system', system); } catch (err) {}
+        if (system === 'overseas') {
+          window.location.href = navUrl('pages/overseas-batch-delivery.html');
+        } else {
+          window.location.href = navUrl('index.html');
+        }
+      }
+
+      function toggleSystemMenu(e) {
+        if (e) e.stopPropagation();
+        var menu = document.getElementById('systemSwitchMenu');
+        if (menu) menu.classList.toggle('open');
+      }
+
+      document.addEventListener('click', function (e) {
+        var menu = document.getElementById('systemSwitchMenu');
+        if (!menu || !menu.classList.contains('open')) return;
+        if (menu.contains(e.target)) return;
+        if (e.target.closest && e.target.closest('.system-switch-trigger')) return;
+        menu.classList.remove('open');
+      });
+
+      (function highlightCurrentSystem() {
+        var current = 'overseas';
+        try { current = localStorage.getItem('delivery_system') || 'overseas'; } catch (err) {}
+        document.querySelectorAll('.system-switch-item').forEach(function (item) {
+          item.classList.toggle('active', item.getAttribute('data-system') === current);
+        });
+      })();
+
+      /* ===== 侧边栏展开/收起 ===== */
+      document.querySelectorAll('.nav-item.has-children').forEach(function (item) {
+        item.addEventListener('click', function (e) {
+          e.stopPropagation();
+          this.classList.toggle('expanded');
+          var caret = this.querySelector('.nav-item-caret');
+          if (caret) caret.textContent = this.classList.contains('expanded') ? '▼' : '▶';
+        });
+      });
+
+            /* ===== 二级分组（批量投放 / 账号管理）展开收起 ===== */
+      document.querySelectorAll('.nav-child-item.has-children').forEach(function (item) {
+        item.addEventListener('click', function (e) {
+          e.stopPropagation();
+          this.classList.toggle('expanded');
+          var caret = this.querySelector('.nav-child-caret');
+          if (caret) caret.textContent = this.classList.contains('expanded') ? '▼' : '▶';
+        });
+      });
+
+      document.querySelectorAll('.nav-child-item[data-page], .nav-item[data-page], .nav-grandchild-item[data-page]').forEach(function (item) {
+        item.addEventListener('click', function () {
+          showPage(this.getAttribute('data-page'));
+        });
+      });
+
+      /* ===== 遮罩点击关闭弹框 ===== */
+      document.addEventListener('click', function (e) {
+        var t = e.target;
+        if (!t || !t.classList) return;
+        if (t.classList.contains('drawer') || t.classList.contains('modal')) {
+          if (t.classList.contains('open')) {
+            t.classList.remove('open');
+            document.querySelectorAll('.drawer-overlay.open, .modal-overlay.open').forEach(function (o) { o.classList.remove('open'); });
+          }
+          return;
+        }
+        if (t.classList.contains('drawer-overlay') || t.classList.contains('modal-overlay')) {
+          t.classList.remove('open');
+          document.querySelectorAll('.drawer.open, .modal.open').forEach(function (m) { m.classList.remove('open'); });
+        }
+      });
+
+      /* ===== 关联绑定列表选择 ===== */
+      function updateSelectedCount() {
+        var count = document.querySelectorAll('#page-fb-binding .binding-checkbox:checked').length;
+        document.getElementById('selected-count').textContent = count;
+        var enabled = count > 0;
+        var b1 = document.getElementById('btn-edit-link');
+        var b2 = document.getElementById('btn-release');
+        if (b1) b1.disabled = !enabled;
+        if (b2) b2.disabled = !enabled;
+      }
+
+      function toggleSelectAllBindings(el) {
+        document.querySelectorAll('#page-fb-binding .binding-checkbox').forEach(function (c) { c.checked = el.checked; });
+        updateSelectedCount();
+      }
+
+      document.querySelectorAll('#page-fb-binding .binding-checkbox').forEach(function (c) {
+        c.addEventListener('change', updateSelectedCount);
+      });
+
+      function searchBindings() {
+        applyCompletenessFilter();
+        alert('查询关联绑定列表');
+      }
+
+      /* 数据完整性筛选：推广链接/小程序/短剧 任一字段为空（"--"）即为不完整；清空选择 = 不过滤 */
+      function applyCompletenessFilter() {
+        var mode = document.getElementById('filter-completeness').value; // '' | complete | incomplete
+        document.querySelectorAll('#page-fb-binding .binding-checkbox').forEach(function (cb) {
+          var tr = cb.closest('tr');
+          var tds = tr.querySelectorAll('td');
+          var link = tds[2].textContent.trim();   // 推广链接
+          var drama = tds[5].textContent.trim();  // 短剧
+          var isIncomplete = link === '--' || link === '' || drama === '--' || drama === '';
+          var show = (mode === '') ? true : (mode === 'incomplete') ? isIncomplete : !isIncomplete;
+          tr.style.display = show ? '' : 'none';
+          if (!show) {
+            var rowCb = tr.querySelector('.binding-checkbox');
+            if (rowCb) rowCb.checked = false;
+          }
+        });
+        var selAll = document.getElementById('select-all-bindings');
+        if (selAll) selAll.checked = false;
+        updateSelectedCount();
+      }
+
+      /* 页面加载即按默认「不完整」过滤 */
+      applyCompletenessFilter();
+
+      function resetBindingFilters() {
+        document.querySelectorAll('#page-fb-binding .filter-bar .filter-combo-input').forEach(function (i) { i.value = ''; });
+        document.querySelectorAll('#page-fb-binding .filter-bar .filter-select, #page-fb-binding .filter-bar .filter-combo-select').forEach(function (s) { s.selectedIndex = 0; });
+        var comp = document.getElementById('filter-completeness');
+        if (comp) comp.value = '';   // 清除选项 → 显示占位「请选择是否填写完整」且不过滤
+        applyCompletenessFilter();
+      }
+
+      /* ===== 批量操作：修改链接 / 释放 ===== */
+      function getBindingSelectedCount() {
+        return document.querySelectorAll('#page-fb-binding .binding-checkbox:checked').length;
+      }
+
+      function batchEditLink() {
+        if (getBindingSelectedCount() === 0) { alert('请先勾选要修改链接的广告组'); return; }
+        if (editingBindingRow) cancelBindingEdit();
+        openEditLinkDrawer();
+      }
+
+      function batchRelease() {
+        var count = getBindingSelectedCount();
+        if (count === 0) { alert('请先勾选要释放的广告组'); return; }
+        if (confirm('是否确认释放选中的 ' + count + ' 个广告组?')) {
+          releaseSelectedRows();
+          showToast('释放成功');
+        }
+      }
+
+      function releaseSingle(btn) {
+        var tr = btn.closest('tr');
+        if (!tr) return;
+        if (confirm('是否确认释放该广告组?')) {
+          var cb = tr.querySelector('.binding-checkbox');
+          if (cb) cb.checked = false;
+          updateSelectedCount();
+          showToast('释放成功');
+        }
+      }
+
+      function releaseSelectedRows() {
+        document.querySelectorAll('#page-fb-binding .binding-checkbox:checked').forEach(function (c) { c.checked = false; });
+        var selAll = document.getElementById('select-all-bindings'); if (selAll) selAll.checked = false;
+        if (editingBindingRow) cancelBindingEdit();
+        updateSelectedCount();
+      }
+
+      /* ===== 认领广告组抽屉 ===== */
+      function openClaimDrawer() {
+        document.getElementById('claim-drawer-overlay').classList.add('open');
+        document.getElementById('claim-drawer').classList.add('open');
+        closeAssignPopover();
+        updateClaimCount();
+      }
+      function closeClaimDrawer() {
+        document.getElementById('claim-drawer-overlay').classList.remove('open');
+        document.getElementById('claim-drawer').classList.remove('open');
+        closeAssignPopover();
+      }
+      function searchClaimAdsets() { alert('查询可认领广告组'); }
+      function resetClaimAdsetFilters() {
+        document.querySelectorAll('#claim-drawer .filter-combo-input').forEach(function (i) { i.value = ''; });
+        document.querySelectorAll('#claim-drawer .filter-combo-select').forEach(function (s) { s.selectedIndex = 0; });
+      }
+
+      /* ===== 批量操作按钮：认领广告组 / 分配用户 ===== */
+      function getClaimSelectedCount() {
+        return document.querySelectorAll('#claim-drawer .claim-checkbox:checked').length;
+      }
+
+      function batchClaimAdsets() {
+        var count = getClaimSelectedCount();
+        if (count === 0) { alert('请先勾选要认领的广告组'); return; }
+        openClaimConfirmModal(count);
+      }
+
+      function openAssignPopover() {
+        if (getClaimSelectedCount() === 0) { alert('请先勾选要分配的广告组'); return; }
+        document.getElementById('assign-popover').classList.add('open');
+      }
+      function closeAssignPopover() {
+        document.getElementById('assign-popover').classList.remove('open');
+      }
+
+      /* 点击浮层外部关闭分配用户浮层 */
+      document.addEventListener('click', function (e) {
+        var popover = document.getElementById('assign-popover');
+        if (!popover || !popover.classList.contains('open')) return;
+        if (popover.contains(e.target)) return;
+        if (e.target.closest && e.target.closest('.claim-batch-btn')) return;
+        popover.classList.remove('open');
+      });
+
+      /* ===== 认领列表选择 ===== */
+      function updateClaimCount() {
+        var count = getClaimSelectedCount();
+        document.getElementById('claim-selected-count').textContent = count;
+        var enabled = count > 0;
+        var b1 = document.getElementById('btn-batch-claim');
+        var b2 = document.getElementById('btn-batch-assign');
+        if (b1) b1.disabled = !enabled;
+        if (b2) b2.disabled = !enabled;
+      }
+      function toggleSelectAllClaim(el) {
+        document.querySelectorAll('#claim-drawer .claim-checkbox').forEach(function (c) { c.checked = el.checked; });
+        updateClaimCount();
+      }
+      document.querySelectorAll('#claim-drawer .claim-checkbox').forEach(function (c) {
+        c.addEventListener('change', updateClaimCount);
+      });
+
+      /* ===== 批量修改链接抽屉 ===== */
+      function escAttr(s) { return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;'); }
+
+      function openEditLinkDrawer() {
+        var tbody = document.getElementById('editlink-tbody');
+        tbody.innerHTML = '';
+        document.querySelectorAll('#page-fb-binding .binding-checkbox:checked').forEach(function (cb) {
+          var tr = cb.closest('tr');
+          var tds = tr.querySelectorAll('td');
+          var nameMain = tds[1].querySelector('.cell-main');
+          var nameSub = tds[1].querySelector('.cell-sub');
+          var link = tds[2].textContent.trim();
+          var linkVal = link === '--' ? '' : link;
+          var row = document.createElement('tr');
+          row.setAttribute('data-adgroup', cb.value);
+          row.innerHTML =
+            '<td class="checkbox-col"><input type="checkbox" class="editlink-checkbox" checked /></td>' +
+            '<td><span class="cell-main">' + escAttr(nameMain ? nameMain.textContent : '') + '</span>' +
+            '<span class="cell-sub">' + escAttr(nameSub ? nameSub.textContent : '') + '</span></td>' +
+            '<td><input type="text" class="form-input editlink-input" style="width:180px;padding:4px 8px;font-size:13px;" placeholder="请输入投放链接" value="' + escAttr(linkVal) + '" /></td>' +
+            '<td>' + escAttr(tds[3].textContent.trim()) + '</td>' +
+            '<td>' + escAttr(tds[4].textContent.trim()) + '</td>' +
+            '<td>' + escAttr(tds[5].textContent.trim()) + '</td>' +
+            '<td>' + escAttr(tds[8].textContent.trim()) + '</td>' +
+            '<td><div class="row-actions"><a href="#" class="link link-danger" onclick="removeEditLinkRow(this);return false;">删除</a></div></td>';
+          tbody.appendChild(row);
+        });
+        document.getElementById('editlink-batch-input').value = '';
+        updateEditLinkCount();
+        document.getElementById('edit-link-drawer-overlay').classList.add('open');
+        document.getElementById('edit-link-drawer').classList.add('open');
+      }
+
+      function closeEditLinkDrawer() {
+        document.getElementById('edit-link-drawer-overlay').classList.remove('open');
+        document.getElementById('edit-link-drawer').classList.remove('open');
+      }
+
+      function updateEditLinkCount() {
+        var boxes = document.querySelectorAll('#editlink-tbody .editlink-checkbox');
+        var count = document.querySelectorAll('#editlink-tbody .editlink-checkbox:checked').length;
+        document.getElementById('editlink-selected-count').textContent = count;
+        var selAll = document.getElementById('select-all-editlink');
+        if (selAll) selAll.checked = boxes.length > 0 && count === boxes.length;
+      }
+
+      function toggleSelectAllEditLink(el) {
+        document.querySelectorAll('#editlink-tbody .editlink-checkbox').forEach(function (c) { c.checked = el.checked; });
+        updateEditLinkCount();
+      }
+
+      document.getElementById('editlink-tbody').addEventListener('change', function (e) {
+        if (e.target && e.target.classList.contains('editlink-checkbox')) updateEditLinkCount();
+      });
+
+      function applyBatchLink() {
+        var val = document.getElementById('editlink-batch-input').value.trim();
+        if (!val) { alert('请输入投放链接'); return; }
+        document.querySelectorAll('#editlink-tbody tr').forEach(function (tr) {
+          var cb = tr.querySelector('.editlink-checkbox');
+          if (cb && cb.checked) {
+            var input = tr.querySelector('.editlink-input');
+            if (input) input.value = val;
+          }
+        });
+      }
+
+      function removeEditLinkRow(btn) {
+        var tr = btn.closest('tr');
+        if (tr) tr.remove();
+        updateEditLinkCount();
+      }
+
+      function submitEditLinkDrawer() {
+        document.querySelectorAll('#editlink-tbody tr').forEach(function (tr) {
+          var adgroup = tr.getAttribute('data-adgroup');
+          var input = tr.querySelector('.editlink-input');
+          if (!adgroup || !input) return;
+          var mainCb = document.querySelector('#page-fb-binding .binding-checkbox[value="' + adgroup + '"]');
+          var mainTr = mainCb ? mainCb.closest('tr') : null;
+          if (mainTr) {
+            var val = input.value.trim();
+            mainTr.querySelectorAll('td')[2].textContent = val || '--';
+          }
+        });
+        releaseSelectedRows();
+        closeEditLinkDrawer();
+        showToast('修改成功');
+      }
+
+      /* ===== 确认认领弹框 ===== */
+      function openClaimConfirmModal(count) {
+        document.getElementById('claim-confirm-count').textContent = count;
+        document.getElementById('claim-confirm-overlay').classList.add('open');
+        document.getElementById('claim-confirm-modal').classList.add('open');
+      }
+      function closeClaimConfirmModal() {
+        document.getElementById('claim-confirm-overlay').classList.remove('open');
+        document.getElementById('claim-confirm-modal').classList.remove('open');
+      }
+      function claimSingleAdset(name) {
+        document.querySelectorAll('#claim-drawer .claim-checkbox').forEach(function (c) { c.checked = false; });
+        var cb = document.querySelector('#claim-drawer .claim-checkbox[value="' + name + '"]');
+        if (cb) cb.checked = true;
+        updateClaimCount();
+        openClaimConfirmModal(1);
+      }
+      function submitClaimAdset() {
+        closeClaimConfirmModal();
+        // 清空抽屉内勾选并刷新计数
+        document.querySelectorAll('#claim-drawer .claim-checkbox').forEach(function (c) { c.checked = false; });
+        var selAll = document.getElementById('select-all-claim'); if (selAll) selAll.checked = false;
+        updateClaimCount();
+        showToast('认领成功');
+      }
+
+      /* ===== 全局 Toast ===== */
+      var _toastTimer = null;
+      function showToast(text) {
+        var el = document.getElementById('page-toast');
+        if (!el) return;
+        el.textContent = text;
+        el.classList.add('show');
+        if (_toastTimer) clearTimeout(_toastTimer);
+        _toastTimer = setTimeout(function () { el.classList.remove('show'); }, 1800);
+      }
+
+      /* ===== 关联绑定列表行内编辑 ===== */
+      var editingBindingRow = null;     // 当前正在编辑的 <tr>
+      var editingOrigLink = '';          // 推广链接原始文本
+      var editingOrigOps = '';            // 操作列原始 HTML
+
+      function editBindingRow(btn) {
+        var tr = btn.closest('tr');
+        if (tr) enterBindingEdit(tr);
+      }
+
+      function enterBindingEdit(tr) {
+        if (!tr) return;
+        if (editingBindingRow && editingBindingRow !== tr) cancelBindingEdit();
+        var tds = tr.querySelectorAll('td');
+        var linkTd = tds[2];
+        var opsTd = tds[12];
+        if (!linkTd || !opsTd) return;
+        editingBindingRow = tr;
+        editingOrigLink = linkTd.textContent.trim();
+        editingOrigOps = opsTd.innerHTML;
+        var val = editingOrigLink.replace(/"/g, '&quot;');
+        linkTd.innerHTML = '<input type="text" class="form-input" style="width:200px;padding:4px 8px;font-size:13px;" value="' + val + '" />';
+        opsTd.innerHTML = '<a href="#" class="link" onclick="saveBindingEdit();return false;">保存</a><a href="#" class="link" onclick="cancelBindingEdit();return false;">取消</a>';
+        tr.style.background = '#f6faff';
+        var input = linkTd.querySelector('input');
+        if (input) { input.focus(); input.select(); }
+      }
+
+      function saveBindingEdit() {
+        if (!editingBindingRow) return;
+        var tds = editingBindingRow.querySelectorAll('td');
+        var linkTd = tds[2];
+        var opsTd = tds[12];
+        var input = linkTd.querySelector('input');
+        var newVal = input ? input.value : editingOrigLink;
+        linkTd.textContent = newVal;
+        opsTd.innerHTML = editingOrigOps;
+        editingBindingRow.style.background = '';
+        editingBindingRow = null;
+        showToast('保存成功');
+      }
+
+      function cancelBindingEdit() {
+        if (!editingBindingRow) return;
+        var tds = editingBindingRow.querySelectorAll('td');
+        tds[2].innerHTML = editingOrigLink;
+        tds[2].textContent = editingOrigLink;
+        // 上面 innerHTML 已替换回纯文本，再用 textContent 截断多余节点，保证只保留原值
+        tds[12].innerHTML = editingOrigOps;
+        editingBindingRow.style.background = '';
+        editingBindingRow = null;
+      }
+
+      /* ===== 分配用户提交 ===== */
+      function submitAssignUser() {
+        var user = document.getElementById('assign-user-select').value;
+        if (!user) { alert('请选择用户'); return; }
+        closeAssignPopover();
+        // 清空抽屉内勾选并刷新计数
+        document.querySelectorAll('#claim-drawer .claim-checkbox').forEach(function (c) { c.checked = false; });
+        var selAll = document.getElementById('select-all-claim'); if (selAll) selAll.checked = false;
+        updateClaimCount();
+        showToast('分配成功：' + user);
+      }
+    </script>
+  <script src="../scripts/header-user.js?v=20260924"></script>
+  <div id="page-toast" class="page-toast" role="status" aria-live="polite"></div>
+  </body>
+</html>

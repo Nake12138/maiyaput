@@ -22,7 +22,7 @@ function navUrl(rootPath) {
 
 document.addEventListener('DOMContentLoaded', function () {
   // Navigation item click handlers
-  document.querySelectorAll('.nav-item[data-page], .nav-child-item[data-page]').forEach(function (item) {
+  document.querySelectorAll('.nav-item[data-page], .nav-child-item[data-page], .nav-grandchild-item[data-page]').forEach(function (item) {
     item.addEventListener('click', function () {
       const pageName = this.getAttribute('data-page');
       showPage(pageName);
@@ -43,6 +43,16 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
+  // 二级分组（批量投放 / 账号管理）展开收起
+  document.querySelectorAll('.nav-child-item.has-children').forEach(function (item) {
+    item.addEventListener('click', function (e) {
+      e.stopPropagation();
+      this.classList.toggle('expanded');
+      var caret = this.querySelector('.nav-child-caret');
+      if (caret) caret.textContent = this.classList.contains('expanded') ? '▼' : '▶';
+    });
+  });
+
   // Hash routing
   window.addEventListener('hashchange', function () {
     handleHashRoute();
@@ -52,17 +62,14 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function showPage(pageName) {
+  if (pageName.indexOf('fb-') === 0) {
+    window.location.href = navUrl('pages/' + pageName + '.html');
+    return;
+  }
   // 海外投放系统页面 → 跳转独立页面文件
-  if (pageName === 'overseas-batch-delivery') {
-    window.location.href = navUrl('pages/overseas-batch-delivery.html');
-    return;
-  }
-  if (pageName === 'overseas-auto-delivery') {
-    window.location.href = navUrl('pages/overseas-auto-delivery.html');
-    return;
-  }
-  if (pageName === 'overseas-system-user') {
-    window.location.href = navUrl('pages/overseas-system-user.html');
+  if (pageName.indexOf('overseas-') === 0) {
+    if (pageName === 'overseas-system-org') pageName = 'overseas-system-user';
+    window.location.href = navUrl('pages/' + pageName + '.html');
     return;
   }
 

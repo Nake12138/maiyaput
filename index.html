@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>短剧投放系统</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles/main.css?v=20260924" />
+    <link rel="stylesheet" href="styles/main.css?v=20261008b" />
+    <link rel="stylesheet" href="styles/theme-antd.css?v=20261008b" />
   </head>
-  <body>
-    <div class="layout">
-      <!-- Sidebar -->
-      <aside class="sidebar">
-          <div class="logo" style="padding: 16px 20px 12px;">
+  <body class="theme-antd">
+        <!-- Top Bar（全宽：品牌 + 用户） -->
+    <header class="app-bar">
+      <div class="app-bar-left">
+<div class="logo">
           <div class="logo-icon">短</div>
           <div class="logo-info">
             <span class="logo-name">短剧投放系统</span>
@@ -22,6 +23,115 @@
             <div class="system-switch-item" data-system="overseas" onclick="switchSystem('overseas')">海外投放系统</div>
           </div>
         </div>
+      </div>
+      <div class="app-bar-right">
+        <!-- 时区切换器 -->
+        <div class="tz-switcher">
+          <select class="tz-select" aria-label="时区切换">
+            <option value="UTC+8" selected>UTC+8</option>
+            <option value="UTC+0">UTC+0</option>
+            <option value="UTC+7">UTC+7</option>
+            <option value="UTC+9">UTC+9</option>
+            <option value="UTC-5">UTC-5</option>
+          </select>
+          <svg class="tz-caret" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+            <path d="M2 3.75L5 6.75L8 3.75" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+
+        <!-- 文档下载 -->
+        <button type="button" class="header-icon-btn" title="文档下载" aria-label="文档下载" onclick="alert('下载文档')">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+            <path d="M9 2.75V10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+            <path d="M5.75 7.5L9 10.75L12.25 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M3.25 12.25V13.5C3.25 14.47 4.03 15.25 5 15.25H13C13.97 15.25 14.75 14.47 14.75 13.5V12.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+          </svg>
+        </button>
+
+        <!-- 用户信息 -->
+        <div class="user-profile-wrap" id="userProfileWrap">
+          <button type="button" class="user-profile" id="userProfileTrigger" aria-haspopup="true" aria-expanded="false">
+            <span class="user-profile-avatar" aria-hidden="true">
+              <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="20" cy="20" r="20" fill="#dce5ef" />
+              <circle cx="20" cy="25.5" r="9.5" fill="#2f3d56" />
+              <rect x="17.4" y="17.5" width="5.2" height="6" rx="2.6" fill="#e0a97f" />
+              <ellipse cx="20" cy="15.6" rx="6.4" ry="7" fill="#f0c19b" />
+              <path d="M20 6.8c4.6 0 7.8 3.1 7.8 7.4 0 .6-.06 1.2-.18 1.75-.9-1.5-2.3-2.2-3.9-3.1-1.9 1.05-4.1 1.55-6.4 1.55-.8 0-1.5-.06-2.2-.18-.5.6-.9 1.3-1.15 2.05-.12-.6-.18-1.2-.18-1.85C12.2 9.9 15.4 6.8 20 6.8z" fill="#e8562a" />
+            </svg>
+            </span>
+            <span class="user-profile-meta">
+              <span class="user-profile-name">娜可 <em>(nake)</em></span>
+              <span class="user-profile-email">nake06870@maiyawx.com</span>
+            </span>
+            <svg class="user-profile-caret" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+              <path d="M2 3.75L5 6.75L8 3.75" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+
+          <div class="user-dropdown" id="userDropdown" role="menu">
+            <!-- 账号信息 + 复制邮箱 -->
+            <div class="user-dropdown-head">
+              <span class="user-dropdown-avatar" aria-hidden="true">
+                <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="20" cy="20" r="20" fill="#dce5ef" />
+                <circle cx="20" cy="25.5" r="9.5" fill="#2f3d56" />
+                <rect x="17.4" y="17.5" width="5.2" height="6" rx="2.6" fill="#e0a97f" />
+                <ellipse cx="20" cy="15.6" rx="6.4" ry="7" fill="#f0c19b" />
+                <path d="M20 6.8c4.6 0 7.8 3.1 7.8 7.4 0 .6-.06 1.2-.18 1.75-.9-1.5-2.3-2.2-3.9-3.1-1.9 1.05-4.1 1.55-6.4 1.55-.8 0-1.5-.06-2.2-.18-.5.6-.9 1.3-1.15 2.05-.12-.6-.18-1.2-.18-1.85C12.2 9.9 15.4 6.8 20 6.8z" fill="#e8562a" />
+              </svg>
+              </span>
+              <span class="user-dropdown-meta">
+                <span class="user-dropdown-name">娜可 <em>(nake)</em></span>
+                <span class="user-dropdown-email" title="nake06870@maiyawx.com">nake06870@maiyawx.com</span>
+              </span>
+              <button type="button" class="copy-mail-btn" id="copyMailBtn" title="复制邮箱" aria-label="复制邮箱">
+                <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <rect x="5.9" y="5.9" width="7.35" height="7.35" rx="1.7" stroke="currentColor" stroke-width="1.3" />
+                  <path d="M10.3 3.95V3.1c0-.88-.72-1.6-1.6-1.6H3.9c-.88 0-1.6.72-1.6 1.6v4.8c0 .88.72 1.6 1.6 1.6h.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                </svg>
+              </button>
+            </div>
+            <div class="user-dropdown-sep"></div>
+            <!-- 帮助指南 -->
+            <button type="button" class="user-dropdown-item" data-action="help" role="menuitem">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <circle cx="8" cy="8" r="6.25" stroke="currentColor" stroke-width="1.3" />
+                <path d="M6.35 6.1c.1-.88.85-1.5 1.68-1.5.9 0 1.62.6 1.62 1.47 0 .78-.5 1.1-1.05 1.48-.5.35-.75.62-.75 1.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                <circle cx="7.87" cy="11.35" r=".85" fill="currentColor" />
+              </svg>
+              帮助指南
+            </button>
+            <!-- 清除缓存 -->
+            <button type="button" class="user-dropdown-item" data-action="clear-cache" role="menuitem">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M2.75 4.5h10.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                <path d="M6.25 4.5V3.4c0-.47.38-.85.85-.85h1.8c.47 0 .85.38.85.85V4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                <path d="M4.4 4.5l.55 8.05c.03.5.45.9.95.9h4.2c.5 0 .92-.4.95-.9l.55-8.05" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                <path d="M6.9 7v4M9.1 7v4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+              </svg>
+              清除缓存
+            </button>
+            <div class="user-dropdown-sep"></div>
+            <!-- 退出登录 -->
+            <button type="button" class="user-dropdown-item danger" data-action="logout" role="menuitem">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M6.5 13.25H3.9c-.64 0-1.15-.51-1.15-1.15V3.9c0-.64.51-1.15 1.15-1.15h2.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                <path d="M10.4 10.8L13.25 8 10.4 5.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M13 8H6.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+              </svg>
+              退出登录
+            </button>
+          </div>
+        </div>
+      
+      </div>
+    </header>
+
+<div class="layout">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+          
         <nav class="nav">
           <div class="nav-section">
             <div class="nav-item" data-page="dashboard">
@@ -162,116 +272,12 @@
 
       <!-- Main Content -->
       <main class="main">
-        <!-- Top Header -->
-        <header class="top-header">
-          <div class="top-header-left"></div>
-          <div class="top-header-right">
-            <!-- 时区切换器 -->
-            <div class="tz-switcher">
-              <select class="tz-select" aria-label="时区切换">
-                <option value="UTC+8" selected>UTC+8</option>
-                <option value="UTC+0">UTC+0</option>
-                <option value="UTC+7">UTC+7</option>
-                <option value="UTC+9">UTC+9</option>
-                <option value="UTC-5">UTC-5</option>
-              </select>
-              <svg class="tz-caret" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
-                <path d="M2 3.75L5 6.75L8 3.75" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            </div>
-
-            <!-- 文档下载 -->
-            <button type="button" class="header-icon-btn" title="文档下载" aria-label="文档下载" onclick="alert('下载文档')">
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-                <path d="M9 2.75V10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                <path d="M5.75 7.5L9 10.75L12.25 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                <path d="M3.25 12.25V13.5C3.25 14.47 4.03 15.25 5 15.25H13C13.97 15.25 14.75 14.47 14.75 13.5V12.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-              </svg>
-            </button>
-
-            <!-- 用户信息 -->
-            <div class="user-profile-wrap" id="userProfileWrap">
-              <button type="button" class="user-profile" id="userProfileTrigger" aria-haspopup="true" aria-expanded="false">
-                <span class="user-profile-avatar" aria-hidden="true">
-                  <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="20" cy="20" r="20" fill="#dce5ef" />
-                  <circle cx="20" cy="25.5" r="9.5" fill="#2f3d56" />
-                  <rect x="17.4" y="17.5" width="5.2" height="6" rx="2.6" fill="#e0a97f" />
-                  <ellipse cx="20" cy="15.6" rx="6.4" ry="7" fill="#f0c19b" />
-                  <path d="M20 6.8c4.6 0 7.8 3.1 7.8 7.4 0 .6-.06 1.2-.18 1.75-.9-1.5-2.3-2.2-3.9-3.1-1.9 1.05-4.1 1.55-6.4 1.55-.8 0-1.5-.06-2.2-.18-.5.6-.9 1.3-1.15 2.05-.12-.6-.18-1.2-.18-1.85C12.2 9.9 15.4 6.8 20 6.8z" fill="#e8562a" />
-                </svg>
-                </span>
-                <span class="user-profile-meta">
-                  <span class="user-profile-name">娜可 <em>(nake)</em></span>
-                  <span class="user-profile-email">nake06870@maiyawx.com</span>
-                </span>
-                <svg class="user-profile-caret" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
-                  <path d="M2 3.75L5 6.75L8 3.75" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-              </button>
-
-              <div class="user-dropdown" id="userDropdown" role="menu">
-                <!-- 账号信息 + 复制邮箱 -->
-                <div class="user-dropdown-head">
-                  <span class="user-dropdown-avatar" aria-hidden="true">
-                    <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="20" cy="20" r="20" fill="#dce5ef" />
-                    <circle cx="20" cy="25.5" r="9.5" fill="#2f3d56" />
-                    <rect x="17.4" y="17.5" width="5.2" height="6" rx="2.6" fill="#e0a97f" />
-                    <ellipse cx="20" cy="15.6" rx="6.4" ry="7" fill="#f0c19b" />
-                    <path d="M20 6.8c4.6 0 7.8 3.1 7.8 7.4 0 .6-.06 1.2-.18 1.75-.9-1.5-2.3-2.2-3.9-3.1-1.9 1.05-4.1 1.55-6.4 1.55-.8 0-1.5-.06-2.2-.18-.5.6-.9 1.3-1.15 2.05-.12-.6-.18-1.2-.18-1.85C12.2 9.9 15.4 6.8 20 6.8z" fill="#e8562a" />
-                  </svg>
-                  </span>
-                  <span class="user-dropdown-meta">
-                    <span class="user-dropdown-name">娜可 <em>(nake)</em></span>
-                    <span class="user-dropdown-email" title="nake06870@maiyawx.com">nake06870@maiyawx.com</span>
-                  </span>
-                  <button type="button" class="copy-mail-btn" id="copyMailBtn" title="复制邮箱" aria-label="复制邮箱">
-                    <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                      <rect x="5.9" y="5.9" width="7.35" height="7.35" rx="1.7" stroke="currentColor" stroke-width="1.3" />
-                      <path d="M10.3 3.95V3.1c0-.88-.72-1.6-1.6-1.6H3.9c-.88 0-1.6.72-1.6 1.6v4.8c0 .88.72 1.6 1.6 1.6h.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
-                    </svg>
-                  </button>
-                </div>
-                <div class="user-dropdown-sep"></div>
-                <!-- 帮助指南 -->
-                <button type="button" class="user-dropdown-item" data-action="help" role="menuitem">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                    <circle cx="8" cy="8" r="6.25" stroke="currentColor" stroke-width="1.3" />
-                    <path d="M6.35 6.1c.1-.88.85-1.5 1.68-1.5.9 0 1.62.6 1.62 1.47 0 .78-.5 1.1-1.05 1.48-.5.35-.75.62-.75 1.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
-                    <circle cx="7.87" cy="11.35" r=".85" fill="currentColor" />
-                  </svg>
-                  帮助指南
-                </button>
-                <!-- 清除缓存 -->
-                <button type="button" class="user-dropdown-item" data-action="clear-cache" role="menuitem">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                    <path d="M2.75 4.5h10.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
-                    <path d="M6.25 4.5V3.4c0-.47.38-.85.85-.85h1.8c.47 0 .85.38.85.85V4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
-                    <path d="M4.4 4.5l.55 8.05c.03.5.45.9.95.9h4.2c.5 0 .92-.4.95-.9l.55-8.05" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
-                    <path d="M6.9 7v4M9.1 7v4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
-                  </svg>
-                  清除缓存
-                </button>
-                <div class="user-dropdown-sep"></div>
-                <!-- 退出登录 -->
-                <button type="button" class="user-dropdown-item danger" data-action="logout" role="menuitem">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                    <path d="M6.5 13.25H3.9c-.64 0-1.15-.51-1.15-1.15V3.9c0-.64.51-1.15 1.15-1.15h2.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
-                    <path d="M10.4 10.8L13.25 8 10.4 5.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" />
-                    <path d="M13 8H6.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
-                  </svg>
-                  退出登录
-                </button>
-              </div>
-            </div>
-          </div>
-        </header>
+        
 
         <!-- Content Pages -->
         <div class="content">
           <div id="page-dashboard" class="page">
-            <h2 class="page-title">我的看板</h2>
+            <div class="content-card">
             <div class="stats-grid" style="grid-template-columns: repeat(4, 1fr);">
               <div class="stat-card">
                 <div class="stat-card-title">今日投放任务</div>
@@ -297,6 +303,7 @@
             <div class="table-card" style="padding: 40px; text-align: center; color: #999;">
               看板详情图表 - 待后续截图补充
             </div>
+            </div>
           </div>
 
           <!-- 自动投放任务 -->
@@ -309,19 +316,16 @@
               <span>自动化任务</span>
             </div>
 
-            <div class="page-header">
-              <h2 class="page-title">自动化任务</h2>
-              <div class="page-header-right">
-                <a class="page-manual-link" href="#" onclick="alert('跳转至：自动化任务用户使用手册')">自动化任务用户使用手册</a>
-              </div>
-            </div>
-
-            <div class="tabs" id="auto-delivery-tabs">
+            <div class="content-card">
+            <div class="tabs-bar">
+<div class="tabs" id="auto-delivery-tabs">
               <button class="tab active" onclick="switchAutoDeliveryTab('task')">任务</button>
               <button class="tab" onclick="switchAutoDeliveryTab('account')">账户</button>
               <button class="tab" onclick="switchAutoDeliveryTab('project')">项目</button>
               <button class="tab" onclick="switchAutoDeliveryTab('unit')">单元</button>
             </div>
+<a class="page-manual-link" href="#" onclick="alert('跳转至：自动化任务用户使用手册')">自动化任务用户使用手册</a>
+</div>
 
             <div id="auto-delivery-task" class="tab-content">
               <div class="filter-bar">
@@ -459,6 +463,7 @@
             </div>
             <div id="auto-delivery-unit" class="tab-content" style="display: none;">
               <div class="table-card" style="padding: 40px; text-align: center; color: #999;">单元列表 - 待后续截图补充</div>
+            </div>
             </div>
           </div>
         </div>

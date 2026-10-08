@@ -3,15 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>应用 - 海外投放系统</title>
+    <title>BC应用 - 海外投放系统</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="../styles/main.css?v=20260924" />
+    <link rel="stylesheet" href="../styles/main.css?v=20261008b" />
+    <link rel="stylesheet" href="../styles/theme-antd.css?v=20261008b" />
   </head>
-  <body>
-    <div class="layout">
-      <!-- Sidebar -->
-      <aside class="sidebar">
-        <div class="logo" style="padding: 16px 20px 12px;">
+  <body class="theme-antd">
+        <!-- Top Bar（全宽：品牌 + 用户） -->
+    <header class="app-bar">
+      <div class="app-bar-left">
+<div class="logo">
           <div class="logo-icon">海</div>
           <div class="logo-info">
             <span class="logo-name">海外投放系统</span>
@@ -22,20 +23,176 @@
             <div class="system-switch-item active" data-system="overseas" onclick="switchSystem('overseas')">海外投放系统<span class="check">✓</span></div>
           </div>
         </div>
+      </div>
+      <div class="app-bar-right">
+        <!-- 时区切换器 -->
+        <div class="tz-switcher">
+          <select class="tz-select" aria-label="时区切换">
+            <option value="UTC+8" selected>UTC+8</option>
+            <option value="UTC+0">UTC+0</option>
+            <option value="UTC+7">UTC+7</option>
+            <option value="UTC+9">UTC+9</option>
+            <option value="UTC-5">UTC-5</option>
+          </select>
+          <svg class="tz-caret" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+            <path d="M2 3.75L5 6.75L8 3.75" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+
+        <!-- 文档下载 -->
+        <button type="button" class="header-icon-btn" title="文档下载" aria-label="文档下载" onclick="alert('下载文档')">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+            <path d="M9 2.75V10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+            <path d="M5.75 7.5L9 10.75L12.25 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M3.25 12.25V13.5C3.25 14.47 4.03 15.25 5 15.25H13C13.97 15.25 14.75 14.47 14.75 13.5V12.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+          </svg>
+        </button>
+
+        <!-- 用户信息 -->
+        <div class="user-profile-wrap" id="userProfileWrap">
+          <button type="button" class="user-profile" id="userProfileTrigger" aria-haspopup="true" aria-expanded="false">
+            <span class="user-profile-avatar" aria-hidden="true">
+              <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="20" cy="20" r="20" fill="#dce5ef" />
+              <circle cx="20" cy="25.5" r="9.5" fill="#2f3d56" />
+              <rect x="17.4" y="17.5" width="5.2" height="6" rx="2.6" fill="#e0a97f" />
+              <ellipse cx="20" cy="15.6" rx="6.4" ry="7" fill="#f0c19b" />
+              <path d="M20 6.8c4.6 0 7.8 3.1 7.8 7.4 0 .6-.06 1.2-.18 1.75-.9-1.5-2.3-2.2-3.9-3.1-1.9 1.05-4.1 1.55-6.4 1.55-.8 0-1.5-.06-2.2-.18-.5.6-.9 1.3-1.15 2.05-.12-.6-.18-1.2-.18-1.85C12.2 9.9 15.4 6.8 20 6.8z" fill="#e8562a" />
+            </svg>
+            </span>
+            <span class="user-profile-meta">
+              <span class="user-profile-name">娜可 <em>(nake)</em></span>
+              <span class="user-profile-email">nake06870@maiyawx.com</span>
+            </span>
+            <svg class="user-profile-caret" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+              <path d="M2 3.75L5 6.75L8 3.75" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+
+          <div class="user-dropdown" id="userDropdown" role="menu">
+            <!-- 账号信息 + 复制邮箱 -->
+            <div class="user-dropdown-head">
+              <span class="user-dropdown-avatar" aria-hidden="true">
+                <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="20" cy="20" r="20" fill="#dce5ef" />
+                <circle cx="20" cy="25.5" r="9.5" fill="#2f3d56" />
+                <rect x="17.4" y="17.5" width="5.2" height="6" rx="2.6" fill="#e0a97f" />
+                <ellipse cx="20" cy="15.6" rx="6.4" ry="7" fill="#f0c19b" />
+                <path d="M20 6.8c4.6 0 7.8 3.1 7.8 7.4 0 .6-.06 1.2-.18 1.75-.9-1.5-2.3-2.2-3.9-3.1-1.9 1.05-4.1 1.55-6.4 1.55-.8 0-1.5-.06-2.2-.18-.5.6-.9 1.3-1.15 2.05-.12-.6-.18-1.2-.18-1.85C12.2 9.9 15.4 6.8 20 6.8z" fill="#e8562a" />
+              </svg>
+              </span>
+              <span class="user-dropdown-meta">
+                <span class="user-dropdown-name">娜可 <em>(nake)</em></span>
+                <span class="user-dropdown-email" title="nake06870@maiyawx.com">nake06870@maiyawx.com</span>
+              </span>
+              <button type="button" class="copy-mail-btn" id="copyMailBtn" title="复制邮箱" aria-label="复制邮箱">
+                <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <rect x="5.9" y="5.9" width="7.35" height="7.35" rx="1.7" stroke="currentColor" stroke-width="1.3" />
+                  <path d="M10.3 3.95V3.1c0-.88-.72-1.6-1.6-1.6H3.9c-.88 0-1.6.72-1.6 1.6v4.8c0 .88.72 1.6 1.6 1.6h.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                </svg>
+              </button>
+            </div>
+            <div class="user-dropdown-sep"></div>
+            <!-- 帮助指南 -->
+            <button type="button" class="user-dropdown-item" data-action="help" role="menuitem">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <circle cx="8" cy="8" r="6.25" stroke="currentColor" stroke-width="1.3" />
+                <path d="M6.35 6.1c.1-.88.85-1.5 1.68-1.5.9 0 1.62.6 1.62 1.47 0 .78-.5 1.1-1.05 1.48-.5.35-.75.62-.75 1.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                <circle cx="7.87" cy="11.35" r=".85" fill="currentColor" />
+              </svg>
+              帮助指南
+            </button>
+            <!-- 清除缓存 -->
+            <button type="button" class="user-dropdown-item" data-action="clear-cache" role="menuitem">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M2.75 4.5h10.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                <path d="M6.25 4.5V3.4c0-.47.38-.85.85-.85h1.8c.47 0 .85.38.85.85V4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                <path d="M4.4 4.5l.55 8.05c.03.5.45.9.95.9h4.2c.5 0 .92-.4.95-.9l.55-8.05" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                <path d="M6.9 7v4M9.1 7v4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+              </svg>
+              清除缓存
+            </button>
+            <div class="user-dropdown-sep"></div>
+            <!-- 退出登录 -->
+            <button type="button" class="user-dropdown-item danger" data-action="logout" role="menuitem">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M6.5 13.25H3.9c-.64 0-1.15-.51-1.15-1.15V3.9c0-.64.51-1.15 1.15-1.15h2.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                <path d="M10.4 10.8L13.25 8 10.4 5.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M13 8H6.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+              </svg>
+              退出登录
+            </button>
+          </div>
+        </div>
+      
+      </div>
+    </header>
+
+<div class="layout">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        
         <nav class="nav">
           <div class="nav-section">
-            <div class="nav-item has-children">
-              <span class="nav-item-icon">⊟</span>
-              <span>项目管理</span>
-              <span class="nav-item-caret">▶</span>
+            <div class="nav-item has-children expanded">
+              <span class="nav-item-icon">🎵</span>
+              <span>TikTok</span>
+              <span class="nav-item-caret">▼</span>
+            </div>
+            <div class="nav-children">
+              <span class="nav-child-item">项目管理</span>
+              <span class="nav-child-item">数据统计</span>
+              <span class="nav-child-item has-children">
+                <span>批量投放</span>
+                <span class="nav-child-caret">▶</span>
+              </span>
+              <div class="nav-grandchildren">
+                <span class="nav-grandchild-item" data-page="overseas-batch-delivery">批量投放</span>
+                <span class="nav-grandchild-item" data-page="overseas-auto-delivery">自动化任务</span>
+                <span class="nav-grandchild-item" data-page="overseas-template">模板管理</span>
+              </div>
+              <span class="nav-child-item has-children expanded active">
+                <span>账号管理</span>
+                <span class="nav-child-caret">▼</span>
+              </span>
+              <div class="nav-grandchildren">
+                <span class="nav-grandchild-item" data-page="overseas-account">账户</span>
+                <span class="nav-grandchild-item active" data-page="overseas-app">BC应用</span>
+                <span class="nav-grandchild-item" data-page="overseas-bc">商务中心</span>
+              </div>
+              <span class="nav-child-item">控损管理</span>
+              <span class="nav-child-item">关联绑定</span>
             </div>
           </div>
 
           <div class="nav-section">
             <div class="nav-item has-children">
-              <span class="nav-item-icon">📊</span>
-              <span>数据统计</span>
+              <span class="nav-item-icon">📘</span>
+              <span>FaceBook</span>
               <span class="nav-item-caret">▶</span>
+            </div>
+            <div class="nav-children">
+              <span class="nav-child-item">项目管理</span>
+              <span class="nav-child-item">数据统计</span>
+              <span class="nav-child-item has-children">
+                <span>批量投放</span>
+                <span class="nav-child-caret">▶</span>
+              </span>
+              <div class="nav-grandchildren">
+                <span class="nav-grandchild-item" data-page="fb-batch-delivery">批量投放</span>
+                <span class="nav-grandchild-item" data-page="fb-auto-delivery">自动化任务</span>
+                <span class="nav-grandchild-item" data-page="fb-template">模板管理</span>
+              </div>
+              <span class="nav-child-item has-children">
+                <span>账号管理</span>
+                <span class="nav-child-caret">▶</span>
+              </span>
+              <div class="nav-grandchildren">
+                <span class="nav-grandchild-item" data-page="fb-account">账户</span>
+                <span class="nav-grandchild-item" data-page="fb-app">BC应用</span>
+              </div>
+              <span class="nav-child-item">控损管理</span>
+              <span class="nav-child-item" data-page="fb-binding">关联绑定</span>
             </div>
           </div>
 
@@ -57,46 +214,14 @@
 
           <div class="nav-section">
             <div class="nav-item has-children">
-              <span class="nav-item-icon">▦</span>
-              <span>批量投放</span>
-              <span class="nav-item-caret">▶</span>
-            </div>
-            <div class="nav-children">
-              <span class="nav-child-item" data-page="overseas-batch-delivery">批量投放</span>
-              <span class="nav-child-item" data-page="overseas-auto-delivery">自动化任务</span>
-              <span class="nav-child-item" data-page="overseas-template">模板管理</span>
-            </div>
-          </div>
-
-          <div class="nav-section">
-            <div class="nav-item has-children expanded">
-              <span class="nav-item-icon">👤</span>
-              <span>账号管理</span>
-              <span class="nav-item-caret">▼</span>
-            </div>
-            <div class="nav-children">
-              <span class="nav-child-item" data-page="overseas-account">账户</span>
-              <span class="nav-child-item active" data-page="overseas-app">应用</span>
-              <span class="nav-child-item" data-page="overseas-bc">商务中心</span>
-            </div>
-          </div>
-
-          <div class="nav-section">
-            <div class="nav-item has-children">
               <span class="nav-item-icon">🗂️</span>
               <span>资产管理</span>
               <span class="nav-item-caret">▶</span>
             </div>
             <div class="nav-children">
+              <span class="nav-child-item" data-page="overseas-asset-app">应用</span>
               <span class="nav-child-item" data-page="overseas-tiktok-account">TikTok账号</span>
-            </div>
-          </div>
-
-          <div class="nav-section">
-            <div class="nav-item has-children">
-              <span class="nav-item-icon">🛡️</span>
-              <span>控损管理</span>
-              <span class="nav-item-caret">▶</span>
+              <span class="nav-child-item" data-page="overseas-fb-page">公共主页</span>
             </div>
           </div>
 
@@ -112,122 +237,12 @@
             </div>
           </div>
 
-          <div class="nav-section">
-            <div class="nav-item has-children">
-              <span class="nav-item-icon">🔗</span>
-              <span>关联绑定</span>
-              <span class="nav-item-caret">▶</span>
-            </div>
-          </div>
         </nav>
       </aside>
 
       <!-- Main Content -->
       <main class="main">
-        <header class="top-header">
-          <div class="top-header-left"></div>
-          <div class="top-header-right">
-            <!-- 时区切换器 -->
-            <div class="tz-switcher">
-              <select class="tz-select" aria-label="时区切换">
-                <option value="UTC+8" selected>UTC+8</option>
-                <option value="UTC+0">UTC+0</option>
-                <option value="UTC+7">UTC+7</option>
-                <option value="UTC+9">UTC+9</option>
-                <option value="UTC-5">UTC-5</option>
-              </select>
-              <svg class="tz-caret" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
-                <path d="M2 3.75L5 6.75L8 3.75" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            </div>
-
-            <!-- 文档下载 -->
-            <button type="button" class="header-icon-btn" title="文档下载" aria-label="文档下载" onclick="alert('下载文档')">
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-                <path d="M9 2.75V10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                <path d="M5.75 7.5L9 10.75L12.25 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                <path d="M3.25 12.25V13.5C3.25 14.47 4.03 15.25 5 15.25H13C13.97 15.25 14.75 14.47 14.75 13.5V12.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-              </svg>
-            </button>
-
-            <!-- 用户信息 -->
-            <div class="user-profile-wrap" id="userProfileWrap">
-              <button type="button" class="user-profile" id="userProfileTrigger" aria-haspopup="true" aria-expanded="false">
-                <span class="user-profile-avatar" aria-hidden="true">
-                  <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="20" cy="20" r="20" fill="#dce5ef" />
-                  <circle cx="20" cy="25.5" r="9.5" fill="#2f3d56" />
-                  <rect x="17.4" y="17.5" width="5.2" height="6" rx="2.6" fill="#e0a97f" />
-                  <ellipse cx="20" cy="15.6" rx="6.4" ry="7" fill="#f0c19b" />
-                  <path d="M20 6.8c4.6 0 7.8 3.1 7.8 7.4 0 .6-.06 1.2-.18 1.75-.9-1.5-2.3-2.2-3.9-3.1-1.9 1.05-4.1 1.55-6.4 1.55-.8 0-1.5-.06-2.2-.18-.5.6-.9 1.3-1.15 2.05-.12-.6-.18-1.2-.18-1.85C12.2 9.9 15.4 6.8 20 6.8z" fill="#e8562a" />
-                </svg>
-                </span>
-                <span class="user-profile-meta">
-                  <span class="user-profile-name">娜可 <em>(nake)</em></span>
-                  <span class="user-profile-email">nake06870@maiyawx.com</span>
-                </span>
-                <svg class="user-profile-caret" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
-                  <path d="M2 3.75L5 6.75L8 3.75" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-              </button>
-
-              <div class="user-dropdown" id="userDropdown" role="menu">
-                <!-- 账号信息 + 复制邮箱 -->
-                <div class="user-dropdown-head">
-                  <span class="user-dropdown-avatar" aria-hidden="true">
-                    <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="20" cy="20" r="20" fill="#dce5ef" />
-                    <circle cx="20" cy="25.5" r="9.5" fill="#2f3d56" />
-                    <rect x="17.4" y="17.5" width="5.2" height="6" rx="2.6" fill="#e0a97f" />
-                    <ellipse cx="20" cy="15.6" rx="6.4" ry="7" fill="#f0c19b" />
-                    <path d="M20 6.8c4.6 0 7.8 3.1 7.8 7.4 0 .6-.06 1.2-.18 1.75-.9-1.5-2.3-2.2-3.9-3.1-1.9 1.05-4.1 1.55-6.4 1.55-.8 0-1.5-.06-2.2-.18-.5.6-.9 1.3-1.15 2.05-.12-.6-.18-1.2-.18-1.85C12.2 9.9 15.4 6.8 20 6.8z" fill="#e8562a" />
-                  </svg>
-                  </span>
-                  <span class="user-dropdown-meta">
-                    <span class="user-dropdown-name">娜可 <em>(nake)</em></span>
-                    <span class="user-dropdown-email" title="nake06870@maiyawx.com">nake06870@maiyawx.com</span>
-                  </span>
-                  <button type="button" class="copy-mail-btn" id="copyMailBtn" title="复制邮箱" aria-label="复制邮箱">
-                    <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                      <rect x="5.9" y="5.9" width="7.35" height="7.35" rx="1.7" stroke="currentColor" stroke-width="1.3" />
-                      <path d="M10.3 3.95V3.1c0-.88-.72-1.6-1.6-1.6H3.9c-.88 0-1.6.72-1.6 1.6v4.8c0 .88.72 1.6 1.6 1.6h.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
-                    </svg>
-                  </button>
-                </div>
-                <div class="user-dropdown-sep"></div>
-                <!-- 帮助指南 -->
-                <button type="button" class="user-dropdown-item" data-action="help" role="menuitem">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                    <circle cx="8" cy="8" r="6.25" stroke="currentColor" stroke-width="1.3" />
-                    <path d="M6.35 6.1c.1-.88.85-1.5 1.68-1.5.9 0 1.62.6 1.62 1.47 0 .78-.5 1.1-1.05 1.48-.5.35-.75.62-.75 1.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
-                    <circle cx="7.87" cy="11.35" r=".85" fill="currentColor" />
-                  </svg>
-                  帮助指南
-                </button>
-                <!-- 清除缓存 -->
-                <button type="button" class="user-dropdown-item" data-action="clear-cache" role="menuitem">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                    <path d="M2.75 4.5h10.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
-                    <path d="M6.25 4.5V3.4c0-.47.38-.85.85-.85h1.8c.47 0 .85.38.85.85V4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
-                    <path d="M4.4 4.5l.55 8.05c.03.5.45.9.95.9h4.2c.5 0 .92-.4.95-.9l.55-8.05" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
-                    <path d="M6.9 7v4M9.1 7v4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
-                  </svg>
-                  清除缓存
-                </button>
-                <div class="user-dropdown-sep"></div>
-                <!-- 退出登录 -->
-                <button type="button" class="user-dropdown-item danger" data-action="logout" role="menuitem">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                    <path d="M6.5 13.25H3.9c-.64 0-1.15-.51-1.15-1.15V3.9c0-.64.51-1.15 1.15-1.15h2.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
-                    <path d="M10.4 10.8L13.25 8 10.4 5.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" />
-                    <path d="M13 8H6.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
-                  </svg>
-                  退出登录
-                </button>
-              </div>
-            </div>
-          </div>
-        </header>
+        
 
         <div class="content">
           <div id="page-overseas-app" class="page active">
@@ -236,17 +251,10 @@
               <span class="breadcrumb-sep">/</span>
               <span>账号管理</span>
               <span class="breadcrumb-sep">/</span>
-              <span>应用</span>
+              <span>BC应用</span>
             </div>
 
-            <div class="page-header">
-              <h2 class="page-title">应用</h2>
-              <div class="page-header-right" style="align-items:center;gap:16px;">
-                <span style="font-size:13px;color:#5c5c5c;">回调地址：http://overseaput.test.maiyaput.com/api/put/oceanengine/callback</span>
-                <button class="btn btn-primary btn-sm" onclick="openAppEditModal('新增应用')">新增</button>
-              </div>
-            </div>
-
+            <div class="content-card">
             <!-- Filter Bar -->
             <div class="filter-bar">
               <div class="filter-bar-row">
@@ -257,6 +265,10 @@
                 <div class="filter-actions">
                   <button class="btn btn-primary btn-sm" onclick="searchApps()">查询</button>
                   <button class="btn btn-outline btn-sm" onclick="resetAppFilters()">重置</button>
+                </div>
+                <div class="filter-callback">
+                  <button class="btn btn-primary btn-sm" onclick="openAppEditModal('新增应用')">新增</button>
+                  <span class="filter-callback-label">回调地址：http://overseaput.test.maiyaput.com/api/put/oceanengine/callback</span>
                 </div>
               </div>
             </div>
@@ -286,9 +298,9 @@
                       <td>2026-08-17 17:08:33</td>
                       <td>
                         <div class="row-actions">
-                          <button class="btn btn-info btn-sm" onclick="openAppDetailDrawer('【撒上椰】NetShort-CQ-01')">详情</button>
-                          <button class="btn btn-outline btn-sm" onclick="alert('授权应用')">授权</button>
-                          <button class="btn btn-outline btn-sm" onclick="openAppEditModal('编辑应用', '【撒上椰】NetShort-CQ-01', '7666008639072649233')">编辑</button>
+                          <button class="row-action-btn" onclick="openAppDetailDrawer('【撒上椰】NetShort-CQ-01')">详情</button>
+                          <button class="row-action-btn" onclick="alert('授权应用')">授权</button>
+                          <button class="row-action-btn" onclick="openAppEditModal('编辑应用', '【撒上椰】NetShort-CQ-01', '7666008639072649233')">编辑</button>
                         </div>
                       </td>
                     </tr>
@@ -301,9 +313,9 @@
                       <td>2026-08-26 09:41:59</td>
                       <td>
                         <div class="row-actions">
-                          <button class="btn btn-info btn-sm" onclick="openAppDetailDrawer('3')">详情</button>
-                          <button class="btn btn-outline btn-sm" onclick="alert('授权应用')">授权</button>
-                          <button class="btn btn-outline btn-sm" onclick="openAppEditModal('编辑应用', '3', '4')">编辑</button>
+                          <button class="row-action-btn" onclick="openAppDetailDrawer('3')">详情</button>
+                          <button class="row-action-btn" onclick="alert('授权应用')">授权</button>
+                          <button class="row-action-btn" onclick="openAppEditModal('编辑应用', '3', '4')">编辑</button>
                         </div>
                       </td>
                     </tr>
@@ -316,9 +328,9 @@
                       <td>2026-08-26 09:41:29</td>
                       <td>
                         <div class="row-actions">
-                          <button class="btn btn-info btn-sm" onclick="openAppDetailDrawer('ns_test_lct1111668')">详情</button>
-                          <button class="btn btn-outline btn-sm" onclick="alert('授权应用')">授权</button>
-                          <button class="btn btn-outline btn-sm" onclick="openAppEditModal('编辑应用', 'ns_test_lct1111668', '7655268739104833599')">编辑</button>
+                          <button class="row-action-btn" onclick="openAppDetailDrawer('ns_test_lct1111668')">详情</button>
+                          <button class="row-action-btn" onclick="alert('授权应用')">授权</button>
+                          <button class="row-action-btn" onclick="openAppEditModal('编辑应用', 'ns_test_lct1111668', '7655268739104833599')">编辑</button>
                         </div>
                       </td>
                     </tr>
@@ -331,9 +343,9 @@
                       <td>2026-08-26 09:41:35</td>
                       <td>
                         <div class="row-actions">
-                          <button class="btn btn-info btn-sm" onclick="openAppDetailDrawer('娜可-NetShort-CQ-03')">详情</button>
-                          <button class="btn btn-outline btn-sm" onclick="alert('授权应用')">授权</button>
-                          <button class="btn btn-outline btn-sm" onclick="openAppEditModal('编辑应用', '娜可-NetShort-CQ-03', '7668306334649614353')">编辑</button>
+                          <button class="row-action-btn" onclick="openAppDetailDrawer('娜可-NetShort-CQ-03')">详情</button>
+                          <button class="row-action-btn" onclick="alert('授权应用')">授权</button>
+                          <button class="row-action-btn" onclick="openAppEditModal('编辑应用', '娜可-NetShort-CQ-03', '7668306334649614353')">编辑</button>
                         </div>
                       </td>
                     </tr>
@@ -346,9 +358,9 @@
                       <td>2026-08-14 17:46:58</td>
                       <td>
                         <div class="row-actions">
-                          <button class="btn btn-info btn-sm" onclick="openAppDetailDrawer('NS-0717-投放api-ldb-2')">详情</button>
-                          <button class="btn btn-outline btn-sm" onclick="alert('授权应用')">授权</button>
-                          <button class="btn btn-outline btn-sm" onclick="openAppEditModal('编辑应用', 'NS-0717-投放api-ldb-2', '7665269150767382544')">编辑</button>
+                          <button class="row-action-btn" onclick="openAppDetailDrawer('NS-0717-投放api-ldb-2')">详情</button>
+                          <button class="row-action-btn" onclick="alert('授权应用')">授权</button>
+                          <button class="row-action-btn" onclick="openAppEditModal('编辑应用', 'NS-0717-投放api-ldb-2', '7665269150767382544')">编辑</button>
                         </div>
                       </td>
                     </tr>
@@ -361,9 +373,9 @@
                       <td>2026-08-13 19:54:31</td>
                       <td>
                         <div class="row-actions">
-                          <button class="btn btn-info btn-sm" onclick="openAppDetailDrawer('NS-0717-投放api-ldb-1')">详情</button>
-                          <button class="btn btn-outline btn-sm" onclick="alert('授权应用')">授权</button>
-                          <button class="btn btn-outline btn-sm" onclick="openAppEditModal('编辑应用', 'NS-0717-投放api-ldb-1', '7665268739104833537')">编辑</button>
+                          <button class="row-action-btn" onclick="openAppDetailDrawer('NS-0717-投放api-ldb-1')">详情</button>
+                          <button class="row-action-btn" onclick="alert('授权应用')">授权</button>
+                          <button class="row-action-btn" onclick="openAppEditModal('编辑应用', 'NS-0717-投放api-ldb-1', '7665268739104833537')">编辑</button>
                         </div>
                       </td>
                     </tr>
@@ -434,7 +446,7 @@
                       </div>
                       <select class="filter-select"><option>授权状态</option><option>有效</option><option>无效</option></select>
                       <select class="filter-select"><option>同步消耗状态</option><option>开启</option><option>关闭</option></select>
-                      <div class="filter-actions" style="margin-left:auto;">
+                      <div class="filter-actions">
                         <button class="btn btn-primary btn-sm" onclick="searchAppAccounts()">查询</button>
                         <button class="btn btn-outline btn-sm" onclick="resetAppAccountFilters()">重置</button>
                       </div>
@@ -465,8 +477,8 @@
                             <td>2026-08-28 17:54:51</td>
                             <td>
                               <div class="row-actions">
-                                <button class="btn btn-info btn-sm" onclick="openAdAccountDetailDrawer('娜可-NetShort-CQ-01','7653403044520510484')">详情</button>
-                                <button class="btn btn-outline btn-sm" onclick="alert('同步账户')">同步账户</button>
+                                <button class="row-action-btn" onclick="openAdAccountDetailDrawer('娜可-NetShort-CQ-01','7653403044520510484')">详情</button>
+                                <button class="row-action-btn" onclick="alert('同步账户')">同步账户</button>
                               </div>
                             </td>
                           </tr>
@@ -498,7 +510,7 @@
                       </div>
                       <select class="filter-select"><option>同步消耗状态</option><option>开启</option><option>关闭</option></select>
                       <select class="filter-select"><option>所属用户</option></select>
-                      <div class="filter-actions" style="margin-left:auto;">
+                      <div class="filter-actions">
                         <button class="btn btn-primary btn-sm" onclick="searchAdAccountDetail()">查询</button>
                         <button class="btn btn-outline btn-sm" onclick="resetAdAccountDetailFilters()">重置</button>
                       </div>
@@ -533,7 +545,7 @@
                             <td>--</td>
                             <td><span class="tag tag-error">关闭</span></td>
                             <td>2026-08-28 17:55:18</td>
-                            <td><a href="#" class="link" onclick="openOperationLogDrawer('White-light_popkon-溜溜-03','7674191162747633684');return false;">操作记录</a></td>
+                            <td><div class="row-actions"><a href="#" class="link" onclick="openOperationLogDrawer('White-light_popkon-溜溜-03','7674191162747633684');return false;">操作记录</a></div></td>
                           </tr>
                           <tr>
                             <td class="checkbox-col"><input type="checkbox" class="ad-detail-checkbox" /></td>
@@ -543,7 +555,7 @@
                             <td>--</td>
                             <td><span class="tag tag-error">关闭</span></td>
                             <td>2026-08-28 17:55:18</td>
-                            <td><a href="#" class="link" onclick="openOperationLogDrawer('White-light_popkon-溜溜-05','7674191628084445205');return false;">操作记录</a></td>
+                            <td><div class="row-actions"><a href="#" class="link" onclick="openOperationLogDrawer('White-light_popkon-溜溜-05','7674191628084445205');return false;">操作记录</a></div></td>
                           </tr>
                           <tr>
                             <td class="checkbox-col"><input type="checkbox" class="ad-detail-checkbox" /></td>
@@ -553,7 +565,7 @@
                             <td>--</td>
                             <td><span class="tag tag-error">关闭</span></td>
                             <td>2026-08-28 17:55:18</td>
-                            <td><a href="#" class="link" onclick="openOperationLogDrawer('White-light_popkon-溜溜-04','7674190827066474504');return false;">操作记录</a></td>
+                            <td><div class="row-actions"><a href="#" class="link" onclick="openOperationLogDrawer('White-light_popkon-溜溜-04','7674190827066474504');return false;">操作记录</a></div></td>
                           </tr>
                           <tr>
                             <td class="checkbox-col"><input type="checkbox" class="ad-detail-checkbox" /></td>
@@ -563,7 +575,7 @@
                             <td>春光</td>
                             <td><span class="tag tag-error">关闭</span></td>
                             <td>2026-08-28 17:55:18</td>
-                            <td><a href="#" class="link" onclick="openOperationLogDrawer('White-light_popkon-溜溜-01','7674191439886106642');return false;">操作记录</a></td>
+                            <td><div class="row-actions"><a href="#" class="link" onclick="openOperationLogDrawer('White-light_popkon-溜溜-01','7674191439886106642');return false;">操作记录</a></div></td>
                           </tr>
                           <tr>
                             <td class="checkbox-col"><input type="checkbox" class="ad-detail-checkbox" /></td>
@@ -573,7 +585,7 @@
                             <td>冷吃兔</td>
                             <td><span class="tag tag-success">开启</span></td>
                             <td>2026-08-24 11:55:29</td>
-                            <td><a href="#" class="link" onclick="openOperationLogDrawer('White-light_popkon-溜溜-02','7674191083738710034');return false;">操作记录</a></td>
+                            <td><div class="row-actions"><a href="#" class="link" onclick="openOperationLogDrawer('White-light_popkon-溜溜-02','7674191083738710034');return false;">操作记录</a></div></td>
                           </tr>
                           <tr>
                             <td class="checkbox-col"><input type="checkbox" class="ad-detail-checkbox" /></td>
@@ -583,7 +595,7 @@
                             <td>冷吃兔</td>
                             <td><span class="tag tag-error">关闭</span></td>
                             <td>2026-08-05 09:45:22</td>
-                            <td><a href="#" class="link" onclick="openOperationLogDrawer('VoltShort-IAA(UTC-5)-063195-MY-...','7655263592175550471');return false;">操作记录</a></td>
+                            <td><div class="row-actions"><a href="#" class="link" onclick="openOperationLogDrawer('VoltShort-IAA(UTC-5)-063195-MY-...','7655263592175550471');return false;">操作记录</a></div></td>
                           </tr>
                           <tr>
                             <td class="checkbox-col"><input type="checkbox" class="ad-detail-checkbox" /></td>
@@ -593,7 +605,7 @@
                             <td>伍吟</td>
                             <td><span class="tag tag-success">开启</span></td>
                             <td>2026-08-05 09:45:22</td>
-                            <td><a href="#" class="link" onclick="openOperationLogDrawer('TT-MAD-IAA-二喵-苙斯-（UTC 8）-2','7648214928863739922');return false;">操作记录</a></td>
+                            <td><div class="row-actions"><a href="#" class="link" onclick="openOperationLogDrawer('TT-MAD-IAA-二喵-苙斯-（UTC 8）-2','7648214928863739922');return false;">操作记录</a></div></td>
                           </tr>
                           <tr>
                             <td class="checkbox-col"><input type="checkbox" class="ad-detail-checkbox" /></td>
@@ -603,7 +615,7 @@
                             <td>娜可</td>
                             <td><span class="tag tag-error">关闭</span></td>
                             <td>2026-07-23 10:56:19</td>
-                            <td><a href="#" class="link" onclick="openOperationLogDrawer('TT-MAD-IAA-二喵-苙斯-（UTC-5）-5','764821520886873362');return false;">操作记录</a></td>
+                            <td><div class="row-actions"><a href="#" class="link" onclick="openOperationLogDrawer('TT-MAD-IAA-二喵-苙斯-（UTC-5）-5','764821520886873362');return false;">操作记录</a></div></td>
                           </tr>
                           <tr>
                             <td class="checkbox-col"><input type="checkbox" class="ad-detail-checkbox" /></td>
@@ -613,7 +625,7 @@
                             <td>--</td>
                             <td><span class="tag tag-success">开启</span></td>
                             <td>2026-07-23 10:56:19</td>
-                            <td><a href="#" class="link" onclick="openOperationLogDrawer('TT-MAD-IAA-AvoShort-(UTC+8)-苙斯-1','7654061089965195282');return false;">操作记录</a></td>
+                            <td><div class="row-actions"><a href="#" class="link" onclick="openOperationLogDrawer('TT-MAD-IAA-AvoShort-(UTC+8)-苙斯-1','7654061089965195282');return false;">操作记录</a></div></td>
                           </tr>
                           <tr>
                             <td class="checkbox-col"><input type="checkbox" class="ad-detail-checkbox" /></td>
@@ -623,7 +635,7 @@
                             <td>--</td>
                             <td><span class="tag tag-success">开启</span></td>
                             <td>2026-07-23 10:56:19</td>
-                            <td><a href="#" class="link" onclick="openOperationLogDrawer('TT-MAD-IAA-US-(UTC-5)-苙斯-2','7651834061279019029');return false;">操作记录</a></td>
+                            <td><div class="row-actions"><a href="#" class="link" onclick="openOperationLogDrawer('TT-MAD-IAA-US-(UTC-5)-苙斯-2','7651834061279019029');return false;">操作记录</a></div></td>
                           </tr>
                         </tbody>
                       </table>
@@ -686,6 +698,7 @@
             </div>
 
           </div>
+            </div>
         </div>
       </main>
     </div>
@@ -701,6 +714,10 @@
       }
 
       function showPage(pageName) {
+        if (pageName.indexOf('fb-') === 0) {
+          window.location.href = navUrl('pages/' + pageName + '.html');
+          return;
+        }
         if (pageName === 'overseas-tiktok-account') {
           window.location.href = navUrl('pages/overseas-tiktok-account.html');
           return;
@@ -730,8 +747,16 @@
           window.location.href = navUrl('pages/overseas-system-user.html');
           return;
         }
+        if (pageName === 'overseas-fb-page') {
+          window.location.href = navUrl('pages/overseas-fb-page.html');
+          return;
+        }
         if (pageName === 'overseas-system-org') {
           window.location.href = navUrl('pages/overseas-system-user.html');
+          return;
+        }
+        if (pageName === 'overseas-asset-app') {
+          window.location.href = navUrl('pages/overseas-asset-app.html');
           return;
         }
         window.location.href = navUrl('index.html') + '#' + pageName;
@@ -778,7 +803,17 @@
         });
       });
 
-      document.querySelectorAll('.nav-child-item[data-page], .nav-item[data-page]').forEach(function (item) {
+            /* ===== 二级分组（批量投放 / 账号管理）展开收起 ===== */
+      document.querySelectorAll('.nav-child-item.has-children').forEach(function (item) {
+        item.addEventListener('click', function (e) {
+          e.stopPropagation();
+          this.classList.toggle('expanded');
+          var caret = this.querySelector('.nav-child-caret');
+          if (caret) caret.textContent = this.classList.contains('expanded') ? '▼' : '▶';
+        });
+      });
+
+      document.querySelectorAll('.nav-child-item[data-page], .nav-item[data-page], .nav-grandchild-item[data-page]').forEach(function (item) {
         item.addEventListener('click', function () {
           showPage(this.getAttribute('data-page'));
         });

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>账户 - 海外投放系统</title>
+    <title>账户 · FaceBook - 海外投放系统</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="../styles/main.css?v=20261008b" />
     <link rel="stylesheet" href="../styles/theme-antd.css?v=20261008b" />
@@ -132,12 +132,12 @@
       <!-- Sidebar -->
       <aside class="sidebar">
         
-        <nav class="nav">
+                <nav class="nav">
           <div class="nav-section">
-            <div class="nav-item has-children expanded">
+            <div class="nav-item has-children">
               <span class="nav-item-icon">🎵</span>
               <span>TikTok</span>
-              <span class="nav-item-caret">▼</span>
+              <span class="nav-item-caret">▶</span>
             </div>
             <div class="nav-children">
               <span class="nav-child-item">项目管理</span>
@@ -151,12 +151,12 @@
                 <span class="nav-grandchild-item" data-page="overseas-auto-delivery">自动化任务</span>
                 <span class="nav-grandchild-item" data-page="overseas-template">模板管理</span>
               </div>
-              <span class="nav-child-item has-children expanded active">
+              <span class="nav-child-item has-children">
                 <span>账号管理</span>
-                <span class="nav-child-caret">▼</span>
+                <span class="nav-child-caret">▶</span>
               </span>
               <div class="nav-grandchildren">
-                <span class="nav-grandchild-item active" data-page="overseas-account">账户</span>
+                <span class="nav-grandchild-item" data-page="overseas-account">账户</span>
                 <span class="nav-grandchild-item" data-page="overseas-app">BC应用</span>
                 <span class="nav-grandchild-item" data-page="overseas-bc">商务中心</span>
               </div>
@@ -166,10 +166,10 @@
           </div>
 
           <div class="nav-section">
-            <div class="nav-item has-children">
+            <div class="nav-item has-children expanded">
               <span class="nav-item-icon">📘</span>
               <span>FaceBook</span>
-              <span class="nav-item-caret">▶</span>
+              <span class="nav-item-caret">▼</span>
             </div>
             <div class="nav-children">
               <span class="nav-child-item">项目管理</span>
@@ -183,12 +183,12 @@
                 <span class="nav-grandchild-item" data-page="fb-auto-delivery">自动化任务</span>
                 <span class="nav-grandchild-item" data-page="fb-template">模板管理</span>
               </div>
-              <span class="nav-child-item has-children">
+              <span class="nav-child-item has-children expanded active">
                 <span>账号管理</span>
-                <span class="nav-child-caret">▶</span>
+                <span class="nav-child-caret">▼</span>
               </span>
               <div class="nav-grandchildren">
-                <span class="nav-grandchild-item" data-page="fb-account">账户</span>
+                <span class="nav-grandchild-item active" data-page="fb-account">账户</span>
                 <span class="nav-grandchild-item" data-page="fb-app">BC应用</span>
               </div>
               <span class="nav-child-item">控损管理</span>
@@ -236,7 +236,6 @@
               <span class="nav-child-item" data-page="overseas-system-user">用户管理</span>
             </div>
           </div>
-
         </nav>
       </aside>
 
@@ -797,14 +796,19 @@
 
       function showPage(pageName) {
         if (pageName.indexOf('fb-') === 0) {
-          window.location.href = navUrl('pages/' + pageName + '.html');
+          if (pageName !== 'fb-account') {
+            window.location.href = navUrl('pages/' + pageName + '.html');
+          }
           return;
         }
         if (pageName === 'overseas-tiktok-account') {
           window.location.href = navUrl('pages/overseas-tiktok-account.html');
           return;
         }
-        if (pageName === 'overseas-account') return;
+        if (pageName === 'overseas-account') {
+          window.location.href = navUrl('pages/overseas-account.html');
+          return;
+        }
         if (pageName === 'overseas-app') {
           window.location.href = navUrl('pages/overseas-app.html');
           return;

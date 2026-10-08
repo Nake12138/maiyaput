@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>公共主页 - 海外投放系统</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../styles/main.css?v=20261008b" />
+    <link rel="stylesheet" href="../styles/theme-antd.css?v=20261008b" />
+    <style>
+      /* ========== 公共主页页面专属样式 ========== */
+      .page-fb-page .filter-bar-row { flex-wrap: wrap; gap: 10px; }
+      .page-fb-page .filter-bar-row .filter-input,
+      .page-fb-page .filter-bar-row .filter-select { min-width: 160px; flex: 1; max-width: 220px; }
+      .page-fb-page .page-cell { display: flex; align-items: center; gap: 10px; }
+      .page-fb-page .page-avatar {
+        width: 36px; height: 36px; border-radius: 50%;
+        background: linear-gradient(135deg, #1877f2, #42a5f5);
+        color: #fff; display: inline-flex; align-items: center; justify-content: center;
+        font-weight: 600; font-size: 13px; flex-shrink: 0; overflow: hidden;
+      }
+      .page-fb-page .page-avatar img { width: 100%; height: 100%; object-fit: cover; }
+      .page-fb-page .page-name { font-weight: 600; color: #1f2937; line-height: 1.2; }
+      .page-fb-page .page-handle { font-size: 12px; color: #6b7280; }
+      .page-fb-page .status-pill {
+        display: inline-flex; align-items: center; gap: 4px;
+        padding: 2px 8px; border-radius: 10px; font-size: 12px;
+      }
+      .page-fb-page .status-pill.is-published { background: #dcfce7; color: #15803d; }
+      .page-fb-page .status-pill.is-unpublished { background: #fef3c7; color: #b45309; }
+      .page-fb-page .status-pill.is-verified { background: #dbeafe; color: #1d4ed8; }
+      .page-fb-page .page-id-cell { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: #374151; }
+      .page-fb-page .copy-btn {
+        background: transparent; border: 1px solid #e5e7eb; color: #6b7280;
+        padding: 2px 8px; border-radius: 6px; font-size: 12px; cursor: pointer;
+        transition: all 0.15s; margin-left: 6px;
+      }
+      .page-fb-page .copy-btn:hover { border-color: #1877f2; color: #1877f2; }
+      .page-fb-page .link-tag {
+        display: inline-block; padding: 1px 8px; border-radius: 4px;
+        background: #eff6ff; color: #1d4ed8; font-size: 12px; margin: 0 2px;
+      }
+      /* 详情抽屉 */
+      #fbpage-detail-drawer .drawer-card { width: min(720px, calc(100vw - 120px)); margin-left: auto; }
+      .page-fb-page .detail-section { padding: 16px 20px; border-bottom: 1px solid #f0f2f5; }
+      .page-fb-page .detail-section:last-child { border-bottom: none; }
+      .page-fb-page .detail-section-title {
+        font-size: 13px; font-weight: 600; color: #6b7280;
+        text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 12px;
+      }
+      .page-fb-page .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 24px; }
+      .page-fb-page .detail-row { display: flex; gap: 8px; font-size: 13px; }
+      .page-fb-page .detail-row .label { color: #6b7280; min-width: 96px; flex-shrink: 0; }
+      .page-fb-page .detail-row .value { color: #1f2937; word-break: break-all; }
+      .page-fb-page .detail-header-card {
+        display: flex; gap: 16px; align-items: center;
+        padding: 20px 24px; background: #f8fafc;
+      }
+      .page-fb-page .detail-header-card .page-avatar { width: 64px; height: 64px; font-size: 22px; }
+      .page-fb-page .detail-header-card .page-name { font-size: 18px; font-weight: 600; }
+      .page-fb-page .detail-header-card .page-handle { font-size: 13px; }
+      /* 关联广告账户抽屉 */
+      #fbpage-bind-drawer .drawer-card { width: min(640px, calc(100vw - 120px)); margin-left: auto; }
+      .page-fb-page .bind-pill {
+        display: inline-flex; align-items: center; gap: 6px;
+        padding: 4px 10px; border-radius: 6px; background: #eff6ff;
+        color: #1d4ed8; font-size: 12px; margin: 4px 4px 0 0;
+      }
+      .page-fb-page .bind-pill .remove { cursor: pointer; color: #9ca3af; }
+      .page-fb-page .bind-pill .remove:hover { color: #b91c1c; }
+      /* 同步结果轻提示 */
+      .fb-toast {
+        position: fixed; left: 50%; top: 24px; transform: translate(-50%, -12px);
+        padding: 10px 18px; border-radius: 8px; background: #1f2937; color: #fff;
+        font-size: 13px; box-shadow: 0 8px 24px rgba(0, 0, 0, .18);
+        opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; z-index: 3000;
+      }
+      .fb-toast.show { opacity: 1; transform: translate(-50%, 0); }
+    </style>
+  </head>
+  <body class="theme-antd">
+        <!-- Top Bar（全宽：品牌 + 用户） -->
+    <header class="app-bar">
+      <div class="app-bar-left">
+<div class="logo">
+          <div class="logo-icon">海</div>
+          <div class="logo-info">
+            <span class="logo-name">海外投放系统</span>
+            <span class="system-switch-trigger" onclick="toggleSystemMenu(event)">切换系统 <span class="system-switch-caret">▾</span></span>
+          </div>
+          <div class="system-switch-menu" id="systemSwitchMenu">
+            <div class="system-switch-item" data-system="cn" onclick="switchSystem('cn')">国内投放系统</div>
+            <div class="system-switch-item active" data-system="overseas" onclick="switchSystem('overseas')">海外投放系统<span class="check">✓</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="app-bar-right">
+        <div class="tz-switcher">
+          <select class="tz-select" aria-label="时区切换">
+            <option value="UTC+8" selected>UTC+8</option>
+            <option value="UTC+0">UTC+0</option>
+            <option value="UTC+7">UTC+7</option>
+            <option value="UTC+9">UTC+9</option>
+            <option value="UTC-5">UTC-5</option>
+          </select>
+          <svg class="tz-caret" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+            <path d="M2 3.75L5 6.75L8 3.75" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+
+        <button type="button" class="header-icon-btn" title="文档下载" aria-label="文档下载" onclick="alert('下载文档')">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+            <path d="M9 2.75V10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+            <path d="M5.75 7.5L9 10.75L12.25 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M3.25 12.25V13.5C3.25 14.47 4.03 15.25 5 15.25H13C13.97 15.25 14.75 14.47 14.75 13.5V12.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+          </svg>
+        </button>
+
+        <div class="user-profile-wrap" id="userProfileWrap">
+          <button type="button" class="user-profile" id="userProfileTrigger" aria-haspopup="true" aria-expanded="false">
+            <span class="user-profile-avatar" aria-hidden="true">
+              <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="20" cy="20" r="20" fill="#dce5ef" />
+              <circle cx="20" cy="25.5" r="9.5" fill="#2f3d56" />
+              <rect x="17.4" y="17.5" width="5.2" height="6" rx="2.6" fill="#e0a97f" />
+              <ellipse cx="20" cy="15.6" rx="6.4" ry="7" fill="#f0c19b" />
+              <path d="M20 6.8c4.6 0 7.8 3.1 7.8 7.4 0 .6-.06 1.2-.18 1.75-.9-1.5-2.3-2.2-3.9-3.1-1.9 1.05-4.1 1.55-6.4 1.55-.8 0-1.5-.06-2.2-.18-.5.6-.9 1.3-1.15 2.05-.12-.6-.18-1.2-.18-1.85C12.2 9.9 15.4 6.8 20 6.8z" fill="#e8562a" />
+            </svg>
+            </span>
+            <span class="user-profile-meta">
+              <span class="user-profile-name">娜可 <em>(nake)</em></span>
+              <span class="user-profile-email">nake06870@maiyawx.com</span>
+            </span>
+            <svg class="user-profile-caret" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+              <path d="M2 3.75L5 6.75L8 3.75" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+
+          <div class="user-dropdown" id="userDropdown" role="menu">
+            <div class="user-dropdown-head">
+              <span class="user-dropdown-avatar" aria-hidden="true">
+                <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="20" cy="20" r="20" fill="#dce5ef" />
+                <circle cx="20" cy="25.5" r="9.5" fill="#2f3d56" />
+                <rect x="17.4" y="17.5" width="5.2" height="6" rx="2.6" fill="#e0a97f" />
+                <ellipse cx="20" cy="15.6" rx="6.4" ry="7" fill="#f0c19b" />
+                <path d="M20 6.8c4.6 0 7.8 3.1 7.8 7.4 0 .6-.06 1.2-.18 1.75-.9-1.5-2.3-2.2-3.9-3.1-1.9 1.05-4.1 1.55-6.4 1.55-.8 0-1.5-.06-2.2-.18-.5.6-.9 1.3-1.15 2.05-.12-.6-.18-1.2-.18-1.85C12.2 9.9 15.4 6.8 20 6.8z" fill="#e8562a" />
+              </svg>
+              </span>
+              <span class="user-dropdown-meta">
+                <span class="user-dropdown-name">娜可 <em>(nake)</em></span>
+                <span class="user-dropdown-email" title="nake06870@maiyawx.com">nake06870@maiyawx.com</span>
+              </span>
+              <button type="button" class="copy-mail-btn" id="copyMailBtn" title="复制邮箱" aria-label="复制邮箱">
+                <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <rect x="5.9" y="5.9" width="7.35" height="7.35" rx="1.7" stroke="currentColor" stroke-width="1.3" />
+                  <path d="M10.3 3.95V3.1c0-.88-.72-1.6-1.6-1.6H3.9c-.88 0-1.6.72-1.6 1.6v4.8c0 .88.72 1.6 1.6 1.6h.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                </svg>
+              </button>
+            </div>
+            <div class="user-dropdown-sep"></div>
+            <button type="button" class="user-dropdown-item" data-action="help" role="menuitem">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <circle cx="8" cy="8" r="6.25" stroke="currentColor" stroke-width="1.3" />
+                <path d="M6.35 6.1c.1-.88.85-1.5 1.68-1.5.9 0 1.62.6 1.62 1.47 0 .78-.5 1.1-1.05 1.48-.5.35-.75.62-.75 1.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                <circle cx="7.87" cy="11.35" r=".85" fill="currentColor" />
+              </svg>
+              帮助指南
+            </button>
+            <button type="button" class="user-dropdown-item" data-action="clear-cache" role="menuitem">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M2.75 4.5h10.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                <path d="M6.25 4.5V3.4c0-.47.38-.85.85-.85h1.8c.47 0 .85.38.85.85V4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                <path d="M4.4 4.5l.55 8.05c.03.5.45.9.95.9h4.2c.5 0 .92-.4.95-.9l.55-8.05" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                <path d="M6.9 7v4M9.1 7v4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+              </svg>
+              清除缓存
+            </button>
+            <div class="user-dropdown-sep"></div>
+            <button type="button" class="user-dropdown-item danger" data-action="logout" role="menuitem">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M6.5 13.25H3.9c-.64 0-1.15-.51-1.15-1.15V3.9c0-.64.51-1.15 1.15-1.15h2.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                <path d="M10.4 10.8L13.25 8 10.4 5.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M13 8H6.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+              </svg>
+              退出登录
+            </button>
+          </div>
+        </div>
+      
+      </div>
+    </header>
+
+<div class="layout">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        
+        <nav class="nav">
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">🎵</span>
+              <span>TikTok</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+            <div class="nav-children">
+              <span class="nav-child-item">项目管理</span>
+              <span class="nav-child-item">数据统计</span>
+              <span class="nav-child-item has-children">
+                <span>批量投放</span>
+                <span class="nav-child-caret">▶</span>
+              </span>
+              <div class="nav-grandchildren">
+                <span class="nav-grandchild-item" data-page="overseas-batch-delivery">批量投放</span>
+                <span class="nav-grandchild-item" data-page="overseas-auto-delivery">自动化任务</span>
+                <span class="nav-grandchild-item" data-page="overseas-template">模板管理</span>
+              </div>
+              <span class="nav-child-item has-children">
+                <span>账号管理</span>
+                <span class="nav-child-caret">▶</span>
+              </span>
+              <div class="nav-grandchildren">
+                <span class="nav-grandchild-item" data-page="overseas-account">账户</span>
+                <span class="nav-grandchild-item" data-page="overseas-app">BC应用</span>
+                <span class="nav-grandchild-item" data-page="overseas-bc">商务中心</span>
+              </div>
+              <span class="nav-child-item">控损管理</span>
+              <span class="nav-child-item">关联绑定</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">📘</span>
+              <span>FaceBook</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+            <div class="nav-children">
+              <span class="nav-child-item">项目管理</span>
+              <span class="nav-child-item">数据统计</span>
+              <span class="nav-child-item has-children">
+                <span>批量投放</span>
+                <span class="nav-child-caret">▶</span>
+              </span>
+              <div class="nav-grandchildren">
+                <span class="nav-grandchild-item" data-page="fb-batch-delivery">批量投放</span>
+                <span class="nav-grandchild-item" data-page="fb-auto-delivery">自动化任务</span>
+                <span class="nav-grandchild-item" data-page="fb-template">模板管理</span>
+              </div>
+              <span class="nav-child-item has-children">
+                <span>账号管理</span>
+                <span class="nav-child-caret">▶</span>
+              </span>
+              <div class="nav-grandchildren">
+                <span class="nav-grandchild-item" data-page="fb-account">账户</span>
+                <span class="nav-grandchild-item" data-page="fb-app">BC应用</span>
+              </div>
+              <span class="nav-child-item">控损管理</span>
+              <span class="nav-child-item" data-page="fb-binding">关联绑定</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">▶</span>
+              <span>短剧管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">▣</span>
+              <span>素材管理</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children expanded">
+              <span class="nav-item-icon">🗂️</span>
+              <span>资产管理</span>
+              <span class="nav-item-caret">▼</span>
+            </div>
+            <div class="nav-children">
+              <span class="nav-child-item" data-page="overseas-asset-app">应用</span>
+              <span class="nav-child-item" data-page="overseas-tiktok-account">TikTok账号</span>
+              <span class="nav-child-item active" data-page="overseas-fb-page">公共主页</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">⚙️</span>
+              <span>系统设置</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+            <div class="nav-children">
+              <span class="nav-child-item" data-page="overseas-system-org">组织架构</span>
+              <span class="nav-child-item" data-page="overseas-system-user">用户管理</span>
+            </div>
+          </div>
+
+        </nav>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main">
+        
+
+        <div class="content">
+          <div id="page-overseas-fb-page" class="page page-fb-page active">
+            <div class="breadcrumb">
+              <a href="#" onclick="showPage('dashboard')">首页</a>
+              <span class="breadcrumb-sep">/</span>
+              <span>资产管理</span>
+              <span class="breadcrumb-sep">/</span>
+              <span>公共主页</span>
+            </div>
+
+            <div class="content-card">
+<div class="page-header page-header--start">
+            </div>
+
+
+            <!-- Filter Bar -->
+            <div class="filter-bar">
+              <div class="filter-bar-row">
+                <input type="text" class="filter-input" id="fbpage-name" placeholder="请输入主页名称 / @用户名" />
+                <input type="text" class="filter-input" id="fbpage-id" placeholder="请输入 Page ID" />
+                <div class="filter-actions">
+                  <button class="btn btn-primary btn-sm" onclick="searchFbPages()">查询</button>
+                  <button class="btn btn-outline btn-sm" onclick="resetFbPageFilters()">重置</button>
+                  <button class="btn btn-outline btn-sm" onclick="syncFbPages(this)">同步主页</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pages Table -->
+            <div class="table-card">
+              <div class="table-wrapper">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>主页</th>
+                      <th>Page ID</th>
+                      <th>粉丝数</th>
+                      <th>所属商务中心</th>
+                      <th>更新人</th>
+                      <th>更新时间</th>
+                    </tr>
+                  </thead>
+                  <tbody id="fb-page-tbody">
+                    <tr data-page-id="100123456789012" data-page-name="Dramatical Shorts" data-page-handle="dramaticalshorts" data-page-category="Entertainment" data-page-fans="184230" data-page-bm="Maiya Global BM" data-page-published="true" data-page-verified="true" data-page-link="https://facebook.com/dramaticalshorts" data-page-about="Official page for Dramatical Shorts — your daily short drama fix." data-page-updater="娜娜" data-page-updated="2026-09-29 18:24:11">
+                      <td>
+                        <div class="page-cell">
+                          <div>
+                            <div class="page-name">Dramatical Shorts</div>
+                            <div class="page-handle">@dramaticalshorts</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="page-id-cell">100123456789012<button class="copy-btn" onclick="copyText('100123456789012',this)" title="复制 ID">复制</button></td>
+                      <td>184,230</td>
+                      <td>Maiya Global BM</td>
+                      <td>娜娜</td>
+                      <td>2026-09-29 18:24:11</td>
+                    </tr>
+
+                    <tr data-page-id="200987654321098" data-page-name="Romance Reels" data-page-handle="romancereels.us" data-page-category="Media/News Company" data-page-fans="1208754" data-page-bm="Drama US BM" data-page-published="true" data-page-verified="false" data-page-link="https://facebook.com/romancereels.us" data-page-about="Bite-sized romance stories you'll binge in one sitting." data-page-updater="Eric.Wu" data-page-updated="2026-09-29 11:02:48">
+                      <td>
+                        <div class="page-cell">
+                          <div>
+                            <div class="page-name">Romance Reels</div>
+                            <div class="page-handle">@romancereels.us</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="page-id-cell">200987654321098<button class="copy-btn" onclick="copyText('200987654321098',this)" title="复制 ID">复制</button></td>
+                      <td>1,208,754</td>
+                      <td>Drama US BM</td>
+                      <td>Eric.Wu</td>
+                      <td>2026-09-29 11:02:48</td>
+                    </tr>
+
+                    <tr data-page-id="300556677889911" data-page-name="悬疑剧场 Mystery" data-page-handle="mystery.cn.tw" data-page-category="Entertainment" data-page-fans="54630" data-page-bm="Drama SEA BM" data-page-published="true" data-page-verified="false" data-page-link="https://facebook.com/mystery.cn.tw" data-page-about="悬疑短剧、烧脑剧场，每周一更新。" data-page-updater="李婷" data-page-updated="2026-09-28 22:15:02">
+                      <td>
+                        <div class="page-cell">
+                          <div>
+                            <div class="page-name">悬疑剧场 Mystery</div>
+                            <div class="page-handle">@mystery.cn.tw</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="page-id-cell">300556677889911<button class="copy-btn" onclick="copyText('300556677889911',this)" title="复制 ID">复制</button></td>
+                      <td>54,630</td>
+                      <td>Drama SEA BM</td>
+                      <td>李婷</td>
+                      <td>2026-09-28 22:15:02</td>
+                    </tr>
+
+                    <tr data-page-id="400112233445566" data-page-name="Drama Hub Latam" data-page-handle="dramahub.latam" data-page-category="Entertainment" data-page-fans="892114" data-page-bm="Maiya Global BM" data-page-published="false" data-page-verified="false" data-page-link="https://facebook.com/dramahub.latam" data-page-about="Dramas cortos en español para todo latinoamérica." data-page-updater="Maya.ops" data-page-updated="2026-09-25 09:48:33">
+                      <td>
+                        <div class="page-cell">
+                          <div>
+                            <div class="page-name">Drama Hub Latam</div>
+                            <div class="page-handle">@dramahub.latam</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="page-id-cell">400112233445566<button class="copy-btn" onclick="copyText('400112233445566',this)" title="复制 ID">复制</button></td>
+                      <td>892,114</td>
+                      <td>Maiya Global BM</td>
+                      <td>Maya.ops</td>
+                      <td>2026-09-25 09:48:33</td>
+                    </tr>
+
+                    <tr data-page-id="500665544332211" data-page-name="K-Drama Daily" data-page-handle="kdramadaily.kr" data-page-category="Media/News Company" data-page-fans="2147890" data-page-bm="Drama SEA BM" data-page-published="true" data-page-verified="true" data-page-link="https://facebook.com/kdramadaily.kr" data-page-about="K-Drama shorts, recaps, and behind-the-scenes in 60 seconds or less." data-page-updater="jihoon.kim" data-page-updated="2026-09-22 14:30:00">
+                      <td>
+                        <div class="page-cell">
+                          <div>
+                            <div class="page-name">K-Drama Daily</div>
+                            <div class="page-handle">@kdramadaily.kr</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="page-id-cell">500665544332211<button class="copy-btn" onclick="copyText('500665544332211',this)" title="复制 ID">复制</button></td>
+                      <td>2,147,890</td>
+                      <td>Drama SEA BM</td>
+                      <td>jihoon.kim</td>
+                      <td>2026-09-22 14:30:00</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+              <span class="pagination-info">共 5 条</span>
+              <div class="pagination-pages">
+                <button class="page-btn" disabled>&lt;</button>
+                <button class="page-btn active">1</button>
+                <button class="page-btn">&gt;</button>
+              </div>
+              <select class="page-size-select">
+                <option>10条/页</option>
+                <option>20条/页</option>
+                <option>50条/页</option>
+              </select>
+              <span>跳至</span>
+              <input type="text" class="jump-input" value="1" />
+              <span>页</span>
+            </div>
+          </div>
+            </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- 公共主页详情 Drawer -->
+    <div id="fbpage-detail-drawer-overlay" class="drawer-overlay" onclick="closeFbPageDetail()"></div>
+    <div id="fbpage-detail-drawer" class="drawer drawer-detail">
+      <div class="drawer-card page-fb-page">
+        <div class="drawer-header">
+          <span class="drawer-title">公共主页详情</span>
+          <button class="drawer-close" onclick="closeFbPageDetail()">×</button>
+        </div>
+        <div class="drawer-body" id="fbpage-detail-body">
+          <!-- 由 JS 渲染 -->
+        </div>
+        <div class="drawer-footer">
+          <button class="btn btn-outline btn-sm" onclick="closeFbPageDetail()">关闭</button>
+          <button class="btn btn-primary btn-sm" onclick="copyText(document.getElementById('fbpage-detail-body').dataset.currentId, this)">复制 Page ID</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 关联广告账户 Drawer -->
+    <div id="fbpage-bind-drawer-overlay" class="drawer-overlay" onclick="closeBindAccountDrawer()"></div>
+    <div id="fbpage-bind-drawer" class="drawer drawer-bind">
+      <div class="drawer-card page-fb-page">
+        <div class="drawer-header">
+          <span class="drawer-title">绑定广告账户</span>
+          <button class="drawer-close" onclick="closeBindAccountDrawer()">×</button>
+        </div>
+        <div class="drawer-body">
+          <p class="drawer-hint">为该主页绑定/解绑可用于投放的广告账户。广告账户需在本系统「账号管理 → 账户」中已关联。</p>
+
+          <div class="detail-section">
+            <div class="detail-section-title">当前主页</div>
+            <div class="page-cell" style="padding:8px 0;">
+              <span class="page-avatar" id="bind-avatar">DS</span>
+              <div>
+                <div class="page-name" id="bind-page-name">Dramatical Shorts</div>
+                <div class="page-handle" id="bind-page-handle">@dramaticalshorts · <span id="bind-page-id">100123456789012</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="detail-section">
+            <div class="detail-section-title">已绑定广告账户</div>
+            <div id="bind-current-list"></div>
+          </div>
+
+          <div class="detail-section">
+            <div class="detail-section-title">添加绑定</div>
+            <div class="form-item">
+              <label class="form-label">可绑定的广告账户：</label>
+              <select class="form-select" id="bind-add-select">
+                <option value="">请选择账户</option>
+                <option value="act_771009384">act_771009384 — Dramatical US</option>
+                <option value="act_338201104">act_338201104 — Dramatical SEA</option>
+                <option value="act_900877665">act_900877665 — Dramatical Latam</option>
+                <option value="act_444123000">act_444123000 — Dramatical EU</option>
+              </select>
+            </div>
+            <button class="btn btn-outline btn-sm" onclick="addBindAccount()">添加</button>
+          </div>
+
+          <div class="sync-api-note">
+            <strong>相关 API：</strong>
+            <ul>
+              <li>广告账户可访问的全部主页（含 BM 继承） → <code>GET /act_{id}/pages</code>（<a href="https://developers.facebook.com/documentation/ads-commerce/marketing-api/reference/ad-account/pages" target="_blank">ad-account/pages</a>）</li>
+              <li>广告账户直接分配的主页（不含继承，多数场景下为空） → <code>GET /act_{id}/assigned_pages</code>（<a href="https://developers.facebook.com/documentation/ads-commerce/marketing-api/reference/ad-account/assigned-pages" target="_blank">ad-account/assigned-pages</a>）</li>
+              <li>BM 名下主页 → <code>GET /{business_id}/owned_pages</code>（<a href="https://developers.facebook.com/documentation/ads-commerce/marketing-api/reference/business/owned_pages" target="_blank">business/owned_pages</a>）</li>
+            </ul>
+          </div>
+        </div>
+        <div class="drawer-footer">
+          <button class="btn btn-outline btn-sm" onclick="closeBindAccountDrawer()">取消</button>
+          <button class="btn btn-primary btn-sm" onclick="saveBindAccounts()">保存</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="../scripts/main.js"></script>
+    <script>
+      /* ===== 跨环境页面跳转 ===== */
+      function navUrl(rootPath) {
+        if (window.location.hostname === 'htmlpreview.github.io') {
+          return 'https://htmlpreview.github.io/?https://github.com/Nake12138/maiyaput/blob/main/' + rootPath;
+        }
+        if (rootPath === 'index.html') return '../index.html';
+        return './' + rootPath.replace(/^pages\//, '');
+      }
+
+      function showPage(pageName) {
+        if (pageName.indexOf('fb-') === 0) {
+          window.location.href = navUrl('pages/' + pageName + '.html');
+          return;
+        }
+        if (pageName === 'overseas-fb-page') return;
+        if (pageName === 'overseas-tiktok-account') {
+          window.location.href = navUrl('pages/overseas-tiktok-account.html');
+          return;
+        }
+        if (pageName === 'overseas-account') {
+          window.location.href = navUrl('pages/overseas-account.html');
+          return;
+        }
+        if (pageName === 'overseas-app') {
+          window.location.href = navUrl('pages/overseas-app.html');
+          return;
+        }
+        if (pageName === 'overseas-bc') {
+          window.location.href = navUrl('pages/overseas-bc.html');
+          return;
+        }
+        if (pageName === 'overseas-batch-delivery') {
+          window.location.href = navUrl('pages/overseas-batch-delivery.html');
+          return;
+        }
+        if (pageName === 'overseas-auto-delivery') {
+          window.location.href = navUrl('pages/overseas-auto-delivery.html');
+          return;
+        }
+        if (pageName === 'overseas-template') {
+          window.location.href = navUrl('pages/overseas-template.html');
+          return;
+        }
+        if (pageName === 'overseas-system-user') {
+          window.location.href = navUrl('pages/overseas-system-user.html');
+          return;
+        }
+        if (pageName === 'overseas-system-org') {
+          window.location.href = navUrl('pages/overseas-system-user.html');
+          return;
+        }
+        if (pageName === 'overseas-asset-app') {
+          window.location.href = navUrl('pages/overseas-asset-app.html');
+          return;
+        }
+        window.location.href = navUrl('index.html') + '#' + pageName;
+      }
+
+      /* ===== 工具函数 ===== */
+      function copyText(text, btn) {
+        try {
+          navigator.clipboard.writeText(text);
+        } catch (e) {
+          var ta = document.createElement('textarea');
+          ta.value = text;
+          document.body.appendChild(ta);
+          ta.select();
+          try { document.execCommand('copy'); } catch (_) {}
+          document.body.removeChild(ta);
+        }
+        if (btn) {
+          var orig = btn.textContent;
+          btn.textContent = '已复制';
+          btn.disabled = true;
+          setTimeout(function () { btn.textContent = orig; btn.disabled = false; }, 1200);
+        }
+      }
+
+      /* ===== 筛选 ===== */
+      function searchFbPages() { alert('查询公共主页'); }
+      function resetFbPageFilters() {
+        document.getElementById('fbpage-name').value = '';
+        document.getElementById('fbpage-id').value = '';
+      }
+
+      /* ===== 详情抽屉 ===== */
+      var _fbPageDetail = null;
+
+      function openFbPageDetail(link) {
+        var row = link.closest('tr');
+        var data = readRowData(row);
+        _fbPageDetail = data;
+
+        var body = document.getElementById('fbpage-detail-body');
+        body.dataset.currentId = data.id;
+        body.innerHTML =
+          '<div class="detail-header-card">' +
+            '<span class="page-avatar" data-letter="' + escapeHtml((data.name || '').charAt(0)) + '">' + escapeHtml((data.name || '').charAt(0)) + '</span>' +
+            '<div>' +
+              '<div class="page-name">' + escapeHtml(data.name || '—') + '</div>' +
+              '<div class="page-handle">' + escapeHtml(data.handle || '—') + ' · ' + escapeHtml(data.id || '—') + '</div>' +
+              '<div style="margin-top:6px;">' +
+                (data.published === 'true' ? '<span class="status-pill is-published">●已发布</span>' : '<span class="status-pill is-unpublished">●未发布</span>') +
+                (data.verified === 'true' ? ' <span class="status-pill is-verified">✓已认证</span>' : '') +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+          '<div class="detail-section">' +
+            '<div class="detail-section-title">基本信息</div>' +
+            '<div class="detail-grid">' +
+              rowKV('主页名称', data.name) +
+              rowKV('Page ID', '<span style="font-family:ui-monospace,monospace;">' + data.id + '</span>') +
+              rowKV('用户名', '@' + data.handle) +
+              rowKV('分类', data.category) +
+              rowKV('粉丝数', data.fans) +
+              rowKV('所属 BM', data.bm) +
+              rowKV('主页链接', '<a href="' + data.link + '" target="_blank" class="link">' + data.link + '</a>') +
+              rowKV('更新人', data.updater || '—') +
+              rowKV('更新时间', data.updated) +
+            '</div>' +
+          '</div>' +
+          '<div class="detail-section">' +
+            '<div class="detail-section-title">简介</div>' +
+            '<div style="font-size:13px;color:#1f2937;line-height:1.6;">' + escapeHtml(data.about || '—') + '</div>' +
+          '</div>' +
+          '<div class="detail-section">' +
+            '<div class="detail-section-title">已绑定的广告账户</div>' +
+            (data.boundHtml || '<span style="color:#9ca3af;">尚未绑定任何广告账户</span>') +
+          '</div>' +
+          '<div class="detail-section">' +
+            '<div class="detail-section-title">相关 API</div>' +
+            '<div style="font-size:12px;color:#4b5563;line-height:1.8;">' +
+              '· 主页基础信息：<code>GET /{page-id}?fields=id,name,username,category,fan_count,is_published,is_verified,picture,link</code><br/>' +
+              '· 当前 token 可见主页：<code>GET /me/accounts</code><br/>' +
+              '· BM 名下主页：<code>GET /{business_id}/owned_pages</code>' +
+            '</div>' +
+          '</div>';
+
+        document.getElementById('fbpage-detail-drawer-overlay').classList.add('open');
+        document.getElementById('fbpage-detail-drawer').classList.add('open');
+      }
+
+      function rowKV(label, value) {
+        return '<div class="detail-row"><span class="label">' + label + '：</span><span class="value">' + (value || '—') + '</span></div>';
+      }
+
+      function escapeHtml(s) {
+        return String(s == null ? '' : s)
+          .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+      }
+
+      function readRowData(row) {
+        var out = {};
+        ['id', 'name', 'handle', 'category', 'fans', 'bm', 'published', 'verified', 'link', 'about', 'updater', 'updated'].forEach(function (k) {
+          out[k] = row.getAttribute('data-page-' + k) || '';
+        });
+        var tagContainer = row.querySelectorAll('.link-tag');
+        if (tagContainer.length) {
+          out.boundHtml = '';
+          tagContainer.forEach(function (el) {
+            out.boundHtml += '<span class="bind-pill">' + el.textContent + '<span class="remove" onclick="this.parentElement.remove();return false;">×</span></span>';
+          });
+        } else {
+          out.boundHtml = '';
+        }
+        return out;
+      }
+
+      function closeFbPageDetail() {
+        document.getElementById('fbpage-detail-drawer-overlay').classList.remove('open');
+        document.getElementById('fbpage-detail-drawer').classList.remove('open');
+      }
+
+      /* ===== 同步公共主页（无弹框：点击即拉取全部商务中心下的所有主页） ===== */
+      function syncFbPages(btn) {
+        if (btn && btn.disabled) { return; }
+        var _orig = btn ? btn.textContent : '';
+        if (btn) { btn.disabled = true; btn.textContent = '同步中…'; }
+
+        // 演示口径：不询问来源，默认拉取所有商务中心（BM）下的全部主页
+        var bms = ['Maiya Global BM', 'Drama US BM', 'Drama SEA BM'];
+        var total = document.querySelectorAll('#fb-page-tbody tr').length;
+
+        setTimeout(function () {
+          if (btn) { btn.disabled = false; btn.textContent = _orig; }
+          showFbToast('同步完成：已从 ' + bms.length + ' 个商务中心拉取全部主页，共 ' + total + ' 个');
+        }, 900);
+      }
+
+      function showFbToast(msg) {
+        var el = document.getElementById('fbpage-toast');
+        if (!el) {
+          el = document.createElement('div');
+          el.id = 'fbpage-toast';
+          el.className = 'fb-toast';
+          document.body.appendChild(el);
+        }
+        el.textContent = msg;
+        el.classList.add('show');
+        clearTimeout(el._t);
+        el._t = setTimeout(function () { el.classList.remove('show'); }, 2800);
+      }
+
+      /* ===== 关联广告账户抽屉 ===== */
+      var _bindPageRow = null;
+
+      function openBindAccountDrawer(link) {
+        _bindPageRow = link.closest('tr');
+        var data = readRowData(_bindPageRow);
+
+        document.getElementById('bind-avatar').textContent = (data.name || '').charAt(0);
+        document.getElementById('bind-page-name').textContent = data.name || '—';
+        document.getElementById('bind-page-handle').innerHTML = '@' + escapeHtml(data.handle) + ' · <span id="bind-page-id">' + escapeHtml(data.id) + '</span>';
+
+        var list = document.getElementById('bind-current-list');
+        if (data.relationship === 'public' || data.boundHtml) {
+          list.innerHTML = data.boundHtml || '<span style="color:#9ca3af;font-size:12px;">尚未绑定任何广告账户</span>';
+        } else {
+          list.innerHTML = '<span style="color:#9ca3af;font-size:12px;">尚未绑定任何广告账户</span>';
+        }
+
+        document.getElementById('bind-add-select').selectedIndex = 0;
+        document.getElementById('fbpage-bind-drawer-overlay').classList.add('open');
+        document.getElementById('fbpage-bind-drawer').classList.add('open');
+      }
+
+      function closeBindAccountDrawer() {
+        document.getElementById('fbpage-bind-drawer-overlay').classList.remove('open');
+        document.getElementById('fbpage-bind-drawer').classList.remove('open');
+      }
+
+      function addBindAccount() {
+        var sel = document.getElementById('bind-add-select');
+        var val = sel.value;
+        if (!val) { alert('请选择要添加的广告账户'); return; }
+        var text = sel.options[sel.selectedIndex].text;
+        var list = document.getElementById('bind-current-list');
+        if (list.textContent.indexOf(val) !== -1 && list.innerHTML.indexOf(val) !== -1) {
+          alert('该账户已绑定');
+          return;
+        }
+        var pill = document.createElement('span');
+        pill.className = 'bind-pill';
+        pill.setAttribute('data-bind', val);
+        pill.innerHTML = text + ' <span class="remove" onclick="this.parentElement.remove();return false;">×</span>';
+        var placeholder = list.querySelector('span[style*="color:#9ca3af"]');
+        if (placeholder) placeholder.remove();
+        list.appendChild(pill);
+        sel.selectedIndex = 0;
+      }
+
+      function saveBindAccounts() {
+        var pills = document.querySelectorAll('#bind-current-list .bind-pill');
+        var accounts = [];
+        pills.forEach(function (p) {
+          var v = p.getAttribute('data-bind');
+          if (v) accounts.push(v);
+        });
+        alert('保存绑定：' + accounts.length + ' 个广告账户\n' + accounts.join('\n') + '\n\n（演示，未实际请求 API）');
+        closeBindAccountDrawer();
+      }
+    </script>
+  <script src="../scripts/header-user.js?v=20260924"></script>
+  </body>
+</html>

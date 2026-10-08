@@ -10,3 +10,6 @@ Thumbs.db
 
 # 本地临时文件
 *.log
+
+# WorkBuddy 本地临时数据
+.workbuddy/

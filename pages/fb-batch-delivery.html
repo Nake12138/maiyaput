@@ -3,43 +3,37 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>批量投放 - 海外投放系统</title>
+    <title>批量投放 · FaceBook - 海外投放系统</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="../styles/main.css?v=20261008b" />
     <link rel="stylesheet" href="../styles/theme-antd.css?v=20261008b" />
     <link rel="stylesheet" href="../styles/multi-select.css?v=20261008b" />
     <style>
-      /* 配置区弹窗覆盖（模块与按钮布局与 FB 批量投放保持一致） */
+      /* 配置区弹窗覆盖 */
       .config-modal-card {
         background: #f5f7fa;
       }
       .config-modal-body {
         background: #f5f7fa;
         padding: 16px;
-        display: flex;
-        flex-direction: column;
       }
       .config-panels {
         display: grid;
         grid-template-columns: 260px repeat(5, 1fr);
         gap: 12px;
-        flex: 0 0 auto;
       }
       .config-panel {
         background: #fff;
         border: 1px solid #e8e8e8;
         border-radius: 6px;
-        padding: 10px 12px;
-        height: 330px;
+        padding: 12px;
+        min-height: 180px;
         position: relative;
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
       }
       .config-panel-header {
         border-bottom: none;
         padding: 0;
-        margin-bottom: 8px;
+        margin-bottom: 10px;
       }
       .config-panel-header span:first-child {
         font-size: 14px;
@@ -52,13 +46,10 @@
       }
       .config-panel-body {
         padding: 0;
-        flex: 1;
-        min-height: 0;
-        overflow-y: auto;
       }
       .config-panel-body .config-row {
-        margin-bottom: 4px;
-        line-height: 1.45;
+        margin-bottom: 6px;
+        line-height: 1.5;
       }
       .config-panel-body .config-row .config-key {
         color: #6b7280;
@@ -92,24 +83,7 @@
         overflow: hidden;
         text-overflow: ellipsis;
       }
-      .config-panel-footer {
-        padding: 6px 0 0;
-        border-top: 1px solid #f0f0f0;
-        margin-top: 8px;
-        display: flex;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 12px;
-        min-height: 24px;
-      }
-      .config-panel-footer .config-action {
-        color: #1890ff;
-        font-size: 13px;
-        cursor: pointer;
-      }
-      .config-panel-footer .config-action:hover {
-        text-decoration: underline;
-      }
+
       /* 标签样式 */
       .config-tag {
         display: inline-flex;
@@ -130,12 +104,13 @@
       .config-tag .tag-count {
         color: #999;
       }
+
+      /* 底部标签按钮 */
       .config-action-buttons {
         display: flex;
         align-items: center;
-        margin-top: 12px;
+        margin-top: 14px;
         gap: 8px;
-        flex: 0 0 auto;
       }
       .config-tab-btn {
         padding: 8px 20px;
@@ -151,234 +126,52 @@
         color: #fff;
         border-color: #1890ff;
       }
-      /* ===== 身份信息弹框 ===== */
-      .identity-help {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 16px;
-        height: 16px;
-        margin-left: 6px;
-        border-radius: 50%;
-        background: #ffa940;
-        color: #fff;
-        font-size: 11px;
-        font-weight: 600;
-        vertical-align: 2px;
-        cursor: help;
-      }
-      .identity-toolbar {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        font-size: 13px;
-        color: #374151;
-        padding: 4px 0 12px;
-      }
-      .identity-toolbar .config-action {
-        color: #1890ff;
-        cursor: pointer;
-        font-size: 13px;
-      }
-      .identity-table th,
-      .identity-table td {
-        border-bottom: 1px solid #f0f0f0;
-        padding: 10px 12px;
-        text-align: left;
-        vertical-align: middle;
-        font-size: 13px;
-      }
-      .identity-table thead th {
-        background: #fafafa;
-        color: #4b5563;
-        font-weight: 600;
-      }
-      .identity-table tr.row-selected td {
-        background: #e8f3ff;
-      }
-      .identity-account-name {
-        color: #1f2937;
-        line-height: 1.5;
-      }
-      .identity-account-id {
-        color: #9ca3af;
-        font-size: 12px;
-        line-height: 1.5;
-      }
-      .identity-table .form-select {
-        width: 220px;
-        height: 32px;
-        border: 1px solid #d9d9d9;
-        border-radius: 4px;
-        color: #9ca3af;
-        font-size: 13px;
-        padding: 0 8px;
-        background: #fff;
-      }
-      /* ===== 关联商品投放（选择商品）弹框 ===== */
-      .product-mode-row {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        font-size: 13px;
-        color: #374151;
-        padding-bottom: 14px;
-        border-bottom: 1px solid #f0f0f0;
-      }
-      .product-mode-btn {
-        padding: 6px 16px;
-        border: 1px solid #d9d9d9;
-        background: #fff;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 13px;
-        color: #595959;
-      }
-      .product-mode-btn.active {
+      .btn-preview-project {
+        margin-left: auto;
+        padding: 8px 24px;
         background: #1890ff;
         color: #fff;
-        border-color: #1890ff;
-      }
-      .product-chooser {
-        display: flex;
-        gap: 16px;
-        padding-top: 14px;
-      }
-      .prod-account-col {
-        width: 240px;
-        flex-shrink: 0;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
-      .prod-account-card {
-        border: 1px solid #e5e7eb;
-        border-radius: 6px;
-        padding: 10px 12px;
-        cursor: pointer;
-        background: #fff;
-      }
-      .prod-account-card.selected {
-        background: #e8f3ff;
-        border-color: #91caff;
-      }
-      .prod-account-name {
-        font-size: 13px;
-        color: #1f2937;
-        line-height: 1.6;
-      }
-      .prod-account-meta {
-        font-size: 12px;
-        color: #9ca3af;
-        line-height: 1.6;
-      }
-      .prod-lib-col {
-        width: 300px;
-        flex-shrink: 0;
-        display: flex;
-        flex-direction: column;
-      }
-      .prod-drama-col {
-        flex: 1;
-        min-width: 0;
-        display: flex;
-        flex-direction: column;
-      }
-      .prod-search-bar {
-        display: flex;
-        gap: 8px;
-        margin-bottom: 10px;
-      }
-      .prod-search-input {
-        flex: 1;
-        min-width: 0;
-        height: 32px;
-        border: 1px solid #d9d9d9;
-        border-radius: 4px;
-        padding: 0 10px;
-        font-size: 13px;
-        color: #374151;
-      }
-      .prod-search-input::placeholder {
-        color: #c0c4cc;
-      }
-      .prod-refresh-btn {
-        height: 32px;
-        padding: 0 14px;
         border: none;
         border-radius: 4px;
-        background: #1890ff;
-        color: #fff;
-        font-size: 13px;
         cursor: pointer;
-        white-space: nowrap;
+        font-size: 13px;
       }
-      .prod-lib-count {
-        font-size: 12px;
-        color: #6b7280;
-        padding-bottom: 8px;
-        border-bottom: 1px solid #f0f0f0;
-        margin-bottom: 10px;
+
+      /* 预览区 */
+      .config-preview {
+        background: #fff;
+        border-radius: 8px;
+        padding: 16px;
+        margin-top: 16px;
       }
-      .prod-lib-list {
-        flex: 1;
-        overflow-y: auto;
+      .config-preview-header {
         display: flex;
-        flex-direction: column;
-        gap: 10px;
-        max-height: 420px;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 12px;
       }
-      .prod-lib-card {
-        background: #f5f9ff;
-        border: 1px solid #e8eef7;
-        border-radius: 6px;
-        padding: 10px 12px;
+      .config-preview-title {
+        font-size: 15px;
+        font-weight: 600;
+        color: #374151;
+      }
+      .config-refresh {
+        font-weight: normal;
+        color: #6b7280;
+        font-size: 13px;
+        margin-left: 8px;
         cursor: pointer;
       }
-      .prod-lib-card.selected {
-        background: #e8f3ff;
-        border-color: #91caff;
-      }
-      .prod-lib-name {
-        font-size: 13px;
-        font-weight: 600;
-        color: #1f2937;
-        line-height: 1.6;
-      }
-      .prod-lib-meta {
-        font-size: 12px;
-        color: #8a94a6;
-        line-height: 1.7;
-      }
-      .prod-drama-count {
-        font-size: 12px;
+      .config-preview-meta {
         color: #6b7280;
-        padding: 2px 0 8px;
-      }
-      .prod-drama-table {
-        width: 100%;
-        border-collapse: collapse;
-      }
-      .prod-drama-table th {
-        background: #fafafa;
-        border: 1px solid #f0f0f0;
-        padding: 8px 10px;
         font-size: 13px;
-        color: #4b5563;
-        font-weight: 600;
-        text-align: left;
       }
-      .prod-drama-table td {
-        border: 1px solid #f0f0f0;
-        padding: 12px 10px;
-        font-size: 13px;
-        color: #6b7280;
+      .config-preview-actions {
+        display: flex;
+        gap: 8px;
       }
-      .product-auto-empty {
-        padding: 56px 0 40px;
-        text-align: center;
-        color: #9ca3af;
-        font-size: 13px;
+      .config-preview-tabs {
+        display: none;
       }
       .config-preview-summary {
         display: flex;
@@ -386,6 +179,146 @@
         margin-bottom: 12px;
         color: #6b7280;
         font-size: 13px;
+      }
+      .config-preview-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+      .config-preview-table th,
+      .config-preview-table td {
+        border: 1px solid #e5e7eb;
+        padding: 10px 8px;
+        text-align: left;
+        vertical-align: top;
+      }
+      .config-preview-table thead th {
+        background: #fafafa;
+        font-weight: 600;
+        color: #374151;
+      }
+      .config-preview-table .preview-group-header {
+        text-align: center;
+        background: #fafafa;
+        font-weight: 600;
+      }
+      /* ===== 预览区：左侧账号列表 + 右侧分层数据 ===== */
+      .config-preview-body {
+        display: flex;
+        gap: 12px;
+        align-items: stretch;
+      }
+      .preview-account-panel {
+        width: 232px;
+        flex-shrink: 0;
+        border: 1px solid #e5e7eb;
+        border-radius: 6px;
+        overflow: hidden;
+        align-self: flex-start;
+      }
+      .preview-account-title {
+        padding: 10px 12px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #374151;
+        background: #fafafa;
+        border-bottom: 1px solid #e5e7eb;
+      }
+      .preview-account-list {
+        max-height: 360px;
+        overflow-y: auto;
+      }
+      .preview-account-item {
+        padding: 9px 10px;
+        cursor: pointer;
+        border-bottom: 1px solid #f3f4f6;
+      }
+      .preview-account-item:last-child { border-bottom: none; }
+      .preview-account-item:hover { background: #f8fafc; }
+      .preview-account-item.active { background: #e8f3ff; }
+      .preview-account-name {
+        font-size: 13px;
+        color: #1f2937;
+        line-height: 1.4;
+        word-break: break-all;
+      }
+      .preview-account-item.active .preview-account-name { color: #1890ff; font-weight: 500; }
+      .preview-account-id {
+        font-size: 12px;
+        color: #9ca3af;
+        margin-top: 2px;
+      }
+      /* 存在上传失败的账号：标红提示 */
+      .preview-account-item.has-error .preview-account-name,
+      .preview-account-item.has-error.active .preview-account-name {
+        color: #cf1322;
+        font-weight: 500;
+      }
+      .preview-account-item.has-error .preview-account-name::before {
+        content: '';
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        margin-right: 6px;
+        border-radius: 50%;
+        background: #f5222d;
+        vertical-align: middle;
+      }
+      .preview-account-item.has-error .preview-account-id { color: #ffa39e; }
+      .preview-account-item.has-error:hover { background: #fff5f5; }
+      .preview-account-item.has-error.active { background: #fff1f0; }
+      .preview-data-panel {
+        flex: 1;
+        min-width: 0;
+        overflow-x: auto;
+      }
+      .preview-pane { display: none; }
+      .preview-pane.active { display: block; }
+      .preview-pane .config-preview-table { min-width: 1372px; table-layout: fixed; }
+      .preview-pane .config-preview-table td { overflow: hidden; }
+      .preview-pane .config-preview-table td[rowspan] { vertical-align: top; }
+      .preview-col-name { width: 220px; }
+      .preview-col-status { width: 90px; }
+      .preview-col-status-ad { width: 120px; }
+      .preview-col-audience { width: 100px; }
+      .preview-col-link { width: 120px; }
+      .preview-col-creative { width: 96px; }
+      .preview-col-title { width: 96px; }
+      .preview-cell-name {
+        font-size: 12px;
+        color: #1f2937;
+        line-height: 1.4;
+        word-break: break-all;
+      }
+      .preview-cell-id {
+        font-size: 12px;
+        color: #9ca3af;
+        margin-top: 2px;
+        word-break: break-all;
+      }
+      .preview-status-fail {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        white-space: nowrap;
+      }
+      .preview-status-fail > .badge { flex-shrink: 0; }
+      .preview-status-retry {
+        flex-shrink: 0;
+        color: #1890ff;
+        font-size: 12px;
+        line-height: 1.4;
+        white-space: nowrap;
+        cursor: pointer;
+      }
+      .preview-status-retry:hover { text-decoration: underline; }
+      .preview-pane .config-preview-table .badge { white-space: nowrap; }
+      .preview-group-count { color: #9ca3af; font-weight: 400; }
+      .preview-pane .config-preview-table td > a {
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
       .badge {
         display: inline-block;
@@ -408,7 +341,30 @@
         color: #d48806;
         border: 1px solid #ffe58f;
       }
-      /* ===== 基本信息抽屉表单 ===== */
+
+      /* 基本信息抽屉内联覆盖 */
+      .basic-info-form .radio-group {
+        display: flex;
+        gap: 0;
+      }
+      .basic-info-form .radio-btn {
+        padding: 6px 16px;
+        border: 1px solid #d9d9d9;
+        cursor: pointer;
+        background: #fff;
+        color: #595959;
+        font-size: 13px;
+      }
+      .basic-info-form .radio-btn:first-child { border-radius: 4px 0 0 4px; }
+      .basic-info-form .radio-btn:last-child { border-radius: 0 4px 4px 0; }
+      .basic-info-form .radio-btn:not(:first-child) { margin-left: -1px; }
+      .basic-info-form .radio-btn.active {
+        background: #1890ff;
+        color: #fff;
+        border-color: #1890ff;
+        position: relative;
+        z-index: 1;
+      }
       .basic-info-form .form-row { margin-bottom: 14px; }
       .basic-info-form .form-label {
         width: 100px;
@@ -474,6 +430,7 @@
         color: #fff;
         border-color: #1890ff;
       }
+
       /* ===== 基建设置抽屉（对齐fb自动化任务-投放配置布局） ===== */
       #ad-group-drawer.drawer-narrow .drawer-card {
         width: min(880px, calc(100vw - 60px));
@@ -577,182 +534,63 @@
         line-height: 1.4;
         margin-top: 6px;
       }
-      .config-preview {
+
+      /* ===== 定时提交弹框 ===== */
+      .scheduled-submit-row { align-items: center; }
+      .scheduled-submit-row .form-label {
+        flex: 0 0 auto;
+        margin-right: 12px;
+        color: var(--color-text);
+        font-size: 14px;
+      }
+      .scheduled-submit-row .form-label.required::before {
+        content: "* ";
+        color: var(--color-error);
+      }
+      .scheduled-submit-field {
+        position: relative;
+        flex: 1;
+      }
+      .scheduled-submit-input {
+        width: 100%;
+        height: 32px;
+        padding: 0 34px 0 12px;
+        font-size: 14px;
+        color: var(--color-text);
         background: #fff;
-        border-radius: 8px;
-        padding: 16px;
-        margin-top: 12px;
-        flex: 1 1 auto;
-        min-height: 280px;
-        display: flex;
-        flex-direction: column;
-      }
-      .config-preview-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 12px;
-      }
-      .config-preview-title {
-        font-size: 15px;
-        font-weight: 600;
-        color: #374151;
-      }
-      .config-refresh {
-        font-weight: normal;
-        color: #6b7280;
-        font-size: 13px;
-        margin-left: 8px;
+        border: 1px solid #d9d9d9;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-family: inherit;
+        line-height: 32px;
         cursor: pointer;
+        transition: border-color 0.2s;
       }
-      .config-preview-meta {
-        color: #6b7280;
-        font-size: 13px;
-      }
-      .config-preview-actions {
-        display: flex;
-        gap: 8px;
-      }
-      .config-preview-table th,
-      .config-preview-table td {
-        border: 1px solid #e5e7eb;
-        padding: 10px 8px;
-        text-align: left;
-        vertical-align: top;
-      }
-      .config-preview-table thead th {
-        background: #fafafa;
-        font-weight: 600;
-        color: #374151;
-      }
-      .config-preview-table .preview-group-header {
-        text-align: center;
-        background: #fafafa;
-        font-weight: 600;
-      }
-      /* ===== 预览区：左侧账号列表 + 右侧分层数据 ===== */
-      .config-preview-body {
-        display: flex;
-        gap: 12px;
-        align-items: stretch;
-        flex: 1;
-        min-height: 0;
-      }
-      .preview-account-panel {
-        width: 232px;
-        flex-shrink: 0;
-        border: 1px solid #e5e7eb;
-        border-radius: 6px;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        align-self: stretch;
-      }
-      .preview-account-title {
-        padding: 10px 12px;
-        font-size: 13px;
-        font-weight: 600;
-        color: #374151;
-        background: #fafafa;
-        border-bottom: 1px solid #e5e7eb;
-      }
-      .preview-account-list {
-        flex: 1;
-        min-height: 0;
-        overflow-y: auto;
-      }
-      .preview-account-item {
-        padding: 9px 10px;
+      .scheduled-submit-input:hover,
+      .scheduled-submit-input:focus { border-color: var(--color-primary, #1890ff); outline: none; }
+      .scheduled-submit-input::-webkit-calendar-picker-indicator {
+        position: absolute;
+        right: 8px;
+        top: 50%;
+        transform: translateY(-50%);
         cursor: pointer;
-        border-bottom: 1px solid #f3f4f6;
+        padding: 4px;
+        opacity: 0.6;
       }
-      .preview-account-item:last-child { border-bottom: none; }
-      .preview-account-item:hover { background: #f8fafc; }
-      .preview-account-item.active { background: #e8f3ff; }
-      .preview-account-name {
-        font-size: 13px;
-        color: #1f2937;
-        line-height: 1.4;
-        word-break: break-all;
+      .scheduled-submit-input::-webkit-calendar-picker-indicator:hover { opacity: 1; }
+      .scheduled-submit-input::-webkit-datetime-edit { padding: 0; }
+      .scheduled-submit-icon {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: none;
+        color: var(--color-text-secondary);
+        font-size: 16px;
+        line-height: 1;
       }
-      .preview-account-item.active .preview-account-name { color: #1677ff; font-weight: 500; }
-      .preview-account-id {
-        font-size: 12px;
-        color: #9ca3af;
-        margin-top: 2px;
-      }
-      /* 存在上传失败的账号：标红提示 */
-      .preview-account-item.has-error .preview-account-name,
-      .preview-account-item.has-error.active .preview-account-name {
-        color: #cf1322;
-        font-weight: 500;
-      }
-      .preview-account-item.has-error .preview-account-name::before {
-        content: '';
-        display: inline-block;
-        width: 6px;
-        height: 6px;
-        margin-right: 6px;
-        border-radius: 50%;
-        background: #f5222d;
-        vertical-align: middle;
-      }
-      .preview-account-item.has-error .preview-account-id { color: #ffa39e; }
-      .preview-account-item.has-error:hover { background: #fff5f5; }
-      .preview-account-item.has-error.active { background: #fff1f0; }
-      .preview-data-panel {
-        flex: 1;
-        min-width: 0;
-        overflow: auto;
-      }
-      .preview-pane { display: none; }
-      .preview-pane.active { display: block; }
-      .preview-pane .config-preview-table { min-width: 1372px; table-layout: fixed; }
-      .preview-pane .config-preview-table td { overflow: hidden; }
-      .preview-pane .config-preview-table td[rowspan] { vertical-align: top; }
-      .preview-col-name { width: 220px; }
-      .preview-col-status { width: 90px; }
-      .preview-col-status-ad { width: 120px; }
-      .preview-col-audience { width: 100px; }
-      .preview-col-link { width: 120px; }
-      .preview-col-creative { width: 96px; }
-      .preview-col-title { width: 96px; }
-      .preview-cell-name {
-        font-size: 12px;
-        color: #1f2937;
-        line-height: 1.4;
-        word-break: break-all;
-      }
-      .preview-cell-id {
-        font-size: 12px;
-        color: #9ca3af;
-        margin-top: 2px;
-        word-break: break-all;
-      }
-      .preview-status-fail {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        white-space: nowrap;
-      }
-      .preview-status-fail > .badge { flex-shrink: 0; }
-      .preview-status-retry {
-        flex-shrink: 0;
-        color: #1677ff;
-        font-size: 12px;
-        line-height: 1.4;
-        white-space: nowrap;
-        cursor: pointer;
-      }
-      .preview-status-retry:hover { text-decoration: underline; }
-      .preview-pane .config-preview-table .badge { white-space: nowrap; }
-      .preview-group-count { color: #9ca3af; font-weight: 400; }
-      .preview-pane .config-preview-table td > a {
-        display: block;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
+
+      /* 创意素材编辑抽屉 */
       .creative-mode-bar {
         display: flex;
         align-items: center;
@@ -994,22 +832,22 @@
       <!-- Sidebar -->
       <aside class="sidebar">
         
-        <nav class="nav">
+                <nav class="nav">
           <div class="nav-section">
-            <div class="nav-item has-children expanded">
+            <div class="nav-item has-children">
               <span class="nav-item-icon">🎵</span>
               <span>TikTok</span>
-              <span class="nav-item-caret">▼</span>
+              <span class="nav-item-caret">▶</span>
             </div>
             <div class="nav-children">
               <span class="nav-child-item">项目管理</span>
               <span class="nav-child-item">数据统计</span>
-              <span class="nav-child-item has-children expanded active">
+              <span class="nav-child-item has-children">
                 <span>批量投放</span>
-                <span class="nav-child-caret">▼</span>
+                <span class="nav-child-caret">▶</span>
               </span>
               <div class="nav-grandchildren">
-                <span class="nav-grandchild-item active" data-page="overseas-batch-delivery">批量投放</span>
+                <span class="nav-grandchild-item" data-page="overseas-batch-delivery">批量投放</span>
                 <span class="nav-grandchild-item" data-page="overseas-auto-delivery">自动化任务</span>
                 <span class="nav-grandchild-item" data-page="overseas-template">模板管理</span>
               </div>
@@ -1028,20 +866,20 @@
           </div>
 
           <div class="nav-section">
-            <div class="nav-item has-children">
+            <div class="nav-item has-children expanded">
               <span class="nav-item-icon">📘</span>
               <span>FaceBook</span>
-              <span class="nav-item-caret">▶</span>
+              <span class="nav-item-caret">▼</span>
             </div>
             <div class="nav-children">
               <span class="nav-child-item">项目管理</span>
               <span class="nav-child-item">数据统计</span>
-              <span class="nav-child-item has-children">
+              <span class="nav-child-item has-children expanded active">
                 <span>批量投放</span>
-                <span class="nav-child-caret">▶</span>
+                <span class="nav-child-caret">▼</span>
               </span>
               <div class="nav-grandchildren">
-                <span class="nav-grandchild-item" data-page="fb-batch-delivery">批量投放</span>
+                <span class="nav-grandchild-item active" data-page="fb-batch-delivery">批量投放</span>
                 <span class="nav-grandchild-item" data-page="fb-auto-delivery">自动化任务</span>
                 <span class="nav-grandchild-item" data-page="fb-template">模板管理</span>
               </div>
@@ -1098,7 +936,6 @@
               <span class="nav-child-item" data-page="overseas-system-user">用户管理</span>
             </div>
           </div>
-
         </nav>
       </aside>
 
@@ -1433,46 +1270,22 @@
       <div class="config-modal-card">
         <div class="config-modal-header" style="justify-content: flex-start; gap: 12px;">
           <button class="config-modal-close" onclick="closeBatchConfigModal()">×</button>
-          <span>批量投放-TikTok</span>
+          <span>批量投放-FaceBook</span>
         </div>
         <div class="config-modal-body">
-          <!-- 6 面板（一行排列，与 FB 批量投放一致） -->
+          <!-- 6 面板 -->
           <div class="config-panels">
             <!-- 账号 -->
-            <div class="config-panel config-panel-account">
+            <div class="config-panel">
               <div class="config-panel-header">
                 <span>账号</span>
-                <span class="config-action" onclick="alert('清空账号')">清空</span>
+                <span class="config-action" onclick="clearAccountSelection()">清空</span>
               </div>
               <div class="config-panel-body">
-                <ul class="config-account-list">
+                <ul class="config-account-list" id="config-account-list">
                   <li>
-                    <div class="config-account-name" title="WingShort-IAA-US-015654-MY-融眸-SIND-TT">WingShort-IAA-US-015654-MY-融眸-SIND-TT</div>
-                    <div class="config-account-id" title="ID:7673348337520640151">ID:7673348337520640151</div>
-                  </li>
-                  <li>
-                    <div class="config-account-name" title="WingShort-IAA-US-022285-MY-融眸-SIND-TT">WingShort-IAA-US-022285-MY-融眸-SIND-TT</div>
-                    <div class="config-account-id" title="ID:7673348337520640152">ID:7673348337520640152</div>
-                  </li>
-                  <li>
-                    <div class="config-account-name" title="WingShort-IAA-US-031723-MY-融眸-SIND-TT">WingShort-IAA-US-031723-MY-融眸-SIND-TT</div>
-                    <div class="config-account-id" title="ID:7673348337520640153">ID:7673348337520640153</div>
-                  </li>
-                  <li>
-                    <div class="config-account-name" title="WingShort-IAA-US-031755-MY-融眸-SIND-TT">WingShort-IAA-US-031755-MY-融眸-SIND-TT</div>
-                    <div class="config-account-id" title="ID:7673348337520640154">ID:7673348337520640154</div>
-                  </li>
-                  <li>
-                    <div class="config-account-name" title="WingShort-IAA-US-033730-MY-融眸-SIND-TT">WingShort-IAA-US-033730-MY-融眸-SIND-TT</div>
-                    <div class="config-account-id" title="ID:7673348337520640155">ID:7673348337520640155</div>
-                  </li>
-                  <li>
-                    <div class="config-account-name" title="WingShort-IAA-US-060457-MY-融眸-SIND-TT">WingShort-IAA-US-060457-MY-融眸-SIND-TT</div>
-                    <div class="config-account-id" title="ID:7673348337520640156">ID:7673348337520640156</div>
-                  </li>
-                  <li>
-                    <div class="config-account-name" title="WingShort-IAA-US-000991-MY-融眸-SIND-TT">WingShort-IAA-US-000991-MY-融眸-SIND-TT</div>
-                    <div class="config-account-id" title="ID:7673348337520640157">ID:7673348337520640157</div>
+                    <div class="config-account-name" title="White-light_Fictic_ttimini-缅泰-07176768107809390">White-light_Fictic_ttimini-缅泰-07176768107809390</div>
+                    <div class="config-account-id" title="ID:210526212149407745">ID:210526212149407745</div>
                   </li>
                 </ul>
               </div>
@@ -1481,36 +1294,41 @@
               </div>
             </div>
 
-            <!-- 基本信息 -->
+            <!-- 计划基本信息 -->
             <div class="config-panel">
               <div class="config-panel-header">
-                <span>基本信息</span>
+                <span>计划基本信息</span>
               </div>
               <div class="config-panel-body">
-                <div class="config-row"><span class="config-key">投放内容：</span><span class="config-value">小程序-IAA</span></div>
-                <div class="config-row"><span class="config-key">投放短剧：</span><span class="config-value">Manor's Healer Nanny (226979)</span></div>
-                <div class="config-row"><span class="config-key">小程序：</span><span class="config-value">Fictic_ttmini_iaa</span></div>
+                <div class="config-row"><span class="config-key">投放内容：</span><span class="config-value">APP-IAP</span></div>
+                <div class="config-row"><span class="config-key">投放短剧：</span><span class="config-value">Wrong Meet Right Love (227215)</span></div>
+                <div class="config-row"><span class="config-key">APP：</span><span class="config-value">Popkron_app(689543)</span></div>
+                <div class="config-row"><span class="config-key">Pixel：</span><span class="config-value">默认TikTok Pixel</span></div>
+                <div class="config-row"><span class="config-key">投放目标：</span><span class="config-value">购物-转化价值</span></div>
+                <div class="config-row"><span class="config-key">跳转方式：</span><span class="config-value">W2A</span></div>
+                <div class="config-row"><span class="config-key">落地页类型：</span><span class="config-value">有感</span></div>
               </div>
               <div class="config-panel-footer">
                 <span class="config-action" onclick="openPlanInfoDrawer()">编辑</span>
               </div>
             </div>
 
-            <!-- 基建设置 -->
+            <!-- 广告组 -->
             <div class="config-panel">
               <div class="config-panel-header">
-                <span>基建设置</span>
+                <span>广告组</span>
               </div>
               <div class="config-panel-body">
-                <div class="config-row"><span class="config-key">广告系列状态：</span><span class="config-value">暂停</span></div>
-                <div class="config-row"><span class="config-key">预算策略：</span><span class="config-value">推广系列预算</span></div>
-                <div class="config-row"><span class="config-key">日预算：</span><span class="config-value">20$</span></div>
+                <div class="config-row"><span class="config-key">预算策略：</span><span class="config-value">广告系列预算</span></div>
+                <div class="config-row"><span class="config-key">日预算：</span><span class="config-value">--</span></div>
+                <div class="config-row"><span class="config-key">广告系列竞价策略：</span><span class="config-value">广告花费回报目标</span></div>
                 <div class="config-row"><span class="config-key">使用商品库：</span><span class="config-value">关闭</span></div>
-                <div class="config-row"><span class="config-key">广告组状态：</span><span class="config-value">暂停</span></div>
-                <div class="config-row"><span class="config-key">竞价策略：</span><span class="config-value">目标ROAS</span></div>
-                <div class="config-row"><span class="config-key">目标ROAS：</span><span class="config-value">1.24</span></div>
-                <div class="config-row"><span class="config-key">广告位：</span><span class="config-value">允许自然评论、允许评论、允许共享视频</span></div>
-                <div class="config-row"><span class="config-key">开投时间：</span><span class="config-value">现在</span></div>
+                <div class="config-row"><span class="config-key">归因模型：</span><span class="config-value">增量</span></div>
+                <div class="config-row"><span class="config-key">广告花费回报目标：</span><span class="config-value">--</span></div>
+                <div class="config-row"><span class="config-key">身份：</span><span class="config-value">公共主页包</span></div>
+                <div class="config-row"><span class="config-key">开始时间：</span><span class="config-value">现在</span></div>
+                <div class="config-row"><span class="config-key">投放时长：</span><span class="config-value">不限</span></div>
+                <div class="config-row"><span class="config-key">投放时段：</span><span class="config-value">全天</span></div>
               </div>
               <div class="config-panel-footer">
                 <span class="config-action" onclick="openAdGroupDrawer()">编辑</span>
@@ -1537,8 +1355,11 @@
             <!-- 创意素材 -->
             <div class="config-panel">
               <div class="config-panel-header">
-                <span style="white-space: nowrap;">创意素材</span>
-                <span class="config-action" onclick="alert('保存素材包')">保存素材包</span>
+                <span>创意素材</span>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                  <span class="config-action" onclick="alert('保存素材包')">保存素材包</span>
+                  <span class="config-action" onclick="alert('清空素材')">清空</span>
+                </div>
               </div>
               <div class="config-panel-body">
                 <div class="config-tag">创意组2 <span class="tag-count">1个素材</span> <span class="tag-x" onclick="alert('移除')">×</span></div>
@@ -1569,12 +1390,10 @@
             </div>
           </div>
 
-          <!-- 中部操作按钮（身份信息 / 受众配置 / 关联商品投放）+ 右侧预览项目 -->
+          <!-- 底部标签 + 预览项目 -->
           <div class="config-action-buttons">
-            <button class="config-tab-btn active" onclick="openIdentityModal()">身份信息</button>
-            <button class="config-tab-btn active" onclick="alert('受众配置')">受众配置</button>
-            <button class="config-tab-btn active" onclick="openProductSelectModal()">关联商品投放</button>
-            <button class="config-tab-btn active" style="margin-left: auto;" onclick="alert('预览项目')">预览项目</button>
+            <button class="config-tab-btn active" onclick="switchBatchPreviewTab(this, 'product')">关联商品投放</button>
+            <button class="btn-preview-project">预览项目</button>
           </div>
 
           <!-- 预览区 -->
@@ -1586,25 +1405,25 @@
               <div class="config-preview-actions">
                 <span class="config-preview-meta">预计生成 1 条广告</span>
                 <button class="btn btn-info btn-sm" onclick="alert('立即提交')">立即提交</button>
-                <button class="btn btn-outline btn-sm" onclick="alert('定时提交')">定时提交</button>
+                <button class="btn btn-outline btn-sm" onclick="openScheduledSubmitModal()">定时提交</button>
               </div>
             </div>
             <div class="config-preview-body">
               <div class="preview-account-panel">
                 <div class="preview-account-title">账号</div>
                 <div class="preview-account-list">
-                  <div class="preview-account-item active" data-pane="preview-pane-1" onclick="switchPreviewAccount(this, 'preview-pane-1')">
-                    <div class="preview-account-name" title="White-light_Fictic_ttmini-不夜瞳-210817-英国-1">White-light_Fictic_ttmini-不夜瞳-210817-英国-1</div>
-                    <div class="preview-account-id" title="ID:7648215202357810178">ID:7648215202357810178</div>
+                  <div class="preview-account-item active" data-pane="fb-preview-pane-1" onclick="switchPreviewAccount(this, 'fb-preview-pane-1')">
+                    <div class="preview-account-name" title="White-light_Fictic_ttimini-缅泰-07176768107809390">White-light_Fictic_ttimini-缅泰-07176768107809390</div>
+                    <div class="preview-account-id" title="ID:210526212149407745">ID:210526212149407745</div>
                   </div>
-                  <div class="preview-account-item" data-pane="preview-pane-2" onclick="switchPreviewAccount(this, 'preview-pane-2')">
-                    <div class="preview-account-name" title="WindShort-IAA-US-016564-MY-融媒体-北美-2">WindShort-IAA-US-016564-MY-融媒体-北美-2</div>
-                    <div class="preview-account-id" title="ID:7295684012345678902">ID:7295684012345678902</div>
+                  <div class="preview-account-item" data-pane="fb-preview-pane-2" onclick="switchPreviewAccount(this, 'fb-preview-pane-2')">
+                    <div class="preview-account-name" title="White-light_popkron-捷普-超小-03">White-light_popkron-捷普-超小-03</div>
+                    <div class="preview-account-id" title="ID:7676811085100867591">ID:7676811085100867591</div>
                   </div>
                 </div>
               </div>
               <div class="preview-data-panel">
-                <div class="preview-pane active" id="preview-pane-1">
+                <div class="preview-pane active" id="fb-preview-pane-1">
                   <table class="config-preview-table">
                   <colgroup>
                     <col class="preview-col-name" />
@@ -1631,7 +1450,7 @@
                         <th class="preview-col-status">状态</th>
                         <th class="preview-col-audience">定向包</th>
                         <th class="preview-col-name">广告名称 / ID</th>
-                        <th class="preview-col-link">推广链接ID</th>
+                        <th class="preview-col-link">监测链接ID</th>
                         <th class="preview-col-status preview-col-status-ad">状态</th>
                         <th class="preview-col-creative">创意素材</th>
                         <th class="preview-col-title">标题包</th>
@@ -1640,39 +1459,39 @@
                     <tbody>
                       <tr>
                         <td rowspan="2">
-                          <div class="preview-cell-name" title="[(CfrfyhYWLiA)-1008-Manor's Healer Nanny&amp;光影*228979_英语_系数1.24_10-08-0718147767_1">[(CfrfyhYWLiA)-1008-Manor's Healer Nanny&光影*228979_英语_系数1.24_10-08-0718147767_1</div>
-                          <div class="preview-cell-id" title="ID:7364829100482613762">ID:7364829100482613762</div>
+                          <div class="preview-cell-name" title="ficaticlChixxl-0929-Wrong Meet Right Love（227215）_英语_系数2_使用商品库_09-30-08:40:205fk_1">ficaticlChixxl-0929-Wrong Meet Right Love（227215）_英语_系数2_使用商品库_09-30-08:40:205fk_1</div>
+                          <div class="preview-cell-id" title="ID:7364829123456789001">ID:7364829123456789001</div>
                         </td>
                         <td rowspan="2"><span class="badge badge-success">上传成功</span></td>
                         <td rowspan="2">
-                          <div class="preview-cell-name" title="Manor's Healer Nanny&amp;光影*228979_广告组1">Manor's Healer Nanny&光影*228979_广告组1</div>
-                          <div class="preview-cell-id" title="ID:7364829100715928321">ID:7364829100715928321</div>
+                          <div class="preview-cell-name" title="Wrong Meet Right Love（227215）_广告组1">Wrong Meet Right Love（227215）_广告组1</div>
+                          <div class="preview-cell-id" title="ID:7364829123456789101">ID:7364829123456789101</div>
                         </td>
                         <td rowspan="2"><span class="badge badge-success">上传成功</span></td>
-                        <td rowspan="2"><a href="#" title="dc测试日本">dc测试日本</a></td>
+                        <td rowspan="2"><a href="#" title="lct_测试定向包1">lct_测试定向包1</a></td>
                         <td>
-                          <div class="preview-cell-name" title="Manor's Healer Nanny&amp;光影*228979_广告1">Manor's Healer Nanny&光影*228979_广告1</div>
-                          <div class="preview-cell-id" title="ID:7364829100957304833">ID:7364829100957304833</div>
+                          <div class="preview-cell-name" title="Wrong Meet Right Love（227215）_广告1">Wrong Meet Right Love（227215）_广告1</div>
+                          <div class="preview-cell-id" title="ID:7364829123456789201">ID:7364829123456789201</div>
                         </td>
-                        <td><a href="#" title="7673348337520640001">7673348337520640001</a></td>
+                        <td><a href="#" title="363243590668955648">363243590668955648</a></td>
                         <td><span class="badge badge-success">上传成功</span></td>
-                        <td><a href="#" title="创意组1（5个）">创意组1（5个）</a></td>
+                        <td><a href="#" title="创意组2（1个）">创意组2（1个）</a></td>
                         <td><a href="#" title="标题包1（1条）">标题包1（1条）</a></td>
                       </tr>
                       <tr>
                         <td>
-                          <div class="preview-cell-name" title="Manor's Healer Nanny&amp;光影*228979_广告2">Manor's Healer Nanny&光影*228979_广告2</div>
-                          <div class="preview-cell-id" title="ID:7364829101198680321">ID:7364829101198680321</div>
+                          <div class="preview-cell-name" title="Wrong Meet Right Love（227215）_广告2">Wrong Meet Right Love（227215）_广告2</div>
+                          <div class="preview-cell-id" title="ID:7364829123456789202">ID:7364829123456789202</div>
                         </td>
-                        <td><a href="#" title="7673348337520640002">7673348337520640002</a></td>
+                        <td><a href="#" title="363243590668955649">363243590668955649</a></td>
                         <td><span class="preview-status-fail"><span class="badge badge-error">上传失败</span><a class="preview-status-retry" onclick="alert('重试上传')">重试</a></span></td>
-                        <td><a href="#" title="创意组2（4个）">创意组2（4个）</a></td>
-                        <td><a href="#" title="标题包2（1条）">标题包2（1条）</a></td>
+                        <td><a href="#" title="创意组1（2个）">创意组1（2个）</a></td>
+                        <td><a href="#" title="标题包1（1条）">标题包1（1条）</a></td>
                       </tr>
                     </tbody>
                   </table>
                 </div>
-                <div class="preview-pane" id="preview-pane-2">
+                <div class="preview-pane" id="fb-preview-pane-2">
                   <table class="config-preview-table">
                   <colgroup>
                     <col class="preview-col-name" />
@@ -1699,7 +1518,7 @@
                         <th class="preview-col-status">状态</th>
                         <th class="preview-col-audience">定向包</th>
                         <th class="preview-col-name">广告名称 / ID</th>
-                        <th class="preview-col-link">推广链接ID</th>
+                        <th class="preview-col-link">监测链接ID</th>
                         <th class="preview-col-status preview-col-status-ad">状态</th>
                         <th class="preview-col-creative">创意素材</th>
                         <th class="preview-col-title">标题包</th>
@@ -1708,44 +1527,43 @@
                     <tbody>
                       <tr>
                         <td rowspan="2">
-                          <div class="preview-cell-name" title="[(PkLmnoQRST)-1008-A promising beginning&amp;星河*228980_英语_系数1.18_10-08-0718238842_1">[(PkLmnoQRST)-1008-A promising beginning&星河*228980_英语_系数1.18_10-08-0718238842_1</div>
-                          <div class="preview-cell-id" title="ID:7364829111123456789">ID:7364829111123456789</div>
+                          <div class="preview-cell-name" title="ficaticlChixxl-0929-Wrong Meet Right Love（227215）_英语_系数2_使用商品库_09-30-08:40:205fk_1">ficaticlChixxl-0929-Wrong Meet Right Love（227215）_英语_系数2_使用商品库_09-30-08:40:205fk_1</div>
+                          <div class="preview-cell-id" title="ID:7364829123456789001">ID:7364829123456789001</div>
                         </td>
                         <td rowspan="2"><span class="badge badge-pending">待上传</span></td>
                         <td rowspan="1">
-                          <div class="preview-cell-name" title="A promising beginning&amp;星河*228980_广告组1">A promising beginning&星河*228980_广告组1</div>
-                          <div class="preview-cell-id" title="ID:7364829112234567890">ID:7364829112234567890</div>
+                          <div class="preview-cell-name" title="Wrong Meet Right Love（227215）_广告组1">Wrong Meet Right Love（227215）_广告组1</div>
+                          <div class="preview-cell-id" title="ID:7364829123456789101">ID:7364829123456789101</div>
                         </td>
                         <td rowspan="1"><span class="badge badge-pending">待上传</span></td>
-                        <td rowspan="1"><a href="#" title="全部（EN）">全部（EN）</a></td>
+                        <td rowspan="1"><a href="#" title="lct_测试定向包1">lct_测试定向包1</a></td>
                         <td>
-                          <div class="preview-cell-name" title="A promising beginning&amp;星河*228980_广告1">A promising beginning&星河*228980_广告1</div>
-                          <div class="preview-cell-id" title="ID:7364829113345678901">ID:7364829113345678901</div>
+                          <div class="preview-cell-name" title="Wrong Meet Right Love（227215）_广告1">Wrong Meet Right Love（227215）_广告1</div>
+                          <div class="preview-cell-id" title="ID:7364829123456789203">ID:7364829123456789203</div>
                         </td>
-                        <td><a href="#" title="7673348337520640003">7673348337520640003</a></td>
+                        <td><a href="#" title="363243590668955650">363243590668955650</a></td>
                         <td><span class="badge badge-pending">待上传</span></td>
-                        <td><a href="#" title="创意组1（3个）">创意组1（3个）</a></td>
-                        <td><a href="#" title="标题包1（2条）">标题包1（2条）</a></td>
+                        <td><a href="#" title="创意组2（1个）">创意组2（1个）</a></td>
+                        <td><a href="#" title="标题包1（1条）">标题包1（1条）</a></td>
                       </tr>
                       <tr>
                         <td rowspan="1">
-                          <div class="preview-cell-name" title="A promising beginning&amp;星河*228980_广告组2">A promising beginning&星河*228980_广告组2</div>
-                          <div class="preview-cell-id" title="ID:7364829114567890123">ID:7364829114567890123</div>
+                          <div class="preview-cell-name" title="Wrong Meet Right Love（227215）_广告组2">Wrong Meet Right Love（227215）_广告组2</div>
+                          <div class="preview-cell-id" title="ID:7364829123456789102">ID:7364829123456789102</div>
                         </td>
                         <td rowspan="1"><span class="badge badge-pending">待上传</span></td>
-                        <td rowspan="1"><a href="#" title="美区女性-21">美区女性-21</a></td>
+                        <td rowspan="1"><a href="#" title="lct_测试定向包2">lct_测试定向包2</a></td>
                         <td>
-                          <div class="preview-cell-name" title="A promising beginning&amp;星河*228980_广告2">A promising beginning&星河*228980_广告2</div>
-                          <div class="preview-cell-id" title="ID:7364829115789012345">ID:7364829115789012345</div>
+                          <div class="preview-cell-name" title="Wrong Meet Right Love（227215）_广告2">Wrong Meet Right Love（227215）_广告2</div>
+                          <div class="preview-cell-id" title="ID:7364829123456789204">ID:7364829123456789204</div>
                         </td>
-                        <td><a href="#" title="7673348337520640004">7673348337520640004</a></td>
+                        <td><a href="#" title="363243590668955651">363243590668955651</a></td>
                         <td><span class="badge badge-pending">待上传</span></td>
-                        <td><a href="#" title="创意组3（2个）">创意组3（2个）</a></td>
-                        <td><a href="#" title="标题包1（2条）">标题包1（2条）</a></td>
+                        <td><a href="#" title="创意组1（2个）">创意组1（2个）</a></td>
+                        <td><a href="#" title="标题包1（1条）">标题包1（1条）</a></td>
                       </tr>
                     </tbody>
                   </table>
-                </div>
                 </div>
               </div>
             </div>
@@ -1764,219 +1582,72 @@
         </div>
         <div class="modal-body">
           <div class="modal-filter">
-            <select class="form-select form-input-sm">
-              <option>账户ID</option>
-              <option>账户名称</option>
+            <select id="account-filter-type" class="form-select form-input-sm" onchange="updateAccountFilterPlaceholder()">
+              <option value="id">账户ID</option>
+              <option value="name">账户名称</option>
             </select>
-            <input type="text" class="form-input" placeholder="请输入账户ID查询" style="width: 240px;" />
-            <button class="btn btn-info btn-sm">搜索</button>
-            <button class="btn btn-outline btn-sm">重置</button>
+            <input id="account-filter-keyword" type="text" class="form-input" placeholder="请输入账户ID查询" style="width: 240px;" />
+            <button class="btn btn-info btn-sm" onclick="searchAccount()">搜索</button>
+            <button class="btn btn-outline btn-sm" onclick="resetAccountFilter()">重置</button>
+            <button class="btn btn-outline btn-sm" onclick="openAccountBatchSearchModal()">批量搜索</button>
           </div>
           <table class="modal-table">
             <thead>
               <tr>
-                <th class="checkbox-col"><input type="checkbox" /></th>
+                <th class="checkbox-col"><input type="checkbox" id="account-select-all" onclick="toggleAccountSelectAll(this)" /></th>
                 <th>账户ID</th>
                 <th>账户名称</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td><input type="checkbox" checked /></td>
-                <td>76482152023578101780</td>
-                <td>TT-MAD-IAA-二组-芬斯-（UTC 8）-5</td>
-              </tr>
+            <tbody id="account-select-tbody">
+              <!-- JS 渲染 -->
             </tbody>
           </table>
           <div class="pagination" style="padding: 12px 0;">
-            <div class="pagination-info">共 <strong>1</strong> 条</div>
-            <div class="pagination-pages">
+            <div class="pagination-info">共 <strong id="account-total">1</strong> 条</div>
+            <div class="pagination-pages" id="account-pagination">
               <button class="page-btn">‹</button>
               <button class="page-btn active">1</button>
               <button class="page-btn">›</button>
             </div>
-            <select class="page-size-select"><option>10 条/页</option></select>
+            <select class="page-size-select" id="account-page-size" onchange="renderAccountSelectTable()"><option>10 条/页</option></select>
           </div>
         </div>
         <div class="modal-footer">
           <button class="btn btn-outline btn-sm" onclick="closeAccountSelectModal()">取消</button>
-          <button class="btn btn-info btn-sm" onclick="closeAccountSelectModal()">确定(14)</button>
+          <button class="btn btn-info btn-sm" id="account-confirm-btn" onclick="confirmAccountSelect()">确定</button>
         </div>
       </div>
     </div>
 
-    <!-- ========== 身份信息 弹框 ========== -->
-    <div id="identity-select-overlay" class="modal-overlay" onclick="closeIdentityModal()"></div>
-    <div id="identity-select-modal" class="modal">
-      <div class="modal-card" style="width: min(680px, calc(100vw - 40px));">
+    <!-- ========== 批量搜索 弹框 ========== -->
+    <div id="account-batch-search-overlay" class="modal-overlay" onclick="closeAccountBatchSearchModal()" style="z-index: 1171;"></div>
+    <div id="account-batch-search-modal" class="modal" style="z-index: 1171;">
+      <div class="modal-card" style="width: min(520px, calc(100vw - 40px));">
         <div class="modal-header">
-          <span>身份信息 <span class="identity-help" title="为已勾选账户配置投放身份">?</span></span>
-          <button class="modal-close" onclick="closeIdentityModal()">×</button>
+          <span>批量搜索</span>
+          <button class="modal-close" onclick="closeAccountBatchSearchModal()">×</button>
         </div>
         <div class="modal-body">
-          <div class="identity-toolbar">
-            <span>已选择: <strong id="identity-selected-count">1</strong></span>
-            <span class="config-action" onclick="alert('批量设置')">批量设置</span>
+          <div class="form-row" style="align-items: flex-start; margin-bottom: 8px;">
+            <label class="form-label" style="width: auto; padding-right: 8px;">请输入要搜索的内容：</label>
           </div>
-          <table class="modal-table identity-table">
-            <thead>
-              <tr>
-                <th class="checkbox-col"><input type="checkbox" onchange="toggleIdentityAll(this)" /></th>
-                <th>账户</th>
-                <th>身份信息</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="row-selected">
-                <td><input type="checkbox" checked onchange="onIdentityRowCheck(this)" /></td>
-                <td>
-                  <div class="identity-account-name">White-light_Fictic_ttmini-捷若-07</div>
-                  <div class="identity-account-id">(7676810780939026439)</div>
-                </td>
-                <td><select class="form-select"><option>请选择身份</option><option>默认身份</option><option>身份A</option><option>身份B</option></select></td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" onchange="onIdentityRowCheck(this)" /></td>
-                <td>
-                  <div class="identity-account-name">White-light_popkon-捷若-超小-03</div>
-                  <div class="identity-account-id">(7676810685100867591)</div>
-                </td>
-                <td><select class="form-select"><option>请选择身份</option><option>默认身份</option><option>身份A</option><option>身份B</option></select></td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" onchange="onIdentityRowCheck(this)" /></td>
-                <td>
-                  <div class="identity-account-name">White-light_popkon-捷若-低-东-03</div>
-                  <div class="identity-account-id">(7676810552638717973)</div>
-                </td>
-                <td><select class="form-select"><option>请选择身份</option><option>默认身份</option><option>身份A</option><option>身份B</option></select></td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" onchange="onIdentityRowCheck(this)" /></td>
-                <td>
-                  <div class="identity-account-name">TT-MAD-IAA-二组-芸斯-（UTC 8）-2</div>
-                  <div class="identity-account-id">(7648214926388)</div>
-                </td>
-                <td><select class="form-select"><option>请选择身份</option><option>默认身份</option><option>身份A</option><option>身份B</option></select></td>
-              </tr>
-            </tbody>
-          </table>
+          <textarea id="account-batch-search-text" class="form-textarea" rows="6" placeholder="支持批量搜索，每行一个关键字" style="width: 100%; resize: none;"></textarea>
+          <div class="form-hint" style="color: #999; font-size: 12px; margin-top: 8px;">提示：每行输入一个账户名称，最多支持 100 个</div>
         </div>
         <div class="modal-footer">
-          <button class="btn btn-outline btn-sm" onclick="closeIdentityModal()">取 消</button>
-          <button class="btn btn-info btn-sm" onclick="closeIdentityModal()">确 定</button>
+          <button class="btn btn-outline btn-sm" onclick="closeAccountBatchSearchModal()">取消</button>
+          <button class="btn btn-info btn-sm" onclick="confirmAccountBatchSearch()">确定</button>
         </div>
       </div>
     </div>
 
-    <!-- ========== 关联商品投放（选择商品）弹框 ========== -->
-    <div id="product-select-overlay" class="modal-overlay" onclick="closeProductSelectModal()"></div>
-    <div id="product-select-modal" class="modal">
-      <div class="modal-card" id="product-modal-card" style="width: min(520px, calc(100vw - 40px));">
-        <div class="modal-header">
-          <span>选择商品</span>
-          <button class="modal-close" onclick="closeProductSelectModal()">×</button>
-        </div>
-        <div class="modal-body">
-          <div class="product-mode-row">
-            <span>商品选择方式：</span>
-            <button type="button" class="product-mode-btn active" data-mode="auto" onclick="setProductMode('auto', this)">自动</button>
-            <button type="button" class="product-mode-btn" data-mode="unified" onclick="setProductMode('unified', this)">统一选择</button>
-            <button type="button" class="product-mode-btn" data-mode="per-account" onclick="setProductMode('per-account', this)">分账户选择</button>
-          </div>
-
-          <!-- 自动模式：仅方式选择 -->
-          <div id="product-auto-pane">
-            <div class="product-auto-empty">系统将按商品库自动匹配商品</div>
-          </div>
-
-          <!-- 统一选择 / 分账户选择：三栏选择器 -->
-          <div id="product-panel-pane" style="display: none;">
-            <div class="product-chooser">
-              <!-- 账户 -->
-              <div class="prod-account-col">
-                <div class="prod-account-card selected" onclick="selectProductAccount(this)">
-                  <div class="prod-account-name">White-light_popkon-捷若-超小-03</div>
-                  <div class="prod-account-meta">ID: 7676810685100867591</div>
-                  <div class="prod-account-meta">BCID: 767370187149197329</div>
-                </div>
-                <div class="prod-account-card" onclick="selectProductAccount(this)">
-                  <div class="prod-account-name">White-light_popkon-捷若-低-先-03</div>
-                  <div class="prod-account-meta">ID: 7676810552638717973</div>
-                  <div class="prod-account-meta">BCID: 767370187149197329</div>
-                </div>
-              </div>
-
-              <!-- 商品库 -->
-              <div class="prod-lib-col">
-                <div class="prod-search-bar">
-                  <input type="text" class="prod-search-input" placeholder="搜索商品库ID或名称" />
-                  <button class="prod-refresh-btn" onclick="alert('刷新商品库')">刷新商品库</button>
-                </div>
-                <div class="prod-lib-count">共9个商品库, 当前选择：无</div>
-                <div class="prod-lib-list">
-                  <div class="prod-lib-card" onclick="selectProductLib(this)">
-                    <div class="prod-lib-name">TT_ZeroDrama#短剧商品库</div>
-                    <div class="prod-lib-meta">定向地区：美国,阿根廷, +60</div>
-                    <div class="prod-lib-meta">ID: 7678173421766772501</div>
-                  </div>
-                  <div class="prod-lib-card" onclick="selectProductLib(this)">
-                    <div class="prod-lib-name">番茄小程序商品库</div>
-                    <div class="prod-lib-meta">定向地区：美国</div>
-                    <div class="prod-lib-meta">ID: 7674058147136358151</div>
-                  </div>
-                  <div class="prod-lib-card" onclick="selectProductLib(this)">
-                    <div class="prod-lib-name">总-短剧库</div>
-                    <div class="prod-lib-meta">定向地区：美国,阿根廷,+80</div>
-                    <div class="prod-lib-meta">ID: 7676372122694872149</div>
-                  </div>
-                  <div class="prod-lib-card" onclick="selectProductLib(this)">
-                    <div class="prod-lib-name">TT_UniShort#短剧商品库</div>
-                    <div class="prod-lib-meta">定向地区：美国,阿根廷,-60</div>
-                    <div class="prod-lib-meta">ID: 7681104818462557972</div>
-                  </div>
-                  <div class="prod-lib-card" onclick="selectProductLib(this)">
-                    <div class="prod-lib-name">TT_AvoShort#短剧商品库</div>
-                    <div class="prod-lib-meta">定向地区：美国,阿根廷,-60</div>
-                    <div class="prod-lib-meta">ID: 7674038147136358151</div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- 商品列表 -->
-              <div class="prod-drama-col">
-                <div class="prod-search-bar">
-                  <input type="text" class="prod-search-input" placeholder="搜索商品名称" />
-                  <button class="prod-refresh-btn" onclick="alert('刷新商品列表')">刷新商品列表</button>
-                </div>
-                <div class="prod-drama-count">共 0 件商品</div>
-                <table class="prod-drama-table">
-                  <thead>
-                    <tr>
-                      <th>短剧名称</th>
-                      <th>短剧标签</th>
-                      <th>剧集数</th>
-                    </tr>
-                  </thead>
-                  <tbody></tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-outline btn-sm" onclick="closeProductSelectModal()">取 消</button>
-          <button class="btn btn-info btn-sm" onclick="closeProductSelectModal()">提 交</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- ========== 基本信息 编辑抽屉 ========== -->
+    <!-- ========== 计划基本信息 编辑抽屉 ========== -->
     <div id="plan-info-overlay" class="drawer-overlay" onclick="closePlanInfoDrawer()"></div>
     <div id="plan-info-drawer" class="drawer drawer-narrow">
       <div class="drawer-card">
         <div class="drawer-header">
-          <span>基本信息</span>
+          <span>计划基本信息</span>
           <button class="modal-close" onclick="closePlanInfoDrawer()">×</button>
         </div>
         <div class="drawer-body">
@@ -1984,11 +1655,7 @@
             <div class="form-row" style="display:flex; align-items:center;">
               <div class="form-label required">投放内容：</div>
               <div class="form-field" style="flex:1;">
-                <div class="segmented-control" id="basicContentSwitch">
-                  <button type="button" class="segmented-item active" data-value="mini-iaa">小程序-IAA</button>
-                  <button type="button" class="segmented-item" data-value="mini-iap">小程序-IAP</button>
-                  <button type="button" class="segmented-item" data-value="app-iap">APP-IAP</button>
-                </div>
+                <span class="pill-tag active">APP-IAP</span>
               </div>
             </div>
             <div class="form-row" style="display:flex; align-items:center;">
@@ -2002,17 +1669,13 @@
                   <option>短剧名称</option>
                 </select>
                 <select id="shortDramaSelect" class="form-select" style="flex:1;" onchange="onShortDramaChange(this)">
-                  <option>Manor's Healer Nanny（226979）</option>
+                  <option>Wrong Meet Right Love（227215）</option>
                 </select>
               </div>
             </div>
             <div class="form-row" style="display:flex; align-items:center;">
-              <div class="form-label">版权方：</div>
-              <div id="readonlyCopyright" class="form-field readonly-text" style="flex:1;">司南</div>
-            </div>
-            <div class="form-row" style="display:flex; align-items:center;">
               <div class="form-label">短剧：</div>
-              <div id="readonlyDrama" class="form-field readonly-text" style="flex:1;">Manor's Healer Nanny（226979）</div>
+              <div id="readonlyDrama" class="form-field readonly-text" style="flex:1;">Wrong Meet Right Love（227215）</div>
             </div>
             <div class="form-row" style="display:flex; align-items:center;">
               <div class="form-label">语言：</div>
@@ -2020,96 +1683,26 @@
             </div>
             <div class="form-row" style="display:flex; align-items:center;">
               <div class="form-label">剧本：</div>
-              <div id="readonlyScript" class="form-field readonly-text" style="flex:1;">Manor's Healer Nanny（956135）</div>
+              <div id="readonlyScript" class="form-field readonly-text" style="flex:1;">Wrong Meet Right Love（356135）</div>
             </div>
-
-            <!-- 小程序-IAA：小程序单选 -->
-            <div class="form-row basic-content-row" data-content="mini-iaa" style="display:flex; align-items:center;">
-              <div class="form-label required">小程序：</div>
+            <div class="form-row" style="display:flex; align-items:center;">
+              <div class="form-label required">APP：</div>
               <div class="form-field" style="flex:1;">
-                <select class="form-select">
-                  <option>Fictic_ttmini_iaa(7673348337520640001)</option>
+                <select id="appSelect" class="form-select" onchange="onAppChange(this)">
+                  <option value="">请选择</option>
+                  <option value="Popkron_app(689543)" data-pixel="默认TikTok Pixel">Popkron_app(689543)</option>
+                  <option value="DramaBox_app(832111)" data-pixel="DramaBox Pixel 001">DramaBox_app(832111)</option>
+                  <option value="ReelShort_app(745921)" data-pixel="ReelShort Pixel 002">ReelShort_app(745921)</option>
                 </select>
               </div>
             </div>
-
-            <!-- 小程序-IAP：小程序双下拉 -->
-            <div class="form-row basic-content-row" data-content="mini-iap" style="display:none; align-items:center;">
-              <div class="form-label required">小程序：</div>
-              <div class="form-field form-field-inline" style="flex:1; display:flex; gap:8px;">
-                <select class="form-select" style="flex:1;">
-                  <option value="">请选择小程序</option>
-                </select>
-                <select class="form-select" style="flex:1;">
-                  <option value="">请选择小程序</option>
-                </select>
-              </div>
-            </div>
-
-            <!-- APP-IAP：APP + Pixel -->
-            <div class="basic-content-row" data-content="app-iap" style="display:none;">
-              <div class="form-row" style="display:flex; align-items:center;">
-                <div class="form-label required">APP：</div>
-                <div class="form-field" style="flex:1;">
-                  <select id="appSelect" class="form-select" onchange="onAppChange(this)">
-                    <option value="">请选择</option>
-                    <option value="Popkon_app(689543)" data-pixel="默认TikTok Pixel" selected>Popkon_app(689543)</option>
-                    <option value="DramaBox_app(832111)" data-pixel="DramaBox Pixel 001">DramaBox_app(832111)</option>
-                    <option value="ReelShort_app(745921)" data-pixel="ReelShort Pixel 002">ReelShort_app(745921)</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-row" style="display:flex; align-items:center;">
-                <div class="form-label">Pixel：</div>
-                <div id="pixelReadonly" class="form-field readonly-text" style="flex:1;">默认TikTok Pixel</div>
-              </div>
+            <div class="form-row" style="display:flex; align-items:center;">
+              <div class="form-label">Pixel：</div>
+              <div id="pixelReadonly" class="form-field readonly-text" style="flex:1;">--</div>
             </div>
 
             <div class="form-section" style="margin-top:20px; border-top:1px solid #f0f0f0; padding-top:16px;">
               <div class="form-section-title" style="font-size:14px; font-weight:600; color:#1f2937; margin-bottom:14px;">推广链接</div>
-
-              <!-- 小程序-IAA：付费卡量 -->
-              <div class="basic-content-row" data-content="mini-iaa">
-                <div class="form-row" style="display:flex; align-items:center;">
-                  <div class="form-label required">付费卡量：</div>
-                  <div class="form-field form-field-inline" style="flex:1; display:flex; gap:8px; align-items:center;">
-                    <div class="segmented-control">
-                      <button type="button" class="segmented-item">默认</button>
-                      <button type="button" class="segmented-item active">自定义</button>
-                    </div>
-                    <span style="color:#6b7280; font-size:13px;">第</span>
-                    <input type="text" class="form-input" value="6" style="width:64px;" />
-                    <span style="color:#6b7280; font-size:13px;">集</span>
-                  </div>
-                </div>
-                <div class="form-hint" style="margin-left:110px; color:#999; font-size:12px;">最大集数338</div>
-              </div>
-
-              <!-- 小程序-IAP：投放目标 + 小程序 -->
-              <div class="basic-content-row" data-content="mini-iap" style="display:none;">
-                <div class="form-row" style="display:flex; align-items:center;">
-                  <div class="form-label required">投放目标：</div>
-                  <div class="form-field" style="flex:1;">
-                    <div class="segmented-control">
-                      <button type="button" class="segmented-item active">拉新</button>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-row" style="display:flex; align-items:center;">
-                  <div class="form-label required">小程序：</div>
-                  <div class="form-field form-field-inline" style="flex:1; display:flex; gap:8px;">
-                    <select class="form-select" style="flex:1;">
-                      <option value="">请选择小程序</option>
-                    </select>
-                    <select class="form-select" style="flex:1;">
-                      <option value="">请选择小程序</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-
-              <!-- APP-IAP：投放目标 / 跳转方式 / 回传模板 / 充值模板 / 价格设置 -->
-              <div class="basic-content-row" data-content="app-iap" style="display:none;">
               <div class="form-row" style="display:flex; align-items:center;">
                 <div class="form-label required">投放目标：</div>
                 <div class="form-field" style="flex:1;">
@@ -2172,30 +1765,29 @@
                 </div>
                 <div class="form-field" style="flex:1;">
                   <div class="price-setting">
-                    <span>付费卡量：<strong id="paidEpisodeCount">10</strong></span>
-                    <span>总集数：<strong id="totalEpisodeCount">88</strong></span>
+                    <span>付费卡点：<strong id="paidEpisodeCount">6</strong></span>
+                    <span>总集数：<strong id="totalEpisodeCount">25</strong></span>
                   </div>
                   <div id="priceRows">
                     <div class="price-row" data-index="0">
                       <input type="number" class="episode-start" value="1" min="1" onchange="validatePriceRows()">
                       <span>-</span>
-                      <input type="number" class="episode-end" value="9" min="1" onchange="validatePriceRows()">
+                      <input type="number" class="episode-end" value="6" min="1" onchange="validatePriceRows()">
                       <span class="currency">$</span>
                       <input type="number" class="episode-price" value="0.00" step="0.01">
                       <span class="delete-btn" onclick="removePriceRow(this)">🗑</span>
                     </div>
                     <div class="price-row" data-index="1">
-                      <input type="number" class="episode-start" value="10" min="1" onchange="validatePriceRows()">
+                      <input type="number" class="episode-start" value="7" min="1" onchange="validatePriceRows()">
                       <span>-</span>
-                      <input type="number" class="episode-end" value="88" min="1" onchange="validatePriceRows()">
+                      <input type="number" class="episode-end" value="25" min="1" onchange="validatePriceRows()">
                       <span class="currency">$</span>
-                      <input type="number" class="episode-price" value="" step="0.01">
+                      <input type="number" class="episode-price" value="0.66" step="0.01">
                       <span class="delete-btn" onclick="removePriceRow(this)">🗑</span>
                     </div>
                   </div>
                   <button type="button" class="add-price-row" onclick="addPriceRow()" style="margin-top:8px; padding:4px 12px; border:1px dashed #d9d9d9; background:#fff; border-radius:4px; cursor:pointer; color:#595959;">+ 添加</button>
                 </div>
-              </div>
               </div>
             </div>
           </div>
@@ -2207,90 +1799,97 @@
       </div>
     </div>
 
-    <!-- ========== 基建设置 编辑抽屉（与fb自动化任务-投放配置一致，去除定向包/APP/推广链接） ========== -->
+    <!-- ========== 广告组 编辑抽屉 ========== -->
     <div id="ad-group-overlay" class="drawer-overlay" onclick="closeAdGroupDrawer()"></div>
     <div id="ad-group-drawer" class="drawer drawer-narrow">
       <div class="drawer-card">
         <div class="drawer-header">
-          <span>基建设置</span>
+          <span>广告组</span>
           <button class="modal-close" onclick="closeAdGroupDrawer()">×</button>
         </div>
         <div class="drawer-body infra-drawer-body">
           <!-- 投放配置 -->
           <div class="form-section">
-            <!-- 广告系列 -->
-            <div class="form-sub-section">
-              <div class="form-row">
-                <div class="form-item">
-                  <label class="form-label"><span class="form-required">*</span> 广告系列状态</label>
-                  <div class="segmented-control">
-                    <button type="button" class="segmented-item active" data-value="open">开启</button>
-                    <button type="button" class="segmented-item" data-value="pause">暂停</button>
-                  </div>
+            <h4 class="form-section-title">投放配置</h4>
+            <!-- 投放内容 -->
+            <div class="form-row">
+              <div class="form-item">
+                <label class="form-label">投放内容</label>
+                <div class="segmented-control">
+                  <button type="button" class="segmented-item active" data-value="app-iap">APP-IAP</button>
                 </div>
               </div>
+            </div>
+
+            <!-- 广告系列 -->
+            <div class="form-sub-section">
+              <div class="form-sub-section-title">广告系列</div>
               <div class="form-row">
                 <div class="form-item">
                   <label class="form-label"><span class="form-required">*</span> 预算策略</label>
                   <div class="segmented-control">
-                    <button type="button" class="segmented-item active" data-value="campaign">推广系列预算</button>
+                    <button type="button" class="segmented-item active" data-value="campaign">广告系列预算</button>
                   </div>
                 </div>
               </div>
               <div class="form-row">
                 <div class="form-item form-item-inline">
                   <label class="form-label"><span class="form-required">*</span> 日预算</label>
-                  <div style="flex:1; min-width:0; display:flex; align-items:center; gap:8px;">
-                    <input type="text" class="form-input" value="20" placeholder="请输入" style="max-width:280px;" />
-                    <span style="color:#6b7280; font-size:13px;">$</span>
+                  <div style="flex:1; min-width:0;">
+                    <input type="text" class="form-input" placeholder="请输入" style="max-width:280px;" />
+                    <div class="form-hint-error">限制填写：20.00-9,999,999.99</div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-item form-item-full">
+                  <label class="form-label">广告系列竞价策略</label>
+                  <div class="segmented-control" id="infra-bid-strategy">
+                    <button type="button" class="segmented-item" data-value="lowest">最高数量或价值</button>
+                    <button type="button" class="segmented-item active" data-value="roas">广告花费回报目标</button>
                   </div>
                 </div>
               </div>
               <div class="form-row">
                 <div class="form-item form-item-inline">
                   <label class="form-label">使用商品库</label>
-                  <div class="segmented-control">
-                    <button type="button" class="segmented-item active">开启</button>
-                    <button type="button" class="segmented-item">关闭</button>
-                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" />
+                    <span class="toggle-slider"></span>
+                  </label>
                 </div>
               </div>
             </div>
 
             <!-- 广告组 -->
             <div class="form-sub-section">
-              <h4 class="form-section-title">广告组</h4>
+              <div class="form-sub-section-title">广告组</div>
               <div class="form-row">
                 <div class="form-item">
-                  <label class="form-label"><span class="form-required">*</span> 广告组状态</label>
+                  <label class="form-label"><span class="form-required">*</span> 归因模型</label>
                   <div class="segmented-control">
-                    <button type="button" class="segmented-item active" data-value="open">开启</button>
-                    <button type="button" class="segmented-item" data-value="pause">暂停</button>
-                  </div>
-                </div>
-              </div>
-              <div class="form-row">
-                <div class="form-item form-item-full">
-                  <label class="form-label"><span class="form-required">*</span> 竞价策略</label>
-                  <div class="segmented-control" id="infra-bid-strategy">
-                    <button type="button" class="segmented-item active" data-value="roas">目标ROAS</button>
-                    <button type="button" class="segmented-item" data-value="highest">最高价值</button>
+                    <button type="button" class="segmented-item" data-value="standard">标准</button>
+                    <button type="button" class="segmented-item active" data-value="incremental">增量</button>
                   </div>
                 </div>
               </div>
               <div class="form-row" id="infra-roas-target-row">
                 <div class="form-item">
-                  <label class="form-label"><span class="form-required">*</span> 目标ROAS</label>
-                  <input type="text" class="form-input" value="1.24" placeholder="请输入" style="max-width:280px;" />
+                  <label class="form-label"><span class="form-required">*</span> 广告花费回报目标</label>
+                  <input type="text" class="form-input" placeholder="请输入" style="max-width:280px;" />
                 </div>
               </div>
+            </div>
+
+            <!-- 广告 -->
+            <div class="form-sub-section">
+              <div class="form-sub-section-title">广告</div>
               <div class="form-row">
                 <div class="form-item form-item-full">
-                  <label class="form-label">广告位</label>
-                  <div style="flex:1; min-width:0; display:flex; align-items:center; gap:16px; flex-wrap:wrap; border:1px solid #e5e7eb; border-radius:4px; padding:8px 12px;">
-                    <label style="display:flex; align-items:center; gap:6px; font-size:13px; color:#374151;"><input type="checkbox" checked /> 允许自然评论</label>
-                    <label style="display:flex; align-items:center; gap:6px; font-size:13px; color:#374151;"><input type="checkbox" checked /> 允许评论</label>
-                    <label style="display:flex; align-items:center; gap:6px; font-size:13px; color:#374151;"><input type="checkbox" checked /> 允许共享视频</label>
+                  <label class="form-label"><span class="form-required">*</span> 身份（公共主页）</label>
+                  <div style="flex:1; min-width:0;">
+                    <!-- 手动选择公共主页：公用多选下拉组件 MultiSelect -->
+                    <div id="infra-identity-field"></div>
                   </div>
                 </div>
               </div>
@@ -2302,16 +1901,15 @@
             <h4 class="form-section-title">排期</h4>
             <div class="form-row">
               <div class="form-item form-item-inline">
-                <label class="form-label"><span class="form-required">*</span> 投放时间</label>
+                <label class="form-label">开始时间</label>
                 <div class="segmented-control">
                   <button type="button" class="segmented-item active" data-value="now">现在</button>
-                  <button type="button" class="segmented-item" data-value="custom">自定义</button>
                 </div>
               </div>
             </div>
             <div class="form-row">
               <div class="form-item form-item-inline">
-                <label class="form-label"><span class="form-required">*</span> 投放时段</label>
+                <label class="form-label"><span class="form-required">*</span> 投放时长</label>
                 <div class="segmented-control">
                   <button type="button" class="segmented-item active" data-value="unlimited">不限</button>
                   <button type="button" class="segmented-item" data-value="custom">自定义</button>
@@ -2336,7 +1934,7 @@
       </div>
     </div>
 
-    <!-- ========== 我的定向包 弹框 ========== -->
+    <!-- ========== 我的定向包 弹框（数据来源：模板管理-定向包页面 → scripts/targeting-packages.js） ========== -->
     <div id="targeting-list-overlay" class="modal-overlay" onclick="closeTargetingListModal()"></div>
     <div id="targeting-list-modal" class="modal">
       <div class="modal-card" style="width: min(860px, calc(100vw - 40px));">
@@ -2347,9 +1945,9 @@
         <div class="modal-body">
           <div class="modal-filter">
             <button class="btn btn-info btn-sm" onclick="openNewTargetingDrawer()">新增定向包</button>
-            <input type="text" class="form-input" placeholder="请输入关键字" style="margin-left: auto; width: 240px;" />
-            <button class="btn btn-info btn-sm">搜索</button>
-            <button class="btn btn-outline btn-sm">重置</button>
+            <input type="text" id="targeting-list-search" class="form-input" placeholder="请输入定向包名称" style="margin-left: auto; width: 240px;" />
+            <button id="targeting-list-query" class="btn btn-info btn-sm" onclick="rerenderTargetingList()">搜索</button>
+            <button id="targeting-list-reset" class="btn btn-outline btn-sm" onclick="resetTargetingListFilter()">重置</button>
           </div>
           <table class="modal-table">
             <thead>
@@ -2357,56 +1955,15 @@
                 <th class="checkbox-col"><input type="checkbox" /></th>
                 <th>ID</th>
                 <th>定向包名称</th>
-                <th>年龄</th>
-                <th>操作系统</th>
+                <th>语言</th>
+                <th>创建人</th>
                 <th>操作</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td><input type="checkbox" /></td>
-                <td>56</td>
-                <td>意大利</td>
-                <td>25</td>
-                <td>不限</td>
-                <td><div class="row-actions"><button class="row-action-btn">修改</button>
-                  <button class="row-action-btn">复制</button>
-                  <button class="row-action-btn danger">删除</button></div></td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" /></td>
-                <td>49</td>
-                <td>日语</td>
-                <td>18</td>
-                <td>不限</td>
-                <td><div class="row-actions"><button class="row-action-btn">修改</button>
-                  <button class="row-action-btn">复制</button>
-                  <button class="row-action-btn danger">删除</button></div></td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" /></td>
-                <td>48</td>
-                <td>西班牙</td>
-                <td>18</td>
-                <td>不限</td>
-                <td><div class="row-actions"><button class="row-action-btn">修改</button>
-                  <button class="row-action-btn">复制</button>
-                  <button class="row-action-btn danger">删除</button></div></td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" /></td>
-                <td>46</td>
-                <td>泰国</td>
-                <td>25</td>
-                <td>不限</td>
-                <td><div class="row-actions"><button class="row-action-btn">修改</button>
-                  <button class="row-action-btn">复制</button>
-                  <button class="row-action-btn danger">删除</button></div></td>
-              </tr>
-            </tbody>
+            <tbody id="targeting-list-tbody"><!-- 由 scripts/targeting-packages.js 渲染 --></tbody>
           </table>
           <div class="pagination" style="padding: 12px 0;">
-            <div class="pagination-info">共 <strong>4</strong> 条</div>
+            <div class="pagination-info" id="targeting-list-info">共 <strong>0</strong> 条</div>
             <div class="pagination-pages">
               <button class="page-btn">‹</button>
               <button class="page-btn active">1</button>
@@ -2422,78 +1979,86 @@
       </div>
     </div>
 
-    <!-- ========== 新增定向包 抽屉 ========== -->
+    <!-- ========== 新增定向包 抽屉（与 fb-template.html 定向包新增抽屉保持一致） ========== -->
     <div id="new-targeting-overlay" class="drawer-overlay" onclick="closeNewTargetingDrawer()"></div>
     <div id="new-targeting-drawer" class="drawer drawer-narrow">
-      <div class="drawer-card">
+      <div class="drawer-card page-fb-template">
         <div class="drawer-header">
-          <span>新增定向包</span>
+          <span id="new-targeting-title">新增定向包</span>
           <button class="drawer-close" onclick="closeNewTargetingDrawer()">×</button>
         </div>
         <div class="drawer-body">
+          <!-- 基础人口属性 -->
           <div class="form-section">
-            <div class="form-section-title">定向信息</div>
+            <div class="form-section-title">基础人口属性</div>
             <div class="form-row">
               <div class="form-label required">定向包名称：</div>
               <div class="form-field form-field-inline" style="width:100%;">
-                <input type="text" class="form-input" placeholder="定向包名称" style="flex:1;" />
+                <input type="text" id="batch-target-name" class="form-input" placeholder="定向包名称" style="flex:1;" />
                 <span class="form-counter">0 / 50</span>
               </div>
             </div>
             <div class="form-row">
               <div class="form-label">性别：</div>
-              <div class="form-field"><select class="form-select form-input-md"><option>不限</option><option>男</option><option>女</option></select></div>
+              <div class="form-field">
+                <div class="radio-group">
+                  <label class="radio-item"><input type="radio" name="batch-target-gender" value="all" checked /> 不限</label>
+                  <label class="radio-item"><input type="radio" name="batch-target-gender" value="1" /> 男</label>
+                  <label class="radio-item"><input type="radio" name="batch-target-gender" value="2" /> 女</label>
+                </div>
+              </div>
             </div>
             <div class="form-row">
               <div class="form-label required">年龄：</div>
-              <div class="form-field"><select class="form-select form-input-md"><option>请选择</option></select></div>
+              <div class="form-field form-field-inline" style="width:100%;">
+                <select id="batch-target-age-min" class="form-select form-input-md">
+                  <option value="">最小年龄</option>
+                </select>
+                <span class="form-sep">至</span>
+                <select id="batch-target-age-max" class="form-select form-input-md">
+                  <option value="">最大年龄</option>
+                </select>
+              </div>
             </div>
             <div class="form-row">
               <div class="form-label">语言：</div>
               <div class="form-field">
-                <div id="target-locale-field"></div>
+                <div id="batch-target-locale-field"></div>
               </div>
             </div>
           </div>
 
+          <!-- 地理位置 -->
           <div class="form-section">
-            <div class="form-section-title">地区定向信息</div>
+            <div class="form-section-title">地理位置</div>
             <div class="drawer-split">
               <div>
-                <div class="modal-filter" style="margin-bottom: 8px;">
-                  <input type="text" class="form-input" placeholder="请输入关键字搜索" style="flex: 1;" />
-                  <button class="btn btn-outline btn-sm">搜索</button>
+                <div class="geo-tabs" id="batch-target-geo-tabs">
+                  <button class="geo-tab active" data-level="country" onclick="switchBatchGeoTab('country')">国家</button>
+                  <button class="geo-tab" data-level="region" onclick="switchBatchGeoTab('region')">区域</button>
+                  <button class="geo-tab" data-level="city" onclick="switchBatchGeoTab('city')">城市</button>
+                </div>
+                <div class="modal-filter" style="margin-bottom:8px;">
+                  <select id="batch-target-geo-country" class="form-select form-input-md" style="max-width:160px;" onchange="reloadBatchGeoList()">
+                    <option value="">所有国家</option>
+                  </select>
+                  <input type="text" id="batch-target-geo-search" class="form-input" placeholder="请输入关键字搜索" style="flex:1;" />
+                  <button class="btn btn-outline btn-sm" onclick="reloadBatchGeoList()">搜索</button>
                 </div>
                 <div class="region-select-box">
-                  <div class="region-select-header">
-                    <label><input type="checkbox" /> 全选</label>
-                    <span>名称</span>
-                    <span>操作</span>
-                  </div>
+                  <div class="region-select-header"><label><input type="checkbox" id="batch-target-geo-all" onclick="toggleBatchSelectAll(this)" /> 全选</label><span>名称</span><span>操作</span></div>
                   <div class="region-select-body">
-                    <ul class="region-select-list">
-                      <li><label><input type="checkbox" /> 意大利</label><span class="region-select-action">定向</span></li>
-                      <li><label><input type="checkbox" /> 阿根廷</label><span class="region-select-action">定向</span></li>
-                      <li><label><input type="checkbox" /> 希腊</label><span class="region-select-action">定向</span></li>
-                      <li><label><input type="checkbox" /> 巴西</label><span class="region-select-action">定向</span></li>
-                      <li><label><input type="checkbox" /> 科威特</label><span class="region-select-action">定向</span></li>
-                      <li><label><input type="checkbox" /> 巴拿马</label><span class="region-select-action">定向</span></li>
+                    <ul class="region-select-list" id="batch-target-geo-list">
+                      <!-- 由 JS 渲染 -->
                     </ul>
                   </div>
                 </div>
               </div>
               <div>
-                <div class="region-select-header" style="border-radius: 4px 4px 0 0;">
-                  <span>已选</span>
-                  <span class="region-select-action">批量导入</span>
-                  <span class="region-select-action">清除</span>
-                </div>
-                <div class="region-select-box" style="border-top: none; border-radius: 0 0 4px 4px;">
-                  <div class="region-select-body">
-                    <div class="empty-state" style="padding: 60px 20px;">
-                      <div class="empty-state-icon">📍</div>
-                      <span>暂无数据</span>
-                    </div>
+                <div class="region-select-header" style="border-radius:4px 4px 0 0;"><span>已选（<em id="batch-target-geo-count">0</em>）</span><span class="region-select-action" onclick="importBatchGeoBatch()">批量导入</span><span class="region-select-action" onclick="clearBatchTargetGeo()">清除</span></div>
+                <div class="region-select-box" style="border-top:none;border-radius:0 0 4px 4px;">
+                  <div class="region-select-body" id="batch-target-geo-selected">
+                    <div class="empty-state" style="padding:60px 20px;"><div class="empty-state-icon">📍</div><span>暂无数据</span></div>
                   </div>
                 </div>
               </div>
@@ -2502,7 +2067,7 @@
         </div>
         <div class="drawer-footer">
           <button class="btn btn-outline btn-sm" onclick="closeNewTargetingDrawer()">取消</button>
-          <button class="btn btn-primary btn-sm" onclick="closeNewTargetingDrawer()">确定</button>
+          <button class="btn btn-primary btn-sm" onclick="saveBatchTarget()">确定</button>
         </div>
       </div>
     </div>
@@ -2568,6 +2133,53 @@
         <div class="drawer-footer">
           <button class="btn btn-outline btn-sm" onclick="closeCreativeEditDrawer()">取消</button>
           <button class="btn btn-info btn-sm" onclick="closeCreativeEditDrawer()">确定</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== 选择素材包 弹框 ========== -->
+    <div id="material-package-select-overlay" class="modal-overlay" onclick="closeMaterialPackageSelectModal()"></div>
+    <div id="material-package-select-modal" class="modal">
+      <div class="modal-card" style="width: min(640px, calc(100vw - 40px));">
+        <div class="modal-header">
+          <span>选择素材包</span>
+          <button class="modal-close" onclick="closeMaterialPackageSelectModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-filter" style="gap: 8px; margin-bottom: 12px;">
+            <input type="text" id="material-package-keyword" class="form-input" placeholder="请输入关键字" style="width: 240px;" />
+            <button class="btn btn-info btn-sm" onclick="searchMaterialPackages()">搜索</button>
+          </div>
+          <table class="data-table" style="font-size: 13px;">
+            <thead>
+              <tr>
+                <th style="width: 40px;"><input type="checkbox" id="material-package-select-all" onclick="toggleMaterialPackageSelectAll()" /></th>
+                <th>素材包名</th>
+                <th>描述</th>
+                <th>创建时间</th>
+                <th style="width: 80px; text-align: right;">操作</th>
+              </tr>
+            </thead>
+            <tbody id="material-package-tbody">
+              <tr>
+                <td><input type="checkbox" class="material-package-check" value="111" /></td>
+                <td>111</td>
+                <td></td>
+                <td>2026-10-08 10:50:48</td>
+                <td style="text-align: right;"><a href="#" class="link link-danger" onclick="deleteMaterialPackage('111');return false;">删除</a></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="pagination" style="margin-top: 12px; justify-content: flex-end;">
+            <span class="pagination-info">共 1 项</span>
+            <button class="page-btn" disabled>&lt;</button>
+            <button class="page-btn active">1</button>
+            <button class="page-btn" disabled>&gt;</button>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline btn-sm" onclick="closeMaterialPackageSelectModal()">取消</button>
+          <button class="btn btn-info btn-sm" onclick="confirmMaterialPackageSelect()">确定</button>
         </div>
       </div>
     </div>
@@ -2647,52 +2259,6 @@
       </div>
     </div>
 
-    <!-- ========== 选择素材包 弹框 ========== -->
-    <div id="material-package-select-overlay" class="modal-overlay" onclick="closeMaterialPackageSelectModal()"></div>
-    <div id="material-package-select-modal" class="modal">
-      <div class="modal-card" style="width: min(640px, calc(100vw - 40px));">
-        <div class="modal-header">
-          <span>选择素材包</span>
-          <button class="modal-close" onclick="closeMaterialPackageSelectModal()">×</button>
-        </div>
-        <div class="modal-body">
-          <div class="modal-filter" style="gap: 8px; margin-bottom: 12px;">
-            <input type="text" id="material-package-keyword" class="form-input" placeholder="请输入关键字" style="width: 240px;" />
-            <button class="btn btn-info btn-sm" onclick="searchMaterialPackages()">搜索</button>
-          </div>
-          <table class="data-table" style="font-size: 13px;">
-            <thead>
-              <tr>
-                <th style="width: 40px;"><input type="checkbox" id="material-package-select-all" onclick="toggleMaterialPackageSelectAll()" /></th>
-                <th>素材包名</th>
-                <th>描述</th>
-                <th>创建时间</th>
-                <th style="width: 80px; text-align: right;">操作</th>
-              </tr>
-            </thead>
-            <tbody id="material-package-tbody">
-              <tr>
-                <td><input type="checkbox" class="material-package-check" value="111" /></td>
-                <td>111</td>
-                <td></td>
-                <td>2026-10-08 10:50:48</td>
-                <td style="text-align: right;"><a href="#" class="link link-danger" onclick="deleteMaterialPackage('111');return false;">删除</a></td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="pagination" style="margin-top: 12px; justify-content: flex-end;">
-            <span class="pagination-info">共 1 项</span>
-            <button class="page-btn" disabled>&lt;</button>
-            <button class="page-btn active">1</button>
-            <button class="page-btn" disabled>&gt;</button>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-outline btn-sm" onclick="closeMaterialPackageSelectModal()">取消</button>
-          <button class="btn btn-info btn-sm" onclick="confirmMaterialPackageSelect()">确定</button>
-        </div>
-      </div>
-    </div>
 
     <!-- ========== 自定义包素材 - 输入数量 弹框 ========== -->
     <div id="custom-material-count-overlay" class="modal-overlay" onclick="closeCustomMaterialCountModal()"></div>
@@ -2716,7 +2282,6 @@
         </div>
       </div>
     </div>
-
     <!-- ========== 标题包 - 选择文案 弹框 ========== -->
     <div id="title-copy-select-overlay" class="modal-overlay" onclick="closeTitleCopySelectModal()"></div>
     <div id="title-copy-select-modal" class="modal">
@@ -2906,6 +2471,33 @@
       </div>
     </div>
 
+    <!-- ========== 定时提交 弹框 ========== -->
+    <div id="scheduled-submit-overlay" class="modal-overlay" onclick="closeScheduledSubmitModal()"></div>
+    <div id="scheduled-submit-modal" class="modal" style="z-index: 1161;">
+      <div class="modal-card" style="width: min(420px, calc(100vw - 40px));">
+        <div class="modal-header">
+          <span>定时提交</span>
+          <button class="modal-close" onclick="closeScheduledSubmitModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-row scheduled-submit-row">
+            <label class="form-label required">提交时间：</label>
+            <div class="form-field scheduled-submit-field">
+              <input type="datetime-local" id="scheduled-submit-time" class="scheduled-submit-input" step="1" />
+              <span class="scheduled-submit-icon">📅</span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline btn-sm" onclick="closeScheduledSubmitModal()">取消</button>
+          <button class="btn btn-info btn-sm" onclick="confirmScheduledSubmit()">确定</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 定向包共享数据模块（必须在所有内联脚本之前加载） -->
+    <script src="../scripts/targeting-packages.js?v=20260930"></script>
+
     <script>
       /* ===== 跨环境页面跳转：兼容本地 / GitHub Pages / htmlpreview.github.io ===== */
       /* rootPath 为仓库根相对路径，如 'pages/overseas-batch-delivery.html'、'index.html' */
@@ -2924,7 +2516,9 @@
       /* ===== 独立页面导航：本页停留 / 海外页面互跳 / 国内页面跳回 index ===== */
       function showPage(pageName) {
         if (pageName.indexOf('fb-') === 0) {
-          window.location.href = navUrl('pages/' + pageName + '.html');
+          if (pageName !== 'fb-batch-delivery') {
+            window.location.href = navUrl('pages/' + pageName + '.html');
+          }
           return;
         }
         if (pageName === 'overseas-tiktok-account') {
@@ -2939,7 +2533,10 @@
           window.location.href = navUrl('pages/overseas-app.html');
           return;
         }
-        if (pageName === 'overseas-batch-delivery') return;
+        if (pageName === 'overseas-batch-delivery') {
+          window.location.href = navUrl('pages/overseas-batch-delivery.html');
+          return;
+        }
         if (pageName === 'overseas-auto-delivery') {
           window.location.href = navUrl('pages/overseas-auto-delivery.html');
           return;
@@ -3146,8 +2743,195 @@
       function switchBatchPreviewTab(tabEl, key) {
         var parent = tabEl.parentElement;
         if (!parent) return;
-        parent.querySelectorAll('.config-preview-tab').forEach(function (t) { t.classList.remove('active'); });
+        parent.querySelectorAll('.config-tab-btn').forEach(function (t) { t.classList.remove('active'); });
         tabEl.classList.add('active');
+      }
+
+      // 页面加载不自动打开弹窗，仅初始化价格设置删除按钮显隐
+      window.addEventListener('DOMContentLoaded', function () {
+        updatePriceDeleteButtons();
+        renderConfigAccountList();
+      });
+
+      /* ===== 通用弹框开关工具 ===== */
+      function openModal(overlayId, modalId) {
+        var overlay = document.getElementById(overlayId);
+        var modal = document.getElementById(modalId);
+        if (overlay) overlay.classList.add('open');
+        if (modal) modal.classList.add('open');
+      }
+
+      function closeModal(overlayId, modalId) {
+        var overlay = document.getElementById(overlayId);
+        var modal = document.getElementById(modalId);
+        if (overlay) overlay.classList.remove('open');
+        if (modal) modal.classList.remove('open');
+      }
+
+      /* ===== 账号 - 选择账号弹框 ===== */
+      var MOCK_ACCOUNT_DATA = [
+        { id: '76482152023578101780', name: 'TT-MAD-IAA-二组-芬斯-（UTC 8）-5' },
+        { id: '7676811085100867591', name: 'White-light_popkron-捷普-超小-03' },
+        { id: '7676810552638717973', name: 'White-light_popkron-捷普-低充-03' },
+        { id: '7648214928086373922', name: 'TT-MAD-IAA-二组-苔斯-（UTC 8）-2' },
+        { id: '76768110780993026439', name: 'White-light_Fictic_ttimini-捷普-07' },
+        { id: '210526212149407745', name: 'White-light_Fictic_ttimini-缅泰-07176768107809390' },
+        { id: '210526212149408012', name: 'White-light_popkron-英语-07176768107809391' },
+        { id: '210526212149408123', name: 'TT-MAD-IAA-三组-英语-07176768107809392' }
+      ];
+      var accountSelectedIds = ['210526212149407745'];
+      var accountFilteredData = [];
+      var accountCurrentPage = 1;
+      var accountPageSize = 10;
+
+      function openAccountSelectModal() {
+        openModal('account-select-overlay', 'account-select-modal');
+        updateAccountFilterPlaceholder();
+        resetAccountFilter();
+      }
+      function closeAccountSelectModal() { closeModal('account-select-overlay', 'account-select-modal'); }
+
+      function updateAccountFilterPlaceholder() {
+        var type = document.getElementById('account-filter-type').value;
+        var input = document.getElementById('account-filter-keyword');
+        input.placeholder = type === 'id' ? '请输入账户ID查询' : '请输入账户名称查询';
+      }
+
+      function filterAccountData(keyword, type) {
+        var k = (keyword || '').trim();
+        if (!k) return MOCK_ACCOUNT_DATA.slice();
+        if (type === 'id') {
+          return MOCK_ACCOUNT_DATA.filter(function (item) { return item.id === k; });
+        }
+        return MOCK_ACCOUNT_DATA.filter(function (item) { return item.name.toLowerCase().indexOf(k.toLowerCase()) !== -1; });
+      }
+
+      function searchAccount() {
+        var type = document.getElementById('account-filter-type').value;
+        var keyword = document.getElementById('account-filter-keyword').value;
+        accountFilteredData = filterAccountData(keyword, type);
+        accountCurrentPage = 1;
+        renderAccountSelectTable();
+      }
+
+      function resetAccountFilter() {
+        document.getElementById('account-filter-keyword').value = '';
+        document.getElementById('account-filter-type').value = 'id';
+        updateAccountFilterPlaceholder();
+        accountFilteredData = MOCK_ACCOUNT_DATA.slice();
+        accountCurrentPage = 1;
+        renderAccountSelectTable();
+      }
+
+      function renderAccountSelectTable() {
+        var tbody = document.getElementById('account-select-tbody');
+        var totalEl = document.getElementById('account-total');
+        var paginationEl = document.getElementById('account-pagination');
+        var confirmBtn = document.getElementById('account-confirm-btn');
+        var selectAll = document.getElementById('account-select-all');
+        if (selectAll) selectAll.checked = false;
+
+        accountFilteredData = accountFilteredData || MOCK_ACCOUNT_DATA.slice();
+        var total = accountFilteredData.length;
+        if (totalEl) totalEl.textContent = total;
+
+        var totalPages = Math.max(1, Math.ceil(total / accountPageSize));
+        if (accountCurrentPage > totalPages) accountCurrentPage = totalPages;
+        var start = (accountCurrentPage - 1) * accountPageSize;
+        var end = Math.min(start + accountPageSize, total);
+        var pageData = accountFilteredData.slice(start, end);
+
+        var html = '';
+        if (pageData.length === 0) {
+          html = '<tr><td colspan="3" style="text-align:center;color:#999;padding:24px 0;">暂无数据</td></tr>';
+        } else {
+          pageData.forEach(function (item) {
+            var checked = accountSelectedIds.indexOf(item.id) !== -1 ? 'checked' : '';
+            html += '<tr>' +
+              '<td class="checkbox-col"><input type="checkbox" data-id="' + escAttr(item.id) + '" ' + checked + ' onclick="toggleAccountRowCheck(this)" /></td>' +
+              '<td>' + escHtml(item.id) + '</td>' +
+              '<td>' + escHtml(item.name) + '</td>' +
+            '</tr>';
+          });
+        }
+        if (tbody) tbody.innerHTML = html;
+
+        var pagesHtml = '';
+        pagesHtml += '<button class="page-btn" onclick="goAccountPage(' + (accountCurrentPage - 1) + ')">‹</button>';
+        for (var i = 1; i <= totalPages; i++) {
+          pagesHtml += '<button class="page-btn ' + (i === accountCurrentPage ? 'active' : '') + '" onclick="goAccountPage(' + i + ')">' + i + '</button>';
+        }
+        pagesHtml += '<button class="page-btn" onclick="goAccountPage(' + (accountCurrentPage + 1) + ')">›</button>';
+        if (paginationEl) paginationEl.innerHTML = pagesHtml;
+
+        if (confirmBtn) confirmBtn.textContent = '确定(' + accountSelectedIds.length + ')';
+      }
+
+      function goAccountPage(page) {
+        var total = accountFilteredData.length;
+        var totalPages = Math.max(1, Math.ceil(total / accountPageSize));
+        if (page < 1 || page > totalPages) return;
+        accountCurrentPage = page;
+        renderAccountSelectTable();
+      }
+
+      function toggleAccountSelectAll(checkbox) {
+        var checked = checkbox.checked;
+        var rows = document.querySelectorAll('#account-select-tbody input[type="checkbox"]');
+        rows.forEach(function (cb) {
+          var id = cb.getAttribute('data-id');
+          cb.checked = checked;
+          updateAccountSelectedIds(id, checked);
+        });
+        var confirmBtn = document.getElementById('account-confirm-btn');
+        if (confirmBtn) confirmBtn.textContent = '确定(' + accountSelectedIds.length + ')';
+      }
+
+      function toggleAccountRowCheck(checkbox) {
+        var id = checkbox.getAttribute('data-id');
+        updateAccountSelectedIds(id, checkbox.checked);
+        var confirmBtn = document.getElementById('account-confirm-btn');
+        if (confirmBtn) confirmBtn.textContent = '确定(' + accountSelectedIds.length + ')';
+      }
+
+      function updateAccountSelectedIds(id, checked) {
+        var idx = accountSelectedIds.indexOf(id);
+        if (checked && idx === -1) accountSelectedIds.push(id);
+        if (!checked && idx !== -1) accountSelectedIds.splice(idx, 1);
+      }
+
+      function confirmAccountSelect() {
+        renderConfigAccountList();
+        closeAccountSelectModal();
+      }
+
+      function renderConfigAccountList() {
+        var listEl = document.getElementById('config-account-list');
+        var countEl = document.getElementById('config-account-count');
+        if (countEl) countEl.textContent = accountSelectedIds.length;
+        if (!listEl) return;
+        if (accountSelectedIds.length === 0) {
+          listEl.innerHTML = '<li style="color:#999;">暂未选择账号</li>';
+          return;
+        }
+        var html = '';
+        accountSelectedIds.forEach(function (id) {
+          var item = MOCK_ACCOUNT_DATA.find(function (a) { return a.id === id; });
+          if (item) {
+            html += '<li>'
+              + '<div class="config-account-name" title="' + escHtml(item.name) + '">' + escHtml(item.name) + '</div>'
+              + '<div class="config-account-id" title="ID:' + escHtml(item.id) + '">ID:' + escHtml(item.id) + '</div>'
+              + '</li>';
+          } else {
+            html += '<li><div class="config-account-name" title="' + escHtml(id) + '">' + escHtml(id) + '</div></li>';
+          }
+        });
+        listEl.innerHTML = html;
+      }
+
+      function clearAccountSelection() {
+        accountSelectedIds = [];
+        renderConfigAccountList();
       }
 
       /* ===== 预览区：左侧账号列表切换右侧数据 ===== */
@@ -3207,97 +2991,66 @@
         syncAccountErrorState();
       })();
 
-      /* ===== 通用弹框开关工具 ===== */
-      function openModal(overlayId, modalId) {
-        var overlay = document.getElementById(overlayId);
-        var modal = document.getElementById(modalId);
-        if (overlay) overlay.classList.add('open');
-        if (modal) modal.classList.add('open');
+      /* ===== 账号 - 批量搜索弹框 ===== */
+      function openAccountBatchSearchModal() {
+        openModal('account-batch-search-overlay', 'account-batch-search-modal');
+        var textarea = document.getElementById('account-batch-search-text');
+        if (textarea) textarea.value = '';
       }
-
-      function closeModal(overlayId, modalId) {
-        var overlay = document.getElementById(overlayId);
-        var modal = document.getElementById(modalId);
-        if (overlay) overlay.classList.remove('open');
-        if (modal) modal.classList.remove('open');
+      function closeAccountBatchSearchModal() {
+        closeModal('account-batch-search-overlay', 'account-batch-search-modal');
       }
+      function confirmAccountBatchSearch() {
+        var textarea = document.getElementById('account-batch-search-text');
+        var text = (textarea ? textarea.value : '').trim();
+        if (!text) {
+          alert('请输入要搜索的内容');
+          return;
+        }
+        var lines = text.split(/[\n\r]+/).map(function (s) { return s.trim(); }).filter(function (s) { return s; });
+        if (lines.length === 0) {
+          alert('请输入要搜索的内容');
+          return;
+        }
+        if (lines.length > 100) {
+          alert('最多支持 100 个关键字');
+          return;
+        }
 
-      /* ===== 账号 - 选择账号弹框 ===== */
-      function openAccountSelectModal() { openModal('account-select-overlay', 'account-select-modal'); }
-      function closeAccountSelectModal() { closeModal('account-select-overlay', 'account-select-modal'); }
+        var results = [];
+        var seen = {};
+        var isIdSearch = document.getElementById('account-filter-type').value === 'id';
 
-      /* ===== 身份信息弹框 ===== */
-      function openIdentityModal() { openModal('identity-select-overlay', 'identity-select-modal'); }
-      function closeIdentityModal() { closeModal('identity-select-overlay', 'identity-select-modal'); }
-      function onIdentityRowCheck(cb) {
-        cb.closest('tr').classList.toggle('row-selected', cb.checked);
-        syncIdentityCount();
-      }
-      function toggleIdentityAll(headCb) {
-        document.querySelectorAll('#identity-select-modal tbody input[type="checkbox"]').forEach(function (cb) {
-          cb.checked = headCb.checked;
-          cb.closest('tr').classList.toggle('row-selected', cb.checked);
+        lines.forEach(function (keyword) {
+          var matched = isIdSearch
+            ? MOCK_ACCOUNT_DATA.filter(function (item) { return item.id === keyword; })
+            : MOCK_ACCOUNT_DATA.filter(function (item) { return item.name.toLowerCase().indexOf(keyword.toLowerCase()) !== -1; });
+          matched.forEach(function (item) {
+            if (!seen[item.id]) {
+              seen[item.id] = true;
+              results.push(item);
+            }
+          });
         });
-        syncIdentityCount();
-      }
-      function syncIdentityCount() {
-        var n = document.querySelectorAll('#identity-select-modal tbody input[type="checkbox"]:checked').length;
-        var el = document.getElementById('identity-selected-count');
-        if (el) el.textContent = n;
+
+        accountFilteredData = results;
+        accountCurrentPage = 1;
+        renderAccountSelectTable();
+        closeAccountBatchSearchModal();
       }
 
-      /* ===== 关联商品投放（选择商品）弹框 ===== */
-      function openProductSelectModal() { openModal('product-select-overlay', 'product-select-modal'); }
-      function closeProductSelectModal() { closeModal('product-select-overlay', 'product-select-modal'); }
-      function setProductMode(mode, btn) {
-        document.querySelectorAll('#product-select-modal .product-mode-btn').forEach(function (b) { b.classList.remove('active'); });
-        btn.classList.add('active');
-        var isAuto = mode === 'auto';
-        document.getElementById('product-auto-pane').style.display = isAuto ? '' : 'none';
-        document.getElementById('product-panel-pane').style.display = isAuto ? 'none' : '';
-        document.getElementById('product-modal-card').style.width = isAuto ? 'min(520px, calc(100vw - 40px))' : 'min(1180px, calc(100vw - 40px))';
+      function escHtml(s) {
+        return String(s).replace(/[&<>"']/g, function (c) {
+          return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+        });
       }
-      function selectProductAccount(card) {
-        card.parentElement.querySelectorAll('.prod-account-card').forEach(function (c) { c.classList.remove('selected'); });
-        card.classList.add('selected');
-      }
-      function selectProductLib(card) {
-        card.parentElement.querySelectorAll('.prod-lib-card').forEach(function (c) { c.classList.remove('selected'); });
-        card.classList.add('selected');
-        var count = card.closest('.prod-lib-col').querySelector('.prod-lib-count');
-        if (count) count.textContent = '共9个商品库, 当前选择：' + card.querySelector('.prod-lib-name').textContent;
-      }
-
+      function escAttr(s) { return escHtml(s).replace(/"/g, '&quot;'); }
 
       /* ===== 计划基本信息 - 编辑抽屉 ===== */
       function openPlanInfoDrawer() { openModal('plan-info-overlay', 'plan-info-drawer'); }
       function closePlanInfoDrawer() { closeModal('plan-info-overlay', 'plan-info-drawer'); }
 
-      /* ===== 基本信息：投放内容切换（小程序-IAA / 小程序-IAP / APP-IAP） ===== */
-      document.querySelectorAll('#plan-info-drawer .segmented-control').forEach(function (group) {
-        group.addEventListener('click', function (e) {
-          var btn = e.target.closest('.segmented-item');
-          if (!btn) return;
-          group.querySelectorAll('.segmented-item').forEach(function (item) { item.classList.remove('active'); });
-          btn.classList.add('active');
-          if (group.id === 'basicContentSwitch') syncBasicContentRows();
-        });
-      });
-
-      /* 投放内容切换：显示对应字段 */
-      function syncBasicContentRows() {
-        var group = document.getElementById('basicContentSwitch');
-        if (!group) return;
-        var act = group.querySelector('.segmented-item.active');
-        var val = act ? act.getAttribute('data-value') : 'mini-iaa';
-        document.querySelectorAll('#plan-info-drawer .basic-content-row').forEach(function (row) {
-          var match = row.getAttribute('data-content') === val;
-          row.style.display = match ? (row.classList.contains('form-row') ? 'flex' : 'block') : 'none';
-        });
-      }
-      (function () { syncBasicContentRows(); })();
-
-      /* APP 选择联动 Pixel */
+      /* ===== 基本信息 - 推广链接交互 ===== */
       function onAppChange(select) {
         var option = select.options[select.selectedIndex];
         var pixel = option && option.getAttribute('data-pixel') ? option.getAttribute('data-pixel') : '--';
@@ -3305,7 +3058,6 @@
         if (pixelEl) pixelEl.textContent = pixel;
       }
 
-      /* 跳转方式联动落地页类型 */
       function onJumpModeChange(select) {
         var row = document.getElementById('landingPageRow');
         if (!row) return;
@@ -3318,13 +3070,15 @@
         }
       }
 
-      /* 切换短剧时同步只读信息与价格设置（原型演示数据） */
       function onShortDramaChange(select) {
+        // 切换短剧时同步更新只读信息与价格设置（原型演示数据）
         var totalMap = {
-          "Manor's Healer Nanny（226979）": { paid: 10, total: 88, lang: '英语', script: "Manor's Healer Nanny（956135）", copyright: '司南' }
+          'Wrong Meet Right Love（227215）': { paid: 6, total: 25, lang: '英语', script: 'Wrong Meet Right Love（356135）', copyright: '司南' },
+          'DramaBox-CQ（100001）': { paid: 5, total: 30, lang: '中文', script: 'DramaBox-CQ（200001）', copyright: '织光' },
+          'ReelShort-LS（100002）': { paid: 8, total: 40, lang: '英语', script: 'ReelShort-LS（200002）', copyright: '司南' }
         };
         var key = select.value;
-        var data = totalMap[key] || totalMap["Manor's Healer Nanny（226979）"];
+        var data = totalMap[key] || totalMap['Wrong Meet Right Love（227215）'];
         var paidEl = document.getElementById('paidEpisodeCount');
         var totalEl = document.getElementById('totalEpisodeCount');
         var langEl = document.getElementById('readonlyLang');
@@ -3337,6 +3091,7 @@
         if (scriptEl) scriptEl.textContent = data.script;
         if (copyrightEl) copyrightEl.textContent = data.copyright;
         if (dramaEl) dramaEl.textContent = key;
+        // 重置价格设置默认两行
         var container = document.getElementById('priceRows');
         if (container) {
           container.innerHTML =
@@ -3353,14 +3108,13 @@
               '<span>-</span>' +
               '<input type="number" class="episode-end" value="' + data.total + '" min="1" onchange="validatePriceRows()">' +
               '<span class="currency">$</span>' +
-              '<input type="number" class="episode-price" value="" step="0.01">' +
+              '<input type="number" class="episode-price" value="0.66" step="0.01">' +
               '<span class="delete-btn" onclick="removePriceRow(this)">🗑</span>' +
             '</div>';
           updatePriceDeleteButtons();
         }
       }
 
-      /* 价格设置：添加/删除/校验 */
       function addPriceRow() {
         var container = document.getElementById('priceRows');
         if (!container) return;
@@ -3435,6 +3189,10 @@
         return !hasError;
       }
 
+      /* ===== 广告组 - 编辑抽屉 ===== */
+      function openAdGroupDrawer() { openModal('ad-group-overlay', 'ad-group-drawer'); }
+      function closeAdGroupDrawer() { closeModal('ad-group-overlay', 'ad-group-drawer'); }
+
       /* ===== 基建设置抽屉：分段选择器交互 ===== */
       document.querySelectorAll('#ad-group-drawer .segmented-control').forEach(function (group) {
         group.addEventListener('click', function (e) {
@@ -3446,7 +3204,7 @@
         });
       });
 
-      /* 竞价策略：选中【目标ROAS】时显示对应字段 */
+      /* 广告系列竞价策略：选中【广告花费回报目标】时显示对应字段 */
       function syncInfraRoasRow() {
         var group = document.getElementById('infra-bid-strategy');
         var row = document.getElementById('infra-roas-target-row');
@@ -3456,21 +3214,63 @@
       }
       (function () { syncInfraRoasRow(); })();
 
-      /* ===== 广告组 - 编辑抽屉 ===== */
-      function openAdGroupDrawer() { openModal('ad-group-overlay', 'ad-group-drawer'); }
-      function closeAdGroupDrawer() { closeModal('ad-group-overlay', 'ad-group-drawer'); }
+      /* ===== 基建设置：身份（公共主页）手动选择（公用多选下拉组件 MultiSelect） =====
+         数据来源：资产管理 - 公共主页页面（pages/overseas-fb-page.html） */
+      var INFRA_IDENTITY_ACCOUNTS = [
+        { id: '100123456789012', name: 'Dramatical Shorts' },
+        { id: '200987654321098', name: 'Romance Reels' },
+        { id: '300556677889911', name: '悬疑剧场 Mystery' },
+        { id: '400112233445566', name: 'Drama Hub Latam' },
+        { id: '500665544332211', name: 'K-Drama Daily' }
+      ];
+      var infraIdentityMs = null;
+      function initInfraIdentityMultiSelect() {
+        if (infraIdentityMs) return infraIdentityMs;
+        if (!window.MultiSelect || !document.getElementById('infra-identity-field')) return null;
+        infraIdentityMs = MultiSelect.init(document.getElementById('infra-identity-field'), {
+          placeholder: '请选择公共主页',
+          countLabel: '已选：{n} 个公共主页',
+          searchPlaceholder: '请输入名称',
+          options: INFRA_IDENTITY_ACCOUNTS.map(function (a) { return { id: a.id, name: a.name }; })
+        });
+        return infraIdentityMs;
+      }
+      window.addEventListener('DOMContentLoaded', initInfraIdentityMultiSelect);
 
-      /* ===== 定向 - 我的定向包弹框 ===== */
+      /* ===== 定向 - 我的定向包弹框（数据来源：模板管理-定向包页面 → scripts/targeting-packages.js） ===== */
       function openTargetingListModal() { openModal('targeting-list-overlay', 'targeting-list-modal'); }
       function closeTargetingListModal() { closeModal('targeting-list-overlay', 'targeting-list-modal'); }
 
-      /* ===== 定向 - 新增定向包抽屉 ===== */
-      function openNewTargetingDrawer() {
-        openModal('new-targeting-overlay', 'new-targeting-drawer');
-        initLocaleMultiSelect();
+      function rerenderTargetingList() {
+        var tbody = document.getElementById('targeting-list-tbody');
+        if (!tbody) return;
+        var kw = ((document.getElementById('targeting-list-search') || {}).value || '').trim();
+        var rows = filterTargetingPackages({ keyword: kw });
+        tbody.innerHTML = rows.map(function (p) {
+          return '<tr data-name="' + p.name + '">' +
+            '<td><input type="checkbox" /></td>' +
+            '<td>' + p.id + '</td>' +
+            '<td>' + p.name + '</td>' +
+            '<td>' + p.lang + '</td>' +
+            '<td>' + p.creator + '</td>' +
+            '<td>' +
+              '<div class="row-actions">' +  
+                '<button class="row-action-btn">修改</button> ' +
+                '<button class="row-action-btn">复制</button> ' +
+                '<button class="row-action-btn danger">删除</button>' +
+              '</div>' +
+              '</td>' +
+          '</tr>';
+        }).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--color-text-tertiary);padding:24px 0;">暂无数据</td></tr>';
+        var info = document.getElementById('targeting-list-info');
+        if (info) info.innerHTML = '共 <strong>' + rows.length + '</strong> 条';
       }
-      function closeNewTargetingDrawer() { closeModal('new-targeting-overlay', 'new-targeting-drawer'); }
+      function resetTargetingListFilter() {
+        var s = document.getElementById('targeting-list-search'); if (s) s.value = '';
+        rerenderTargetingList();
+      }
 
+      /* ===== 定向 - 新增定向包抽屉（与 fb-template.html 定向包新增抽屉保持一致） ===== */
       var TARGET_LOCALES = [
         { id: 6,  name: '英语 (English)' }, { id: 1,  name: '中文 (简体)' },
         { id: 2,  name: '中文 (繁体)' },    { id: 17, name: '西班牙语' },
@@ -3483,13 +3283,58 @@
         { id: 18, name: '土耳其语' }
       ];
 
-      /* 语言字段：公用多选下拉组件（styles/multi-select.css + scripts/multi-select.js） */
-      var targetLocaleMs = null;
-      function initLocaleMultiSelect() {
-        if (targetLocaleMs) return;
-        var field = document.getElementById('target-locale-field');
+      var TARGET_COUNTRIES = [
+        { code: 'US', name: '美国' },     { code: 'GB', name: '英国' },
+        { code: 'JP', name: '日本' },     { code: 'KR', name: '韩国' },
+        { code: 'DE', name: '德国' },     { code: 'FR', name: '法国' },
+        { code: 'IT', name: '意大利' },   { code: 'ES', name: '西班牙' },
+        { code: 'PT', name: '葡萄牙' },   { code: 'BR', name: '巴西' },
+        { code: 'AR', name: '阿根廷' },   { code: 'MX', name: '墨西哥' },
+        { code: 'CA', name: '加拿大' },   { code: 'AU', name: '澳大利亚' },
+        { code: 'IN', name: '印度' },     { code: 'ID', name: '印尼' },
+        { code: 'TH', name: '泰国' },     { code: 'VN', name: '越南' },
+        { code: 'PH', name: '菲律宾' },   { code: 'MY', name: '马来西亚' },
+        { code: 'SG', name: '新加坡' },   { code: 'AE', name: '阿联酋' },
+        { code: 'SA', name: '沙特' },     { code: 'TR', name: '土耳其' },
+        { code: 'EG', name: '埃及' },     { code: 'NG', name: '尼日利亚' },
+        { code: 'ZA', name: '南非' },     { code: 'GR', name: '希腊' },
+        { code: 'KW', name: '科威特' },   { code: 'PA', name: '巴拿马' }
+      ];
+
+      var TARGET_REGIONS = [
+        { id: 'US-CA', name: '加利福尼亚', country: 'US' },
+        { id: 'US-NY', name: '纽约',       country: 'US' },
+        { id: 'US-TX', name: '得克萨斯',   country: 'US' },
+        { id: 'JP-13', name: '东京都',     country: 'JP' },
+        { id: 'JP-27', name: '大阪府',     country: 'JP' },
+        { id: 'KR-11', name: '首尔',       country: 'KR' },
+        { id: 'GB-LND', name: '伦敦',      country: 'GB' },
+        { id: 'DE-BE', name: '柏林',       country: 'DE' },
+        { id: 'FR-IDF', name: '巴黎',      country: 'FR' },
+        { id: 'IT-MI', name: '米兰',       country: 'IT' },
+        { id: 'BR-SP', name: '圣保罗',     country: 'BR' },
+        { id: 'AU-NSW', name: '新南威尔士',country: 'AU' }
+      ];
+
+      var TARGET_CITIES = [
+        { id: '2418779', name: '伦敦 (London)', country: 'GB' },
+        { id: '2334456', name: '纽约 (New York)', country: 'US' },
+        { id: '2487610', name: '巴黎 (Paris)', country: 'FR' },
+        { id: '2442047', name: '东京 (Tokyo)', country: 'JP' },
+        { id: '2339945', name: '柏林 (Berlin)', country: 'DE' },
+        { id: '2385029', name: '米兰 (Milan)', country: 'IT' },
+        { id: '2391279', name: '首尔 (Seoul)', country: 'KR' }
+      ];
+
+      var batchTargetGeoLevel = 'country';
+      var batchTargetGeoSelected = [];
+      var batchTargetLocaleMs = null;
+
+      function initBatchLocaleMultiSelect() {
+        if (batchTargetLocaleMs) return;
+        var field = document.getElementById('batch-target-locale-field');
         if (!field || typeof MultiSelect === 'undefined') return;
-        targetLocaleMs = MultiSelect.init(field, {
+        batchTargetLocaleMs = MultiSelect.init(field, {
           placeholder: '请选择语言（可多选）',
           countLabel: '已选：{n} 种语言',
           searchPlaceholder: '请输入语言名称',
@@ -3499,6 +3344,204 @@
           })
         });
       }
+
+      function initBatchTargetDrawer() {
+        initBatchLocaleMultiSelect();
+        var ageMin = document.getElementById('batch-target-age-min');
+        var ageMax = document.getElementById('batch-target-age-max');
+        if (ageMin && ageMin.options.length <= 1) {
+          for (var i = 13; i <= 65; i++) {
+            ageMin.add(new Option(i, i));
+            ageMax.add(new Option(i, i));
+          }
+        }
+        var cSel = document.getElementById('batch-target-geo-country');
+        if (cSel && cSel.options.length <= 1) {
+          TARGET_COUNTRIES.forEach(function (c) {
+            cSel.add(new Option(c.code + ' ' + c.name, c.code));
+          });
+        }
+        reloadBatchGeoList();
+        renderBatchTargetGeoSelected();
+      }
+
+      function switchBatchGeoTab(level) {
+        batchTargetGeoLevel = level;
+        document.querySelectorAll('#batch-target-geo-tabs .geo-tab').forEach(function (b) {
+          b.classList.toggle('active', b.dataset.level === level);
+        });
+        reloadBatchGeoList();
+      }
+
+      function getBatchGeoList() {
+        var country = document.getElementById('batch-target-geo-country').value;
+        var kw = (document.getElementById('batch-target-geo-search').value || '').trim().toLowerCase();
+        var list = (batchTargetGeoLevel === 'country') ? TARGET_COUNTRIES
+                  : (batchTargetGeoLevel === 'region')  ? TARGET_REGIONS
+                  :                                       TARGET_CITIES;
+        return list.filter(function (x) {
+          if (country && batchTargetGeoLevel !== 'country' && x.country !== country) return false;
+          if (kw && x.name.toLowerCase().indexOf(kw) < 0 && (x.id || '').toString().toLowerCase().indexOf(kw) < 0) return false;
+          return true;
+        });
+      }
+
+      function reloadBatchGeoList() {
+        var ul = document.getElementById('batch-target-geo-list');
+        if (!ul) return;
+        ul.innerHTML = '';
+        var list = getBatchGeoList();
+        if (!list.length) {
+          ul.innerHTML = '<li style="padding:14px;color:#909399;text-align:center;">暂无数据</li>';
+          return;
+        }
+        list.forEach(function (x) {
+          var key = batchTargetGeoLevel + ':' + x.id;
+          var li = document.createElement('li');
+          li.innerHTML = '<label><input type="checkbox" data-key="' + key + '" /> '
+            + (x.name || x.code) + '</label><span class="region-select-action" data-add="' + key + '">定向</span>';
+          li.querySelector('[data-add]').onclick = function () {
+            addBatchTargetGeo(x.id, x.name || x.code, batchTargetGeoLevel);
+          };
+          li.querySelector('input').onchange = function (e) {
+            if (e.target.checked) addBatchTargetGeo(x.id, x.name || x.code, batchTargetGeoLevel);
+            else removeBatchTargetGeo(key);
+          };
+          ul.appendChild(li);
+        });
+        batchTargetGeoSelected.forEach(function (s) {
+          var cb = ul.querySelector('input[data-key="' + s.key + '"]');
+          if (cb) cb.checked = true;
+        });
+      }
+
+      function addBatchTargetGeo(id, name, level) {
+        var key = level + ':' + id;
+        if (batchTargetGeoSelected.some(function (s) { return s.key === key; })) return;
+        batchTargetGeoSelected.push({ key: key, id: id, name: name, level: level });
+        renderBatchTargetGeoSelected();
+        var cb = document.querySelector('#batch-target-geo-list input[data-key="' + key + '"]');
+        if (cb) cb.checked = true;
+      }
+
+      function removeBatchTargetGeo(key) {
+        batchTargetGeoSelected = batchTargetGeoSelected.filter(function (s) { return s.key !== key; });
+        renderBatchTargetGeoSelected();
+        var cb = document.querySelector('#batch-target-geo-list input[data-key="' + key + '"]');
+        if (cb) cb.checked = false;
+      }
+
+      function clearBatchTargetGeo() {
+        batchTargetGeoSelected = [];
+        renderBatchTargetGeoSelected();
+        document.querySelectorAll('#batch-target-geo-list input[type=checkbox]').forEach(function (cb) { cb.checked = false; });
+        var all = document.getElementById('batch-target-geo-all');
+        if (all) all.checked = false;
+      }
+
+      function toggleBatchSelectAll(master) {
+        var list = getBatchGeoList();
+        list.forEach(function (x) {
+          var key = batchTargetGeoLevel + ':' + x.id;
+          var has = batchTargetGeoSelected.some(function (s) { return s.key === key; });
+          if (master.checked && !has) addBatchTargetGeo(x.id, x.name || x.code, batchTargetGeoLevel);
+          if (!master.checked && has) removeBatchTargetGeo(key);
+        });
+      }
+
+      function importBatchGeoBatch() {
+        var ta = prompt('批量导入：每行一个名称/代码/ID，例如：US / JP / 2442047', '');
+        if (!ta) return;
+        ta.split(/\r?\n/).map(function (s) { return s.trim(); }).filter(Boolean).forEach(function (raw) {
+          var hit = TARGET_COUNTRIES.find(function (x) { return x.code === raw || x.name === raw; })
+                 || TARGET_REGIONS.find(function (x)   { return x.id === raw || x.name === raw; })
+                 || TARGET_CITIES.find(function (x)   { return x.id === raw || x.name === raw; });
+          if (hit) {
+            var lvl = TARGET_COUNTRIES.indexOf(hit) >= 0 ? 'country'
+                    : TARGET_REGIONS.indexOf(hit)   >= 0 ? 'region'
+                    : 'city';
+            addBatchTargetGeo(hit.id, hit.name || hit.code, lvl);
+          }
+        });
+      }
+
+      function renderBatchTargetGeoSelected() {
+        var box = document.getElementById('batch-target-geo-selected');
+        var countEl = document.getElementById('batch-target-geo-count');
+        if (countEl) countEl.textContent = batchTargetGeoSelected.length;
+        if (!batchTargetGeoSelected.length) {
+          box.innerHTML = '<div class="empty-state" style="padding:60px 20px;"><div class="empty-state-icon">📍</div><span>暂无数据</span></div>';
+          return;
+        }
+        var html = '<ul class="region-select-list">';
+        batchTargetGeoSelected.forEach(function (s) {
+          var lvlLabel = ({ country: '国家', region: '区域', city: '城市' })[s.level] || s.level;
+          html += '<li><label><span class="region-tag">' + lvlLabel + '</span>' + s.name + '</label><span class="region-select-action" data-rm="' + s.key + '">移除</span></li>';
+        });
+        html += '</ul>';
+        box.innerHTML = html;
+        box.querySelectorAll('[data-rm]').forEach(function (el) {
+          el.onclick = function () { removeBatchTargetGeo(el.dataset.rm); };
+        });
+      }
+
+      function saveBatchTarget() {
+        var name = (document.getElementById('batch-target-name').value || '').trim();
+        if (!name) { alert('请输入定向包名称'); return; }
+        var ageMin = document.getElementById('batch-target-age-min').value;
+        var ageMax = document.getElementById('batch-target-age-max').value;
+        if (ageMin && ageMax && parseInt(ageMin, 10) > parseInt(ageMax, 10)) {
+          alert('最小年龄不能大于最大年龄'); return;
+        }
+        var gender = (document.querySelector('input[name="batch-target-gender"]:checked') || {}).value;
+        var localeIds = batchTargetLocaleMs ? batchTargetLocaleMs.getSelectedIds().map(function (id) { return parseInt(id, 10); }) : [];
+        var geo = { countries: [], regions: [], cities: [] };
+        batchTargetGeoSelected.forEach(function (s) {
+          var key = s.level === 'country' ? 'countries' : s.level === 'region' ? 'regions' : 'cities';
+          geo[key].push(s.id);
+        });
+        var targeting = {};
+        if (gender === '1') targeting.genders = [1];
+        else if (gender === '2') targeting.genders = [2];
+        if (ageMin) targeting.age_min = parseInt(ageMin, 10);
+        if (ageMax) targeting.age_max = parseInt(ageMax, 10);
+        if (localeIds.length) targeting.locales = localeIds;
+        if (geo.countries.length || geo.regions.length || geo.cities.length) {
+          targeting.geo_locations = {};
+          if (geo.countries.length) targeting.geo_locations.countries = geo.countries;
+          if (geo.regions.length)   targeting.geo_locations.regions   = geo.regions.map(function (id) { return { id: id }; });
+          if (geo.cities.length)    targeting.geo_locations.cities    = geo.cities.map(function (id) { return { id: id }; });
+        }
+
+        var list = getTargetingPackages();
+        var exists = list.some(function (p) { return p.name === name; });
+        if (exists) { alert('定向包名称已存在'); return; }
+        var nextId = list.reduce(function (max, p) { return Math.max(max, p.id || 0); }, 0) + 1;
+        list.unshift({
+          id: nextId,
+          name: name,
+          lang: (localeIds.length ? TARGET_LOCALES.find(function (l) { return l.id === localeIds[0]; }) : {}).name || '多语言',
+          creator: (typeof CURRENT_USER !== 'undefined' ? CURRENT_USER : null) || '娜可',
+          createTime: formatNow(),
+          updateTime: formatNow()
+        });
+        setTargetingPackages(list);
+        rerenderTargetingList();
+        closeNewTargetingDrawer();
+        alert('已新增定向包：' + name);
+      }
+
+      function formatNow() {
+        var d = new Date();
+        var pad = function (n) { return n < 10 ? '0' + n : n; };
+        return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
+      }
+
+      function openNewTargetingDrawer() {
+        openModal('new-targeting-overlay', 'new-targeting-drawer');
+        initBatchTargetDrawer();
+      }
+      function closeNewTargetingDrawer() { closeModal('new-targeting-overlay', 'new-targeting-drawer'); }
 
       /* ===== 创意素材 - 编辑抽屉 ===== */
       function openCreativeEditDrawer() { openModal('creative-edit-overlay', 'creative-edit-drawer'); renderCreativeGroups(); }
@@ -3809,6 +3852,38 @@
         closeTitleCopyManualModal();
       }
 
+      /* ===== 定时提交 弹框 ===== */
+      function pad2(n) { return n < 10 ? '0' + n : n; }
+      function formatScheduledTime(dt) {
+        return dt.getFullYear() + '-' + pad2(dt.getMonth() + 1) + '-' + pad2(dt.getDate()) + ' ' + pad2(dt.getHours()) + ':' + pad2(dt.getMinutes()) + ':' + pad2(dt.getSeconds());
+      }
+      function toLocalDatetimeValue(d) {
+        return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate()) + 'T' + pad2(d.getHours()) + ':' + pad2(d.getMinutes());
+      }
+      function openScheduledSubmitModal() {
+        openModal('scheduled-submit-overlay', 'scheduled-submit-modal');
+        var input = document.getElementById('scheduled-submit-time');
+        input.value = '';
+        input.min = toLocalDatetimeValue(new Date());
+      }
+      function closeScheduledSubmitModal() {
+        closeModal('scheduled-submit-overlay', 'scheduled-submit-modal');
+      }
+      function confirmScheduledSubmit() {
+        var input = document.getElementById('scheduled-submit-time');
+        if (!input.value) {
+          alert('请选择提交时间');
+          return;
+        }
+        var dt = new Date(input.value);
+        if (isNaN(dt.getTime())) {
+          alert('请选择提交时间');
+          return;
+        }
+        alert('已设置定时提交：' + formatScheduledTime(dt));
+        closeScheduledSubmitModal();
+      }
+
       /* ===== 遮罩点击关闭弹框（全系统统一） ===== */
       document.addEventListener('click', function (e) {
         var t = e.target;
@@ -3822,9 +3897,20 @@
         }
         if (t.classList.contains('drawer-overlay') || t.classList.contains('modal-overlay') || t.classList.contains('config-modal-overlay')) {
           t.classList.remove('open');
-          document.querySelectorAll('.drawer.open, .modal.open, .config-modal.open').forEach(function (m) { m.classList.remove('open'); });
+          var pairId = '';
+          if (t.classList.contains('drawer-overlay')) {
+            pairId = t.id.replace('-overlay', '-drawer');
+          } else {
+            pairId = t.id.replace('-overlay', '-modal');
+          }
+          var pair = document.getElementById(pairId);
+          if (pair) pair.classList.remove('open');
         }
       });
+    </script>
+  <script>
+      // 页面加载时预渲染「我的定向包」弹框列表（数据来源：localStorage['delivery_targeting_packages']）
+      (function () { rerenderTargetingList(); })();
     </script>
   <script src="../scripts/multi-select.js?v=20260930"></script>
   <script src="../scripts/header-user.js?v=20260924"></script>

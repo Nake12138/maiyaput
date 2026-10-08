@@ -1,0 +1,404 @@
+/* ============================================================
+   海外投放系统 · 蓝色后台主题层（参考【fb投放】空间页面样式）
+   作用域：body.theme-antd —— 只作用于挂载该类的页面
+   阶段：样板页验收用。确认后可直接并入 main.css 全站铺开
+   色值来源：参考页截图逐像素采样，主色按约定统一为 #1890ff
+   ============================================================ */
+
+body.theme-antd {
+  /* 主色（全站统一蓝） */
+  --t-primary: #1890ff;
+  --t-primary-hover: #40a9ff;
+  --t-primary-bg: #e6f7ff;
+  /* 中性色 */
+  --t-page-bg: #f5f7fa;
+  --t-border: #e8e8e8;
+  --t-border-light: #f0f0f0;
+  --t-input-border: #d9d9d9;
+  --t-text: #1f2937;
+  --t-text-secondary: #4b5563;
+  --t-text-muted: #9ca3af;
+  --t-radius: 4px;
+  --t-bar-h: 56px;
+
+  background: var(--t-page-bg);
+  color: var(--t-text);
+  font-size: 13px;
+  letter-spacing: normal;
+}
+
+/* ============ 顶部栏：全宽白底，品牌居左 / 用户居右 ============ */
+body.theme-antd .app-bar {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  height: var(--t-bar-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 20px;
+  background: #fff;
+  border-bottom: 1px solid var(--t-border);
+}
+
+body.theme-antd .app-bar-left,
+body.theme-antd .app-bar-right {
+  display: flex;
+  align-items: center;
+}
+
+body.theme-antd .app-bar-right {
+  gap: 20px;
+  color: var(--t-text-secondary);
+}
+
+body.theme-antd .app-bar .logo {
+  position: static;
+  cursor: default;
+  padding: 0;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: normal;
+}
+
+/* 「切换系统」菜单改挂到顶部栏下沿 */
+body.theme-antd .app-bar .system-switch-menu {
+  left: 20px;
+  top: calc(100% + 2px);
+  border-radius: 6px;
+}
+
+body.theme-antd .app-bar .logo-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: var(--t-primary);
+  font-size: 13px;
+}
+
+body.theme-antd .app-bar .logo-name {
+  font-size: 15px;
+  color: var(--t-text);
+}
+
+body.theme-antd .app-bar .system-switch-trigger {
+  font-size: 11px;
+  color: var(--t-text-muted);
+}
+
+/* ============ 侧栏：随顶栏定位，选中态右侧强调条 ============ */
+body.theme-antd .sidebar {
+  position: sticky;
+  top: var(--t-bar-h);
+  height: calc(100vh - var(--t-bar-h));
+  border-right: 1px solid var(--t-border);
+}
+
+body.theme-antd .nav {
+  padding: 8px 0;
+}
+
+body.theme-antd .nav-item {
+  padding: 9px 16px;
+  font-size: 13px;
+  color: var(--t-text);
+}
+
+body.theme-antd .nav-item:hover {
+  background: var(--t-page-bg);
+}
+
+body.theme-antd .nav-item.active {
+  background: var(--t-primary-bg);
+  color: var(--t-primary);
+  font-weight: 400;
+}
+
+body.theme-antd .nav-item.active::before {
+  left: auto;
+  right: 0;
+  width: 3px;
+  background: var(--t-primary);
+}
+
+body.theme-antd .nav-children,
+body.theme-antd .nav-grandchildren {
+  padding-left: 0;
+}
+
+body.theme-antd .nav-child-item {
+  padding: 8px 16px 8px 36px;
+  font-size: 13px;
+  color: var(--t-text-secondary);
+}
+
+body.theme-antd .nav-grandchild-item {
+  padding: 7px 16px 7px 52px;
+  font-size: 12.5px;
+  color: var(--t-text-muted);
+}
+
+body.theme-antd .nav-child-item.active {
+  background: var(--t-primary-bg);
+  color: var(--t-primary);
+  font-weight: 500;
+}
+
+body.theme-antd .nav-grandchild-item.active {
+  background: var(--t-primary-bg);
+  color: var(--t-primary);
+  font-weight: 400;
+}
+
+/* 展开箭头由脚本切换字形，取消 CSS 二次旋转 */
+body.theme-antd .nav-item.expanded .nav-item-caret,
+body.theme-antd .nav-child-item.expanded .nav-child-caret {
+  transform: none;
+}
+
+/* ============ 内容区：灰底 + 白色内容卡片 ============ */
+body.theme-antd .content {
+  padding: 16px 20px;
+}
+
+body.theme-antd .breadcrumb {
+  font-size: 12px;
+  color: var(--t-text-muted);
+  margin-bottom: 12px;
+}
+
+body.theme-antd .breadcrumb a {
+  color: var(--t-text-muted);
+}
+
+body.theme-antd .breadcrumb a:hover {
+  color: var(--t-primary);
+}
+
+body.theme-antd .page-header {
+  margin-bottom: 12px;
+}
+
+/* 卡片内首个元素为筛选行 / 页头 / 看板卡 / 分栏容器时，补足卡片上内边距 */
+body.theme-antd .content-card > .filter-bar:first-child,
+body.theme-antd .content-card > .page-header:first-child,
+body.theme-antd .content-card > .stats-grid:first-child,
+body.theme-antd .content-card > .bc-layout:first-child {
+  padding-top: 16px;
+}
+
+body.theme-antd .page-title {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: normal;
+  color: var(--t-text);
+}
+
+body.theme-antd .content-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  padding: 0 20px 20px;
+}
+
+/* ============ 页签 ============ */
+body.theme-antd .tabs {
+  gap: 32px;
+  border-bottom: 1px solid var(--t-border);
+  margin-bottom: 16px;
+  padding-top: 4px;
+}
+
+/* 页签栏：页签与右侧操作（如「用户使用手册」）同处一行，下边框整行贯通 */
+body.theme-antd .tabs-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-bottom: 1px solid var(--t-border);
+  margin-bottom: 16px;
+  padding-top: 4px;
+}
+
+body.theme-antd .tabs-bar .tabs {
+  flex: 1 1 auto;
+  min-width: 0;
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-top: 0;
+}
+
+/* 操作文案与页签文字同一基线观感：字阶、行高对齐页签 */
+body.theme-antd .tabs-bar .page-manual-link {
+  flex: 0 0 auto;
+  font-size: 13px;
+  line-height: 20px;
+  white-space: nowrap;
+}
+
+body.theme-antd .tab {
+  padding: 14px 0 12px;
+  font-size: 13px;
+  color: var(--t-text-secondary);
+}
+
+body.theme-antd .tab:hover,
+body.theme-antd .tab.active {
+  color: var(--t-primary);
+}
+
+body.theme-antd .tab.active::after {
+  background: var(--t-primary);
+}
+
+/* ============ 筛选行：卡片内不再套一层盒子 ============ */
+body.theme-antd .filter-bar {
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  margin-bottom: 16px;
+}
+
+body.theme-antd .filter-bar-row {
+  gap: 12px;
+}
+
+/* 回调地址 + 新增：并入筛选行右侧，紧随「重置」按钮之后 */
+body.theme-antd .filter-callback {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+body.theme-antd .filter-callback-label {
+  font-size: 13px;
+  color: var(--t-text-secondary);
+  white-space: nowrap;
+}
+
+body.theme-antd .filter-input,
+body.theme-antd .filter-select {
+  height: 32px;
+  border-color: var(--t-input-border);
+  border-radius: var(--t-radius);
+}
+
+body.theme-antd .filter-input:focus,
+body.theme-antd .filter-select:focus {
+  border-color: var(--t-primary);
+}
+
+/* ============ 按钮：方角 + 蓝色主按钮 ============ */
+body.theme-antd .btn {
+  border-radius: var(--t-radius);
+  font-weight: 400;
+}
+
+body.theme-antd .btn-primary {
+  background: var(--t-primary);
+  color: #fff;
+}
+
+body.theme-antd .btn-primary:hover {
+  background: var(--t-primary-hover);
+  color: #fff;
+}
+
+body.theme-antd .btn-outline {
+  border-color: var(--t-input-border);
+  background: #fff;
+  color: var(--t-text-secondary);
+}
+
+body.theme-antd .btn-outline:hover {
+  border-color: var(--t-primary);
+  color: var(--t-primary);
+}
+
+body.theme-antd .btn-sm {
+  height: 30px;
+  padding: 0 15px;
+  font-size: 13px;
+}
+
+body.theme-antd .btn-text {
+  color: var(--t-primary);
+}
+
+/* ============ 表格 ============ */
+body.theme-antd .table-card {
+  border: none;
+  border-radius: 0;
+}
+
+body.theme-antd .data-table thead th {
+  padding: 12px;
+  font-weight: 600;
+  color: #374151;
+  border-bottom: 1px solid var(--t-border);
+}
+
+body.theme-antd .data-table tbody td {
+  padding: 12px;
+  color: #374151;
+  border-bottom: 1px solid var(--t-border-light);
+}
+
+body.theme-antd .data-table tbody tr:hover {
+  background: var(--t-page-bg);
+}
+
+body.theme-antd .link {
+  color: var(--t-primary);
+}
+
+/* ---- 操作列统一形态：文字链接 + 删除红色 ----
+   注意：body.theme-antd .link 特异性为 (0,2,1)，
+   会反超 .link.link-danger (0,2,0)，必须在此提升优先级。 */
+body.theme-antd .row-action-btn,
+body.theme-antd .inline-link {
+  color: var(--t-primary);
+}
+
+body.theme-antd .link-danger,
+body.theme-antd a.link.link-danger,
+body.theme-antd .row-action-btn.danger,
+body.theme-antd .inline-link.danger {
+  color: var(--color-error, #ff4d4f);
+}
+
+body.theme-antd .row-action-btn.danger:hover,
+body.theme-antd .inline-link.danger:hover,
+body.theme-antd a.link.link-danger:hover {
+  color: #ff7875;
+}
+
+/* ============ 分页 ============ */
+body.theme-antd .pagination {
+  padding: 16px 0 0;
+}
+
+body.theme-antd .page-btn,
+body.theme-antd .page-size-select,
+body.theme-antd .jump-input {
+  height: 28px;
+  border-radius: var(--t-radius);
+  font-size: 13px;
+}
+
+body.theme-antd .page-btn {
+  min-width: 28px;
+}
+
+body.theme-antd .page-btn:hover {
+  border-color: var(--t-primary);
+  color: var(--t-primary);
+}
+
+body.theme-antd .page-btn.active {
+  background: var(--t-primary);
+  border-color: var(--t-primary);
+  color: #fff;
+}
