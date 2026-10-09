@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>自动化任务 · FaceBook - 海外投放系统</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="../styles/main.css?v=20261008b" />
-    <link rel="stylesheet" href="../styles/theme-antd.css?v=20261008b" />
-    <link rel="stylesheet" href="../styles/multi-select.css?v=20261008b" />
+    <link rel="stylesheet" href="../styles/main.css?v=20261009a" />
+    <link rel="stylesheet" href="../styles/theme-antd.css?v=20261009a" />
+    <link rel="stylesheet" href="../styles/multi-select.css?v=20261009a" />
   </head>
   <body class="theme-antd">
         <!-- Top Bar（全宽：品牌 + 用户） -->
@@ -273,11 +273,11 @@
               <!-- Filter Bar -->
               <div class="filter-bar">
                 <div class="filter-combo" data-filter-type="task-name">
-                  <select class="filter-combo-select" onchange="updateTaskSearchPlaceholder(this)">
+                  <select class="filter-combo-select">
                     <option value="name">任务名称</option>
                     <option value="id">任务ID</option>
                   </select>
-                  <input type="text" class="filter-combo-input" placeholder="请输入任务名称" />
+                  <input type="text" class="filter-combo-input" placeholder="请输入" />
                 </div>
                 <select class="filter-select">
                   <option value="">请选择状态</option>
@@ -456,14 +456,14 @@
                     <option>剧本名称</option>
                     <option>剧本ID</option>
                   </select>
-                  <input type="text" class="filter-combo-input" placeholder="请选择剧本名称" />
+                  <input type="text" class="filter-combo-input" placeholder="请输入" />
                 </div>
                 <div class="filter-combo">
                   <select class="filter-combo-select">
                     <option>短剧名称</option>
                     <option>短剧ID</option>
                   </select>
-                  <input type="text" class="filter-combo-input" placeholder="请选择短剧名称" />
+                  <input type="text" class="filter-combo-input" placeholder="请输入" />
                 </div>
                 <select class="filter-select">
                   <option>请选择语言</option>
@@ -625,14 +625,14 @@
                     <option>剧本名称</option>
                     <option>剧本ID</option>
                   </select>
-                  <input type="text" class="filter-combo-input" placeholder="请输入剧本..." />
+                  <input type="text" class="filter-combo-input" placeholder="请输入" />
                 </div>
                 <div class="filter-combo">
                   <select class="filter-combo-select">
                     <option>短剧名称</option>
                     <option>短剧ID</option>
                   </select>
-                  <input type="text" class="filter-combo-input" placeholder="请选择短剧名称" />
+                  <input type="text" class="filter-combo-input" placeholder="请输入" />
                 </div>
                 <select class="filter-select">
                   <option>请选择语言</option>
@@ -800,14 +800,14 @@
                     <option>剧本名称</option>
                     <option>剧本ID</option>
                   </select>
-                  <input type="text" class="filter-combo-input" placeholder="请输入剧本..." />
+                  <input type="text" class="filter-combo-input" placeholder="请输入" />
                 </div>
                 <div class="filter-combo">
                   <select class="filter-combo-select">
                     <option>短剧名称</option>
                     <option>短剧ID</option>
                   </select>
-                  <input type="text" class="filter-combo-input" placeholder="请选择短剧名称" />
+                  <input type="text" class="filter-combo-input" placeholder="请输入" />
                 </div>
                 <select class="filter-select">
                   <option>请选择语言</option>
@@ -982,14 +982,14 @@
                     <option>剧本名称</option>
                     <option>剧本ID</option>
                   </select>
-                  <input type="text" class="filter-combo-input" placeholder="请输入剧本..." />
+                  <input type="text" class="filter-combo-input" placeholder="请输入" />
                 </div>
                 <div class="filter-combo">
                   <select class="filter-combo-select">
                     <option>短剧名称</option>
                     <option>短剧ID</option>
                   </select>
-                  <input type="text" class="filter-combo-input" placeholder="请选择短剧名称" />
+                  <input type="text" class="filter-combo-input" placeholder="请输入" />
                 </div>
                 <select class="filter-select">
                   <option>请选择语言</option>
@@ -2278,11 +2278,8 @@
         root.querySelectorAll('.filter-combo-input').forEach(function (i) { i.value = ''; });
       }
 
-      function updateTaskSearchPlaceholder(select) {
-        var input = select.parentElement.querySelector('.filter-combo-input');
-        if (!input) return;
-        input.placeholder = select.value === 'id' ? '请输入任务ID' : '请输入任务名称';
-      }
+      /* 占位文案全站统一为「请输入」，不再随所选项变化 */
+      function updateTaskSearchPlaceholder() {}
 
       function searchOverseasAutoDelivery(tabKey) {
         tabKey = tabKey || 'task';

@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>模板管理 · FaceBook - 海外投放系统</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="../styles/main.css?v=20261008b" />
-    <link rel="stylesheet" href="../styles/theme-antd.css?v=20261008b" />
-    <link rel="stylesheet" href="../styles/multi-select.css?v=20261008b" />
+    <link rel="stylesheet" href="../styles/main.css?v=20261009a" />
+    <link rel="stylesheet" href="../styles/theme-antd.css?v=20261009a" />
+    <link rel="stylesheet" href="../styles/multi-select.css?v=20261009a" />
   </head>
   <body class="theme-antd">
     <!-- Top Bar（全宽：品牌 + 用户） -->
@@ -267,7 +267,10 @@
   <div id="template-tab-account" class="template-tab-panel" style="display:none;">
     <div class="filter-bar">
       <div class="filter-bar-row">
-        <input type="text" class="filter-input" placeholder="请输入账户包名称/ID" />
+        <div class="filter-combo">
+          <select class="filter-combo-select"><option>账户包名称</option><option>账户包ID</option></select>
+          <input type="text" class="filter-combo-input" placeholder="请输入" />
+        </div>
         <select class="filter-select"><option>请选择创建人</option><option>听泉</option><option>魔法七</option><option>橙子</option><option>孤树</option></select>
         <div class="filter-actions">
           <button class="btn btn-primary btn-sm" onclick="searchTemplate('account')">查询</button>
@@ -527,8 +530,10 @@
             <div class="form-field" style="flex:1;">
               <div style="display:flex;gap:8px;margin-bottom:12px;">
                 <button type="button" class="btn btn-info btn-sm" onclick="openBatchAddModal()">批量添加</button>
-                <select class="form-select" style="width:120px;"><option>账户名称</option><option>账户ID</option></select>
-                <input type="text" class="form-input" placeholder="请输入" style="flex:1;" />
+                <div class="filter-combo" style="flex:1;">
+                  <select class="filter-combo-select"><option>账户名称</option><option>账户ID</option></select>
+                  <input type="text" class="filter-combo-input" placeholder="请输入" />
+                </div>
                 <button type="button" class="btn btn-outline btn-sm">搜索</button>
               </div>
               <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">

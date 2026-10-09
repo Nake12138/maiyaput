@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>批量投放 · FaceBook - 海外投放系统</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="../styles/main.css?v=20261008b" />
-    <link rel="stylesheet" href="../styles/theme-antd.css?v=20261008b" />
-    <link rel="stylesheet" href="../styles/multi-select.css?v=20261008b" />
+    <link rel="stylesheet" href="../styles/main.css?v=20261009a" />
+    <link rel="stylesheet" href="../styles/theme-antd.css?v=20261009a" />
+    <link rel="stylesheet" href="../styles/multi-select.css?v=20261009a" />
     <style>
       /* 配置区弹窗覆盖 */
       .config-modal-card {
@@ -966,14 +966,14 @@
                 <button type="button" class="filter-range-pick" title="按月选择">月</button>
               </div>
               <div class="filter-combo">
-                <select class="filter-combo-select" onchange="updateFilterComboPlaceholder(this)">
+                <select class="filter-combo-select">
                   <option value="name">任务名称</option>
                   <option value="id">任务ID</option>
                 </select>
                 <input type="text" class="filter-combo-input" placeholder="请输入" />
               </div>
               <div class="filter-combo">
-                <select class="filter-combo-select" onchange="updateFilterComboPlaceholder(this)">
+                <select class="filter-combo-select">
                   <option value="name">账户名称</option>
                   <option value="id">账户ID</option>
                 </select>
@@ -1584,11 +1584,13 @@
         </div>
         <div class="modal-body">
           <div class="modal-filter">
-            <select id="account-filter-type" class="form-select form-input-sm" onchange="updateAccountFilterPlaceholder()">
-              <option value="id">账户ID</option>
-              <option value="name">账户名称</option>
-            </select>
-            <input id="account-filter-keyword" type="text" class="form-input" placeholder="请输入账户ID查询" style="width: 240px;" />
+            <div class="filter-combo" style="width:320px;">
+              <select id="account-filter-type" class="filter-combo-select">
+                <option value="id">账户ID</option>
+                <option value="name">账户名称</option>
+              </select>
+              <input id="account-filter-keyword" type="text" class="filter-combo-input" placeholder="请输入" />
+            </div>
             <button class="btn btn-info btn-sm" onclick="searchAccount()">搜索</button>
             <button class="btn btn-outline btn-sm" onclick="resetAccountFilter()">重置</button>
             <button class="btn btn-outline btn-sm" onclick="openAccountBatchSearchModal()">批量搜索</button>
@@ -2649,12 +2651,8 @@
       });
 
       /* ===== 通用：组合控件 placeholder 切换 ===== */
-      function updateFilterComboPlaceholder(select) {
-        var input = select.parentElement.querySelector('.filter-combo-input');
-        if (!input) return;
-        var optionText = select.options[select.selectedIndex].text;
-        input.placeholder = select.value === 'id' ? '请输入' + optionText : '请输入';
-      }
+      /* 占位文案全站统一为「请输入」，不再随所选项变化 */
+      function updateFilterComboPlaceholder() {}
 
       /* ===== 筛选：查询/重置 ===== */
       function searchBatchDelivery() {
@@ -2793,11 +2791,8 @@
       }
       function closeAccountSelectModal() { closeModal('account-select-overlay', 'account-select-modal'); }
 
-      function updateAccountFilterPlaceholder() {
-        var type = document.getElementById('account-filter-type').value;
-        var input = document.getElementById('account-filter-keyword');
-        input.placeholder = type === 'id' ? '请输入账户ID查询' : '请输入账户名称查询';
-      }
+      /* 占位文案全站统一为「请输入」，不再随所选项变化 */
+      function updateAccountFilterPlaceholder() {}
 
       function filterAccountData(keyword, type) {
         var k = (keyword || '').trim();

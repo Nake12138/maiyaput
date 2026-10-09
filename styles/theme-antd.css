@@ -290,6 +290,32 @@ body.theme-antd .filter-select:focus {
   border-color: var(--t-primary);
 }
 
+/* 名称/ID 组合筛选框：下拉选类型 + 输入，同一个外壳。
+   全站名称/ID 类筛选项统一使用该组件（参考「关联绑定」页账户名称/ID）。 */
+body.theme-antd .filter-combo {
+  height: 32px;
+  border-color: var(--t-input-border);
+  border-radius: var(--t-radius);
+  background: var(--color-white);
+}
+
+body.theme-antd .filter-combo:focus-within {
+  border-color: var(--t-primary);
+}
+
+body.theme-antd .filter-combo-select {
+  border-right-color: var(--t-border);
+  color: var(--t-text);
+}
+
+body.theme-antd .filter-combo-input {
+  color: var(--t-text);
+}
+
+body.theme-antd .filter-combo-input::placeholder {
+  color: var(--t-text-muted);
+}
+
 /* ============ 按钮：方角 + 蓝色主按钮 ============ */
 body.theme-antd .btn {
   border-radius: var(--t-radius);

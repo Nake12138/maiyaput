@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>应用 · FaceBook - 海外投放系统</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="../styles/main.css?v=20261008b" />
-    <link rel="stylesheet" href="../styles/theme-antd.css?v=20261008b" />
+    <link rel="stylesheet" href="../styles/main.css?v=20261009a" />
+    <link rel="stylesheet" href="../styles/theme-antd.css?v=20261009a" />
     <style>
       /* 回调地址：双击复制交互 */
       .callback-url {
@@ -294,7 +294,7 @@
                     <option>APPID</option>
                     <option>ID</option>
                   </select>
-                  <input type="text" class="filter-combo-input" id="app-search-input" placeholder="请输入应用名" oninput="searchApps()" />
+                  <input type="text" class="filter-combo-input" id="app-search-input" placeholder="请输入" oninput="searchApps()" />
                 </div>
                 <div class="filter-actions">
                   <button class="btn btn-primary btn-sm" onclick="searchApps()">查询</button>
@@ -545,7 +545,7 @@
                     <div class="filter-bar-row">
                       <div class="filter-combo" style="min-width:220px;">
                         <select class="filter-combo-select" id="ad-detail-search-type" onchange="updateAdDetailSearchPlaceholder()"><option>账户ID</option><option>账户名称</option></select>
-                        <input type="text" class="filter-combo-input" id="ad-detail-search-input" placeholder="请输入账户ID" oninput="searchAdAccountDetail()" />
+                        <input type="text" class="filter-combo-input" id="ad-detail-search-input" placeholder="请输入" oninput="searchAdAccountDetail()" />
                       </div>
                       <select class="filter-select"><option>同步消耗状态</option><option>开启</option><option>关闭</option></select>
                       <select class="filter-select"><option>所属用户</option></select>
@@ -1052,10 +1052,8 @@
           r.style.display = col.textContent.toLowerCase().indexOf(kw) > -1 ? '' : 'none';
         });
       }
-      function updateAdDetailSearchPlaceholder() {
-        var t = document.getElementById('ad-detail-search-type').value;
-        document.getElementById('ad-detail-search-input').placeholder = (t === '账户名称') ? '请输入账户名称（模糊查询）' : '请输入账户ID';
-      }
+      /* 占位文案全站统一为「请输入」，不再随所选项变化 */
+      function updateAdDetailSearchPlaceholder() {}
       function resetAdAccountDetailFilters() {
         document.querySelectorAll('#ad-account-detail-drawer .filter-combo-input').forEach(function (i) { i.value = ''; });
         document.querySelectorAll('#ad-account-detail-drawer .filter-select, #ad-account-detail-drawer .filter-combo-select').forEach(function (s) { s.selectedIndex = 0; });
