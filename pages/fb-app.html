@@ -7,6 +7,37 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="../styles/main.css?v=20261008b" />
     <link rel="stylesheet" href="../styles/theme-antd.css?v=20261008b" />
+    <style>
+      /* 回调地址：双击复制交互 */
+      .callback-url {
+        cursor: pointer;
+        user-select: all;
+        color: #1890ff;
+        border-bottom: 1px dashed transparent;
+        transition: border-color .15s, background-color .15s;
+        padding: 0 2px;
+        border-radius: 2px;
+      }
+      .callback-url:hover {
+        border-bottom-color: #1890ff;
+        background-color: rgba(24, 144, 255, .06);
+      }
+      .callback-copy-toast {
+        display: inline-block;
+        margin-left: 8px;
+        padding: 1px 8px;
+        font-size: 12px;
+        color: #fff;
+        background: #52c41a;
+        border-radius: 3px;
+        opacity: 0;
+        transform: translateY(-2px);
+        transition: opacity .15s, transform .15s;
+        pointer-events: none;
+      }
+      .callback-copy-toast.show { opacity: 1; transform: translateY(0); }
+      .callback-copy-toast.fail { background: #ff4d4f; }
+    </style>
   </head>
   <body class="theme-antd">
         <!-- Top Bar（全宽：品牌 + 用户） -->
@@ -258,8 +289,12 @@
             <div class="filter-bar">
               <div class="filter-bar-row">
                 <div class="filter-combo" style="min-width:260px;">
-                  <select class="filter-combo-select"><option>应用名</option></select>
-                  <input type="text" class="filter-combo-input" placeholder="请输入应用名" />
+                  <select class="filter-combo-select" id="app-search-type" onchange="updateAppSearchPlaceholder()">
+                    <option>应用名</option>
+                    <option>APPID</option>
+                    <option>ID</option>
+                  </select>
+                  <input type="text" class="filter-combo-input" id="app-search-input" placeholder="请输入应用名" oninput="searchApps()" />
                 </div>
                 <div class="filter-actions">
                   <button class="btn btn-primary btn-sm" onclick="searchApps()">查询</button>
@@ -267,7 +302,8 @@
                 </div>
                 <div class="filter-callback">
                   <button class="btn btn-primary btn-sm" onclick="openAppEditModal('新增应用')">新增</button>
-                  <span class="filter-callback-label">回调地址：https://overseaput.test.maiyaput.com/api/put/facebook/callback</span>
+                  <span class="filter-callback-label">回调地址：<span id="callback-url" class="callback-url" title="双击复制" ondblclick="copyCallbackUrl()">https://overseaput.test.maiyaput.com/api/put/facebook/callback</span></span>
+                  <span id="callback-copy-toast" class="callback-copy-toast" aria-live="polite"></span>
                 </div>
               </div>
             </div>
@@ -458,20 +494,6 @@
                   <button class="drawer-close" onclick="closeAppDetailDrawer()">×</button>
                 </div>
                 <div class="drawer-body">
-                  <div class="filter-bar" style="padding:12px;margin-bottom:12px;">
-                    <div class="filter-bar-row">
-                      <div class="filter-combo" style="min-width:220px;">
-                        <select class="filter-combo-select"><option>用户ID</option></select>
-                        <input type="text" class="filter-combo-input" placeholder="请输入用户ID" />
-                      </div>
-                      <select class="filter-select"><option>授权状态</option><option>有效</option><option>无效</option></select>
-                      <select class="filter-select"><option>同步消耗状态</option><option>开启</option><option>关闭</option></select>
-                      <div class="filter-actions">
-                        <button class="btn btn-primary btn-sm" onclick="searchAppAccounts()">查询</button>
-                        <button class="btn btn-outline btn-sm" onclick="resetAppAccountFilters()">重置</button>
-                      </div>
-                    </div>
-                  </div>
                   <div class="table-card" style="border-radius:4px;">
                     <div class="table-wrapper">
                       <table class="data-table">
@@ -523,7 +545,7 @@
                     <div class="filter-bar-row">
                       <div class="filter-combo" style="min-width:220px;">
                         <select class="filter-combo-select" id="ad-detail-search-type" onchange="updateAdDetailSearchPlaceholder()"><option>账户ID</option><option>账户名称</option></select>
-                        <input type="text" class="filter-combo-input" id="ad-detail-search-input" placeholder="请输入账户ID" />
+                        <input type="text" class="filter-combo-input" id="ad-detail-search-input" placeholder="请输入账户ID" oninput="searchAdAccountDetail()" />
                       </div>
                       <select class="filter-select"><option>同步消耗状态</option><option>开启</option><option>关闭</option></select>
                       <select class="filter-select"><option>所属用户</option></select>
@@ -859,7 +881,65 @@
       });
 
       /* ===== 应用列表筛选 ===== */
-      function searchApps() { alert('查询应用列表'); }
+      function searchApps() {
+        var type = document.getElementById('app-search-type').value;
+        var kw = document.getElementById('app-search-input').value.trim().toLowerCase();
+        var rows = document.querySelectorAll('#page-overseas-app .data-table tbody tr');
+        if (!kw) {
+          rows.forEach(function (r) { r.style.display = ''; });
+          return;
+        }
+        // ID(0) / APPID(1) / 应用名(2) 均按包含匹配（模糊查询）
+        var colMap = { 'ID': 0, 'APPID': 1, '应用名': 2 };
+        var col = colMap[type];
+        rows.forEach(function (r) {
+          r.style.display = r.cells[col].textContent.toLowerCase().indexOf(kw) > -1 ? '' : 'none';
+        });
+      }
+      function updateAppSearchPlaceholder() {
+        var t = document.getElementById('app-search-type').value;
+        document.getElementById('app-search-input').placeholder = (t === '应用名') ? '请输入应用名' : '请输入' + t;
+        searchApps();
+      }
+
+      /* ===== 回调地址：双击复制 ===== */
+      function showCallbackToast(msg, ok) {
+        var t = document.getElementById('callback-copy-toast');
+        if (!t) return;
+        t.textContent = msg;
+        t.classList.toggle('fail', !ok);
+        t.classList.add('show');
+        clearTimeout(t._timer);
+        t._timer = setTimeout(function () { t.classList.remove('show'); }, 1500);
+      }
+      function copyCallbackUrl() {
+        var el = document.getElementById('callback-url');
+        if (!el) return;
+        var text = el.textContent.trim();
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(
+            function () { showCallbackToast('已复制到剪贴板', true); },
+            function () { fallbackCopy(text); }
+          );
+        } else {
+          fallbackCopy(text);
+        }
+      }
+      function fallbackCopy(text) {
+        try {
+          var ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.left = '-9999px';
+          document.body.appendChild(ta);
+          ta.select();
+          var ok = document.execCommand('copy');
+          document.body.removeChild(ta);
+          showCallbackToast(ok ? '已复制到剪贴板' : '复制失败，请手动复制', ok);
+        } catch (e) {
+          showCallbackToast('复制失败，请手动复制', false);
+        }
+      }
 
       /* ===== FB 应用授权：拼 OAuth 地址并新窗口打开 ===== */
       function openFbAppAuth(appid, recordId) {
@@ -876,6 +956,8 @@
       function resetAppFilters() {
         document.querySelectorAll('#page-overseas-app .filter-combo-input').forEach(function (i) { i.value = ''; });
         document.querySelectorAll('#page-overseas-app .filter-combo-select').forEach(function (s) { s.selectedIndex = 0; });
+        searchApps();
+        updateAppSearchPlaceholder();
       }
 
       /* ===== 新增/编辑应用弹框 ===== */
@@ -933,11 +1015,6 @@
       function closeAppDetailDrawer() {
         document.getElementById('app-detail-overlay').classList.remove('open');
         document.getElementById('app-detail-drawer').classList.remove('open');
-      }
-      function searchAppAccounts() { alert('查询广告账户'); }
-      function resetAppAccountFilters() {
-        document.querySelectorAll('#app-detail-drawer .filter-combo-input').forEach(function (i) { i.value = ''; });
-        document.querySelectorAll('#app-detail-drawer .filter-select, #app-detail-drawer .filter-combo-select').forEach(function (s) { s.selectedIndex = 0; });
       }
 
       /* ===== 广告账户详情抽屉 ===== */
