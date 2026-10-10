@@ -43,6 +43,24 @@
       .input-clear-btn { position: absolute; right: 9px; top: 14px; transform: translateY(-50%); width: 15px; height: 15px; border: none; border-radius: 50%; background: #c9cdd4; color: #fff; font-size: 11px; line-height: 15px; text-align: center; padding: 0; cursor: pointer; display: none; }
       .input-clear-btn:hover { background: #a9aeb8; }
       .form-field { flex: 1; min-width: 0; }
+      /* ===== 平台锁定：编辑「织光」数据时仅允许改备注 ===== */
+      #asset-app-edit-modal .platform-lock-tip {
+        display: none; align-items: center; gap: 6px;
+        margin: -4px 0 16px; padding: 8px 10px;
+        background: #fffbe6; border: 1px solid #ffe58f; border-radius: 4px;
+        font-size: 12px; color: #ad6800; line-height: 1.5;
+      }
+      #asset-app-edit-modal.is-platform-locked .platform-lock-tip { display: flex; }
+      #asset-app-edit-modal .form-item.locked .form-label { color: #9ca3af; }
+      #asset-app-edit-modal .form-item.locked .form-label.required::before { color: #c9cdd4; }
+      #asset-app-edit-modal .form-input:disabled,
+      #asset-app-edit-modal .form-select:disabled {
+        background: #f5f6f7; color: #9ca3af; cursor: not-allowed;
+        border-color: #e5e6eb; -webkit-text-fill-color: #9ca3af; opacity: 1;
+      }
+      #asset-app-edit-modal .form-radio input[type="radio"]:disabled { cursor: not-allowed; }
+      #asset-app-edit-modal .form-radio input[type="radio"]:disabled + span { color: #9ca3af; }
+      #asset-app-edit-modal .form-select option:disabled { color: #c9cdd4; }
     </style>
   </head>
   <body class="theme-antd">
@@ -539,18 +557,21 @@
                   <button class="modal-close" onclick="closeAssetAppModal()">×</button>
                 </div>
                 <div class="modal-body">
-                  <div class="form-item">
+                  <div class="platform-lock-tip">
+                    <span>该数据为「织光」平台创建，仅支持编辑备注</span>
+                  </div>
+                  <div class="form-item" data-field="platform">
                     <label class="form-label required">平台</label>
                     <div class="form-field">
                       <select class="form-select" id="asset-app-platform">
                         <option value="">请选择</option>
-                        <option value="织光">织光</option>
+                        <option value="织光" disabled>织光</option>
                         <option value="司南">司南</option>
                       </select>
                       <div class="form-error-msg">请选择平台</div>
                     </div>
                   </div>
-                  <div class="form-item">
+                  <div class="form-item" data-field="payType">
                     <label class="form-label required">付费类型</label>
                     <div class="form-field">
                       <div class="form-radio-group" id="asset-app-pay-type">
@@ -560,7 +581,7 @@
                       <div class="form-error-msg">请选择付费类型</div>
                     </div>
                   </div>
-                  <div class="form-item">
+                  <div class="form-item" data-field="name">
                     <label class="form-label required">名称</label>
                     <div class="form-field">
                       <div class="input-clearable">
@@ -570,7 +591,7 @@
                       <div class="form-error-msg">请输入名称</div>
                     </div>
                   </div>
-                  <div class="form-item">
+                  <div class="form-item" data-field="distId">
                     <label class="form-label required">分销平台ID</label>
                     <div class="form-field">
                       <div class="input-clearable">
@@ -580,7 +601,7 @@
                       <div class="form-error-msg">请输入分销平台ID</div>
                     </div>
                   </div>
-                  <div class="form-item" data-tab-field="小程序">
+                  <div class="form-item" data-field="minisId" data-tab-field="小程序">
                     <label class="form-label">minisId</label>
                     <div class="form-field">
                       <div class="input-clearable">
@@ -589,7 +610,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="form-item" data-tab-field="APP">
+                  <div class="form-item" data-field="pixel" data-tab-field="APP">
                     <label class="form-label required">Pixel 名称</label>
                     <div class="form-field">
                       <select class="form-select" id="asset-app-pixel">
@@ -601,7 +622,7 @@
                       <div class="form-error-msg">请选择Pixel 名称</div>
                     </div>
                   </div>
-                  <div class="form-item" style="margin-bottom:8px;">
+                  <div class="form-item" data-field="remark" style="margin-bottom:8px;">
                     <label class="form-label">备注</label>
                     <div class="form-field">
                       <input type="text" class="form-input" id="asset-app-remark" placeholder="请输入" />
@@ -884,6 +905,47 @@
         });
       }
 
+      /* ===== 平台锁定：编辑「织光」数据时仅允许编辑备注 ===== */
+      var PLATFORM_LOCKED = '织光';
+
+      function isPlatformLocked() {
+        var modal = document.getElementById('asset-app-edit-modal');
+        return !!modal && modal.classList.contains('is-platform-locked');
+      }
+
+      /* 程序化赋值：走 selectedIndex，不受 option disabled 影响 */
+      function setSelectByValue(id, value) {
+        var sel = document.getElementById(id);
+        if (!sel) return;
+        var idx = 0;
+        for (var i = 0; i < sel.options.length; i++) {
+          if (sel.options[i].value === value) { idx = i; break; }
+        }
+        sel.selectedIndex = idx;
+      }
+
+      /* platformValue 传 '' 表示解锁（新建 / 编辑非织光数据） */
+      function applyPlatformLock(platformValue) {
+        var modal = document.getElementById('asset-app-edit-modal');
+        var locked = platformValue === PLATFORM_LOCKED;
+        modal.classList.toggle('is-platform-locked', locked);
+        modal.querySelectorAll('.form-item[data-field]').forEach(function (item) {
+          var isRemark = item.getAttribute('data-field') === 'remark';
+          var lockThis = locked && !isRemark;
+          item.classList.toggle('locked', lockThis);
+          item.querySelectorAll('.form-input, .form-select, input[type="radio"]').forEach(function (el) {
+            el.disabled = lockThis;
+          });
+          if (lockThis) {
+            item.classList.remove('has-error');
+            var btn = item.querySelector('.input-clear-btn');
+            if (btn) btn.style.display = 'none';
+          }
+        });
+        var platformSel = document.getElementById('asset-app-platform');
+        if (platformSel) platformSel.disabled = locked;
+      }
+
       function openAssetAppModal() {
         editingAssetAppRow = null;
         document.getElementById('asset-app-edit-title').textContent = '新建' + currentAppType;
@@ -895,6 +957,7 @@
         document.getElementById('asset-app-pixel').selectedIndex = 0;
         document.getElementById('asset-app-remark').value = '';
         document.querySelectorAll('#asset-app-edit-modal .form-item.has-error').forEach(function (i) { i.classList.remove('has-error'); });
+        applyPlatformLock('');
         syncInputClearBtns();
         document.getElementById('asset-app-edit-overlay').classList.add('open');
         document.getElementById('asset-app-edit-modal').classList.add('open');
@@ -908,8 +971,7 @@
         }
         editingAssetAppRow = row;
         document.getElementById('asset-app-edit-title').textContent = '编辑' + (rowType || currentAppType);
-        document.getElementById('asset-app-platform').value = row.getAttribute('data-platform') || '';
-        if (document.getElementById('asset-app-platform').selectedIndex === -1) document.getElementById('asset-app-platform').selectedIndex = 0;
+        setSelectByValue('asset-app-platform', row.getAttribute('data-platform') || '');
         setRadioValue('asset-app-pay-type', row.getAttribute('data-pay-type') || '');
         document.getElementById('asset-app-name').value = row.getAttribute('data-name') || '';
         document.getElementById('asset-app-dist-id').value = row.getAttribute('data-dist-id') || '';
@@ -918,6 +980,7 @@
         if (document.getElementById('asset-app-pixel').selectedIndex === -1) document.getElementById('asset-app-pixel').selectedIndex = 0;
         document.getElementById('asset-app-remark').value = row.getAttribute('data-remark') || '';
         document.querySelectorAll('#asset-app-edit-modal .form-item.has-error').forEach(function (i) { i.classList.remove('has-error'); });
+        applyPlatformLock(row.getAttribute('data-platform') || '');
         syncInputClearBtns();
         document.getElementById('asset-app-edit-overlay').classList.add('open');
         document.getElementById('asset-app-edit-modal').classList.add('open');
@@ -928,12 +991,12 @@
         document.getElementById('asset-app-edit-modal').classList.remove('open');
       }
 
-      /* 清空按钮：输入框有值时显示 ×，点击清空 */
+      /* 清空按钮：输入框有值且未禁用时显示 ×，点击清空 */
       function syncInputClearBtns() {
         document.querySelectorAll('#asset-app-edit-modal .input-clearable').forEach(function (wrap) {
           var input = wrap.querySelector('.form-input');
           var btn = wrap.querySelector('.input-clear-btn');
-          if (input && btn) btn.style.display = input.value ? 'block' : 'none';
+          if (input && btn) btn.style.display = (!input.disabled && input.value) ? 'block' : 'none';
         });
       }
 
@@ -977,6 +1040,19 @@
 
       function submitAssetApp() {
         var platform = document.getElementById('asset-app-platform');
+
+        /* 编辑「织光」数据：仅可改备注 */
+        if (isPlatformLocked() && editingAssetAppRow) {
+          var lockedRow = editingAssetAppRow;
+          var newRemark = document.getElementById('asset-app-remark').value.trim();
+          lockedRow.setAttribute('data-remark', newRemark);
+          lockedRow.children[3].textContent = newRemark || '--';
+          alert('保存成功');
+          closeAssetAppModal();
+          searchAssetApps();
+          return;
+        }
+
         var payType = getRadioValue('asset-app-pay-type');
         var name = document.getElementById('asset-app-name');
         var distId = document.getElementById('asset-app-dist-id');
