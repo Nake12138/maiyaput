@@ -1,23 +1,25 @@
 // Main navigation and interaction logic
 
-/* ===== 跨环境页面跳转：兼容本地 / GitHub Pages / htmlpreview.github.io ===== */
+/* ===== 跨环境页面跳转：默认走 GitHub Pages，本地 http 服务兜底 ===== */
 /* rootPath 为仓库根相对路径，如 'pages/overseas-batch-delivery.html'、'index.html' */
-/* 在 pages/ 下的页面会自动剥离 'pages/' 前缀，转为 './xxx.html' 相对路径 */
 function navUrl(rootPath) {
-  if (window.location.hostname === 'htmlpreview.github.io') {
-    return (
-      'https://htmlpreview.github.io/?' +
-      'https://github.com/Nake12138/maiyaput/blob/main/' +
-      rootPath
-    );
+  // 1. 已托管（含 GitHub Pages / htmlpreview.github.io）：使用相对路径
+  var isHosted =
+    window.location.hostname === 'nake12138.github.io' ||
+    window.location.hostname === 'htmlpreview.github.io' ||
+    (/^https?:$/.test(window.location.protocol) &&
+      window.location.hostname !== 'localhost' &&
+      window.location.hostname !== '127.0.0.1');
+  if (isHosted) {
+    var inPages = window.location.pathname.replace(/\\/g, '/').indexOf('/pages/') !== -1;
+    if (inPages) {
+      if (rootPath === 'index.html') return '../index.html';
+      return './' + rootPath.replace(/^pages\//, '');
+    }
+    return rootPath;
   }
-  // 当前页面位于 pages/ 下时，去掉 'pages/' 前缀并加上 './'
-  var inPages = window.location.pathname.replace(/\\/g, '/').indexOf('/pages/') !== -1;
-  if (inPages) {
-    if (rootPath === 'index.html') return '../index.html';
-    return './' + rootPath.replace(/^pages\//, '');
-  }
-  return rootPath;
+  // 2. file:// 或本地 localhost：默认走 GitHub Pages（项目部署地址），便于分享/预览
+  return 'https://nake12138.github.io/maiyaput/' + rootPath;
 }
 
 document.addEventListener('DOMContentLoaded', function () {

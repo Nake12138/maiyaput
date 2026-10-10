@@ -706,6 +706,37 @@
       .creative-group-body .material-grid {
         grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
       }
+      /* ===== 失败明细：数量列失败数可点击 ===== */
+      .stat-stack .stat-fail-text.fail-clickable {
+        cursor: pointer;
+        text-decoration: underline;
+        text-underline-offset: 2px;
+      }
+      .stat-stack .stat-fail-text.fail-clickable:hover { opacity: .8; }
+      .fail-detail-hint {
+        font-size: 13px;
+        color: var(--color-text-secondary);
+      }
+      .fail-detail-hint strong { color: var(--color-error); font-weight: 600; }
+      .fail-detail-name {
+        color: var(--color-text-primary);
+        word-break: break-all;
+      }
+      .fail-detail-id {
+        font-size: 12px;
+        color: var(--color-text-tertiary);
+        margin-top: 2px;
+        word-break: break-all;
+      }
+      .fail-detail-error {
+        color: var(--color-error);
+        font-size: 12px;
+        line-height: 1.5;
+      }
+      #fail-detail-modal .row-actions { white-space: nowrap; }
+      #fail-detail-modal .modal-filter { flex-wrap: nowrap; }
+      #fail-detail-modal .modal-filter > div { flex-shrink: 0; }
+      #fail-detail-modal .fail-detail-hint { flex: 1; min-width: 0; }
     </style>
   </head>
   <body class="theme-antd">
@@ -1063,7 +1094,7 @@
                           <span class="stat-total">50</span>
                           <span class="stat-row">
                             <span class="stat-row-empty">成功: 0</span>
-                            <span class="stat-fail-text">失败: 40</span>
+                            <span class="stat-fail-text fail-clickable" onclick="openFailDetail(25, '任务1', 'campaign')">失败: 40</span>
                           </span>
                         </div>
                       </td>
@@ -1072,7 +1103,7 @@
                           <span class="stat-total">50</span>
                           <span class="stat-row">
                             <span class="stat-row-empty">成功: 0</span>
-                            <span class="stat-fail-text">失败: 40</span>
+                            <span class="stat-fail-text fail-clickable" onclick="openFailDetail(25, '任务1', 'adgroup')">失败: 40</span>
                           </span>
                         </div>
                       </td>
@@ -1081,7 +1112,7 @@
                           <span class="stat-total">50</span>
                           <span class="stat-row">
                             <span class="stat-row-empty">成功: 0</span>
-                            <span class="stat-row-empty">失败: 0</span>
+                            <span class="stat-fail-text fail-clickable" onclick="openFailDetail(25, '任务1', 'ad')">失败: 40</span>
                           </span>
                         </div>
                       </td>
@@ -1120,7 +1151,7 @@
                           <span class="stat-total">50</span>
                           <span class="stat-row">
                             <span class="stat-row-empty">成功: 0</span>
-                            <span class="stat-fail-text">失败: 40</span>
+                            <span class="stat-fail-text fail-clickable" onclick="openFailDetail(24, '任务2', 'adgroup')">失败: 40</span>
                           </span>
                         </div>
                       </td>
@@ -1129,7 +1160,7 @@
                           <span class="stat-total">50</span>
                           <span class="stat-row">
                             <span class="stat-row-empty">成功: 0</span>
-                            <span class="stat-row-empty">失败: 0</span>
+                            <span class="stat-fail-text fail-clickable" onclick="openFailDetail(24, '任务2', 'ad')">失败: 40</span>
                           </span>
                         </div>
                       </td>
@@ -1979,6 +2010,47 @@
         <div class="modal-footer">
           <button class="btn btn-outline btn-sm" onclick="closeTargetingListModal()">取消</button>
           <button class="btn btn-info btn-sm" onclick="closeTargetingListModal()">确定</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== 失败明细 弹框（点击任务列表数量列「失败: N」打开） ========== -->
+    <div id="fail-detail-overlay" class="modal-overlay" onclick="closeFailDetailModal()"></div>
+    <div id="fail-detail-modal" class="modal">
+      <div class="modal-card" style="width: min(1080px, calc(100vw - 40px));">
+        <div class="modal-header">
+          <span id="fail-detail-title">失败明细</span>
+          <button class="modal-close" onclick="closeFailDetailModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-filter" style="margin-bottom: 12px;">
+            <span style="font-size: 13px; color: var(--color-text-secondary);">已选择 <strong id="fail-detail-selected-count" style="color: var(--color-info);">0</strong> 个</span>
+            <button class="retry-link" onclick="batchRetryFailDetail()">重试</button>
+            <div style="margin-left: auto; display: flex; gap: 8px;">
+              <button class="btn btn-outline btn-sm" onclick="batchRefreshFailDetail()">刷新</button>
+            </div>
+          </div>
+          <div class="table-wrapper" style="max-height: 420px; overflow-y: auto;">
+            <table class="modal-table">
+              <thead id="fail-detail-thead"></thead>
+              <tbody id="fail-detail-tbody"></tbody>
+            </table>
+          </div>
+          <div class="pagination" style="padding: 12px 0 0;">
+            <div class="pagination-info" id="fail-detail-pagination-info">共 <strong>40</strong> 条</div>
+            <div class="pagination-pages">
+              <button class="page-btn">‹</button>
+              <button class="page-btn active">1</button>
+              <button class="page-btn">2</button>
+              <button class="page-btn">3</button>
+              <button class="page-btn">4</button>
+              <button class="page-btn">›</button>
+            </div>
+            <select class="page-size-select"><option>10 条/页</option></select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline btn-sm" onclick="closeFailDetailModal()">关闭</button>
         </div>
       </div>
     </div>
@@ -3237,6 +3309,103 @@
       /* ===== 定向 - 我的定向包弹框（数据来源：模板管理-定向包页面 → scripts/targeting-packages.js） ===== */
       function openTargetingListModal() { openModal('targeting-list-overlay', 'targeting-list-modal'); }
       function closeTargetingListModal() { closeModal('targeting-list-overlay', 'targeting-list-modal'); }
+
+      /* ===== 失败明细弹框（点击任务列表数量列「失败: N」打开） ===== */
+      var FAIL_DETAIL_META = {
+        campaign: { label: '推广系列', nameCol: '推广系列名称/ID' },
+        adgroup:  { label: '广告组',   nameCol: '广告组名称/ID',  parentCol: '所属推广系列名称/ID' },
+        ad:       { label: '广告',     nameCol: '广告名称/ID',    parentCol: '所属广告组名称/ID' }
+      };
+      var FAIL_DETAIL_DATA = {
+        campaign: [
+          { name: 'Campaign-葡萄牙语-雷隆太子-01', id: '23851234567890123', parent: null, account: 'ViviShort-IAA(UTC-5)-058212-MY-听泉-SINO-TT', accountId: '7676009561349996552', error: '广告账户未完成 Business Verification，无法创建广告' },
+          { name: 'Campaign-葡萄牙语-雷隆太子-02', id: '23851234567890124', parent: null, account: 'ViviShort-IAA(UTC-5)-009512-MY-听泉-SINO-TT', accountId: '7676009929921658887', error: '账户消费限额已达上限（Lifetime Spend Limit）' },
+          { name: 'Campaign-葡萄牙语-听泉-03',     id: '23851234567890125', parent: null, account: 'ViviShort-IAA(UTC+7)-011408-TH-听泉-SINO-TT', accountId: '7681203341027765248', error: '主页与广告账户绑定关系异常' },
+          { name: 'Campaign-西班牙语-雷隆太子-04', id: '23851234567890126', parent: null, account: 'ViviShort-IAA(UTC+1)-023309-ES-听泉-SINO-TT', accountId: '7692387451029933120', error: '支付方式无效，请更新账户付款设置' },
+          { name: 'Campaign-葡萄牙语-雷隆太子-05', id: '23851234567890127', parent: null, account: 'ViviShort-IAA(UTC-5)-058212-MY-听泉-SINO-TT', accountId: '7676009561349996552', error: '定向地区不在该账户可投范围内' }
+        ],
+        adgroup: [
+          { name: 'AdGroup-雷隆太子-01-A', id: '23859876543210987', parent: 'Campaign-葡萄牙语-雷隆太子-01', parentId: '23851234567890123', account: 'ViviShort-IAA(UTC-5)-058212-MY-听泉-SINO-TT', accountId: '7676009561349996552', error: '素材宽高比不符合版位要求（建议 1:1 或 9:16）' },
+          { name: 'AdGroup-雷隆太子-01-B', id: '23859876543210988', parent: 'Campaign-葡萄牙语-雷隆太子-01', parentId: '23851234567890123', account: 'ViviShort-IAA(UTC-5)-058212-MY-听泉-SINO-TT', accountId: '7676009561349996552', error: '该账户被标记为特殊广告类别，定向设置受限' },
+          { name: 'AdGroup-听泉-02-A',     id: '23859876543210989', parent: 'Campaign-葡萄牙语-听泉-03',     parentId: '23851234567890125', account: 'ViviShort-IAA(UTC+7)-011408-TH-听泉-SINO-TT', accountId: '7681203341027765248', error: '优化目标与所选版位不兼容' },
+          { name: 'AdGroup-雷隆太子-04-A', id: '23859876543210990', parent: 'Campaign-西班牙语-雷隆太子-04', parentId: '23851234567890126', account: 'ViviShort-IAA(UTC+1)-023309-ES-听泉-SINO-TT', accountId: '7692387451029933120', error: '竞价策略与预算组合无效' },
+          { name: 'AdGroup-雷隆太子-01-C', id: '23859876543210991', parent: 'Campaign-葡萄牙语-雷隆太子-01', parentId: '23851234567890123', account: 'ViviShort-IAA(UTC-5)-009512-MY-听泉-SINO-TT', accountId: '7676009929921658887', error: '创建频率超限，请稍后重试' }
+        ],
+        ad: [
+          { name: 'Ad-雷隆太子-01-A-01', id: '23845678901234567', parent: 'AdGroup-雷隆太子-01-A', parentId: '23859876543210987', account: 'ViviShort-IAA(UTC-5)-058212-MY-听泉-SINO-TT', accountId: '7676009561349996552', error: '图片素材文字占比超过 20%，审核驳回' },
+          { name: 'Ad-雷隆太子-01-A-02', id: '23845678901234568', parent: 'AdGroup-雷隆太子-01-A', parentId: '23859876543210987', account: 'ViviShort-IAA(UTC-5)-058212-MY-听泉-SINO-TT', accountId: '7676009561349996552', error: '标题包含违禁内容，审核驳回' },
+          { name: 'Ad-雷隆太子-01-B-01', id: '23845678901234569', parent: 'AdGroup-雷隆太子-01-B', parentId: '23859876543210988', account: 'ViviShort-IAA(UTC-5)-058212-MY-听泉-SINO-TT', accountId: '7676009561349996552', error: '落地页与广告内容不一致' },
+          { name: 'Ad-听泉-02-A-01',     id: '23845678901234570', parent: 'AdGroup-听泉-02-A',     parentId: '23859876543210989', account: 'ViviShort-IAA(UTC+7)-011408-TH-听泉-SINO-TT', accountId: '7681203341027765248', error: '视频素材时长超出版位限制' },
+          { name: 'Ad-雷隆太子-04-A-01', id: '23845678901234571', parent: 'AdGroup-雷隆太子-04-A', parentId: '23859876543210990', account: 'ViviShort-IAA(UTC+1)-023309-ES-听泉-SINO-TT', accountId: '7692387451029933120', error: '应用下载链接失效' }
+        ]
+      };
+      var failDetailState = { taskId: null, taskName: '', level: 'campaign', failCount: 0 };
+
+      function openFailDetail(taskId, taskName, level, failCount) {
+        failDetailState = { taskId: taskId, taskName: taskName, level: level, failCount: failCount || 40 };
+        renderFailDetail();
+        openModal('fail-detail-overlay', 'fail-detail-modal');
+      }
+      function closeFailDetailModal() { closeModal('fail-detail-overlay', 'fail-detail-modal'); }
+
+      function renderFailDetail() {
+        var meta = FAIL_DETAIL_META[failDetailState.level];
+        var rows = FAIL_DETAIL_DATA[failDetailState.level];
+        document.getElementById('fail-detail-title').textContent =
+          '失败明细 - ' + failDetailState.taskName + ' - ' + meta.label;
+        document.getElementById('fail-detail-pagination-info').innerHTML =
+          '共 <strong>' + failDetailState.failCount + '</strong> 条';
+
+        var head = '<tr><th class="checkbox-col"><input type="checkbox" onclick="toggleFailDetailAll(this)" /></th>';
+        head += '<th>' + meta.nameCol + '</th>';
+        if (meta.parentCol) head += '<th>' + meta.parentCol + '</th>';
+        head += '<th>账户名称/ID</th><th>报错信息</th><th>操作</th></tr>';
+        document.getElementById('fail-detail-thead').innerHTML = head;
+
+        var body = rows.map(function (r) {
+          var html = '<tr>';
+          html += '<td><input type="checkbox" class="fail-detail-row-checkbox" onchange="updateFailDetailSelectedCount()" /></td>';
+          html += '<td><div class="fail-detail-name">' + r.name + '</div><div class="fail-detail-id">ID: ' + r.id + '</div></td>';
+          if (meta.parentCol) {
+            html += '<td><div class="fail-detail-name">' + r.parent + '</div><div class="fail-detail-id">ID: ' + r.parentId + '</div></td>';
+          }
+          html += '<td><div class="fail-detail-name">' + r.account + '</div><div class="fail-detail-id">ID: ' + r.accountId + '</div></td>';
+          html += '<td><span class="fail-detail-error">' + r.error + '</span></td>';
+          html += '<td><div class="row-actions"><button class="row-action-btn" onclick="refreshFailRow(\'' + r.name + '\')">刷新</button>' +
+                  '<button class="row-action-btn" onclick="retryFailRow(\'' + r.name + '\')">重试</button></div></td>';
+          html += '</tr>';
+          return html;
+        }).join('');
+        document.getElementById('fail-detail-tbody').innerHTML = body;
+        updateFailDetailSelectedCount();
+      }
+
+      function toggleFailDetailAll(headCb) {
+        document.querySelectorAll('#fail-detail-modal .fail-detail-row-checkbox').forEach(function (cb) {
+          cb.checked = headCb.checked;
+        });
+        updateFailDetailSelectedCount();
+      }
+      function getCheckedFailDetailCount() {
+        return document.querySelectorAll('#fail-detail-modal .fail-detail-row-checkbox:checked').length;
+      }
+      /* 已选择数量常显（与批量投放页工具条一致），勾选实时刷新 */
+      function updateFailDetailSelectedCount() {
+        var n = getCheckedFailDetailCount();
+        var countEl = document.getElementById('fail-detail-selected-count');
+        if (countEl) countEl.textContent = n;
+      }
+      function refreshFailRow(name) { alert('刷新 ' + FAIL_DETAIL_META[failDetailState.level].label + '「' + name + '」（原型占位）'); }
+      function retryFailRow(name) { alert('重试 ' + FAIL_DETAIL_META[failDetailState.level].label + '「' + name + '」（原型占位）'); }
+      /* 批量刷新：无需勾选，默认刷新全部失败数据 */
+      function batchRefreshFailDetail() {
+        alert('批量刷新全部 ' + failDetailState.failCount + ' 条失败' + FAIL_DETAIL_META[failDetailState.level].label + '（原型占位）');
+      }
+      function batchRetryFailDetail() {
+        var n = getCheckedFailDetailCount();
+        if (!n) { alert('请先勾选要重试的数据'); return; }
+        alert('批量重试 ' + n + ' 条失败' + FAIL_DETAIL_META[failDetailState.level].label + '（原型占位）');
+      }
 
       function rerenderTargetingList() {
         var tbody = document.getElementById('targeting-list-tbody');

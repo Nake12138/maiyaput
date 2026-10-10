@@ -11,7 +11,38 @@
       /* ===== 资产管理-应用 页面局部样式 ===== */
       .cell-main { display: block; }
       .cell-sub { display: block; font-size: 12px; color: #9ca3af; margin-top: 2px; white-space: nowrap; }
+      /* Tabs：小程序 / APP */
+      .asset-app-tabs { display: flex; align-items: center; gap: 24px; padding: 0 0 12px; border-bottom: 1px solid var(--color-border, #e5e7eb); margin-bottom: 16px; }
+      .asset-app-tab { padding: 8px 4px; cursor: pointer; font-size: 14px; color: var(--color-text-secondary, #4b5563); border-bottom: 2px solid transparent; margin-bottom: -1px; user-select: none; }
+      .asset-app-tab:hover { color: #1677ff; }
+      .asset-app-tab.active { color: #1677ff; border-bottom-color: #1677ff; font-weight: 500; }
+      .asset-app-pane { display: none; }
+      .asset-app-pane.active { display: block; }
       /* 操作列间距与删除色由全站规范统一接管（原 gap:14px 与 link-danger 局部覆盖已移除） */
+      /* ===== Tabs：小程序 / APP ===== */
+      .asset-app-tabs { display: flex; align-items: center; gap: 24px; padding: 0 0 12px; border-bottom: 1px solid var(--color-border, #e5e7eb); margin-bottom: 16px; }
+      .asset-app-tab { padding: 8px 4px; cursor: pointer; font-size: 14px; color: var(--color-text-secondary, #4b5563); border-bottom: 2px solid transparent; margin-bottom: -1px; user-select: none; }
+      .asset-app-tab:hover { color: #1677ff; }
+      .asset-app-tab.active { color: #1677ff; border-bottom-color: #1677ff; font-weight: 500; }
+      .asset-app-pane { display: none; }
+      .asset-app-pane.active { display: block; }
+      /* ===== 新增/编辑应用弹框局部样式（对齐截图：单列，label左/控件右） ===== */
+      #asset-app-edit-modal .modal-card { width: 520px; }
+      #asset-app-edit-modal .modal-body { padding: 28px 32px 8px; }
+      #asset-app-edit-modal .form-item { margin-bottom: 20px; gap: 12px; }
+      #asset-app-edit-modal .form-label { width: 108px; text-align: left; font-size: 13px; }
+      .form-error-msg { display: none; font-size: 12px; color: #ff4d4f; margin-top: 5px; line-height: 1.2; }
+      .form-item.has-error .form-input,
+      .form-item.has-error .form-select { border-color: #ff4d4f; }
+      .form-item.has-error .form-error-msg { display: block; }
+      .form-radio-group { display: flex; align-items: center; gap: 18px; height: 32px; }
+      .form-radio { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; color: var(--color-text-primary, #1f2329); cursor: pointer; }
+      .form-radio input[type="radio"] { width: 14px; height: 14px; margin: 0; accent-color: #1677ff; cursor: pointer; }
+      .input-clearable { position: relative; flex: 1; min-width: 0; display: flex; }
+      .input-clearable .form-input { padding-right: 30px; }
+      .input-clear-btn { position: absolute; right: 9px; top: 14px; transform: translateY(-50%); width: 15px; height: 15px; border: none; border-radius: 50%; background: #c9cdd4; color: #fff; font-size: 11px; line-height: 15px; text-align: center; padding: 0; cursor: pointer; display: none; }
+      .input-clear-btn:hover { background: #a9aeb8; }
+      .form-field { flex: 1; min-width: 0; }
     </style>
   </head>
   <body class="theme-antd">
@@ -261,82 +292,96 @@
             </div>
 
             <div class="content-card">
-            <!-- Filter Bar -->
-            <div class="filter-bar">
-              <div class="filter-bar-row">
-                <div class="filter-combo" style="min-width:300px;">
-                  <select class="filter-combo-select"><option>应用名称</option></select>
-                  <input type="text" class="filter-combo-input" id="f-app-name" placeholder="请输入" />
-                </div>
-                <input type="text" class="filter-input" id="f-dist-app-id" placeholder="请输入分销平台应用ID" style="width:220px;" />
-                <div class="filter-combo" style="min-width:300px;">
-                  <select class="filter-combo-select" id="f-pixel-key" onchange="syncAssetPixelPlaceholder()">
-                    <option value="name">Pixel 名称</option>
-                    <option value="id">Pixel ID</option>
-                  </select>
-                  <input type="text" class="filter-combo-input" id="f-pixel-name" placeholder="请输入" />
-                </div>
-                <select class="filter-select" id="f-app-type" style="width:160px;">
-                  <option value="">请选择应用类型</option>
-                  <option value="小程序">小程序</option>
-                  <option value="APP">APP</option>
-                </select>
-                <select class="filter-select" id="f-pay-type" style="width:160px;">
-                  <option value="">请选择付费类型</option>
-                  <option value="免费">免费</option>
-                  <option value="付费">付费</option>
-                </select>
-                <select class="filter-select" id="f-platform" style="width:160px;">
-                  <option value="">请选择平台</option>
-                  <option value="织光">织光</option>
-                  <option value="司南">司南</option>
-                </select>
+              <!-- Tabs：小程序 / APP -->
+              <div class="asset-app-tabs" id="asset-app-tabs">
+                <div class="asset-app-tab active" data-tab="小程序" onclick="switchAppTab('小程序')">小程序</div>
+                <div class="asset-app-tab" data-tab="APP" onclick="switchAppTab('APP')">APP</div>
               </div>
 
-              <div class="filter-bar-row">
-                <button class="btn btn-primary btn-sm" onclick="searchAssetApps()">查询</button>
-                <button class="btn btn-outline btn-sm" onclick="resetAssetAppFilters()">重置</button>
-                <button class="btn btn-primary btn-sm" onclick="openAssetAppModal()">
-                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-                    <path d="M6 1.5v9M1.5 6h9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
-                  </svg>
-                  新增
-                </button>
-                <button class="btn btn-sm btn-text" onclick="refreshAssetAppList()">刷新列表</button>
+              <!-- Filter Bar：小程序 -->
+              <div class="asset-app-pane active" data-pane="小程序">
+                <div class="filter-bar">
+                  <div class="filter-bar-row" style="flex-wrap:wrap; gap:10px; row-gap:10px;">
+                    <div class="filter-combo" style="width:200px; min-width:0;">
+                      <select class="filter-combo-select"><option>名称</option></select>
+                      <input type="text" class="filter-combo-input" data-filter="name" placeholder="请输入" />
+                    </div>
+                    <input type="text" class="filter-input" data-filter="distId" placeholder="请输入分销平台ID" style="width:200px;" />
+                    <input type="text" class="filter-input" data-filter="minisId" placeholder="请输入minisId" style="width:200px;" />
+                    <select class="filter-select" data-filter="payType" style="width:140px;">
+                      <option value="">请选择付费类型</option>
+                      <option value="免费">免费</option>
+                      <option value="付费">付费</option>
+                    </select>
+                    <select class="filter-select" data-filter="platform" style="width:140px;">
+                      <option value="">请选择平台</option>
+                      <option value="织光">织光</option>
+                      <option value="司南">司南</option>
+                    </select>
+                    <span class="filter-bar-divider" style="width:1px;height:18px;background:var(--color-border,#e5e7eb);margin:0 4px;"></span>
+                    <button class="btn btn-primary btn-sm" onclick="searchAssetApps()">查询</button>
+                    <button class="btn btn-outline btn-sm" onclick="resetAssetAppFilters()">重置</button>
+                    <button class="btn btn-primary btn-sm" onclick="openAssetAppModal()">
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                        <path d="M6 1.5v9M1.5 6h9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+                      </svg>
+                      新增
+                    </button>
+                    <button class="btn btn-sm btn-text" onclick="refreshAssetAppList()">刷新列表</button>
+                  </div>
+                </div>
               </div>
-            </div>
+
+              <!-- Filter Bar：APP -->
+              <div class="asset-app-pane" data-pane="APP">
+                <div class="filter-bar">
+                  <div class="filter-bar-row" style="flex-wrap:wrap; gap:10px; row-gap:10px;">
+                    <div class="filter-combo" style="width:200px; min-width:0;">
+                      <select class="filter-combo-select"><option>名称</option></select>
+                      <input type="text" class="filter-combo-input" data-filter="name" placeholder="请输入" />
+                    </div>
+                    <input type="text" class="filter-input" data-filter="distId" placeholder="请输入分销平台ID" style="width:200px;" />
+                    <select class="filter-select" data-filter="pixel" style="width:200px;">
+                      <option value="">请选择Pixel 名称</option>
+                      <option value="默认TikTok Pixel">默认TikTok Pixel</option>
+                      <option value="默认Pixel">默认Pixel</option>
+                      <option value="Popkon_Pixel_AI解剖剂">Popkon_Pixel_AI解剖剂</option>
+                    </select>
+                    <select class="filter-select" data-filter="payType" style="width:140px;">
+                      <option value="">请选择付费类型</option>
+                      <option value="免费">免费</option>
+                      <option value="付费">付费</option>
+                    </select>
+                    <select class="filter-select" data-filter="platform" style="width:140px;">
+                      <option value="">请选择平台</option>
+                      <option value="织光">织光</option>
+                      <option value="司南">司南</option>
+                    </select>
+                    <span class="filter-bar-divider" style="width:1px;height:18px;background:var(--color-border,#e5e7eb);margin:0 4px;"></span>
+                    <button class="btn btn-primary btn-sm" onclick="searchAssetApps()">查询</button>
+                    <button class="btn btn-outline btn-sm" onclick="resetAssetAppFilters()">重置</button>
+                    <button class="btn btn-primary btn-sm" onclick="openAssetAppModal()">
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                        <path d="M6 1.5v9M1.5 6h9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+                      </svg>
+                      新增
+                    </button>
+                    <button class="btn btn-sm btn-text" onclick="refreshAssetAppList()">刷新列表</button>
+                  </div>
+                </div>
+              </div>
 
             <!-- App Table -->
             <div class="table-card">
               <div class="table-wrapper">
                 <table class="data-table" id="asset-app-table">
-                  <thead>
-                    <tr>
-                      <th>应用名称</th>
-                      <th>分销平台应用ID</th>
-                      <th>Pixel 名称</th>
-                      <th>备注</th>
-                      <th>应用类型</th>
-                      <th>付费类型</th>
-                      <th>平台</th>
-                      <th>更新人</th>
-                      <th>更新时间</th>
-                      <th>操作</th>
-                    </tr>
-                  </thead>
+                  <thead id="asset-app-thead"></thead>
                   <tbody>
-                    <tr data-name="3" data-dist-id="" data-pixel="" data-pixel-id="" data-remark="" data-app-type="小程序" data-pay-type="免费" data-platform="织光" data-updater="admin" data-updated="2026-09-21 16:30:44">
-                      <td>
-                        <span class="cell-main">3</span>
-                        <span class="cell-sub">ID: 7672334517253233533</span>
-                      </td>
+                    <tr data-name="3" data-dist-id="" data-minis-id="7672334517253233533" data-pixel="" data-remark="" data-app-type="小程序" data-pay-type="免费" data-platform="织光" data-updater="admin" data-updated="2026-09-21 16:30:44">
+                      <td>3</td>
+                      <td>7672334517253233533</td>
                       <td>--</td>
-                      <td>
-                        <span class="cell-main">--</span>
-                        <span class="cell-sub">ID:--</span>
-                      </td>
                       <td>--</td>
-                      <td>小程序</td>
                       <td>免费</td>
                       <td>织光</td>
                       <td>admin</td>
@@ -348,18 +393,11 @@
                         </div>
                       </td>
                     </tr>
-                    <tr data-name="TT_VigoShort" data-dist-id="" data-pixel="" data-pixel-id="" data-remark="" data-app-type="小程序" data-pay-type="免费" data-platform="织光" data-updater="admin" data-updated="2026-09-21 16:30:44">
-                      <td>
-                        <span class="cell-main">TT_VigoShort</span>
-                        <span class="cell-sub">ID: 7672304517253232137</span>
-                      </td>
+                    <tr data-name="TT_VigoShort" data-dist-id="" data-minis-id="7672304517253232137" data-pixel="" data-remark="" data-app-type="小程序" data-pay-type="免费" data-platform="织光" data-updater="admin" data-updated="2026-09-21 16:30:44">
+                      <td>TT_VigoShort</td>
+                      <td>7672304517253232137</td>
                       <td>--</td>
-                      <td>
-                        <span class="cell-main">--</span>
-                        <span class="cell-sub">ID:--</span>
-                      </td>
                       <td>--</td>
-                      <td>小程序</td>
                       <td>免费</td>
                       <td>织光</td>
                       <td>admin</td>
@@ -371,18 +409,11 @@
                         </div>
                       </td>
                     </tr>
-                    <tr data-name="TT_MagoShort" data-dist-id="" data-pixel="" data-pixel-id="" data-remark="" data-app-type="小程序" data-pay-type="免费" data-platform="织光" data-updater="admin" data-updated="2026-09-21 16:30:44">
-                      <td>
-                        <span class="cell-main">TT_MagoShort</span>
-                        <span class="cell-sub">ID: 7672303938922725136</span>
-                      </td>
+                    <tr data-name="TT_MagoShort" data-dist-id="" data-minis-id="7672303938922725136" data-pixel="" data-remark="" data-app-type="小程序" data-pay-type="免费" data-platform="织光" data-updater="admin" data-updated="2026-09-21 16:30:44">
+                      <td>TT_MagoShort</td>
+                      <td>7672303938922725136</td>
                       <td>--</td>
-                      <td>
-                        <span class="cell-main">--</span>
-                        <span class="cell-sub">ID:--</span>
-                      </td>
                       <td>--</td>
-                      <td>小程序</td>
                       <td>免费</td>
                       <td>织光</td>
                       <td>admin</td>
@@ -394,18 +425,11 @@
                         </div>
                       </td>
                     </tr>
-                    <tr data-name="TT_EagoShort" data-dist-id="" data-pixel="" data-pixel-id="" data-remark="" data-app-type="小程序" data-pay-type="免费" data-platform="织光" data-updater="admin" data-updated="2026-09-21 16:30:44">
-                      <td>
-                        <span class="cell-main">TT_EagoShort</span>
-                        <span class="cell-sub">ID: 7672835893022741520</span>
-                      </td>
+                    <tr data-name="TT_EagoShort" data-dist-id="" data-minis-id="7672835893022741520" data-pixel="" data-remark="" data-app-type="小程序" data-pay-type="免费" data-platform="织光" data-updater="admin" data-updated="2026-09-21 16:30:44">
+                      <td>TT_EagoShort</td>
+                      <td>7672835893022741520</td>
                       <td>--</td>
-                      <td>
-                        <span class="cell-main">--</span>
-                        <span class="cell-sub">ID:--</span>
-                      </td>
                       <td>--</td>
-                      <td>小程序</td>
                       <td>免费</td>
                       <td>织光</td>
                       <td>admin</td>
@@ -417,18 +441,11 @@
                         </div>
                       </td>
                     </tr>
-                    <tr data-name="Popkon_app" data-dist-id="689543" data-pixel="默认TikTok Pixel" data-pixel-id="D6I8KD8C7CU7C9MB39AHQ" data-remark="像素aid:D6I8KD8C7CU..." data-app-type="APP" data-pay-type="付费" data-platform="司南" data-updater="冷吃兔" data-updated="2026-09-11 16:52:47">
-                      <td>
-                        <span class="cell-main">Popkon_app</span>
-                        <span class="cell-sub">ID: 689543</span>
-                      </td>
+                    <tr data-name="Popkon_app" data-dist-id="689543" data-minis-id="" data-pixel="默认TikTok Pixel" data-remark="像素aid:D6I8KD8C7CU..." data-app-type="APP" data-pay-type="付费" data-platform="司南" data-updater="冷吃兔" data-updated="2026-09-11 16:52:47">
+                      <td>Popkon_app</td>
+                      <td>默认TikTok Pixel</td>
                       <td>689543</td>
-                      <td>
-                        <span class="cell-main">默认TikTok Pixel</span>
-                        <span class="cell-sub">ID: D6I8KD8C7CU7C9MB39AHQ</span>
-                      </td>
                       <td>像素aid:D6I8KD8C7CU...</td>
-                      <td>APP</td>
                       <td>付费</td>
                       <td>司南</td>
                       <td>冷吃兔</td>
@@ -440,18 +457,11 @@
                         </div>
                       </td>
                     </tr>
-                    <tr data-name="TEST_SN_APP" data-dist-id="1212312.1" data-pixel="Popkon_Pixel_AI解剖剂" data-pixel-id="181819419034709" data-remark="test" data-app-type="APP" data-pay-type="免费" data-platform="司南" data-updater="冷吃兔" data-updated="2026-09-10 18:44:12">
-                      <td>
-                        <span class="cell-main">TEST_SN_APP</span>
-                        <span class="cell-sub">ID: 455465465465</span>
-                      </td>
+                    <tr data-name="TEST_SN_APP" data-dist-id="1212312.1" data-minis-id="" data-pixel="Popkon_Pixel_AI解剖剂" data-remark="test" data-app-type="APP" data-pay-type="免费" data-platform="司南" data-updater="冷吃兔" data-updated="2026-09-10 18:44:12">
+                      <td>TEST_SN_APP</td>
+                      <td>Popkon_Pixel_AI解剖剂</td>
                       <td>1212312.1</td>
-                      <td>
-                        <span class="cell-main">Popkon_Pixel_AI解剖剂</span>
-                        <span class="cell-sub">ID: 181819419034709</span>
-                      </td>
                       <td>test</td>
-                      <td>APP</td>
                       <td>免费</td>
                       <td>司南</td>
                       <td>冷吃兔</td>
@@ -463,18 +473,11 @@
                         </div>
                       </td>
                     </tr>
-                    <tr data-name="lct_test_p" data-dist-id="1513123121" data-pixel="默认TikTok Pixel" data-pixel-id="D6I8KD8C7CU7C9MB39AHQ" data-remark="test_pixel_name:关联pr..." data-app-type="APP" data-pay-type="免费" data-platform="司南" data-updater="冷吃兔" data-updated="2026-09-09 17:49:23">
-                      <td>
-                        <span class="cell-main">lct_test_p</span>
-                        <span class="cell-sub">ID: 845612312</span>
-                      </td>
+                    <tr data-name="lct_test_p" data-dist-id="1513123121" data-minis-id="" data-pixel="默认TikTok Pixel" data-remark="test_pixel_name:关联pr..." data-app-type="APP" data-pay-type="免费" data-platform="司南" data-updater="冷吃兔" data-updated="2026-09-09 17:49:23">
+                      <td>lct_test_p</td>
+                      <td>默认TikTok Pixel</td>
                       <td>1513123121</td>
-                      <td>
-                        <span class="cell-main">默认TikTok Pixel</span>
-                        <span class="cell-sub">ID: D6I8KD8C7CU7C9MB39AHQ</span>
-                      </td>
                       <td>test_pixel_name:关联pr...</td>
-                      <td>APP</td>
                       <td>免费</td>
                       <td>司南</td>
                       <td>冷吃兔</td>
@@ -486,18 +489,11 @@
                         </div>
                       </td>
                     </tr>
-                    <tr data-name="Fctic_ttmin_baa" data-dist-id="3000006" data-pixel="默认Pixel" data-pixel-id="7608550448794830493" data-remark="" data-app-type="小程序" data-pay-type="免费" data-platform="司南" data-updater="春光" data-updated="2026-09-09 17:49:23">
-                      <td>
-                        <span class="cell-main">Fctic_ttmin_baa</span>
-                        <span class="cell-sub">ID: 7672304517253240001</span>
-                      </td>
+                    <tr data-name="Fctic_ttmin_baa" data-dist-id="3000006" data-minis-id="7672304517253240001" data-pixel="" data-remark="" data-app-type="小程序" data-pay-type="免费" data-platform="司南" data-updater="春光" data-updated="2026-09-09 17:49:23">
+                      <td>Fctic_ttmin_baa</td>
+                      <td>7672304517253240001</td>
                       <td>3000006</td>
-                      <td>
-                        <span class="cell-main">默认Pixel</span>
-                        <span class="cell-sub">ID: 7608550448794830493</span>
-                      </td>
                       <td>--</td>
-                      <td>小程序</td>
                       <td>免费</td>
                       <td>司南</td>
                       <td>春光</td>
@@ -510,7 +506,7 @@
                       </td>
                     </tr>
                     <tr id="asset-app-empty" style="display:none;">
-                      <td colspan="10" style="text-align:center;color:#999;padding:48px 0;">暂无数据</td>
+                      <td colspan="9" style="text-align:center;color:#999;padding:48px 0;">暂无数据</td>
                     </tr>
                   </tbody>
                 </table>
@@ -537,56 +533,79 @@
             <!-- 新增/编辑应用弹框 -->
             <div id="asset-app-edit-overlay" class="modal-overlay" onclick="closeAssetAppModal()"></div>
             <div id="asset-app-edit-modal" class="modal">
-              <div class="modal-card" style="width:560px;">
+              <div class="modal-card" style="width:520px;">
                 <div class="modal-header">
-                  <span id="asset-app-edit-title">新增应用</span>
+                  <span id="asset-app-edit-title">新建应用</span>
                   <button class="modal-close" onclick="closeAssetAppModal()">×</button>
                 </div>
                 <div class="modal-body">
-                  <div class="form-item" style="margin-bottom:16px;">
-                    <label class="form-label required">应用名称：</label>
-                    <input type="text" class="form-input" id="asset-app-name" placeholder="请输入应用名称" />
+                  <div class="form-item">
+                    <label class="form-label required">平台</label>
+                    <div class="form-field">
+                      <select class="form-select" id="asset-app-platform">
+                        <option value="">请选择</option>
+                        <option value="织光">织光</option>
+                        <option value="司南">司南</option>
+                      </select>
+                      <div class="form-error-msg">请选择平台</div>
+                    </div>
                   </div>
-                  <div class="form-item" style="margin-bottom:16px;">
-                    <label class="form-label required">应用类型：</label>
-                    <select class="form-select" id="asset-app-type">
-                      <option value="">请选择应用类型</option>
-                      <option value="小程序">小程序</option>
-                      <option value="APP">APP</option>
-                    </select>
+                  <div class="form-item">
+                    <label class="form-label required">付费类型</label>
+                    <div class="form-field">
+                      <div class="form-radio-group" id="asset-app-pay-type">
+                        <label class="form-radio"><input type="radio" name="asset-app-pay-type" value="免费" /><span>免费</span></label>
+                        <label class="form-radio"><input type="radio" name="asset-app-pay-type" value="付费" /><span>付费</span></label>
+                      </div>
+                      <div class="form-error-msg">请选择付费类型</div>
+                    </div>
                   </div>
-                  <div class="form-item" style="margin-bottom:16px;">
-                    <label class="form-label">分销平台应用ID：</label>
-                    <input type="text" class="form-input" id="asset-app-dist-id" placeholder="请输入分销平台应用ID" />
+                  <div class="form-item">
+                    <label class="form-label required">名称</label>
+                    <div class="form-field">
+                      <div class="input-clearable">
+                        <input type="text" class="form-input" id="asset-app-name" placeholder="请输入" />
+                        <button type="button" class="input-clear-btn" data-target="asset-app-name" aria-label="清空">×</button>
+                      </div>
+                      <div class="form-error-msg">请输入名称</div>
+                    </div>
                   </div>
-                  <div class="form-item" style="margin-bottom:16px;">
-                    <label class="form-label required">付费类型：</label>
-                    <select class="form-select" id="asset-app-pay-type">
-                      <option value="">请选择付费类型</option>
-                      <option value="免费">免费</option>
-                      <option value="付费">付费</option>
-                    </select>
+                  <div class="form-item">
+                    <label class="form-label required">分销平台ID</label>
+                    <div class="form-field">
+                      <div class="input-clearable">
+                        <input type="text" class="form-input" id="asset-app-dist-id" placeholder="请输入" />
+                        <button type="button" class="input-clear-btn" data-target="asset-app-dist-id" aria-label="清空">×</button>
+                      </div>
+                      <div class="form-error-msg">请输入分销平台ID</div>
+                    </div>
                   </div>
-                  <div class="form-item" style="margin-bottom:16px;">
-                    <label class="form-label">Pixel 名称：</label>
-                    <select class="form-select" id="asset-app-pixel">
-                      <option value="">请选择Pixel 名称</option>
-                      <option value="默认TikTok Pixel">默认TikTok Pixel</option>
-                      <option value="默认Pixel">默认Pixel</option>
-                      <option value="Popkon_Pixel_AI解剖剂">Popkon_Pixel_AI解剖剂</option>
-                    </select>
+                  <div class="form-item" data-tab-field="小程序">
+                    <label class="form-label">minisId</label>
+                    <div class="form-field">
+                      <div class="input-clearable">
+                        <input type="text" class="form-input" id="asset-app-minis-id" placeholder="请输入" />
+                        <button type="button" class="input-clear-btn" data-target="asset-app-minis-id" aria-label="清空">×</button>
+                      </div>
+                    </div>
                   </div>
-                  <div class="form-item" style="margin-bottom:16px;">
-                    <label class="form-label required">平台：</label>
-                    <select class="form-select" id="asset-app-platform">
-                      <option value="">请选择平台</option>
-                      <option value="织光">织光</option>
-                      <option value="司南">司南</option>
-                    </select>
+                  <div class="form-item" data-tab-field="APP">
+                    <label class="form-label required">Pixel 名称</label>
+                    <div class="form-field">
+                      <select class="form-select" id="asset-app-pixel">
+                        <option value="">请选择</option>
+                        <option value="默认TikTok Pixel">默认TikTok Pixel</option>
+                        <option value="默认Pixel">默认Pixel</option>
+                        <option value="Popkon_Pixel_AI解剖剂">Popkon_Pixel_AI解剖剂</option>
+                      </select>
+                      <div class="form-error-msg">请选择Pixel 名称</div>
+                    </div>
                   </div>
-                  <div class="form-item" style="margin-bottom:0;">
-                    <label class="form-label">备注：</label>
-                    <input type="text" class="form-input" id="asset-app-remark" placeholder="请输入备注" />
+                  <div class="form-item" style="margin-bottom:8px;">
+                    <label class="form-label">备注</label>
+                    <div class="form-field">
+                      <input type="text" class="form-input" id="asset-app-remark" placeholder="请输入" />
+                    </div>
                   </div>
                 </div>
                 <div class="modal-footer">
@@ -755,50 +774,95 @@
         }
       });
 
-      /* ===== 应用列表：筛选 / 重置 / 刷新 ===== */
+      /* ===== 应用列表：Tabs + 筛选 / 重置 / 刷新 ===== */
+      var currentAppType = '小程序';
+
+      function activeAppPane() {
+        return document.querySelector('.asset-app-pane[data-pane="' + currentAppType + '"]');
+      }
+
+      function activeAppFilter(key) {
+        var pane = activeAppPane();
+        if (!pane) return null;
+        return pane.querySelector('[data-filter="' + key + '"]');
+      }
+
       function assetAppRows() {
         return Array.prototype.slice.call(document.querySelectorAll('#asset-app-table tbody tr[data-name]'));
       }
 
-      /* Pixel 筛选字段切换：Pixel 名称 / Pixel ID */
-      function syncAssetPixelPlaceholder() {
-        var key = document.getElementById('f-pixel-key').value;
-        var input = document.getElementById('f-pixel-name');
-        input.placeholder = key === 'id' ? '请输入Pixel ID' : '请输入Pixel名称';
-        input.value = '';
+      function renderAssetAppHead() {
+        var thead = document.getElementById('asset-app-thead');
+        if (!thead) return;
+        var secondCol = currentAppType === 'APP' ? '<th>Pixel 名称</th>' : '<th>minisId</th>';
+        thead.innerHTML = '<tr>'
+          + '<th>名称</th>'
+          + secondCol
+          + '<th>分销平台ID</th>'
+          + '<th>备注</th>'
+          + '<th>付费类型</th>'
+          + '<th>平台</th>'
+          + '<th>更新人</th>'
+          + '<th>更新时间</th>'
+          + '<th>操作</th>'
+          + '</tr>';
+      }
+
+      function switchAppTab(type) {
+        if (type !== '小程序' && type !== 'APP') return;
+        currentAppType = type;
+        document.querySelectorAll('#asset-app-tabs .asset-app-tab').forEach(function (t) {
+          t.classList.toggle('active', t.getAttribute('data-tab') === type);
+        });
+        document.querySelectorAll('.asset-app-pane').forEach(function (p) {
+          p.classList.toggle('active', p.getAttribute('data-pane') === type);
+        });
+        document.querySelectorAll('#asset-app-edit-modal [data-tab-field]').forEach(function (f) {
+          f.style.display = (f.getAttribute('data-tab-field') === type) ? '' : 'none';
+        });
+        document.querySelectorAll('#asset-app-edit-modal .form-item.has-error').forEach(function (i) { i.classList.remove('has-error'); });
+        renderAssetAppHead();
+        searchAssetApps();
       }
 
       function searchAssetApps() {
-        var name = (document.getElementById('f-app-name').value || '').trim().toLowerCase();
-        var distId = (document.getElementById('f-dist-app-id').value || '').trim().toLowerCase();
-        var pixel = (document.getElementById('f-pixel-name').value || '').trim().toLowerCase();
-        var pixelAttr = document.getElementById('f-pixel-key').value === 'id' ? 'data-pixel-id' : 'data-pixel';
-        var appType = document.getElementById('f-app-type').value;
-        var payType = document.getElementById('f-pay-type').value;
-        var platform = document.getElementById('f-platform').value;
+        var nameEl = activeAppFilter('name');
+        var distIdEl = activeAppFilter('distId');
+        var payTypeEl = activeAppFilter('payType');
+        var platformEl = activeAppFilter('platform');
+        var name = nameEl ? (nameEl.value || '').trim().toLowerCase() : '';
+        var distId = distIdEl ? (distIdEl.value || '').trim().toLowerCase() : '';
+        var payType = payTypeEl ? payTypeEl.value : '';
+        var platform = platformEl ? platformEl.value : '';
+        var extraKey = currentAppType === 'APP' ? 'pixel' : 'minisId';
+        var extraAttr = currentAppType === 'APP' ? 'data-pixel' : 'data-minis-id';
+        var extraEl = activeAppFilter(extraKey);
+        var extraVal = extraEl ? (extraEl.value || '').trim().toLowerCase() : '';
 
         var hit = 0;
+        var totalOfTab = 0;
         assetAppRows().forEach(function (row) {
-          var ok =
-            (!name || (row.getAttribute('data-name') || '').toLowerCase().indexOf(name) !== -1) &&
-            (!distId || (row.getAttribute('data-dist-id') || '').toLowerCase().indexOf(distId) !== -1) &&
-            (!pixel || (row.getAttribute(pixelAttr) || '').toLowerCase().indexOf(pixel) !== -1) &&
-            (!appType || row.getAttribute('data-app-type') === appType) &&
-            (!payType || row.getAttribute('data-pay-type') === payType) &&
-            (!platform || row.getAttribute('data-platform') === platform);
+          var isTab = row.getAttribute('data-app-type') === currentAppType;
+          if (isTab) totalOfTab += 1;
+          var ok = isTab
+            && (!name || (row.getAttribute('data-name') || '').toLowerCase().indexOf(name) !== -1)
+            && (!distId || (row.getAttribute('data-dist-id') || '').toLowerCase().indexOf(distId) !== -1)
+            && (!extraVal || (row.getAttribute(extraAttr) || '').toLowerCase().indexOf(extraVal) !== -1)
+            && (!payType || row.getAttribute('data-pay-type') === payType)
+            && (!platform || row.getAttribute('data-platform') === platform);
           row.style.display = ok ? '' : 'none';
           if (ok) hit += 1;
         });
         document.getElementById('asset-app-empty').style.display = hit ? 'none' : '';
+        var total = document.getElementById('asset-app-total');
+        if (total) total.textContent = totalOfTab;
       }
 
       function resetAssetAppFilters() {
-        var wrap = document.getElementById('page-overseas-asset-app');
-        wrap.querySelectorAll('.filter-combo-input, .filter-input').forEach(function (i) { i.value = ''; });
-        wrap.querySelectorAll('.filter-select').forEach(function (s) { s.selectedIndex = 0; });
-        var pixelKey = document.getElementById('f-pixel-key');
-        if (pixelKey) { pixelKey.selectedIndex = 0; }
-        syncAssetPixelPlaceholder();
+        var pane = activeAppPane();
+        if (!pane) return;
+        pane.querySelectorAll('.filter-combo-input, .filter-input').forEach(function (i) { i.value = ''; });
+        pane.querySelectorAll('.filter-select').forEach(function (s) { s.selectedIndex = 0; });
         searchAssetApps();
       }
 
@@ -809,39 +873,54 @@
       /* ===== 新增 / 编辑应用 ===== */
       var editingAssetAppRow = null;
 
+      function getRadioValue(name) {
+        var el = document.querySelector('input[name="' + name + '"]:checked');
+        return el ? el.value : '';
+      }
+
+      function setRadioValue(name, value) {
+        document.querySelectorAll('input[name="' + name + '"]').forEach(function (r) {
+          r.checked = (r.value === value);
+        });
+      }
+
       function openAssetAppModal() {
         editingAssetAppRow = null;
-        document.getElementById('asset-app-edit-title').textContent = '新增应用';
-        document.getElementById('asset-app-name').value = '';
-        document.getElementById('asset-app-type').selectedIndex = 0;
-        document.getElementById('asset-app-dist-id').value = '';
-        document.getElementById('asset-app-pay-type').selectedIndex = 0;
-        document.getElementById('asset-app-pixel').selectedIndex = 0;
+        document.getElementById('asset-app-edit-title').textContent = '新建' + currentAppType;
         document.getElementById('asset-app-platform').selectedIndex = 0;
+        setRadioValue('asset-app-pay-type', '');
+        document.getElementById('asset-app-name').value = '';
+        document.getElementById('asset-app-dist-id').value = '';
+        document.getElementById('asset-app-minis-id').value = '';
+        document.getElementById('asset-app-pixel').selectedIndex = 0;
         document.getElementById('asset-app-remark').value = '';
+        document.querySelectorAll('#asset-app-edit-modal .form-item.has-error').forEach(function (i) { i.classList.remove('has-error'); });
+        syncInputClearBtns();
         document.getElementById('asset-app-edit-overlay').classList.add('open');
         document.getElementById('asset-app-edit-modal').classList.add('open');
       }
 
       function editAssetApp(el) {
         var row = el.closest('tr');
+        var rowType = row.getAttribute('data-app-type');
+        if (rowType && rowType !== currentAppType) {
+          switchAppTab(rowType);
+        }
         editingAssetAppRow = row;
-        document.getElementById('asset-app-edit-title').textContent = '编辑应用';
+        document.getElementById('asset-app-edit-title').textContent = '编辑' + (rowType || currentAppType);
+        document.getElementById('asset-app-platform').value = row.getAttribute('data-platform') || '';
+        if (document.getElementById('asset-app-platform').selectedIndex === -1) document.getElementById('asset-app-platform').selectedIndex = 0;
+        setRadioValue('asset-app-pay-type', row.getAttribute('data-pay-type') || '');
         document.getElementById('asset-app-name').value = row.getAttribute('data-name') || '';
-        setSelect('asset-app-type', row.getAttribute('data-app-type'));
         document.getElementById('asset-app-dist-id').value = row.getAttribute('data-dist-id') || '';
-        setSelect('asset-app-pay-type', row.getAttribute('data-pay-type'));
-        setSelect('asset-app-pixel', row.getAttribute('data-pixel'));
-        setSelect('asset-app-platform', row.getAttribute('data-platform'));
+        document.getElementById('asset-app-minis-id').value = row.getAttribute('data-minis-id') || '';
+        document.getElementById('asset-app-pixel').value = row.getAttribute('data-pixel') || '';
+        if (document.getElementById('asset-app-pixel').selectedIndex === -1) document.getElementById('asset-app-pixel').selectedIndex = 0;
         document.getElementById('asset-app-remark').value = row.getAttribute('data-remark') || '';
+        document.querySelectorAll('#asset-app-edit-modal .form-item.has-error').forEach(function (i) { i.classList.remove('has-error'); });
+        syncInputClearBtns();
         document.getElementById('asset-app-edit-overlay').classList.add('open');
         document.getElementById('asset-app-edit-modal').classList.add('open');
-      }
-
-      function setSelect(id, value) {
-        var sel = document.getElementById(id);
-        sel.value = value || '';
-        if (sel.selectedIndex === -1) sel.selectedIndex = 0;
       }
 
       function closeAssetAppModal() {
@@ -849,35 +928,88 @@
         document.getElementById('asset-app-edit-modal').classList.remove('open');
       }
 
+      /* 清空按钮：输入框有值时显示 ×，点击清空 */
+      function syncInputClearBtns() {
+        document.querySelectorAll('#asset-app-edit-modal .input-clearable').forEach(function (wrap) {
+          var input = wrap.querySelector('.form-input');
+          var btn = wrap.querySelector('.input-clear-btn');
+          if (input && btn) btn.style.display = input.value ? 'block' : 'none';
+        });
+      }
+
+      (function initInputClearable() {
+        document.querySelectorAll('#asset-app-edit-modal .input-clearable').forEach(function (wrap) {
+          var input = wrap.querySelector('.form-input');
+          var btn = wrap.querySelector('.input-clear-btn');
+          if (!input || !btn) return;
+          input.addEventListener('input', syncInputClearBtns);
+          btn.addEventListener('click', function () {
+            input.value = '';
+            input.focus();
+            syncInputClearBtns();
+          });
+        });
+      })();
+
+      /* 内联校验：红框 + 字段下方红字（对齐截图） */
+      function markFieldError(el, msg) {
+        var item = el.closest('.form-item');
+        if (!item) return;
+        item.classList.add('has-error');
+        var tip = item.querySelector('.form-error-msg');
+        if (tip && msg) tip.textContent = msg;
+      }
+
+      function clearFieldError(el) {
+        var item = el.closest('.form-item');
+        if (item) item.classList.remove('has-error');
+      }
+
+      (function initFieldErrorClear() {
+        document.querySelectorAll('#asset-app-edit-modal .form-input, #asset-app-edit-modal .form-select').forEach(function (el) {
+          el.addEventListener('input', function () { clearFieldError(el); });
+          el.addEventListener('change', function () { clearFieldError(el); });
+        });
+        document.querySelectorAll('#asset-app-edit-modal input[type="radio"]').forEach(function (el) {
+          el.addEventListener('change', function () { clearFieldError(el); });
+        });
+      })();
+
       function submitAssetApp() {
-        var name = document.getElementById('asset-app-name').value.trim();
-        var appType = document.getElementById('asset-app-type').value;
-        var payType = document.getElementById('asset-app-pay-type').value;
-        var platform = document.getElementById('asset-app-platform').value;
-        if (!name) { alert('请填写应用名称'); return; }
-        if (!appType) { alert('请选择应用类型'); return; }
-        if (!payType) { alert('请选择付费类型'); return; }
-        if (!platform) { alert('请选择平台'); return; }
+        var platform = document.getElementById('asset-app-platform');
+        var payType = getRadioValue('asset-app-pay-type');
+        var name = document.getElementById('asset-app-name');
+        var distId = document.getElementById('asset-app-dist-id');
+        if (!platform.value) { markFieldError(platform); platform.focus(); return; }
+        if (!payType) { markFieldError(document.querySelector('input[name="asset-app-pay-type"]')); return; }
+        if (!name.value.trim()) { markFieldError(name); name.focus(); return; }
+        if (!distId.value.trim()) { markFieldError(distId); distId.focus(); return; }
+
+        var minisId = '', pixel = '';
+        if (currentAppType === '小程序') {
+          minisId = document.getElementById('asset-app-minis-id').value.trim();
+        } else {
+          pixel = document.getElementById('asset-app-pixel').value;
+          if (!pixel) { markFieldError(document.getElementById('asset-app-pixel')); document.getElementById('asset-app-pixel').focus(); return; }
+        }
+        var remark = document.getElementById('asset-app-remark').value.trim();
 
         if (editingAssetAppRow) {
           var row = editingAssetAppRow;
-          row.setAttribute('data-name', name);
-          row.setAttribute('data-app-type', appType);
+          row.setAttribute('data-platform', platform.value);
           row.setAttribute('data-pay-type', payType);
-          row.setAttribute('data-platform', platform);
-          row.setAttribute('data-dist-id', document.getElementById('asset-app-dist-id').value.trim());
-          row.setAttribute('data-pixel', document.getElementById('asset-app-pixel').value);
-          row.setAttribute('data-remark', document.getElementById('asset-app-remark').value.trim());
+          row.setAttribute('data-name', name.value.trim());
+          row.setAttribute('data-dist-id', distId.value.trim());
+          row.setAttribute('data-minis-id', minisId);
+          row.setAttribute('data-pixel', pixel);
+          row.setAttribute('data-remark', remark);
           var cells = row.children;
-          cells[0].innerHTML = '<span class="cell-main">' + name + '</span><span class="cell-sub">ID: ' + (row.getAttribute('data-dist-id') || '--') + '</span>';
-          cells[1].textContent = row.getAttribute('data-dist-id') || '--';
-          var pixelName = row.getAttribute('data-pixel') || '--';
-          var pixelId = row.getAttribute('data-pixel-id') || '';
-          cells[2].innerHTML = '<span class="cell-main">' + pixelName + '</span><span class="cell-sub">ID:' + (pixelId || '--') + '</span>';
-          cells[3].textContent = row.getAttribute('data-remark') || '--';
-          cells[4].textContent = appType;
-          cells[5].textContent = payType;
-          cells[6].textContent = platform;
+          cells[0].textContent = name.value.trim();
+          cells[1].textContent = (currentAppType === 'APP' ? (pixel || '--') : (minisId || '--'));
+          cells[2].textContent = distId.value.trim() || '--';
+          cells[3].textContent = remark || '--';
+          cells[4].textContent = payType;
+          cells[5].textContent = platform.value;
           alert('保存成功');
         } else {
           alert('新增成功');
@@ -910,6 +1042,16 @@
         closeDeleteAssetApp();
         searchAssetApps();
       }
+
+      /* 初始化：渲染表头、初始化 modal tab 字段可见性 */
+      (function initAssetAppPage() {
+        renderAssetAppHead();
+        // 默认显示小程序字段、隐藏 APP 字段
+        document.querySelectorAll('#asset-app-edit-modal [data-tab-field]').forEach(function (f) {
+          f.style.display = (f.getAttribute('data-tab-field') === currentAppType) ? '' : 'none';
+        });
+        searchAssetApps();
+      })();
     </script>
   <script src="../scripts/header-user.js?v=20261008"></script>
   </body>

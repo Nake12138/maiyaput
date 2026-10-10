@@ -1328,9 +1328,6 @@ body {
 .stat-stack .stat-total {
   font-size: 13px;
   color: var(--color-text-primary);
-  text-decoration: underline;
-  text-decoration-color: var(--color-text-tertiary);
-  text-underline-offset: 3px;
 }
 
 .stat-stack .stat-row {

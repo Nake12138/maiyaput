@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BC - 海外投放系统</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="../styles/main.css?v=20261009a" />
-    <link rel="stylesheet" href="../styles/theme-antd.css?v=20261009a" />
+    <link rel="stylesheet" href="../styles/main.css?v=20261010a" />
+    <link rel="stylesheet" href="../styles/theme-antd.css?v=20261010a" />
   </head>
   <body class="theme-antd">
         <!-- Top Bar（全宽：品牌 + 用户） -->
@@ -278,7 +278,7 @@
                 </div>
 
                 <!-- 页签 1：BC用户 -->
-                <div class="bc-tab-panel us-fab-host" id="bc-tab-panel-user">
+                <div class="bc-tab-panel" id="bc-tab-panel-user">
                   <div class="filter-bar" style="margin-bottom:12px;">
                     <div class="filter-bar-row">
                       <input type="text" class="filter-input" id="bc-user-search" placeholder="请输入BC用户名搜索" style="width:200px;" onkeydown="if(event.key==='Enter')searchBcUser()" />
@@ -306,11 +306,10 @@
                       </table>
                     </div>
                   </div>
-                  <button type="button" class="us-fab" data-us="US-002" title="按住可拖动，点击查看本页签用户故事说明">📋 US-002 说明 · BC用户列表与搜索</button>
                 </div>
 
                 <!-- 页签 2：TikTok 账号 -->
-                <div class="bc-tab-panel us-fab-host" id="bc-tab-panel-tt" style="display:none;">
+                <div class="bc-tab-panel" id="bc-tab-panel-tt" style="display:none;">
                   <div class="filter-bar" style="margin-bottom:12px;">
                     <div class="filter-bar-row">
                       <input type="text" class="filter-input" id="bc-tt-search" placeholder="请输入TikTok账号名称" style="width:180px;" onkeydown="if(event.key==='Enter')searchBcTt()" />
@@ -335,7 +334,6 @@
                       </table>
                     </div>
                   </div>
-                  <button type="button" class="us-fab" data-us="US-006" title="按住可拖动，点击查看本页签用户故事说明">📋 US-006 说明 · TikTok 账号列表与搜索</button>
                 </div>
               </section>
             </div>
@@ -344,7 +342,7 @@
           <!-- 分配 TikTok 账号弹框 -->
           <div id="assign-tt-overlay" class="modal-overlay" onclick="closeAssignTtModal(event)"></div>
           <div id="assign-tt-modal" class="modal">
-            <div class="modal-card us-fab-host" style="width:520px;">
+            <div class="modal-card" style="width:520px;">
               <div class="modal-header">
                 <span id="assign-tt-title">分配 TikTok 账号</span>
                 <button class="modal-close" onclick="closeAssignTtModal()">×</button>
@@ -375,14 +373,13 @@
                 <button class="btn btn-outline btn-sm" onclick="closeAssignTtModal()">取消</button>
                 <button class="btn btn-primary btn-sm" onclick="submitAssignTt()">确定</button>
               </div>
-              <button type="button" class="us-fab" data-us="US-003" title="按住可拖动，点击查看本弹框用户故事说明">📋 US-003 说明 · 单个BC用户分配 TikTok 账号</button>
             </div>
           </div>
 
           <!-- 批量分配 TikTok 账号弹框 -->
           <div id="batch-assign-overlay" class="modal-overlay" onclick="closeBatchAssignModal(event)"></div>
           <div id="batch-assign-modal" class="modal">
-            <div class="modal-card us-fab-host" style="width:640px;">
+            <div class="modal-card" style="width:640px;">
               <div class="modal-header">
                 <span>分配 TikTok 账号</span>
                 <button class="modal-close" onclick="closeBatchAssignModal()">×</button>
@@ -414,14 +411,13 @@
                 <button class="btn btn-outline btn-sm" onclick="closeBatchAssignModal()">取消</button>
                 <button class="btn btn-primary btn-sm" onclick="submitBatchAssign()">确定</button>
               </div>
-              <button type="button" class="us-fab" data-us="US-005" title="按住可拖动，点击查看本弹框用户故事说明">📋 US-005 说明 · 批量分配 TikTok 账号</button>
             </div>
           </div>
 
           <!-- BC用户已分配 TikTok 账号抽屉 -->
           <div id="user-tt-overlay" class="drawer-overlay" onclick="closeUserTtDrawer()"></div>
           <div id="user-tt-drawer" class="drawer drawer-wide">
-            <div class="drawer-card us-fab-host">
+            <div class="drawer-card">
               <div class="drawer-header">
                 <span id="user-tt-title">TikTok 账号</span>
                 <button class="drawer-close" onclick="closeUserTtDrawer()">×</button>
@@ -463,14 +459,13 @@
               <div class="drawer-footer">
                 <button class="btn btn-outline btn-sm" onclick="closeUserTtDrawer()">关闭</button>
               </div>
-              <button type="button" class="us-fab" data-us="US-004" title="按住可拖动，点击查看本抽屉用户故事说明">📋 US-004 说明 · BC用户已分配 TikTok 账号抽屉</button>
             </div>
           </div>
 
           <!-- 添加 TikTok 账号弹框（选择添加方式后，字段直接在弹框下方展开） -->
           <div id="add-tt-overlay" class="modal-overlay" onclick="closeAddTtModal()"></div>
           <div id="add-tt-modal" class="modal">
-            <div class="modal-card us-fab-host" style="width:520px;">
+            <div class="modal-card" style="width:520px;">
               <div class="modal-header">
                 <span>添加 TikTok 账号</span>
                 <button class="modal-close" onclick="closeAddTtModal()">×</button>
@@ -545,7 +540,6 @@
                 <button id="add-tt-submit-btn" class="btn btn-primary btn-sm" onclick="submitAddTtNew()" style="display:none;">确定</button>
                 <button id="add-tt-close-btn" class="btn btn-outline btn-sm" onclick="closeAddTtModal()" style="display:none;">关闭</button>
               </div>
-              <button type="button" class="us-fab" id="add-tt-us-fab" data-us="add-tt" title="按住可拖动，点击查看本弹框用户故事说明（US-008 关联方式）">📋 US-008 说明 · 添加 TikTok 账号（关联方式）</button>
             </div>
           </div>
 
@@ -1028,450 +1022,6 @@
         text-align: left;
       }
 
-      /* ===== 需求说明（简洁版 PRD）面板 ===== */
-      .prd-float-btn {
-        position: fixed;
-        left: auto;
-        right: 20px;
-        bottom: 20px;
-        z-index: 1300;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        padding: 8px 14px;
-        font-size: 13px;
-        color: #fff;
-        background: #1d4ed8;
-        border: none;
-        border-radius: 20px;
-        cursor: pointer;
-        box-shadow: 0 2px 8px rgba(29, 78, 216, 0.35);
-        transition: box-shadow 0.15s;
-        touch-action: none;
-        user-select: none;
-      }
-      .prd-float-btn:hover {
-        box-shadow: 0 4px 12px rgba(29, 78, 216, 0.45);
-      }
-      .prd-float-btn.dragging {
-        cursor: grabbing;
-        box-shadow: 0 6px 16px rgba(29, 78, 216, 0.55);
-      }
-      /* ===== 抽屉/弹框内：单个 US 悬浮说明按钮（配色与「📋 需求说明」按钮一致，可拖动） ===== */
-      .us-fab-host { position: relative; }
-      .us-fab {
-        position: absolute;
-        left: 14px;
-        bottom: 12px;
-        z-index: 60;
-        display: inline-flex;
-        align-items: center;
-        gap: 5px;
-        padding: 6px 12px;
-        font-size: 12px;
-        color: #fff;
-        background: #1d4ed8;
-        border: 1px solid #1d4ed8;
-        border-radius: 16px;
-        cursor: pointer;
-        box-shadow: 0 2px 8px rgba(29, 78, 216, 0.35);
-        transition: background 0.15s, box-shadow 0.15s;
-        touch-action: none;
-        user-select: none;
-      }
-      .us-fab:hover {
-        background: #1e40af;
-        box-shadow: 0 4px 12px rgba(29, 78, 216, 0.45);
-      }
-      .us-fab.dragging {
-        cursor: grabbing;
-        box-shadow: 0 6px 16px rgba(29, 78, 216, 0.55);
-      }
-      /* 主页面 US-001：固定悬浮，叠在「📋 需求说明」按钮上方 */
-      .us-fab-page {
-        position: fixed;
-        left: auto;
-        right: 20px;
-        bottom: 66px;
-        z-index: 1300;
-        border-radius: 20px;
-        padding: 7px 13px;
-      }
-      /* ===== 单个 US 详情面板（悬浮按钮点击后展开） ===== */
-      .us-detail-panel {
-        position: fixed;
-        top: 48px;
-        right: 24px;
-        z-index: 1350;
-        width: min(560px, calc(100vw - 32px));
-        max-height: calc(100vh - 96px);
-        background: #fff;
-        border: 1px solid #e4e7ec;
-        border-radius: 10px;
-        box-shadow: 0 10px 32px rgba(16, 24, 40, 0.2);
-        display: flex;
-        flex-direction: column;
-        opacity: 0;
-        visibility: hidden;
-        transform: translateY(8px);
-        transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
-      }
-      .us-detail-panel.open {
-        opacity: 1;
-        visibility: visible;
-        transform: translateY(0);
-      }
-      .us-detail-header {
-        flex: none;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        padding: 12px 14px;
-        border-bottom: 1px solid #e4e7ec;
-        background: #f8fafc;
-        border-radius: 10px 10px 0 0;
-      }
-      .us-detail-title {
-        flex: 1;
-        min-width: 0;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 14px;
-        font-weight: 600;
-        color: #1d2939;
-      }
-      .us-detail-body {
-        flex: 1;
-        overflow-y: auto;
-        padding: 12px 14px 16px;
-      }
-      .us-detail-desc {
-        font-size: 12px;
-        line-height: 1.7;
-        color: #475467;
-        background: #f8fafc;
-        border: 1px solid #eef2f6;
-        border-radius: 6px;
-        padding: 8px 10px;
-        margin-bottom: 10px;
-      }
-      .us-detail-supp {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-      }
-      .prd-overlay {
-        position: fixed;
-        inset: 0;
-        z-index: 1299;
-        background: rgba(16, 24, 40, 0.45);
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.2s, visibility 0.2s;
-      }
-      .prd-overlay.open {
-        opacity: 1;
-        visibility: visible;
-      }
-      .prd-panel {
-        position: fixed;
-        z-index: 1301;
-        background: #fff;
-        box-shadow: 0 10px 32px rgba(16, 24, 40, 0.2);
-        border: 1px solid #e4e7ec;
-        border-radius: 10px;
-        display: flex;
-        flex-direction: column;
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.2s ease, visibility 0.2s ease;
-      }
-      .prd-panel.open {
-        opacity: 1;
-        visibility: visible;
-      }
-      .prd-panel.fullscreen {
-        left: 0 !important;
-        top: 0 !important;
-        width: 100vw !important;
-        height: 100vh !important;
-        max-width: none;
-        border-radius: 0;
-        border: none;
-      }
-      .prd-panel-header {
-        flex: none;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 8px;
-        padding: 14px 16px;
-        border-bottom: 1px solid #e4e7ec;
-        background: #f8fafc;
-        border-radius: 10px 10px 0 0;
-        cursor: move;
-        user-select: none;
-        touch-action: none;
-      }
-      .prd-panel.fullscreen .prd-panel-header {
-        border-radius: 0;
-        cursor: default;
-      }
-      .prd-panel-actions {
-        display: flex;
-        align-items: center;
-        gap: 4px;
-        flex: none;
-      }
-      .prd-panel-title {
-        font-size: 15px;
-        font-weight: 600;
-        color: #1d2939;
-      }
-      .prd-panel-sub {
-        margin-top: 2px;
-        font-size: 12px;
-        color: #98a2b3;
-      }
-      .prd-panel-btn {
-        height: 28px;
-        padding: 0 10px;
-        border: none;
-        border-radius: 4px;
-        background: transparent;
-        color: #667085;
-        font-size: 12px;
-        line-height: 1;
-        cursor: pointer;
-      }
-      .prd-panel-btn:hover {
-        background: #eef2f6;
-        color: #1d2939;
-      }
-      .prd-panel-close {
-        width: 28px;
-        height: 28px;
-        border: none;
-        border-radius: 4px;
-        background: transparent;
-        color: #667085;
-        font-size: 18px;
-        line-height: 1;
-        cursor: pointer;
-      }
-      .prd-panel-close:hover {
-        background: #eef2f6;
-        color: #1d2939;
-      }
-      .prd-panel-body {
-        flex: 1;
-        overflow-y: auto;
-        padding: 14px 16px 20px;
-      }
-      .prd-story {
-        border: 1px solid #e4e7ec;
-        border-radius: 6px;
-        margin-bottom: 10px;
-        overflow: hidden;
-        background: #fff;
-      }
-      .prd-story-head {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 10px 12px;
-        cursor: pointer;
-        user-select: none;
-      }
-      .prd-story-head:hover {
-        background: #f8fafc;
-      }
-      .prd-story-id {
-        font-size: 12px;
-        font-weight: 600;
-        color: #1d4ed8;
-        background: #eff4ff;
-        border-radius: 4px;
-        padding: 1px 6px;
-        flex: none;
-      }
-      .prd-story-title {
-        flex: 1;
-        font-size: 13px;
-        font-weight: 600;
-        color: #1d2939;
-      }
-      .prd-story-pri {
-        flex: none;
-        font-size: 11px;
-        color: #b54708;
-        background: #fffaeb;
-        border: 1px solid #fedf89;
-        border-radius: 4px;
-        padding: 0 5px;
-      }
-      .prd-story-pri.p1 {
-        color: #027a48;
-        background: #ecfdf3;
-        border-color: #abefc6;
-      }
-      .prd-story-caret {
-        flex: none;
-        font-size: 11px;
-        color: #98a2b3;
-        transition: transform 0.15s;
-      }
-      .prd-story.open .prd-story-caret {
-        transform: rotate(90deg);
-      }
-      .prd-story-desc {
-        padding: 2px 12px 8px;
-        font-size: 12px;
-        line-height: 1.6;
-        color: #475467;
-      }
-      .prd-story-supp {
-        display: none;
-        padding: 0 12px 10px;
-      }
-      .prd-story.open .prd-story-supp {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-      }
-      .prd-story-supp-item {
-        font-size: 12px;
-        line-height: 1.6;
-        color: #475467;
-        background: #f8fafc;
-        border: 1px solid #eef2f6;
-        border-radius: 6px;
-        padding: 6px 8px;
-      }
-      .prd-story-supp-label {
-        display: block;
-        font-weight: 600;
-        color: #344054;
-        margin-bottom: 2px;
-      }
-      .prd-story-supp-list {
-        margin: 0;
-        padding: 0 0 0 14px;
-        font-size: 12px;
-        line-height: 1.7;
-        color: #475467;
-      }
-      .prd-story-supp-list li {
-        margin: 1px 0;
-      }
-      .prd-story-supp-list a,
-      .prd-story-supp-text a {
-        color: #1d4ed8;
-        text-decoration: none;
-      }
-      .prd-story-supp-list a:hover,
-      .prd-story-supp-text a:hover {
-        text-decoration: underline;
-      }
-      .prd-story-shot {
-        display: none;
-        padding: 0 12px 10px;
-      }
-      .prd-story.open .prd-story-shot {
-        display: block;
-      }
-      .prd-story-shot-label {
-        margin-bottom: 6px;
-        font-size: 11px;
-        font-weight: 600;
-        color: #667085;
-      }
-      .prd-story-shot img {
-        width: 100%;
-        height: auto;
-        border: 1px solid #e4e7ec;
-        border-radius: 6px;
-        background: #f8fafc;
-        display: block;
-        cursor: zoom-in;
-        transition: box-shadow 0.15s;
-      }
-      .prd-story-shot img:hover {
-        box-shadow: 0 2px 10px rgba(16, 24, 40, 0.18);
-      }
-      .prd-img-viewer {
-        position: fixed;
-        inset: 0;
-        z-index: 1400;
-        background: rgba(16, 24, 40, 0.78);
-        display: none;
-        align-items: center;
-        justify-content: center;
-        padding: 32px;
-        cursor: zoom-out;
-      }
-      .prd-img-viewer.open {
-        display: flex;
-      }
-      .prd-img-viewer img {
-        max-width: 100%;
-        max-height: 100%;
-        border-radius: 6px;
-        background: #fff;
-        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
-      }
-      .prd-img-viewer-tip {
-        position: absolute;
-        top: 16px;
-        left: 50%;
-        transform: translateX(-50%);
-        padding: 6px 14px;
-        font-size: 12px;
-        color: #fff;
-        background: rgba(16, 24, 40, 0.6);
-        border-radius: 14px;
-        pointer-events: none;
-      }
-      .prd-story-shot-empty {
-        padding: 8px 12px;
-        font-size: 12px;
-        color: #98a2b3;
-        background: #f8fafc;
-        border: 1px dashed #e4e7ec;
-        border-radius: 6px;
-      }
-      /* ===== 单个 user-story 展开内容：界面示意（左） + 说明（右）左右布局 ===== */
-      .prd-story-body {
-        display: none;
-        padding: 0 12px 12px;
-      }
-      .prd-story.open .prd-story-body {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        align-items: flex-start;
-      }
-      .prd-story-shot-col {
-        flex: 0 1 46%;
-        min-width: 300px;
-        align-self: flex-start;
-        position: sticky;
-        top: 0;
-      }
-      .prd-story-main {
-        flex: 1 1 300px;
-        min-width: 0;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-      }
-      /* 左右布局下取消原纵向布局的水平内边距 */
-      .prd-story-body .prd-story-desc { padding: 0; }
-      .prd-story-body .prd-story-supp { padding: 0; }
-      .prd-story-body .prd-story-ac { padding: 0; }
-      .prd-story-body .prd-story-shot { padding: 0; }
-      .prd-story-body .prd-story-ac-head { margin-top: 0; }
     </style>
 
     <script>
@@ -1738,7 +1288,6 @@
         document.getElementById('bc-tab-btn-tt').classList.toggle('active', bcActiveTab === 'tt');
         document.getElementById('bc-tab-panel-user').style.display = bcActiveTab === 'user' ? 'block' : 'none';
         document.getElementById('bc-tab-panel-tt').style.display = bcActiveTab === 'tt' ? 'block' : 'none';
-        closeUsDetail(); /* 页签切换时同步关闭 US 说明弹框 */
       }
 
       /* 商务中心列表 30 分钟轮询渲染（仅刷新列表，不触碰页签时间戳；
@@ -1859,7 +1408,6 @@
         if (e && e.stopPropagation) e.stopPropagation();
         document.getElementById('assign-tt-overlay').classList.remove('open');
         document.getElementById('assign-tt-modal').classList.remove('open');
-        closeUsDetail(); /* 同步关闭 US 说明弹框 */
       }
 
       /* ===== 分配 / 批量分配 TikTok 账号 公共行渲染（4 列：选择 / TikTok账号 / 更新人 / 更新时间） =====
@@ -1974,7 +1522,6 @@
         if (e && e.stopPropagation) e.stopPropagation();
         document.getElementById('batch-assign-overlay').classList.remove('open');
         document.getElementById('batch-assign-modal').classList.remove('open');
-        closeUsDetail(); /* 同步关闭 US 说明弹框 */
       }
 
       function searchBatchAssign() {
@@ -2183,7 +1730,6 @@
       function closeUserTtDrawer() {
         document.getElementById('user-tt-overlay').classList.remove('open');
         document.getElementById('user-tt-drawer').classList.remove('open');
-        closeUsDetail(); /* 同步关闭 US 说明弹框 */
         userTtSelected = []; /* 关闭抽屉时清空批量勾选状态 */
         updateUserTtSelected();
       }
@@ -2447,7 +1993,6 @@
       function closeAddTtModal() {
         document.getElementById('add-tt-overlay').classList.remove('open');
         document.getElementById('add-tt-modal').classList.remove('open');
-        closeUsDetail(); /* 同步关闭 US 说明弹框 */
       }
 
       /* 选择添加方式：新建 / 关联，其余字段直接在当前弹框下方展示 */
@@ -2545,351 +2090,6 @@
       }
       loadTtRegionOptions();
 
-      /* ===== 需求说明（简洁版 PRD）面板 ===== */
-      var prdStories = [
-        {
-          id: 'US-001', title: '商务中心列表展示与单选', priority: 'P0',
-          shot: '../assets/prd/us-001-main.png',
-          desc: '作为投放运营，我想要在左侧查看商务中心列表并单选目标 BC，以便切换查看该 BC 下的BC用户和 TikTok 账号。',
-          filter: '左侧「商务中心」面板：顶部「商务中心」标题；搜索框（占位「请输入商务中心名称」，输入即时过滤列表）。',
-          fields: '左侧每行：单选指示符（实心圆 ● 为当前选中，空心圆 ○ 为未选中）+ 商务中心名称（文本，单行截断显示）+ 「N 人 · N TikTok账号」元信息。',
-          source: '左侧列表数据 ← 接口「获取商务中心列表」（<a href="https://business-api.tiktok.com/portal/docs/get-business-centers/v1.3" target="_blank">get-business-centers 官方文档</a>）；列表数据每 30 分钟自动轮询刷新一次，无需手动操作。',
-          flow: '页面加载 → 调用「获取商务中心列表」→ 渲染左侧商务中心列表（默认选中第一个 BC）→ 用户可点击切换当前所选 BC / 搜索；切换选中后右侧两个页签（BC用户、TikTok账号）同时按所选 BC 刷新；每 30 分钟自动重新拉取一次列表数据。',
-          ac: [
-            '页面左侧展示「商务中心」面板，列为：单选指示符 / 商务中心名称 / N 人 · N TikTok账号',
-            '支持按商务中心名称即时模糊搜索（包含匹配、不区分大小写），无结果显示「暂无数据」',
-            '面板内单选语义：同一时间仅一个 BC 处于选中状态，点击任意行即切换当前所选 BC',
-            '默认选中第一个 BC；切换选中后右侧两个页签同步刷新，按所选 BC 展示对应内容',
-            '左侧面板不展示「上次更新时间」与「自动更新频率」等运维类提示，时间戳只在右侧两个页签的工具条上独立显示',
-            '列表数据每 30 分钟自动重新拉取一次（前端轮询），无需用户手动触发'
-          ]
-        },
-        {
-          id: 'US-002', title: 'BC用户列表页签与搜索', priority: 'P0',
-          shot: '../assets/prd/us-002-user-tab.png',
-          desc: '作为投放运营，我想要查看当前所选 BC 下的BC用户列表并搜索BC用户，以便定位目标BC用户。',
-          filter: 'BC用户名筛选：单行文本输入框（占位「请输入BC用户名搜索」）+「查询」/「重置」按钮 +「刷新」按钮；点击「查询」后按BC用户名查询列表（包含匹配、不区分大小写），点击「重置」清空条件并恢复全量列表，点击「刷新」调用接口重新拉取当前所选 BC 下的BC用户并刷新表格与时间戳。',
-          fields: '选择列（复选框，表头支持全选/半选，勾选用于批量分配）／BC用户名（文本，BC BC用户账号名称）／TikTok 账号（数字，可点击链接，打开该BC用户已分配账号抽屉）／所属商务中心（文本，固定展示在「TikTok 账号」列之后，取值恒为当前所选 BC 名称）／操作（按钮：分配 TikTok 账号）；工具条左侧显示「已选择 X 个BC用户」与「分配TikTok」按钮；工具条右侧显示「上次更新 HH:MM:SS」时间戳，与 TikTok账号页签的时间戳相互独立。',
-          source: '页签表格 ← 接口「获取商务中心BC用户列表」（<a href="https://business-api.tiktok.com/portal/docs/get-the-members-of-a-bc/v1.3" target="_blank">get-the-members-of-a-bc 官方文档</a>），入参为左侧当前所选 BC ID。',
-          flow: '左侧切换 BC 后右侧「BC用户」页签直接展示该 BC 下的BC用户；搜索框在本地过滤可见行，勾选状态独立于可见列表保留；点击「刷新」调用接口重新拉取并独立刷新本页签的时间戳。',
-          ac: [
-            '右侧默认显示「BC用户」页签，标题：BC用户',
-            '支持按BC用户名搜索（点击「查询」按钮或输入框内回车执行，包含匹配、不区分大小写），无结果显示「暂无数据」空态',
-            '表格列序：选择 / BC用户名 / TikTok 账号 / 所属商务中心 / 操作；其中「所属商务中心」固定展示（取值恒为当前所选 BC 名称），每次切换左侧 BC 后跟随刷新',
-            '顶部「刷新」按钮：点击后置灰为「刷新中…」，调用接口重新拉取当前所选 BC 下的BC用户，结束后恢复并独立更新本页签的时间戳',
-            '工具条右侧显示「上次更新 HH:MM:SS」；页面初始化时即写入一次，刷新按钮触发后再写入一次；该时间戳与 TikTok账号页签互不干扰',
-            '每次切换左侧 BC 后，自动按新 BC 刷新页签'
-          ]
-        },
-        {
-          id: 'US-003', title: '单个BC用户分配 TikTok 账号', priority: 'P0',
-          shot: '../assets/prd/us-003-single-assign.png',
-          desc: '作为投放运营，我想要为单个BC用户分配 TikTok 账号，以便授予其投放资产权限。',
-          filter: '账号筛选：单行文本输入框（占位「搜索 TikTok 账号名称」）+「查询」/「重置」按钮，点击「查询」后按账号名称查询；列表首列复选框支持表头全选。',
-          fields: '选择列（复选框；已分配给该BC用户的账号禁用并标注「已分配」，全选自动跳过）／TikTok 账号（文本，账号名称）。',
-          source: '弹框账号列表 ← 接口「获取资产列表」（<a href="https://business-api.tiktok.com/portal/docs/get-assets/v1.3" target="_blank">get-assets 官方文档</a>），入参为当前 BC ID；已分配状态来自分配关系数据。提交调用「将资产分配给用户」（<a href="https://business-api.tiktok.com/portal/docs/assign-an-asset/v1.3" target="_blank">assign-an-asset 官方文档</a>），撤销调用「撤销用户对资产的权限」（<a href="https://business-api.tiktok.com/portal/docs/unassign-an-asset/v1.3" target="_blank">unassign-an-asset 官方文档</a>）。',
-          flow: 'BC用户行内点击「分配 TikTok 账号」→ 携带 BC ID + BC用户名打开弹框 → 调用「获取资产列表」→ 展示该 BC 下全部账号并标注已分配 → 勾选未分配账号 → 点「确定」→ 调用「将资产分配给用户」→ 成功提示并关闭；弹框层级高于页面其他元素，关闭不影响底层页签。',
-          ac: [
-            'BC用户行内「分配 TikTok 账号」打开弹框，标题：分配 TikTok 账号 - {BC用户名}',
-            '弹框列出该 BC 全部 TikTok 账号（仅账号名称），支持按名称搜索与表头全选',
-            '已分配给该BC用户的账号复选框禁用并标注「已分配」，全选自动跳过',
-            '未勾选可用账号时点「确定」→ 提示「请至少选择一个未分配的 TikTok 账号」',
-            '弹框层级高于页签，关闭弹框不影响底层页签'
-          ]
-        },
-        {
-          id: 'US-004', title: 'BC用户已分配 TikTok 账号抽屉', priority: 'P0',
-          shot: '../assets/prd/us-004-user-tt.png',
-          desc: '作为投放运营，我想要查看某个BC用户已分配的 TikTok 账号明细，以便确认其资产权限。',
-          filter: '筛选项仅保留 TikTok账号名称（单行文本输入框，占位「请输入TikTok账号名称」）+「查询」/「重置」按钮；点击「查询」后按账号名称查询，点击「重置」清空全部条件并恢复全量列表。',
-          fields: '选择列（复选框，固定显示，表头支持全选/半选，勾选用于批量删除）／TikTok账号名称（文本，账号名称）／更新人（文本，最近操作人）／更新时间（文本，格式 yyyy-MM-dd HH:mm）／操作（按钮：删除，点击后二次确认并调用「撤销用户对资产的权限」接口取消授权）；仅展示该BC用户已分配的账号。表格上方工具条显示「已选择 X 个 TikTok 账号」+「批量删除」按钮（红色，勾选为空时置灰）。',
-          source: '抽屉内账号列表 ← 该BC用户与资产的分配关系；可调用「获取资产列表」（<a href="https://business-api.tiktok.com/portal/docs/get-assets/v1.3" target="_blank">get-assets 官方文档</a>）后按BC用户名过滤出已分配账号。单条删除与批量删除均调用「撤销用户对资产的权限」（<a href="https://business-api.tiktok.com/portal/docs/unassign-an-asset/v1.3" target="_blank">unassign-an-asset 官方文档</a>）。',
-          flow: 'BC用户列表行内点击「TikTok 账号」数量 → 携带 BC ID + BC用户名打开宽抽屉 → 调用「获取资产列表」→ 仅展示该BC用户已被分配的 TikTok 账号 → 渲染账号明细（含选择列、操作列「删除」）；点击「删除」→ 二次确认「是否取消授权该BC用户该 TikTok 账号？」→ 用户确认后调用「撤销用户对资产的权限」→ 成功从列表移除该账号并同步BC用户账号数；抽屉叠加在BC用户抽屉之上，关闭后回到BC用户列表。',
-          ac: [
-            '点击BC用户行内「TikTok 账号」数量，打开右侧宽抽屉，标题：TikTok 账号 - {BC用户名}（{BC名称}）',
-            '抽屉仅列出该BC用户已被分配的 TikTok 账号（仅账号名称），不展示 BC 下未分配给该BC用户的账号',
-            '表格列序：选择 / TikTok账号名称（账号名称）/ 更新人 / 更新时间 / 操作（删除按钮），无已分配账号时显示空态「该BC用户暂无已分配 TikTok 账号」',
-            '点击单条「删除」弹出二次确认「是否取消授权该BC用户该 TikTok 账号？」，用户确认后调用「撤销用户对资产的权限」接口取消授权，成功后移除该账号并刷新列表；点击「取消」则不执行',
-            '支持按账号名称查询（点击「查询」后执行，「重置」恢复全量）',
-            '抽屉叠加在BC用户抽屉之上，关闭后回到BC用户列表',
-            '表格上方工具条：实时显示「已选择 X 个 TikTok 账号」与红色「批量删除」按钮；勾选为空时按钮置灰、不可点击；勾选项受搜索过滤影响（被过滤掉的勾选保留）'
-          ]
-        },
-        {
-          id: 'US-005', title: '批量分配 TikTok 账号', priority: 'P0',
-          shot: '../assets/prd/us-004-batch-assign.png',
-          desc: '作为投放运营，我想要勾选多个BC用户后批量分配 TikTok 账号，以便提高分配效率。',
-          filter: '筛选项仅保留 TikTok账号名称（单行文本输入框，占位「请输入TikTok账号名称」）+「查询」/「重置」按钮；点击「查询」后按账号名称查询，点击「重置」清空全部条件并恢复全量列表。',
-          fields: '选择列（复选框，固定显示，表头支持全选；不展示「已分配」状态，是否已分配由后端自动判断）／TikTok账号名称（文本，账号名称）／更新人（文本，最近操作人）／更新时间（文本，格式 yyyy-MM-dd HH:mm）；弹框顶部显示提示条「已选择 N 个BC用户，请勾选要分配的 TikTok 账号」。',
-          source: '弹框账号列表 ← 取本地 tiktok 账号列表（页面进入时已通过「获取资产列表」拉取并缓存在本地 bcTtData，直接复用避免重复请求）；同一账号可能同属多个 BC，按账号名去重展示一次。提交调用「将资产分配给用户」（<a href="https://business-api.tiktok.com/portal/docs/assign-an-asset/v1.3" target="_blank">assign-an-asset 官方文档</a>）。',
-          flow: 'BC用户页签勾选 N 个BC用户（本地状态）→ 点「分配TikTok」→ 打开批量弹框 → 直接复用本地 TikTok 账号列表渲染 → 勾选账号 → 点「确定」→ 提交「将资产分配给用户」→ 是否已分配由后端逐一自动判断 → 成功提示并关闭。',
-          ac: [
-            'BC用户页签首列复选框（表头全选支持半选态），工具条实时显示「已选择 X 个BC用户」',
-            '未勾选BC用户时「分配TikTok」按钮置灰',
-            '点击「分配TikTok」打开弹框，顶部提示「已选择 N 个BC用户，请勾选要分配的 TikTok 账号」',
-            '弹框筛选项：TikTok账号名称 + 查询 / 重置',
-            '表格列序：选择 / TikTok账号名称 / 更新人 / 更新时间；第一列固定显示复选框，不展示「已分配」状态（是否已分配由后端自动判断）',
-            '未勾选账号时点「确定」→ 提示「请至少选择一个 TikTok 账号」'
-          ]
-        },
-        {
-          id: 'US-006', title: 'TikTok 账号列表页签与搜索', priority: 'P0',
-          shot: '../assets/prd/us-006-tt-tab.png',
-          desc: '作为投放运营，我想要查看当前所选 BC 下的 TikTok 账号资产明细，以便了解资产情况。',
-          filter: '筛选项仅保留 TikTok账号名称（单行文本输入框，占位「请输入TikTok账号名称」）+「查询」/「重置」按钮 +「刷新」按钮 +「添加 TikTok 账号」按钮；点击「查询」后按账号名称查询，点击「重置」清空全部条件并恢复全量列表，点击「刷新」调用接口重新拉取当前所选 BC 下的 TikTok 账号并刷新表格与时间戳。',
-          fields: 'TikTok账号名称（文本，账号名称）／已分配 BC 用户（文本，本 BC 下被分配该 TikTok 账号的 BC 用户数量，鼠标悬浮逐行显示 BC 用户名清单）／所属商务中心（文本，固定展示在「TikTok账号名称」之后，取值恒为当前所选 BC 名称）／更新人（文本，最近操作人）／更新时间（文本，格式 yyyy-MM-dd HH:mm）；展示当前所选 BC 下全部 TikTok 账号资产，无操作列；表格上方工具条左侧显示「上次更新 HH:MM:SS」时间戳，与 BC用户页签的时间戳相互独立。',
-          source: '页签表格 ← 接口「获取资产列表」（<a href="https://business-api.tiktok.com/portal/docs/get-assets/v1.3" target="_blank">get-assets 官方文档</a>），入参为左侧当前所选 BC ID。',
-          flow: '左侧切换 BC 后右侧「TikTok账号」页签直接展示该 BC 下的 TikTok 账号→「所属商务中心」列固定展示在「TikTok账号名称」之后，取值恒为当前所选 BC 名称；筛选项在本地过滤可见行；点击「刷新」重新拉取并独立刷新本页签的时间戳；点击「添加 TikTok 账号」在当前所选 BC 上打开添加弹框，商务中心字段自动带入并锁定。',
-          ac: [
-            '右侧提供「TikTok账号」页签，点击切换进入，标题：TikTok账号',
-            '支持按账号名称查询（点击「查询」后执行，「重置」恢复全量），无结果显示空态',
-            '「已分配 BC 用户」列：默认显示当前所选 BC 下已分配该 TikTok 账号的 BC 用户数量；鼠标悬浮在该单元格上时浮层逐行展示 BC 用户名清单；未分配时显示 0',
-            '「所属商务中心」列固定展示在「TikTok账号名称」列之后，取值恒为当前所选左侧 BC 名称，不展开该账号在其他 BC 下的归属',
-            '顶部「刷新」按钮：点击后置灰为「刷新中…」，调用接口重新拉取当前所选 BC 下的 TikTok 账号，结束后恢复并独立更新本页签的时间戳',
-            '工具条左侧显示「上次更新 HH:MM:SS」；页面初始化时即写入一次，刷新按钮触发后再写入一次；该时间戳与 BC用户页签互不干扰',
-            '顶部「添加 TikTok 账号」按钮：点击后直接打开弹框并锁定当前所选 BC',
-            '每次切换左侧 BC 后，自动按新 BC 刷新页签'
-          ]
-        },
-        {
-          id: 'US-008', title: '添加 TikTok 账号（关联方式）', priority: 'P0',
-          shot: '../assets/prd/us-007-add-link.png',
-          desc: '作为投放运营，我想要通过扫码关联已有 TikTok 账号，以便复用已有资产。',
-          filter: '无列表筛选；二维码展示组件 + 文本提示 + 授权对象信息（{BC名称}，只读）。',
-          fieldsLabel: '展示字段',
-          fields: '授权二维码（图片，由授权链接渲染生成，使用 TikTok App 扫码完成授权）／提示文案（只读文本：「请使用 TikTok App 扫描二维码完成账号授权」）／授权对象（只读文本，显示当前 BC 名称）／「刷新二维码」按钮（点击后置灰为「刷新中…」，调用接口重新拉取授权链接并刷新画布；完成后恢复）／提示文案（只读文本：「授权完成后弹框不会自动关闭；如二维码失效，可点击『刷新二维码』」）；底部按钮为「关闭」，仅在用户主动操作时关闭弹框。',
-          source: '二维码 ← 接口「获取 TikTok 账号授权链接」（<a href="https://business-api.tiktok.com/portal/docs/obtain-a-tiktok-account-ad-delivery-authorization-url/v1.3" target="_blank">obtain-a-tiktok-account-ad-delivery-authorization-url 官方文档</a>）返回的授权链接渲染生成；刷新二维码按钮调用同一接口重新拉取。',
-          flow: '弹框选择「关联」卡片 → 携带当前 BC ID 调用「获取 TikTok 账号授权链接」→ 渲染二维码 → 用户使用 TikTok App 扫码授权 → **弹框不自动关闭**；若二维码失效，在弹框内点击「刷新二维码」重新拉取授权链接并刷新二维码，用户继续在 TikTokApp 中完成新账号授权；用户手动点「关闭」才退出弹框，刷新 TikTok账号列表后新账号出现。',
-          ac: [
-            '在添加弹框中选择「关联 TikTok 账号」卡片',
-            '弹框内展开二维码区域：二维码 + 提示「请使用 TikTok App 扫描二维码完成账号授权」+ 授权对象 {BC名称} + 「刷新二维码」按钮 + 提示「授权完成后弹框不会自动关闭；如二维码失效，可点击『刷新二维码』」',
-            '底部按钮切换为「关闭」；授权完成后弹框不自动关闭，由用户主动决定退出时机',
-            '点击「刷新二维码」：按钮置灰为「刷新中…」，调用「获取 TikTok 账号授权链接」接口重新拉取授权链接并刷新二维码画布；接口返回后按钮恢复正常文案',
-            '关闭弹框后，TikTok账号列表中能看到所有已成功授权的账号'
-          ]
-        },
-        {
-          id: 'US-009', title: 'BC用户已分配 TikTok 账号批量删除', priority: 'P0',
-          shot: '../assets/prd/us-009-batch-remove.png',
-          desc: '作为投放运营，我想要在抽屉内一次性勾选多个 TikTok 账号并批量取消授权，以便快速收回资产权限。',
-          filter: '无独立筛选条件，依赖 US-004 抽屉自身的账号名称筛选项；当前可见行（受筛选过滤后的行）支持表头全选与逐行勾选。',
-          fields: '表格首列复选框（单条勾选，可保留已过滤掉的勾选项）／表头复选框（全选/取消全选，半选态表示部分可见行被选中）／表格上方工具条：「已选择 X 个 TikTok 账号」+ 红色「批量删除」按钮并排位于表格左上方（勾选为空时置灰，布局与 BC用户页签的「已选择 + 分配TikTok」工具条一致）；二次确认弹框仅问「是否确认取消授权？」+ 明细区显示「BC用户：{user}　共 N 个 TikTok 账号」，不再展开账号名预览。',
-          source: '批量删除调用「撤销用户对资产的权限」（<a href="https://business-api.tiktok.com/portal/docs/unassign-an-asset/v1.3" target="_blank">unassign-an-asset 官方文档</a>），按勾选账号名串行执行；执行完成后同步刷新抽屉列表与底层「BC用户」页签的账号数量。',
-          flow: '打开抽屉（US-004）→ 通过账号名称筛选缩小目标范围 → 在表格首列勾选多个账号（可表头全选当前可见行）→ 工具条实时显示「已选择 X 个」→ 点击红色「批量删除」→ 弹出二次确认「取消授权」弹框（问句「是否确认取消授权？」+ 明细仅显示 BC用户与总数）→ 用户点「确定」→ 串行调用「撤销用户对资产的权限」逐条撤销 → 全部完成后一次性刷新抽屉与 BC用户列表 → 提示「已批量取消授权 N 个 TikTok 账号：{账号名清单}」。',
-          ac: [
-            '抽屉内表格首列复选框，每行独立可控；表头复选框支持全选当前可见行，并出现半选态',
-            '工具条实时显示「已选择 X 个 TikTok 账号」；未勾选时「批量删除」按钮置灰、不可点击',
-            '点击「批量删除」复用「取消授权」二次确认弹框，仅问「是否确认取消授权？」，明细区只显示当前 BC用户与账号总数（不展开账号名清单，不展示「该操作不可恢复，请谨慎」提示）',
-            '用户确认后批量调用「撤销用户对资产的权限」，按勾选顺序串行撤销；执行结束后一次性刷新抽屉列表与底层 BC用户列表的账号数量，避免单条重绘造成多次抖动',
-            '执行成功后弹窗提示「已批量取消授权 N 个 TikTok 账号：{账号名清单}」（账号名以「、」分隔），并自动清空批量勾选状态、关闭抽屉时同样清空',
-            '勾选项在被单条删除 / 批量删除后自动收敛：已撤销授权或已不在分配关系中的账号会从勾选集合中剔除，计数与按钮置灰状态随之更新'
-          ]
-        }
-      ];
-
-      /* 将筛选项/表格字段/数据来源按全角分隔符分行罗列（括号内的分隔符不拆行） */
-      function prdSplitLines(text) {
-        var out = [], buf = '', depth = 0;
-        for (var i = 0; i < text.length; i++) {
-          var ch = text.charAt(i);
-          if (ch === '（') depth++;
-          if (ch === '）' && depth > 0) depth--;
-          if (depth === 0 && (ch === '／' || ch === '；' || ch === '。')) {
-            var t = buf.trim();
-            if (t) out.push(t);
-            buf = '';
-          } else {
-            buf += ch;
-          }
-        }
-        var last = buf.trim();
-        if (last) out.push(last);
-        return out;
-      }
-
-      function prdSuppItemHtml(label, text) {
-        var lines = prdSplitLines(text);
-        var content;
-        if (lines.length > 1) {
-          content = '<ul class="prd-story-supp-list">' + lines.map(function (l) { return '<li>' + l + '</li>'; }).join('') + '</ul>';
-        } else {
-          content = '<span class="prd-story-supp-text">' + text + '</span>';
-        }
-        return '<div class="prd-story-supp-item"><span class="prd-story-supp-label">' + label + '</span>' + content + '</div>';
-      }
-
-      /* 拼接单个 US 的说明条目（筛选项/表格字段/数据来源/数据流转），供完整面板与 US 详情面板共用 */
-      function prdSuppItemsHtml(s) {
-        var items = '';
-        if (s.filter) items += prdSuppItemHtml('筛选项', s.filter);
-        if (s.fields) items += prdSuppItemHtml(s.fieldsLabel || '表格字段', s.fields);
-        if (s.source) items += prdSuppItemHtml('数据来源', s.source);
-        if (s.flow) items += '<div class="prd-story-supp-item"><span class="prd-story-supp-label">数据流转</span><span class="prd-story-supp-text">' + s.flow + '</span></div>';
-        return items;
-      }
-
-      function renderPrdPanel() {
-        var body = document.getElementById('prd-panel-body');
-        if (!body) return;
-        body.innerHTML = prdStories.map(function (s, i) {
-          var shotHtml = '';
-          if (s.shot) {
-            shotHtml = '<div class="prd-story-shot">' +
-              '<div class="prd-story-shot-label">界面示意（点击图片放大查看）</div>' +
-              '<img src="' + s.shot + '" alt="' + s.title + '" title="' + s.title + '" />' +
-            '</div>';
-          }
-          var suppItems = prdSuppItemsHtml(s);
-          var suppHtml = suppItems ? '<div class="prd-story-supp">' + suppItems + '</div>' : '';
-          /* 说明区（右栏）：描述 + 筛选项/表格字段/数据来源/数据流转 */
-          var mainHtml = '<div class="prd-story-main">' +
-            '<div class="prd-story-desc">' + s.desc + '</div>' +
-            suppHtml +
-          '</div>';
-          /* 界面示意区（左栏）：有截图时占左侧，无截图时说明区占满整行 */
-          var shotColHtml = shotHtml ? '<div class="prd-story-shot-col">' + shotHtml + '</div>' : '';
-          return '<div class="prd-story' + (i === 0 ? ' open' : '') + '" id="prd-story-' + s.id + '">' +
-            '<div class="prd-story-head" onclick="togglePrdStory(\'' + s.id + '\')">' +
-              '<span class="prd-story-id">' + s.id + '</span>' +
-              '<span class="prd-story-title">' + s.title + '</span>' +
-              '<span class="prd-story-pri' + (s.priority === 'P1' ? ' p1' : '') + '">' + s.priority + '</span>' +
-              '<span class="prd-story-caret">▶</span>' +
-            '</div>' +
-            '<div class="prd-story-body">' +
-              shotColHtml +
-              mainHtml +
-            '</div>' +
-          '</div>';
-        }).join('');
-      }
-
-      function togglePrdStory(id) {
-        var el = document.getElementById('prd-story-' + id);
-        if (el) el.classList.toggle('open');
-      }
-
-      function openPrdPanel() {
-        document.getElementById('prd-overlay').classList.add('open');
-        document.getElementById('prd-panel').classList.add('open');
-        document.getElementById('prd-float-btn').style.display = 'none';
-      }
-
-      function closePrdPanel() {
-        document.getElementById('prd-overlay').classList.remove('open');
-        document.getElementById('prd-panel').classList.remove('open');
-        document.getElementById('prd-float-btn').style.display = '';
-      }
-
-      function togglePrdFullscreen() {
-        var panel = document.getElementById('prd-panel');
-        var btn = document.getElementById('prd-fullscreen-btn');
-        var isFs = panel.classList.toggle('fullscreen');
-        if (btn) {
-          btn.textContent = isFs ? '还原' : '全屏';
-          btn.title = isFs ? '退出全屏' : '全屏查看';
-        }
-      }
-
-      /* ===== 抽屉/弹框/页面内：单个 US 详情面板 ===== */
-      function findPrdStory(id) {
-        for (var i = 0; i < prdStories.length; i++) {
-          if (prdStories[i].id === id) return prdStories[i];
-        }
-        return null;
-      }
-
-      /* 无遮罩：弹框打开时用户仍可继续点击页面操作；再次点击同一 US 按钮可切换关闭 */
-      var usDetailCurrentId = null;
-      function openUsDetail(id) {
-        var s = findPrdStory(id);
-        var panel = document.getElementById('us-detail-panel');
-        if (!s || !panel) return;
-        if (panel.classList.contains('open') && usDetailCurrentId === id) {
-          closeUsDetail();
-          return;
-        }
-        usDetailCurrentId = id;
-        document.getElementById('us-detail-title').innerHTML =
-          '<span class="prd-story-id">' + s.id + '</span>' +
-          '<span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + s.title + '</span>' +
-          '<span class="prd-story-pri' + (s.priority === 'P1' ? ' p1' : '') + '">' + s.priority + '</span>';
-        var suppItems = prdSuppItemsHtml(s);
-        document.getElementById('us-detail-body').innerHTML =
-          '<div class="us-detail-desc">' + s.desc + '</div>' +
-          (suppItems ? '<div class="us-detail-supp">' + suppItems + '</div>' : '');
-        panel.classList.add('open');
-      }
-
-      function closeUsDetail() {
-        var panel = document.getElementById('us-detail-panel');
-        if (!panel) return;
-        panel.classList.remove('open');
-        usDetailCurrentId = null;
-      }
-
-      /* 从单个 US 详情跳转到完整交互需求说明 */
-      function openFullPrdFromUs() {
-        closeUsDetail();
-        openPrdPanel();
-      }
-
-      /* 添加账号弹框：固定展示 US-008（关联方式；新建方式本版本禁选，已去除 US-007 需求说明） */
-      function updateAddTtUsFab() {
-        var fab = document.getElementById('add-tt-us-fab');
-        if (!fab) return;
-        var s = findPrdStory('US-008');
-        fab.textContent = '📋 US-008 说明' + (s ? ' · ' + s.title : '');
-      }
-      function openAddTtUsDetail() {
-        openUsDetail('US-008');
-      }
-
-      /* ===== 复制需求说明页面链接（独立的需求文档页面，而非商务中心页面） ===== */
-      var PRD_PAGE_URL = '../output/prd-doc-refresh-20260911/stage2/formatted-business-report.html';
-      function prdShareLink() {
-        try {
-          return new URL(PRD_PAGE_URL, location.href).href;
-        } catch (e) {
-          return PRD_PAGE_URL;
-        }
-      }
-      function fallbackCopyText(text) {
-        var ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
-        document.body.appendChild(ta);
-        ta.select();
-        var ok = false;
-        try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
-        document.body.removeChild(ta);
-        return ok;
-      }
-      function copyPrdLink() {
-        var link = prdShareLink();
-        var btn = document.getElementById('prd-copy-link-btn');
-        function finish(ok) {
-          if (!btn) return;
-          btn.textContent = ok ? '已复制' : '复制失败';
-          setTimeout(function () { btn.textContent = '复制链接'; }, 1600);
-        }
-        function manualCopy() {
-          /* 自动复制均失败（如浏览器权限限制）时，提供手动复制入口 */
-          window.prompt('自动复制失败，请手动复制需求说明页面链接：', link);
-        }
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(link).then(function () { finish(true); }, function () {
-            var ok = fallbackCopyText(link);
-            finish(ok);
-            if (!ok) manualCopy();
-          });
-        } else {
-          var ok = fallbackCopyText(link);
-          finish(ok);
-          if (!ok) manualCopy();
-        }
-      }
-
       /* ===== 初始化（必须放在脚本末尾：此时所有状态变量与函数均已就绪） ===== */
       setInterval(bcAutoSync, BC_SYNC_INTERVAL);
       /* BC用户 / TikTok账号 页签各自独立写入一次初始时间戳（用户进入页面时即能看到） */
@@ -2900,287 +2100,6 @@
       bcAutoSync(); /* 渲染左侧商务中心列表 + 右侧两个页签表格 */
     </script>
 
-    <!-- ===== 需求说明（简洁版 PRD）入口 ===== -->
-    <div id="prd-overlay" class="prd-overlay"></div>
-    <aside id="prd-panel" class="prd-panel" role="dialog" aria-label="交互需求说明">
-      <div class="prd-panel-header" id="prd-panel-header" title="按住此处可拖动面板，双击可全屏">
-        <div>
-          <div class="prd-panel-title">商务中心 · 交互需求说明</div>
-          <div class="prd-panel-sub">简洁版 PRD（8 个用户故事 · 展开查看筛选项/表格字段/数据来源/数据流转 · 按住标题栏可拖动，双击或按钮可全屏 · 「复制链接」复制需求说明页面链接）</div>
-        </div>
-        <div class="prd-panel-actions">
-          <button type="button" class="prd-panel-btn" id="prd-copy-link-btn" onclick="copyPrdLink()" title="复制需求说明页面（商务中心页面需求文档）的链接">复制链接</button>
-          <button type="button" class="prd-panel-btn" id="prd-fullscreen-btn" title="全屏查看">全屏</button>
-          <button type="button" class="prd-panel-close" onclick="closePrdPanel()" title="关闭">×</button>
-        </div>
-      </div>
-      <div class="prd-panel-body" id="prd-panel-body"></div>
-    </aside>
-    <button type="button" id="prd-float-btn" class="prd-float-btn" title="按住可拖动，点击打开需求说明">📋 需求说明</button>
-    <button type="button" class="us-fab us-fab-page" data-us="US-001" title="按住可拖动，点击查看本页面（商务中心列表）用户故事说明">📋 US-001 说明 · 商务中心列表查询与展示</button>
-    <div id="prd-img-viewer" class="prd-img-viewer" role="dialog" aria-label="图片预览">
-      <div class="prd-img-viewer-tip">点击任意位置或按 Esc 关闭</div>
-      <img id="prd-img-viewer-img" src="" alt="" />
-    </div>
-
-    <!-- ===== 单个用户故事（US）详情面板：抽屉/弹框/页面内悬浮按钮点击后展开（无遮罩，不影响页面操作） ===== -->
-    <aside id="us-detail-panel" class="us-detail-panel" role="dialog" aria-label="用户故事说明">
-      <div class="us-detail-header" id="us-detail-header" title="按住此处可拖动面板">
-        <div class="us-detail-title" id="us-detail-title"></div>
-        <button type="button" class="prd-panel-btn" onclick="openFullPrdFromUs()" title="打开完整交互需求说明">完整说明</button>
-        <button type="button" class="prd-panel-close" onclick="closeUsDetail()" title="关闭">×</button>
-      </div>
-      <div class="us-detail-body" id="us-detail-body"></div>
-    </aside>
-
-    <script>
-      /* PRD 面板初始化：在 DOM 就绪后执行，避免引用尚未渲染的面板节点 */
-      (function () {
-        document.getElementById('prd-overlay').addEventListener('click', function (e) {
-          if (e) e.stopPropagation();
-          closePrdPanel();
-        });
-        renderPrdPanel();
-
-        /* 单个 US 详情面板：按 Esc 关闭（无遮罩，页面仍可操作；对应抽屉/弹框关闭时同步关闭） */
-        document.addEventListener('keydown', function (e) {
-          if (e.key === 'Escape' && document.getElementById('us-detail-panel').classList.contains('open')) closeUsDetail();
-        });
-
-        /* ===== 单个 US 悬浮按钮：可拖动 + 点击打开（位移小于阈值视为点击） ===== */
-        function triggerUsFab(btn) {
-          var us = btn.getAttribute('data-us');
-          if (!us) return;
-          if (us === 'add-tt') openAddTtUsDetail();
-          else openUsDetail(us);
-        }
-        function makeUsFabDraggable(btn) {
-          var st = { active: false, moved: false, dx: 0, dy: 0, sx: 0, sy: 0 };
-          btn.addEventListener('pointerdown', function (e) {
-            var rect = btn.getBoundingClientRect();
-            st.active = true;
-            st.moved = false;
-            st.sx = e.clientX;
-            st.sy = e.clientY;
-            st.dx = e.clientX - rect.left;
-            st.dy = e.clientY - rect.top;
-            try { btn.setPointerCapture(e.pointerId); } catch (err) { /* 忽略不支持的情况 */ }
-            e.preventDefault();
-          });
-          btn.addEventListener('pointermove', function (e) {
-            if (!st.active) return;
-            if (!st.moved && Math.abs(e.clientX - st.sx) < 5 && Math.abs(e.clientY - st.sy) < 5) return;
-            st.moved = true;
-            btn.classList.add('dragging');
-            var w = btn.offsetWidth;
-            var h = btn.offsetHeight;
-            var host = btn.closest('.us-fab-host');
-            if (btn.classList.contains('us-fab-page') || !host) {
-              /* 主页面固定悬浮按钮：整个视口内拖动 */
-              var left = Math.min(Math.max(0, e.clientX - st.dx), Math.max(0, window.innerWidth - w));
-              var top = Math.min(Math.max(0, e.clientY - st.dy), Math.max(0, window.innerHeight - h));
-              btn.style.right = 'auto';
-              btn.style.bottom = 'auto';
-              btn.style.left = left + 'px';
-              btn.style.top = top + 'px';
-            } else {
-              /* 抽屉/弹框内按钮：宿主卡片范围内拖动（卡片 overflow:hidden 会裁剪超出部分） */
-              var hr = host.getBoundingClientRect();
-              var left2 = Math.min(Math.max(0, e.clientX - st.dx - hr.left), Math.max(0, hr.width - w));
-              var top2 = Math.min(Math.max(0, e.clientY - st.dy - hr.top), Math.max(0, hr.height - h));
-              btn.style.bottom = 'auto';
-              btn.style.left = left2 + 'px';
-              btn.style.top = top2 + 'px';
-            }
-          });
-          function endDrag() {
-            if (!st.active) return;
-            st.active = false;
-            btn.classList.remove('dragging');
-            if (!st.moved) triggerUsFab(btn);
-          }
-          btn.addEventListener('pointerup', endDrag);
-          btn.addEventListener('pointercancel', function () { st.active = false; btn.classList.remove('dragging'); });
-          /* 键盘可达性：聚焦后回车/空格打开 */
-          btn.addEventListener('keydown', function (e) {
-            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); triggerUsFab(btn); }
-          });
-        }
-        Array.prototype.forEach.call(document.querySelectorAll('.us-fab'), makeUsFabDraggable);
-
-        /* ===== 单个 US 详情面板：按住标题栏拖动 ===== */
-        var usPanel = document.getElementById('us-detail-panel');
-        var usHeader = document.getElementById('us-detail-header');
-        var usDrag = { active: false, dx: 0, dy: 0 };
-        usHeader.addEventListener('pointerdown', function (e) {
-          if (e.target.closest('button')) return;
-          var rect = usPanel.getBoundingClientRect();
-          usDrag.active = true;
-          usDrag.dx = e.clientX - rect.left;
-          usDrag.dy = e.clientY - rect.top;
-          usPanel.style.transition = 'none';
-          usPanel.style.right = 'auto';
-          usPanel.style.left = rect.left + 'px';
-          usPanel.style.top = rect.top + 'px';
-          try { usHeader.setPointerCapture(e.pointerId); } catch (err) { /* 忽略不支持的情况 */ }
-          e.preventDefault();
-        });
-        usHeader.addEventListener('pointermove', function (e) {
-          if (!usDrag.active) return;
-          var w = usPanel.offsetWidth;
-          var left = Math.min(Math.max(0, e.clientX - usDrag.dx), Math.max(0, window.innerWidth - w));
-          var top = Math.min(Math.max(0, e.clientY - usDrag.dy), Math.max(0, window.innerHeight - 44));
-          usPanel.style.left = left + 'px';
-          usPanel.style.top = top + 'px';
-        });
-        function endUsPanelDrag() {
-          if (!usDrag.active) return;
-          usDrag.active = false;
-          usPanel.style.transition = '';
-        }
-        usHeader.addEventListener('pointerup', endUsPanelDrag);
-        usHeader.addEventListener('pointercancel', endUsPanelDrag);
-
-        /* 通过分享链接打开时（#交互需求说明），自动展开完整交互需求说明 */
-        if (decodeURIComponent(location.hash || '') === '#交互需求说明') {
-          openPrdPanel();
-        }
-
-        var panel = document.getElementById('prd-panel');
-        var header = document.getElementById('prd-panel-header');
-
-        /* 初始位置：视口右下角悬浮窗（加宽以支持单个 user-story 界面示意+说明左右布局） */
-        function initPrdPanelPos() {
-          var w = Math.min(960, Math.round(window.innerWidth * 0.92));
-          var h = Math.min(Math.max(360, Math.round(window.innerHeight * 0.72)), window.innerHeight - 16);
-          panel.style.width = w + 'px';
-          panel.style.height = h + 'px';
-          panel.style.left = Math.max(8, window.innerWidth - w - 24) + 'px';
-          panel.style.top = Math.max(8, window.innerHeight - h - 24) + 'px';
-        }
-        initPrdPanelPos();
-
-        /* 全屏切换：按钮点击 + 双击标题栏 */
-        document.getElementById('prd-fullscreen-btn').addEventListener('click', togglePrdFullscreen);
-        header.addEventListener('dblclick', function (e) {
-          if (e.target.closest('button')) return;
-          togglePrdFullscreen();
-        });
-
-        /* 按住标题栏拖动面板（Pointer Events，鼠标/触摸通用） */
-        var prdDrag = { active: false, dx: 0, dy: 0 };
-        header.addEventListener('pointerdown', function (e) {
-          if (panel.classList.contains('fullscreen')) return;
-          if (e.target.closest('button')) return;
-          var rect = panel.getBoundingClientRect();
-          prdDrag.active = true;
-          prdDrag.dx = e.clientX - rect.left;
-          prdDrag.dy = e.clientY - rect.top;
-          panel.style.transition = 'none';
-          try { header.setPointerCapture(e.pointerId); } catch (err) { /* 忽略不支持的情况 */ }
-          e.preventDefault();
-        });
-        header.addEventListener('pointermove', function (e) {
-          if (!prdDrag.active) return;
-          var w = panel.offsetWidth;
-          var left = Math.min(Math.max(0, e.clientX - prdDrag.dx), Math.max(0, window.innerWidth - w));
-          var top = Math.min(Math.max(0, e.clientY - prdDrag.dy), Math.max(0, window.innerHeight - 44));
-          panel.style.left = left + 'px';
-          panel.style.top = top + 'px';
-        });
-        function endPrdDrag() {
-          if (!prdDrag.active) return;
-          prdDrag.active = false;
-          panel.style.transition = '';
-        }
-        header.addEventListener('pointerup', endPrdDrag);
-        header.addEventListener('pointercancel', endPrdDrag);
-
-        /* 窗口尺寸变化时保持面板在可视区域内 */
-        window.addEventListener('resize', function () {
-          if (panel.classList.contains('fullscreen')) return;
-          var w = panel.offsetWidth;
-          var h = panel.offsetHeight;
-          if (w > window.innerWidth - 16) { w = window.innerWidth - 16; panel.style.width = w + 'px'; }
-          if (h > window.innerHeight - 16) { h = window.innerHeight - 16; panel.style.height = h + 'px'; }
-          var left = parseFloat(panel.style.left) || 0;
-          var top = parseFloat(panel.style.top) || 0;
-          panel.style.left = Math.min(Math.max(0, left), Math.max(0, window.innerWidth - w)) + 'px';
-          panel.style.top = Math.min(Math.max(0, top), Math.max(0, window.innerHeight - 44)) + 'px';
-        });
-
-        /* ===== 悬浮按钮：可拖动 + 点击打开（位移小于阈值视为点击） ===== */
-        var fab = document.getElementById('prd-float-btn');
-        var fabDrag = { active: false, moved: false, dx: 0, dy: 0, sx: 0, sy: 0 };
-        fab.addEventListener('pointerdown', function (e) {
-          var rect = fab.getBoundingClientRect();
-          fabDrag.active = true;
-          fabDrag.moved = false;
-          fabDrag.sx = e.clientX;
-          fabDrag.sy = e.clientY;
-          fabDrag.dx = e.clientX - rect.left;
-          fabDrag.dy = e.clientY - rect.top;
-          try { fab.setPointerCapture(e.pointerId); } catch (err) { /* 忽略不支持的情况 */ }
-          e.preventDefault();
-        });
-        fab.addEventListener('pointermove', function (e) {
-          if (!fabDrag.active) return;
-          if (!fabDrag.moved && Math.abs(e.clientX - fabDrag.sx) < 5 && Math.abs(e.clientY - fabDrag.sy) < 5) return;
-          fabDrag.moved = true;
-          fab.classList.add('dragging');
-          var w = fab.offsetWidth;
-          var h = fab.offsetHeight;
-          var left = Math.min(Math.max(0, e.clientX - fabDrag.dx), Math.max(0, window.innerWidth - w));
-          var top = Math.min(Math.max(0, e.clientY - fabDrag.dy), Math.max(0, window.innerHeight - h));
-          fab.style.right = 'auto';
-          fab.style.bottom = 'auto';
-          fab.style.left = left + 'px';
-          fab.style.top = top + 'px';
-        });
-        function endFabDrag(e) {
-          if (!fabDrag.active) return;
-          fabDrag.active = false;
-          fab.classList.remove('dragging');
-          if (!fabDrag.moved) openPrdPanel();
-        }
-        fab.addEventListener('pointerup', endFabDrag);
-        fab.addEventListener('pointercancel', function () { fabDrag.active = false; fab.classList.remove('dragging'); });
-        /* 键盘可达性：聚焦后回车/空格仍可打开 */
-        fab.addEventListener('keydown', function (e) {
-          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openPrdPanel(); }
-        });
-        /* 窗口缩放时钳制按钮位置 */
-        window.addEventListener('resize', function () {
-          var rect = fab.getBoundingClientRect();
-          var left = Math.min(Math.max(0, rect.left), Math.max(0, window.innerWidth - fab.offsetWidth));
-          var top = Math.min(Math.max(0, rect.top), Math.max(0, window.innerHeight - fab.offsetHeight));
-          fab.style.left = left + 'px';
-          fab.style.top = top + 'px';
-        });
-
-        /* ===== 图片放大查看（lightbox） ===== */
-        var viewer = document.getElementById('prd-img-viewer');
-        var viewerImg = document.getElementById('prd-img-viewer-img');
-        function openPrdImageViewer(src, alt) {
-          if (!src) return;
-          viewerImg.src = src;
-          viewerImg.alt = alt || '';
-          viewer.classList.add('open');
-        }
-        function closePrdImageViewer() {
-          viewer.classList.remove('open');
-          viewerImg.src = '';
-        }
-        document.getElementById('prd-panel-body').addEventListener('click', function (e) {
-          var img = e.target.closest('.prd-story-shot img');
-          if (img) openPrdImageViewer(img.getAttribute('src'), img.getAttribute('alt'));
-        });
-        viewer.addEventListener('click', function () { closePrdImageViewer(); });
-        document.addEventListener('keydown', function (e) {
-          if (e.key === 'Escape' && viewer.classList.contains('open')) closePrdImageViewer();
-        });
-      })();
-    </script>
   <script src="../scripts/header-user.js?v=20260924"></script>
   </body>
 </html>

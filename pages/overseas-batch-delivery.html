@@ -648,14 +648,6 @@
         flex-direction: column;
         align-self: stretch;
       }
-      .preview-account-title {
-        padding: 10px 12px;
-        font-size: 13px;
-        font-weight: 600;
-        color: #374151;
-        background: #fafafa;
-        border-bottom: 1px solid #e5e7eb;
-      }
       .preview-account-list {
         flex: 1;
         min-height: 0;
@@ -700,6 +692,47 @@
       .preview-account-item.has-error .preview-account-id { color: #ffa39e; }
       .preview-account-item.has-error:hover { background: #fff5f5; }
       .preview-account-item.has-error.active { background: #fff1f0; }
+      /* 账户面板：标题栏 + 过滤输入 */
+      .preview-account-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 6px;
+        padding: 8px 10px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #374151;
+        background: #fafafa;
+        border-bottom: 1px solid #e5e7eb;
+      }
+      .preview-account-title .title-text { flex: 1; min-width: 0; }
+      .preview-account-title .title-count { color: #9ca3af; font-weight: 400; }
+      .preview-account-title .title-count.has-fail { color: #f5222d; }
+      .preview-account-filter {
+        width: 100%;
+        padding: 6px 10px;
+        border-bottom: 1px solid #e5e7eb;
+        background: #fff;
+      }
+      .preview-account-filter input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 5px 8px;
+        font-size: 12px;
+        color: #1f2937;
+        border: 1px solid #e5e7eb;
+        border-radius: 4px;
+        outline: none;
+        background: #fff;
+      }
+      .preview-account-filter input:focus { border-color: #1677ff; }
+      .preview-account-empty {
+        padding: 16px 10px;
+        font-size: 12px;
+        color: #9ca3af;
+        text-align: center;
+      }
+      .preview-account-item.hidden { display: none; }
       .preview-data-panel {
         flex: 1;
         min-width: 0;
@@ -707,7 +740,7 @@
       }
       .preview-pane { display: none; }
       .preview-pane.active { display: block; }
-      .preview-pane .config-preview-table { min-width: 1372px; table-layout: fixed; }
+      .preview-pane .config-preview-table { min-width: 1482px; table-layout: fixed; }
       .preview-pane .config-preview-table td { overflow: hidden; }
       .preview-pane .config-preview-table td[rowspan] { vertical-align: top; }
       .preview-col-name { width: 220px; }
@@ -717,6 +750,7 @@
       .preview-col-link { width: 120px; }
       .preview-col-creative { width: 96px; }
       .preview-col-title { width: 96px; }
+      .preview-col-budget { width: 110px; }
       .preview-cell-name {
         font-size: 12px;
         color: #1f2937;
@@ -727,6 +761,12 @@
         font-size: 12px;
         color: #9ca3af;
         margin-top: 2px;
+        word-break: break-all;
+      }
+      .preview-cell-budget {
+        font-size: 12px;
+        color: #1f2937;
+        line-height: 1.4;
         word-break: break-all;
       }
       .preview-status-fail {
@@ -868,6 +908,50 @@
       .creative-group-body .material-grid {
         grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
       }
+      /* ===== 失败明细：数量列失败数可点击 ===== */
+      .stat-stack .stat-fail-text.fail-clickable {
+        cursor: pointer;
+        text-decoration: underline;
+        text-underline-offset: 2px;
+      }
+      .stat-stack .stat-fail-text.fail-clickable:hover { opacity: .8; }
+      .fail-detail-name {
+        color: var(--color-text-primary);
+        word-break: break-all;
+      }
+      .fail-detail-id {
+        font-size: 12px;
+        color: var(--color-text-tertiary);
+        margin-top: 2px;
+        word-break: break-all;
+      }
+      .fail-detail-error {
+        color: var(--color-error);
+        font-size: 12px;
+        line-height: 1.5;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 360px;
+        word-break: break-word;
+        cursor: help;
+      }
+      #fail-detail-modal .row-actions { white-space: nowrap; }
+      /* 失败明细弹框工具条重试：蓝色文字链（.retry-link 全局样式仅作用于 .filter-status-bar 内） */
+      #fail-detail-modal .retry-link {
+        color: var(--color-info);
+        cursor: pointer;
+        background: none;
+        border: none;
+        font-family: inherit;
+        font-size: 13px;
+        padding: 0;
+      }
+      #fail-detail-modal .retry-link:hover { text-decoration: underline; }
+      #fail-detail-modal .modal-filter { flex-wrap: nowrap; }
+      #fail-detail-modal .modal-filter > div { flex-shrink: 0; }
     </style>
   </head>
   <body class="theme-antd">
@@ -1226,7 +1310,7 @@
                           <span class="stat-total">50</span>
                           <span class="stat-row">
                             <span class="stat-row-empty">成功: 0</span>
-                            <span class="stat-fail-text">失败: 40</span>
+                            <span class="stat-fail-text fail-clickable" onclick="openFailDetail(25, '任务1', 'campaign')">失败: 40</span>
                           </span>
                         </div>
                       </td>
@@ -1235,7 +1319,7 @@
                           <span class="stat-total">50</span>
                           <span class="stat-row">
                             <span class="stat-row-empty">成功: 0</span>
-                            <span class="stat-fail-text">失败: 40</span>
+                            <span class="stat-fail-text fail-clickable" onclick="openFailDetail(25, '任务1', 'adgroup')">失败: 40</span>
                           </span>
                         </div>
                       </td>
@@ -1244,7 +1328,7 @@
                           <span class="stat-total">50</span>
                           <span class="stat-row">
                             <span class="stat-row-empty">成功: 0</span>
-                            <span class="stat-row-empty">失败: 0</span>
+                            <span class="stat-fail-text fail-clickable" onclick="openFailDetail(25, '任务1', 'ad')">失败: 40</span>
                           </span>
                         </div>
                       </td>
@@ -1283,7 +1367,7 @@
                           <span class="stat-total">50</span>
                           <span class="stat-row">
                             <span class="stat-row-empty">成功: 0</span>
-                            <span class="stat-fail-text">失败: 40</span>
+                            <span class="stat-fail-text fail-clickable" onclick="openFailDetail(24, '任务2', 'adgroup')">失败: 40</span>
                           </span>
                         </div>
                       </td>
@@ -1292,7 +1376,7 @@
                           <span class="stat-total">50</span>
                           <span class="stat-row">
                             <span class="stat-row-empty">成功: 0</span>
-                            <span class="stat-row-empty">失败: 0</span>
+                            <span class="stat-fail-text fail-clickable" onclick="openFailDetail(24, '任务2', 'ad')">失败: 40</span>
                           </span>
                         </div>
                       </td>
@@ -1583,7 +1667,7 @@
           <div class="config-preview">
             <div class="config-preview-header">
               <div class="config-preview-title">
-                预览区 <span class="config-refresh" onclick="alert('刷新预览')">↻ 刷新</span>
+                预览区 <span class="config-refresh" onclick="refreshPreview()">↻ 刷新</span>
               </div>
               <div class="config-preview-actions">
                 <span class="config-preview-meta">预计生成 1 条广告</span>
@@ -1593,8 +1677,14 @@
             </div>
             <div class="config-preview-body">
               <div class="preview-account-panel">
-                <div class="preview-account-title">账号</div>
-                <div class="preview-account-list">
+                <div class="preview-account-title">
+                  <span class="title-text">账号</span>
+                  <span class="title-count" id="preview-account-count">（2）</span>
+                </div>
+                <div class="preview-account-filter">
+                  <input type="text" id="preview-account-filter-input" placeholder="按账户名 / ID 过滤" oninput="filterPreviewAccounts(this.value)" />
+                </div>
+                <div class="preview-account-list" id="preview-account-list">
                   <div class="preview-account-item active" data-pane="preview-pane-1" onclick="switchPreviewAccount(this, 'preview-pane-1')">
                     <div class="preview-account-name" title="White-light_Fictic_ttmini-不夜瞳-210817-英国-1">White-light_Fictic_ttmini-不夜瞳-210817-英国-1</div>
                     <div class="preview-account-id" title="ID:7648215202357810178">ID:7648215202357810178</div>
@@ -1611,6 +1701,7 @@
                   <colgroup>
                     <col class="preview-col-name" />
                     <col class="preview-col-status" />
+                    <col class="preview-col-budget" />
                     <col class="preview-col-name" />
                     <col class="preview-col-status" />
                     <col class="preview-col-audience" />
@@ -1622,13 +1713,14 @@
                   </colgroup>
                     <thead>
                       <tr>
-                        <th colspan="2" class="preview-group-header">推广系列<span class="preview-group-count">（1）</span></th>
+                        <th colspan="3" class="preview-group-header">推广系列<span class="preview-group-count">（1）</span></th>
                         <th colspan="3" class="preview-group-header">广告组<span class="preview-group-count">（1）</span></th>
                         <th colspan="5" class="preview-group-header">广告<span class="preview-group-count">（2）</span></th>
                       </tr>
                       <tr>
                         <th class="preview-col-name">系列名称 / ID</th>
                         <th class="preview-col-status">状态</th>
+                        <th class="preview-col-budget">系列预算</th>
                         <th class="preview-col-name">广告组名称 / ID</th>
                         <th class="preview-col-status">状态</th>
                         <th class="preview-col-audience">定向包</th>
@@ -1646,6 +1738,7 @@
                           <div class="preview-cell-id" title="ID:7364829100482613762">ID:7364829100482613762</div>
                         </td>
                         <td rowspan="2"><span class="badge badge-success">上传成功</span></td>
+                        <td rowspan="2" class="preview-cell-budget" title="系列预算：¥1,000 / 天">¥1,000 / 天</td>
                         <td rowspan="2">
                           <div class="preview-cell-name" title="Manor's Healer Nanny&amp;光影*228979_广告组1">Manor's Healer Nanny&光影*228979_广告组1</div>
                           <div class="preview-cell-id" title="ID:7364829100715928321">ID:7364829100715928321</div>
@@ -1667,7 +1760,7 @@
                           <div class="preview-cell-id" title="ID:7364829101198680321">ID:7364829101198680321</div>
                         </td>
                         <td><a href="#" title="7673348337520640002">7673348337520640002</a></td>
-                        <td><span class="preview-status-fail"><span class="badge badge-error">上传失败</span><a class="preview-status-retry" onclick="alert('重试上传')">重试</a></span></td>
+                        <td><span class="preview-status-fail" title="失败原因：监测链接 ID 已存在，无法重复提交"><span class="badge badge-error">上传失败</span><a class="preview-status-retry" onclick="alert('重试上传')">重试</a></span></td>
                         <td><a href="#" title="创意组2（4个）">创意组2（4个）</a></td>
                         <td><a href="#" title="标题包2（1条）">标题包2（1条）</a></td>
                       </tr>
@@ -1679,6 +1772,7 @@
                   <colgroup>
                     <col class="preview-col-name" />
                     <col class="preview-col-status" />
+                    <col class="preview-col-budget" />
                     <col class="preview-col-name" />
                     <col class="preview-col-status" />
                     <col class="preview-col-audience" />
@@ -1690,13 +1784,14 @@
                   </colgroup>
                     <thead>
                       <tr>
-                        <th colspan="2" class="preview-group-header">推广系列<span class="preview-group-count">（1）</span></th>
+                        <th colspan="3" class="preview-group-header">推广系列<span class="preview-group-count">（1）</span></th>
                         <th colspan="3" class="preview-group-header">广告组<span class="preview-group-count">（2）</span></th>
                         <th colspan="5" class="preview-group-header">广告<span class="preview-group-count">（2）</span></th>
                       </tr>
                       <tr>
                         <th class="preview-col-name">系列名称 / ID</th>
                         <th class="preview-col-status">状态</th>
+                        <th class="preview-col-budget">系列预算</th>
                         <th class="preview-col-name">广告组名称 / ID</th>
                         <th class="preview-col-status">状态</th>
                         <th class="preview-col-audience">定向包</th>
@@ -1714,6 +1809,7 @@
                           <div class="preview-cell-id" title="ID:7364829111123456789">ID:7364829111123456789</div>
                         </td>
                         <td rowspan="2"><span class="badge badge-pending">待上传</span></td>
+                        <td rowspan="2" class="preview-cell-budget" title="系列预算：$200 / 天">$200 / 天</td>
                         <td rowspan="1">
                           <div class="preview-cell-name" title="A promising beginning&amp;星河*228980_广告组1">A promising beginning&星河*228980_广告组1</div>
                           <div class="preview-cell-id" title="ID:7364829112234567890">ID:7364829112234567890</div>
@@ -2421,6 +2517,47 @@
         <div class="modal-footer">
           <button class="btn btn-outline btn-sm" onclick="closeTargetingListModal()">取消</button>
           <button class="btn btn-info btn-sm" onclick="closeTargetingListModal()">确定</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== 失败明细 弹框（点击任务列表数量列「失败: N」打开） ========== -->
+    <div id="fail-detail-overlay" class="modal-overlay" onclick="closeFailDetailModal()"></div>
+    <div id="fail-detail-modal" class="modal">
+      <div class="modal-card" style="width: min(1080px, calc(100vw - 40px));">
+        <div class="modal-header">
+          <span id="fail-detail-title">失败明细</span>
+          <button class="modal-close" onclick="closeFailDetailModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-filter" style="margin-bottom: 12px;">
+            <span style="font-size: 13px; color: var(--color-text-secondary);">已选择 <strong id="fail-detail-selected-count" style="color: var(--color-info);">0</strong> 个</span>
+            <button class="retry-link" onclick="batchRetryFailDetail()">重试</button>
+            <div style="margin-left: auto; display: flex; gap: 8px;">
+              <button class="btn btn-outline btn-sm" onclick="batchRefreshFailDetail()">刷新</button>
+            </div>
+          </div>
+          <div class="table-wrapper" style="max-height: 420px; overflow-y: auto;">
+            <table class="modal-table">
+              <thead id="fail-detail-thead"></thead>
+              <tbody id="fail-detail-tbody"></tbody>
+            </table>
+          </div>
+          <div class="pagination" style="padding: 12px 0 0;">
+            <div class="pagination-info" id="fail-detail-pagination-info">共 <strong>40</strong> 条</div>
+            <div class="pagination-pages">
+              <button class="page-btn">‹</button>
+              <button class="page-btn active">1</button>
+              <button class="page-btn">2</button>
+              <button class="page-btn">3</button>
+              <button class="page-btn">4</button>
+              <button class="page-btn">›</button>
+            </div>
+            <select class="page-size-select"><option>10 条/页</option></select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline btn-sm" onclick="closeFailDetailModal()">关闭</button>
         </div>
       </div>
     </div>
@@ -3162,13 +3299,13 @@
       }
 
       /* ===== 预览区数量统计：从 DOM 行结构推导 系列/广告组/广告 数量 ===== */
-      /* 行结构约定：10 列 = 新系列+新广告组+广告；8 列 = 新广告组+广告；5 列 = 广告 */
+      /* 行结构约定：11 列 = 新系列+新广告组+广告；8 列 = 新广告组+广告；5 列 = 广告 */
       function updatePreviewCounts(pane) {
         if (!pane) return;
         var series = 0, group = 0, ad = 0;
         pane.querySelectorAll('tbody tr').forEach(function (tr) {
           var n = tr.children.length;
-          if (n >= 10) { series++; group++; ad++; }
+          if (n >= 11) { series++; group++; ad++; }
           else if (n >= 8) { group++; ad++; }
           else { ad++; }
         });
@@ -3188,14 +3325,78 @@
         if (meta) meta.textContent = '预计生成 ' + total + ' 条广告';
       }
 
-      /* 存在上传失败的账号标红：按账号对应面板里是否有失败状态自动推导 */
+      /* 存在上传失败的账号标红：推导失败状态 + 报错账户置顶 + 标题汇总 */
       function syncAccountErrorState() {
-        document.querySelectorAll('.preview-account-item').forEach(function (it) {
+        var list = document.getElementById('preview-account-list');
+        var items = list ? Array.prototype.slice.call(list.querySelectorAll('.preview-account-item')) : [];
+        var failMap = {};
+        items.forEach(function (it) {
           var paneId = it.getAttribute('data-pane');
           var pane = paneId ? document.getElementById(paneId) : null;
-          var hasFailed = !!(pane && pane.querySelector('.preview-status-fail'));
+          var failNodes = pane ? pane.querySelectorAll('.preview-status-fail') : [];
+          var hasFailed = failNodes.length > 0;
           it.classList.toggle('has-error', hasFailed);
+          // 失败条数涉及系列/广告组/广告多层级，统计口径不唯一，不再在账户项下展示数量徽标
+          if (hasFailed) {
+            failMap[it.getAttribute('data-pane')] = failNodes.length;
+          }
         });
+        // 报错账户按失败条数倒序置顶；保持 DOM 选中态
+        if (list) {
+          var activeItem = list.querySelector('.preview-account-item.active');
+          items.sort(function (a, b) {
+            var fa = failMap[a.getAttribute('data-pane')] || 0;
+            var fb = failMap[b.getAttribute('data-pane')] || 0;
+            if (fa !== fb) return fb - fa;
+            return 0; // 失败数相同保持原顺序
+          });
+          items.forEach(function (it) { list.appendChild(it); });
+          if (activeItem) activeItem.classList.add('active');
+        }
+        // 标题汇总：账号（N · 失败 M）
+        var total = items.length;
+        var failCount = Object.keys(failMap).length;
+        var titleEl = document.getElementById('preview-account-count');
+        if (titleEl) {
+          titleEl.textContent = failCount > 0 ? '（' + total + ' · 失败 ' + failCount + '）' : '（' + total + '）';
+          titleEl.classList.toggle('has-fail', failCount > 0);
+        }
+      }
+
+      /* 刷新预览：重新汇总数量 + 同步报错账户置顶 */
+      function refreshPreview() {
+        var activePane = document.querySelector('.preview-pane.active') || document.querySelector('.preview-pane');
+        updatePreviewCounts(activePane);
+        updatePreviewTotals();
+        syncAccountErrorState();
+        // 过滤框有值则重过滤
+        var filterInput = document.getElementById('preview-account-filter-input');
+        if (filterInput && filterInput.value) filterPreviewAccounts(filterInput.value);
+      }
+
+      /* 左侧账户列表关键字过滤：按账户名 / ID 模糊匹配 */
+      function filterPreviewAccounts(keyword) {
+        var list = document.getElementById('preview-account-list');
+        if (!list) return;
+        var kw = (keyword || '').trim().toLowerCase();
+        var items = list.querySelectorAll('.preview-account-item');
+        var visible = 0;
+        items.forEach(function (it) {
+          var name = (it.querySelector('.preview-account-name') || {}).textContent || '';
+          var idEl = it.querySelector('.preview-account-id');
+          var idText = idEl ? (idEl.getAttribute('title') || idEl.textContent) : '';
+          var match = !kw || name.toLowerCase().indexOf(kw) >= 0 || idText.toLowerCase().indexOf(kw) >= 0;
+          it.classList.toggle('hidden', !match);
+          if (match) visible++;
+        });
+        var empty = list.parentNode.querySelector('.preview-account-empty');
+        if (empty) empty.parentNode.removeChild(empty);
+        if (visible === 0 && kw) {
+          var tip = document.createElement('div');
+          tip.className = 'preview-account-empty';
+          tip.textContent = '没有匹配的账户';
+          list.parentNode.appendChild(tip);
+        }
       }
 
       /* 初始化：按默认选中账号刷新数量 */
@@ -3462,6 +3663,116 @@
       /* ===== 定向 - 我的定向包弹框 ===== */
       function openTargetingListModal() { openModal('targeting-list-overlay', 'targeting-list-modal'); }
       function closeTargetingListModal() { closeModal('targeting-list-overlay', 'targeting-list-modal'); }
+
+      /* ===== 失败明细弹框（点击任务列表数量列「失败: N」打开） ===== */
+      var FAIL_DETAIL_META = {
+        campaign: { label: '推广系列', nameCol: '推广系列名称/ID' },
+        adgroup:  { label: '广告组',   nameCol: '广告组名称/ID',  parentCol: '所属推广系列名称/ID' },
+        ad:       { label: '广告',     nameCol: '广告名称/ID',    parentCol: '所属广告组名称/ID' }
+      };
+      var FAIL_DETAIL_DATA = {
+        campaign: [
+          { name: 'Campaign-葡萄牙语-雷隆太子-01', id: '7498236153209778432', parent: null, account: 'ViviShort-IAA(UTC-5)-058212-MY-听泉-SINO-TT', accountId: '7676009561349996552', error: { code: 40001, message: '账户余额不足，请充值后重试', request_id: '20261010114321A1012345678ABCDEF01' } },
+          { name: 'Campaign-葡萄牙语-雷隆太子-02', id: '7498236153209778433', parent: null, account: 'ViviShort-IAA(UTC-5)-009512-MY-听泉-SINO-TT', accountId: '7676009929921658887', error: { code: 40003, message: '定向地区不在账户可投范围内', request_id: '20261010114321B2023456789BCDEF012' } },
+          { name: 'Campaign-葡萄牙语-听泉-03',     id: '7498236153209778434', parent: null, account: 'ViviShort-IAA(UTC+7)-011408-TH-听泉-SINO-TT', accountId: '7681203341027765248', error: { code: 40004, message: '账户授权已过期，请重新授权', request_id: '20261010114321C3034567890CDEF0123' } },
+          { name: 'Campaign-西班牙语-雷隆太子-04', id: '7498236153209778435', parent: null, account: 'ViviShort-IAA(UTC+1)-023309-ES-听泉-SINO-TT', accountId: '7692387451029933120', error: { code: 40005, message: '出价低于该版位最低出价限制', request_id: '20261010114321D4045678901DEF01234' } },
+          { name: 'Campaign-葡萄牙语-雷隆太子-05', id: '7498236153209778436', parent: null, account: 'ViviShort-IAA(UTC-5)-058212-MY-听泉-SINO-TT', accountId: '7676009561349996552', error: { code: 40006, message: '预算低于最低预算要求（$20/天）', request_id: '20261010114321E5056789012EF012345' } }
+        ],
+        adgroup: [
+          { name: 'AdGroup-雷隆太子-01-A', id: '7501345987123456789', parent: 'Campaign-葡萄牙语-雷隆太子-01', parentId: '7498236153209778432', account: 'ViviShort-IAA(UTC-5)-058212-MY-听泉-SINO-TT', accountId: '7676009561349996552', error: { code: 40010, message: '创意素材审核未通过，请更换素材', request_id: '20261010114321F106789013F0123456' } },
+          { name: 'AdGroup-雷隆太子-01-B', id: '7501345987123456790', parent: 'Campaign-葡萄牙语-雷隆太子-01', parentId: '7498236153209778432', account: 'ViviShort-IAA(UTC-5)-058212-MY-听泉-SINO-TT', accountId: '7676009561349996552', error: { code: 40011, message: '定向包包含不可用兴趣词', request_id: '20261010114321A20789012401234567' } },
+          { name: 'AdGroup-听泉-02-A',     id: '7501345987123456791', parent: 'Campaign-葡萄牙语-听泉-03',     parentId: '7498236153209778434', account: 'ViviShort-IAA(UTC+7)-011408-TH-听泉-SINO-TT', accountId: '7681203341027765248', error: { code: 40012, message: '素材宽高比不符合版位要求（建议 9:16）', request_id: '20261010114321B308901235012345678' } },
+          { name: 'AdGroup-雷隆太子-04-A', id: '7501345987123456792', parent: 'Campaign-西班牙语-雷隆太子-04', parentId: '7498236153209778435', account: 'ViviShort-IAA(UTC+1)-023309-ES-听泉-SINO-TT', accountId: '7692387451029933120', error: { code: 40013, message: '触达频控上限，建议更换定向包', request_id: '20261010114321C40901234601234567' } },
+          { name: 'AdGroup-雷隆太子-01-C', id: '7501345987123456793', parent: 'Campaign-葡萄牙语-雷隆太子-01', parentId: '7498236153209778432', account: 'ViviShort-IAA(UTC-5)-009512-MY-听泉-SINO-TT', accountId: '7676009929921658887', error: { code: 40001, message: '账户余额不足，请充值后重试', request_id: '20261010114321D50012345701234567' } }
+        ],
+        ad: [
+          { name: 'Ad-雷隆太子-01-A-01', id: '7512567849012345678', parent: 'AdGroup-雷隆太子-01-A', parentId: '7501345987123456789', account: 'ViviShort-IAA(UTC-5)-058212-MY-听泉-SINO-TT', accountId: '7676009561349996552', error: { code: 40020, message: '视频素材时长超出限制（≤34s）；画面右下角带可点击二维码，违反素材规范；落地页请求超时，无法访问（HTTP 504）', request_id: '20261010114321E60123456801234567' } },
+          { name: 'Ad-雷隆太子-01-A-02', id: '7512567849012345679', parent: 'AdGroup-雷隆太子-01-A', parentId: '7501345987123456789', account: 'ViviShort-IAA(UTC-5)-058212-MY-听泉-SINO-TT', accountId: '7676009561349996552', error: { code: 40021, message: '标题包含违规词，审核驳回', request_id: '20261010114321F70234567901234567' } },
+          { name: 'Ad-雷隆太子-01-B-01', id: '7512567849012345680', parent: 'AdGroup-雷隆太子-01-B', parentId: '7501345987123456790', account: 'ViviShort-IAA(UTC-5)-058212-MY-听泉-SINO-TT', accountId: '7676009561349996552', error: { code: 40022, message: '落地页无法访问（请求超时）；落地页缺少隐私政策链接，审核未通过', request_id: '20261010114321A80345678012345678' } },
+          { name: 'Ad-听泉-02-A-01',     id: '7512567849012345681', parent: 'AdGroup-听泉-02-A',     parentId: '7501345987123456791', account: 'ViviShort-IAA(UTC+7)-011408-TH-听泉-SINO-TT', accountId: '7681203341027765248', error: { code: 40023, message: '图片素材分辨率过低（≥720p）', request_id: '20261010114321B90456789012345678' } },
+          { name: 'Ad-雷隆太子-04-A-01', id: '7512567849012345682', parent: 'AdGroup-雷隆太子-04-A', parentId: '7501345987123456792', account: 'ViviShort-IAA(UTC+1)-023309-ES-听泉-SINO-TT', accountId: '7692387451029933120', error: { code: 40024, message: '应用下载链接失效', request_id: '20261010114321C00567890123456789' } },
+          { name: 'Ad-雷隆太子-04-B-01', id: '7512567849012345683', parent: 'AdGroup-雷隆太子-04-A', parentId: '7501345987123456792', account: 'ViviShort-IAA(UTC+1)-023309-ES-听泉-SINO-TT', accountId: '7692387451029933120', error: {
+            code: 40002,
+            message: 'You no longer have access to the TikTok account used in this ad. To continue editing, select a new identity and creative material or re-apply for access.',
+            request_id: '20261010114321D8426488F15AAB1EC2EA'
+          } }
+        ]
+      };
+      var failDetailState = { taskId: null, taskName: '', level: 'campaign', failCount: 0 };
+
+      function openFailDetail(taskId, taskName, level, failCount) {
+        failDetailState = { taskId: taskId, taskName: taskName, level: level, failCount: failCount || 40 };
+        renderFailDetail();
+        openModal('fail-detail-overlay', 'fail-detail-modal');
+      }
+      function closeFailDetailModal() { closeModal('fail-detail-overlay', 'fail-detail-modal'); }
+
+      function renderFailDetail() {
+        var meta = FAIL_DETAIL_META[failDetailState.level];
+        var rows = FAIL_DETAIL_DATA[failDetailState.level];
+        document.getElementById('fail-detail-title').textContent =
+          '失败明细 - ' + failDetailState.taskName + ' - ' + meta.label;
+        document.getElementById('fail-detail-pagination-info').innerHTML =
+          '共 <strong>' + failDetailState.failCount + '</strong> 条';
+
+        var head = '<tr><th class="checkbox-col"><input type="checkbox" onclick="toggleFailDetailAll(this)" /></th>';
+        head += '<th>' + meta.nameCol + '</th>';
+        if (meta.parentCol) head += '<th>' + meta.parentCol + '</th>';
+        head += '<th>账户名称/ID</th><th>报错信息</th><th>操作</th></tr>';
+        document.getElementById('fail-detail-thead').innerHTML = head;
+
+        var body = rows.map(function (r) {
+          var html = '<tr>';
+          html += '<td><input type="checkbox" class="fail-detail-row-checkbox" onchange="updateFailDetailSelectedCount()" /></td>';
+          html += '<td><div class="fail-detail-name">' + r.name + '</div><div class="fail-detail-id">ID: ' + r.id + '</div></td>';
+          if (meta.parentCol) {
+            html += '<td><div class="fail-detail-name">' + r.parent + '</div><div class="fail-detail-id">ID: ' + r.parentId + '</div></td>';
+          }
+          html += '<td><div class="fail-detail-name">' + r.account + '</div><div class="fail-detail-id">ID: ' + r.accountId + '</div></td>';
+          html += '<td>' + renderFailDetailError(r.error) + '</td>';
+          html += '<td><div class="row-actions"><button class="row-action-btn" onclick="refreshFailRow(\'' + r.name + '\')">刷新</button>' +
+                  '<button class="row-action-btn" onclick="retryFailRow(\'' + r.name + '\')">重试</button></div></td>';
+          html += '</tr>';
+          return html;
+        }).join('');
+        document.getElementById('fail-detail-tbody').innerHTML = body;
+        updateFailDetailSelectedCount();
+      }
+
+      function toggleFailDetailAll(headCb) {
+        document.querySelectorAll('#fail-detail-modal .fail-detail-row-checkbox').forEach(function (cb) {
+          cb.checked = headCb.checked;
+        });
+        updateFailDetailSelectedCount();
+      }
+      function getCheckedFailDetailCount() {
+        return document.querySelectorAll('#fail-detail-modal .fail-detail-row-checkbox:checked').length;
+      }
+      /* 已选择数量常显（与批量投放页工具条一致），勾选实时刷新 */
+      function updateFailDetailSelectedCount() {
+        var n = getCheckedFailDetailCount();
+        var countEl = document.getElementById('fail-detail-selected-count');
+        if (countEl) countEl.textContent = n;
+      }
+      function refreshFailRow(name) { alert('刷新 ' + FAIL_DETAIL_META[failDetailState.level].label + '「' + name + '」（原型占位）'); }
+      function retryFailRow(name) { alert('重试 ' + FAIL_DETAIL_META[failDetailState.level].label + '「' + name + '」（原型占位）'); }
+      /* 报错信息渲染：以红色文本形式展示，对象取 message（不解析 code/request_id） */
+      function renderFailDetailError(err) {
+        if (err && typeof err === 'object' && !Array.isArray(err)) err = err.message || '';
+        return '<span class="fail-detail-error" title="' + escapeAttr(err) + '">' + err + '</span>';
+      }
+      function escapeAttr(s) {
+        return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      }
+      /* 批量刷新：无需勾选，默认刷新全部失败数据 */
+      function batchRefreshFailDetail() {
+        alert('批量刷新全部 ' + failDetailState.failCount + ' 条失败' + FAIL_DETAIL_META[failDetailState.level].label + '（原型占位）');
+      }
+      function batchRetryFailDetail() {
+        var n = getCheckedFailDetailCount();
+        if (!n) { alert('请先勾选要重试的数据'); return; }
+        alert('批量重试 ' + n + ' 条失败' + FAIL_DETAIL_META[failDetailState.level].label + '（原型占位）');
+      }
 
       /* ===== 定向 - 新增定向包抽屉 ===== */
       function openNewTargetingDrawer() {
