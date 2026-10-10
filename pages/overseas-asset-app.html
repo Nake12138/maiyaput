@@ -353,12 +353,13 @@
                   <div class="filter-bar-row" style="flex-wrap:wrap; gap:10px; row-gap:10px;">
                     <input type="text" class="filter-input" data-filter="name" placeholder="请输入名称" style="width:200px;" />
                     <input type="text" class="filter-input" data-filter="distId" placeholder="请输入分销平台ID" style="width:200px;" />
-                    <select class="filter-select" data-filter="pixel" style="width:200px;">
-                      <option value="">请选择Pixel 名称</option>
-                      <option value="默认TikTok Pixel">默认TikTok Pixel</option>
-                      <option value="默认Pixel">默认Pixel</option>
-                      <option value="Popkon_Pixel_AI解剖剂">Popkon_Pixel_AI解剖剂</option>
-                    </select>
+                    <div class="filter-combo" style="width:220px; min-width:0;">
+                      <select class="filter-combo-select" id="pixel-filter-key">
+                        <option value="name">Pixel 名称</option>
+                        <option value="id">Pixel ID</option>
+                      </select>
+                      <input type="text" class="filter-combo-input" data-filter="pixel" placeholder="请输入" />
+                    </div>
                     <select class="filter-select" data-filter="payType" style="width:140px;">
                       <option value="">请选择付费类型</option>
                       <option value="免费">免费</option>
@@ -453,9 +454,9 @@
                         </div>
                       </td>
                     </tr>
-                    <tr data-name="Popkon_app" data-dist-id="689543" data-minis-id="" data-pixel="默认TikTok Pixel" data-remark="像素aid:D6I8KD8C7CU..." data-app-type="APP" data-pay-type="付费" data-platform="司南" data-updater="冷吃兔" data-updated="2026-09-11 16:52:47">
+                    <tr data-name="Popkon_app" data-dist-id="689543" data-minis-id="" data-pixel="默认TikTok Pixel" data-pixel-id="D6I8KD8C7CU9K2M4P6R8" data-remark="像素aid:D6I8KD8C7CU..." data-app-type="APP" data-pay-type="付费" data-platform="司南" data-updater="冷吃兔" data-updated="2026-09-11 16:52:47">
                       <td>Popkon_app</td>
-                      <td>默认TikTok Pixel</td>
+                      <td><div>默认TikTok Pixel</div><div class="cell-sub">D6I8KD8C7CU9K2M4P6R8</div></td>
                       <td>689543</td>
                       <td>像素aid:D6I8KD8C7CU...</td>
                       <td>付费</td>
@@ -469,9 +470,9 @@
                         </div>
                       </td>
                     </tr>
-                    <tr data-name="TEST_SN_APP" data-dist-id="1212312.1" data-minis-id="" data-pixel="Popkon_Pixel_AI解剖剂" data-remark="test" data-app-type="APP" data-pay-type="免费" data-platform="司南" data-updater="冷吃兔" data-updated="2026-09-10 18:44:12">
+                    <tr data-name="TEST_SN_APP" data-dist-id="1212312.1" data-minis-id="" data-pixel="Popkon_Pixel_AI解剖剂" data-pixel-id="C4J7N2X8V5B1Z3M6Q9W2E" data-remark="test" data-app-type="APP" data-pay-type="免费" data-platform="司南" data-updater="冷吃兔" data-updated="2026-09-10 18:44:12">
                       <td>TEST_SN_APP</td>
-                      <td>Popkon_Pixel_AI解剖剂</td>
+                      <td><div>Popkon_Pixel_AI解剖剂</div><div class="cell-sub">C4J7N2X8V5B1Z3M6Q9W2E</div></td>
                       <td>1212312.1</td>
                       <td>test</td>
                       <td>免费</td>
@@ -485,9 +486,9 @@
                         </div>
                       </td>
                     </tr>
-                    <tr data-name="lct_test_p" data-dist-id="1513123121" data-minis-id="" data-pixel="默认TikTok Pixel" data-remark="test_pixel_name:关联pr..." data-app-type="APP" data-pay-type="免费" data-platform="司南" data-updater="冷吃兔" data-updated="2026-09-09 17:49:23">
+                    <tr data-name="lct_test_p" data-dist-id="1513123121" data-minis-id="" data-pixel="默认TikTok Pixel" data-pixel-id="D0F3T7W2N6X5R8K4M2P6Q" data-remark="test_pixel_name:关联pr..." data-app-type="APP" data-pay-type="免费" data-platform="司南" data-updater="冷吃兔" data-updated="2026-09-09 17:49:23">
                       <td>lct_test_p</td>
-                      <td>默认TikTok Pixel</td>
+                      <td><div>默认TikTok Pixel</div><div class="cell-sub">D0F3T7W2N6X5R8K4M2P6Q</div></td>
                       <td>1513123121</td>
                       <td>test_pixel_name:关联pr...</td>
                       <td>免费</td>
@@ -850,7 +851,14 @@
         var payType = payTypeEl ? payTypeEl.value : '';
         var platform = platformEl ? platformEl.value : '';
         var extraKey = currentAppType === 'APP' ? 'pixel' : 'minisId';
-        var extraAttr = currentAppType === 'APP' ? 'data-pixel' : 'data-minis-id';
+        var extraAttr;
+        if (currentAppType === 'APP') {
+          var paneEl = activeAppPane();
+          var pixelKeySel = paneEl ? paneEl.querySelector('#pixel-filter-key') : null;
+          extraAttr = (pixelKeySel && pixelKeySel.value === 'id') ? 'data-pixel-id' : 'data-pixel';
+        } else {
+          extraAttr = 'data-minis-id';
+        }
         var extraEl = activeAppFilter(extraKey);
         var extraVal = extraEl ? (extraEl.value || '').trim().toLowerCase() : '';
 
@@ -891,6 +899,12 @@
       function getRadioValue(name) {
         var el = document.querySelector('input[name="' + name + '"]:checked');
         return el ? el.value : '';
+      }
+
+      function escapeHtml(s) {
+        return String(s == null ? '' : s)
+          .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
       }
 
       function setRadioValue(name, value) {
@@ -1055,12 +1069,23 @@
         if (!name.value.trim()) { markFieldError(name); name.focus(); return; }
         if (!distId.value.trim()) { markFieldError(distId); distId.focus(); return; }
 
-        var minisId = '', pixel = '';
+        var minisId = '', pixel = '', pixelId = '';
         if (currentAppType === '小程序') {
           minisId = document.getElementById('asset-app-minis-id').value.trim();
         } else {
           pixel = document.getElementById('asset-app-pixel').value;
           if (!pixel) { markFieldError(document.getElementById('asset-app-pixel')); document.getElementById('asset-app-pixel').focus(); return; }
+          /* Pixel ID 由名称派生（原型演示）；编辑时若名称未变则保留原 ID */
+          var PIXEL_ID_MAP = {
+            '默认TikTok Pixel': 'D6I8KD8C7CU9K2M4P6R8',
+            '默认Pixel': 'C0A1B2C3D4E5F6G7H8I9',
+            'Popkon_Pixel_AI解剖剂': 'C4J7N2X8V5B1Z3M6Q9W2E'
+          };
+          if (editingAssetAppRow && editingAssetAppRow.getAttribute('data-pixel') === pixel) {
+            pixelId = editingAssetAppRow.getAttribute('data-pixel-id') || PIXEL_ID_MAP[pixel] || '';
+          } else {
+            pixelId = PIXEL_ID_MAP[pixel] || '';
+          }
         }
         var remark = document.getElementById('asset-app-remark').value.trim();
 
@@ -1072,10 +1097,15 @@
           row.setAttribute('data-dist-id', distId.value.trim());
           row.setAttribute('data-minis-id', minisId);
           row.setAttribute('data-pixel', pixel);
+          row.setAttribute('data-pixel-id', pixelId);
           row.setAttribute('data-remark', remark);
           var cells = row.children;
           cells[0].textContent = name.value.trim();
-          cells[1].textContent = (currentAppType === 'APP' ? (pixel || '--') : (minisId || '--'));
+          if (currentAppType === 'APP') {
+            cells[1].innerHTML = '<div>' + escapeHtml(pixel) + '</div><div class="cell-sub">' + escapeHtml(pixelId) + '</div>';
+          } else {
+            cells[1].textContent = minisId || '--';
+          }
           cells[2].textContent = distId.value.trim() || '--';
           cells[3].textContent = remark || '--';
           cells[4].textContent = payType;
