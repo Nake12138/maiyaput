@@ -152,9 +152,32 @@ body.theme-antd .nav-grandchild-item.active {
   font-weight: 400;
 }
 
+body.theme-antd .nav-grandchild-item.has-children {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+body.theme-antd .nav-greatgrandchildren {
+  padding-left: 0;
+}
+
+body.theme-antd .nav-greatgrandchild-item {
+  padding: 7px 16px 7px 68px;
+  font-size: 12.5px;
+  color: var(--t-text-muted);
+}
+
+body.theme-antd .nav-greatgrandchild-item.active {
+  background: var(--t-primary-bg);
+  color: var(--t-primary);
+  font-weight: 400;
+}
+
 /* 展开箭头由脚本切换字形，取消 CSS 二次旋转 */
 body.theme-antd .nav-item.expanded .nav-item-caret,
-body.theme-antd .nav-child-item.expanded .nav-child-caret {
+body.theme-antd .nav-child-item.expanded .nav-child-caret,
+body.theme-antd .nav-grandchild-item.expanded .nav-grandchild-caret {
   transform: none;
 }
 

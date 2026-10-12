@@ -133,138 +133,402 @@
       <aside class="sidebar">
           
         <nav class="nav">
+          <!-- 数据看板 -->
           <div class="nav-section">
-            <div class="nav-item" data-page="dashboard">
-              <span class="nav-item-icon">⊞</span>
+            <div class="nav-item active" data-page="dashboard">
+              <span class="nav-item-icon">📊</span>
               <span>数据看板</span>
             </div>
           </div>
 
+          <!-- 巨量 -->
           <div class="nav-section">
-            <div class="nav-item has-children">
-              <span class="nav-item-icon">⊟</span>
-              <span>项目管理</span>
-              <span class="nav-item-caret">▶</span>
+            <div class="nav-item has-children expanded">
+              <span class="nav-item-icon">🔷</span>
+              <span>巨量</span>
+              <span class="nav-item-caret">▼</span>
+            </div>
+            <div class="nav-children">
+              <span class="nav-child-item has-children expanded">
+                <span>项目管理</span>
+                <span class="nav-child-caret">▼</span>
+              </span>
+              <div class="nav-grandchildren">
+                <span class="nav-grandchild-item" data-page="pm-ocean-engine">标准投放</span>
+                <span class="nav-grandchild-item" data-page="roi3-project">全域投放</span>
+              </div>
+              <span class="nav-child-item has-children">
+                <span>数据统计</span>
+                <span class="nav-child-caret">▶</span>
+              </span>
+              <div class="nav-grandchildren">
+                <span class="nav-grandchild-item" data-page="ocean-user-consume">用户消耗</span>
+                <span class="nav-grandchild-item" data-page="ocean-interval-consume">区间消耗</span>
+                <span class="nav-grandchild-item" data-page="ocean-group-consume">小组消耗</span>
+                <span class="nav-grandchild-item" data-page="ocean-video-consume">短剧统计</span>
+                <span class="nav-grandchild-item" data-page="ocean-video-report">短剧报表</span>
+                <span class="nav-grandchild-item" data-page="ocean-material-daily">素材明细</span>
+                <span class="nav-grandchild-item" data-page="ocean-footage">素材统计</span>
+                <span class="nav-grandchild-item has-children">
+                  <span>订单明细</span>
+                  <span class="nav-grandchild-caret">▶</span>
+                </span>
+                <div class="nav-greatgrandchildren">
+                  <span class="nav-greatgrandchild-item" data-page="ocean-consume-pay">充值消耗</span>
+                  <span class="nav-greatgrandchild-item" data-page="ocean-order-detail">订单明细</span>
+                </div>
+              </div>
+              <span class="nav-child-item has-children">
+                <span>推广管理</span>
+                <span class="nav-child-caret">▶</span>
+              </span>
+              <div class="nav-grandchildren">
+                <span class="nav-grandchild-item has-children">
+                  <span>全域推广</span>
+                  <span class="nav-grandchild-caret">▶</span>
+                </span>
+                <div class="nav-greatgrandchildren">
+                  <span class="nav-greatgrandchild-item" data-page="roi3-auto-delivery">自动化投放</span>
+                  <span class="nav-greatgrandchild-item" data-page="roi3-material-update">素材更新</span>
+                </div>
+                <span class="nav-grandchild-item has-children">
+                  <span>标准推广</span>
+                  <span class="nav-grandchild-caret">▶</span>
+                </span>
+                <div class="nav-greatgrandchildren">
+                  <span class="nav-greatgrandchild-item" data-page="auto-delivery">自动化任务</span>
+                  <span class="nav-greatgrandchild-item" data-page="semi-auto-delivery">半自动投放</span>
+                </div>
+                <span class="nav-grandchild-item" data-page="template-manage">模板管理</span>
+                <span class="nav-grandchild-item" data-page="asset-management">资产管理</span>
+                <span class="nav-grandchild-item" data-page="ocean-tiktok-account">抖音号</span>
+                <span class="nav-grandchild-item" data-page="ocean-micro-app">小程序</span>
+              </div>
+              <span class="nav-child-item has-children">
+                <span>账号管理</span>
+                <span class="nav-child-caret">▶</span>
+              </span>
+              <div class="nav-grandchildren">
+                <span class="nav-grandchild-item" data-page="ocean-rds">RDS应用(一级)</span>
+                <span class="nav-grandchild-item" data-page="ocean-advertiser-app-first">广告主应用(一级)</span>
+                <span class="nav-grandchild-item" data-page="ocean-advertiser-app">广告主应用(二级)</span>
+                <span class="nav-grandchild-item" data-page="ocean-agent-app">代理商应用(二级)</span>
+                <span class="nav-grandchild-item" data-page="ocean-account">账户</span>
+                <span class="nav-grandchild-item" data-page="ocean-subject">主体</span>
+              </div>
+              <span class="nav-child-item has-children">
+                <span>控损管理</span>
+                <span class="nav-child-caret">▶</span>
+              </span>
+              <div class="nav-grandchildren">
+                <span class="nav-grandchild-item has-children">
+                  <span>全域投放</span>
+                  <span class="nav-grandchild-caret">▶</span>
+                </span>
+                <div class="nav-greatgrandchildren">
+                  <span class="nav-greatgrandchild-item" data-page="jl-all-project-monitor">项目盯盘</span>
+                  <span class="nav-greatgrandchild-item" data-page="jl-domain-inefficient">低效项目</span>
+                </div>
+                <span class="nav-grandchild-item has-children">
+                  <span>标准投放</span>
+                  <span class="nav-grandchild-caret">▶</span>
+                </span>
+                <div class="nav-greatgrandchildren">
+                  <span class="nav-greatgrandchild-item" data-page="jl-account-monitor">账户监控</span>
+                  <span class="nav-greatgrandchild-item" data-page="jl-shared-wallet">共享钱包余额</span>
+                  <span class="nav-greatgrandchild-item" data-page="jl-project-monitor">项目盯盘</span>
+                  <span class="nav-greatgrandchild-item" data-page="jl-advertiser-monitor">广告控损</span>
+                  <span class="nav-greatgrandchild-item" data-page="jl-price-management">出价控损</span>
+                  <span class="nav-greatgrandchild-item" data-page="jl-exclude-account">排除账户</span>
+                  <span class="nav-greatgrandchild-item" data-page="jl-inefficient">低效账户</span>
+                  <span class="nav-greatgrandchild-item" data-page="jl-project-inefficient">低效计划</span>
+                </div>
+              </div>
+              <span class="nav-child-item has-children">
+                <span>算法管理</span>
+                <span class="nav-child-caret">▶</span>
+              </span>
+              <div class="nav-grandchildren">
+                <span class="nav-grandchild-item" data-page="ocean-routing-config">分流配置</span>
+              </div>
+              <span class="nav-child-item" data-page="ocean-association-binding">关联绑定</span>
+              <span class="nav-child-item has-children">
+                <span>操作记录</span>
+                <span class="nav-child-caret">▶</span>
+              </span>
+              <div class="nav-grandchildren">
+                <span class="nav-grandchild-item" data-page="ocean-bind-log">换绑记录</span>
+                <span class="nav-grandchild-item" data-page="ocean-operation-summarizing">操作记录汇总</span>
+              </div>
+              <span class="nav-child-item has-children">
+                <span>财务管理</span>
+                <span class="nav-child-caret">▶</span>
+              </span>
+              <div class="nav-grandchildren">
+                <span class="nav-grandchild-item" data-page="ocean-financial-daily">账户日流水</span>
+              </div>
             </div>
           </div>
 
+          <!-- 腾讯 -->
           <div class="nav-section">
             <div class="nav-item has-children">
-              <span class="nav-item-icon">📊</span>
-              <span>数据统计</span>
+              <span class="nav-item-icon">🐧</span>
+              <span>腾讯</span>
               <span class="nav-item-caret">▶</span>
+            </div>
+            <div class="nav-children">
+              <span class="nav-child-item" data-page="tencent-project-management">项目管理</span>
+              <span class="nav-child-item has-children">
+                <span>数据统计</span>
+                <span class="nav-child-caret">▶</span>
+              </span>
+              <div class="nav-grandchildren">
+                <span class="nav-grandchild-item" data-page="tencent-user-consume">用户消耗</span>
+                <span class="nav-grandchild-item" data-page="tencent-interval-consume">区间消耗</span>
+                <span class="nav-grandchild-item" data-page="tencent-group-consume">小组消耗</span>
+                <span class="nav-grandchild-item" data-page="tencent-video-consume">短剧统计</span>
+                <span class="nav-grandchild-item" data-page="tencent-video-report">短剧报表</span>
+                <span class="nav-grandchild-item" data-page="tencent-material-daily">素材明细</span>
+                <span class="nav-grandchild-item" data-page="tencent-footage">素材统计</span>
+                <span class="nav-grandchild-item has-children">
+                  <span>订单明细</span>
+                  <span class="nav-grandchild-caret">▶</span>
+                </span>
+                <div class="nav-greatgrandchildren">
+                  <span class="nav-greatgrandchild-item" data-page="tencent-consume-pay">充值消耗</span>
+                  <span class="nav-greatgrandchild-item" data-page="tencent-order-detail">订单明细</span>
+                </div>
+              </div>
+              <span class="nav-child-item has-children">
+                <span>推广管理</span>
+                <span class="nav-child-caret">▶</span>
+              </span>
+              <div class="nav-grandchildren">
+                <span class="nav-grandchild-item" data-page="tencent-batch-put">批量投放</span>
+                <span class="nav-grandchild-item" data-page="tencent-template-manage">模板管理</span>
+                <span class="nav-grandchild-item has-children">
+                  <span>资产管理</span>
+                  <span class="nav-grandchild-caret">▶</span>
+                </span>
+                <div class="nav-greatgrandchildren">
+                  <span class="nav-greatgrandchild-item" data-page="tencent-conversion-attribute">转化归因</span>
+                  <span class="nav-greatgrandchild-item" data-page="tencent-mini-program">小程序</span>
+                  <span class="nav-greatgrandchild-item" data-page="tencent-auth-record">视频号授权</span>
+                </div>
+              </div>
+              <span class="nav-child-item has-children">
+                <span>账号管理</span>
+                <span class="nav-child-caret">▶</span>
+              </span>
+              <div class="nav-grandchildren">
+                <span class="nav-grandchild-item" data-page="tencent-application">应用</span>
+                <span class="nav-grandchild-item" data-page="tencent-account">账户</span>
+                <span class="nav-grandchild-item" data-page="tencent-subject">主体</span>
+              </div>
+              <span class="nav-child-item has-children">
+                <span>控损管理</span>
+                <span class="nav-child-caret">▶</span>
+              </span>
+              <div class="nav-grandchildren">
+                <span class="nav-grandchild-item" data-page="tencent-account-monitor">账户监控</span>
+                <span class="nav-grandchild-item" data-page="tencent-shared-wallet">共享钱包余额</span>
+                <span class="nav-grandchild-item" data-page="tencent-ad-loss-control">广告控损</span>
+                <span class="nav-grandchild-item" data-page="tencent-creative-loss-control">创意控损</span>
+                <span class="nav-grandchild-item" data-page="tencent-price-management">出价控损</span>
+                <span class="nav-grandchild-item" data-page="tencent-exclude-account">排除账户</span>
+              </div>
+              <span class="nav-child-item" data-page="tencent-association-binding">关联绑定</span>
+              <span class="nav-child-item" data-page="tencent-bind-log">操作记录</span>
+              <span class="nav-child-item has-children">
+                <span>财务管理</span>
+                <span class="nav-child-caret">▶</span>
+              </span>
+              <div class="nav-grandchildren">
+                <span class="nav-grandchild-item" data-page="tencent-daily-bill">日结账单</span>
+                <span class="nav-grandchild-item" data-page="tencent-account-revenue">资金流水</span>
+                <span class="nav-grandchild-item" data-page="tencent-auto-recharge">自动充值</span>
+              </div>
             </div>
           </div>
 
+          <!-- 快手 -->
           <div class="nav-section">
             <div class="nav-item has-children">
-              <span class="nav-item-icon">▶</span>
+              <span class="nav-item-icon">🎬</span>
+              <span>快手</span>
+              <span class="nav-item-caret">▶</span>
+            </div>
+            <div class="nav-children">
+              <span class="nav-child-item" data-page="kwai-pm">项目管理</span>
+              <span class="nav-child-item has-children">
+                <span>数据统计</span>
+                <span class="nav-child-caret">▶</span>
+              </span>
+              <div class="nav-grandchildren">
+                <span class="nav-grandchild-item" data-page="kwai-user-consume">用户消耗</span>
+                <span class="nav-grandchild-item" data-page="kwai-interval-consume">区间消耗</span>
+                <span class="nav-grandchild-item" data-page="kwai-group-consume">小组消耗</span>
+                <span class="nav-grandchild-item" data-page="kwai-video-consume">短剧统计</span>
+                <span class="nav-grandchild-item" data-page="kwai-video-report">短剧报表</span>
+                <span class="nav-grandchild-item" data-page="kwai-material-daily">素材明细</span>
+                <span class="nav-grandchild-item" data-page="kwai-footage">素材统计</span>
+              </div>
+              <span class="nav-child-item has-children">
+                <span>推广管理</span>
+                <span class="nav-child-caret">▶</span>
+              </span>
+              <div class="nav-grandchildren">
+                <span class="nav-grandchild-item has-children">
+                  <span>自动化任务</span>
+                  <span class="nav-grandchild-caret">▶</span>
+                </span>
+                <div class="nav-greatgrandchildren">
+                  <span class="nav-greatgrandchild-item" data-page="kwai-auto-task-list">任务列表</span>
+                  <span class="nav-greatgrandchild-item" data-page="kwai-auto-task-drama">投放短剧</span>
+                </div>
+                <span class="nav-grandchild-item" data-page="kwai-magnetic-put">批量投放</span>
+              </div>
+              <span class="nav-child-item has-children">
+                <span>账号管理</span>
+                <span class="nav-child-caret">▶</span>
+              </span>
+              <div class="nav-grandchildren">
+                <span class="nav-grandchild-item" data-page="kwai-application">应用</span>
+                <span class="nav-grandchild-item" data-page="kwai-account">账户</span>
+              </div>
+              <span class="nav-child-item has-children">
+                <span>控损管理</span>
+                <span class="nav-child-caret">▶</span>
+              </span>
+              <div class="nav-grandchildren">
+                <span class="nav-grandchild-item" data-page="ks-account-monitor">账户监控</span>
+                <span class="nav-grandchild-item" data-page="ks-shared-wallet">共享钱包余额</span>
+                <span class="nav-grandchild-item" data-page="ks-project-monitor">计划控损</span>
+                <span class="nav-grandchild-item" data-page="ks-advertiser-monitor">广告组控损</span>
+                <span class="nav-grandchild-item" data-page="ks-price-management">出价控损</span>
+                <span class="nav-grandchild-item" data-page="ks-exclude-account">排除账户</span>
+                <span class="nav-grandchild-item" data-page="ks-low-efficiency-plan">低效计划</span>
+                <span class="nav-grandchild-item" data-page="ks-inefficient-account">低效账户</span>
+              </div>
+              <span class="nav-child-item" data-page="kwai-association-binding">关联绑定</span>
+              <span class="nav-child-item" data-page="kwai-bind-log">操作记录</span>
+              <span class="nav-child-item has-children">
+                <span>财务管理</span>
+                <span class="nav-child-caret">▶</span>
+              </span>
+              <div class="nav-grandchildren">
+                <span class="nav-grandchild-item" data-page="ks-founds">广告金</span>
+                <span class="nav-grandchild-item" data-page="ks-daily-bill">日结账单</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 短剧管理 -->
+          <div class="nav-section">
+            <div class="nav-item has-children">
+              <span class="nav-item-icon">🎭</span>
               <span>短剧管理</span>
               <span class="nav-item-caret">▶</span>
             </div>
+            <div class="nav-children">
+              <span class="nav-child-item" data-page="drama-list-operation">短剧列表(运营)</span>
+              <span class="nav-child-item" data-page="drama-list">短剧列表</span>
+              <span class="nav-child-item" data-page="drama-consume">短剧消耗</span>
+            </div>
           </div>
 
+          <!-- 素材管理 -->
           <div class="nav-section">
             <div class="nav-item has-children">
-              <span class="nav-item-icon">▣</span>
+              <span class="nav-item-icon">🖼️</span>
               <span>素材管理</span>
               <span class="nav-item-caret">▶</span>
             </div>
-          </div>
-
-          <div class="nav-section">
-            <div class="nav-item has-children expanded">
-              <span class="nav-item-icon">▦</span>
-              <span>批量投放</span>
-              <span class="nav-item-caret">▼</span>
-            </div>
             <div class="nav-children">
-              <span class="nav-child-item active" data-page="auto-delivery">自动化任务</span>
-              <span class="nav-child-item" data-page="semi-auto-delivery">半自动投放</span>
-              <span class="nav-child-item" data-page="roi3-auto-delivery">Roi3自动投放</span>
-              <span class="nav-child-item" data-page="roi3-material-update">Roi3素材更新</span>
-              <span class="nav-child-item" data-page="template-manage">模板管理</span>
-              <span class="nav-child-item" data-page="subject-package">主体包</span>
-              <span class="nav-child-item" data-page="app-package">应用包</span>
-              <span class="nav-child-item" data-page="account-package">账户包</span>
-              <span class="nav-child-item" data-page="asset-management">资产管理</span>
+              <span class="nav-child-item" data-page="material-search">素材搜索</span>
+              <span class="nav-child-item" data-page="album-management">素材库</span>
+              <span class="nav-child-item" data-page="ai-materials">AI素材</span>
+              <span class="nav-child-item" data-page="adx-materials">adx素材</span>
+              <span class="nav-child-item" data-page="d-drama-data">懂小剧数据</span>
+              <span class="nav-child-item" data-page="ks-magnetic-star">快手聚星</span>
+              <span class="nav-child-item has-children">
+                <span>标签管理</span>
+                <span class="nav-child-caret">▶</span>
+              </span>
+              <div class="nav-grandchildren">
+                <span class="nav-grandchild-item" data-page="tag-management">标签管理</span>
+                <span class="nav-grandchild-item" data-page="tag-group-management">标签组管理</span>
+              </div>
             </div>
           </div>
 
-          <div class="nav-section">
-            <div class="nav-item has-children">
-              <span class="nav-item-icon">👤</span>
-              <span>账号管理</span>
-              <span class="nav-item-caret">▶</span>
-            </div>
-          </div>
-
-          <div class="nav-section">
-            <div class="nav-item has-children expanded">
-              <span class="nav-item-icon">◈</span>
-              <span>投放管理</span>
-              <span class="nav-item-caret">▼</span>
-            </div>
-            <div class="nav-children">
-              <span class="nav-child-item">巨量</span>
-              <span class="nav-child-item">账户监控</span>
-              <span class="nav-child-item">共享钱包余额</span>
-              <span class="nav-child-item">项目盯盘</span>
-              <span class="nav-child-item">全域项目盯盘</span>
-              <span class="nav-child-item">广告控损</span>
-              <span class="nav-child-item">基建管理</span>
-              <span class="nav-child-item">出价控损</span>
-              <span class="nav-child-item">掉排账户</span>
-              <span class="nav-child-item">低效账户</span>
-              <span class="nav-child-item">低效计划</span>
-            </div>
-          </div>
-
+          <!-- 资产管理 -->
           <div class="nav-section">
             <div class="nav-item has-children">
               <span class="nav-item-icon">🗂️</span>
               <span>资产管理</span>
               <span class="nav-item-caret">▶</span>
             </div>
-          </div>
-
-          <div class="nav-section">
-            <div class="nav-item has-children">
-              <span class="nav-item-icon">💰</span>
-              <span>财务管理</span>
-              <span class="nav-item-caret">▶</span>
+            <div class="nav-children">
+              <span class="nav-child-item" data-page="platform-account">平台账号</span>
             </div>
           </div>
 
-          <div class="nav-section">
-            <div class="nav-item has-children">
-              <span class="nav-item-icon">🛡️</span>
-              <span>控损管理</span>
-              <span class="nav-item-caret">▶</span>
-            </div>
-          </div>
-
+          <!-- 系统设置 -->
           <div class="nav-section">
             <div class="nav-item has-children">
               <span class="nav-item-icon">⚙️</span>
               <span>系统设置</span>
               <span class="nav-item-caret">▶</span>
             </div>
-          </div>
-
-          <div class="nav-section">
-            <div class="nav-item has-children">
-              <span class="nav-item-icon">🔗</span>
-              <span>关联绑定</span>
-              <span class="nav-item-caret">▶</span>
+            <div class="nav-children">
+              <span class="nav-child-item" data-page="organiza-structure">组织架构</span>
+              <span class="nav-child-item" data-page="user-management">用户管理</span>
+              <span class="nav-child-item" data-page="permission-manage">权限管理</span>
+              <span class="nav-child-item" data-page="log-management">日志管理</span>
+              <span class="nav-child-item" data-page="data-sync">数据同步</span>
             </div>
           </div>
 
+          <!-- CPS系统 -->
           <div class="nav-section">
             <div class="nav-item has-children">
-              <span class="nav-item-icon">🧠</span>
-              <span>算法管理</span>
+              <span class="nav-item-icon">📦</span>
+              <span>CPS系统</span>
               <span class="nav-item-caret">▶</span>
+            </div>
+            <div class="nav-children">
+              <span class="nav-child-item" data-page="cps-notice">公告通知</span>
+              <span class="nav-child-item" data-page="cps-user-list">用户列表</span>
+              <span class="nav-child-item has-children">
+                <span>数据中心</span>
+                <span class="nav-child-caret">▶</span>
+              </span>
+              <div class="nav-grandchildren">
+                <span class="nav-grandchild-item" data-page="cps-order-list">每笔订单明细</span>
+                <span class="nav-grandchild-item" data-page="cps-refund-order">退款订单明细</span>
+                <span class="nav-grandchild-item" data-page="cps-day-income">每日收益汇总</span>
+                <span class="nav-grandchild-item" data-page="cps-ad-revenue">广告收益明细</span>
+              </div>
+              <span class="nav-child-item has-children">
+                <span>投放管理</span>
+                <span class="nav-child-caret">▶</span>
+              </span>
+              <div class="nav-grandchildren">
+                <span class="nav-grandchild-item" data-page="cps-back-kick">回传模板</span>
+                <span class="nav-grandchild-item" data-page="cps-promotion-link">推广链接</span>
+              </div>
+              <span class="nav-child-item" data-page="cps-book-list">短剧列表</span>
+              <span class="nav-child-item" data-page="cps-user-analysis">用户剧集分析</span>
+              <span class="nav-child-item has-children">
+                <span>网站设置</span>
+                <span class="nav-child-caret">▶</span>
+              </span>
+              <div class="nav-grandchildren">
+                <span class="nav-grandchild-item" data-page="cps-website">网站设置</span>
+                <span class="nav-grandchild-item" data-page="cps-recharge-template">充值模板设置</span>
+              </div>
             </div>
           </div>
         </nav>
@@ -276,7 +540,7 @@
 
         <!-- Content Pages -->
         <div class="content">
-          <div id="page-dashboard" class="page">
+          <div id="page-dashboard" class="page active">
             <div class="content-card">
             <div class="stats-grid" style="grid-template-columns: repeat(4, 1fr);">
               <div class="stat-card">
@@ -311,7 +575,11 @@
             <div class="breadcrumb">
               <a href="#" onclick="showPage('dashboard')">首页</a>
               <span class="breadcrumb-sep">/</span>
-              <span>批量投放</span>
+              <span>巨量</span>
+              <span class="breadcrumb-sep">/</span>
+              <span>推广管理</span>
+              <span class="breadcrumb-sep">/</span>
+              <span>标准推广</span>
               <span class="breadcrumb-sep">/</span>
               <span>自动化任务</span>
             </div>
@@ -583,27 +851,7 @@
 
     <script src="scripts/main.js"></script>
     <script>
-      /* ===== 子菜单与二级分组展开/收起 ===== */
-      function toggleNavExpand(item, caretSelector) {
-        item.classList.toggle('expanded');
-        var caret = item.querySelector(caretSelector);
-        if (caret) {
-          caret.textContent = item.classList.contains('expanded') ? '▼' : '▶';
-        }
-      }
-
-      document.querySelectorAll('.nav-child-item.has-children').forEach(function (item) {
-        item.addEventListener('click', function (e) {
-          e.stopPropagation();
-          toggleNavExpand(this, '.nav-child-caret');
-        });
-      });
-
-      document.querySelectorAll('.nav-child-item[data-page]').forEach(function (item) {
-        item.addEventListener('click', function () {
-          showPage(this.getAttribute('data-page'));
-        });
-      });
+      /* 导航展开/收起与页面切换统一由 scripts/main.js 处理（含二/三/四级分组） */
 
       /* ===== 自动投放任务页 ===== */
       function switchAutoDeliveryTab(tabName) {

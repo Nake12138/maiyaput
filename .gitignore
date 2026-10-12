@@ -13,3 +13,6 @@ Thumbs.db
 
 # WorkBuddy 本地临时数据
 .workbuddy/
+
+# 飞书文档草稿工作目录（lark-cli docs +script init-draft 创建的临时区）
+draft_*_folder/

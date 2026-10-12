@@ -260,10 +260,10 @@
   <div class="content-card">
   <!-- Tabs -->
   <div class="tabs" id="template-tabs">
-    <button class="tab active" data-tab="account" onclick="switchTemplateTab('account')">账户包</button>
+    <button class="tab active" data-tab="manage" onclick="switchTemplateTab('manage')">模板管理</button>
+    <button class="tab" data-tab="account" onclick="switchTemplateTab('account')">账户包</button>
     <button class="tab" data-tab="target" onclick="switchTemplateTab('target')">定向包</button>
-    <button class="tab" data-tab="recharge" onclick="switchTemplateTab('recharge')">充值模板</button>
-    <button class="tab" data-tab="callback" onclick="switchTemplateTab('callback')">回传模板</button>
+    <button class="tab" data-tab="tiktok" onclick="switchTemplateTab('tiktok')">TikTok 账号包</button>
   </div>
 
   <!-- 账户包 -->
@@ -384,8 +384,171 @@
     </div>
   </div>
 
-  <!-- 充值模板 -->
-  <div id="template-tab-recharge" class="template-tab-panel" style="display:none;">
+  <!-- TikTok 账号包 -->
+  <div id="template-tab-tiktok" class="template-tab-panel" style="display:none;">
+    <div class="filter-bar">
+      <div class="filter-bar-row">
+        <input type="text" class="filter-input" id="tiktok-package-name-filter" placeholder="请输入名称" />
+        <select class="filter-select" id="tiktok-package-creator-filter"><option>请选择创建人</option><option>听泉</option><option>魔法七</option><option>橙子</option><option>孤树</option><option>admin</option></select>
+        <div class="filter-actions">
+          <button class="btn btn-primary btn-sm" onclick="filterTiktokPackageList()">查询</button>
+          <button class="btn btn-outline btn-sm" onclick="resetTemplateFilter('tiktok')">重置</button>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="openTiktokAccountDrawer('add')">新增TikTok 账号包</button>
+      </div>
+    </div>
+    <div class="table-card">
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th class="checkbox-col"><input type="checkbox" /></th>
+              <th>ID</th>
+              <th>名称</th>
+              <th>备注</th>
+              <th>TikTok账号数量</th>
+              <th>创建人</th>
+              <th>创建时间</th>
+              <th>更新时间</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="tiktok-package-tbody">
+            <tr data-name="东南亚英语TikTok包" data-creator="admin"><td class="checkbox-col"><input type="checkbox" /></td><td>201</td><td><a href="#" class="link" onclick="openTiktokAccountDrawer('edit','东南亚英语TikTok包')">东南亚英语TikTok包</a></td><td>--</td><td>4</td><td>admin</td><td>2026-09-01 10:22:18</td><td>2026-09-01 10:22:18</td><td><div class="row-actions"><a href="#" class="link" onclick="openTiktokAccountDrawer('copy','东南亚英语TikTok包')">复制</a> <a href="#" class="link" onclick="openTiktokAccountDrawer('edit','东南亚英语TikTok包')">编辑</a> <a href="#" class="link link-danger" onclick="deleteTemplateRow(this)">删除</a></div></td></tr>
+            <tr data-name="欧洲多语言TikTok包" data-creator="admin"><td class="checkbox-col"><input type="checkbox" /></td><td>202</td><td><a href="#" class="link" onclick="openTiktokAccountDrawer('edit','欧洲多语言TikTok包')">欧洲多语言TikTok包</a></td><td>--</td><td>3</td><td>admin</td><td>2026-09-02 14:35:42</td><td>2026-09-02 14:35:42</td><td><div class="row-actions"><a href="#" class="link" onclick="openTiktokAccountDrawer('copy','欧洲多语言TikTok包')">复制</a> <a href="#" class="link" onclick="openTiktokAccountDrawer('edit','欧洲多语言TikTok包')">编辑</a> <a href="#" class="link link-danger" onclick="deleteTemplateRow(this)">删除</a></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pagination">
+        <span class="pagination-info">共 2 条</span>
+        <div class="pagination-pages">
+          <button class="page-btn" disabled>&lt;</button>
+          <button class="page-btn active">1</button>
+          <button class="page-btn" disabled>&gt;</button>
+        </div>
+        <select class="page-size-select"><option>10条/页</option><option>20条/页</option><option>50条/页</option></select>
+        <span>跳至</span>
+        <input type="text" class="jump-input" value="1" />
+        <span>页</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 模板管理（二级页签：文案模板 / 充值模板 / 回传模板） -->
+  <div id="template-tab-manage" class="template-tab-panel" style="display:block;">
+    <div class="tpl-subtabs" id="template-manage-subtabs">
+      <button class="tpl-subtab active" data-sub="copy" onclick="switchTemplateSubTab('copy')">文案模板</button>
+      <button class="tpl-subtab" data-sub="recharge" onclick="switchTemplateSubTab('recharge')">充值模板</button>
+      <button class="tpl-subtab" data-sub="callback" onclick="switchTemplateSubTab('callback')">回传模板</button>
+    </div>
+
+    <!-- 文案模板 -->
+    <div id="template-subtab-copy" class="template-subtab-panel">
+      <div class="filter-bar">
+        <div class="filter-bar-row">
+          <div class="filter-combo">
+            <select class="filter-combo-select">
+              <option>文案内容</option>
+              <option>ID</option>
+            </select>
+            <input type="text" class="filter-combo-input" placeholder="请输入" />
+          </div>
+          <select class="filter-select" id="template-copy-type-filter">
+            <option value="">请选择文案类型</option>
+            <option>标题</option>
+            <option>产品卖点</option>
+          </select>
+          <select class="filter-select" id="template-copy-pay-filter">
+            <option value="">请选择付费类型</option>
+            <option>付费</option>
+            <option>免费</option>
+          </select>
+          <select class="filter-select" id="template-copy-lang-filter">
+            <option value="">请选择语言</option>
+            <option>英语</option>
+            <option>简体中文</option>
+            <option>繁体中文</option>
+            <option>西班牙语</option>
+            <option>日语</option>
+            <option>韩语</option>
+            <option>印尼语</option>
+            <option>意大利语</option>
+            <option>泰语</option>
+          </select>
+          <select class="filter-select" id="template-copy-creator-filter">
+            <option value="">请选择创建人</option>
+            <option>娜可</option>
+            <option>春光</option>
+            <option>冷吃兔</option>
+            <option>分享</option>
+          </select>
+          <div class="filter-actions">
+            <button class="btn btn-primary btn-sm" onclick="filterCopyTemplateList()">查询</button>
+            <button class="btn btn-outline btn-sm" onclick="resetCopyTemplateFilter()">重置</button>
+          </div>
+          <button class="btn btn-primary btn-sm" style="margin-left:auto;" onclick="openCopyAddModal()">新增文案</button>
+        </div>
+      </div>
+      <div class="table-card" id="copy-template-card">
+        <div class="table-toolbar">
+          <span>已选 <strong id="copy-selected-count">0</strong> 项</span>
+          <a href="#" class="link" onclick="batchDeleteCopyTemplates();return false;">批量删除</a>
+          <div class="table-toolbar-actions">
+            <button type="button" class="table-toolbar-icon-btn" title="列设置" aria-label="列设置" onclick="showToast('列设置（原型演示）')">
+              <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M8 5.1a2.9 2.9 0 100 5.8 2.9 2.9 0 000-5.8z" stroke="currentColor" stroke-width="1.3"/>
+                <path d="M13.4 10.2a7 7 0 000-4.4l-1.7.6a5.2 5.2 0 00-1.5-1.5l.6-1.7a7 7 0 00-4.4 0l.6 1.7a5.2 5.2 0 00-1.5 1.5l-1.7-.6a7 7 0 000 4.4l1.7-.6c.37.6.86 1.09 1.5 1.5l-.6 1.7a7 7 0 004.4 0l-.6-1.7c.59-.41 1.08-.9 1.5-1.5l1.7.6z" stroke="currentColor" stroke-width="1.1"/>
+              </svg>
+            </button>
+            <button type="button" class="table-toolbar-icon-btn" title="全屏" aria-label="全屏" onclick="toggleCopyTableFullscreen()">
+              <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M2 6V2.5A.5.5 0 012.5 2H6M10 2h3.5a.5.5 0 01.5.5V6M14 10v3.5a.5.5 0 01-.5.5H10M6 14H2.5a.5.5 0 01-.5-.5V10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th class="checkbox-col"><input type="checkbox" id="copy-select-all" onclick="toggleCopySelectAll(this)" /></th>
+                <th>ID</th>
+                <th>文案内容</th>
+                <th>文案类型</th>
+                <th>付费类型</th>
+                <th>语言</th>
+                <th>创建人</th>
+                <th>创建时间</th>
+                <th>更新时间</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="copy-template-tbody"><!-- 由脚本渲染 --></tbody>
+          </table>
+        </div>
+        <div class="pagination">
+          <span class="pagination-info">共 138 项</span>
+          <div class="pagination-pages">
+            <button class="page-btn" disabled>&lt;</button>
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn">3</button>
+            <button class="page-btn">4</button>
+            <button class="page-btn">5</button>
+            <span style="padding:0 6px;color:var(--color-text-secondary);">…</span>
+            <button class="page-btn">14</button>
+            <button class="page-btn">&gt;</button>
+          </div>
+          <select class="page-size-select"><option>10 条/页</option><option>20 条/页</option><option>50 条/页</option></select>
+          <span>跳至</span>
+          <input type="text" class="jump-input" />
+          <span>页</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 充值模板 -->
+    <div id="template-tab-recharge" class="template-subtab-panel" style="display:none;">
     <div class="filter-bar">
       <div class="filter-bar-row">
         <input type="text" class="filter-input" placeholder="请输入模板名称" />
@@ -446,7 +609,7 @@
   </div>
 
   <!-- 回传模板 -->
-  <div id="template-tab-callback" class="template-tab-panel" style="display:none;">
+  <div id="template-tab-callback" class="template-subtab-panel" style="display:none;">
     <div class="filter-bar">
       <div class="filter-bar-row">
         <input type="text" class="filter-input" placeholder="请输入模板名称" />
@@ -500,6 +663,7 @@
         <span>页</span>
       </div>
     </div>
+  </div>
   </div>
 
   <!-- 账户包 新增/编辑/复制 抽屉 -->
@@ -582,6 +746,113 @@
       <div class="modal-footer">
         <button class="btn btn-outline btn-sm" onclick="closeBatchAddModal()">取消</button>
         <button class="btn btn-primary btn-sm" onclick="confirmBatchAdd()">确定</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TikTok 账号包 新增/编辑/复制 抽屉 -->
+  <div id="template-tiktok-overlay" class="drawer-overlay" onclick="closeTiktokAccountDrawer()"></div>
+  <div id="template-tiktok-drawer" class="drawer drawer-wide">
+    <div class="drawer-card">
+      <div class="drawer-header">
+        <span id="template-tiktok-title">新增TikTok 账号包</span>
+        <button class="drawer-close" onclick="closeTiktokAccountDrawer()">×</button>
+      </div>
+      <div class="drawer-body">
+        <div class="form-section">
+          <div class="form-row">
+            <div class="form-label required">名称：</div>
+            <div class="form-field form-field-inline" style="width:100%;">
+              <input type="text" id="tiktok-name" class="form-input" placeholder="请输入" style="flex:1;" />
+              <span class="form-counter">0 / 50</span>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-label">备注：</div>
+            <div class="form-field form-field-inline" style="width:100%;">
+              <input type="text" id="tiktok-remark" class="form-input" placeholder="请输入" style="flex:1;" />
+              <span class="form-counter">0 / 100</span>
+            </div>
+          </div>
+          <div class="form-row" style="align-items:flex-start;">
+            <div class="form-label required">TikTok 账号：</div>
+            <div class="form-field" style="flex:1;">
+              <div class="drawer-split">
+                <!-- 左侧：全量 TikTok 账号（数据来源：资产管理-TikTok账号） -->
+                <div>
+                  <div class="tt-transfer-toolbar tt-asset-filter">
+                    <input type="text" class="filter-input" id="tt-avail-name" placeholder="请输入TT账号名称" style="flex:1.2;" />
+                    <select class="filter-select" id="tt-avail-lang" style="min-width:104px;width:auto;">
+                      <option value="">请选择语言</option>
+                      <option>葡萄牙语</option>
+                      <option>繁体中文</option>
+                      <option>马来西亚语</option>
+                      <option>英语</option>
+                      <option>德语</option>
+                      <option>意大利语</option>
+                      <option>法语</option>
+                    </select>
+                    <input type="text" class="filter-input" id="tt-avail-remark" placeholder="请输入备注" style="flex:1;" />
+                    <button type="button" class="btn btn-primary btn-sm" onclick="searchTiktokAvailable()">查询</button>
+                    <button type="button" class="btn btn-outline btn-sm" onclick="resetTiktokAvailable()">重置</button>
+                  </div>
+                  <div class="tt-transfer-status"><span class="tt-transfer-count" id="tiktok-available-count">共 0 条</span></div>
+                  <div class="tt-transfer-box tt-transfer-left">
+                    <div class="tt-transfer-scroll">
+                      <table class="data-table tt-transfer-table">
+                        <thead>
+                          <tr>
+                            <th class="checkbox-col"><input type="checkbox" id="tiktok-available-header-checkbox" onclick="toggleAllTiktokAvailable(this)" /></th>
+                            <th>TikTok账号名称</th>
+                            <th>语言</th>
+                            <th>备注</th>
+                          </tr>
+                        </thead>
+                        <tbody id="tiktok-available-tbody"></tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <!-- 右侧：已选 TikTok 账号 -->
+                <div>
+                  <div class="tt-transfer-toolbar tt-asset-filter">
+                    <input type="text" class="filter-input" id="tt-sel-name" placeholder="请输入TT账号名称" style="flex:1.2;" />
+                    <select class="filter-select" id="tt-sel-lang" style="min-width:104px;width:auto;">
+                      <option value="">请选择语言</option>
+                      <option>葡萄牙语</option>
+                      <option>繁体中文</option>
+                      <option>马来西亚语</option>
+                      <option>英语</option>
+                      <option>德语</option>
+                      <option>意大利语</option>
+                      <option>法语</option>
+                    </select>
+                    <input type="text" class="filter-input" id="tt-sel-remark" placeholder="请输入备注" style="flex:1;" />
+                    <button type="button" class="btn btn-primary btn-sm" onclick="searchTiktokSelected()">查询</button>
+                    <button type="button" class="btn btn-outline btn-sm" onclick="resetTiktokSelected()">重置</button>
+                  </div>
+                  <div class="tt-transfer-status"><span class="tt-transfer-count" id="tiktok-selected-count">已选：0 <a href="#" class="link" onclick="clearSelectedTiktokAccounts();return false;">清空</a></span></div>
+                  <div class="tt-transfer-box tt-transfer-right">
+                    <div class="tt-transfer-scroll">
+                      <table class="data-table tt-transfer-table">
+                        <thead>
+                          <tr><th>TikTok账号名称</th><th>语言</th><th>备注</th><th>操作</th></tr>
+                        </thead>
+                        <tbody id="tiktok-selected-tbody">
+                          <tr class="tt-transfer-empty"><td colspan="4"><div class="empty-state" style="padding:30px 20px;"><div class="empty-state-icon">📦</div><span>暂无数据</span></div></td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="drawer-footer">
+        <button class="btn btn-outline btn-sm" onclick="closeTiktokAccountDrawer()">取消</button>
+        <button class="btn btn-primary btn-sm" onclick="closeTiktokAccountDrawer()">确定</button>
       </div>
     </div>
   </div>
@@ -720,6 +991,65 @@
       <div class="drawer-footer">
         <button class="btn btn-outline btn-sm" onclick="closeCallbackDrawer()">取消</button>
         <button class="btn btn-primary btn-sm" onclick="closeCallbackDrawer()">确定</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 文案模板 新增/编辑 弹框 -->
+  <div id="copy-add-overlay" class="modal-overlay" onclick="closeCopyAddModal()"></div>
+  <div id="copy-add-modal" class="modal">
+    <div class="modal-card" style="width: min(700px, calc(100vw - 40px));">
+      <div class="modal-header">
+        <span>新增文案</span>
+        <button class="modal-close" onclick="closeCopyAddModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <div style="font-size:12px;color:var(--color-text-tertiary);margin-bottom:16px;">标题限填100个半角字符，产品卖点限制25个半角字符</div>
+        <div class="form-row" style="align-items:center;">
+          <div class="form-label required">文案类型：</div>
+          <div class="form-field">
+            <label style="display:inline-flex;align-items:center;gap:4px;cursor:pointer;font-size:13px;margin-right:16px;"><input type="radio" name="copy-add-type" value="标题" checked /> 标题</label>
+            <label style="display:inline-flex;align-items:center;gap:4px;cursor:pointer;font-size:13px;"><input type="radio" name="copy-add-type" value="产品卖点" /> 产品卖点</label>
+          </div>
+        </div>
+        <div class="form-row" style="align-items:center;">
+          <div class="form-label required">付费类型：</div>
+          <div class="form-field">
+            <label style="display:inline-flex;align-items:center;gap:4px;cursor:pointer;font-size:13px;margin-right:16px;"><input type="radio" name="copy-add-pay-type" value="付费" checked /> 付费</label>
+            <label style="display:inline-flex;align-items:center;gap:4px;cursor:pointer;font-size:13px;"><input type="radio" name="copy-add-pay-type" value="免费" /> 免费</label>
+          </div>
+        </div>
+        <div class="form-row" style="align-items:center;">
+          <div class="form-label required">语言：</div>
+          <div class="form-field">
+            <select id="copy-add-lang" class="form-select" style="width:100%;max-width:490px;">
+              <option value="">请选择语言</option>
+              <option>英语</option>
+              <option>简体中文</option>
+              <option>繁体中文</option>
+              <option>西班牙语</option>
+              <option>日语</option>
+              <option>韩语</option>
+              <option>印尼语</option>
+              <option>意大利语</option>
+              <option>泰语</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row" style="align-items:flex-start;">
+          <div class="form-label required">文案：</div>
+          <div class="form-field">
+            <div class="copy-editor">
+              <div class="copy-editor-gutter" id="copy-add-gutter">1</div>
+              <textarea id="copy-add-text" class="form-textarea" placeholder="请粘贴或者输入文案，回车换行" oninput="updateCopyEditorGutter()" onscroll="syncCopyGutterScroll()"></textarea>
+            </div>
+            <div style="text-align:right;font-size:12px;color:var(--color-text-tertiary);margin-top:4px;"><span id="copy-add-count">0</span> / 100</div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" onclick="confirmCopyAdd()">确定</button>
+        <button class="btn btn-outline btn-sm" onclick="closeCopyAddModal()">取消</button>
       </div>
     </div>
   </div>
@@ -943,9 +1273,27 @@
       /* ===== 模板管理 Tab 切换 ===== */
       function switchTemplateTab(tabName) {
         document.querySelectorAll('#page-overseas-template .template-tab-panel').forEach(function (p) { p.style.display = 'none'; });
-        document.getElementById('template-tab-' + tabName).style.display = 'block';
+        var panel = document.getElementById('template-tab-' + tabName);
+        if (panel) panel.style.display = 'block';
         document.querySelectorAll('#template-tabs .tab').forEach(function (t) {
           t.classList.toggle('active', t.getAttribute('data-tab') === tabName);
+        });
+        /* 「模板管理」为二级页签容器：切进来时保证有一个子页签处于激活态 */
+        if (tabName === 'manage') {
+          var activeSub = document.querySelector('#template-manage-subtabs .tpl-subtab.active');
+          if (!activeSub) switchTemplateSubTab('copy');
+        }
+      }
+
+      /* ===== 模板管理·二级页签切换（文案模板 / 充值模板 / 回传模板） ===== */
+      /* 面板 id 映射：充值/回传沿用原 id（template-tab-*），其余逻辑（筛选/渲染）均按原 id 引用，不能改名 */
+      var TEMPLATE_SUBTAB_PANEL_ID = { copy: 'template-subtab-copy', recharge: 'template-tab-recharge', callback: 'template-tab-callback' };
+      function switchTemplateSubTab(subName) {
+        document.querySelectorAll('#template-tab-manage .template-subtab-panel').forEach(function (p) { p.style.display = 'none'; });
+        var panel = document.getElementById(TEMPLATE_SUBTAB_PANEL_ID[subName]);
+        if (panel) panel.style.display = 'block';
+        document.querySelectorAll('#template-manage-subtabs .tpl-subtab').forEach(function (t) {
+          t.classList.toggle('active', t.getAttribute('data-sub') === subName);
         });
       }
 
@@ -963,6 +1311,12 @@
           var l = document.getElementById('template-target-lang'); if (l) l.selectedIndex = 0;
           var c = document.getElementById('template-target-creator'); if (c) c.selectedIndex = 0;
           rerenderTemplateTarget();
+          return;
+        }
+        if (tab === 'tiktok') {
+          var ni = document.getElementById('tiktok-package-name-filter'); if (ni) ni.value = '';
+          var ci = document.getElementById('tiktok-package-creator-filter'); if (ci) ci.selectedIndex = 0;
+          filterTiktokPackageList();
           return;
         }
         var root = document.getElementById('template-tab-' + tab);
@@ -1150,6 +1504,193 @@
         document.getElementById('template-account-drawer').classList.remove('open');
       }
 
+      /* ===== TikTok 账号包列表（静态演示数据，前端筛选） ===== */
+      function filterTiktokPackageList() {
+        var nameFilter = (document.getElementById('tiktok-package-name-filter') || {}).value || '';
+        var creatorSel = document.getElementById('tiktok-package-creator-filter');
+        var creatorFilter = (creatorSel && creatorSel.selectedIndex > 0) ? creatorSel.value : '';
+        var tbody = document.getElementById('tiktok-package-tbody');
+        if (!tbody) return;
+        var visible = 0;
+        Array.prototype.forEach.call(tbody.querySelectorAll('tr[data-name]'), function (tr) {
+          var matchName = !nameFilter || tr.getAttribute('data-name').indexOf(nameFilter) > -1;
+          var matchCreator = !creatorFilter || tr.getAttribute('data-creator') === creatorFilter;
+          tr.style.display = (matchName && matchCreator) ? '' : 'none';
+          if (tr.style.display !== 'none') visible++;
+        });
+        var info = document.querySelector('#template-tab-tiktok .pagination-info');
+        if (info) info.textContent = '共 ' + visible + ' 条';
+      }
+
+      /* ===== TikTok 账号包穿梭框（数据来源：资产管理-TikTok账号） ===== */
+      var TT_ASSET_ACCOUNTS = [
+        { name: 'Sasa ดู', lang: '葡萄牙语', remark: '--' },
+        { name: '廖廖短剧', lang: '繁体中文', remark: '--' },
+        { name: 'Titi Pendek', lang: '马来西亚语', remark: '--' },
+        { name: 'Yoyo Cortos', lang: '英语', remark: '--' },
+        { name: 'Rio Curtas', lang: '英语', remark: '--' },
+        { name: 'Bobo Flicks', lang: '英语', remark: '--' },
+        { name: 'Milo Reels', lang: '英语', remark: '--' },
+        { name: 'Kiki Kurz', lang: '德语', remark: '--' },
+        { name: 'Momo Corti', lang: '意大利语', remark: '--' },
+        { name: 'Coco Courts', lang: '法语', remark: '--' }
+      ];
+      /* 编辑/复制演示：按账号包预填已选账号 */
+      var TT_PACKAGE_PRESETS = {
+        '东南亚英语TikTok包': ['Sasa ดู', '廖廖短剧', 'Titi Pendek', 'Yoyo Cortos'],
+        '欧洲多语言TikTok包': ['Kiki Kurz', 'Momo Corti', 'Coco Courts']
+      };
+      var tiktokSelectedNames = [];
+
+      function ttAccountName(name) {
+        return String(name || '');
+      }
+      function isTiktokSelected(name) { return tiktokSelectedNames.indexOf(name) > -1; }
+
+      function ttFilterOf(prefix) {
+        return {
+          name: (document.getElementById('tt-' + prefix + '-name') || {}).value || '',
+          lang: (document.getElementById('tt-' + prefix + '-lang') || {}).value || '',
+          remark: (document.getElementById('tt-' + prefix + '-remark') || {}).value || ''
+        };
+      }
+      function ttMatchAccount(a, f) {
+        if (f.name && a.name.indexOf(f.name) === -1) return false;
+        if (f.lang && a.lang !== f.lang) return false;
+        if (f.remark && a.remark.indexOf(f.remark) === -1) return false;
+        return true;
+      }
+      function ttAccountOf(name) {
+        for (var i = 0; i < TT_ASSET_ACCOUNTS.length; i++) {
+          if (TT_ASSET_ACCOUNTS[i].name === name) return TT_ASSET_ACCOUNTS[i];
+        }
+        return null;
+      }
+
+      /* 渲染左侧全量列表 */
+      function renderTiktokAvailable() {
+        var tbody = document.getElementById('tiktok-available-tbody');
+        if (!tbody) return;
+        var f = ttFilterOf('avail');
+        var html = '';
+        var count = 0;
+        TT_ASSET_ACCOUNTS.forEach(function (a) {
+          if (!ttMatchAccount(a, f)) return;
+          count++;
+          html += '<tr data-name="' + a.name + '">' +
+            '<td class="checkbox-col"><input type="checkbox"' + (isTiktokSelected(a.name) ? ' checked' : '') + ' onchange="toggleTiktokAvailable(this)" /></td>' +
+            '<td>' + ttAccountName(a.name) + '</td><td>' + a.lang + '</td><td>' + a.remark + '</td></tr>';
+        });
+        tbody.innerHTML = html || '<tr class="tt-transfer-empty"><td colspan="4"><div class="empty-state" style="padding:40px 20px;"><div class="empty-state-icon">📦</div><span>暂无数据</span></div></td></tr>';
+        updateTiktokAvailableHeaderState();
+        var countEl = document.getElementById('tiktok-available-count');
+        if (countEl) countEl.textContent = '共 ' + count + ' 条';
+      }
+      /* 渲染右侧已选列表 */
+      function renderTiktokSelected() {
+        var tbody = document.getElementById('tiktok-selected-tbody');
+        if (!tbody) return;
+        var f = ttFilterOf('sel');
+        var html = '';
+        tiktokSelectedNames.forEach(function (name) {
+          var a = ttAccountOf(name);
+          if (!a || !ttMatchAccount(a, f)) return;
+          html += '<tr data-name="' + a.name + '">' +
+            '<td>' + ttAccountName(a.name) + '</td><td>' + a.lang + '</td><td>' + a.remark + '</td>' +
+            '<td><a href="#" class="link" style="color:var(--color-error);" onclick="removeSelectedTiktokAccount(this);return false;">删除</a></td></tr>';
+        });
+        tbody.innerHTML = html || '<tr class="tt-transfer-empty"><td colspan="4"><div class="empty-state" style="padding:30px 20px;"><div class="empty-state-icon">📦</div><span>暂无数据</span></div></td></tr>';
+        updateTiktokSelectedCount();
+      }
+
+      function toggleTiktokAvailable(checkbox) {
+        var tr = checkbox.closest('tr');
+        if (!tr) return;
+        var name = tr.getAttribute('data-name');
+        var idx = tiktokSelectedNames.indexOf(name);
+        if (checkbox.checked && idx === -1) tiktokSelectedNames.push(name);
+        if (!checkbox.checked && idx > -1) tiktokSelectedNames.splice(idx, 1);
+        renderTiktokSelected();
+        updateTiktokAvailableHeaderState();
+      }
+      function toggleAllTiktokAvailable(headerCheckbox) {
+        Array.prototype.forEach.call(document.querySelectorAll('#tiktok-available-tbody tr[data-name]'), function (tr) {
+          var name = tr.getAttribute('data-name');
+          var idx = tiktokSelectedNames.indexOf(name);
+          if (headerCheckbox.checked && idx === -1) tiktokSelectedNames.push(name);
+          if (!headerCheckbox.checked && idx > -1) tiktokSelectedNames.splice(idx, 1);
+        });
+        renderTiktokAvailable();
+        renderTiktokSelected();
+      }
+      function removeSelectedTiktokAccount(link) {
+        var tr = link.closest('tr');
+        if (!tr) return;
+        var name = tr.getAttribute('data-name');
+        var idx = tiktokSelectedNames.indexOf(name);
+        if (idx > -1) tiktokSelectedNames.splice(idx, 1);
+        renderTiktokAvailable();
+        renderTiktokSelected();
+      }
+      function clearSelectedTiktokAccounts() {
+        tiktokSelectedNames = [];
+        renderTiktokAvailable();
+        renderTiktokSelected();
+      }
+      function updateTiktokSelectedCount() {
+        var el = document.getElementById('tiktok-selected-count');
+        if (el) el.innerHTML = '已选：' + tiktokSelectedNames.length + ' <a href="#" class="link" onclick="clearSelectedTiktokAccounts();return false;">清空</a>';
+      }
+      function updateTiktokAvailableHeaderState() {
+        var tbody = document.getElementById('tiktok-available-tbody');
+        if (!tbody) return;
+        var rows = tbody.querySelectorAll('tr[data-name]');
+        var checked = 0;
+        Array.prototype.forEach.call(rows, function (tr) { if (isTiktokSelected(tr.getAttribute('data-name'))) checked++; });
+        var header = document.getElementById('tiktok-available-header-checkbox');
+        if (header) header.checked = rows.length > 0 && checked === rows.length;
+      }
+      function searchTiktokAvailable() { renderTiktokAvailable(); }
+      function resetTiktokAvailable() {
+        var el;
+        el = document.getElementById('tt-avail-name'); if (el) el.value = '';
+        el = document.getElementById('tt-avail-lang'); if (el) el.value = '';
+        el = document.getElementById('tt-avail-remark'); if (el) el.value = '';
+        renderTiktokAvailable();
+      }
+      function searchTiktokSelected() { renderTiktokSelected(); }
+      function resetTiktokSelected() {
+        var el;
+        el = document.getElementById('tt-sel-name'); if (el) el.value = '';
+        el = document.getElementById('tt-sel-lang'); if (el) el.value = '';
+        el = document.getElementById('tt-sel-remark'); if (el) el.value = '';
+        renderTiktokSelected();
+      }
+      function openTiktokAccountDrawer(mode, name) {
+        var titles = { add: '新增TikTok 账号包', edit: '编辑TikTok 账号包', copy: '复制TikTok 账号包' };
+        document.getElementById('template-tiktok-title').textContent = titles[mode] || '新增TikTok 账号包';
+        if (mode === 'copy') {
+          document.getElementById('tiktok-name').value = name ? '复制-' + name : '';
+        } else if (mode === 'edit') {
+          document.getElementById('tiktok-name').value = name || '';
+        } else {
+          document.getElementById('tiktok-name').value = '';
+        }
+        document.getElementById('tiktok-remark').value = '';
+        tiktokSelectedNames = [];
+        if ((mode === 'edit' || mode === 'copy') && name && TT_PACKAGE_PRESETS[name]) {
+          tiktokSelectedNames = TT_PACKAGE_PRESETS[name].slice();
+        }
+        resetTiktokAvailable();
+        resetTiktokSelected();
+        document.getElementById('template-tiktok-overlay').classList.add('open');
+        document.getElementById('template-tiktok-drawer').classList.add('open');
+      }
+      function closeTiktokAccountDrawer() {
+        document.getElementById('template-tiktok-overlay').classList.remove('open');
+        document.getElementById('template-tiktok-drawer').classList.remove('open');
+      }
+
       /* ===== 账户包·已选账户（表格行维护） ===== */
       function updateSelectedAccountCount() {
         var tbody = document.getElementById('account-selected-tbody');
@@ -1294,6 +1835,226 @@
         document.getElementById('template-target-overlay').classList.remove('open');
         document.getElementById('template-target-drawer').classList.remove('open');
       }
+
+      /* ===== 文案模板（模板管理·二级页签） ===== */
+      var COPY_TEMPLATE_DATA = [
+        { id: 164, content: '过来看',   type: '标题',     payType: '免费', lang: '西班牙语', creator: '春光',   createdAt: '2026-10-10 11:06:11', updatedAt: '2026-10-10 11:06:11', deletable: false },
+        { id: 163, content: '1111',     type: '产品卖点', payType: '免费', lang: '繁体中文', creator: '娜可',   createdAt: '2026-09-29 15:57:21', updatedAt: '2026-09-29 15:57:21', deletable: true },
+        { id: 162, content: '1111',     type: '标题',     payType: '免费', lang: '繁体中文', creator: '娜可',   createdAt: '2026-09-29 15:57:17', updatedAt: '2026-09-29 15:57:17', deletable: true },
+        { id: 161, content: '繁中卖点', type: '产品卖点', payType: '免费', lang: '繁体中文', creator: '冷吃兔', createdAt: '2026-09-29 14:59:34', updatedAt: '2026-09-29 14:59:34', deletable: false },
+        { id: 160, content: '繁中标题', type: '标题',     payType: '免费', lang: '繁体中文', creator: '冷吃兔', createdAt: '2026-09-29 14:59:19', updatedAt: '2026-09-29 14:59:19', deletable: false },
+        { id: 159, content: '来来来',   type: '标题',     payType: '付费', lang: '繁体中文', creator: '春光',   createdAt: '2026-09-29 14:31:24', updatedAt: '2026-09-29 14:31:24', deletable: false },
+        { id: 158, content: '卖点2',    type: '产品卖点', payType: '付费', lang: '英语',     creator: '分享',   createdAt: '2026-09-24 14:26:18', updatedAt: '2026-09-24 14:26:18', deletable: false },
+        { id: 157, content: '卖点1',    type: '产品卖点', payType: '付费', lang: '英语',     creator: '分享',   createdAt: '2026-09-24 14:26:18', updatedAt: '2026-09-24 14:26:18', deletable: false },
+        { id: 156, content: '标题2',    type: '标题',     payType: '付费', lang: '英语',     creator: '分享',   createdAt: '2026-09-24 14:25:59', updatedAt: '2026-09-24 14:25:59', deletable: false }
+      ];
+      var COPY_TEMPLATE_NEXT_ID = 165;
+      var COPY_TITLE_MAX = 100;            /* 标题：半角字符上限 */
+      var COPY_SELLING_POINT_MAX = 25;     /* 产品卖点：半角字符上限 */
+
+      function copyTemplateFilterState() {
+        var comboInput = document.querySelector('#template-subtab-copy .filter-combo-input');
+        return {
+          keyword: comboInput && comboInput.value ? comboInput.value.trim() : '',
+          type: (document.getElementById('template-copy-type-filter') || {}).value || '',
+          payType: (document.getElementById('template-copy-pay-filter') || {}).value || '',
+          lang: (document.getElementById('template-copy-lang-filter') || {}).value || '',
+          creator: (document.getElementById('template-copy-creator-filter') || {}).value || ''
+        };
+      }
+
+      function renderCopyTemplateList() {
+        var tbody = document.getElementById('copy-template-tbody');
+        if (!tbody) return;
+        var f = copyTemplateFilterState();
+        var list = COPY_TEMPLATE_DATA.filter(function (item) {
+          if (f.keyword && item.content.indexOf(f.keyword) === -1 && String(item.id) !== f.keyword) return false;
+          if (f.type && item.type !== f.type) return false;
+          if (f.payType && item.payType !== f.payType) return false;
+          if (f.lang && item.lang !== f.lang) return false;
+          if (f.creator && item.creator !== f.creator) return false;
+          return true;
+        });
+        tbody.innerHTML = list.map(function (item) {
+          var actions = '<a href="#" class="link" onclick="openCopyEditModal(' + item.id + ');return false;">编辑</a>';
+          if (item.deletable) {
+            actions += ' <a href="#" class="link link-danger" onclick="deleteCopyTemplateRow(this,' + item.id + ');return false;">删除</a>';
+          }
+          return '<tr data-id="' + item.id + '">' +
+            '<td class="checkbox-col"><input type="checkbox" class="copy-row-check" onchange="updateCopySelectedCount()" /></td>' +
+            '<td>' + escHtml(item.id) + '</td>' +
+            '<td>' + escHtml(item.content) + '</td>' +
+            '<td>' + escHtml(item.type) + '</td>' +
+            '<td>' + escHtml(item.payType) + '</td>' +
+            '<td>' + escHtml(item.lang) + '</td>' +
+            '<td>' + escHtml(item.creator) + '</td>' +
+            '<td>' + escHtml(item.createdAt) + '</td>' +
+            '<td>' + escHtml(item.updatedAt) + '</td>' +
+            '<td><div class="row-actions">' + actions + '</div></td>' +
+          '</tr>';
+        }).join('') || '<tr><td colspan="10" style="text-align:center;color:var(--color-text-secondary);padding:32px;">暂无数据</td></tr>';
+        updateCopySelectedCount();
+      }
+
+      function filterCopyTemplateList() { renderCopyTemplateList(); }
+
+      function resetCopyTemplateFilter() {
+        var root = document.getElementById('template-subtab-copy');
+        if (!root) return;
+        root.querySelectorAll('.filter-combo-input').forEach(function (i) { i.value = ''; });
+        root.querySelectorAll('.filter-select').forEach(function (s) { s.selectedIndex = 0; });
+        renderCopyTemplateList();
+      }
+
+      /* ===== 文案模板·勾选 / 批量删除 ===== */
+      function updateCopySelectedCount() {
+        var checks = document.querySelectorAll('#copy-template-tbody .copy-row-check');
+        var checked = document.querySelectorAll('#copy-template-tbody .copy-row-check:checked');
+        var el = document.getElementById('copy-selected-count');
+        if (el) el.textContent = checked.length;
+        var all = document.getElementById('copy-select-all');
+        if (all) all.checked = checks.length > 0 && checked.length === checks.length;
+      }
+      function toggleCopySelectAll(cb) {
+        document.querySelectorAll('#copy-template-tbody .copy-row-check').forEach(function (c) { c.checked = cb.checked; });
+        updateCopySelectedCount();
+      }
+      function batchDeleteCopyTemplates() {
+        var checks = document.querySelectorAll('#copy-template-tbody .copy-row-check:checked');
+        if (!checks.length) { showToast('请先勾选要删除的文案', 'error'); return; }
+        if (!confirm('确定删除已选中的 ' + checks.length + ' 项文案？')) return;
+        var ids = {};
+        checks.forEach(function (c) { ids[c.closest('tr').getAttribute('data-id')] = true; });
+        COPY_TEMPLATE_DATA = COPY_TEMPLATE_DATA.filter(function (item) { return !ids[item.id]; });
+        renderCopyTemplateList();
+        showToast('已删除 ' + checks.length + ' 项文案');
+      }
+      function deleteCopyTemplateRow(link, id) {
+        if (!confirm('确定删除该文案？')) return;
+        COPY_TEMPLATE_DATA = COPY_TEMPLATE_DATA.filter(function (item) { return item.id !== id; });
+        renderCopyTemplateList();
+        showToast('已删除');
+      }
+
+      /* ===== 文案模板·新增/编辑弹框 ===== */
+      var COPY_EDIT_ID = null; /* null=新增，数字=编辑 */
+      function openCopyAddModal() {
+        COPY_EDIT_ID = null;
+        document.querySelector('#copy-add-modal .modal-header span').textContent = '新增文案';
+        document.querySelector('input[name="copy-add-type"][value="标题"]').checked = true;
+        document.querySelector('input[name="copy-add-pay-type"][value="付费"]').checked = true;
+        document.getElementById('copy-add-lang').selectedIndex = 0;
+        document.getElementById('copy-add-text').value = '';
+        updateCopyEditorGutter();
+        document.getElementById('copy-add-overlay').classList.add('open');
+        document.getElementById('copy-add-modal').classList.add('open');
+      }
+      function openCopyEditModal(id) {
+        var item = null;
+        COPY_TEMPLATE_DATA.forEach(function (it) { if (it.id === id) item = it; });
+        if (!item) return;
+        COPY_EDIT_ID = id;
+        document.querySelector('#copy-add-modal .modal-header span').textContent = '编辑文案';
+        var typeRadio = document.querySelector('input[name="copy-add-type"][value="' + item.type + '"]');
+        if (typeRadio) typeRadio.checked = true;
+        var payRadio = document.querySelector('input[name="copy-add-pay-type"][value="' + item.payType + '"]');
+        if (payRadio) payRadio.checked = true;
+        var langSel = document.getElementById('copy-add-lang');
+        for (var i = 0; i < langSel.options.length; i++) {
+          if (langSel.options[i].value === item.lang) { langSel.selectedIndex = i; break; }
+        }
+        document.getElementById('copy-add-text').value = item.content;
+        updateCopyEditorGutter();
+        document.getElementById('copy-add-overlay').classList.add('open');
+        document.getElementById('copy-add-modal').classList.add('open');
+      }
+      function closeCopyAddModal() {
+        document.getElementById('copy-add-overlay').classList.remove('open');
+        document.getElementById('copy-add-modal').classList.remove('open');
+      }
+      function updateCopyAddCount() {
+        var ta = document.getElementById('copy-add-text');
+        var el = document.getElementById('copy-add-count');
+        if (ta && el) el.textContent = ta.value.length;
+      }
+      /* 行号槽与输入框联动 */
+      function updateCopyEditorGutter() {
+        var ta = document.getElementById('copy-add-text');
+        var gutter = document.getElementById('copy-add-gutter');
+        if (!ta || !gutter) return;
+        var lines = ta.value.split('\n').length;
+        var html = '';
+        for (var i = 1; i <= lines; i++) html += i + '<br>';
+        gutter.innerHTML = html;
+        gutter.scrollTop = ta.scrollTop;
+        updateCopyAddCount();
+      }
+      function syncCopyGutterScroll() {
+        var ta = document.getElementById('copy-add-text');
+        var gutter = document.getElementById('copy-add-gutter');
+        if (ta && gutter) gutter.scrollTop = ta.scrollTop;
+      }
+      function nowCopyTimestamp() {
+        var d = new Date();
+        function p(n) { return n < 10 ? '0' + n : n; }
+        return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes()) + ':' + p(d.getSeconds());
+      }
+      function confirmCopyAdd() {
+        var type = document.querySelector('input[name="copy-add-type"]:checked').value;
+        var payType = document.querySelector('input[name="copy-add-pay-type"]:checked').value;
+        var lang = document.getElementById('copy-add-lang').value;
+        var text = document.getElementById('copy-add-text').value;
+        if (!lang) { showToast('请选择语言', 'error'); return; }
+        var lines = text.split(/\r?\n/).map(function (s) { return s.trim(); }).filter(function (s) { return s.length > 0; });
+        if (!lines.length) { showToast('请输入文案', 'error'); return; }
+        var max = type === '产品卖点' ? COPY_SELLING_POINT_MAX : COPY_TITLE_MAX;
+        for (var i = 0; i < lines.length; i++) {
+          if (lines[i].length > max) {
+            showToast(type + '最多 ' + max + ' 个半角字符，请精简后重试', 'error');
+            return;
+          }
+        }
+        var ts = nowCopyTimestamp();
+        if (COPY_EDIT_ID !== null) {
+          COPY_TEMPLATE_DATA.forEach(function (item) {
+            if (item.id === COPY_EDIT_ID) {
+              item.content = lines[0];
+              item.type = type;
+              item.payType = payType;
+              item.lang = lang;
+              item.updatedAt = ts;
+              item.deletable = true;
+            }
+          });
+          showToast('已保存');
+        } else {
+          lines.forEach(function (line) {
+            COPY_TEMPLATE_DATA.unshift({
+              id: COPY_TEMPLATE_NEXT_ID++,
+              content: line,
+              type: type,
+              payType: payType,
+              lang: lang,
+              creator: '娜可',
+              createdAt: ts,
+              updatedAt: ts,
+              deletable: true
+            });
+          });
+          showToast('已新增 ' + lines.length + ' 条文案');
+        }
+        renderCopyTemplateList();
+        closeCopyAddModal();
+      }
+
+      /* ===== 文案模板·表格全屏 ===== */
+      function toggleCopyTableFullscreen() {
+        var card = document.getElementById('copy-template-card');
+        if (card) card.classList.toggle('table-fullscreen');
+      }
+
+      /* 首屏渲染一次文案模板列表 */
+      renderCopyTemplateList();
     </script>
 
     <script>

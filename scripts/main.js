@@ -1,36 +1,35 @@
 // Main navigation and interaction logic
 
-/* ===== 跨环境页面跳转：默认走 GitHub Pages，本地 http 服务兜底 ===== */
+/* ===== 跨环境页面跳转：默认走相对路径，本地 file:// / localhost / GitHub Pages 均可直跳 ===== */
 /* rootPath 为仓库根相对路径，如 'pages/overseas-batch-delivery.html'、'index.html' */
 function navUrl(rootPath) {
-  // 1. 已托管（含 GitHub Pages / htmlpreview.github.io）：使用相对路径
-  var isHosted =
-    window.location.hostname === 'nake12138.github.io' ||
-    window.location.hostname === 'htmlpreview.github.io' ||
-    (/^https?:$/.test(window.location.protocol) &&
-      window.location.hostname !== 'localhost' &&
-      window.location.hostname !== '127.0.0.1');
-  if (isHosted) {
-    var inPages = window.location.pathname.replace(/\\/g, '/').indexOf('/pages/') !== -1;
-    if (inPages) {
-      if (rootPath === 'index.html') return '../index.html';
-      return './' + rootPath.replace(/^pages\//, '');
-    }
-    return rootPath;
+  // htmlpreview 代理预览：拼线上代理地址
+  if (window.location.hostname === 'htmlpreview.github.io') {
+    return (
+      'https://htmlpreview.github.io/?' +
+      'https://github.com/Nake12138/maiyaput/blob/main/' +
+      rootPath
+    );
   }
-  // 2. file:// 或本地 localhost：默认走 GitHub Pages（项目部署地址），便于分享/预览
-  return 'https://nake12138.github.io/maiyaput/' + rootPath;
+  // 位于 pages/ 子目录内的页面：回到上一级/同级相对跳转
+  var inPages = window.location.pathname.replace(/\\/g, '/').indexOf('/pages/') !== -1;
+  if (inPages) {
+    if (rootPath === 'index.html') return '../index.html';
+    return './' + rootPath.replace(/^pages\//, '');
+  }
+  // 仓库根目录（index.html 或线上托管根路径）：直接相对跳转
+  return rootPath;
 }
 
 document.addEventListener('DOMContentLoaded', function () {
   // Navigation item click handlers
-  document.querySelectorAll('.nav-item[data-page], .nav-child-item[data-page], .nav-grandchild-item[data-page]').forEach(function (item) {
+  document.querySelectorAll('.nav-item[data-page], .nav-child-item[data-page], .nav-grandchild-item[data-page], .nav-greatgrandchild-item[data-page]').forEach(function (item) {
     item.addEventListener('click', function () {
       const pageName = this.getAttribute('data-page');
       showPage(pageName);
 
       // Update active state in sidebar
-      document.querySelectorAll('.nav-item, .nav-child-item').forEach(function (nav) {
+      document.querySelectorAll('.nav-item, .nav-child-item, .nav-grandchild-item, .nav-greatgrandchild-item').forEach(function (nav) {
         nav.classList.remove('active');
       });
       this.classList.add('active');
@@ -51,6 +50,16 @@ document.addEventListener('DOMContentLoaded', function () {
       e.stopPropagation();
       this.classList.toggle('expanded');
       var caret = this.querySelector('.nav-child-caret');
+      if (caret) caret.textContent = this.classList.contains('expanded') ? '▼' : '▶';
+    });
+  });
+
+  // 三级分组（推广管理下的全域推广 / 标准推广等）展开收起
+  document.querySelectorAll('.nav-grandchild-item.has-children').forEach(function (item) {
+    item.addEventListener('click', function (e) {
+      e.stopPropagation();
+      this.classList.toggle('expanded');
+      var caret = this.querySelector('.nav-grandchild-caret');
       if (caret) caret.textContent = this.classList.contains('expanded') ? '▼' : '▶';
     });
   });
@@ -87,7 +96,7 @@ function showPage(pageName) {
     targetPage.classList.add('active');
 
     // Update sidebar active state
-    document.querySelectorAll('.nav-item, .nav-child-item').forEach(function (item) {
+    document.querySelectorAll('.nav-item, .nav-child-item, .nav-grandchild-item, .nav-greatgrandchild-item').forEach(function (item) {
       item.classList.remove('active');
       if (item.getAttribute('data-page') === pageName) {
         item.classList.add('active');
@@ -99,8 +108,10 @@ function showPage(pageName) {
     return;
   }
 
-  // 未实现的页面：占位提示
-  alert('页面开发中：' + pageName);
+  // 未实现的页面：占位提示（优先显示菜单中文名）
+  var navEl = document.querySelector('[data-page="' + pageName + '"]');
+  var label = navEl ? navEl.textContent.replace(/[▶▼]/g, '').trim() : pageName;
+  alert('页面开发中：' + label);
 }
 
 function handleHashRoute() {
@@ -114,7 +125,7 @@ function handleHashRoute() {
       targetPage.classList.add('active');
 
       // Update sidebar active state
-      document.querySelectorAll('.nav-item, .nav-child-item').forEach(function (item) {
+      document.querySelectorAll('.nav-item, .nav-child-item, .nav-grandchild-item, .nav-greatgrandchild-item').forEach(function (item) {
         item.classList.remove('active');
         if (item.getAttribute('data-page') === hash) {
           item.classList.add('active');

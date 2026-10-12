@@ -775,6 +775,46 @@ body {
   background: var(--color-info-bg);
 }
 
+/* 四级导航（模块 → 分组 → 子分组 → 叶子，如 巨量 → 推广管理 → 全域推广 → 自动化投放） */
+.nav-grandchild-item.has-children {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-grandchild-caret {
+  margin-left: auto;
+  font-size: 10px;
+  color: #ccc;
+}
+
+.nav-greatgrandchildren {
+  display: none;
+  padding-left: 16px;
+}
+
+.nav-item.expanded + .nav-children .nav-child-item.expanded + .nav-grandchildren .nav-grandchild-item.expanded + .nav-greatgrandchildren {
+  display: block;
+}
+
+.nav-greatgrandchild-item {
+  padding: 4px 20px;
+  font-size: 12px;
+  color: var(--color-text-tertiary);
+  cursor: pointer;
+  display: block;
+}
+
+.nav-greatgrandchild-item:hover {
+  color: var(--color-info);
+}
+
+.nav-greatgrandchild-item.active {
+  color: var(--color-info);
+  font-weight: 500;
+  background: var(--color-info-bg);
+}
+
 /* ============ Breadcrumb ============ */
 .breadcrumb {
   font-size: 13px;
@@ -3165,4 +3205,138 @@ body {
   color: #b45309;
   border-radius: 3px;
   font-size: 11px;
+}
+
+/* ============ 模板管理·二级页签（「模板管理」tab 内：文案模板 / 充值模板 / 回传模板） ============ */
+.tpl-subtabs {
+  display: flex;
+  gap: 24px;
+  border-bottom: 1px solid var(--color-border-light);
+  margin-bottom: var(--space-4);
+}
+
+.tpl-subtab {
+  padding: 8px 0;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  position: relative;
+  transition: color 0.15s;
+}
+
+.tpl-subtab:hover {
+  color: var(--color-info);
+}
+
+.tpl-subtab.active {
+  color: var(--color-info);
+  font-weight: 500;
+}
+
+.tpl-subtab.active::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--color-info);
+}
+
+/* ============ 表格工具条（已选 N 项 / 批量删除 / 右侧图标按钮） ============ */
+.table-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.table-toolbar-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.table-toolbar-icon-btn {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text-tertiary);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.table-toolbar-icon-btn:hover {
+  background: var(--color-bg-hover);
+  color: var(--color-info);
+}
+
+/* 表格全屏态（工具条右侧「全屏」按钮切换） */
+.table-card.table-fullscreen {
+  position: fixed;
+  inset: 16px;
+  z-index: 1050;
+  margin: 0;
+  max-height: none;
+  overflow: auto;
+  box-shadow: var(--shadow-lg);
+}
+
+/* ============ 文案输入框（带行号槽，参照「新增文案」弹框） ============ */
+.copy-editor {
+  display: flex;
+  width: 100%;
+  max-width: 490px;
+  height: 320px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--color-white);
+}
+
+.copy-editor:focus-within {
+  border-color: var(--color-info);
+}
+
+.copy-editor-gutter {
+  width: 44px;
+  flex-shrink: 0;
+  border-right: 1px solid var(--color-border);
+  padding: 10px 0;
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--color-info);
+  user-select: none;
+  overflow: hidden;
+  background: var(--color-white);
+}
+
+/* 覆盖 .form-textarea 的外壳边框 / 尺寸，输入区本身无边框 */
+.copy-editor .form-textarea {
+  flex: 1;
+  height: 100%;
+  min-height: 0;
+  border: none;
+  border-radius: 0;
+  outline: none;
+  resize: none;
+  padding: 10px 12px;
+  font-size: 13px;
+  font-family: inherit;
+  line-height: 1.6;
+  color: var(--color-text-primary);
+  background: var(--color-white);
 }

@@ -257,10 +257,9 @@
   <!-- Tabs -->
   <div class="content-card">
   <div class="tabs" id="template-tabs">
-    <button class="tab active" data-tab="account" onclick="switchTemplateTab('account')">账户包</button>
+    <button class="tab active" data-tab="manage" onclick="switchTemplateTab('manage')">模板管理</button>
+    <button class="tab" data-tab="account" onclick="switchTemplateTab('account')">账户包</button>
     <button class="tab" data-tab="target" onclick="switchTemplateTab('target')">定向包</button>
-    <button class="tab" data-tab="recharge" onclick="switchTemplateTab('recharge')">充值模板</button>
-    <button class="tab" data-tab="callback" onclick="switchTemplateTab('callback')">回传模板</button>
   </div>
 
   <!-- 账户包 -->
@@ -381,8 +380,121 @@
     </div>
   </div>
 
-  <!-- 充值模板 -->
-  <div id="template-tab-recharge" class="template-tab-panel" style="display:none;">
+  <!-- 模板管理（二级页签：文案模板 / 充值模板 / 回传模板） -->
+  <div id="template-tab-manage" class="template-tab-panel" style="display:block;">
+    <div class="tpl-subtabs" id="template-manage-subtabs">
+      <button class="tpl-subtab active" data-sub="copy" onclick="switchTemplateSubTab('copy')">文案模板</button>
+      <button class="tpl-subtab" data-sub="recharge" onclick="switchTemplateSubTab('recharge')">充值模板</button>
+      <button class="tpl-subtab" data-sub="callback" onclick="switchTemplateSubTab('callback')">回传模板</button>
+    </div>
+
+    <!-- 文案模板 -->
+    <div id="template-subtab-copy" class="template-subtab-panel">
+      <div class="filter-bar">
+        <div class="filter-bar-row">
+          <div class="filter-combo">
+            <select class="filter-combo-select">
+              <option>文案内容</option>
+              <option>ID</option>
+            </select>
+            <input type="text" class="filter-combo-input" placeholder="请输入" />
+          </div>
+          <select class="filter-select" id="template-copy-type-filter">
+            <option value="">请选择文案类型</option>
+            <option>标题</option>
+            <option>产品卖点</option>
+          </select>
+          <select class="filter-select" id="template-copy-pay-filter">
+            <option value="">请选择付费类型</option>
+            <option>付费</option>
+            <option>免费</option>
+          </select>
+          <select class="filter-select" id="template-copy-lang-filter">
+            <option value="">请选择语言</option>
+            <option>英语</option>
+            <option>简体中文</option>
+            <option>繁体中文</option>
+            <option>西班牙语</option>
+            <option>日语</option>
+            <option>韩语</option>
+            <option>印尼语</option>
+            <option>意大利语</option>
+            <option>泰语</option>
+          </select>
+          <select class="filter-select" id="template-copy-creator-filter">
+            <option value="">请选择创建人</option>
+            <option>娜可</option>
+            <option>春光</option>
+            <option>冷吃兔</option>
+            <option>分享</option>
+          </select>
+          <div class="filter-actions">
+            <button class="btn btn-primary btn-sm" onclick="filterCopyTemplateList()">查询</button>
+            <button class="btn btn-outline btn-sm" onclick="resetCopyTemplateFilter()">重置</button>
+          </div>
+          <button class="btn btn-primary btn-sm" style="margin-left:auto;" onclick="openCopyAddModal()">新增文案</button>
+        </div>
+      </div>
+      <div class="table-card" id="copy-template-card">
+        <div class="table-toolbar">
+          <span>已选 <strong id="copy-selected-count">0</strong> 项</span>
+          <a href="#" class="link" onclick="batchDeleteCopyTemplates();return false;">批量删除</a>
+          <div class="table-toolbar-actions">
+            <button type="button" class="table-toolbar-icon-btn" title="列设置" aria-label="列设置" onclick="showToast('列设置（原型演示）')">
+              <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M8 5.1a2.9 2.9 0 100 5.8 2.9 2.9 0 000-5.8z" stroke="currentColor" stroke-width="1.3"/>
+                <path d="M13.4 10.2a7 7 0 000-4.4l-1.7.6a5.2 5.2 0 00-1.5-1.5l.6-1.7a7 7 0 00-4.4 0l.6 1.7a5.2 5.2 0 00-1.5 1.5l-1.7-.6a7 7 0 000 4.4l1.7-.6c.37.6.86 1.09 1.5 1.5l-.6 1.7a7 7 0 004.4 0l-.6-1.7c.59-.41 1.08-.9 1.5-1.5l1.7.6z" stroke="currentColor" stroke-width="1.1"/>
+              </svg>
+            </button>
+            <button type="button" class="table-toolbar-icon-btn" title="全屏" aria-label="全屏" onclick="toggleCopyTableFullscreen()">
+              <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M2 6V2.5A.5.5 0 012.5 2H6M10 2h3.5a.5.5 0 01.5.5V6M14 10v3.5a.5.5 0 01-.5.5H10M6 14H2.5a.5.5 0 01-.5-.5V10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th class="checkbox-col"><input type="checkbox" id="copy-select-all" onclick="toggleCopySelectAll(this)" /></th>
+                <th>ID</th>
+                <th>文案内容</th>
+                <th>文案类型</th>
+                <th>付费类型</th>
+                <th>语言</th>
+                <th>创建人</th>
+                <th>创建时间</th>
+                <th>更新时间</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="copy-template-tbody"><!-- 由脚本渲染 --></tbody>
+          </table>
+        </div>
+        <div class="pagination">
+          <span class="pagination-info">共 138 项</span>
+          <div class="pagination-pages">
+            <button class="page-btn" disabled>&lt;</button>
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn">3</button>
+            <button class="page-btn">4</button>
+            <button class="page-btn">5</button>
+            <span style="padding:0 6px;color:var(--color-text-secondary);">…</span>
+            <button class="page-btn">14</button>
+            <button class="page-btn">&gt;</button>
+          </div>
+          <select class="page-size-select"><option>10 条/页</option><option>20 条/页</option><option>50 条/页</option></select>
+          <span>跳至</span>
+          <input type="text" class="jump-input" />
+          <span>页</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 充值模板 -->
+    <div id="template-tab-recharge" class="template-subtab-panel" style="display:none;">
     <div class="filter-bar">
       <div class="filter-bar-row">
         <input type="text" class="filter-input" placeholder="请输入模板名称" />
@@ -443,7 +555,7 @@
   </div>
 
   <!-- 回传模板 -->
-  <div id="template-tab-callback" class="template-tab-panel" style="display:none;">
+  <div id="template-tab-callback" class="template-subtab-panel" style="display:none;">
     <div class="filter-bar">
       <div class="filter-bar-row">
         <input type="text" class="filter-input" placeholder="请输入模板名称" />
@@ -498,7 +610,7 @@
       </div>
     </div>
   </div>
-
+  </div>
   </div>
 
   <!-- 账户包 新增/编辑/复制 抽屉 -->
@@ -719,6 +831,65 @@
       <div class="drawer-footer">
         <button class="btn btn-outline btn-sm" onclick="closeCallbackDrawer()">取消</button>
         <button class="btn btn-primary btn-sm" onclick="closeCallbackDrawer()">确定</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 文案模板 新增/编辑 弹框 -->
+  <div id="copy-add-overlay" class="modal-overlay" onclick="closeCopyAddModal()"></div>
+  <div id="copy-add-modal" class="modal">
+    <div class="modal-card" style="width: min(700px, calc(100vw - 40px));">
+      <div class="modal-header">
+        <span>新增文案</span>
+        <button class="modal-close" onclick="closeCopyAddModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <div style="font-size:12px;color:var(--color-text-tertiary);margin-bottom:16px;">标题限填100个半角字符，产品卖点限制25个半角字符</div>
+        <div class="form-row" style="align-items:center;">
+          <div class="form-label required">文案类型：</div>
+          <div class="form-field">
+            <label style="display:inline-flex;align-items:center;gap:4px;cursor:pointer;font-size:13px;margin-right:16px;"><input type="radio" name="copy-add-type" value="标题" checked /> 标题</label>
+            <label style="display:inline-flex;align-items:center;gap:4px;cursor:pointer;font-size:13px;"><input type="radio" name="copy-add-type" value="产品卖点" /> 产品卖点</label>
+          </div>
+        </div>
+        <div class="form-row" style="align-items:center;">
+          <div class="form-label required">付费类型：</div>
+          <div class="form-field">
+            <label style="display:inline-flex;align-items:center;gap:4px;cursor:pointer;font-size:13px;margin-right:16px;"><input type="radio" name="copy-add-pay-type" value="付费" checked /> 付费</label>
+            <label style="display:inline-flex;align-items:center;gap:4px;cursor:pointer;font-size:13px;"><input type="radio" name="copy-add-pay-type" value="免费" /> 免费</label>
+          </div>
+        </div>
+        <div class="form-row" style="align-items:center;">
+          <div class="form-label required">语言：</div>
+          <div class="form-field">
+            <select id="copy-add-lang" class="form-select" style="width:100%;max-width:490px;">
+              <option value="">请选择语言</option>
+              <option>英语</option>
+              <option>简体中文</option>
+              <option>繁体中文</option>
+              <option>西班牙语</option>
+              <option>日语</option>
+              <option>韩语</option>
+              <option>印尼语</option>
+              <option>意大利语</option>
+              <option>泰语</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row" style="align-items:flex-start;">
+          <div class="form-label required">文案：</div>
+          <div class="form-field">
+            <div class="copy-editor">
+              <div class="copy-editor-gutter" id="copy-add-gutter">1</div>
+              <textarea id="copy-add-text" class="form-textarea" placeholder="请粘贴或者输入文案，回车换行" oninput="updateCopyEditorGutter()" onscroll="syncCopyGutterScroll()"></textarea>
+            </div>
+            <div style="text-align:right;font-size:12px;color:var(--color-text-tertiary);margin-top:4px;"><span id="copy-add-count">0</span> / 100</div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" onclick="confirmCopyAdd()">确定</button>
+        <button class="btn btn-outline btn-sm" onclick="closeCopyAddModal()">取消</button>
       </div>
     </div>
   </div>
@@ -970,6 +1141,23 @@
         document.getElementById('template-tab-' + tabName).style.display = 'block';
         document.querySelectorAll('#template-tabs .tab').forEach(function (t) {
           t.classList.toggle('active', t.getAttribute('data-tab') === tabName);
+        });
+        /* 「模板管理」为二级页签容器：切进来时保证有一个子页签处于激活态 */
+        if (tabName === 'manage') {
+          var activeSub = document.querySelector('#template-manage-subtabs .tpl-subtab.active');
+          if (!activeSub) switchTemplateSubTab('copy');
+        }
+      }
+
+      /* ===== 模板管理·二级页签切换（文案模板 / 充值模板 / 回传模板） ===== */
+      /* 面板 id 映射：充值/回传沿用原 id（template-tab-*），其余逻辑（筛选/渲染）均按原 id 引用，不能改名 */
+      var TEMPLATE_SUBTAB_PANEL_ID = { copy: 'template-subtab-copy', recharge: 'template-tab-recharge', callback: 'template-tab-callback' };
+      function switchTemplateSubTab(subName) {
+        document.querySelectorAll('#template-tab-manage .template-subtab-panel').forEach(function (p) { p.style.display = 'none'; });
+        var panel = document.getElementById(TEMPLATE_SUBTAB_PANEL_ID[subName]);
+        if (panel) panel.style.display = 'block';
+        document.querySelectorAll('#template-manage-subtabs .tpl-subtab').forEach(function (t) {
+          t.classList.toggle('active', t.getAttribute('data-sub') === subName);
         });
       }
 
@@ -1289,6 +1477,226 @@
         document.getElementById('template-target-overlay').classList.remove('open');
         document.getElementById('template-target-drawer').classList.remove('open');
       }
+
+      /* ===== 文案模板（模板管理·二级页签） ===== */
+      var COPY_TEMPLATE_DATA = [
+        { id: 164, content: '过来看',   type: '标题',     payType: '免费', lang: '西班牙语', creator: '春光',   createdAt: '2026-10-10 11:06:11', updatedAt: '2026-10-10 11:06:11', deletable: false },
+        { id: 163, content: '1111',     type: '产品卖点', payType: '免费', lang: '繁体中文', creator: '娜可',   createdAt: '2026-09-29 15:57:21', updatedAt: '2026-09-29 15:57:21', deletable: true },
+        { id: 162, content: '1111',     type: '标题',     payType: '免费', lang: '繁体中文', creator: '娜可',   createdAt: '2026-09-29 15:57:17', updatedAt: '2026-09-29 15:57:17', deletable: true },
+        { id: 161, content: '繁中卖点', type: '产品卖点', payType: '免费', lang: '繁体中文', creator: '冷吃兔', createdAt: '2026-09-29 14:59:34', updatedAt: '2026-09-29 14:59:34', deletable: false },
+        { id: 160, content: '繁中标题', type: '标题',     payType: '免费', lang: '繁体中文', creator: '冷吃兔', createdAt: '2026-09-29 14:59:19', updatedAt: '2026-09-29 14:59:19', deletable: false },
+        { id: 159, content: '来来来',   type: '标题',     payType: '付费', lang: '繁体中文', creator: '春光',   createdAt: '2026-09-29 14:31:24', updatedAt: '2026-09-29 14:31:24', deletable: false },
+        { id: 158, content: '卖点2',    type: '产品卖点', payType: '付费', lang: '英语',     creator: '分享',   createdAt: '2026-09-24 14:26:18', updatedAt: '2026-09-24 14:26:18', deletable: false },
+        { id: 157, content: '卖点1',    type: '产品卖点', payType: '付费', lang: '英语',     creator: '分享',   createdAt: '2026-09-24 14:26:18', updatedAt: '2026-09-24 14:26:18', deletable: false },
+        { id: 156, content: '标题2',    type: '标题',     payType: '付费', lang: '英语',     creator: '分享',   createdAt: '2026-09-24 14:25:59', updatedAt: '2026-09-24 14:25:59', deletable: false }
+      ];
+      var COPY_TEMPLATE_NEXT_ID = 165;
+      var COPY_TITLE_MAX = 100;            /* 标题：半角字符上限 */
+      var COPY_SELLING_POINT_MAX = 25;     /* 产品卖点：半角字符上限 */
+
+      function copyTemplateFilterState() {
+        var comboInput = document.querySelector('#template-subtab-copy .filter-combo-input');
+        return {
+          keyword: comboInput && comboInput.value ? comboInput.value.trim() : '',
+          type: (document.getElementById('template-copy-type-filter') || {}).value || '',
+          payType: (document.getElementById('template-copy-pay-filter') || {}).value || '',
+          lang: (document.getElementById('template-copy-lang-filter') || {}).value || '',
+          creator: (document.getElementById('template-copy-creator-filter') || {}).value || ''
+        };
+      }
+
+      function renderCopyTemplateList() {
+        var tbody = document.getElementById('copy-template-tbody');
+        if (!tbody) return;
+        var f = copyTemplateFilterState();
+        var list = COPY_TEMPLATE_DATA.filter(function (item) {
+          if (f.keyword && item.content.indexOf(f.keyword) === -1 && String(item.id) !== f.keyword) return false;
+          if (f.type && item.type !== f.type) return false;
+          if (f.payType && item.payType !== f.payType) return false;
+          if (f.lang && item.lang !== f.lang) return false;
+          if (f.creator && item.creator !== f.creator) return false;
+          return true;
+        });
+        tbody.innerHTML = list.map(function (item) {
+          var actions = '<a href="#" class="link" onclick="openCopyEditModal(' + item.id + ');return false;">编辑</a>';
+          if (item.deletable) {
+            actions += ' <a href="#" class="link link-danger" onclick="deleteCopyTemplateRow(this,' + item.id + ');return false;">删除</a>';
+          }
+          return '<tr data-id="' + item.id + '">' +
+            '<td class="checkbox-col"><input type="checkbox" class="copy-row-check" onchange="updateCopySelectedCount()" /></td>' +
+            '<td>' + escHtml(item.id) + '</td>' +
+            '<td>' + escHtml(item.content) + '</td>' +
+            '<td>' + escHtml(item.type) + '</td>' +
+            '<td>' + escHtml(item.payType) + '</td>' +
+            '<td>' + escHtml(item.lang) + '</td>' +
+            '<td>' + escHtml(item.creator) + '</td>' +
+            '<td>' + escHtml(item.createdAt) + '</td>' +
+            '<td>' + escHtml(item.updatedAt) + '</td>' +
+            '<td><div class="row-actions">' + actions + '</div></td>' +
+          '</tr>';
+        }).join('') || '<tr><td colspan="10" style="text-align:center;color:var(--color-text-secondary);padding:32px;">暂无数据</td></tr>';
+        updateCopySelectedCount();
+      }
+
+      function filterCopyTemplateList() { renderCopyTemplateList(); }
+
+      function resetCopyTemplateFilter() {
+        var root = document.getElementById('template-subtab-copy');
+        if (!root) return;
+        root.querySelectorAll('.filter-combo-input').forEach(function (i) { i.value = ''; });
+        root.querySelectorAll('.filter-select').forEach(function (s) { s.selectedIndex = 0; });
+        renderCopyTemplateList();
+      }
+
+      /* ===== 文案模板·勾选 / 批量删除 ===== */
+      function updateCopySelectedCount() {
+        var checks = document.querySelectorAll('#copy-template-tbody .copy-row-check');
+        var checked = document.querySelectorAll('#copy-template-tbody .copy-row-check:checked');
+        var el = document.getElementById('copy-selected-count');
+        if (el) el.textContent = checked.length;
+        var all = document.getElementById('copy-select-all');
+        if (all) all.checked = checks.length > 0 && checked.length === checks.length;
+      }
+      function toggleCopySelectAll(cb) {
+        document.querySelectorAll('#copy-template-tbody .copy-row-check').forEach(function (c) { c.checked = cb.checked; });
+        updateCopySelectedCount();
+      }
+      function batchDeleteCopyTemplates() {
+        var checks = document.querySelectorAll('#copy-template-tbody .copy-row-check:checked');
+        if (!checks.length) { showToast('请先勾选要删除的文案', 'error'); return; }
+        if (!confirm('确定删除已选中的 ' + checks.length + ' 项文案？')) return;
+        var ids = {};
+        checks.forEach(function (c) { ids[c.closest('tr').getAttribute('data-id')] = true; });
+        COPY_TEMPLATE_DATA = COPY_TEMPLATE_DATA.filter(function (item) { return !ids[item.id]; });
+        renderCopyTemplateList();
+        showToast('已删除 ' + checks.length + ' 项文案');
+      }
+      function deleteCopyTemplateRow(link, id) {
+        if (!confirm('确定删除该文案？')) return;
+        COPY_TEMPLATE_DATA = COPY_TEMPLATE_DATA.filter(function (item) { return item.id !== id; });
+        renderCopyTemplateList();
+        showToast('已删除');
+      }
+
+      /* ===== 文案模板·新增/编辑弹框 ===== */
+      var COPY_EDIT_ID = null; /* null=新增，数字=编辑 */
+      function openCopyAddModal() {
+        COPY_EDIT_ID = null;
+        document.querySelector('#copy-add-modal .modal-header span').textContent = '新增文案';
+        document.querySelector('input[name="copy-add-type"][value="标题"]').checked = true;
+        document.querySelector('input[name="copy-add-pay-type"][value="付费"]').checked = true;
+        document.getElementById('copy-add-lang').selectedIndex = 0;
+        document.getElementById('copy-add-text').value = '';
+        updateCopyEditorGutter();
+        document.getElementById('copy-add-overlay').classList.add('open');
+        document.getElementById('copy-add-modal').classList.add('open');
+      }
+      function openCopyEditModal(id) {
+        var item = null;
+        COPY_TEMPLATE_DATA.forEach(function (it) { if (it.id === id) item = it; });
+        if (!item) return;
+        COPY_EDIT_ID = id;
+        document.querySelector('#copy-add-modal .modal-header span').textContent = '编辑文案';
+        var typeRadio = document.querySelector('input[name="copy-add-type"][value="' + item.type + '"]');
+        if (typeRadio) typeRadio.checked = true;
+        var payRadio = document.querySelector('input[name="copy-add-pay-type"][value="' + item.payType + '"]');
+        if (payRadio) payRadio.checked = true;
+        var langSel = document.getElementById('copy-add-lang');
+        for (var i = 0; i < langSel.options.length; i++) {
+          if (langSel.options[i].value === item.lang) { langSel.selectedIndex = i; break; }
+        }
+        document.getElementById('copy-add-text').value = item.content;
+        updateCopyEditorGutter();
+        document.getElementById('copy-add-overlay').classList.add('open');
+        document.getElementById('copy-add-modal').classList.add('open');
+      }
+      function closeCopyAddModal() {
+        document.getElementById('copy-add-overlay').classList.remove('open');
+        document.getElementById('copy-add-modal').classList.remove('open');
+      }
+      function updateCopyAddCount() {
+        var ta = document.getElementById('copy-add-text');
+        var el = document.getElementById('copy-add-count');
+        if (ta && el) el.textContent = ta.value.length;
+      }
+      /* 行号槽与输入框联动 */
+      function updateCopyEditorGutter() {
+        var ta = document.getElementById('copy-add-text');
+        var gutter = document.getElementById('copy-add-gutter');
+        if (!ta || !gutter) return;
+        var lines = ta.value.split('\n').length;
+        var html = '';
+        for (var i = 1; i <= lines; i++) html += i + '<br>';
+        gutter.innerHTML = html;
+        gutter.scrollTop = ta.scrollTop;
+        updateCopyAddCount();
+      }
+      function syncCopyGutterScroll() {
+        var ta = document.getElementById('copy-add-text');
+        var gutter = document.getElementById('copy-add-gutter');
+        if (ta && gutter) gutter.scrollTop = ta.scrollTop;
+      }
+      function nowCopyTimestamp() {
+        var d = new Date();
+        function p(n) { return n < 10 ? '0' + n : n; }
+        return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes()) + ':' + p(d.getSeconds());
+      }
+      function confirmCopyAdd() {
+        var type = document.querySelector('input[name="copy-add-type"]:checked').value;
+        var payType = document.querySelector('input[name="copy-add-pay-type"]:checked').value;
+        var lang = document.getElementById('copy-add-lang').value;
+        var text = document.getElementById('copy-add-text').value;
+        if (!lang) { showToast('请选择语言', 'error'); return; }
+        var lines = text.split(/\r?\n/).map(function (s) { return s.trim(); }).filter(function (s) { return s.length > 0; });
+        if (!lines.length) { showToast('请输入文案', 'error'); return; }
+        var max = type === '产品卖点' ? COPY_SELLING_POINT_MAX : COPY_TITLE_MAX;
+        for (var i = 0; i < lines.length; i++) {
+          if (lines[i].length > max) {
+            showToast(type + '最多 ' + max + ' 个半角字符，请精简后重试', 'error');
+            return;
+          }
+        }
+        var ts = nowCopyTimestamp();
+        if (COPY_EDIT_ID !== null) {
+          COPY_TEMPLATE_DATA.forEach(function (item) {
+            if (item.id === COPY_EDIT_ID) {
+              item.content = lines[0];
+              item.type = type;
+              item.payType = payType;
+              item.lang = lang;
+              item.updatedAt = ts;
+              item.deletable = true;
+            }
+          });
+          showToast('已保存');
+        } else {
+          lines.forEach(function (line) {
+            COPY_TEMPLATE_DATA.unshift({
+              id: COPY_TEMPLATE_NEXT_ID++,
+              content: line,
+              type: type,
+              payType: payType,
+              lang: lang,
+              creator: '娜可',
+              createdAt: ts,
+              updatedAt: ts,
+              deletable: true
+            });
+          });
+          showToast('已新增 ' + lines.length + ' 条文案');
+        }
+        renderCopyTemplateList();
+        closeCopyAddModal();
+      }
+
+      /* ===== 文案模板·表格全屏 ===== */
+      function toggleCopyTableFullscreen() {
+        var card = document.getElementById('copy-template-card');
+        if (card) card.classList.toggle('table-fullscreen');
+      }
+
+      /* 首屏渲染一次文案模板列表 */
+      renderCopyTemplateList();
 
       /* ===== 定向包：年龄 / 语言 / 地区 数据源 ===== */
       var TARGET_LOCALES = [
