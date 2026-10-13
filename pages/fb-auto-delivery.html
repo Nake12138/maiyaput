@@ -1017,7 +1017,7 @@
                         <th>ID</th>
                         <th>广告信息</th>
                         <th>创意素材</th>
-                        <th>FaceBook账号</th>
+                        <th>公共主页</th>
                         <th>上传状态</th>
                         <th>操作</th>
                         <th>推广链接ID</th>
@@ -1466,7 +1466,9 @@
                   <div class="form-row">
                     <div class="form-item form-item-inline">
                       <label class="form-label">账户包：</label>
-                      <button type="button" class="btn btn-outline btn-sm" onclick="selectAccountPackage()">选择账户包</button>
+                      <span id="account-package-tags-field" style="display:inline-flex;flex-wrap:wrap;gap:6px;align-items:center;">
+                        <button type="button" class="btn btn-outline btn-sm" onclick="selectAccountPackage()">选择账户包</button>
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -1657,6 +1659,10 @@
                         <button type="button" class="segmented-item active" data-value="unlimited">不限</button>
                         <button type="button" class="segmented-item" data-value="custom">自定义</button>
                       </div>
+                      <span id="schedule-duration-custom" style="display:none;align-items:center;gap:6px;">
+                        <input type="text" class="form-input" id="schedule-duration-days" placeholder="请输入" style="width:110px;" />
+                        <span>天</span>
+                      </span>
                     </div>
                   </div>
                   <div class="form-row">
@@ -1665,6 +1671,12 @@
                       <div class="segmented-control" id="schedule-period">
                         <button type="button" class="segmented-item active" data-value="all">全天</button>
                         <button type="button" class="segmented-item" data-value="custom">自定义</button>
+                      </div>
+                    </div>
+                    <div id="schedule-period-custom" style="display:none;flex-basis:100%;padding-left:12px;">
+                      <div style="text-align:right;font-size:12px;color:var(--color-text-secondary);margin-bottom:6px;">一共 0 小时</div>
+                      <div style="border:1px solid var(--color-border);border-radius:6px;background:#fafafa;padding:48px 0;text-align:center;color:var(--color-text-tertiary);font-size:13px;">
+                        时段选择组件占位（星期 × 小时，可拖拽框选）——待对接行业通用时段选择组件后替换
                       </div>
                     </div>
                   </div>
@@ -2050,6 +2062,54 @@
       </div>
     </div>
 
+    <!-- 投放账户 - 选择账户包 弹窗 -->
+    <div id="account-package-overlay" class="modal-overlay" style="z-index:1150;" onclick="closeAccountPackagePicker()"></div>
+    <div id="account-package-picker" class="modal" style="z-index:1151;">
+      <div class="modal-card" style="width:980px;max-width:94vw;">
+        <div class="modal-header">
+          <span>选择账户包</span>
+          <button class="modal-close" onclick="closeAccountPackagePicker()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-filter">
+            <input type="text" class="form-input" id="account-package-search" placeholder="请输入账户包名称" style="flex:1;" />
+            <select class="form-input" id="account-package-creator" style="width:150px;min-width:120px;">
+              <option value="">请选择创建人</option>
+              <option>娜可</option>
+              <option>听泉</option>
+              <option>魔法七</option>
+              <option>橙子</option>
+              <option>孤树</option>
+            </select>
+            <button class="btn btn-primary btn-sm" onclick="apGoPage(1)">查询</button>
+          </div>
+          <div class="table-card" style="border-radius:4px;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th class="checkbox-col"><input type="checkbox" onclick="toggleAllAccountPackages(this)" /></th>
+                  <th>ID</th>
+                  <th>账户包名称</th>
+                  <th>备注</th>
+                  <th>账户数量</th>
+                  <th>创建人</th>
+                  <th>创建时间</th>
+                  <th>更新时间</th>
+                </tr>
+              </thead>
+              <tbody id="account-package-tbody"></tbody>
+            </table>
+          </div>
+          <div id="account-package-pager" style="display:flex;justify-content:flex-end;align-items:center;gap:6px;padding:10px 4px 0;"></div>
+        </div>
+        <div class="modal-footer">
+          <span style="margin-right:auto;font-size:13px;color:var(--color-text-secondary);" id="account-package-count">已选：0</span>
+          <button class="btn btn-outline btn-sm" onclick="closeAccountPackagePicker()">取消</button>
+          <button class="btn btn-primary btn-sm" onclick="confirmAccountPackage()">确定</button>
+        </div>
+      </div>
+    </div>
+
     <!-- 任务日志抽屉 -->
     <style>
       #drawer-task-log .drawer-body {
@@ -2413,19 +2473,18 @@
       }
 
       /* ===== 身份（公共主页）：手动选择 ===== */
-      /* 当前登录人：由 scripts/targeting-packages.js 注入（默认娜可），此处不再覆盖 */
+      /* 数据来源：资产管理 - 公共主页页面（pages/overseas-fb-page.html，#fb-page-tbody 静态数据） */
       var IDENTITY_ACCOUNTS = [
-        { name: 'Sasa ดู', lang: '葡萄牙语' },
-        { name: '廖廖短剧', lang: '繁体中文' },
-        { name: 'Titi Pendek', lang: '马来西亚语' },
-        { name: 'Yoyo Cortos', lang: '英语' },
-        { name: 'Mimi Drama', lang: '泰语' },
-        { name: 'Luna Shorts', lang: '西班牙语' }
+        { id: '100123456789012', name: 'Dramatical Shorts', meta: '@dramaticalshorts' },
+        { id: '200987654321098', name: 'Romance Reels', meta: '@romancereels.us' },
+        { id: '300556677889911', name: '悬疑剧场 Mystery', meta: '@mystery.cn.tw' },
+        { id: '400112233445566', name: 'Drama Hub Latam', meta: '@dramahub.latam' },
+        { id: '500665544332211', name: 'K-Drama Daily', meta: '@kdramadaily.kr' }
       ];
-      /* 历史任务投放身份回显：历史数据统一按手动选择处理并回显已选账号 */
+      /* 历史任务投放身份回显：历史数据统一按手动选择处理并回显已选公共主页 */
       var HISTORY_TASKS = {
-        295: { identityMode: 'manual', identityAccounts: ['Sasa ดู', '廖廖短剧'] },
-        294: { identityMode: 'manual', identityAccounts: ['Yoyo Cortos', 'Mimi Drama'] }
+        295: { identityMode: 'manual', identityAccounts: ['100123456789012', '200987654321098'] },
+        294: { identityMode: 'manual', identityAccounts: ['300556677889911', '500665544332211'] }
       };
 
       /* 手动选择：公用多选下拉组件（scripts/multi-select.js） */
@@ -2437,7 +2496,7 @@
           placeholder: '请选择公共主页',
           countLabel: '已选：{n} 个公共主页',
           searchPlaceholder: '请输入名称',
-          options: IDENTITY_ACCOUNTS.map(function (a) { return { id: a.name, name: a.name, meta: a.lang }; })
+          options: IDENTITY_ACCOUNTS.map(function (a) { return { id: a.id, name: a.name, meta: a.meta }; })
         });
         return identityMs;
       }
@@ -2753,6 +2812,38 @@
         sync();
       })();
 
+      /* ===== 投放时长：选中【自定义】显示后方输入框，限制输入正整数（单位：天） ===== */
+      (function () {
+        var group = document.getElementById('schedule-duration');
+        var wrap = document.getElementById('schedule-duration-custom');
+        var input = document.getElementById('schedule-duration-days');
+        if (!group || !wrap || !input) return;
+        var sync = function () {
+          var act = group.querySelector('.segmented-item.active');
+          wrap.style.display = (act && act.getAttribute('data-value') === 'custom') ? 'inline-flex' : 'none';
+        };
+        group.addEventListener('click', sync);
+        input.addEventListener('input', function () {
+          /* 仅保留数字并去掉前导 0，保证为正整数 */
+          var cleaned = input.value.replace(/[^\d]/g, '').replace(/^0+(?=\d)/, '');
+          if (cleaned !== input.value) input.value = cleaned;
+        });
+        sync();
+      })();
+
+      /* ===== 投放时段：选中【自定义】显示下方时段选择组件（占位，待对接通用组件） ===== */
+      (function () {
+        var group = document.getElementById('schedule-period');
+        var wrap = document.getElementById('schedule-period-custom');
+        if (!group || !wrap) return;
+        var sync = function () {
+          var act = group.querySelector('.segmented-item.active');
+          wrap.style.display = (act && act.getAttribute('data-value') === 'custom') ? '' : 'none';
+        };
+        group.addEventListener('click', sync);
+        sync();
+      })();
+
       /* ===== 广告系列竞价策略：选中【广告花费回报目标】时显示对应字段 ===== */
       (function () {
         var group = document.getElementById('bid-strategy');
@@ -2845,10 +2936,8 @@
       function openTargetingPicker() {
         var creator = document.getElementById('targeting-creator');
         if (creator) creator.value = CURRENT_USER || '';
-        // 仅打开弹窗，不自动查询；列表置为空，等用户点击「查询」再加载
-        var tbody = document.getElementById('targeting-picker-tbody');
-        if (tbody) tbody.innerHTML = '';
-        updateTargetingPickerCount();
+        // 打开弹窗即按当前筛选条件（创建人默认当前登录人）渲染全量数据
+        renderTargetingPickerRows();
         var overlay = document.getElementById('targeting-picker-overlay');
         var modal = document.getElementById('targeting-picker');
         if (overlay) overlay.classList.add('open');
@@ -2978,8 +3067,169 @@
         alert('添加短剧范围');
       }
 
+      /* ===== 选择账户包 弹窗（示例数据对齐设计稿，真实分页 10条/页） ===== */
+      var ACCOUNT_PACKAGE_SAMPLE = [
+        { id: 29, name: 'popkin', remark: '', count: 2, creator: '娜可', createTime: '2026-09-18 04:06:53', updateTime: '2026-09-18 04:06:53' },
+        { id: 24, name: '河南FdicHtmin', remark: '', count: 1, creator: '娜可', createTime: '2026-09-04 08:35:50', updateTime: '2026-09-24 01:50:28' },
+        { id: 21, name: 'AvoShort', remark: '', count: 2, creator: '娜可', createTime: '2026-08-13 07:03:45', updateTime: '2026-08-13 07:03:45' },
+        { id: 20, name: 'ZeroDrama', remark: '', count: 1, creator: '娜可', createTime: '2026-08-11 08:59:20', updateTime: '2026-09-29 07:49:03' },
+        { id: 19, name: '7648215203578101780', remark: '', count: 1, creator: '娜可', createTime: '2026-08-11 08:01:54', updateTime: '2026-08-11 08:01:54' },
+        { id: 18, name: 'AvoShort', remark: '', count: 3, creator: '娜可', createTime: '2026-08-11 07:28:21', updateTime: '2026-08-11 07:28:21' },
+        { id: 17, name: '全部', remark: '', count: 6, creator: '娜可', createTime: '2026-08-11 03:43:55', updateTime: '2026-08-11 07:28:36' },
+        { id: 16, name: '1', remark: '', count: 1, creator: '娜可', createTime: '2026-08-10 08:36:15', updateTime: '2026-08-10 08:36:15' },
+        { id: 13, name: '复制-111', remark: '222', count: 1, creator: '娜可', createTime: '2026-08-07 07:17:52', updateTime: '2026-08-07 07:17:52' },
+        { id: 12, name: '素材测试包', remark: '', count: 4, creator: '听泉', createTime: '2026-08-06 10:20:11', updateTime: '2026-08-06 10:20:11' },
+        { id: 11, name: '夜色短剧', remark: '', count: 5, creator: '听泉', createTime: '2026-08-05 09:12:40', updateTime: '2026-08-19 15:30:07' },
+        { id: 10, name: '拉美投放组', remark: 'ES/MX', count: 8, creator: '魔法七', createTime: '2026-08-02 14:22:36', updateTime: '2026-08-28 11:05:19' },
+        { id: 9, name: '日韩合集', remark: '', count: 3, creator: '娜可', createTime: '2026-07-30 16:45:02', updateTime: '2026-07-30 16:45:02' },
+        { id: 8, name: '新号测试', remark: '', count: 2, creator: '娜可', createTime: '2026-07-28 11:08:44', updateTime: '2026-08-15 09:54:21' },
+        { id: 5, name: '东南亚主包', remark: 'ID/TH/VN', count: 12, creator: '娜可', createTime: '2026-07-21 10:30:18', updateTime: '2026-08-25 18:40:55' },
+        { id: 3, name: '默认包', remark: '', count: 6, creator: '娜可', createTime: '2026-07-15 08:00:00', updateTime: '2026-07-15 08:00:00' }
+      ];
+      var accountPackageSelected = [];
+      var apPage = 1;
+      var apPageSize = 10;
+
       function selectAccountPackage() {
-        alert('选择账户包');
+        apPage = 1;
+        renderAccountPackageRows();
+        var overlay = document.getElementById('account-package-overlay');
+        var modal = document.getElementById('account-package-picker');
+        if (overlay) overlay.classList.add('open');
+        if (modal) modal.classList.add('open');
+      }
+
+      function closeAccountPackagePicker() {
+        var overlay = document.getElementById('account-package-overlay');
+        var modal = document.getElementById('account-package-picker');
+        if (overlay) overlay.classList.remove('open');
+        if (modal) modal.classList.remove('open');
+      }
+
+      function getFilteredAccountPackages() {
+        var kw = ((document.getElementById('account-package-search') || {}).value || '').trim();
+        var creator = (document.getElementById('account-package-creator') || {}).value || '';
+        return ACCOUNT_PACKAGE_SAMPLE.filter(function (p) {
+          if (kw && p.name.indexOf(kw) < 0) return false;
+          if (creator && p.creator !== creator) return false;
+          return true;
+        });
+      }
+
+      function renderAccountPackageRows() {
+        var tbody = document.getElementById('account-package-tbody');
+        if (!tbody) return;
+        var rows = getFilteredAccountPackages();
+        var totalPages = Math.max(1, Math.ceil(rows.length / apPageSize));
+        if (apPage > totalPages) apPage = totalPages;
+        var pageRows = rows.slice((apPage - 1) * apPageSize, apPage * apPageSize);
+        tbody.innerHTML = pageRows.length
+          ? pageRows.map(function (p) {
+              var checked = accountPackageSelected.indexOf(String(p.id)) >= 0;
+              return '<tr data-id="' + p.id + '">' +
+                '<td class="checkbox-col"><input type="checkbox" value="' + p.id + '"' + (checked ? ' checked' : '') + ' onchange="onAccountPackageCheck(this)" /></td>' +
+                '<td>' + p.id + '</td>' +
+                '<td>' + p.name + '</td>' +
+                '<td>' + (p.remark || '—') + '</td>' +
+                '<td>' + p.count + '</td>' +
+                '<td>' + p.creator + '</td>' +
+                '<td>' + p.createTime + '</td>' +
+                '<td>' + p.updateTime + '</td></tr>';
+            }).join('')
+          : '<tr><td colspan="8" style="text-align:center;color:var(--color-text-tertiary);padding:24px 0;">暂无数据</td></tr>';
+        renderAccountPackagePager(rows.length, totalPages);
+        updateAccountPackageCount();
+      }
+
+      function renderAccountPackagePager(total, totalPages) {
+        var pager = document.getElementById('account-package-pager');
+        if (!pager) return;
+        var html = '';
+        if (total > 0) {
+          html += '<button type="button" class="btn btn-outline btn-sm"' + (apPage <= 1 ? ' disabled' : '') + ' onclick="apGoPage(' + (apPage - 1) + ')">‹</button>';
+          for (var i = 1; i <= totalPages; i++) {
+            html += '<button type="button" class="btn ' + (i === apPage ? 'btn-primary' : 'btn-outline') + ' btn-sm" style="min-width:32px;" onclick="apGoPage(' + i + ')">' + i + '</button>';
+          }
+          html += '<button type="button" class="btn btn-outline btn-sm"' + (apPage >= totalPages ? ' disabled' : '') + ' onclick="apGoPage(' + (apPage + 1) + ')">›</button>';
+          html += '<select class="form-input" style="width:auto;height:28px;padding:2px 6px;" onchange="apSetPageSize(this)">';
+          [10, 20, 50].forEach(function (n) {
+            html += '<option value="' + n + '"' + (n === apPageSize ? ' selected' : '') + '>' + n + ' 条/页</option>';
+          });
+          html += '</select>';
+        }
+        pager.innerHTML = html;
+      }
+
+      function apGoPage(p) {
+        apPage = p;
+        renderAccountPackageRows();
+      }
+
+      function apSetPageSize(sel) {
+        apPageSize = parseInt(sel.value, 10) || 10;
+        apPage = 1;
+        renderAccountPackageRows();
+      }
+
+      function onAccountPackageCheck(cb) {
+        var id = cb.value;
+        if (cb.checked) {
+          if (accountPackageSelected.indexOf(id) < 0) accountPackageSelected.push(id);
+        } else {
+          accountPackageSelected = accountPackageSelected.filter(function (n) { return n !== id; });
+        }
+        updateAccountPackageCount();
+      }
+
+      function toggleAllAccountPackages(header) {
+        var tbody = document.getElementById('account-package-tbody');
+        if (!tbody) return;
+        Array.prototype.forEach.call(tbody.querySelectorAll('input[type="checkbox"]'), function (cb) {
+          if (cb.checked !== header.checked) {
+            cb.checked = header.checked;
+            onAccountPackageCheck(cb);
+          }
+        });
+      }
+
+      function updateAccountPackageCount() {
+        var countEl = document.getElementById('account-package-count');
+        if (countEl) countEl.textContent = '已选：' + accountPackageSelected.length;
+        var header = document.querySelector('#account-package-picker .data-table thead input[type="checkbox"]');
+        var cbs = document.querySelectorAll('#account-package-tbody input[type="checkbox"]');
+        var checked = 0;
+        Array.prototype.forEach.call(cbs, function (cb) { if (cb.checked) checked++; });
+        if (header) header.checked = cbs.length > 0 && checked === cbs.length;
+      }
+
+      function confirmAccountPackage() {
+        renderAccountPackageTags();
+        closeAccountPackagePicker();
+      }
+
+      function renderAccountPackageTags() {
+        var field = document.getElementById('account-package-tags-field');
+        if (!field) return;
+        Array.prototype.forEach.call(field.querySelectorAll('.config-tag'), function (tag) {
+          tag.parentNode.removeChild(tag);
+        });
+        var btn = field.querySelector('.btn');
+        accountPackageSelected.forEach(function (id) {
+          var pkg = ACCOUNT_PACKAGE_SAMPLE.filter(function (p) { return String(p.id) === id; })[0];
+          if (!pkg) return;
+          var span = document.createElement('span');
+          span.className = 'config-tag';
+          span.setAttribute('data-id', id);
+          span.innerHTML = pkg.name + ' <span class="config-tag-remove" onclick="removeAccountPackageTag(this)" title="移除">✕</span>';
+          field.insertBefore(span, btn.nextSibling);
+        });
+      }
+
+      function removeAccountPackageTag(el) {
+        var tag = el.parentElement;
+        var id = tag.getAttribute('data-id');
+        accountPackageSelected = accountPackageSelected.filter(function (n) { return n !== id; });
+        tag.remove();
       }
 
       function showOverseasTaskDetail(id) {
