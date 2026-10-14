@@ -89,10 +89,13 @@
   function filterTargetingPackages(opts) {
     opts = opts || {};
     var kw = (opts.keyword || '').trim();
+    var kwField = opts.keywordField || '名称';
     var lang = opts.lang || '';
     var creator = opts.creator || '';
     return getTargetingPackages().filter(function (p) {
-      var matchKw = !kw || (p.name || '').indexOf(kw) >= 0;
+      var matchKw = !kw || (kwField === 'ID'
+        ? String(p.id) === kw
+        : (p.name || '').indexOf(kw) >= 0);
       var matchLang = !lang || p.lang === lang;
       var matchCreator = !creator || p.creator === creator;
       return matchKw && matchLang && matchCreator;

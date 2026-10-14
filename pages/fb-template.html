@@ -267,7 +267,7 @@
     <div class="filter-bar">
       <div class="filter-bar-row">
         <div class="filter-combo">
-          <select class="filter-combo-select"><option>账户包名称</option><option>账户包ID</option></select>
+          <select class="filter-combo-select"><option>名称</option><option>ID</option></select>
           <input type="text" class="filter-combo-input" placeholder="请输入" />
         </div>
         <select class="filter-select"><option>请选择创建人</option><option>听泉</option><option>魔法七</option><option>橙子</option><option>孤树</option></select>
@@ -320,7 +320,13 @@
   <div id="template-tab-target" class="template-tab-panel" style="display:none;">
     <div class="filter-bar">
       <div class="filter-bar-row">
-        <input type="text" id="template-target-search" class="filter-input" placeholder="定向包名称" />
+        <div class="filter-combo">
+          <select class="filter-combo-select">
+            <option>名称</option>
+            <option>ID</option>
+          </select>
+          <input type="text" id="template-target-search" class="filter-combo-input" placeholder="请输入" />
+        </div>
         <select id="template-target-lang" class="filter-select">
           <option value="">请选择语言</option>
           <option>英语</option>
@@ -394,7 +400,7 @@
         <div class="filter-bar-row">
           <div class="filter-combo">
             <select class="filter-combo-select">
-              <option>文案内容</option>
+              <option>名称</option>
               <option>ID</option>
             </select>
             <input type="text" class="filter-combo-input" placeholder="请输入" />
@@ -439,19 +445,6 @@
         <div class="table-toolbar">
           <span>已选 <strong id="copy-selected-count">0</strong> 项</span>
           <a href="#" class="link" onclick="batchDeleteCopyTemplates();return false;">批量删除</a>
-          <div class="table-toolbar-actions">
-            <button type="button" class="table-toolbar-icon-btn" title="列设置" aria-label="列设置" onclick="showToast('列设置（原型演示）')">
-              <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                <path d="M8 5.1a2.9 2.9 0 100 5.8 2.9 2.9 0 000-5.8z" stroke="currentColor" stroke-width="1.3"/>
-                <path d="M13.4 10.2a7 7 0 000-4.4l-1.7.6a5.2 5.2 0 00-1.5-1.5l.6-1.7a7 7 0 00-4.4 0l.6 1.7a5.2 5.2 0 00-1.5 1.5l-1.7-.6a7 7 0 000 4.4l1.7-.6c.37.6.86 1.09 1.5 1.5l-.6 1.7a7 7 0 004.4 0l-.6-1.7c.59-.41 1.08-.9 1.5-1.5l1.7.6z" stroke="currentColor" stroke-width="1.1"/>
-              </svg>
-            </button>
-            <button type="button" class="table-toolbar-icon-btn" title="全屏" aria-label="全屏" onclick="toggleCopyTableFullscreen()">
-              <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                <path d="M2 6V2.5A.5.5 0 012.5 2H6M10 2h3.5a.5.5 0 01.5.5V6M14 10v3.5a.5.5 0 01-.5.5H10M6 14H2.5a.5.5 0 01-.5-.5V10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-              </svg>
-            </button>
-          </div>
         </div>
         <div class="table-wrapper">
           <table class="data-table">
@@ -497,7 +490,13 @@
     <div id="template-tab-recharge" class="template-subtab-panel" style="display:none;">
     <div class="filter-bar">
       <div class="filter-bar-row">
-        <input type="text" class="filter-input" placeholder="请输入模板名称" />
+        <div class="filter-combo">
+          <select class="filter-combo-select">
+            <option>名称</option>
+            <option>ID</option>
+          </select>
+          <input type="text" class="filter-combo-input" placeholder="请输入" />
+        </div>
         <select class="filter-select"><option>请选择平台</option><option>司南</option><option>织光</option></select>
         <select class="filter-select"><option>请选择用户</option><option>技术部-娜可</option><option>麦芽短剧-分享</option><option>投放六部-苍洱</option><option>投放六部-苏竹</option><option>投放六部-娜吒</option><option>投放六部-小坤</option><option>投放六部-木南</option><option>投放六部-思保</option><option>xx-嗯哼</option></select>
         <div class="filter-actions">
@@ -558,7 +557,13 @@
   <div id="template-tab-callback" class="template-subtab-panel" style="display:none;">
     <div class="filter-bar">
       <div class="filter-bar-row">
-        <input type="text" class="filter-input" placeholder="请输入模板名称" />
+        <div class="filter-combo">
+          <select class="filter-combo-select">
+            <option>名称</option>
+            <option>ID</option>
+          </select>
+          <input type="text" class="filter-combo-input" placeholder="请输入" />
+        </div>
         <select class="filter-select"><option>请选择平台</option><option>司南</option><option>织光</option></select>
         <select class="filter-select"><option>请选择用户</option><option>技术部-娜可</option><option>麦芽短剧-分享</option><option>投放六部-苍洱</option><option>投放六部-苏竹</option><option>投放六部-娜吒</option><option>投放六部-小坤</option><option>投放六部-木南</option><option>投放六部-思保</option></select>
         <div class="filter-actions">
@@ -656,8 +661,8 @@
                 <table class="data-table">
                   <thead><tr><th>账户ID</th><th>账户名称</th><th>时区</th><th>操作</th></tr></thead>
                   <tbody id="account-selected-tbody">
-                    <tr><td>7676009561349996552</td><td>ViviShort-IAA(UTC-5)-058212-MY-听泉-SINO-TT</td><td>UTC-5</td></tr>
-                    <tr><td>7676009929921658887</td><td>ViviShort-IAA(UTC-5)-009512-MY-听泉-SINO-TT</td><td>UTC-5</td></tr>
+                    <tr><td>7676009561349996552</td><td>ViviShort-IAA(UTC-5)-058212-MY-听泉-SINO-TT</td><td>UTC-5</td><td><a href="#" class="link link-danger" onclick="removeSelectedAccount(this);return false;">删除</a></td></tr>
+                    <tr><td>7676009929921658887</td><td>ViviShort-IAA(UTC-5)-009512-MY-听泉-SINO-TT</td><td>UTC-5</td><td><a href="#" class="link link-danger" onclick="removeSelectedAccount(this);return false;">删除</a></td></tr>
                   </tbody>
                 </table>
               </div>
@@ -903,9 +908,8 @@
         <button class="drawer-close" onclick="closeTargetDrawer()">×</button>
       </div>
       <div class="drawer-body">
-        <!-- 基础人口属性 -->
         <div class="form-section">
-          <div class="form-section-title">基础人口属性</div>
+          <div class="form-section-title">定向信息</div>
           <div class="form-row">
             <div class="form-label required">定向包名称：</div>
             <div class="form-field form-field-inline" style="width:100%;">
@@ -916,11 +920,11 @@
           <div class="form-row">
             <div class="form-label">性别：</div>
             <div class="form-field">
-              <div class="radio-group">
-                <label class="radio-item"><input type="radio" name="target-gender" value="all" checked /> 不限</label>
-                <label class="radio-item"><input type="radio" name="target-gender" value="1" /> 男</label>
-                <label class="radio-item"><input type="radio" name="target-gender" value="2" /> 女</label>
-              </div>
+              <select class="form-select form-input-md">
+                <option>不限</option>
+                <option>男</option>
+                <option>女</option>
+              </select>
             </div>
           </div>
           <div class="form-row">
@@ -943,36 +947,32 @@
           </div>
         </div>
 
-        <!-- 地理位置 -->
         <div class="form-section">
-          <div class="form-section-title">地理位置</div>
+          <div class="form-section-title">地区定向信息</div>
           <div class="drawer-split">
             <div>
-              <div class="geo-tabs" id="target-geo-tabs">
-                <button class="geo-tab active" data-level="country" onclick="switchGeoTab('country')">国家</button>
-                <button class="geo-tab" data-level="region" onclick="switchGeoTab('region')">区域</button>
-                <button class="geo-tab" data-level="city" onclick="switchGeoTab('city')">城市</button>
-              </div>
               <div class="modal-filter" style="margin-bottom:8px;">
-                <select id="target-geo-country" class="form-select form-input-md" style="max-width:160px;" onchange="reloadGeoList()">
-                  <option value="">所有国家</option>
-                </select>
-                <input type="text" id="target-geo-search" class="form-input" placeholder="请输入关键字搜索" style="flex:1;" />
-                <button class="btn btn-outline btn-sm" onclick="reloadGeoList()">搜索</button>
+                <input type="text" class="form-input" placeholder="请输入关键字搜索" style="flex:1;" />
+                <button class="btn btn-outline btn-sm">搜索</button>
               </div>
               <div class="region-select-box">
-                <div class="region-select-header"><label><input type="checkbox" id="target-geo-all" onclick="toggleSelectAll(this)" /> 全选</label><span>名称</span><span>操作</span></div>
+                <div class="region-select-header"><label><input type="checkbox" /> 全选</label><span>名称</span><span>操作</span></div>
                 <div class="region-select-body">
-                  <ul class="region-select-list" id="target-geo-list">
-                    <!-- 由 JS 渲染 -->
+                  <ul class="region-select-list">
+                    <li><label><input type="checkbox" /> 意大利</label><span class="region-select-action">定向</span></li>
+                    <li><label><input type="checkbox" /> 阿根廷</label><span class="region-select-action">定向</span></li>
+                    <li><label><input type="checkbox" /> 希腊</label><span class="region-select-action">定向</span></li>
+                    <li><label><input type="checkbox" /> 巴西</label><span class="region-select-action">定向</span></li>
+                    <li><label><input type="checkbox" /> 科威特</label><span class="region-select-action">定向</span></li>
+                    <li><label><input type="checkbox" /> 巴拿马</label><span class="region-select-action">定向</span></li>
                   </ul>
                 </div>
               </div>
             </div>
             <div>
-              <div class="region-select-header" style="border-radius:4px 4px 0 0;"><span>已选（<em id="target-geo-count">0</em>）</span><span class="region-select-action" onclick="importGeoBatch()">批量导入</span><span class="region-select-action" onclick="clearTargetGeo()">清除</span></div>
+              <div class="region-select-header" style="border-radius:4px 4px 0 0;"><span>已选</span><span class="region-select-action">批量导入</span><span class="region-select-action">清除</span></div>
               <div class="region-select-box" style="border-top:none;border-radius:0 0 4px 4px;">
-                <div class="region-select-body" id="target-geo-selected">
+                <div class="region-select-body">
                   <div class="empty-state" style="padding:60px 20px;"><div class="empty-state-icon">📍</div><span>暂无数据</span></div>
                 </div>
               </div>
@@ -982,7 +982,7 @@
       </div>
       <div class="drawer-footer">
         <button class="btn btn-outline btn-sm" onclick="closeTargetDrawer()">取消</button>
-        <button class="btn btn-primary btn-sm" onclick="saveTarget()">确定</button>
+        <button class="btn btn-primary btn-sm" onclick="closeTargetDrawer()">确定</button>
       </div>
     </div>
   </div>
@@ -1180,6 +1180,8 @@
         var root = document.getElementById('template-tab-' + tab);
         if (!root) return;
         root.querySelectorAll('.filter-input').forEach(function (i) { i.value = ''; });
+        root.querySelectorAll('.filter-combo-input').forEach(function (i) { i.value = ''; });
+        root.querySelectorAll('.filter-combo-select').forEach(function (s) { s.selectedIndex = 0; });
         root.querySelectorAll('.filter-select').forEach(function (s) { s.selectedIndex = 0; });
       }
 
@@ -1195,8 +1197,15 @@
         var root = document.getElementById('template-tab-' + tab);
         if (!root) return {};
         var params = { channel: TEMPLATE_CHANNEL };
-        var input = root.querySelector('.filter-input');
-        if (input && input.value.trim()) params.name = input.value.trim();
+        var comboInput = root.querySelector('.filter-combo-input');
+        var comboSelect = root.querySelector('.filter-combo-select');
+        if (comboInput && comboInput.value.trim()) {
+          var key = (comboSelect && comboSelect.value === 'ID') ? 'id' : 'name';
+          params[key] = comboInput.value.trim();
+        } else {
+          var input = root.querySelector('.filter-input');
+          if (input && input.value.trim()) params.name = input.value.trim();
+        }
         var selects = root.querySelectorAll('.filter-select');
         if (selects[0] && selects[0].selectedIndex > 0) params.platform = selects[0].value;
         if (selects[1] && selects[1].selectedIndex > 0) params.user = selects[1].value;
@@ -1425,7 +1434,7 @@
           if (existing[id]) { dup++; return; }
           existing[id] = true;
           var tr = document.createElement('tr');
-          tr.innerHTML = '<td>' + escHtml(id) + '</td><td>--</td><td>--</td>';
+          tr.innerHTML = '<td>' + escHtml(id) + '</td><td>--</td><td>--</td><td><a href="#" class="link link-danger" onclick="removeSelectedAccount(this);return false;">删除</a></td>';
           tbody.appendChild(tr);
           added++;
         });
@@ -1495,9 +1504,12 @@
       var COPY_SELLING_POINT_MAX = 25;     /* 产品卖点：半角字符上限 */
 
       function copyTemplateFilterState() {
-        var comboInput = document.querySelector('#template-subtab-copy .filter-combo-input');
+        var root = document.getElementById('template-subtab-copy');
+        var comboInput = root ? root.querySelector('.filter-combo-input') : null;
+        var comboSelect = root ? root.querySelector('.filter-combo-select') : null;
         return {
           keyword: comboInput && comboInput.value ? comboInput.value.trim() : '',
+          keywordField: comboSelect ? comboSelect.value : '名称',
           type: (document.getElementById('template-copy-type-filter') || {}).value || '',
           payType: (document.getElementById('template-copy-pay-filter') || {}).value || '',
           lang: (document.getElementById('template-copy-lang-filter') || {}).value || '',
@@ -1510,7 +1522,13 @@
         if (!tbody) return;
         var f = copyTemplateFilterState();
         var list = COPY_TEMPLATE_DATA.filter(function (item) {
-          if (f.keyword && item.content.indexOf(f.keyword) === -1 && String(item.id) !== f.keyword) return false;
+          if (f.keyword) {
+            if (f.keywordField === 'ID') {
+              if (String(item.id) !== f.keyword) return false;
+            } else {
+              if (item.content.indexOf(f.keyword) === -1) return false;
+            }
+          }
           if (f.type && item.type !== f.type) return false;
           if (f.payType && item.payType !== f.payType) return false;
           if (f.lang && item.lang !== f.lang) return false;
@@ -1544,6 +1562,7 @@
         var root = document.getElementById('template-subtab-copy');
         if (!root) return;
         root.querySelectorAll('.filter-combo-input').forEach(function (i) { i.value = ''; });
+        root.querySelectorAll('.filter-combo-select').forEach(function (s) { s.selectedIndex = 0; });
         root.querySelectorAll('.filter-select').forEach(function (s) { s.selectedIndex = 0; });
         renderCopyTemplateList();
       }
@@ -1689,12 +1708,6 @@
         closeCopyAddModal();
       }
 
-      /* ===== 文案模板·表格全屏 ===== */
-      function toggleCopyTableFullscreen() {
-        var card = document.getElementById('copy-template-card');
-        if (card) card.classList.toggle('table-fullscreen');
-      }
-
       /* 首屏渲染一次文案模板列表 */
       renderCopyTemplateList();
 
@@ -1711,51 +1724,6 @@
         { id: 18, name: '土耳其语' }
       ];
 
-      var TARGET_COUNTRIES = [
-        { code: 'US', name: '美国' },     { code: 'GB', name: '英国' },
-        { code: 'JP', name: '日本' },     { code: 'KR', name: '韩国' },
-        { code: 'DE', name: '德国' },     { code: 'FR', name: '法国' },
-        { code: 'IT', name: '意大利' },   { code: 'ES', name: '西班牙' },
-        { code: 'PT', name: '葡萄牙' },   { code: 'BR', name: '巴西' },
-        { code: 'AR', name: '阿根廷' },   { code: 'MX', name: '墨西哥' },
-        { code: 'CA', name: '加拿大' },   { code: 'AU', name: '澳大利亚' },
-        { code: 'IN', name: '印度' },     { code: 'ID', name: '印尼' },
-        { code: 'TH', name: '泰国' },     { code: 'VN', name: '越南' },
-        { code: 'PH', name: '菲律宾' },   { code: 'MY', name: '马来西亚' },
-        { code: 'SG', name: '新加坡' },   { code: 'AE', name: '阿联酋' },
-        { code: 'SA', name: '沙特' },     { code: 'TR', name: '土耳其' },
-        { code: 'EG', name: '埃及' },     { code: 'NG', name: '尼日利亚' },
-        { code: 'ZA', name: '南非' },     { code: 'GR', name: '希腊' },
-        { code: 'KW', name: '科威特' },   { code: 'PA', name: '巴拿马' }
-      ];
-
-      var TARGET_REGIONS = [
-        { id: 'US-CA', name: '加利福尼亚', country: 'US' },
-        { id: 'US-NY', name: '纽约',       country: 'US' },
-        { id: 'US-TX', name: '得克萨斯',   country: 'US' },
-        { id: 'JP-13', name: '东京都',     country: 'JP' },
-        { id: 'JP-27', name: '大阪府',     country: 'JP' },
-        { id: 'KR-11', name: '首尔',       country: 'KR' },
-        { id: 'GB-LND', name: '伦敦',      country: 'GB' },
-        { id: 'DE-BE', name: '柏林',       country: 'DE' },
-        { id: 'FR-IDF', name: '巴黎',      country: 'FR' },
-        { id: 'IT-MI', name: '米兰',       country: 'IT' },
-        { id: 'BR-SP', name: '圣保罗',     country: 'BR' },
-        { id: 'AU-NSW', name: '新南威尔士',country: 'AU' }
-      ];
-
-      var TARGET_CITIES = [
-        { id: '2418779', name: '伦敦 (London)', country: 'GB' },
-        { id: '2334456', name: '纽约 (New York)', country: 'US' },
-        { id: '2487610', name: '巴黎 (Paris)', country: 'FR' },
-        { id: '2442047', name: '东京 (Tokyo)', country: 'JP' },
-        { id: '2339945', name: '柏林 (Berlin)', country: 'DE' },
-        { id: '2385029', name: '米兰 (Milan)', country: 'IT' },
-        { id: '2391279', name: '首尔 (Seoul)', country: 'KR' }
-      ];
-
-      var targetGeoLevel = 'country';
-      var targetGeoSelected = []; /* {id, name, level} */
       var targetLocaleMs = null;  /* 语言多选下拉组件实例（MultiSelect） */
 
       function initTargetDrawer() {
@@ -1770,15 +1738,6 @@
         }
         // 语言：公用多选下拉组件（面板内带复选框）
         initLocaleMultiSelect();
-        // 国家下拉（用于筛选 region/city）
-        var cSel = document.getElementById('target-geo-country');
-        if (cSel.options.length <= 1) {
-          TARGET_COUNTRIES.forEach(function (c) {
-            cSel.add(new Option(c.code + ' ' + c.name, c.code));
-          });
-        }
-        reloadGeoList();
-        renderTargetGeoSelected();
       }
 
       /* 语言字段：初始化公用多选下拉组件（styles/multi-select.css + scripts/multi-select.js） */
@@ -1797,160 +1756,16 @@
         });
       }
 
-      function switchGeoTab(level) {
-        targetGeoLevel = level;
-        document.querySelectorAll('#target-geo-tabs .geo-tab').forEach(function (b) {
-          b.classList.toggle('active', b.dataset.level === level);
-        });
-        reloadGeoList();
-      }
-
-      function getGeoList() {
-        var country = document.getElementById('target-geo-country').value;
-        var kw = (document.getElementById('target-geo-search').value || '').trim().toLowerCase();
-        var list = (targetGeoLevel === 'country') ? TARGET_COUNTRIES
-                  : (targetGeoLevel === 'region')  ? TARGET_REGIONS
-                  :                                 TARGET_CITIES;
-        var filtered = list.filter(function (x) {
-          if (country && targetGeoLevel !== 'country' && x.country !== country) return false;
-          if (kw && x.name.toLowerCase().indexOf(kw) < 0 && (x.id || '').toString().toLowerCase().indexOf(kw) < 0) return false;
-          return true;
-        });
-        return filtered;
-      }
-
-      function reloadGeoList() {
-        var ul = document.getElementById('target-geo-list');
-        ul.innerHTML = '';
-        var list = getGeoList();
-        if (!list.length) {
-          ul.innerHTML = '<li style="padding:14px;color:#909399;text-align:center;">暂无数据</li>';
-          return;
-        }
-        list.forEach(function (x) {
-          var key = targetGeoLevel + ':' + x.id;
-          var li = document.createElement('li');
-          li.innerHTML = '<label><input type="checkbox" data-key="' + key + '" /> '
-            + (x.name || x.code) + '</label><span class="region-select-action" data-add="' + key + '">定向</span>';
-          li.querySelector('[data-add]').onclick = function () {
-            addTargetGeo(x.id, x.name || x.code, targetGeoLevel);
-          };
-          li.querySelector('input').onchange = function (e) {
-            if (e.target.checked) addTargetGeo(x.id, x.name || x.code, targetGeoLevel);
-            else removeTargetGeo(key);
-          };
-          ul.appendChild(li);
-        });
-        // 同步已选的勾选状态
-        targetGeoSelected.forEach(function (s) {
-          var cb = ul.querySelector('input[data-key="' + s.key + '"]');
-          if (cb) cb.checked = true;
-        });
-      }
-
-      function addTargetGeo(id, name, level) {
-        var key = level + ':' + id;
-        if (targetGeoSelected.some(function (s) { return s.key === key; })) return;
-        targetGeoSelected.push({ key: key, id: id, name: name, level: level });
-        renderTargetGeoSelected();
-        var cb = document.querySelector('#target-geo-list input[data-key="' + key + '"]');
-        if (cb) cb.checked = true;
-      }
-      function removeTargetGeo(key) {
-        targetGeoSelected = targetGeoSelected.filter(function (s) { return s.key !== key; });
-        renderTargetGeoSelected();
-        var cb = document.querySelector('#target-geo-list input[data-key="' + key + '"]');
-        if (cb) cb.checked = false;
-      }
-      function clearTargetGeo() {
-        targetGeoSelected = [];
-        renderTargetGeoSelected();
-        document.querySelectorAll('#target-geo-list input[type=checkbox]').forEach(function (cb) { cb.checked = false; });
-        document.getElementById('target-geo-all').checked = false;
-      }
-      function toggleSelectAll(master) {
-        var list = getGeoList();
-        list.forEach(function (x) {
-          var key = targetGeoLevel + ':' + x.id;
-          var has = targetGeoSelected.some(function (s) { return s.key === key; });
-          if (master.checked && !has) addTargetGeo(x.id, x.name || x.code, targetGeoLevel);
-          if (!master.checked && has) removeTargetGeo(key);
-        });
-      }
-      function importGeoBatch() {
-        var ta = prompt('批量导入：每行一个名称/代码/ID，例如：US / JP / 2442047', '');
-        if (!ta) return;
-        ta.split(/\r?\n/).map(function (s) { return s.trim(); }).filter(Boolean).forEach(function (raw) {
-          var hit = TARGET_COUNTRIES.find(function (x) { return x.code === raw || x.name === raw; })
-                 || TARGET_REGIONS.find(function (x)   { return x.id === raw || x.name === raw; })
-                 || TARGET_CITIES.find(function (x)   { return x.id === raw || x.name === raw; });
-          if (hit) {
-            var lvl = TARGET_COUNTRIES.indexOf(hit) >= 0 ? 'country'
-                    : TARGET_REGIONS.indexOf(hit)   >= 0 ? 'region'
-                    : 'city';
-            addTargetGeo(hit.id, hit.name || hit.code, lvl);
-          }
-        });
-      }
-      function renderTargetGeoSelected() {
-        var box = document.getElementById('target-geo-selected');
-        document.getElementById('target-geo-count').textContent = targetGeoSelected.length;
-        if (!targetGeoSelected.length) {
-          box.innerHTML = '<div class="empty-state" style="padding:60px 20px;"><div class="empty-state-icon">📍</div><span>暂无数据</span></div>';
-          return;
-        }
-        var html = '<ul class="region-select-list">';
-        targetGeoSelected.forEach(function (s) {
-          var lvlLabel = ({ country: '国家', region: '区域', city: '城市' })[s.level] || s.level;
-          html += '<li><label><span class="region-tag">' + lvlLabel + '</span>' + s.name + '</label><span class="region-select-action" data-rm="' + s.key + '">移除</span></li>';
-        });
-        html += '</ul>';
-        box.innerHTML = html;
-        box.querySelectorAll('[data-rm]').forEach(function (el) {
-          el.onclick = function () { removeTargetGeo(el.dataset.rm); };
-        });
-      }
-
-      function saveTarget() {
-        var name = (document.getElementById('target-name').value || '').trim();
-        if (!name) { alert('请输入定向包名称'); return; }
-        var ageMin = document.getElementById('target-age-min').value;
-        var ageMax = document.getElementById('target-age-max').value;
-        if (ageMin && ageMax && parseInt(ageMin) > parseInt(ageMax)) {
-          alert('最小年龄不能大于最大年龄'); return;
-        }
-        var gender = (document.querySelector('input[name="target-gender"]:checked') || {}).value;
-        var localeIds = targetLocaleMs ? targetLocaleMs.getSelectedIds().map(function (id) { return parseInt(id, 10); }) : [];
-        var geo = { countries: [], regions: [], cities: [] };
-        targetGeoSelected.forEach(function (s) {
-          var key = s.level === 'country' ? 'countries' : s.level === 'region' ? 'regions' : 'cities';
-          geo[key].push(s.id);
-        });
-        var targeting = {};
-        if (gender === '1') targeting.genders = [1];
-        else if (gender === '2') targeting.genders = [2];
-        if (ageMin) targeting.age_min = parseInt(ageMin, 10);
-        if (ageMax) targeting.age_max = parseInt(ageMax, 10);
-        if (localeIds.length) targeting.locales = localeIds;
-        if (geo.countries.length || geo.regions.length || geo.cities.length) {
-          targeting.geo_locations = {};
-          if (geo.countries.length) targeting.geo_locations.countries = geo.countries;
-          if (geo.regions.length)   targeting.geo_locations.regions   = geo.regions.map(function (id) { return { id: id }; });
-          if (geo.cities.length)    targeting.geo_locations.cities    = geo.cities.map(function (id) { return { id: id }; });
-        }
-        console.log('保存定向包', { name: name, targeting: targeting });
-        alert('已保存\n' + JSON.stringify({ name: name, targeting: targeting }, null, 2));
-        closeTargetDrawer();
-      }
-
       /* ===== 定向包 tab 渲染（数据源：localStorage['delivery_targeting_packages']，由 scripts/targeting-packages.js 维护） ===== */
       function rerenderTemplateTarget() {
         var tbody = document.getElementById('template-target-tbody');
         if (!tbody) return;
+        var root = document.getElementById('template-tab-target');
         var kw  = ((document.getElementById('template-target-search')   || {}).value || '');
+        var kwField = (root && root.querySelector('.filter-combo-select')) ? root.querySelector('.filter-combo-select').value : '名称';
         var lng = ((document.getElementById('template-target-lang')     || {}).value || '');
         var crt = ((document.getElementById('template-target-creator')  || {}).value || '');
-        var list = filterTargetingPackages({ keyword: kw, lang: lng, creator: crt });
+        var list = filterTargetingPackages({ keyword: kw, keywordField: kwField, lang: lng, creator: crt });
         tbody.innerHTML = list.map(function (p) {
           return buildTargetingRowHtml(p, {
             checked: false,

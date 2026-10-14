@@ -2077,11 +2077,11 @@
             <div class="form-row">
               <div class="form-label">性别：</div>
               <div class="form-field">
-                <div class="radio-group">
-                  <label class="radio-item"><input type="radio" name="batch-target-gender" value="all" checked /> 不限</label>
-                  <label class="radio-item"><input type="radio" name="batch-target-gender" value="1" /> 男</label>
-                  <label class="radio-item"><input type="radio" name="batch-target-gender" value="2" /> 女</label>
-                </div>
+                <select id="batch-target-gender" class="form-select form-input-md">
+                  <option value="">不限</option>
+                  <option value="1">男</option>
+                  <option value="2">女</option>
+                </select>
               </div>
             </div>
             <div class="form-row">
@@ -3659,7 +3659,7 @@
         if (ageMin && ageMax && parseInt(ageMin, 10) > parseInt(ageMax, 10)) {
           alert('最小年龄不能大于最大年龄'); return;
         }
-        var gender = (document.querySelector('input[name="batch-target-gender"]:checked') || {}).value;
+        var gender = (document.getElementById('batch-target-gender') || {}).value || '';
         var localeIds = batchTargetLocaleMs ? batchTargetLocaleMs.getSelectedIds().map(function (id) { return parseInt(id, 10); }) : [];
         var geo = { countries: [], regions: [], cities: [] };
         batchTargetGeoSelected.forEach(function (s) {

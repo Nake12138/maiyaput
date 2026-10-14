@@ -597,7 +597,13 @@
 
             <div id="auto-delivery-task" class="tab-content">
               <div class="filter-bar">
-                <input type="text" class="filter-input" placeholder="请输入" />
+                <div class="filter-combo" data-filter-type="task-name">
+                  <select class="filter-combo-select">
+                    <option>任务名称</option>
+                    <option>任务ID</option>
+                  </select>
+                  <input type="text" class="filter-combo-input" placeholder="请输入" />
+                </div>
                 <select class="filter-select">
                   <option value="">请选择状态</option>
                   <option value="active">生效</option>
@@ -623,7 +629,7 @@
                 </div>
               </div>
 
-              <div class="filter-status">已选择0个任务 任务状态</div>
+              <div class="filter-status">已选择<span id="autoTaskSelectedCount">0</span>个任务 任务状态</div>
 
               <div class="table-card">
                 <div class="table-wrapper">
@@ -649,9 +655,9 @@
                     </thead>
                     <tbody>
                       <tr>
-                        <td><input type="checkbox" class="task-checkbox" /></td>
+                        <td><input type="checkbox" class="task-checkbox" onchange="updateAutoTaskSelectedCount()" /></td>
                         <td>15530</td>
-                        <td><span class="link" onclick="showTaskDetail(15530)">任务二：番茄漫画激活活跃用户</span></td>
+                        <td><span class="link" onclick="drillTaskToAccount(15530)">任务二：番茄漫画激活活跃用户</span></td>
                         <td><span class="tag tag-success">生效</span></td>
                         <td>10</td>
                         <td>最大转化</td>
@@ -659,7 +665,7 @@
                         <td>100</td>
                         <td>--</td>
                         <td>崛原生免费</td>
-                        <td>--</td>
+                        <td>2026-08-19 22:20:34</td>
                         <td>还音</td>
                         <td>还音</td>
                         <td>2026-08-19 22:20:34</td>
@@ -672,9 +678,9 @@
                         </td>
                       </tr>
                       <tr>
-                        <td><input type="checkbox" class="task-checkbox" /></td>
+                        <td><input type="checkbox" class="task-checkbox" onchange="updateAutoTaskSelectedCount()" /></td>
                         <td>15523</td>
-                        <td><span class="link" onclick="showTaskDetail(15523)">任务十二：番茄漫画完璧归赵召回</span></td>
+                        <td><span class="link" onclick="drillTaskToAccount(15523)">任务十二：番茄漫画完璧归赵召回</span></td>
                         <td><span class="tag tag-error">停用</span></td>
                         <td>10</td>
                         <td>稳定成本</td>
@@ -691,6 +697,29 @@
                             <button class="row-action-btn" onclick="editTask(15523)">编辑</button>
                             <button class="row-action-btn" onclick="copyTask(15523)">复制</button>
                             <button class="row-action-btn" onclick="showTaskLog(15523)">日志</button>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td><input type="checkbox" class="task-checkbox" onchange="updateAutoTaskSelectedCount()" /></td>
+                        <td>15508</td>
+                        <td><span class="link" onclick="drillTaskToAccount(15508)">任务五：番茄漫画新增付费混投</span></td>
+                        <td><span class="tag tag-success">生效</span></td>
+                        <td>30</td>
+                        <td>稳定成本</td>
+                        <td>1.08</td>
+                        <td>5000</td>
+                        <td>0.8</td>
+                        <td>崛原生免费</td>
+                        <td>2026-10-13 09:02:11</td>
+                        <td>娜可</td>
+                        <td>娜可</td>
+                        <td>2026-10-13 09:15:40</td>
+                        <td>
+                          <div class="row-actions">
+                            <button class="row-action-btn" onclick="editTask(15508)">编辑</button>
+                            <button class="row-action-btn" onclick="copyTask(15508)">复制</button>
+                            <button class="row-action-btn" onclick="showTaskLog(15508)">日志</button>
                           </div>
                         </td>
                       </tr>
@@ -724,19 +753,1067 @@
             </div>
 
             <div id="auto-delivery-account" class="tab-content" style="display: none;">
-              <div class="table-card" style="padding: 40px; text-align: center; color: #999;">账户列表 - 待后续截图补充</div>
+              <div class="filter-bar">
+                <div class="filter-range">
+                  <span class="filter-range-label">创建时间</span>
+                  <input type="text" placeholder="开始时间" />
+                  <span class="filter-range-tilde">-</span>
+                  <input type="text" placeholder="结束时间" />
+                  <button type="button" class="filter-range-pick" title="选择日期">📅</button>
+                  <span class="filter-range-unit">月</span>
+                </div>
+                <div class="filter-combo" data-filter-type="task-name">
+                  <select class="filter-combo-select">
+                    <option>任务名称</option>
+                    <option>任务ID</option>
+                  </select>
+                  <input type="text" class="filter-combo-input" placeholder="请输入" />
+                </div>
+                <div class="filter-combo" data-filter-type="account-name">
+                  <select class="filter-combo-select">
+                    <option>账户名称</option>
+                    <option>账户ID</option>
+                    <option>账户列表ID</option>
+                  </select>
+                  <input type="text" class="filter-combo-input" placeholder="请输入" />
+                </div>
+                <div class="filter-combo">
+                  <select class="filter-combo-select">
+                    <option>短剧名称</option>
+                    <option>短剧ID</option>
+                  </select>
+                  <input type="text" class="filter-combo-input" placeholder="请输入" />
+                </div>
+                <select class="filter-select">
+                  <option value="">请选择业务场景</option>
+                  <option value="fufei">崛原生免费</option>
+                </select>
+                <select class="filter-select">
+                  <option value="">请选择创建人</option>
+                  <option value="huanxue">还音</option>
+                  <option value="nake">娜可</option>
+                </select>
+                <div class="filter-actions">
+                  <button class="btn btn-info btn-sm" onclick="searchAutoDeliverySub('account')">查询</button>
+                  <button class="btn btn-outline btn-sm" onclick="resetAutoDeliverySubFilters('account')">重置</button>
+                </div>
+              </div>
+
+              <div class="filter-status">已选择<span id="autoAccountSelectedCount">0</span>个  重试</div>
+
+              <div class="table-card">
+                <div class="table-wrapper">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th class="checkbox-col"><input type="checkbox" id="selectAllAccounts" onclick="toggleSelectAllAutoRows('selectAllAccounts','auto-account-checkbox','autoAccountSelectedCount')" /></th>
+                        <th>ID</th>
+                        <th>账户信息</th>
+                        <th>任务信息</th>
+                        <th>项目数</th>
+                        <th>单元数</th>
+                        <th>操作</th>
+                        <th>投放短剧</th>
+                        <th>业务场景</th>
+                        <th>创建人</th>
+                        <th>创建时间</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><input type="checkbox" class="auto-account-checkbox" onchange="updateAutoAccountSelectedCount()" /></td>
+                        <td>5167</td>
+                        <td>
+                          <span class="link" onclick="drillAccountToProject(5167)">JL-MAD-IAA-二组-京服..</span>
+                          <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7648215203578101780</div>
+                        </td>
+                        <td>
+                          <span class="link">任务二：番茄漫画激活..</span>
+                          <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:15530</div>
+                        </td>
+                        <td><span class="link">2</span><div style="font-size:12px;"><span class="stat-success-text">成功2</span> <span class="stat-row-empty">失败0</span></div></td>
+                        <td><span class="link">4</span><div style="font-size:12px;"><span class="stat-success-text">成功4</span> <span class="stat-row-empty">失败0</span></div></td>
+                        <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAutoRow('账户',5167)">刷新</button> <button class="row-action-btn" onclick="retryAutoRow('账户',5167)">重试</button></div></td>
+                        <td>番茄漫画：完璧归赵<br /><span style="color:var(--color-text-tertiary);">ID:JM1024</span></td>
+                        <td>崛原生免费</td>
+                        <td>还音</td>
+                        <td>2026-10-10 09:12:33</td>
+                      </tr>
+                      <tr>
+                        <td><input type="checkbox" class="auto-account-checkbox" onchange="updateAutoAccountSelectedCount()" /></td>
+                        <td>5166</td>
+                        <td>
+                          <span class="link" onclick="drillAccountToProject(5166)">JL-MAD-IAA-二组-京服..</span>
+                          <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7648215203578101666</div>
+                        </td>
+                        <td>
+                          <span class="link">任务十二：番茄漫画完璧..</span>
+                          <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:15523</div>
+                        </td>
+                        <td><span class="link">2</span><div style="font-size:12px;"><span class="stat-success-text">成功2</span> <span class="stat-row-empty">失败0</span></div></td>
+                        <td><span class="link">4</span><div style="font-size:12px;"><span class="stat-success-text">成功3</span> <span style="color:var(--color-error);">失败1</span></div></td>
+                        <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAutoRow('账户',5166)">刷新</button> <button class="row-action-btn" onclick="retryAutoRow('账户',5166)">重试</button></div></td>
+                        <td>番茄漫画：完璧归赵<br /><span style="color:var(--color-text-tertiary);">ID:JM1024</span></td>
+                        <td>崛原生免费</td>
+                        <td>还音</td>
+                        <td>2026-10-10 09:12:33</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="pagination">
+                  <span class="pagination-info">共 21 条</span>
+                  <div class="pagination-pages">
+                    <button class="page-btn" onclick="changePage('prev')">&lt;</button>
+                    <button class="page-btn active" onclick="changePage(1)">1</button>
+                    <button class="page-btn" onclick="changePage(2)">2</button>
+                    <button class="page-btn" onclick="changePage('next')">&gt;</button>
+                  </div>
+                  <select class="page-size-select">
+                    <option value="20">20 条/页</option>
+                    <option value="50">50 条/页</option>
+                    <option value="100">100 条/页</option>
+                  </select>
+                  <span>跳至</span>
+                  <input type="text" class="jump-input" value="1" />
+                  <span>页</span>
+                </div>
+              </div>
             </div>
             <div id="auto-delivery-project" class="tab-content" style="display: none;">
-              <div class="table-card" style="padding: 40px; text-align: center; color: #999;">项目列表 - 待后续截图补充</div>
+              <div class="filter-bar">
+                <div class="filter-combo" data-filter-type="task-name">
+                  <select class="filter-combo-select">
+                    <option>任务名称</option>
+                    <option>任务ID</option>
+                  </select>
+                  <input type="text" class="filter-combo-input" placeholder="请输入" />
+                </div>
+                <div class="filter-combo" data-filter-type="account-name">
+                  <select class="filter-combo-select">
+                    <option>账户名称</option>
+                    <option>账户ID</option>
+                  </select>
+                  <input type="text" class="filter-combo-input" placeholder="请输入" />
+                </div>
+                <div class="filter-combo" data-filter-type="project-name">
+                  <select class="filter-combo-select">
+                    <option>项目名称</option>
+                    <option>项目ID</option>
+                  </select>
+                  <input type="text" class="filter-combo-input" placeholder="请输入" />
+                </div>
+                <div class="filter-combo">
+                  <select class="filter-combo-select">
+                    <option>短剧名称</option>
+                    <option>短剧ID</option>
+                  </select>
+                  <input type="text" class="filter-combo-input" placeholder="请输入" />
+                </div>
+                <select class="filter-select">
+                  <option value="">请选择上传状态</option>
+                  <option value="success">成功</option>
+                  <option value="fail">失败</option>
+                </select>
+                <select class="filter-select">
+                  <option value="">请选择创建人</option>
+                  <option value="huanxue">还音</option>
+                  <option value="nake">娜可</option>
+                </select>
+                <div class="filter-actions">
+                  <button class="btn btn-info btn-sm" onclick="searchAutoDeliverySub('project')">查询</button>
+                  <button class="btn btn-outline btn-sm" onclick="resetAutoDeliverySubFilters('project')">重置</button>
+                </div>
+              </div>
+
+              <div class="filter-status">已选择<span id="autoProjectSelectedCount">0</span>个  重试</div>
+
+              <div class="table-card">
+                <div class="table-wrapper">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th class="checkbox-col"><input type="checkbox" id="selectAllProjects" onclick="toggleSelectAllAutoRows('selectAllProjects','auto-project-checkbox','autoProjectSelectedCount')" /></th>
+                        <th>ID</th>
+                        <th>项目信息</th>
+                        <th>上传状态</th>
+                        <th>单元数</th>
+                        <th>操作</th>
+                        <th>竞价策略</th>
+                        <th>日预算</th>
+                        <th>账户信息</th>
+                        <th>任务信息</th>
+                        <th>投放短剧</th>
+                        <th>业务场景</th>
+                        <th>创建人</th>
+                        <th>创建时间</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><input type="checkbox" class="auto-project-checkbox" onchange="updateAutoProjectSelectedCount()" /></td>
+                        <td>90012</td>
+                        <td>
+                          <span class="link" onclick="drillProjectToUnit(90012)">任务二-项目A-激活..</span>
+                          <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7455532211008899</div>
+                        </td>
+                        <td><span class="tag tag-success">成功</span></td>
+                        <td><span class="link">2</span><div style="font-size:12px;"><span class="stat-success-text">成功2</span> <span class="stat-row-empty">失败0</span></div></td>
+                        <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAutoRow('项目',90012)">刷新</button> <button class="row-action-btn" onclick="retryAutoRow('项目',90012)">重试</button></div></td>
+                        <td>最大转化</td>
+                        <td>1000</td>
+                        <td>
+                          JL-MAD-IAA-二组-京服..
+                          <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7648215203578101780</div>
+                        </td>
+                        <td>
+                          任务二：番茄漫画激活..
+                          <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:15530</div>
+                        </td>
+                        <td>番茄漫画：完璧归赵<br /><span style="color:var(--color-text-tertiary);">ID:JM1024</span></td>
+                        <td>崛原生免费</td>
+                        <td>还音</td>
+                        <td>2026-10-10 09:12:35</td>
+                      </tr>
+                      <tr>
+                        <td><input type="checkbox" class="auto-project-checkbox" onchange="updateAutoProjectSelectedCount()" /></td>
+                        <td>90011</td>
+                        <td>
+                          <span class="link" onclick="drillProjectToUnit(90011)">任务十二-项目B-召回..</span>
+                          <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7455532211007788</div>
+                        </td>
+                        <td><span class="tag tag-error">失败</span></td>
+                        <td><span class="link">2</span><div style="font-size:12px;"><span class="stat-success-text">成功1</span> <span style="color:var(--color-error);">失败1</span></div></td>
+                        <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAutoRow('项目',90011)">刷新</button> <button class="row-action-btn" onclick="retryAutoRow('项目',90011)">重试</button></div></td>
+                        <td>稳定成本</td>
+                        <td>3000</td>
+                        <td>
+                          JL-MAD-IAA-二组-京服..
+                          <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7648215203578101666</div>
+                        </td>
+                        <td>
+                          任务十二：番茄漫画完璧..
+                          <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:15523</div>
+                        </td>
+                        <td>番茄漫画：完璧归赵<br /><span style="color:var(--color-text-tertiary);">ID:JM1024</span></td>
+                        <td>崛原生免费</td>
+                        <td>还音</td>
+                        <td>2026-10-10 09:12:35</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="pagination">
+                  <span class="pagination-info">共 42 条</span>
+                  <div class="pagination-pages">
+                    <button class="page-btn" onclick="changePage('prev')">&lt;</button>
+                    <button class="page-btn active" onclick="changePage(1)">1</button>
+                    <button class="page-btn" onclick="changePage(2)">2</button>
+                    <button class="page-btn" onclick="changePage(3)">3</button>
+                    <button class="page-btn" onclick="changePage('next')">&gt;</button>
+                  </div>
+                  <select class="page-size-select">
+                    <option value="20">20 条/页</option>
+                    <option value="50">50 条/页</option>
+                    <option value="100">100 条/页</option>
+                  </select>
+                  <span>跳至</span>
+                  <input type="text" class="jump-input" value="1" />
+                  <span>页</span>
+                </div>
+              </div>
             </div>
             <div id="auto-delivery-unit" class="tab-content" style="display: none;">
-              <div class="table-card" style="padding: 40px; text-align: center; color: #999;">单元列表 - 待后续截图补充</div>
+              <div class="filter-bar">
+                <div class="filter-combo" data-filter-type="task-name">
+                  <select class="filter-combo-select">
+                    <option>任务名称</option>
+                    <option>任务ID</option>
+                  </select>
+                  <input type="text" class="filter-combo-input" placeholder="请输入" />
+                </div>
+                <div class="filter-combo" data-filter-type="account-name">
+                  <select class="filter-combo-select">
+                    <option>账户名称</option>
+                    <option>账户ID</option>
+                  </select>
+                  <input type="text" class="filter-combo-input" placeholder="请输入" />
+                </div>
+                <div class="filter-combo" data-filter-type="project-name">
+                  <select class="filter-combo-select">
+                    <option>项目名称</option>
+                    <option>项目ID</option>
+                  </select>
+                  <input type="text" class="filter-combo-input" placeholder="请输入" />
+                </div>
+                <div class="filter-combo" data-filter-type="unit-name">
+                  <select class="filter-combo-select">
+                    <option>单元名称</option>
+                    <option>单元ID</option>
+                  </select>
+                  <input type="text" class="filter-combo-input" placeholder="请输入" />
+                </div>
+                <select class="filter-select">
+                  <option value="">请选择上传状态</option>
+                  <option value="success">成功</option>
+                  <option value="fail">失败</option>
+                </select>
+                <select class="filter-select">
+                  <option value="">请选择创建人</option>
+                  <option value="huanxue">还音</option>
+                  <option value="nake">娜可</option>
+                </select>
+                <div class="filter-actions">
+                  <button class="btn btn-info btn-sm" onclick="searchAutoDeliverySub('unit')">查询</button>
+                  <button class="btn btn-outline btn-sm" onclick="resetAutoDeliverySubFilters('unit')">重置</button>
+                </div>
+              </div>
+
+              <div class="filter-status">已选择<span id="autoUnitSelectedCount">0</span>个  重试</div>
+
+              <div class="table-card">
+                <div class="table-wrapper">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th class="checkbox-col"><input type="checkbox" id="selectAllUnits" onclick="toggleSelectAllAutoRows('selectAllUnits','auto-unit-checkbox','autoUnitSelectedCount')" /></th>
+                        <th>ID</th>
+                        <th>单元信息</th>
+                        <th>上传状态</th>
+                        <th>操作</th>
+                        <th>小程序</th>
+                        <th>竞价策略</th>
+                        <th>ROI系数</th>
+                        <th>出价</th>
+                        <th>日预算</th>
+                        <th>项目信息</th>
+                        <th>账户信息</th>
+                        <th>任务信息</th>
+                        <th>创建人</th>
+                        <th>创建时间</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><input type="checkbox" class="auto-unit-checkbox" onchange="updateAutoUnitSelectedCount()" /></td>
+                        <td>30021</td>
+                        <td>
+                          <span class="link" onclick="showAutoUnitDetail(30021)">任务二-项目A-单元1</span>
+                          <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:6611223344556677</div>
+                        </td>
+                        <td><span class="tag tag-success">成功</span></td>
+                        <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAutoRow('单元',30021)">刷新</button> <button class="row-action-btn" onclick="retryAutoRow('单元',30021)">重试</button></div></td>
+                        <td>剧点-番茄漫画小程序</td>
+                        <td>最大转化</td>
+                        <td>--</td>
+                        <td>--</td>
+                        <td>500</td>
+                        <td>
+                          任务二-项目A-激活..
+                          <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7455532211008899</div>
+                        </td>
+                        <td>
+                          JL-MAD-IAA-二组-京服..
+                          <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7648215203578101780</div>
+                        </td>
+                        <td>
+                          任务二：番茄漫画激活..
+                          <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:15530</div>
+                        </td>
+                        <td>还音</td>
+                        <td>2026-10-10 09:12:40</td>
+                      </tr>
+                      <tr>
+                        <td><input type="checkbox" class="auto-unit-checkbox" onchange="updateAutoUnitSelectedCount()" /></td>
+                        <td>30020</td>
+                        <td>
+                          <span class="link" onclick="showAutoUnitDetail(30020)">任务十二-项目B-单元1</span>
+                          <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:6611223344555566</div>
+                        </td>
+                        <td><span class="tag tag-error">失败</span></td>
+                        <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAutoRow('单元',30020)">刷新</button> <button class="row-action-btn" onclick="retryAutoRow('单元',30020)">重试</button></div></td>
+                        <td>剧点-番茄漫画小程序</td>
+                        <td>稳定成本</td>
+                        <td>1.03</td>
+                        <td>0.8</td>
+                        <td>1500</td>
+                        <td>
+                          任务十二-项目B-召回..
+                          <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7455532211007788</div>
+                        </td>
+                        <td>
+                          JL-MAD-IAA-二组-京服..
+                          <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7648215203578101666</div>
+                        </td>
+                        <td>
+                          任务十二：番茄漫画完璧..
+                          <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:15523</div>
+                        </td>
+                        <td>还音</td>
+                        <td>2026-10-10 09:12:40</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="pagination">
+                  <span class="pagination-info">共 84 条</span>
+                  <div class="pagination-pages">
+                    <button class="page-btn" onclick="changePage('prev')">&lt;</button>
+                    <button class="page-btn active" onclick="changePage(1)">1</button>
+                    <button class="page-btn" onclick="changePage(2)">2</button>
+                    <button class="page-btn" onclick="changePage(3)">3</button>
+                    <button class="page-btn" onclick="changePage(4)">4</button>
+                    <button class="page-btn" onclick="changePage(5)">5</button>
+                    <button class="page-btn" onclick="changePage('next')">&gt;</button>
+                  </div>
+                  <select class="page-size-select">
+                    <option value="20">20 条/页</option>
+                    <option value="50">50 条/页</option>
+                    <option value="100">100 条/页</option>
+                  </select>
+                  <span>跳至</span>
+                  <input type="text" class="jump-input" value="1" />
+                  <span>页</span>
+                </div>
+              </div>
             </div>
             </div>
           </div>
-        </div>
-      </main>
-    </div>
+
+          <!-- 半自动投放 -->
+          <div id="page-semi-auto-delivery" class="page">
+            <div class="breadcrumb">
+              <a href="#" onclick="showPage('dashboard')">首页</a>
+              <span class="breadcrumb-sep">/</span>
+              <span>巨量</span>
+              <span class="breadcrumb-sep">/</span>
+              <span>推广管理</span>
+              <span class="breadcrumb-sep">/</span>
+              <span>标准推广</span>
+              <span class="breadcrumb-sep">/</span>
+              <span>半自动投放</span>
+            </div>
+
+            <div class="content-card">
+              <div class="tabs-bar">
+                <div class="tabs" id="semi-auto-delivery-tabs">
+                  <button class="tab active" onclick="switchSemiAutoTab('task')">任务</button>
+                  <button class="tab" onclick="switchSemiAutoTab('account')">账户</button>
+                  <button class="tab" onclick="switchSemiAutoTab('project')">项目</button>
+                  <button class="tab" onclick="switchSemiAutoTab('unit')">单元</button>
+                </div>
+                <div class="filter-actions" style="gap: 10px; display: flex; align-items: center;">
+                  <a class="page-manual-link" href="#" onclick="alert('跳转至：半自动投放用户使用手册')" style="margin-right: 6px;">半自动投放用户使用手册</a>
+                  <button class="btn btn-danger btn-sm" onclick="alert('重新投放')">重新投放</button>
+                  <button class="btn btn-primary btn-sm" onclick="openNewSemiTaskModal()">新建计划</button>
+                </div>
+              </div>
+
+              <div id="semi-auto-delivery-task" class="tab-content">
+                <div class="filter-bar">
+                  <select class="filter-select" style="min-width: 130px;">
+                    <option value="">请选择任务类型</option>
+                    <option value="standard">标准投放</option>
+                    <option value="project">项目投放</option>
+                    <option value="batch">批量投放</option>
+                  </select>
+                  <div class="filter-combo" data-filter-type="task-name">
+                    <select class="filter-combo-select">
+                      <option>任务名称</option>
+                      <option>任务ID</option>
+                    </select>
+                    <input type="text" class="filter-combo-input" placeholder="请输入" />
+                  </div>
+                  <div class="filter-combo" data-filter-type="account-name">
+                    <select class="filter-combo-select">
+                      <option>账户名称</option>
+                      <option>账户ID</option>
+                    </select>
+                    <input type="text" class="filter-combo-input" placeholder="请输入" />
+                  </div>
+                  <select class="filter-select" style="min-width: 130px;">
+                    <option value="">选择短剧</option>
+                    <option value="fanqie">番茄漫画</option>
+                    <option value="shuku">书旗小说</option>
+                  </select>
+                  <select class="filter-select" style="min-width: 140px;">
+                    <option value="">选择投放模式</option>
+                    <option value="auto">自动</option>
+                    <option value="manual">手动</option>
+                  </select>
+                  <div class="filter-range">
+                    <span class="filter-range-label">创建时间</span>
+                    <input type="text" placeholder="开始时间" value="2026-09-22" />
+                    <span class="filter-range-tilde">-</span>
+                    <input type="text" placeholder="结束时间" value="2026-09-22" />
+                    <button type="button" class="filter-range-pick" title="选择日期">📅</button>
+                  </div>
+                  <div class="filter-actions">
+                    <button class="btn btn-info btn-sm" onclick="searchSemiAuto()">查询</button>
+                    <button class="btn btn-outline btn-sm" onclick="resetSemiAutoFilters()">重置</button>
+                  </div>
+                </div>
+
+                <div class="filter-status">
+                  已选择<span id="semiTaskSelectedCount">0</span>个
+                  <button class="row-action-btn" onclick="alert('批量删除')">删除</button>
+                  <button class="row-action-btn" onclick="alert('批量重试')">重试</button>
+                </div>
+
+                <div class="table-card">
+                  <div class="table-wrapper">
+                    <table class="data-table">
+                      <thead>
+                        <tr>
+                          <th class="checkbox-col"><input type="checkbox" id="selectAllSemiTasks" onclick="toggleSelectAllSemiRows('selectAllSemiTasks','semi-task-checkbox','semiTaskSelectedCount')" /></th>
+                          <th>ID</th>
+                          <th>任务名称</th>
+                          <th>投放短剧</th>
+                          <th>提交账户数</th>
+                          <th>提交项目数</th>
+                          <th>提交单元数</th>
+                          <th>操作</th>
+                          <th>创建人</th>
+                          <th>定时时间</th>
+                          <th>操作</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td><input type="checkbox" class="semi-task-checkbox" onchange="updateSemiTaskSelectedCount()" /></td>
+                          <td>1517904</td>
+                          <td>
+                            <span class="link" onclick="drillSemiTaskToAccount(1517904)">紫鸢-谁言寸草心-微信小程序/抖音小...</span>
+                          </td>
+                          <td>谁言寸草心<br><span style="font-size: 12px; color: var(--color-text-tertiary);">ID: 163</span></td>
+                          <td><span class="link" onclick="drillSemiTaskToAccount(1517904)">1</span></td>
+                          <td>
+                            <span class="link" onclick="drillSemiTaskToProject(1517904)">2</span>
+                            <div class="stat-stack">
+                              <div class="stat-row">
+                                <span class="stat-success-text">成功0</span>
+                                <span class="stat-fail-text fail-clickable" onclick="openSemiFailDetail(1517904, '紫鸢-谁言寸草心-微信小程序/抖音小...', 'project', 2)">失败2</span>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <span class="link" onclick="drillSemiTaskToUnit(1517904)">10</span>
+                            <div class="stat-stack">
+                              <div class="stat-row">
+                                <span class="stat-success-text">成功0</span>
+                                <span class="stat-fail-text fail-clickable" onclick="openSemiFailDetail(1517904, '紫鸢-谁言寸草心-微信小程序/抖音小...', 'unit', 17)">失败17</span>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="row-actions">
+                              <button class="row-action-btn" onclick="alert('刷新')">刷新</button>
+                              <button class="row-action-btn" onclick="alert('重试')">重试</button>
+                            </div>
+                          </td>
+                          <td>紫鸢</td>
+                          <td>--</td>
+                          <td>
+                            <div class="row-actions">
+                              <button class="row-action-btn" onclick="alert('查看模板')">查看模板</button>
+                              <button class="row-action-btn" onclick="copySemiTask(1517904)">复制</button>
+                              <button class="row-action-btn" onclick="alert('删除')">删除</button>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td><input type="checkbox" class="semi-task-checkbox" onchange="updateSemiTaskSelectedCount()" /></td>
+                          <td>1517903</td>
+                          <td>
+                            <span class="link" onclick="drillSemiTaskToAccount(1517903)">紫鸢-无人知我是真仙-抖音小...</span>
+                          </td>
+                          <td>
+                            无人知我是真仙(番茄)<br>
+                            <span style="font-size: 12px; color: var(--color-text-tertiary);">ID: 54218</span>
+                          </td>
+                          <td><span class="link" onclick="drillSemiTaskToAccount(1517903)">1</span></td>
+                          <td>
+                            <span class="link" onclick="drillSemiTaskToProject(1517903)">1</span>
+                            <div class="stat-stack">
+                              <div class="stat-row">
+                                <span class="stat-success-text">成功0</span>
+                                <span class="stat-fail-text fail-clickable" onclick="openSemiFailDetail(1517903, '紫鸢-无人知我是真仙-抖音小...', 'project', 1)">失败1</span>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <span class="link" onclick="drillSemiTaskToUnit(1517903)">20</span>
+                            <div class="stat-stack">
+                              <div class="stat-row">
+                                <span class="stat-success-text">成功0</span>
+                                <span class="stat-fail-text fail-clickable" onclick="openSemiFailDetail(1517903, '紫鸢-无人知我是真仙-抖音小...', 'unit', 17)">失败17</span>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="row-actions">
+                              <button class="row-action-btn" onclick="alert('刷新')">刷新</button>
+                              <button class="row-action-btn" onclick="alert('重试')">重试</button>
+                            </div>
+                          </td>
+                          <td>紫鸢</td>
+                          <td>--</td>
+                          <td>
+                            <div class="row-actions">
+                              <button class="row-action-btn" onclick="alert('查看模板')">查看模板</button>
+                              <button class="row-action-btn" onclick="copySemiTask(1517903)">复制</button>
+                              <button class="row-action-btn" onclick="alert('删除')">删除</button>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div class="pagination">
+                    <span class="pagination-info">共 2 条</span>
+                    <div class="pagination-pages">
+                      <button class="page-btn" onclick="changePage('prev')">&lt;</button>
+                      <button class="page-btn active" onclick="changePage(1)">1</button>
+                      <button class="page-btn" onclick="changePage('next')">&gt;</button>
+                    </div>
+                    <select class="page-size-select">
+                      <option value="10">10 条/页</option>
+                      <option value="20">20 条/页</option>
+                      <option value="50">50 条/页</option>
+                    </select>
+                    <span>跳至</span>
+                    <input type="text" class="jump-input" value="1" />
+                    <span>页</span>
+                  </div>
+                </div>
+              </div>
+
+
+              <div id="semi-auto-delivery-account" class="tab-content" style="display: none;">
+                <div class="filter-bar">
+                  <div class="filter-range">
+                    <span class="filter-range-label">创建时间</span>
+                    <input type="text" placeholder="开始时间" />
+                    <span class="filter-range-tilde">-</span>
+                    <input type="text" placeholder="结束时间" />
+                    <button type="button" class="filter-range-pick" title="选择日期">📅</button>
+                  </div>
+                  <div class="filter-combo" data-filter-type="task-name">
+                    <select class="filter-combo-select">
+                      <option>任务名称</option>
+                      <option>任务ID</option>
+                    </select>
+                    <input type="text" class="filter-combo-input" placeholder="请输入" />
+                  </div>
+                  <div class="filter-combo" data-filter-type="account-name">
+                    <select class="filter-combo-select">
+                      <option>账户名称</option>
+                      <option>账户ID</option>
+                      <option>账户列表ID</option>
+                    </select>
+                    <input type="text" class="filter-combo-input" placeholder="请输入" />
+                  </div>
+                  <select class="filter-select">
+                    <option value="">请选择业务场景</option>
+                    <option value="fufei">崛原生免费</option>
+                  </select>
+                  <select class="filter-select">
+                    <option value="">请选择创建人</option>
+                    <option value="ziyuan">紫鸢</option>
+                    <option value="huanxue">还音</option>
+                  </select>
+                  <div class="filter-actions">
+                    <button class="btn btn-info btn-sm" onclick="searchSemiSub('account')">查询</button>
+                    <button class="btn btn-outline btn-sm" onclick="resetSemiSubFilters('account')">重置</button>
+                  </div>
+                </div>
+
+                <div class="filter-status">已选择<span id="semiAccountSelectedCount">0</span>个  重试</div>
+
+                <div class="table-card">
+                  <div class="table-wrapper">
+                    <table class="data-table">
+                      <thead>
+                        <tr>
+                          <th class="checkbox-col"><input type="checkbox" id="selectAllSemiAccounts" onclick="toggleSelectAllSemiRows('selectAllSemiAccounts','semi-account-checkbox','semiAccountSelectedCount')" /></th>
+                          <th>ID</th>
+                          <th>账户信息</th>
+                          <th>任务信息</th>
+                          <th>项目数</th>
+                          <th>单元数</th>
+                          <th>操作</th>
+                          <th>投放短剧</th>
+                          <th>业务场景</th>
+                          <th>创建人</th>
+                          <th>创建时间</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td><input type="checkbox" class="semi-account-checkbox" onchange="updateSemiAccountSelectedCount()" /></td>
+                          <td>5167</td>
+                          <td>
+                            <span class="link" onclick="drillSemiAccountToProject(5167)">JL-MAD-IAA-二组-京服..</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 7648215203578101780</div>
+                          </td>
+                          <td>
+                            <span class="link" onclick="drillSemiAccountToProject(5167)">紫鸢-谁言寸草心-微信小...</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 1517904</div>
+                          </td>
+                          <td>
+                            <span class="link" onclick="drillSemiAccountToProject(5167)">2</span>
+                            <div class="stat-stack">
+                              <div class="stat-row">
+                                <span class="stat-success-text">成功0</span>
+                                <span class="stat-fail-text fail-clickable" onclick="openSemiFailDetail(5167, 'JL-MAD-IAA-二组-京服..', 'project', 2)">失败2</span>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <span class="link" onclick="drillSemiAccountToUnit(5167)">10</span>
+                            <div class="stat-stack">
+                              <div class="stat-row">
+                                <span class="stat-success-text">成功0</span>
+                                <span class="stat-fail-text fail-clickable" onclick="openSemiFailDetail(5167, 'JL-MAD-IAA-二组-京服..', 'unit', 17)">失败17</span>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="row-actions">
+                              <button class="row-action-btn" onclick="alert('刷新账户 5167')">刷新</button>
+                              <button class="row-action-btn" onclick="alert('重试账户 5167')">重试</button>
+                            </div>
+                          </td>
+                          <td>谁言寸草心</td>
+                          <td>崛原生免费</td>
+                          <td>紫鸢</td>
+                          <td>2026-09-22 10:15:30</td>
+                        </tr>
+                        <tr>
+                          <td><input type="checkbox" class="semi-account-checkbox" onchange="updateSemiAccountSelectedCount()" /></td>
+                          <td>5166</td>
+                          <td>
+                            <span class="link" onclick="drillSemiAccountToProject(5166)">JL-MAD-IAA-三组-京服..</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 7648215203578101781</div>
+                          </td>
+                          <td>
+                            <span class="link" onclick="drillSemiAccountToProject(5166)">紫鸢-无人知我是真仙-抖音小...</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 1517903</div>
+                          </td>
+                          <td>
+                            <span class="link" onclick="drillSemiAccountToProject(5166)">1</span>
+                            <div class="stat-stack">
+                              <div class="stat-row">
+                                <span class="stat-success-text">成功0</span>
+                                <span class="stat-fail-text fail-clickable" onclick="openSemiFailDetail(5166, 'JL-MAD-IAA-三组-京服..', 'project', 1)">失败1</span>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <span class="link" onclick="drillSemiAccountToUnit(5166)">20</span>
+                            <div class="stat-stack">
+                              <div class="stat-row">
+                                <span class="stat-success-text">成功0</span>
+                                <span class="stat-fail-text fail-clickable" onclick="openSemiFailDetail(5166, 'JL-MAD-IAA-三组-京服..', 'unit', 17)">失败17</span>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="row-actions">
+                              <button class="row-action-btn" onclick="alert('刷新账户 5166')">刷新</button>
+                              <button class="row-action-btn" onclick="alert('重试账户 5166')">重试</button>
+                            </div>
+                          </td>
+                          <td>无人知我是真仙</td>
+                          <td>崛原生免费</td>
+                          <td>紫鸢</td>
+                          <td>2026-09-22 11:20:08</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div class="pagination">
+                    <span class="pagination-info">共 2 条</span>
+                    <div class="pagination-pages">
+                      <button class="page-btn" onclick="changePage('prev')">&lt;</button>
+                      <button class="page-btn active" onclick="changePage(1)">1</button>
+                      <button class="page-btn" onclick="changePage('next')">&gt;</button>
+                    </div>
+                    <select class="page-size-select">
+                      <option value="10">10 条/页</option>
+                      <option value="20">20 条/页</option>
+                    </select>
+                    <span>跳至</span>
+                    <input type="text" class="jump-input" value="1" />
+                    <span>页</span>
+                  </div>
+                </div>
+              </div>
+
+              <div id="semi-auto-delivery-project" class="tab-content" style="display: none;">
+                <div class="filter-bar">
+                  <div class="filter-combo" data-filter-type="account-name">
+                    <select class="filter-combo-select">
+                      <option>账户名称</option>
+                      <option>账户ID</option>
+                    </select>
+                    <input type="text" class="filter-combo-input" placeholder="请输入" />
+                  </div>
+                  <div class="filter-combo" data-filter-type="project-name">
+                    <select class="filter-combo-select">
+                      <option>项目名称</option>
+                      <option>项目ID</option>
+                    </select>
+                    <input type="text" class="filter-combo-input" placeholder="请输入" />
+                  </div>
+                  <select class="filter-select">
+                    <option value="">请选择状态</option>
+                    <option value="success">成功</option>
+                    <option value="failed">失败</option>
+                    <option value="pending">上传中</option>
+                  </select>
+                  <div class="filter-actions">
+                    <button class="btn btn-info btn-sm" onclick="searchSemiSub('project')">查询</button>
+                    <button class="btn btn-outline btn-sm" onclick="resetSemiSubFilters('project')">重置</button>
+                  </div>
+                </div>
+
+                <div class="filter-status">已选择<span id="semiProjectSelectedCount">0</span>个  重试</div>
+
+                <div class="table-card">
+                  <div class="table-wrapper">
+                    <table class="data-table">
+                      <thead>
+                        <tr>
+                          <th class="checkbox-col"><input type="checkbox" id="selectAllSemiProjects" onclick="toggleSelectAllSemiRows('selectAllSemiProjects','semi-project-checkbox','semiProjectSelectedCount')" /></th>
+                          <th>ID</th>
+                          <th>项目信息</th>
+                          <th>所属账户</th>
+                          <th>单元数</th>
+                          <th>状态</th>
+                          <th>操作</th>
+                          <th>投放短剧</th>
+                          <th>业务场景</th>
+                          <th>创建人</th>
+                          <th>创建时间</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td><input type="checkbox" class="semi-project-checkbox" onchange="updateSemiProjectSelectedCount()" /></td>
+                          <td>80812</td>
+                          <td>
+                            <span class="link" onclick="drillSemiProjectToUnit(80812)">谁言寸草心-小程序-A</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: prj_80812</div>
+                          </td>
+                          <td>
+                            <span class="link" onclick="drillSemiAccountToProject(5167)">JL-MAD-IAA-二组-京服..</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 7648215203578101780</div>
+                          </td>
+                          <td>
+                            <span class="link" onclick="drillSemiProjectToUnit(80812)">6</span>
+                            <div class="stat-stack">
+                              <div class="stat-row">
+                                <span class="stat-success-text">成功3</span>
+                                <span class="stat-fail-text fail-clickable" onclick="openSemiFailDetail(80812, '谁言寸草心-小程序-A', 'unit', 3)">失败3</span>
+                              </div>
+                            </div>
+                          </td>
+                          <td><span class="tag tag-success">上传成功</span></td>
+                          <td>
+                            <div class="row-actions">
+                              <button class="row-action-btn" onclick="alert('刷新项目 80812')">刷新</button>
+                              <button class="row-action-btn" onclick="alert('重试项目 80812')">重试</button>
+                            </div>
+                          </td>
+                          <td>谁言寸草心</td>
+                          <td>崛原生免费</td>
+                          <td>紫鸢</td>
+                          <td>2026-09-22 10:18:11</td>
+                        </tr>
+                        <tr>
+                          <td><input type="checkbox" class="semi-project-checkbox" onchange="updateSemiProjectSelectedCount()" /></td>
+                          <td>80811</td>
+                          <td>
+                            <span class="link" onclick="drillSemiProjectToUnit(80811)">谁言寸草心-小程序-B</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: prj_80811</div>
+                          </td>
+                          <td>
+                            <span class="link" onclick="drillSemiAccountToProject(5167)">JL-MAD-IAA-二组-京服..</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 7648215203578101780</div>
+                          </td>
+                          <td>
+                            <span class="link" onclick="drillSemiProjectToUnit(80811)">4</span>
+                            <div class="stat-stack">
+                              <div class="stat-row">
+                                <span class="stat-success-text">成功1</span>
+                                <span class="stat-fail-text fail-clickable" onclick="openSemiFailDetail(80811, '谁言寸草心-小程序-B', 'unit', 3)">失败3</span>
+                              </div>
+                            </div>
+                          </td>
+                          <td><span class="tag tag-error">上传失败</span></td>
+                          <td>
+                            <div class="row-actions">
+                              <button class="row-action-btn" onclick="alert('刷新项目 80811')">刷新</button>
+                              <button class="row-action-btn" onclick="alert('重试项目 80811')">重试</button>
+                            </div>
+                          </td>
+                          <td>谁言寸草心</td>
+                          <td>崛原生免费</td>
+                          <td>紫鸢</td>
+                          <td>2026-09-22 10:18:11</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div class="pagination">
+                    <span class="pagination-info">共 2 条</span>
+                    <div class="pagination-pages">
+                      <button class="page-btn" onclick="changePage('prev')">&lt;</button>
+                      <button class="page-btn active" onclick="changePage(1)">1</button>
+                      <button class="page-btn" onclick="changePage('next')">&gt;</button>
+                    </div>
+                    <select class="page-size-select">
+                      <option value="10">10 条/页</option>
+                      <option value="20">20 条/页</option>
+                    </select>
+                    <span>跳至</span>
+                    <input type="text" class="jump-input" value="1" />
+                    <span>页</span>
+                  </div>
+                </div>
+              </div>
+
+              <div id="semi-auto-delivery-unit" class="tab-content" style="display: none;">
+                <div class="filter-bar">
+                  <div class="filter-combo" data-filter-type="project-name">
+                    <select class="filter-combo-select">
+                      <option>项目名称</option>
+                      <option>项目ID</option>
+                    </select>
+                    <input type="text" class="filter-combo-input" placeholder="请输入" />
+                  </div>
+                  <div class="filter-combo" data-filter-type="unit-name">
+                    <select class="filter-combo-select">
+                      <option>单元名称</option>
+                      <option>单元ID</option>
+                    </select>
+                    <input type="text" class="filter-combo-input" placeholder="请输入" />
+                  </div>
+                  <select class="filter-select">
+                    <option value="">请选择小程序</option>
+                    <option value="shucai">谁言寸草心</option>
+                    <option value="wuren">无人知我是真仙</option>
+                  </select>
+                  <select class="filter-select">
+                    <option value="">请选择竞价策略</option>
+                    <option value="max">最大转化</option>
+                    <option value="stable">稳定成本</option>
+                  </select>
+                  <div class="filter-actions">
+                    <button class="btn btn-info btn-sm" onclick="searchSemiSub('unit')">查询</button>
+                    <button class="btn btn-outline btn-sm" onclick="resetSemiSubFilters('unit')">重置</button>
+                  </div>
+                </div>
+
+                <div class="filter-status">已选择<span id="semiUnitSelectedCount">0</span>个  重试</div>
+
+                <div class="table-card">
+                  <div class="table-wrapper">
+                    <table class="data-table">
+                      <thead>
+                        <tr>
+                          <th class="checkbox-col"><input type="checkbox" id="selectAllSemiUnits" onclick="toggleSelectAllSemiRows('selectAllSemiUnits','semi-unit-checkbox','semiUnitSelectedCount')" /></th>
+                          <th>ID</th>
+                          <th>单元信息</th>
+                          <th>所属项目</th>
+                          <th>小程序</th>
+                          <th>竞价策略</th>
+                          <th>ROI系数</th>
+                          <th>出价</th>
+                          <th>日预算</th>
+                          <th>操作</th>
+                          <th>创建时间</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td><input type="checkbox" class="semi-unit-checkbox" onchange="updateSemiUnitSelectedCount()" /></td>
+                          <td>unit_209183</td>
+                          <td>
+                            <span class="link" onclick="alert('查看单元详情 unit_209183')">谁言寸草心-单元-A01</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: unit_209183</div>
+                          </td>
+                          <td>
+                            <span class="link" onclick="drillSemiProjectToUnit(80812)">谁言寸草心-小程序-A</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: prj_80812</div>
+                          </td>
+                          <td>谁言寸草心</td>
+                          <td>最大转化</td>
+                          <td>1.02</td>
+                          <td>0.85</td>
+                          <td>2000</td>
+                          <td>
+                            <div class="row-actions">
+                              <button class="row-action-btn" onclick="alert('刷新单元 unit_209183')">刷新</button>
+                              <button class="row-action-btn" onclick="alert('重试单元 unit_209183')">重试</button>
+                            </div>
+                          </td>
+                          <td>2026-09-22 10:22:04</td>
+                        </tr>
+                        <tr>
+                          <td><input type="checkbox" class="semi-unit-checkbox" onchange="updateSemiUnitSelectedCount()" /></td>
+                          <td>unit_209182</td>
+                          <td>
+                            <span class="link" onclick="alert('查看单元详情 unit_209182')">谁言寸草心-单元-A02</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: unit_209182</div>
+                          </td>
+                          <td>
+                            <span class="link" onclick="drillSemiProjectToUnit(80812)">谁言寸草心-小程序-A</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: prj_80812</div>
+                          </td>
+                          <td>谁言寸草心</td>
+                          <td>稳定成本</td>
+                          <td>1.05</td>
+                          <td>0.80</td>
+                          <td>1500</td>
+                          <td>
+                            <div class="row-actions">
+                              <button class="row-action-btn" onclick="alert('刷新单元 unit_209182')">刷新</button>
+                              <button class="row-action-btn" onclick="alert('重试单元 unit_209182')">重试</button>
+                            </div>
+                          </td>
+                          <td>2026-09-22 10:22:04</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div class="pagination">
+                    <span class="pagination-info">共 2 条</span>
+                    <div class="pagination-pages">
+                      <button class="page-btn" onclick="changePage('prev')">&lt;</button>
+                      <button class="page-btn active" onclick="changePage(1)">1</button>
+                      <button class="page-btn" onclick="changePage('next')">&gt;</button>
+                    </div>
+                    <select class="page-size-select">
+                      <option value="10">10 条/页</option>
+                      <option value="20">20 条/页</option>
+                    </select>
+                    <span>跳至</span>
+                    <input type="text" class="jump-input" value="1" />
+                    <span>页</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
     <!-- New Task Modal -->
     <div
@@ -777,7 +1854,7 @@
             background: #f9fafb;
           "
         >
-          <h3 style="margin: 0; font-size: 18px; font-weight: 600; color: #111827;">新建自动化任务</h3>
+          <h3 id="modal-new-task-title" style="margin: 0; font-size: 18px; font-weight: 600; color: #111827;">新建自动化任务</h3>
           <button
             onclick="closeNewTaskModal()"
             style="
@@ -870,20 +1947,31 @@
       }
 
       function resetAutoDeliveryFilters() {
-        document.querySelectorAll('#page-auto-delivery .filter-select').forEach(function (s) { s.selectedIndex = 0; });
-        document.querySelectorAll('#page-auto-delivery .filter-input').forEach(function (i) { i.value = ''; });
+        var root = document.getElementById('auto-delivery-task');
+        root.querySelectorAll('.filter-select').forEach(function (s) { s.selectedIndex = 0; });
+        root.querySelectorAll('.filter-input, .filter-combo-input').forEach(function (i) { i.value = ''; });
+        root.querySelectorAll('.filter-range input').forEach(function (i) { i.value = ''; });
       }
 
       function searchAutoDelivery() {
         alert('查询自动投放任务');
       }
 
-      function toggleSelectAllTasks() {
-        var checked = document.getElementById('selectAllTasks').checked;
-        document.querySelectorAll('#page-auto-delivery .task-checkbox').forEach(function (cb) { cb.checked = checked; });
+      function updateAutoTaskSelectedCount() {
+        var n = document.querySelectorAll('#auto-delivery-task .task-checkbox:checked').length;
+        document.getElementById('autoTaskSelectedCount').textContent = n;
+        document.getElementById('selectAllTasks').checked = n > 0 && n === document.querySelectorAll('#auto-delivery-task .task-checkbox').length;
       }
 
-      function openNewTaskModal() {
+      function toggleSelectAllTasks() {
+        var checked = document.getElementById('selectAllTasks').checked;
+        document.querySelectorAll('#auto-delivery-task .task-checkbox').forEach(function (cb) { cb.checked = checked; });
+        updateAutoTaskSelectedCount();
+      }
+
+      function openNewTaskModal(title) {
+        var titleEl = document.getElementById('modal-new-task-title');
+        if (titleEl) titleEl.textContent = title || '新建自动化任务';
         document.getElementById('modal-new-task').style.display = 'flex';
       }
 
@@ -898,20 +1986,217 @@
         closeNewTaskModal();
       }
 
+      /* ===== 名称下钻：切换 Tab 并自动带入对应列表的筛选项 ===== */
+      function setAutoDeliveryFilter(tabKey, filterType, optionText, value) {
+        var root = document.getElementById('auto-delivery-' + tabKey);
+        if (!root) return;
+        var combo = root.querySelector('[data-filter-type="' + filterType + '"]');
+        if (!combo) return;
+        var select = combo.querySelector('.filter-combo-select');
+        var input = combo.querySelector('.filter-combo-input');
+        if (select) select.value = optionText;
+        if (input) input.value = value;
+      }
+
+      function drillTaskToAccount(taskId) {
+        switchAutoDeliveryTab('account');
+        setAutoDeliveryFilter('account', 'task-name', '任务ID', taskId);
+      }
+
+      function drillAccountToProject(accountId) {
+        switchAutoDeliveryTab('project');
+        setAutoDeliveryFilter('project', 'account-name', '账户ID', accountId);
+      }
+
+      function drillProjectToUnit(projectId) {
+        switchAutoDeliveryTab('unit');
+        setAutoDeliveryFilter('unit', 'project-name', '项目ID', projectId);
+      }
+
       function showTaskDetail(id) {
-        alert('查看任务详情：' + id);
+        drillTaskToAccount(id);
       }
 
       function editTask(id) {
-        alert('编辑任务：' + id);
+        openNewTaskModal('编辑自动化任务');
       }
 
       function copyTask(id) {
-        alert('复制任务：' + id);
+        openNewTaskModal('复制自动化任务');
       }
 
       function showTaskLog(id) {
         alert('查看任务日志：' + id);
+      }
+
+      /* ===== 账户 / 项目 / 单元 Tab 通用交互 ===== */
+      function searchAutoDeliverySub(tabKey) {
+        var names = { account: '账户', project: '项目', unit: '单元' };
+        alert('查询' + (names[tabKey] || tabKey) + '列表');
+      }
+
+      function resetAutoDeliverySubFilters(tabKey) {
+        var root = document.getElementById('auto-delivery-' + tabKey);
+        if (!root) return;
+        root.querySelectorAll('.filter-select').forEach(function (s) { s.selectedIndex = 0; });
+        root.querySelectorAll('.filter-input, .filter-combo-input').forEach(function (i) { i.value = ''; });
+        root.querySelectorAll('.filter-range input').forEach(function (i) { i.value = ''; });
+      }
+
+      function toggleSelectAllAutoRows(masterId, childClass, countId) {
+        var checked = document.getElementById(masterId).checked;
+        document.querySelectorAll('.' + childClass).forEach(function (cb) { cb.checked = checked; });
+        var el = document.getElementById(countId);
+        if (el) el.textContent = checked ? document.querySelectorAll('.' + childClass).length : 0;
+      }
+
+      function updateAutoAccountSelectedCount() {
+        document.getElementById('autoAccountSelectedCount').textContent =
+          document.querySelectorAll('.auto-account-checkbox:checked').length;
+      }
+
+      function updateAutoProjectSelectedCount() {
+        document.getElementById('autoProjectSelectedCount').textContent =
+          document.querySelectorAll('.auto-project-checkbox:checked').length;
+      }
+
+      function updateAutoUnitSelectedCount() {
+        document.getElementById('autoUnitSelectedCount').textContent =
+          document.querySelectorAll('.auto-unit-checkbox:checked').length;
+      }
+
+      function refreshAutoRow(type, id) {
+        alert('刷新' + type + '：' + id);
+      }
+
+      function retryAutoRow(type, id) {
+        alert('重试' + type + '：' + id);
+      }
+
+      function showAutoUnitDetail(id) {
+        alert('查看单元详情：' + id);
+      }
+
+      /* ===== 半自动投放页 ===== */
+      function switchSemiAutoTab(tabName) {
+        ['task', 'account', 'project', 'unit'].forEach(function (name) {
+          document.getElementById('semi-auto-delivery-' + name).style.display = 'none';
+        });
+        document.getElementById('semi-auto-delivery-' + tabName).style.display = 'block';
+        document.querySelectorAll('#semi-auto-delivery-tabs .tab').forEach(function (tab, index) {
+          var names = ['task', 'account', 'project', 'unit'];
+          if (names[index] === tabName) {
+            tab.classList.add('active');
+          } else {
+            tab.classList.remove('active');
+          }
+        });
+      }
+
+      function searchSemiAuto() {
+        alert('查询半自动投放任务');
+      }
+
+      function resetSemiAutoFilters() {
+        var root = document.getElementById('semi-auto-delivery-task');
+        if (!root) return;
+        root.querySelectorAll('.filter-select').forEach(function (s) { s.selectedIndex = 0; });
+        root.querySelectorAll('.filter-input, .filter-combo-input').forEach(function (i) { i.value = ''; });
+        root.querySelectorAll('.filter-range input').forEach(function (i) { i.value = ''; });
+      }
+
+      function updateSemiTaskSelectedCount() {
+        var n = document.querySelectorAll('#semi-auto-delivery-task .semi-task-checkbox:checked').length;
+        document.getElementById('semiTaskSelectedCount').textContent = n;
+        var total = document.querySelectorAll('#semi-auto-delivery-task .semi-task-checkbox').length;
+        document.getElementById('selectAllSemiTasks').checked = n > 0 && n === total;
+      }
+
+      function toggleSelectAllSemiRows(masterId, childClass, countId) {
+        var checked = document.getElementById(masterId).checked;
+        document.querySelectorAll('.' + childClass).forEach(function (cb) { cb.checked = checked; });
+        var el = document.getElementById(countId);
+        if (el) el.textContent = checked ? document.querySelectorAll('.' + childClass).length : 0;
+      }
+
+      function openNewSemiTaskModal(title) {
+        openNewTaskModal(title || '新建半自动投放计划');
+      }
+
+      function copySemiTask(id) {
+        openNewTaskModal('复制半自动投放计划');
+      }
+
+      function setSemiSubFilter(tabKey, filterType, optionText, value) {
+        var root = document.getElementById('semi-auto-delivery-' + tabKey);
+        if (!root) return;
+        var combo = root.querySelector('[data-filter-type="' + filterType + '"]');
+        if (!combo) return;
+        var select = combo.querySelector('.filter-combo-select');
+        var input = combo.querySelector('.filter-combo-input');
+        if (select) select.value = optionText;
+        if (input) input.value = value;
+      }
+
+      function searchSemiSub(tabKey) {
+        var names = { account: '账户', project: '项目', unit: '单元' };
+        alert('查询半自动投放' + (names[tabKey] || tabKey) + '列表');
+      }
+
+      function resetSemiSubFilters(tabKey) {
+        var root = document.getElementById('semi-auto-delivery-' + tabKey);
+        if (!root) return;
+        root.querySelectorAll('.filter-select').forEach(function (s) { s.selectedIndex = 0; });
+        root.querySelectorAll('.filter-input, .filter-combo-input').forEach(function (i) { i.value = ''; });
+        root.querySelectorAll('.filter-range input').forEach(function (i) { i.value = ''; });
+      }
+
+      function updateSemiAccountSelectedCount() {
+        var n = document.querySelectorAll('#semi-auto-delivery-account .semi-account-checkbox:checked').length;
+        var el = document.getElementById('semiAccountSelectedCount');
+        if (el) el.textContent = n;
+      }
+
+      function updateSemiProjectSelectedCount() {
+        var n = document.querySelectorAll('#semi-auto-delivery-project .semi-project-checkbox:checked').length;
+        var el = document.getElementById('semiProjectSelectedCount');
+        if (el) el.textContent = n;
+      }
+
+      function updateSemiUnitSelectedCount() {
+        var n = document.querySelectorAll('#semi-auto-delivery-unit .semi-unit-checkbox:checked').length;
+        var el = document.getElementById('semiUnitSelectedCount');
+        if (el) el.textContent = n;
+      }
+
+      function drillSemiTaskToAccount(taskId) {
+        switchSemiAutoTab('account');
+        setSemiSubFilter('account', 'task-name', '任务ID', taskId);
+      }
+
+      function drillSemiTaskToProject(taskId) {
+        switchSemiAutoTab('project');
+        setSemiSubFilter('project', 'task-name', '任务ID', taskId);
+      }
+
+      function drillSemiTaskToUnit(taskId) {
+        switchSemiAutoTab('unit');
+        setSemiSubFilter('unit', 'task-name', '任务ID', taskId);
+      }
+
+      function drillSemiAccountToProject(accountId) {
+        switchSemiAutoTab('project');
+        setSemiSubFilter('project', 'account-name', '账户ID', accountId);
+      }
+
+      function drillSemiAccountToUnit(accountId) {
+        switchSemiAutoTab('unit');
+        setSemiSubFilter('unit', 'account-name', '账户ID', accountId);
+      }
+
+      function drillSemiProjectToUnit(projectId) {
+        switchSemiAutoTab('unit');
+        setSemiSubFilter('unit', 'project-name', '项目ID', projectId);
       }
 
       function changePage(page) {
@@ -923,7 +2208,160 @@
           alert('跳转到第 ' + page + ' 页');
         }
       }
+
+      /* ===== 半自动投放 - 失败明细弹框 ===== */
+      var SEMI_FAIL_DETAIL_META = {
+        project: { label: '项目', nameCol: '项目名称/ID' },
+        unit:    { label: '单元', nameCol: '单元名称/ID', parentCol: '所属项目名称/ID' }
+      };
+      var SEMI_FAIL_DETAIL_DATA = {
+        project: [
+          { name: '谁言寸草心-项目01', id: '80812', parent: null, account: '紫鸢-巨量账户A', accountId: '5167', error: { code: 40001, message: '账户余额不足，请充值后重试', request_id: '20261014120001A1012345678ABCDEF01' } },
+          { name: '谁言寸草心-项目02', id: '80813', parent: null, account: '紫鸢-巨量账户A', accountId: '5167', error: { code: 40003, message: '定向包与账户可投范围不匹配', request_id: '20261014120001B2023456789BCDEF012' } }
+        ],
+        unit: [
+          { name: '谁言寸草心-单元01', id: '120045', parent: '谁言寸草心-项目01', parentId: '80812', account: '紫鸢-巨量账户A', accountId: '5167', error: { code: 40010, message: '创意素材审核未通过，请更换素材', request_id: '20261014120001F106789013F0123456' } },
+          { name: '谁言寸草心-单元02', id: '120046', parent: '谁言寸草心-项目01', parentId: '80812', account: '紫鸢-巨量账户A', accountId: '5167', error: { code: 40011, message: '出价低于该版位最低出价限制', request_id: '20261014120001A20789012401234567' } },
+          { name: '谁言寸草心-单元03', id: '120047', parent: '谁言寸草心-项目02', parentId: '80813', account: '紫鸢-巨量账户A', accountId: '5167', error: { code: 40012, message: '素材宽高比不符合版位要求（建议 9:16）', request_id: '20261014120001B308901235012345678' } }
+        ]
+      };
+      var semiFailDetailState = { taskId: null, taskName: '', level: 'project', failCount: 0 };
+
+      function openSemiFailDetail(taskId, taskName, level, failCount) {
+        semiFailDetailState = { taskId: taskId, taskName: taskName, level: level, failCount: failCount || 0 };
+        renderSemiFailDetail();
+        var overlay = document.getElementById('semi-fail-detail-overlay');
+        var modal = document.getElementById('semi-fail-detail-modal');
+        if (overlay) overlay.classList.add('open');
+        if (modal) modal.classList.add('open');
+      }
+
+      function closeSemiFailDetailModal() {
+        var overlay = document.getElementById('semi-fail-detail-overlay');
+        var modal = document.getElementById('semi-fail-detail-modal');
+        if (overlay) overlay.classList.remove('open');
+        if (modal) modal.classList.remove('open');
+      }
+
+      function renderSemiFailDetail() {
+        var meta = SEMI_FAIL_DETAIL_META[semiFailDetailState.level];
+        var rows = SEMI_FAIL_DETAIL_DATA[semiFailDetailState.level] || [];
+        document.getElementById('semi-fail-detail-title').textContent =
+          '失败明细 - ' + semiFailDetailState.taskName + ' - ' + meta.label;
+        document.getElementById('semi-fail-detail-pagination-info').innerHTML =
+          '共 <strong>' + semiFailDetailState.failCount + '</strong> 条';
+
+        var head = '<tr><th class="checkbox-col"><input type="checkbox" onclick="toggleSemiFailDetailAll(this)" /></th>';
+        head += '<th>' + meta.nameCol + '</th>';
+        if (meta.parentCol) head += '<th>' + meta.parentCol + '</th>';
+        head += '<th>账户名称/ID</th><th>报错信息</th><th>操作</th></tr>';
+        document.getElementById('semi-fail-detail-thead').innerHTML = head;
+
+        var body = rows.map(function (r) {
+          var html = '<tr>';
+          html += '<td><input type="checkbox" class="semi-fail-detail-row-checkbox" onchange="updateSemiFailDetailSelectedCount()" /></td>';
+          html += '<td><div class="fail-detail-name">' + r.name + '</div><div class="fail-detail-id">ID: ' + r.id + '</div></td>';
+          if (meta.parentCol) {
+            html += '<td><div class="fail-detail-name">' + r.parent + '</div><div class="fail-detail-id">ID: ' + r.parentId + '</div></td>';
+          }
+          html += '<td><div class="fail-detail-name">' + r.account + '</div><div class="fail-detail-id">ID: ' + r.accountId + '</div></td>';
+          html += '<td>' + renderSemiFailDetailError(r.error) + '</td>';
+          html += '<td><div class="row-actions"><button class="row-action-btn" onclick="refreshSemiFailRow(\'' + r.name + '\')">刷新</button>' +
+                  '<button class="row-action-btn" onclick="retrySemiFailRow(\'' + r.name + '\')">重试</button></div></td>';
+          html += '</tr>';
+          return html;
+        }).join('');
+        document.getElementById('semi-fail-detail-tbody').innerHTML = body;
+        updateSemiFailDetailSelectedCount();
+      }
+
+      function toggleSemiFailDetailAll(headCb) {
+        document.querySelectorAll('#semi-fail-detail-modal .semi-fail-detail-row-checkbox').forEach(function (cb) {
+          cb.checked = headCb.checked;
+        });
+        updateSemiFailDetailSelectedCount();
+      }
+
+      function getCheckedSemiFailDetailCount() {
+        return document.querySelectorAll('#semi-fail-detail-modal .semi-fail-detail-row-checkbox:checked').length;
+      }
+
+      function updateSemiFailDetailSelectedCount() {
+        var n = getCheckedSemiFailDetailCount();
+        var countEl = document.getElementById('semi-fail-detail-selected-count');
+        if (countEl) countEl.textContent = n;
+      }
+
+      function refreshSemiFailRow(name) {
+        alert('刷新 ' + SEMI_FAIL_DETAIL_META[semiFailDetailState.level].label + '「' + name + '」（原型占位）');
+      }
+
+      function retrySemiFailRow(name) {
+        alert('重试 ' + SEMI_FAIL_DETAIL_META[semiFailDetailState.level].label + '「' + name + '」（原型占位）');
+      }
+
+      function renderSemiFailDetailError(err) {
+        if (err && typeof err === 'object' && !Array.isArray(err)) err = err.message || '';
+        return '<span class="fail-detail-error" title="' + escapeSemiAttr(err) + '">' + err + '</span>';
+      }
+
+      function escapeSemiAttr(s) {
+        return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      }
+
+      function batchRefreshSemiFailDetail() {
+        alert('批量刷新全部 ' + semiFailDetailState.failCount + ' 条失败' + SEMI_FAIL_DETAIL_META[semiFailDetailState.level].label + '（原型占位）');
+      }
+
+      function batchRetrySemiFailDetail() {
+        var n = getCheckedSemiFailDetailCount();
+        if (!n) { alert('请先勾选要重试的数据'); return; }
+        alert('批量重试 ' + n + ' 条失败' + SEMI_FAIL_DETAIL_META[semiFailDetailState.level].label + '（原型占位）');
+      }
     </script>
+    <!-- 半自动投放 - 失败明细弹框 -->
+    <div id="semi-fail-detail-overlay" class="modal-overlay" onclick="closeSemiFailDetailModal()"></div>
+    <div id="semi-fail-detail-modal" class="modal">
+      <div class="modal-card" style="width: min(1080px, calc(100vw - 40px));">
+        <div class="modal-header">
+          <span id="semi-fail-detail-title">失败明细</span>
+          <button class="modal-close" onclick="closeSemiFailDetailModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-filter" style="margin-bottom: 12px;">
+            <span style="font-size: 13px; color: var(--color-text-secondary);">已选择 <strong id="semi-fail-detail-selected-count" style="color: var(--color-info);">0</strong> 个</span>
+            <button class="row-action-btn" onclick="batchRetrySemiFailDetail()">重试</button>
+            <div style="margin-left: auto; display: flex; gap: 8px;">
+              <button class="btn btn-outline btn-sm" onclick="batchRefreshSemiFailDetail()">刷新</button>
+            </div>
+          </div>
+          <div class="table-wrapper" style="max-height: 420px; overflow-y: auto;">
+            <table class="modal-table">
+              <thead id="semi-fail-detail-thead"></thead>
+              <tbody id="semi-fail-detail-tbody"></tbody>
+            </table>
+          </div>
+          <div class="pagination" style="padding: 12px 0 0;">
+            <div class="pagination-info" id="semi-fail-detail-pagination-info">共 <strong>0</strong> 条</div>
+            <div class="pagination-pages">
+              <button class="page-btn">‹</button>
+              <button class="page-btn active">1</button>
+              <button class="page-btn">2</button>
+              <button class="page-btn">›</button>
+            </div>
+            <select class="page-size-select">
+              <option value="10">10 条/页</option>
+              <option value="20">20 条/页</option>
+              <option value="50">50 条/页</option>
+            </select>
+            <span>跳至</span>
+            <input type="text" class="jump-input" value="1" />
+            <span>页</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script src="scripts/header-user.js?v=20260924"></script>
   </body>
 </html>

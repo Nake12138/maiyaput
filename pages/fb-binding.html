@@ -27,11 +27,6 @@
       .assign-popover .popover-label { display: block; font-size: 13px; color: #374151; margin-bottom: 8px; }
       .assign-popover .popover-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px; }
 
-      /* 表格右上角工具图标 */
-      .table-tools { display: flex; justify-content: flex-end; gap: 10px; padding-bottom: 8px; }
-      .table-tools button { border: none; background: none; cursor: pointer; color: #6b7280; font-size: 14px; padding: 2px; }
-      .table-tools button:hover { color: #1890ff; }
-
       /* 全局 Toast（顶部居中） */
       .page-toast { position: fixed; left: 50%; top: 24px; transform: translateX(-50%) translateY(-8px); padding: 10px 18px; background: rgba(0, 0, 0, 0.78); color: #fff; border-radius: 4px; font-size: 14px; z-index: 2000; opacity: 0; pointer-events: none; transition: opacity 0.2s ease, transform 0.2s ease; }
       .page-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
@@ -285,9 +280,9 @@
               <div class="filter-bar-row">
                 <div class="filter-range">
                   <span class="filter-range-label">创建时间</span>
-                  <input type="text" value="2026-09-24" />
+                  <input type="text" id="binding-date-start" />
                   <span class="filter-range-tilde">-</span>
-                  <input type="text" value="2026-09-30" />
+                  <input type="text" id="binding-date-end" />
                   <button type="button" class="filter-range-pick" title="选择日期">📅</button>
                   <button type="button" class="filter-range-pick" title="按月选择">月</button>
                 </div>
@@ -339,10 +334,6 @@
 
             <!-- Binding Table -->
             <div class="table-card">
-              <div class="table-tools">
-                <button type="button" title="列设置" onclick="alert('列设置')">⚙</button>
-                <button type="button" title="全屏" onclick="alert('全屏')">⛶</button>
-              </div>
               <div class="table-wrapper">
                 <table class="data-table">
                   <thead>
@@ -392,7 +383,7 @@
                         <span class="cell-sub">ID: 1873474144116671357</span>
                       </td>
                       <td>2105199969800708...</td>
-                      <td>启光</td>
+                      <td data-copyright-multi="1">启光</td>
                       <td>TT_TimberDrama</td>
                       <td>
                         <span class="cell-main">凤逆乾坤（AI配音）</span>
@@ -513,9 +504,9 @@
                     <div class="filter-bar-row">
                       <div class="filter-range">
                         <span class="filter-range-label">创建时间</span>
-                        <input type="text" value="2026-09-01" />
+                        <input type="text" id="claim-date-start" />
                         <span class="filter-range-tilde">-</span>
-                        <input type="text" value="2026-09-30" />
+                        <input type="text" id="claim-date-end" />
                         <button type="button" class="filter-range-pick" title="选择日期">📅</button>
                         <button type="button" class="filter-range-pick" title="按月选择">月</button>
                       </div>
@@ -872,11 +863,23 @@
       /* 页面加载即按默认「不完整」过滤 */
       applyCompletenessFilter();
 
+      /* 创建时间默认选中当天 */
+      function fillTodayDateRange() {
+        var d = new Date();
+        var today = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+        [['binding-date-start'], ['binding-date-end'], ['claim-date-start'], ['claim-date-end']].forEach(function (ids) {
+          var el = document.getElementById(ids[0]);
+          if (el) el.value = today;
+        });
+      }
+      fillTodayDateRange();
+
       function resetBindingFilters() {
         document.querySelectorAll('#page-fb-binding .filter-bar .filter-combo-input').forEach(function (i) { i.value = ''; });
         document.querySelectorAll('#page-fb-binding .filter-bar .filter-select, #page-fb-binding .filter-bar .filter-combo-select').forEach(function (s) { s.selectedIndex = 0; });
         var comp = document.getElementById('filter-completeness');
         if (comp) comp.value = '';   // 清除选项 → 显示占位「请选择是否填写完整」且不过滤
+        fillTodayDateRange();        // 创建时间恢复为当天
         applyCompletenessFilter();
       }
 
@@ -934,6 +937,7 @@
       function resetClaimAdsetFilters() {
         document.querySelectorAll('#claim-drawer .filter-combo-input').forEach(function (i) { i.value = ''; });
         document.querySelectorAll('#claim-drawer .filter-combo-select').forEach(function (s) { s.selectedIndex = 0; });
+        fillTodayDateRange();
       }
 
       /* ===== 批量操作按钮：认领广告组 / 分配用户 ===== */
@@ -1112,6 +1116,7 @@
       /* ===== 关联绑定列表行内编辑 ===== */
       var editingBindingRow = null;     // 当前正在编辑的 <tr>
       var editingOrigLink = '';          // 推广链接原始文本
+      var editingOrigCopyright = '';     // 版权方原始 HTML
       var editingOrigOps = '';            // 操作列原始 HTML
 
       function editBindingRow(btn) {
@@ -1124,14 +1129,30 @@
         if (editingBindingRow && editingBindingRow !== tr) cancelBindingEdit();
         var tds = tr.querySelectorAll('td');
         var linkTd = tds[2];
+        var copyrightTd = tds[3];
         var opsTd = tds[12];
         if (!linkTd || !opsTd) return;
         editingBindingRow = tr;
         editingOrigLink = linkTd.textContent.trim();
+        editingOrigCopyright = copyrightTd ? copyrightTd.innerHTML : '';
         editingOrigOps = opsTd.innerHTML;
         var val = editingOrigLink.replace(/"/g, '&quot;');
         linkTd.innerHTML = '<input type="text" class="form-input" style="width:200px;padding:4px 8px;font-size:13px;" value="' + val + '" />';
-        opsTd.innerHTML = '<a href="#" class="link" onclick="saveBindingEdit();return false;">保存</a><a href="#" class="link" onclick="cancelBindingEdit();return false;">取消</a>';
+        /* 版权方编辑态：多版权方 → 下拉单选；单版权方 → 只读；链接为空 → 暂不可确定 */
+        if (copyrightTd) {
+          if (copyrightTd.getAttribute('data-copyright-multi') === '1') {
+            copyrightTd.innerHTML = '<select class="form-select" id="copyright-select" style="width:130px;padding:4px 8px;font-size:13px;">'
+              + '<option value="">请选择版权方</option>'
+              + '<option>启光</option>'
+              + '<option>星耀传媒</option>'
+              + '</select>';
+          } else if (editingOrigLink === '--' || editingOrigLink === '') {
+            copyrightTd.innerHTML = '--';
+          } else {
+            copyrightTd.innerHTML = '<span title="该链接仅对应 1 个版权方，不支持更改">' + editingOrigCopyright + '</span>';
+          }
+        }
+        opsTd.innerHTML = '<a href="#" class="link" onclick="saveBindingEdit();return false;">保存</a><a href="#" class="link" style="margin-left:8px;" onclick="cancelBindingEdit();return false;">取消</a>';
         tr.style.background = '#f6faff';
         var input = linkTd.querySelector('input');
         if (input) { input.focus(); input.select(); }
@@ -1141,10 +1162,21 @@
         if (!editingBindingRow) return;
         var tds = editingBindingRow.querySelectorAll('td');
         var linkTd = tds[2];
+        var copyrightTd = tds[3];
         var opsTd = tds[12];
         var input = linkTd.querySelector('input');
         var newVal = input ? input.value : editingOrigLink;
         linkTd.textContent = newVal;
+        /* 版权方写回：多版权方场景取下拉选中值（未选中保持原值） */
+        if (copyrightTd) {
+          var sel = document.getElementById('copyright-select');
+          if (sel && sel.value) {
+            copyrightTd.textContent = sel.value;
+            copyrightTd.setAttribute('data-copyright-multi', '1');   // 原型演示：该链接仍为多版权方场景
+          } else {
+            copyrightTd.innerHTML = editingOrigCopyright;
+          }
+        }
         opsTd.innerHTML = editingOrigOps;
         editingBindingRow.style.background = '';
         editingBindingRow = null;
@@ -1157,6 +1189,7 @@
         tds[2].innerHTML = editingOrigLink;
         tds[2].textContent = editingOrigLink;
         // 上面 innerHTML 已替换回纯文本，再用 textContent 截断多余节点，保证只保留原值
+        if (tds[3]) tds[3].innerHTML = editingOrigCopyright;
         tds[12].innerHTML = editingOrigOps;
         editingBindingRow.style.background = '';
         editingBindingRow = null;
