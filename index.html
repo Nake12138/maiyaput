@@ -831,8 +831,8 @@
                           <span class="link">任务二：番茄漫画激活..</span>
                           <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:15530</div>
                         </td>
-                        <td><span class="link">2</span><div style="font-size:12px;"><span class="stat-success-text">成功2</span> <span class="stat-row-empty">失败0</span></div></td>
-                        <td><span class="link">4</span><div style="font-size:12px;"><span class="stat-success-text">成功4</span> <span class="stat-row-empty">失败0</span></div></td>
+                        <td><span class="link">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功1</span><span class="stat-fail-text fail-clickable" onclick="openAutoFailDetail(5167, 'JL-MAD-IAA-二组-京服..', 'project', 1)">失败1</span></div></div></td>
+                        <td><span class="link">4</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功4</span><span class="stat-row-empty">失败0</span></div></div></td>
                         <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAutoRow('账户',5167)">刷新</button> <button class="row-action-btn" onclick="retryAutoRow('账户',5167)">重试</button></div></td>
                         <td>番茄漫画：完璧归赵<br /><span style="color:var(--color-text-tertiary);">ID:JM1024</span></td>
                         <td>崛原生免费</td>
@@ -850,8 +850,8 @@
                           <span class="link">任务十二：番茄漫画完璧..</span>
                           <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:15523</div>
                         </td>
-                        <td><span class="link">2</span><div style="font-size:12px;"><span class="stat-success-text">成功2</span> <span class="stat-row-empty">失败0</span></div></td>
-                        <td><span class="link">4</span><div style="font-size:12px;"><span class="stat-success-text">成功3</span> <span style="color:var(--color-error);">失败1</span></div></td>
+                        <td><span class="link">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功2</span><span class="stat-row-empty">失败0</span></div></div></td>
+                        <td><span class="link">4</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功3</span><span class="stat-fail-text fail-clickable" onclick="openAutoFailDetail(5166, 'JL-MAD-IAA-二组-京服..', 'unit', 1)">失败1</span></div></div></td>
                         <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAutoRow('账户',5166)">刷新</button> <button class="row-action-btn" onclick="retryAutoRow('账户',5166)">重试</button></div></td>
                         <td>番茄漫画：完璧归赵<br /><span style="color:var(--color-text-tertiary);">ID:JM1024</span></td>
                         <td>崛原生免费</td>
@@ -959,7 +959,7 @@
                           <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7455532211008899</div>
                         </td>
                         <td><span class="tag tag-success">成功</span></td>
-                        <td><span class="link">2</span><div style="font-size:12px;"><span class="stat-success-text">成功2</span> <span class="stat-row-empty">失败0</span></div></td>
+                        <td><span class="link">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功2</span><span class="stat-row-empty">失败0</span></div></div></td>
                         <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAutoRow('项目',90012)">刷新</button> <button class="row-action-btn" onclick="retryAutoRow('项目',90012)">重试</button></div></td>
                         <td>最大转化</td>
                         <td>1000</td>
@@ -984,7 +984,7 @@
                           <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7455532211007788</div>
                         </td>
                         <td><span class="tag tag-error">失败</span></td>
-                        <td><span class="link">2</span><div style="font-size:12px;"><span class="stat-success-text">成功1</span> <span style="color:var(--color-error);">失败1</span></div></td>
+                        <td><span class="link">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功1</span><span class="stat-fail-text fail-clickable" onclick="openAutoFailDetail(90011, '任务十二-项目B-召回', 'unit', 1)">失败1</span></div></div></td>
                         <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAutoRow('项目',90011)">刷新</button> <button class="row-action-btn" onclick="retryAutoRow('项目',90011)">重试</button></div></td>
                         <td>稳定成本</td>
                         <td>3000</td>
@@ -2225,10 +2225,28 @@
           { name: '谁言寸草心-单元03', id: '120047', parent: '谁言寸草心-项目02', parentId: '80813', account: '紫鸢-巨量账户A', accountId: '5167', error: { code: 40012, message: '素材宽高比不符合版位要求（建议 9:16）', request_id: '20261014120001B308901235012345678' } }
         ]
       };
-      var semiFailDetailState = { taskId: null, taskName: '', level: 'project', failCount: 0 };
+      /* 自动化任务 - 失败明细数据（与半自动投放共用弹框，仅数据源不同） */
+      var AUTO_FAIL_DETAIL_DATA = {
+        project: [
+          { name: '任务二-项目A-激活', id: '90013', parent: null, account: 'JL-MAD-IAA-二组-京服..', accountId: '5167', error: { code: 40003, message: '定向包与账户可投范围不匹配', request_id: '20261010150012C3034567890CDEF013' } }
+        ],
+        unit: [
+          { name: '任务二-项目A-激活-单元01', id: '130045', parent: '任务二-项目A-激活', parentId: '90013', account: 'JL-MAD-IAA-二组-京服..', accountId: '5167', error: { code: 40001, message: 'You no longer have access to the TikTok account used in this ad. To continue editing, select a new identity and creative material or re-apply for access.', request_id: '20261010150012D4045678901DEF0124' } },
+          { name: '任务十二-项目B-召回-单元02', id: '130046', parent: '任务十二-项目B-召回', parentId: '90012', account: 'JL-MAD-IAA-二组-京服..', accountId: '5166', error: { code: 40011, message: '出价低于该版位最低出价限制', request_id: '20261010150012E5056789012EF01235' } }
+        ]
+      };
+      var semiFailDetailState = { taskId: null, taskName: '', level: 'project', failCount: 0, source: 'semi' };
 
       function openSemiFailDetail(taskId, taskName, level, failCount) {
-        semiFailDetailState = { taskId: taskId, taskName: taskName, level: level, failCount: failCount || 0 };
+        openFailDetailModal(taskId, taskName, level, failCount, 'semi');
+      }
+
+      function openAutoFailDetail(taskId, taskName, level, failCount) {
+        openFailDetailModal(taskId, taskName, level, failCount, 'auto');
+      }
+
+      function openFailDetailModal(taskId, taskName, level, failCount, source) {
+        semiFailDetailState = { taskId: taskId, taskName: taskName, level: level, failCount: failCount || 0, source: source || 'semi' };
         renderSemiFailDetail();
         var overlay = document.getElementById('semi-fail-detail-overlay');
         var modal = document.getElementById('semi-fail-detail-modal');
@@ -2245,7 +2263,8 @@
 
       function renderSemiFailDetail() {
         var meta = SEMI_FAIL_DETAIL_META[semiFailDetailState.level];
-        var rows = SEMI_FAIL_DETAIL_DATA[semiFailDetailState.level] || [];
+        var dataSource = semiFailDetailState.source === 'auto' ? AUTO_FAIL_DETAIL_DATA : SEMI_FAIL_DETAIL_DATA;
+        var rows = dataSource[semiFailDetailState.level] || [];
         document.getElementById('semi-fail-detail-title').textContent =
           '失败明细 - ' + semiFailDetailState.taskName + ' - ' + meta.label;
         document.getElementById('semi-fail-detail-pagination-info').innerHTML =
