@@ -8,7 +8,7 @@
 | 优先级 | 高 |
 | 涉及页面 | 半自动投放任务列表、账户列表、项目列表；自动化任务账户列表、项目列表 |
 | 涉及原型 | https://nake12138.github.io/maiyaput/#semi-auto-delivery |
-| 参考截图 | `outputs/semi-task-fail-entry.png` |
+| 参考截图 | `outputs/semi-task-fail-entry.png`（半自动投放任务列表失败入口）<br>`outputs/auto-account-fail-entry.png`（自动化任务账户列表失败入口）<br>`outputs/auto-account-fail-detail.png`（自动化任务项目级失败明细弹框） |
 
 ---
 
@@ -63,7 +63,7 @@
 | --- | --- |
 | R2-1 | 点击任务/账户/项目行的「失败M」后，弹出模态弹框 |
 | R2-2 | 失败入口与弹框层级对应：任务「提交项目数」→ 项目级；任务「提交单元数」→ 单元级；账户「项目数」→ 项目级；账户「单元数」→ 单元级；项目「单元数」→ 单元级 |
-| R2-3 | 弹框标题格式：`失败明细 - {名称} - {层级}`，层级为「项目」或「单元」 |
+| R2-3 | 弹框标题格式：`失败明细 - {名称}(ID:{列表ID}) - {层级}`，层级为「项目」或「单元」；其中列表ID为表格第一列ID（任务/账户/项目行ID） |
 | R2-4 | 弹框背景遮罩，点击遮罩或关闭按钮可关闭弹框 |
 | R2-5 | 半自动投放与自动化任务共用同一套弹框组件与交互规则，仅数据源不同 |
 
@@ -135,7 +135,7 @@
 - [ ] 自动化任务账户列表「项目数」「单元数」展示紧凑「成功N 失败M」
 - [ ] 自动化任务项目列表「单元数」展示紧凑「成功N 失败M」
 - [ ] 自动化任务账户/项目列表的「失败M」点击后弹出失败明细弹框
-- [ ] 弹框标题为「失败明细 - {名称} - {项目/单元}」
+- [ ] 弹框标题为「失败明细 - {名称}(ID:{列表ID}) - {项目/单元}」
 - [ ] 项目级弹框表格含：选择、项目名称/ID、账户名称/ID、报错信息、操作
 - [ ] 单元级弹框表格含：选择、单元名称/ID、所属项目名称/ID、账户名称/ID、报错信息、操作
 - [ ] 报错信息以红色文本展示，最多 3 行，内容为后端 `message` 字段
@@ -150,4 +150,4 @@
 
 - 半自动投放列表：https://nake12138.github.io/maiyaput/#semi-auto-delivery
 - 自动化任务列表：https://nake12138.github.io/maiyaput/#auto-delivery
-- 参考截图：`outputs/semi-task-fail-entry.png`
+- 参考截图：`outputs/semi-task-fail-entry.png`（半自动投放任务列表失败入口）、`outputs/auto-account-fail-entry.png`（自动化任务账户列表失败入口）、`outputs/auto-account-fail-detail.png`（自动化任务项目级失败明细弹框）

@@ -2265,8 +2265,10 @@
         var meta = SEMI_FAIL_DETAIL_META[semiFailDetailState.level];
         var dataSource = semiFailDetailState.source === 'auto' ? AUTO_FAIL_DETAIL_DATA : SEMI_FAIL_DETAIL_DATA;
         var rows = dataSource[semiFailDetailState.level] || [];
+        var titleName = semiFailDetailState.taskName || '（未命名）';
+        var titleIdStr = semiFailDetailState.taskId != null ? '(ID:' + semiFailDetailState.taskId + ')' : '';
         document.getElementById('semi-fail-detail-title').textContent =
-          '失败明细 - ' + semiFailDetailState.taskName + ' - ' + meta.label;
+          '失败明细 - ' + titleName + titleIdStr + ' - ' + meta.label;
         document.getElementById('semi-fail-detail-pagination-info').innerHTML =
           '共 <strong>' + semiFailDetailState.failCount + '</strong> 条';
 
