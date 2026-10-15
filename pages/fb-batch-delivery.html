@@ -67,6 +67,29 @@
         border-radius: 4px;
       }
       .config-account-list li:hover { background: #f5f7fa; }
+      .config-account-list li { position: relative; padding-right: 30px; }
+      .config-account-item-del {
+        position: absolute;
+        top: 7px;
+        right: 6px;
+        width: 18px;
+        height: 18px;
+        line-height: 16px;
+        text-align: center;
+        border: 1px solid #e5e7eb;
+        border-radius: 50%;
+        background: #fff;
+        color: #9ca3af;
+        font-size: 12px;
+        cursor: pointer;
+        transition: all .15s;
+        user-select: none;
+      }
+      .config-account-item-del:hover {
+        border-color: var(--color-error);
+        color: var(--color-error);
+        background: #fff1f0;
+      }
       .config-account-name {
         font-size: 13px;
         color: #1f2937;
@@ -3183,16 +3206,45 @@
         var html = '';
         accountSelectedIds.forEach(function (id) {
           var item = MOCK_ACCOUNT_DATA.find(function (a) { return a.id === id; });
+          var delBtn = '<div class="config-account-item-del" title="删除" onclick="removeConfigAccount(\'' + escHtml(String(id)) + '\')">×</div>';
           if (item) {
             html += '<li>'
               + '<div class="config-account-name" title="' + escHtml(item.name) + '">' + escHtml(item.name) + '</div>'
               + '<div class="config-account-id" title="ID:' + escHtml(item.id) + '">ID:' + escHtml(item.id) + '</div>'
+              + delBtn
               + '</li>';
           } else {
-            html += '<li><div class="config-account-name" title="' + escHtml(id) + '">' + escHtml(id) + '</div></li>';
+            html += '<li><div class="config-account-name" title="' + escHtml(id) + '">' + escHtml(id) + '</div>' + delBtn + '</li>';
           }
         });
         listEl.innerHTML = html;
+      }
+
+      /* 账号模块：快捷删除单个账户（同步移除已选数组与预览区对应账户） */
+      function removeConfigAccount(id) {
+        var idx = accountSelectedIds.indexOf(id);
+        if (idx > -1) accountSelectedIds.splice(idx, 1);
+        renderConfigAccountList();
+        var target = null;
+        document.querySelectorAll('.preview-account-item').forEach(function (it) {
+          var idEl = it.querySelector('.preview-account-id');
+          if (idEl && idEl.textContent.replace(/^ID:/, '').trim() === String(id)) target = it;
+        });
+        if (target) {
+          var wasActive = target.classList.contains('active');
+          var list = target.parentElement;
+          target.remove();
+          if (wasActive) {
+            var first = list ? list.querySelector('.preview-account-item') : null;
+            if (first) {
+              switchPreviewAccount(first, first.getAttribute('data-pane'));
+            } else {
+              document.querySelectorAll('.preview-pane').forEach(function (p) { p.classList.remove('active'); });
+            }
+          }
+        }
+        sortFbPreviewAccounts();
+        updatePreviewTotals();
       }
 
       function clearAccountSelection() {

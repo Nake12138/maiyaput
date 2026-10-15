@@ -76,6 +76,29 @@
         border-radius: 4px;
       }
       .config-account-list li:hover { background: #f5f7fa; }
+      .config-account-list li { position: relative; padding-right: 30px; }
+      .config-account-item-del {
+        position: absolute;
+        top: 7px;
+        right: 6px;
+        width: 18px;
+        height: 18px;
+        line-height: 16px;
+        text-align: center;
+        border: 1px solid #e5e7eb;
+        border-radius: 50%;
+        background: #fff;
+        color: #9ca3af;
+        font-size: 12px;
+        cursor: pointer;
+        transition: all .15s;
+        user-select: none;
+      }
+      .config-account-item-del:hover {
+        border-color: var(--color-error);
+        color: var(--color-error);
+        background: #fff1f0;
+      }
       .config-account-name {
         font-size: 13px;
         color: #1f2937;
@@ -151,6 +174,57 @@
         color: #fff;
         border-color: #1890ff;
       }
+      var INFRA_IDENTITY_ACCOUNTS = [
+        { id: '100123456789012', name: 'Dramatical Shorts' },
+        { id: '200987654321098', name: 'Romance Reels' },
+        { id: '300556677889911', name: '悬疑剧场 Mystery' },
+        { id: '400112233445566', name: 'Drama Hub Latam' },
+        { id: '500665544332211', name: 'K-Drama Daily' }
+      ];
+
+      function renderIdentityPageOptions() {
+        var opts = '<option value="">请选择身份</option>';
+        INFRA_IDENTITY_ACCOUNTS.forEach(function (a) {
+          opts += '<option value="' + a.id + '">' + a.name + '</option>';
+        });
+        document.querySelectorAll('.identity-page-select').forEach(function (sel) {
+          var val = sel.value;
+          sel.innerHTML = opts;
+          sel.value = val;
+        });
+      }
+      function renderIdentityBatchOptions() {
+        var sel = document.getElementById('identity-batch-page');
+        if (!sel) return;
+        var opts = '<option value="">请选择身份</option>';
+        INFRA_IDENTITY_ACCOUNTS.forEach(function (a) {
+          opts += '<option value="' + a.id + '">' + a.name + '</option>';
+        });
+        sel.innerHTML = opts;
+      }
+      function openIdentityBatchSetModal() { openModal('identity-batch-overlay', 'identity-batch-modal'); renderIdentityBatchOptions(); }
+      function closeIdentityBatchSetModal() { closeModal('identity-batch-overlay', 'identity-batch-modal'); }
+      function confirmIdentityBatchSet() {
+        var pageId = document.getElementById('identity-batch-page').value;
+        if (!pageId) { alert('请选择身份'); return; }
+        document.querySelectorAll('#identity-select-modal tbody tr').forEach(function (tr) {
+          var cb = tr.querySelector('input[type="checkbox"]');
+          var sel = tr.querySelector('.identity-page-select');
+          if (cb && cb.checked && sel) sel.value = pageId;
+        });
+        closeIdentityBatchSetModal();
+      }
+
+      /* ===== 使用商品库开关：控制关联商品投放按钮显隐 ===== */
+      function setCatalogSwitch(isOn, btn) {
+        var group = document.getElementById('tt-catalog-switch');
+        if (!group) return;
+        group.querySelectorAll('.segmented-item').forEach(function (b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        var productBtn = document.getElementById('btn-product-placement');
+        if (productBtn) productBtn.style.display = isOn ? '' : 'none';
+      }
+
       /* ===== 身份信息弹框 ===== */
       .identity-help {
         display: inline-flex;
@@ -1528,31 +1602,31 @@
                   <li>
                     <div class="config-account-name" title="WingShort-IAA-US-015654-MY-融眸-SIND-TT">WingShort-IAA-US-015654-MY-融眸-SIND-TT</div>
                     <div class="config-account-id" title="ID:7673348337520640151">ID:7673348337520640151</div>
-                  </li>
+                  <div class="config-account-item-del" title="删除" onclick="removeConfigAccountItem(this)">×</div></li>
                   <li>
                     <div class="config-account-name" title="WingShort-IAA-US-022285-MY-融眸-SIND-TT">WingShort-IAA-US-022285-MY-融眸-SIND-TT</div>
                     <div class="config-account-id" title="ID:7673348337520640152">ID:7673348337520640152</div>
-                  </li>
+                  <div class="config-account-item-del" title="删除" onclick="removeConfigAccountItem(this)">×</div></li>
                   <li>
                     <div class="config-account-name" title="WingShort-IAA-US-031723-MY-融眸-SIND-TT">WingShort-IAA-US-031723-MY-融眸-SIND-TT</div>
                     <div class="config-account-id" title="ID:7673348337520640153">ID:7673348337520640153</div>
-                  </li>
+                  <div class="config-account-item-del" title="删除" onclick="removeConfigAccountItem(this)">×</div></li>
                   <li>
                     <div class="config-account-name" title="WingShort-IAA-US-031755-MY-融眸-SIND-TT">WingShort-IAA-US-031755-MY-融眸-SIND-TT</div>
                     <div class="config-account-id" title="ID:7673348337520640154">ID:7673348337520640154</div>
-                  </li>
+                  <div class="config-account-item-del" title="删除" onclick="removeConfigAccountItem(this)">×</div></li>
                   <li>
                     <div class="config-account-name" title="WingShort-IAA-US-033730-MY-融眸-SIND-TT">WingShort-IAA-US-033730-MY-融眸-SIND-TT</div>
                     <div class="config-account-id" title="ID:7673348337520640155">ID:7673348337520640155</div>
-                  </li>
+                  <div class="config-account-item-del" title="删除" onclick="removeConfigAccountItem(this)">×</div></li>
                   <li>
                     <div class="config-account-name" title="WingShort-IAA-US-060457-MY-融眸-SIND-TT">WingShort-IAA-US-060457-MY-融眸-SIND-TT</div>
                     <div class="config-account-id" title="ID:7673348337520640156">ID:7673348337520640156</div>
-                  </li>
+                  <div class="config-account-item-del" title="删除" onclick="removeConfigAccountItem(this)">×</div></li>
                   <li>
                     <div class="config-account-name" title="WingShort-IAA-US-000991-MY-融眸-SIND-TT">WingShort-IAA-US-000991-MY-融眸-SIND-TT</div>
                     <div class="config-account-id" title="ID:7673348337520640157">ID:7673348337520640157</div>
-                  </li>
+                  <div class="config-account-item-del" title="删除" onclick="removeConfigAccountItem(this)">×</div></li>
                 </ul>
               </div>
               <div class="config-panel-footer">
@@ -1652,7 +1726,7 @@
           <div class="config-action-buttons">
             <button class="config-tab-btn active" onclick="openIdentityModal()">身份信息</button>
             <button class="config-tab-btn active" onclick="alert('受众配置')">受众配置</button>
-            <button class="config-tab-btn active" onclick="openProductSelectModal()">关联商品投放</button>
+            <button id="btn-product-placement" class="config-tab-btn active" style="display:none;" onclick="openProductSelectModal()">关联商品投放</button>
             <button class="config-tab-btn active" style="margin-left: auto;" onclick="alert('预览项目')">预览项目</button>
           </div>
 
@@ -1896,20 +1970,20 @@
     <div id="identity-select-modal" class="modal">
       <div class="modal-card" style="width: min(680px, calc(100vw - 40px));">
         <div class="modal-header">
-          <span>身份信息 <span class="identity-help" title="为已勾选账户配置投放身份">?</span></span>
+          <span>身份信息</span>
           <button class="modal-close" onclick="closeIdentityModal()">×</button>
         </div>
         <div class="modal-body">
           <div class="identity-toolbar">
             <span>已选择: <strong id="identity-selected-count">1</strong></span>
-            <span class="config-action" onclick="alert('批量设置')">批量设置</span>
+            <span class="config-action" onclick="openIdentityBatchSetModal()">批量设置</span>
           </div>
           <table class="modal-table identity-table">
             <thead>
               <tr>
                 <th class="checkbox-col"><input type="checkbox" onchange="toggleIdentityAll(this)" /></th>
                 <th>账户</th>
-                <th>身份信息</th>
+                <th>身份（公共主页）</th>
               </tr>
             </thead>
             <tbody>
@@ -1919,7 +1993,7 @@
                   <div class="identity-account-name">White-light_Fictic_ttmini-捷若-07</div>
                   <div class="identity-account-id">(7676810780939026439)</div>
                 </td>
-                <td><select class="form-select"><option>请选择身份</option><option>默认身份</option><option>身份A</option><option>身份B</option></select></td>
+                <td><select class="form-select identity-page-select"><option value="">请选择身份</option></select></td>
               </tr>
               <tr>
                 <td><input type="checkbox" onchange="onIdentityRowCheck(this)" /></td>
@@ -1927,7 +2001,7 @@
                   <div class="identity-account-name">White-light_popkon-捷若-超小-03</div>
                   <div class="identity-account-id">(7676810685100867591)</div>
                 </td>
-                <td><select class="form-select"><option>请选择身份</option><option>默认身份</option><option>身份A</option><option>身份B</option></select></td>
+                <td><select class="form-select identity-page-select"><option value="">请选择身份</option></select></td>
               </tr>
               <tr>
                 <td><input type="checkbox" onchange="onIdentityRowCheck(this)" /></td>
@@ -1935,7 +2009,7 @@
                   <div class="identity-account-name">White-light_popkon-捷若-低-东-03</div>
                   <div class="identity-account-id">(7676810552638717973)</div>
                 </td>
-                <td><select class="form-select"><option>请选择身份</option><option>默认身份</option><option>身份A</option><option>身份B</option></select></td>
+                <td><select class="form-select identity-page-select"><option value="">请选择身份</option></select></td>
               </tr>
               <tr>
                 <td><input type="checkbox" onchange="onIdentityRowCheck(this)" /></td>
@@ -1943,7 +2017,7 @@
                   <div class="identity-account-name">TT-MAD-IAA-二组-芸斯-（UTC 8）-2</div>
                   <div class="identity-account-id">(7648214926388)</div>
                 </td>
-                <td><select class="form-select"><option>请选择身份</option><option>默认身份</option><option>身份A</option><option>身份B</option></select></td>
+                <td><select class="form-select identity-page-select"><option value="">请选择身份</option></select></td>
               </tr>
             </tbody>
           </table>
@@ -1951,6 +2025,33 @@
         <div class="modal-footer">
           <button class="btn btn-outline btn-sm" onclick="closeIdentityModal()">取 消</button>
           <button class="btn btn-info btn-sm" onclick="closeIdentityModal()">确 定</button>
+        </div>
+      </div>
+    </div>
+
+
+
+    <!-- ========== 设置身份信息 弹框（批量） ========== -->
+    <div id="identity-batch-overlay" class="modal-overlay" onclick="closeIdentityBatchSetModal()"></div>
+    <div id="identity-batch-modal" class="modal">
+      <div class="modal-card" style="width: min(420px, calc(100vw - 40px));">
+        <div class="modal-header">
+          <span>设置身份信息</span>
+          <button class="modal-close" onclick="closeIdentityBatchSetModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-label required">身份（公共主页）：</div>
+            <div class="form-field">
+              <select id="identity-batch-page" class="form-select">
+                <option value="">请选择身份</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline btn-sm" onclick="closeIdentityBatchSetModal()">取 消</button>
+          <button class="btn btn-info btn-sm" onclick="confirmIdentityBatchSet()">确 定</button>
         </div>
       </div>
     </div>
@@ -2335,9 +2436,9 @@
               <div class="form-row">
                 <div class="form-item form-item-inline">
                   <label class="form-label">使用商品库</label>
-                  <div class="segmented-control">
-                    <button type="button" class="segmented-item active">开启</button>
-                    <button type="button" class="segmented-item">关闭</button>
+                  <div id="tt-catalog-switch" class="segmented-control">
+                    <button type="button" class="segmented-item active" onclick="setCatalogSwitch(true, this)">开启</button>
+                    <button type="button" class="segmented-item" onclick="setCatalogSwitch(false, this)">关闭</button>
                   </div>
                 </div>
               </div>
@@ -3413,8 +3514,65 @@
       function openAccountSelectModal() { openModal('account-select-overlay', 'account-select-modal'); }
       function closeAccountSelectModal() { closeModal('account-select-overlay', 'account-select-modal'); }
 
+      /* 账号模块：快捷删除单个账户 */
+      function removeConfigAccountItem(el) {
+        var li = el.closest('li');
+        if (li) li.remove();
+      }
+
+      var INFRA_IDENTITY_ACCOUNTS = [
+        { id: '100123456789012', name: 'Dramatical Shorts' },
+        { id: '200987654321098', name: 'Romance Reels' },
+        { id: '300556677889911', name: '悬疑剧场 Mystery' },
+        { id: '400112233445566', name: 'Drama Hub Latam' },
+        { id: '500665544332211', name: 'K-Drama Daily' }
+      ];
+
+      function renderIdentityPageOptions() {
+        var opts = '<option value="">请选择身份</option>';
+        INFRA_IDENTITY_ACCOUNTS.forEach(function (a) {
+          opts += '<option value="' + a.id + '">' + a.name + '</option>';
+        });
+        document.querySelectorAll('.identity-page-select').forEach(function (sel) {
+          var val = sel.value;
+          sel.innerHTML = opts;
+          sel.value = val;
+        });
+      }
+      function renderIdentityBatchOptions() {
+        var sel = document.getElementById('identity-batch-page');
+        if (!sel) return;
+        var opts = '<option value="">请选择身份</option>';
+        INFRA_IDENTITY_ACCOUNTS.forEach(function (a) {
+          opts += '<option value="' + a.id + '">' + a.name + '</option>';
+        });
+        sel.innerHTML = opts;
+      }
+      function openIdentityBatchSetModal() { openModal('identity-batch-overlay', 'identity-batch-modal'); renderIdentityBatchOptions(); }
+      function closeIdentityBatchSetModal() { closeModal('identity-batch-overlay', 'identity-batch-modal'); }
+      function confirmIdentityBatchSet() {
+        var pageId = document.getElementById('identity-batch-page').value;
+        if (!pageId) { alert('请选择身份'); return; }
+        document.querySelectorAll('#identity-select-modal tbody tr').forEach(function (tr) {
+          var cb = tr.querySelector('input[type="checkbox"]');
+          var sel = tr.querySelector('.identity-page-select');
+          if (cb && cb.checked && sel) sel.value = pageId;
+        });
+        closeIdentityBatchSetModal();
+      }
+
+      /* ===== 使用商品库开关：控制关联商品投放按钮显隐 ===== */
+      function setCatalogSwitch(isOn, btn) {
+        var group = document.getElementById('tt-catalog-switch');
+        if (!group) return;
+        group.querySelectorAll('.segmented-item').forEach(function (b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        var productBtn = document.getElementById('btn-product-placement');
+        if (productBtn) productBtn.style.display = isOn ? '' : 'none';
+      }
+
       /* ===== 身份信息弹框 ===== */
-      function openIdentityModal() { openModal('identity-select-overlay', 'identity-select-modal'); }
+      function openIdentityModal() { openModal('identity-select-overlay', 'identity-select-modal'); renderIdentityPageOptions(); syncIdentityCount(); }
       function closeIdentityModal() { closeModal('identity-select-overlay', 'identity-select-modal'); }
       function onIdentityRowCheck(cb) {
         cb.closest('tr').classList.toggle('row-selected', cb.checked);
