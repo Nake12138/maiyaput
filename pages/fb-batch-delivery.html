@@ -3854,31 +3854,6 @@
         { code: 'KW', name: '科威特' },   { code: 'PA', name: '巴拿马' }
       ];
 
-      var TARGET_REGIONS = [
-        { id: 'US-CA', name: '加利福尼亚', country: 'US' },
-        { id: 'US-NY', name: '纽约',       country: 'US' },
-        { id: 'US-TX', name: '得克萨斯',   country: 'US' },
-        { id: 'JP-13', name: '东京都',     country: 'JP' },
-        { id: 'JP-27', name: '大阪府',     country: 'JP' },
-        { id: 'KR-11', name: '首尔',       country: 'KR' },
-        { id: 'GB-LND', name: '伦敦',      country: 'GB' },
-        { id: 'DE-BE', name: '柏林',       country: 'DE' },
-        { id: 'FR-IDF', name: '巴黎',      country: 'FR' },
-        { id: 'IT-MI', name: '米兰',       country: 'IT' },
-        { id: 'BR-SP', name: '圣保罗',     country: 'BR' },
-        { id: 'AU-NSW', name: '新南威尔士',country: 'AU' }
-      ];
-
-      var TARGET_CITIES = [
-        { id: '2418779', name: '伦敦 (London)', country: 'GB' },
-        { id: '2334456', name: '纽约 (New York)', country: 'US' },
-        { id: '2487610', name: '巴黎 (Paris)', country: 'FR' },
-        { id: '2442047', name: '东京 (Tokyo)', country: 'JP' },
-        { id: '2339945', name: '柏林 (Berlin)', country: 'DE' },
-        { id: '2385029', name: '米兰 (Milan)', country: 'IT' },
-        { id: '2391279', name: '首尔 (Seoul)', country: 'KR' }
-      ];
-
       var batchTargetGeoLevel = 'country';
       var batchTargetGeoSelected = [];
       var batchTargetLocaleMs = null;
@@ -3908,20 +3883,8 @@
             ageMax.add(new Option(i, i));
           }
         }
-        var cSel = document.getElementById('batch-target-geo-country');
-        if (cSel && cSel.options.length <= 1) {
-          TARGET_COUNTRIES.forEach(function (c) {
-            cSel.add(new Option(c.code + ' ' + c.name, c.code));
-          });
-        }
         reloadBatchGeoList();
         renderBatchTargetGeoSelected();
-      }
-
-      function switchBatchGeoTab(level) {
-        // 地区定向仅保留国家维度，tab 已移除
-        batchTargetGeoLevel = 'country';
-        reloadBatchGeoList();
       }
 
       function getBatchGeoList() {
@@ -4000,18 +3963,12 @@
       }
 
       function importBatchGeoBatch() {
-        var ta = prompt('批量导入：每行一个名称/代码/ID，例如：US / JP / 2442047', '');
+        var ta = prompt('批量导入国家：每行一个名称或代码，例如：US / JP / 日本', '');
         if (!ta) return;
         ta.split(/\r?\n/).map(function (s) { return s.trim(); }).filter(Boolean).forEach(function (raw) {
-          var hit = TARGET_COUNTRIES.find(function (x) { return x.code === raw || x.name === raw; })
-                 || TARGET_REGIONS.find(function (x)   { return x.id === raw || x.name === raw; })
-                 || TARGET_CITIES.find(function (x)   { return x.id === raw || x.name === raw; });
+          var hit = TARGET_COUNTRIES.find(function (x) { return x.code === raw || x.name === raw; });
           if (hit) {
-            var lvl = TARGET_COUNTRIES.indexOf(hit) >= 0 ? 'country'
-                    : TARGET_REGIONS.indexOf(hit)   >= 0 ? 'region'
-                    : 'city';
-            var id = TARGET_COUNTRIES.indexOf(hit) >= 0 ? hit.code : hit.id;
-            addBatchTargetGeo(id, hit.name || hit.code, lvl);
+            addBatchTargetGeo(hit.code, hit.name || hit.code, 'country');
           }
         });
       }
