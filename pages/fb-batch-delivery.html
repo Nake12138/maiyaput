@@ -1488,7 +1488,6 @@
                 <div class="config-row"><span class="config-key">使用商品库：</span><span class="config-value">关闭</span></div>
                 <div class="config-row"><span class="config-key">归因模型：</span><span class="config-value">增量</span></div>
                 <div class="config-row"><span class="config-key">广告花费回报目标：</span><span class="config-value">--</span></div>
-                <div class="config-row"><span class="config-key">身份：</span><span class="config-value">公共主页包</span></div>
                 <div class="config-row"><span class="config-key">开始时间：</span><span class="config-value">现在</span></div>
                 <div class="config-row"><span class="config-key">投放时长：</span><span class="config-value">不限</span></div>
                 <div class="config-row"><span class="config-key">投放时段：</span><span class="config-value">全天</span></div>
@@ -2326,20 +2325,12 @@
             </div>
           </div>
 
-          <!-- 地理位置 -->
-          <div class="form-section">
-            <div class="form-section-title">地理位置</div>
+          <!-- 地区定向信息 -->
+          <div class="form-section" id="batch-target-geo-section">
+            <div class="form-section-title">地区定向信息</div>
             <div class="drawer-split">
               <div>
-                <div class="geo-tabs" id="batch-target-geo-tabs">
-                  <button class="geo-tab active" data-level="country" onclick="switchBatchGeoTab('country')">国家</button>
-                  <button class="geo-tab" data-level="region" onclick="switchBatchGeoTab('region')">区域</button>
-                  <button class="geo-tab" data-level="city" onclick="switchBatchGeoTab('city')">城市</button>
-                </div>
                 <div class="modal-filter" style="margin-bottom:8px;">
-                  <select id="batch-target-geo-country" class="form-select form-input-md" style="max-width:160px;" onchange="reloadBatchGeoList()">
-                    <option value="">所有国家</option>
-                  </select>
                   <input type="text" id="batch-target-geo-search" class="form-input" placeholder="请输入关键字搜索" style="flex:1;" />
                   <button class="btn btn-outline btn-sm" onclick="reloadBatchGeoList()">搜索</button>
                 </div>
@@ -3928,21 +3919,16 @@
       }
 
       function switchBatchGeoTab(level) {
-        batchTargetGeoLevel = level;
-        document.querySelectorAll('#batch-target-geo-tabs .geo-tab').forEach(function (b) {
-          b.classList.toggle('active', b.dataset.level === level);
-        });
+        // 地区定向仅保留国家维度，tab 已移除
+        batchTargetGeoLevel = 'country';
         reloadBatchGeoList();
       }
 
       function getBatchGeoList() {
-        var country = document.getElementById('batch-target-geo-country').value;
+        batchTargetGeoLevel = 'country';
         var kw = (document.getElementById('batch-target-geo-search').value || '').trim().toLowerCase();
-        var list = (batchTargetGeoLevel === 'country') ? TARGET_COUNTRIES
-                  : (batchTargetGeoLevel === 'region')  ? TARGET_REGIONS
-                  :                                       TARGET_CITIES;
+        var list = TARGET_COUNTRIES;
         return list.filter(function (x) {
-          if (country && batchTargetGeoLevel !== 'country' && x.country !== country) return false;
           if (kw && x.name.toLowerCase().indexOf(kw) < 0 && (x.id || '').toString().toLowerCase().indexOf(kw) < 0) return false;
           return true;
         });
@@ -3958,15 +3944,16 @@
           return;
         }
         list.forEach(function (x) {
-          var key = batchTargetGeoLevel + ':' + x.id;
+          var id = x.code || x.id;
+          var key = batchTargetGeoLevel + ':' + id;
           var li = document.createElement('li');
           li.innerHTML = '<label><input type="checkbox" data-key="' + key + '" /> '
             + (x.name || x.code) + '</label><span class="region-select-action" data-add="' + key + '">定向</span>';
           li.querySelector('[data-add]').onclick = function () {
-            addBatchTargetGeo(x.id, x.name || x.code, batchTargetGeoLevel);
+            addBatchTargetGeo(id, x.name || x.code, batchTargetGeoLevel);
           };
           li.querySelector('input').onchange = function (e) {
-            if (e.target.checked) addBatchTargetGeo(x.id, x.name || x.code, batchTargetGeoLevel);
+            if (e.target.checked) addBatchTargetGeo(id, x.name || x.code, batchTargetGeoLevel);
             else removeBatchTargetGeo(key);
           };
           ul.appendChild(li);
@@ -4004,9 +3991,10 @@
       function toggleBatchSelectAll(master) {
         var list = getBatchGeoList();
         list.forEach(function (x) {
-          var key = batchTargetGeoLevel + ':' + x.id;
+          var id = x.code || x.id;
+          var key = batchTargetGeoLevel + ':' + id;
           var has = batchTargetGeoSelected.some(function (s) { return s.key === key; });
-          if (master.checked && !has) addBatchTargetGeo(x.id, x.name || x.code, batchTargetGeoLevel);
+          if (master.checked && !has) addBatchTargetGeo(id, x.name || x.code, batchTargetGeoLevel);
           if (!master.checked && has) removeBatchTargetGeo(key);
         });
       }
@@ -4022,7 +4010,8 @@
             var lvl = TARGET_COUNTRIES.indexOf(hit) >= 0 ? 'country'
                     : TARGET_REGIONS.indexOf(hit)   >= 0 ? 'region'
                     : 'city';
-            addBatchTargetGeo(hit.id, hit.name || hit.code, lvl);
+            var id = TARGET_COUNTRIES.indexOf(hit) >= 0 ? hit.code : hit.id;
+            addBatchTargetGeo(id, hit.name || hit.code, lvl);
           }
         });
       }
@@ -4037,7 +4026,7 @@
         }
         var html = '<ul class="region-select-list">';
         batchTargetGeoSelected.forEach(function (s) {
-          var lvlLabel = ({ country: '国家', region: '区域', city: '城市' })[s.level] || s.level;
+          var lvlLabel = '国家';
           html += '<li><label><span class="region-tag">' + lvlLabel + '</span>' + s.name + '</label><span class="region-select-action" data-rm="' + s.key + '">移除</span></li>';
         });
         html += '</ul>';
