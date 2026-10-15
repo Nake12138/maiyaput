@@ -126,6 +126,72 @@
         color: #fff;
         border-color: #1890ff;
       }
+
+      /* 身份信息弹框 */
+      .identity-help {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 16px;
+        height: 16px;
+        margin-left: 6px;
+        border-radius: 50%;
+        background: #ffa940;
+        color: #fff;
+        font-size: 11px;
+        font-weight: 600;
+        vertical-align: 2px;
+        cursor: help;
+      }
+      .identity-toolbar {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        font-size: 13px;
+        color: #374151;
+        padding: 4px 0 12px;
+      }
+      .identity-toolbar .config-action {
+        color: #1890ff;
+        cursor: pointer;
+        font-size: 13px;
+      }
+      .identity-table th,
+      .identity-table td {
+        border-bottom: 1px solid #f0f0f0;
+        padding: 10px 12px;
+        text-align: left;
+        vertical-align: middle;
+        font-size: 13px;
+      }
+      .identity-table thead th {
+        background: #fafafa;
+        color: #4b5563;
+        font-weight: 600;
+      }
+      .identity-table tr.row-selected td {
+        background: #e8f3ff;
+      }
+      .identity-account-name {
+        color: #1f2937;
+        line-height: 1.5;
+      }
+      .identity-account-id {
+        color: #9ca3af;
+        font-size: 12px;
+        line-height: 1.5;
+      }
+      .identity-table .form-select {
+        width: 220px;
+        height: 32px;
+        border: 1px solid #d9d9d9;
+        border-radius: 4px;
+        color: #9ca3af;
+        font-size: 13px;
+        padding: 0 8px;
+        background: #fff;
+      }
+
       .btn-preview-project {
         margin-left: auto;
         padding: 8px 24px;
@@ -223,6 +289,28 @@
         color: #374151;
         background: #fafafa;
         border-bottom: 1px solid #e5e7eb;
+      }
+      .preview-account-filter {
+        padding: 8px 10px;
+        border-bottom: 1px solid #f3f4f6;
+        background: #fff;
+      }
+      .preview-account-filter input {
+        width: 100%;
+        height: 28px;
+        padding: 0 8px;
+        border: 1px solid #d9d9d9;
+        border-radius: 4px;
+        font-size: 12px;
+        outline: none;
+        transition: border-color .15s;
+      }
+      .preview-account-filter input:focus { border-color: var(--color-info); }
+      .preview-account-empty {
+        padding: 16px 10px;
+        text-align: center;
+        font-size: 12px;
+        color: var(--color-text-tertiary);
       }
       .preview-account-list {
         max-height: 360px;
@@ -732,6 +820,14 @@
         color: var(--color-error);
         font-size: 12px;
         line-height: 1.5;
+        max-width: 360px;
+      }
+      #fail-detail-modal .modal-table .fail-detail-error {
+        display: -webkit-box !important;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        word-break: break-all;
       }
       #fail-detail-modal .row-actions { white-space: nowrap; }
       #fail-detail-modal .modal-filter { flex-wrap: nowrap; }
@@ -1327,10 +1423,10 @@
               </div>
             </div>
 
-            <!-- 计划基本信息 -->
+            <!-- 基本信息 -->
             <div class="config-panel">
               <div class="config-panel-header">
-                <span>计划基本信息</span>
+                <span>基本信息</span>
               </div>
               <div class="config-panel-body">
                 <div class="config-row"><span class="config-key">投放内容：</span><span class="config-value">APP-IAP</span></div>
@@ -1346,10 +1442,10 @@
               </div>
             </div>
 
-            <!-- 广告组 -->
+            <!-- 基建设置 -->
             <div class="config-panel">
               <div class="config-panel-header">
-                <span>广告组</span>
+                <span>基建设置</span>
               </div>
               <div class="config-panel-body">
                 <div class="config-row"><span class="config-key">预算策略：</span><span class="config-value">广告系列预算</span></div>
@@ -1425,7 +1521,8 @@
 
           <!-- 底部标签 + 预览项目 -->
           <div class="config-action-buttons">
-            <button class="config-tab-btn active" onclick="switchBatchPreviewTab(this, 'product')">关联商品投放</button>
+            <button class="config-tab-btn active" onclick="openIdentityModal()">身份信息</button>
+            <button id="btn-product-placement" class="config-tab-btn active" style="display:none;" onclick="switchBatchPreviewTab(this, 'product')">关联商品投放</button>
             <button class="btn-preview-project">预览项目</button>
           </div>
 
@@ -1443,7 +1540,10 @@
             </div>
             <div class="config-preview-body">
               <div class="preview-account-panel">
-                <div class="preview-account-title">账号</div>
+                <div class="preview-account-title">账号<span class="preview-account-count" id="fb-preview-account-count" style="margin-left:6px;color:var(--color-text-tertiary);font-weight:400;"></span></div>
+                <div class="preview-account-filter">
+                  <input type="text" id="fb-preview-account-filter" placeholder="按账户名 / ID 过滤" oninput="filterFbPreviewAccounts(this.value)" />
+                </div>
                 <div class="preview-account-list">
                   <div class="preview-account-item active" data-pane="fb-preview-pane-1" onclick="switchPreviewAccount(this, 'fb-preview-pane-1')">
                     <div class="preview-account-name" title="White-light_Fictic_ttimini-缅泰-07176768107809390">White-light_Fictic_ttimini-缅泰-07176768107809390</div>
@@ -1483,7 +1583,7 @@
                         <th class="preview-col-status">状态</th>
                         <th class="preview-col-audience">定向包</th>
                         <th class="preview-col-name">广告名称 / ID</th>
-                        <th class="preview-col-link">监测链接ID</th>
+                        <th class="preview-col-link">推广链接ID</th>
                         <th class="preview-col-status preview-col-status-ad">状态</th>
                         <th class="preview-col-creative">创意素材</th>
                         <th class="preview-col-title">标题包</th>
@@ -1551,7 +1651,7 @@
                         <th class="preview-col-status">状态</th>
                         <th class="preview-col-audience">定向包</th>
                         <th class="preview-col-name">广告名称 / ID</th>
-                        <th class="preview-col-link">监测链接ID</th>
+                        <th class="preview-col-link">推广链接ID</th>
                         <th class="preview-col-status preview-col-status-ad">状态</th>
                         <th class="preview-col-creative">创意素材</th>
                         <th class="preview-col-title">标题包</th>
@@ -1677,12 +1777,12 @@
       </div>
     </div>
 
-    <!-- ========== 计划基本信息 编辑抽屉 ========== -->
+    <!-- ========== 基本信息 编辑抽屉 ========== -->
     <div id="plan-info-overlay" class="drawer-overlay" onclick="closePlanInfoDrawer()"></div>
     <div id="plan-info-drawer" class="drawer drawer-narrow">
       <div class="drawer-card">
         <div class="drawer-header">
-          <span>计划基本信息</span>
+          <span>基本信息</span>
           <button class="modal-close" onclick="closePlanInfoDrawer()">×</button>
         </div>
         <div class="drawer-body">
@@ -1834,12 +1934,12 @@
       </div>
     </div>
 
-    <!-- ========== 广告组 编辑抽屉 ========== -->
+    <!-- ========== 基建设置 编辑抽屉 ========== -->
     <div id="ad-group-overlay" class="drawer-overlay" onclick="closeAdGroupDrawer()"></div>
     <div id="ad-group-drawer" class="drawer drawer-narrow">
       <div class="drawer-card">
         <div class="drawer-header">
-          <span>广告组</span>
+          <span>基建设置</span>
           <button class="modal-close" onclick="closeAdGroupDrawer()">×</button>
         </div>
         <div class="drawer-body infra-drawer-body">
@@ -1889,7 +1989,7 @@
                 <div class="form-item form-item-inline">
                   <label class="form-label">使用商品库</label>
                   <label class="toggle-switch">
-                    <input type="checkbox" />
+                    <input id="fb-catalog-switch" type="checkbox" onchange="syncCatalogProductTab()" />
                     <span class="toggle-slider"></span>
                   </label>
                 </div>
@@ -1916,19 +2016,7 @@
               </div>
             </div>
 
-            <!-- 广告 -->
-            <div class="form-sub-section">
-              <div class="form-sub-section-title">广告</div>
-              <div class="form-row">
-                <div class="form-item form-item-full">
-                  <label class="form-label"><span class="form-required">*</span> 身份（公共主页）</label>
-                  <div style="flex:1; min-width:0;">
-                    <!-- 手动选择公共主页：公用多选下拉组件 MultiSelect -->
-                    <div id="infra-identity-field"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
+
           </div>
 
           <!-- 排期 -->
@@ -1945,18 +2033,37 @@
             <div class="form-row">
               <div class="form-item form-item-inline">
                 <label class="form-label"><span class="form-required">*</span> 投放时长</label>
-                <div class="segmented-control">
+                <div class="segmented-control" id="infra-duration-switch">
                   <button type="button" class="segmented-item active" data-value="unlimited">不限</button>
                   <button type="button" class="segmented-item" data-value="custom">自定义</button>
+                </div>
+              </div>
+            </div>
+            <div class="form-row" id="infra-duration-custom-row" style="display:none;">
+              <div class="form-item form-item-inline">
+                <label class="form-label"><span class="form-required">*</span> 自定义时长</label>
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <input type="number" class="form-input" placeholder="请输入" style="width:120px;" min="1" />
+                  <span style="font-size:13px; color:#595959;">天</span>
                 </div>
               </div>
             </div>
             <div class="form-row">
               <div class="form-item form-item-inline">
                 <label class="form-label"><span class="form-required">*</span> 投放时段</label>
-                <div class="segmented-control">
+                <div class="segmented-control" id="infra-schedule-switch">
                   <button type="button" class="segmented-item active" data-value="all">全天</button>
                   <button type="button" class="segmented-item" data-value="custom">自定义</button>
+                </div>
+              </div>
+            </div>
+            <div class="form-row" id="infra-schedule-custom-row" style="display:none;">
+              <div class="form-item form-item-inline">
+                <label class="form-label"><span class="form-required">*</span> 自定义时段</label>
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <input type="time" class="form-input" value="00:00" style="width:110px;" />
+                  <span style="font-size:13px; color:#595959;">至</span>
+                  <input type="time" class="form-input" value="23:59" style="width:110px;" />
                 </div>
               </div>
             </div>
@@ -1965,6 +2072,96 @@
         <div class="drawer-footer">
           <button class="btn btn-outline btn-sm" onclick="closeAdGroupDrawer()">取消</button>
           <button class="btn btn-info btn-sm" onclick="closeAdGroupDrawer()">确定</button>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ========== 身份信息 弹框 ========== -->
+    <div id="identity-select-overlay" class="modal-overlay" onclick="closeIdentityModal()"></div>
+    <div id="identity-select-modal" class="modal">
+      <div class="modal-card" style="width: min(680px, calc(100vw - 40px));">
+        <div class="modal-header">
+          <span>身份信息</span>
+          <button class="modal-close" onclick="closeIdentityModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="identity-toolbar">
+            <span>已选择: <strong id="identity-selected-count">0</strong></span>
+            <span class="config-action" onclick="openIdentityBatchSetModal()">批量设置</span>
+          </div>
+          <table class="modal-table identity-table">
+            <thead>
+              <tr>
+                <th class="checkbox-col"><input type="checkbox" onchange="toggleIdentityAll(this)" /></th>
+                <th>账户</th>
+                <th>身份（公共主页）</th>
+              </tr>
+            </thead>
+            <tbody id="identity-select-tbody">
+              <tr class="row-selected">
+                <td><input type="checkbox" checked onchange="onIdentityRowCheck(this)" /></td>
+                <td>
+                  <div class="identity-account-name">White-light_Fictic_ttmini-捷若-07</div>
+                  <div class="identity-account-id">(7676810780939026439)</div>
+                </td>
+                <td><select class="form-select identity-page-select"><option value="">请选择身份</option></select></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" onchange="onIdentityRowCheck(this)" /></td>
+                <td>
+                  <div class="identity-account-name">White-light_popkon-捷若-超小-03</div>
+                  <div class="identity-account-id">(7676810685100867591)</div>
+                </td>
+                <td><select class="form-select identity-page-select"><option value="">请选择身份</option></select></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" onchange="onIdentityRowCheck(this)" /></td>
+                <td>
+                  <div class="identity-account-name">White-light_popkon-捷若-低-东-03</div>
+                  <div class="identity-account-id">(7676810552638717973)</div>
+                </td>
+                <td><select class="form-select identity-page-select"><option value="">请选择身份</option></select></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" onchange="onIdentityRowCheck(this)" /></td>
+                <td>
+                  <div class="identity-account-name">TT-MAD-IAA-二组-芸斯-（UTC 8）-2</div>
+                  <div class="identity-account-id">(7648214926388)</div>
+                </td>
+                <td><select class="form-select identity-page-select"><option value="">请选择身份</option></select></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline btn-sm" onclick="closeIdentityModal()">取 消</button>
+          <button class="btn btn-info btn-sm" onclick="closeIdentityModal()">确 定</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== 设置身份信息 弹框（批量） ========== -->
+    <div id="identity-batch-overlay" class="modal-overlay" onclick="closeIdentityBatchSetModal()"></div>
+    <div id="identity-batch-modal" class="modal">
+      <div class="modal-card" style="width: min(420px, calc(100vw - 40px));">
+        <div class="modal-header">
+          <span>设置身份信息</span>
+          <button class="modal-close" onclick="closeIdentityBatchSetModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-label required">身份（公共主页）：</div>
+            <div class="form-field">
+              <select id="identity-batch-page" class="form-select">
+                <option value="">请选择身份</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline btn-sm" onclick="closeIdentityBatchSetModal()">取 消</button>
+          <button class="btn btn-info btn-sm" onclick="confirmIdentityBatchSet()">确 定</button>
         </div>
       </div>
     </div>
@@ -3052,12 +3249,59 @@
         });
       }
 
-      /* 初始化：按默认选中账号刷新数量 */
+      /* 报错账户置顶排序：错误账户排在列表前部，非报错账户保持原顺序依次排在后部 */
+      function sortFbPreviewAccounts() {
+        var list = document.querySelector('.preview-account-list');
+        if (!list) return;
+        var items = Array.prototype.slice.call(list.children)
+          .filter(function (it) { return it.classList.contains('preview-account-item'); });
+        items.sort(function (a, b) {
+          var ae = a.classList.contains('has-error') ? 1 : 0;
+          var be = b.classList.contains('has-error') ? 1 : 0;
+          return be - ae;
+        });
+        items.forEach(function (it) { list.appendChild(it); });
+        updateFbPreviewAccountCount();
+      }
+
+      /* 预览区账户数量统计 + 过滤空态 */
+      function updateFbPreviewAccountCount() {
+        var list = document.querySelector('.preview-account-list');
+        var countEl = document.getElementById('fb-preview-account-count');
+        if (countEl && list) {
+          var total = list.querySelectorAll('.preview-account-item').length;
+          var failed = list.querySelectorAll('.preview-account-item.has-error').length;
+          countEl.textContent = total ? '（' + total + (failed ? ' · 失败 ' + failed : '') + '）' : '';
+        }
+      }
+
+      /* 预览区关键字过滤：按账户名 / ID 实时模糊过滤；选中项被隐藏则切换到首个可见项 */
+      function filterFbPreviewAccounts(kw) {
+        kw = (kw || '').toLowerCase().trim();
+        var list = document.querySelector('.preview-account-list');
+        if (!list) return;
+        var firstVisible = null;
+        list.querySelectorAll('.preview-account-item').forEach(function (it) {
+          var name = (it.querySelector('.preview-account-name') || {}).textContent || '';
+          var id = (it.querySelector('.preview-account-id') || {}).textContent || '';
+          var hit = !kw || name.toLowerCase().indexOf(kw) >= 0 || id.toLowerCase().indexOf(kw) >= 0;
+          it.style.display = hit ? '' : 'none';
+          if (hit && !firstVisible) firstVisible = it;
+        });
+        var active = list.querySelector('.preview-account-item.active');
+        if (active && active.style.display === 'none' && firstVisible) {
+          var paneId = firstVisible.getAttribute('data-pane');
+          switchPreviewAccount(firstVisible, paneId);
+        }
+      }
+
+      /* 初始化：按默认选中账号刷新数量 + 报错置顶排序 */
       (function () {
         var activePane = document.querySelector('.preview-pane.active');
         updatePreviewCounts(activePane);
         updatePreviewTotals();
         syncAccountErrorState();
+        sortFbPreviewAccounts();
       })();
 
       /* ===== 账号 - 批量搜索弹框 ===== */
@@ -3115,7 +3359,7 @@
       }
       function escAttr(s) { return escHtml(s).replace(/"/g, '&quot;'); }
 
-      /* ===== 计划基本信息 - 编辑抽屉 ===== */
+      /* ===== 基本信息 - 编辑抽屉 ===== */
       function openPlanInfoDrawer() { openModal('plan-info-overlay', 'plan-info-drawer'); }
       function closePlanInfoDrawer() { closeModal('plan-info-overlay', 'plan-info-drawer'); }
 
@@ -3270,10 +3514,26 @@
           group.querySelectorAll('.segmented-item').forEach(function (item) { item.classList.remove('active'); });
           btn.classList.add('active');
           if (group.id === 'infra-bid-strategy') syncInfraRoasRow();
+          if (group.id === 'infra-duration-switch') syncInfraDurationCustomRow();
+          if (group.id === 'infra-schedule-switch') syncInfraScheduleCustomRow();
         });
       });
 
       /* 广告系列竞价策略：选中【广告花费回报目标】时显示对应字段 */
+      function syncInfraDurationCustomRow() {
+        var group = document.getElementById('infra-duration-switch');
+        var row = document.getElementById('infra-duration-custom-row');
+        if (!group || !row) return;
+        var act = group.querySelector('.segmented-item.active');
+        row.style.display = (act && act.getAttribute('data-value') === 'custom') ? '' : 'none';
+      }
+      function syncInfraScheduleCustomRow() {
+        var group = document.getElementById('infra-schedule-switch');
+        var row = document.getElementById('infra-schedule-custom-row');
+        if (!group || !row) return;
+        var act = group.querySelector('.segmented-item.active');
+        row.style.display = (act && act.getAttribute('data-value') === 'custom') ? '' : 'none';
+      }
       function syncInfraRoasRow() {
         var group = document.getElementById('infra-bid-strategy');
         var row = document.getElementById('infra-roas-target-row');
@@ -3281,7 +3541,7 @@
         var act = group.querySelector('.segmented-item.active');
         row.style.display = (act && act.getAttribute('data-value') === 'roas') ? '' : 'none';
       }
-      (function () { syncInfraRoasRow(); })();
+      (function () { syncInfraRoasRow(); syncInfraDurationCustomRow(); syncInfraScheduleCustomRow(); })();
 
       /* ===== 基建设置：身份（公共主页）手动选择（公用多选下拉组件 MultiSelect） =====
          数据来源：资产管理 - 公共主页页面（pages/overseas-fb-page.html） */
@@ -3305,6 +3565,71 @@
         return infraIdentityMs;
       }
       window.addEventListener('DOMContentLoaded', initInfraIdentityMultiSelect);
+
+
+      /* ===== 身份信息弹框 ===== */
+      function openIdentityModal() {
+        openModal('identity-select-overlay', 'identity-select-modal');
+        renderIdentityPageOptions();
+        syncIdentityCount();
+      }
+      function closeIdentityModal() { closeModal('identity-select-overlay', 'identity-select-modal'); }
+      function openIdentityBatchSetModal() { openModal('identity-batch-overlay', 'identity-batch-modal'); renderIdentityBatchOptions(); }
+      function closeIdentityBatchSetModal() { closeModal('identity-batch-overlay', 'identity-batch-modal'); }
+      function renderIdentityPageOptions() {
+        var opts = '<option value="">请选择身份</option>';
+        INFRA_IDENTITY_ACCOUNTS.forEach(function (a) {
+          opts += '<option value="' + a.id + '">' + a.name + '</option>';
+        });
+        document.querySelectorAll('.identity-page-select').forEach(function (sel) {
+          var val = sel.value;
+          sel.innerHTML = opts;
+          sel.value = val;
+        });
+      }
+      function renderIdentityBatchOptions() {
+        var sel = document.getElementById('identity-batch-page');
+        if (!sel) return;
+        var opts = '<option value="">请选择身份</option>';
+        INFRA_IDENTITY_ACCOUNTS.forEach(function (a) {
+          opts += '<option value="' + a.id + '">' + a.name + '</option>';
+        });
+        sel.innerHTML = opts;
+      }
+      function confirmIdentityBatchSet() {
+        var pageId = document.getElementById('identity-batch-page').value;
+        if (!pageId) { alert('请选择身份'); return; }
+        document.querySelectorAll('#identity-select-modal tbody tr').forEach(function (tr) {
+          var cb = tr.querySelector('input[type="checkbox"]');
+          var sel = tr.querySelector('.identity-page-select');
+          if (cb && cb.checked && sel) sel.value = pageId;
+        });
+        closeIdentityBatchSetModal();
+      }
+      function onIdentityRowCheck(cb) {
+        cb.closest('tr').classList.toggle('row-selected', cb.checked);
+        syncIdentityCount();
+      }
+      function toggleIdentityAll(headCb) {
+        document.querySelectorAll('#identity-select-modal tbody input[type="checkbox"]').forEach(function (cb) {
+          cb.checked = headCb.checked;
+          cb.closest('tr').classList.toggle('row-selected', cb.checked);
+        });
+        syncIdentityCount();
+      }
+      function syncIdentityCount() {
+        var n = document.querySelectorAll('#identity-select-modal tbody input[type="checkbox"]:checked').length;
+        var el = document.getElementById('identity-selected-count');
+        if (el) el.textContent = n;
+      }
+
+      /* ===== 关联商品投放按钮：仅在使用商品库开启时显示 ===== */
+      function syncCatalogProductTab() {
+        var sw = document.getElementById('fb-catalog-switch');
+        var btn = document.getElementById('btn-product-placement');
+        if (!sw || !btn) return;
+        btn.style.display = sw.checked ? '' : 'none';
+      }
 
       /* ===== 定向 - 我的定向包弹框（数据来源：模板管理-定向包页面 → scripts/targeting-packages.js） ===== */
       function openTargetingListModal() { openModal('targeting-list-overlay', 'targeting-list-modal'); }
@@ -3348,6 +3673,13 @@
       }
       function closeFailDetailModal() { closeModal('fail-detail-overlay', 'fail-detail-modal'); }
 
+      /* HTML 属性转义（用于报错信息 title） */
+      function escapeAttr(s) {
+        return String(s == null ? '' : s)
+          .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;');
+      }
+
       function renderFailDetail() {
         var meta = FAIL_DETAIL_META[failDetailState.level];
         var rows = FAIL_DETAIL_DATA[failDetailState.level];
@@ -3370,7 +3702,7 @@
             html += '<td><div class="fail-detail-name">' + r.parent + '</div><div class="fail-detail-id">ID: ' + r.parentId + '</div></td>';
           }
           html += '<td><div class="fail-detail-name">' + r.account + '</div><div class="fail-detail-id">ID: ' + r.accountId + '</div></td>';
-          html += '<td><span class="fail-detail-error">' + r.error + '</span></td>';
+          html += '<td><span class="fail-detail-error" title="' + escapeAttr(r.error) + '">' + r.error + '</span></td>';
           html += '<td><div class="row-actions"><button class="row-action-btn" onclick="refreshFailRow(\'' + r.name + '\')">刷新</button>' +
                   '<button class="row-action-btn" onclick="retryFailRow(\'' + r.name + '\')">重试</button></div></td>';
           html += '</tr>';
