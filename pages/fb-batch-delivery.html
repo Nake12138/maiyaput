@@ -853,6 +853,17 @@
         word-break: break-all;
       }
       #fail-detail-modal .row-actions { white-space: nowrap; }
+      /* 失败明细弹框工具条重试：蓝色文字链（.retry-link 全局样式仅作用于 .filter-status-bar 内） */
+      #fail-detail-modal .retry-link {
+        color: var(--color-info);
+        cursor: pointer;
+        background: none;
+        border: none;
+        font-family: inherit;
+        font-size: 13px;
+        padding: 0;
+      }
+      #fail-detail-modal .retry-link:hover { text-decoration: underline; }
       #fail-detail-modal .modal-filter { flex-wrap: nowrap; }
       #fail-detail-modal .modal-filter > div { flex-shrink: 0; }
       #fail-detail-modal .fail-detail-hint { flex: 1; min-width: 0; }
