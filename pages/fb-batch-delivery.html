@@ -2054,7 +2054,7 @@
           </div>
 
           <!-- 排期 -->
-          <div class="form-section">
+          <div class="form-section" id="infra-schedule-section">
             <h4 class="form-section-title">排期</h4>
             <div class="form-row">
               <div class="form-item form-item-inline">
@@ -2071,15 +2071,10 @@
                   <button type="button" class="segmented-item active" data-value="unlimited">不限</button>
                   <button type="button" class="segmented-item" data-value="custom">自定义</button>
                 </div>
-              </div>
-            </div>
-            <div class="form-row" id="infra-duration-custom-row" style="display:none;">
-              <div class="form-item form-item-inline">
-                <label class="form-label"><span class="form-required">*</span> 自定义时长</label>
-                <div style="display:flex; align-items:center; gap:8px;">
-                  <input type="number" class="form-input" placeholder="请输入" style="width:120px;" min="1" />
-                  <span style="font-size:13px; color:#595959;">天</span>
-                </div>
+                <span id="infra-duration-custom" style="display:none;align-items:center;gap:6px;">
+                  <input type="text" class="form-input" id="infra-duration-days" placeholder="请输入" style="width:110px;" />
+                  <span>天</span>
+                </span>
               </div>
             </div>
             <div class="form-row">
@@ -2090,14 +2085,10 @@
                   <button type="button" class="segmented-item" data-value="custom">自定义</button>
                 </div>
               </div>
-            </div>
-            <div class="form-row" id="infra-schedule-custom-row" style="display:none;">
-              <div class="form-item form-item-inline">
-                <label class="form-label"><span class="form-required">*</span> 自定义时段</label>
-                <div style="display:flex; align-items:center; gap:8px;">
-                  <input type="time" class="form-input" value="00:00" style="width:110px;" />
-                  <span style="font-size:13px; color:#595959;">至</span>
-                  <input type="time" class="form-input" value="23:59" style="width:110px;" />
+              <div id="infra-schedule-custom" style="display:none;flex-basis:100%;padding-left:12px;">
+                <div style="text-align:right;font-size:12px;color:var(--color-text-secondary);margin-bottom:6px;">一共 0 小时</div>
+                <div style="border:1px solid var(--color-border);border-radius:6px;background:#fafafa;padding:48px 0;text-align:center;color:var(--color-text-tertiary);font-size:13px;">
+                  时段选择组件占位（星期 × 小时，可拖拽框选）——待对接行业通用时段选择组件后替换
                 </div>
               </div>
             </div>
@@ -3585,17 +3576,17 @@
       /* 广告系列竞价策略：选中【广告花费回报目标】时显示对应字段 */
       function syncInfraDurationCustomRow() {
         var group = document.getElementById('infra-duration-switch');
-        var row = document.getElementById('infra-duration-custom-row');
-        if (!group || !row) return;
+        var wrap = document.getElementById('infra-duration-custom');
+        if (!group || !wrap) return;
         var act = group.querySelector('.segmented-item.active');
-        row.style.display = (act && act.getAttribute('data-value') === 'custom') ? '' : 'none';
+        wrap.style.display = (act && act.getAttribute('data-value') === 'custom') ? 'inline-flex' : 'none';
       }
       function syncInfraScheduleCustomRow() {
         var group = document.getElementById('infra-schedule-switch');
-        var row = document.getElementById('infra-schedule-custom-row');
-        if (!group || !row) return;
+        var wrap = document.getElementById('infra-schedule-custom');
+        if (!group || !wrap) return;
         var act = group.querySelector('.segmented-item.active');
-        row.style.display = (act && act.getAttribute('data-value') === 'custom') ? '' : 'none';
+        wrap.style.display = (act && act.getAttribute('data-value') === 'custom') ? '' : 'none';
       }
       function syncInfraRoasRow() {
         var group = document.getElementById('infra-bid-strategy');
@@ -3605,6 +3596,16 @@
         row.style.display = (act && act.getAttribute('data-value') === 'roas') ? '' : 'none';
       }
       (function () { syncInfraRoasRow(); syncInfraDurationCustomRow(); syncInfraScheduleCustomRow(); })();
+
+      /* 投放时长自定义输入：仅允许正整数（单位：天） */
+      (function () {
+        var input = document.getElementById('infra-duration-days');
+        if (!input) return;
+        input.addEventListener('input', function () {
+          var cleaned = input.value.replace(/[^\d]/g, '').replace(/^0+(?=\d)/, '');
+          if (cleaned !== input.value) input.value = cleaned;
+        });
+      })();
 
       /* ===== 基建设置：身份（公共主页）手动选择（公用多选下拉组件 MultiSelect） =====
          数据来源：资产管理 - 公共主页页面（pages/overseas-fb-page.html） */
