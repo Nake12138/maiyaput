@@ -1079,6 +1079,74 @@
               </div>
             </div>
 
+            <!-- 任务日志抽屉（含错误类型：无短剧封面） -->
+            <style>
+              #drawer-overseas-task-log .drawer-body {
+                padding: 20px 24px;
+                background: #f2f3f5;
+              }
+              #drawer-overseas-task-log .modal-filter {
+                margin-bottom: 12px;
+              }
+            </style>
+            <div id="task-log-overlay" class="drawer-overlay" onclick="closeOverseasTaskLogDrawer()"></div>
+            <div id="drawer-overseas-task-log" class="drawer drawer-wide">
+              <div class="drawer-card">
+                <div class="drawer-header">
+                  <h3 class="drawer-title" id="overseas-task-log-title">任务日志</h3>
+                  <button class="drawer-close" onclick="closeOverseasTaskLogDrawer()">×</button>
+                </div>
+                <div class="drawer-body">
+                  <div class="modal-filter">
+                    <span id="task-log-drama-select" style="width:300px;display:block;"></span>
+                    <input type="text" class="form-input" id="task-log-script-input" placeholder="剧集名称" style="width:180px;" />
+                    <select class="form-input" id="task-log-error-select" style="width:170px;min-width:130px;">
+                      <option value="">请选择错误类型</option>
+                      <option>无短剧封面</option>
+                      <option>无可投放短剧</option>
+                      <option>无可投素材</option>
+                      <option>无可用标题/产品卖点</option>
+                      <option>无可投账户</option>
+                      <option>无可用TikTok账号</option>
+                      <option>无可用应用</option>
+                      <option>执行报错</option>
+                      <option>短剧执行异常</option>
+                    </select>
+                    <button class="btn btn-primary btn-sm" onclick="renderOverseasTaskLogRows()">查询</button>
+                    <button class="btn btn-outline btn-sm" onclick="resetOverseasTaskLogFilters()">重置</button>
+                  </div>
+                  <div class="table-card" style="border-radius:4px;">
+                    <table class="data-table">
+                      <thead>
+                        <tr>
+                          <th>短剧名称</th>
+                          <th>剧集名称</th>
+                          <th>语言</th>
+                          <th>错误类型</th>
+                          <th>执行结果</th>
+                          <th>执行时间</th>
+                        </tr>
+                      </thead>
+                      <tbody id="task-log-tbody"></tbody>
+                    </table>
+                  </div>
+                  <div style="display:flex;justify-content:flex-end;align-items:center;gap:10px;padding:10px 4px 0;font-size:13px;color:var(--color-text-secondary);">
+                    <span>共 <span id="task-log-total">0</span> 条</span>
+                    <span style="display:inline-flex;gap:4px;">
+                      <button type="button" class="btn btn-primary btn-sm" style="min-width:32px;">1</button>
+                    </span>
+                    <select class="form-input" style="width:auto;padding:2px 6px;height:28px;" onchange="alert('每页条数演示：' + this.value + '条/页')">
+                      <option>20 条/页</option>
+                      <option>50 条/页</option>
+                    </select>
+                    <span>跳至</span>
+                    <input type="text" class="form-input" style="width:44px;padding:2px 6px;height:28px;text-align:center;" value="1" />
+                    <span>页</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <!-- New Task Drawer -->
             <div id="drawer-overlay-overseas-new-task" class="drawer-overlay" onclick="closeOverseasNewTaskDrawer(event)"></div>
             <div id="drawer-overseas-new-task" class="drawer drawer-narrow">
@@ -2589,8 +2657,183 @@
         prefillTaskIdentity(id);
       }
 
+      /* ===== 任务日志抽屉（示例数据，错误类型含「无短剧封面」） ===== */
+      var OVERSEAS_TASK_LOG_DATA = {
+        295: [
+          { drama: 'Twice Betrayed, Once Turned Back', episode: 'Chapter 1', lang: '英语', error: '无可投素材', result: '没有可投放的素材', time: '2026-08-20 11:20:15' },
+          { drama: 'The Love We Denied', episode: 'Chapter 2', lang: '英语', error: '无可用TikTok账号', result: '没有与短剧语言匹配的TikTok账号，跳过投放', time: '2026-08-20 11:20:15' }
+        ],
+        294: [
+          { drama: 'Humanity\'s Last Hope? I Became Its Worst Nightmare', episode: 'Chapter 1', lang: '英语', error: '无短剧封面', result: '司南未查询到该短剧封面，请在短剧管理补全封面后重试', time: '2026-08-17 15:55:00' },
+          { drama: 'The Love We Denied', episode: 'Chapter 1', lang: '英语', error: '执行报错', result: '创建商品失败：Missing required parameter(s): \'image_url\' is required in \'MINI_SERIES\' catalog.', time: '2026-08-17 15:55:00' }
+        ]
+      };
+      var overseasTaskLogTaskId = null;
+
+      /* 短剧单选下拉（模糊查询，复用 multi-select.css 的 ms-* 样式） */
+      function initOverseasTaskLogDramaSelect() {
+        var host = document.getElementById('task-log-drama-select');
+        if (!host || host._inited) return;
+        host._inited = true;
+
+        var rows = overseasTaskLogRows();
+        var dramas = [];
+        rows.forEach(function (r) {
+          if (dramas.indexOf(r.drama) < 0) dramas.push(r.drama);
+        });
+        var state = { value: '', open: false, kw: '' };
+
+        host.innerHTML =
+          '<div class="ms-field">' +
+            '<button type="button" class="ms-trigger" style="width:100%;">' +
+              '<span class="ms-label">请选择短剧</span>' +
+              '<span class="ms-caret">▾</span>' +
+            '</button>' +
+            '<button type="button" class="ms-clear" title="清空">×</button>' +
+          '</div>';
+        var trigger = host.querySelector('.ms-trigger');
+        var label = host.querySelector('.ms-label');
+        var clearBtn = host.querySelector('.ms-clear');
+
+        var panel = document.createElement('div');
+        panel.className = 'ms-panel';
+        panel.innerHTML =
+          '<div class="ms-search"><input type="text" class="form-input" placeholder="请输入短剧名称" /></div>' +
+          '<div class="ms-list"></div>';
+        document.body.appendChild(panel);
+        var search = panel.querySelector('input');
+        var list = panel.querySelector('.ms-list');
+
+        function renderList() {
+          var kw = state.kw.trim().toLowerCase();
+          var items = dramas.filter(function (d) { return !kw || d.toLowerCase().indexOf(kw) >= 0; });
+          list.innerHTML = items.length
+            ? items.map(function (d) {
+                return '<div class="ms-option" data-v="' + d + '">' + d + '</div>';
+              }).join('')
+            : '<div class="ms-empty">暂无数据</div>';
+        }
+        function position() {
+          if (!state.open) return;
+          var r = trigger.getBoundingClientRect();
+          panel.style.width = r.width + 'px';
+          panel.style.left = r.left + 'px';
+          panel.style.top = (r.bottom + 4) + 'px';
+        }
+        function sync() {
+          label.textContent = state.value || '请选择短剧';
+          label.style.color = state.value ? 'var(--color-text-primary)' : 'var(--color-text-tertiary)';
+        }
+        function openPanel() {
+          state.open = true; state.kw = ''; search.value = '';
+          renderList(); panel.classList.add('is-open'); host.classList.add('is-open'); position();
+          setTimeout(function () { search.focus(); }, 0);
+        }
+        function closePanel() {
+          state.open = false;
+          panel.classList.remove('is-open'); host.classList.remove('is-open');
+        }
+
+        trigger.addEventListener('click', function (e) { e.stopPropagation(); state.open ? closePanel() : openPanel(); });
+        clearBtn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          state.value = ''; sync(); closePanel();
+        });
+        search.addEventListener('input', function () { state.kw = this.value; renderList(); });
+        panel.addEventListener('click', function (e) {
+          e.stopPropagation();
+          var opt = e.target.closest ? e.target.closest('.ms-option') : null;
+          if (!opt) return;
+          state.value = opt.getAttribute('data-v');
+          sync(); closePanel();
+        });
+        document.addEventListener('click', function (e) {
+          if (state.open && !panel.contains(e.target) && !trigger.contains(e.target)) closePanel();
+        });
+        window.addEventListener('resize', position);
+        window.addEventListener('scroll', position, true);
+
+        host._getDrama = function () { return state.value; };
+        host._resetDrama = function () { state.value = ''; sync(); };
+      }
+
+      function overseasTaskLogRows() {
+        var all = [];
+        Object.keys(OVERSEAS_TASK_LOG_DATA).forEach(function (id) {
+          (OVERSEAS_TASK_LOG_DATA[id] || []).forEach(function (r) {
+            all.push(Object.assign({ taskId: id }, r));
+          });
+        });
+        return all;
+      }
+
+      function renderOverseasTaskLogRows() {
+        var tbody = document.getElementById('task-log-tbody');
+        if (!tbody) return;
+        initOverseasTaskLogDramaSelect();
+        var dramaHost = document.getElementById('task-log-drama-select');
+        var drama = dramaHost && dramaHost._getDrama ? dramaHost._getDrama() : '';
+        var episode = ((document.getElementById('task-log-script-input') || {}).value || '').trim();
+        var errType = (document.getElementById('task-log-error-select') || {}).value || '';
+        var rows = overseasTaskLogRows().filter(function (r) {
+          if (overseasTaskLogTaskId && String(r.taskId) !== String(overseasTaskLogTaskId)) return false;
+          if (drama && r.drama !== drama) return false;
+          if (episode && r.episode.indexOf(episode) < 0) return false;
+          if (errType && r.error !== errType) return false;
+          return true;
+        });
+        tbody.innerHTML = rows.length
+          ? rows
+              .map(function (r) {
+                return (
+                  '<tr>' +
+                  '<td>' + r.drama + '</td>' +
+                  '<td>' + r.episode + '</td>' +
+                  '<td>' + r.lang + '</td>' +
+                  '<td>' + r.error + '</td>' +
+                  '<td style="color:var(--color-error);">' + r.result + '</td>' +
+                  '<td>' + r.time + '</td>' +
+                  '</tr>'
+                );
+              })
+              .join('')
+          : '<tr><td colspan="6" style="text-align:center;padding:24px 0;color:var(--color-text-secondary);">暂无数据</td></tr>';
+        var total = document.getElementById('task-log-total');
+        if (total) total.textContent = rows.length;
+      }
+
+      function resetOverseasTaskLogFilters() {
+        var dramaHost = document.getElementById('task-log-drama-select');
+        if (dramaHost && dramaHost._resetDrama) dramaHost._resetDrama();
+        var input = document.getElementById('task-log-script-input');
+        var err = document.getElementById('task-log-error-select');
+        if (input) input.value = '';
+        if (err) err.value = '';
+        renderOverseasTaskLogRows();
+      }
+
       function showOverseasTaskLog(id) {
-        alert('查看任务日志：' + id);
+        overseasTaskLogTaskId = id;
+        var name = '';
+        document.querySelectorAll('#overseas-auto-delivery-task tbody tr').forEach(function (tr) {
+          if (!tr.querySelector('button[onclick*="showOverseasTaskLog(' + id + ')"]')) return;
+          var nameCell = tr.querySelector('td:nth-child(3)');
+          if (nameCell) name = (nameCell.textContent || '').trim();
+        });
+        var titleEl = document.getElementById('overseas-task-log-title');
+        if (titleEl) titleEl.textContent = (name || '任务') + '(ID:' + id + ')';
+        resetOverseasTaskLogFilters();
+        var overlay = document.getElementById('task-log-overlay');
+        var drawer = document.getElementById('drawer-overseas-task-log');
+        if (overlay) overlay.classList.add('open');
+        if (drawer) drawer.classList.add('open');
+      }
+
+      function closeOverseasTaskLogDrawer() {
+        var overlay = document.getElementById('task-log-overlay');
+        var drawer = document.getElementById('drawer-overseas-task-log');
+        if (overlay) overlay.classList.remove('open');
+        if (drawer) drawer.classList.remove('open');
       }
 
       function changeOverseasPage(page) {
