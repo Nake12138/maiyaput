@@ -2325,6 +2325,25 @@
                   <button class="drawer-close" onclick="closeAiTaskDrawer()" style="margin-left: auto;">×</button>
                 </div>
                 <div class="drawer-body" style="padding: 0 24px 24px;">
+                  <!-- 短剧范围：三个模块（标准投放 / 全域投放 / 控损管理）共用，位于页签上方 -->
+                  <div class="ai-schedule-section" style="margin-bottom: 20px;">
+                    <h4 class="form-section-title">短剧范围</h4>
+
+                    <div style="display: flex; align-items: center; gap: 12px; margin: 16px 0 8px;">
+                      <select class="form-input" style="width: 140px; flex: none;">
+                        <option>短剧标签</option>
+                        <option>剧名</option>
+                      </select>
+                      <select class="form-input" style="width: 140px; flex: none;">
+                        <option selected>包含</option>
+                        <option>不包含</option>
+                      </select>
+                      <input type="text" class="form-input" style="flex: 1;" placeholder="请选择" />
+                    </div>
+                    <span class="link" style="font-size: 13px; display: inline-block; margin-bottom: 8px;" onclick="alert('添加短剧范围')">添加短剧范围</span>
+
+                  </div>
+
                   <div class="tabs" id="ai-task-drawer-tabs" style="justify-content: space-between; margin: 0 -24px 20px; padding: 0 24px;">
                     <button class="tab active" style="padding-left: 0;" onclick="switchAiTaskDrawerTab('standard')">标准投放</button>
                     <button class="tab" onclick="switchAiTaskDrawerTab('global')">全域投放</button>
@@ -2332,24 +2351,6 @@
                   </div>
 
                   <div id="ai-drawer-standard" class="ai-drawer-pane">
-                    <div class="ai-schedule-section" style="margin-bottom: 20px;">
-                      <h4 class="form-section-title">短剧范围</h4>
-
-                      <div style="display: flex; align-items: center; gap: 12px; margin: 16px 0 8px;">
-                        <select class="form-input" style="width: 140px; flex: none;">
-                          <option>短剧标签</option>
-                          <option>剧名</option>
-                        </select>
-                        <select class="form-input" style="width: 140px; flex: none;">
-                          <option selected>包含</option>
-                          <option>不包含</option>
-                        </select>
-                        <input type="text" class="form-input" style="flex: 1;" placeholder="请选择" />
-                      </div>
-                      <span class="link" style="font-size: 13px; display: inline-block; margin-bottom: 8px;" onclick="alert('添加短剧范围')">添加短剧范围</span>
-
-                    </div>
-
                     <div class="tabs ai-std-subtabs" id="ai-std-subtabs" style="margin-bottom: 20px;">
                       <button class="tab active" onclick="switchAiStdSubTab('stable-pay')">稳定成本-付费</button>
                       <button class="tab" onclick="switchAiStdSubTab('stable-iaa')">稳定成本-IAA</button>
