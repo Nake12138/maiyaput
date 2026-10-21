@@ -3473,23 +3473,13 @@ body {
   margin-bottom: 14px;
 }
 
-/* 表单两列栅格：模块内字段自动两两配对，缩短纵向长度 */
-#ai-task-drawer .ai-schedule-section {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px 16px;
-  align-items: start;
-}
-
+/* 表单单列排布：字段独占一行，纵向顺序填写 */
 #ai-task-drawer .form-row {
-  display: contents;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 16px;
+  align-items: flex-start;
   margin-bottom: 0;
-}
-
-#ai-task-drawer .ai-schedule-section .form-section-title,
-#ai-task-drawer .ai-schedule-section > .link,
-#ai-task-drawer .ai-schedule-section > div:not(.form-row) {
-  grid-column: 1 / -1;
 }
 
 #ai-task-drawer .form-item {
