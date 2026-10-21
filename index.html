@@ -3843,7 +3843,7 @@
       function resetAiScopeFilters(scope, tabKey) {
         var root = document.getElementById('ai-' + scope + '-' + tabKey);
         if (!root) return;
-        root.querySelectorAll('.filter-select').forEach(function (s) { s.selectedIndex = 0; });
+        root.querySelectorAll('.filter-select, .filter-combo-select').forEach(function (s) { s.selectedIndex = 0; });
         root.querySelectorAll('.filter-input, .filter-combo-input').forEach(function (i) { i.value = ''; });
       }
 
