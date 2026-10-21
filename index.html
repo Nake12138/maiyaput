@@ -1303,7 +1303,7 @@
                       <tbody>
                         <tr>
                           <td>
-                            <span class="link">短剧1</span>
+                            <span class="link" onclick="drillAiDramaToAccount('1001')">短剧1</span>
                             <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 1001</div>
                           </td>
                           <td>
@@ -1774,37 +1774,7 @@
                       </div>
                       <span class="link" style="font-size: 13px; display: inline-block; margin-bottom: 8px;" onclick="alert('添加短剧范围')">添加短剧范围</span>
 
-                      <h4 class="form-section-title" style="margin-top: 20px;">基建数量/单剧</h4>
-                      <div class="form-row">
-                        <div class="form-item">
-                          <label class="form-label"><span class="required-star">*</span> 投放账户数</label>
-                          <input type="text" class="form-input" placeholder="请输入" />
-                        </div>
-                      </div>
-                      <div class="form-row">
-                        <div class="form-item">
-                          <label class="form-label"><span class="required-star">*</span> <span class="tip-icon" data-tip="每个账户下创建的项目数量，将影响基建总量">?</span> 账户下项目数</label>
-                          <input type="text" class="form-input" placeholder="请输入" />
-                        </div>
-                      </div>
-                      <div class="form-row">
-                        <div class="form-item">
-                          <label class="form-label">项目下单元数</label>
-                          <input type="text" class="form-input" placeholder="请输入" />
-                          <span style="margin-left: 8px; font-size: 12px; color: var(--color-text-tertiary); white-space: nowrap;">不填写默认15</span>
-                        </div>
-                      </div>
-                      <div class="form-row">
-                        <div class="form-item">
-                          <label class="form-label">单元下创意数</label>
-                          <input type="text" class="form-input" placeholder="请输入" />
-                          <span style="margin-left: 8px; font-size: 12px; color: var(--color-text-tertiary); white-space: nowrap;">不填写默认30</span>
-                        </div>
-                      </div>
                     </div>
-
-                    <div class="ai-schedule-section" style="margin-bottom: 20px; padding-top: 20px; border-top: 1px solid var(--color-border);">
-                      <h4 class="form-section-title">投放配置</h4>
 
                     <div class="tabs ai-std-subtabs" id="ai-std-subtabs" style="margin-bottom: 20px;">
                       <button class="tab active" onclick="switchAiStdSubTab('stable-pay')">稳定成本-付费</button>
@@ -1812,127 +1782,337 @@
                       <button class="tab" onclick="switchAiStdSubTab('max-pay')">最大转化-付费</button>
                       <button class="tab" onclick="switchAiStdSubTab('max-iaa')">最大转化-IAA</button>
                     </div>
-
-                    <!-- 稳定成本-付费 -->
                     <div id="ai-std-stable-pay" class="ai-std-pane">
-                      <div class="form-row">
-                        <div class="form-item">
-                          <label class="form-label"><span class="tip-icon" data-tip="如果填写ROI系数，深度优化目标为 付费ROI，不填写则没有 深度优化目标">?</span> ROI系数</label>
-                          <input type="text" class="form-input" placeholder="请输入（选填）" />
+                      <div class="ai-schedule-section" style="padding-top: 20px; border-top: 1px solid var(--color-border);">
+                        <h4 class="form-section-title">基建数量/单剧</h4>
+                        <div class="form-row">
+                          <div class="form-item">
+                            <label class="form-label"><span class="required-star">*</span> 投放账户数</label>
+                            <input type="text" class="form-input" placeholder="请输入" />
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-item">
+                            <label class="form-label"><span class="required-star">*</span> <span class="tip-icon" data-tip="每个账户下创建的项目数量，将影响基建总量">?</span> 账户下项目数</label>
+                            <input type="text" class="form-input" placeholder="请输入" />
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-item">
+                            <label class="form-label">项目下单元数</label>
+                            <input type="text" class="form-input" placeholder="请输入" />
+                            <span style="margin-left: 8px; font-size: 12px; color: var(--color-text-tertiary); white-space: nowrap;">不填写默认15</span>
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-item">
+                            <label class="form-label">单元下创意数</label>
+                            <input type="text" class="form-input" placeholder="请输入" />
+                            <span style="margin-left: 8px; font-size: 12px; color: var(--color-text-tertiary); white-space: nowrap;">不填写默认30</span>
+                          </div>
                         </div>
                       </div>
-                      <div class="form-row">
-                        <div class="form-item">
-                          <label class="form-label"><span class="required-star">*</span> 出价</label>
-                          <input type="text" class="form-input" placeholder="请输入" />
+                      <div class="ai-schedule-section" style="padding-top: 20px; border-top: 1px solid var(--color-border);">
+                        <h4 class="form-section-title">投放配置</h4>
+                        <div class="form-row">
+                          <div class="form-item">
+                            <label class="form-label"><span class="tip-icon" data-tip="如果填写ROI系数，深度优化目标为 付费ROI，不填写则没有 深度优化目标">?</span> ROI系数</label>
+                            <input type="text" class="form-input" placeholder="请输入（选填）" />
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-item">
+                            <label class="form-label"><span class="required-star">*</span> 出价</label>
+                            <input type="text" class="form-input" placeholder="请输入" />
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-item">
+                            <label class="form-label"><span class="required-star">*</span> 日预算</label>
+                            <input type="text" class="form-input" placeholder="请输入" />
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-item">
+                            <label class="form-label"><span class="required-star">*</span> 充值面板</label>
+                            <select class="form-input">
+                              <option value="" selected disabled>充值面板</option>
+                              <option>充值面板1</option>
+                              <option>充值面板2</option>
+                            </select>
+                          </div>
                         </div>
                       </div>
-                      <div class="form-row">
-                        <div class="form-item">
-                          <label class="form-label"><span class="required-star">*</span> 日预算</label>
-                          <input type="text" class="form-input" placeholder="请输入" />
+                      <div class="ai-schedule-section" style="padding-top: 20px; border-top: 1px solid var(--color-border);">
+                        <h4 class="form-section-title">项目排期</h4>
+                        <div class="form-row">
+                          <div class="form-item">
+                            <label class="form-label">开投时间</label>
+                            <div class="segmented-control">
+                              <button class="segmented-item active" type="button">今天</button>
+                              <button class="segmented-item" type="button">明天</button>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                      <div class="form-row">
-                        <div class="form-item">
-                          <label class="form-label"><span class="required-star">*</span> 充值面板</label>
-                          <select class="form-input">
-                            <option value="" selected disabled>充值面板</option>
-                            <option>充值面板1</option>
-                            <option>充值面板2</option>
-                          </select>
+                        <div class="form-row">
+                          <div class="form-item">
+                            <label class="form-label"><span class="required-star">*</span> 投放天数</label>
+                            <div class="segmented-control">
+                              <button class="segmented-item active" type="button">不限</button>
+                              <button class="segmented-item" type="button">指定天数</button>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-item">
+                            <label class="form-label"><span class="required-star">*</span> 投放时段</label>
+                            <div class="segmented-control">
+                              <button class="segmented-item active" type="button">不限</button>
+                              <button class="segmented-item" type="button">指定时间段</button>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
 
-                    <!-- 稳定成本-IAA -->
                     <div id="ai-std-stable-iaa" class="ai-std-pane" style="display: none;">
-                      <div class="form-row">
-                        <div class="form-item">
-                          <label class="form-label"><span class="required-star">*</span> ROI系数</label>
-                          <input type="text" class="form-input" placeholder="请输入" />
+                      <div class="ai-schedule-section" style="padding-top: 20px; border-top: 1px solid var(--color-border);">
+                        <h4 class="form-section-title">基建数量/单剧</h4>
+                        <div class="form-row">
+                          <div class="form-item">
+                            <label class="form-label"><span class="required-star">*</span> 投放账户数</label>
+                            <input type="text" class="form-input" placeholder="请输入" />
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-item">
+                            <label class="form-label"><span class="required-star">*</span> <span class="tip-icon" data-tip="每个账户下创建的项目数量，将影响基建总量">?</span> 账户下项目数</label>
+                            <input type="text" class="form-input" placeholder="请输入" />
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-item">
+                            <label class="form-label">项目下单元数</label>
+                            <input type="text" class="form-input" placeholder="请输入" />
+                            <span style="margin-left: 8px; font-size: 12px; color: var(--color-text-tertiary); white-space: nowrap;">不填写默认15</span>
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-item">
+                            <label class="form-label">单元下创意数</label>
+                            <input type="text" class="form-input" placeholder="请输入" />
+                            <span style="margin-left: 8px; font-size: 12px; color: var(--color-text-tertiary); white-space: nowrap;">不填写默认30</span>
+                          </div>
                         </div>
                       </div>
-                      <div class="form-row">
-                        <div class="form-item">
-                          <label class="form-label"><span class="required-star">*</span> 日预算</label>
-                          <input type="text" class="form-input" placeholder="请输入" />
+                      <div class="ai-schedule-section" style="padding-top: 20px; border-top: 1px solid var(--color-border);">
+                        <h4 class="form-section-title">投放配置</h4>
+                        <div class="form-row">
+                          <div class="form-item">
+                            <label class="form-label"><span class="required-star">*</span> ROI系数</label>
+                            <input type="text" class="form-input" placeholder="请输入" />
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-item">
+                            <label class="form-label"><span class="required-star">*</span> 日预算</label>
+                            <input type="text" class="form-input" placeholder="请输入" />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="ai-schedule-section" style="padding-top: 20px; border-top: 1px solid var(--color-border);">
+                        <h4 class="form-section-title">项目排期</h4>
+                        <div class="form-row">
+                          <div class="form-item">
+                            <label class="form-label">开投时间</label>
+                            <div class="segmented-control">
+                              <button class="segmented-item active" type="button">今天</button>
+                              <button class="segmented-item" type="button">明天</button>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-item">
+                            <label class="form-label"><span class="required-star">*</span> 投放天数</label>
+                            <div class="segmented-control">
+                              <button class="segmented-item active" type="button">不限</button>
+                              <button class="segmented-item" type="button">指定天数</button>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-item">
+                            <label class="form-label"><span class="required-star">*</span> 投放时段</label>
+                            <div class="segmented-control">
+                              <button class="segmented-item active" type="button">不限</button>
+                              <button class="segmented-item" type="button">指定时间段</button>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
 
-                    <!-- 最大转化-付费 -->
                     <div id="ai-std-max-pay" class="ai-std-pane" style="display: none;">
-                      <div class="form-row">
-                        <div class="form-item">
-                          <label class="form-label">深度优化目标</label>
-                          <div class="segmented-control">
-                            <button class="segmented-item active" type="button">无</button>
-                            <button class="segmented-item" type="button">付费ROI</button>
+                      <div class="ai-schedule-section" style="padding-top: 20px; border-top: 1px solid var(--color-border);">
+                        <h4 class="form-section-title">基建数量/单剧</h4>
+                        <div class="form-row">
+                          <div class="form-item">
+                            <label class="form-label"><span class="required-star">*</span> 投放账户数</label>
+                            <input type="text" class="form-input" placeholder="请输入" />
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-item">
+                            <label class="form-label"><span class="required-star">*</span> <span class="tip-icon" data-tip="每个账户下创建的项目数量，将影响基建总量">?</span> 账户下项目数</label>
+                            <input type="text" class="form-input" placeholder="请输入" />
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-item">
+                            <label class="form-label">项目下单元数</label>
+                            <input type="text" class="form-input" placeholder="请输入" />
+                            <span style="margin-left: 8px; font-size: 12px; color: var(--color-text-tertiary); white-space: nowrap;">不填写默认15</span>
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-item">
+                            <label class="form-label">单元下创意数</label>
+                            <input type="text" class="form-input" placeholder="请输入" />
+                            <span style="margin-left: 8px; font-size: 12px; color: var(--color-text-tertiary); white-space: nowrap;">不填写默认30</span>
                           </div>
                         </div>
                       </div>
-                      <div class="form-row">
-                        <div class="form-item">
-                          <label class="form-label"><span class="required-star">*</span> 日预算</label>
-                          <input type="text" class="form-input" value="100.00" style="color: var(--color-error);" />
+                      <div class="ai-schedule-section" style="padding-top: 20px; border-top: 1px solid var(--color-border);">
+                        <h4 class="form-section-title">投放配置</h4>
+                        <div class="form-row">
+                          <div class="form-item">
+                            <label class="form-label">深度优化目标</label>
+                            <div class="segmented-control">
+                              <button class="segmented-item active" type="button">无</button>
+                              <button class="segmented-item" type="button">付费ROI</button>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-item">
+                            <label class="form-label"><span class="required-star">*</span> 日预算</label>
+                            <input type="text" class="form-input" value="100.00" style="color: var(--color-error);" />
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-item">
+                            <label class="form-label"><span class="required-star">*</span> 充值面板</label>
+                            <select class="form-input">
+                              <option value="" selected disabled>充值面板</option>
+                              <option>充值面板1</option>
+                              <option>充值面板2</option>
+                            </select>
+                          </div>
                         </div>
                       </div>
-                      <div class="form-row">
-                        <div class="form-item">
-                          <label class="form-label"><span class="required-star">*</span> 充值面板</label>
-                          <select class="form-input">
-                            <option value="" selected disabled>充值面板</option>
-                            <option>充值面板1</option>
-                            <option>充值面板2</option>
-                          </select>
+                      <div class="ai-schedule-section" style="padding-top: 20px; border-top: 1px solid var(--color-border);">
+                        <h4 class="form-section-title">项目排期</h4>
+                        <div class="form-row">
+                          <div class="form-item">
+                            <label class="form-label">开投时间</label>
+                            <div class="segmented-control">
+                              <button class="segmented-item active" type="button">今天</button>
+                              <button class="segmented-item" type="button">明天</button>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-item">
+                            <label class="form-label"><span class="required-star">*</span> 投放天数</label>
+                            <div class="segmented-control">
+                              <button class="segmented-item active" type="button">不限</button>
+                              <button class="segmented-item" type="button">指定天数</button>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-item">
+                            <label class="form-label"><span class="required-star">*</span> 投放时段</label>
+                            <div class="segmented-control">
+                              <button class="segmented-item active" type="button">不限</button>
+                              <button class="segmented-item" type="button">指定时间段</button>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
 
-                    <!-- 最大转化-IAA -->
                     <div id="ai-std-max-iaa" class="ai-std-pane" style="display: none;">
-                      <div class="form-row">
-                        <div class="form-item">
-                          <label class="form-label"><span class="required-star">*</span> 日预算</label>
-                          <input type="text" class="form-input" value="100.00" style="color: var(--color-error);" />
-                          <span style="margin-left: 8px; font-size: 12px; color: var(--color-text-tertiary); white-space: nowrap;">固定100</span>
+                      <div class="ai-schedule-section" style="padding-top: 20px; border-top: 1px solid var(--color-border);">
+                        <h4 class="form-section-title">基建数量/单剧</h4>
+                        <div class="form-row">
+                          <div class="form-item">
+                            <label class="form-label"><span class="required-star">*</span> 投放账户数</label>
+                            <input type="text" class="form-input" placeholder="请输入" />
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                    </div>
-
-                    <div class="ai-schedule-section" style="margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--color-border);">
-                      <h4 class="form-section-title">项目排期</h4>
-                      <div class="form-row">
-                        <div class="form-item">
-                          <label class="form-label">开投时间</label>
-                          <div class="segmented-control">
-                            <button class="segmented-item active" type="button">今天</button>
-                            <button class="segmented-item" type="button">明天</button>
+                        <div class="form-row">
+                          <div class="form-item">
+                            <label class="form-label"><span class="required-star">*</span> <span class="tip-icon" data-tip="每个账户下创建的项目数量，将影响基建总量">?</span> 账户下项目数</label>
+                            <input type="text" class="form-input" placeholder="请输入" />
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-item">
+                            <label class="form-label">项目下单元数</label>
+                            <input type="text" class="form-input" placeholder="请输入" />
+                            <span style="margin-left: 8px; font-size: 12px; color: var(--color-text-tertiary); white-space: nowrap;">不填写默认15</span>
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-item">
+                            <label class="form-label">单元下创意数</label>
+                            <input type="text" class="form-input" placeholder="请输入" />
+                            <span style="margin-left: 8px; font-size: 12px; color: var(--color-text-tertiary); white-space: nowrap;">不填写默认30</span>
                           </div>
                         </div>
                       </div>
-                      <div class="form-row">
-                        <div class="form-item">
-                          <label class="form-label"><span class="required-star">*</span> 投放天数</label>
-                          <div class="segmented-control">
-                            <button class="segmented-item active" type="button">不限</button>
-                            <button class="segmented-item" type="button">指定天数</button>
+                      <div class="ai-schedule-section" style="padding-top: 20px; border-top: 1px solid var(--color-border);">
+                        <h4 class="form-section-title">投放配置</h4>
+                        <div class="form-row">
+                          <div class="form-item">
+                            <label class="form-label"><span class="required-star">*</span> 日预算</label>
+                            <input type="text" class="form-input" value="100.00" style="color: var(--color-error);" />
+                            <span style="margin-left: 8px; font-size: 12px; color: var(--color-text-tertiary); white-space: nowrap;">固定100</span>
                           </div>
                         </div>
                       </div>
-                      <div class="form-row">
-                        <div class="form-item">
-                          <label class="form-label"><span class="required-star">*</span> 投放时段</label>
-                          <div class="segmented-control">
-                            <button class="segmented-item active" type="button">不限</button>
-                            <button class="segmented-item" type="button">指定时间段</button>
+                      <div class="ai-schedule-section" style="padding-top: 20px; border-top: 1px solid var(--color-border);">
+                        <h4 class="form-section-title">项目排期</h4>
+                        <div class="form-row">
+                          <div class="form-item">
+                            <label class="form-label">开投时间</label>
+                            <div class="segmented-control">
+                              <button class="segmented-item active" type="button">今天</button>
+                              <button class="segmented-item" type="button">明天</button>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-item">
+                            <label class="form-label"><span class="required-star">*</span> 投放天数</label>
+                            <div class="segmented-control">
+                              <button class="segmented-item active" type="button">不限</button>
+                              <button class="segmented-item" type="button">指定天数</button>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-item">
+                            <label class="form-label"><span class="required-star">*</span> 投放时段</label>
+                            <div class="segmented-control">
+                              <button class="segmented-item active" type="button">不限</button>
+                              <button class="segmented-item" type="button">指定时间段</button>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
 
                   <div id="ai-drawer-global" class="ai-drawer-pane" style="display: none;">
                     <div class="form-row">
@@ -3128,6 +3308,12 @@
           if (select) select.value = '任务ID';
           if (input) input.value = taskId;
         }
+      }
+
+      /* 短剧名下钻：切换到账户 Tab 并带入短剧ID筛选项 */
+      function drillAiDramaToAccount(dramaId) {
+        switchAiAutoTaskTab('account');
+        setAiAutoTaskFilter('account', 'drama-name', '短剧ID', dramaId);
       }
 
       /* 新增/编辑抽屉：标题为「任务名（ID: x）」，新增场景回退为通用标题 */
