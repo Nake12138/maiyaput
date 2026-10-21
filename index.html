@@ -1209,9 +1209,8 @@
                 <div class="tabs" id="ai-auto-task-tabs">
                   <button class="tab active" onclick="switchAiAutoTaskTab('task')">任务</button>
                   <button class="tab" onclick="switchAiAutoTaskTab('drama')">短剧</button>
-                  <button class="tab" onclick="switchAiAutoTaskTab('account')">账户</button>
-                  <button class="tab" onclick="switchAiAutoTaskTab('project')">项目</button>
-                  <button class="tab" onclick="switchAiAutoTaskTab('unit')">单元</button>
+                  <button class="tab" onclick="switchAiAutoTaskTab('standard')">标准投放</button>
+                  <button class="tab" onclick="switchAiAutoTaskTab('global')">全域投放</button>
                 </div>
               </div>
 
@@ -1327,8 +1326,16 @@
                 </div>
               </div>
 
-              <!-- 账户 Tab -->
-              <div id="ai-auto-task-account" class="tab-content" style="display: none;">
+              <!-- 标准投放 Tab（内含 账户 / 项目 / 单元 子页签） -->
+              <div id="ai-auto-task-standard" class="tab-content" style="display: none;">
+                <div class="tabs" id="ai-standard-tabs" style="margin-bottom: 12px;">
+                  <button class="tab active" onclick="switchAiScopeTab('standard','account')">账户</button>
+                  <button class="tab" onclick="switchAiScopeTab('standard','project')">项目</button>
+                  <button class="tab" onclick="switchAiScopeTab('standard','unit')">单元</button>
+                </div>
+
+                <!-- 账户子页签 -->
+                <div id="ai-standard-account" class="tab-content">
                 <div class="filter-bar">
                   <div class="filter-combo" data-filter-type="task-name">
                     <select class="filter-combo-select">
@@ -1459,7 +1466,7 @@
               </div>
 
               <!-- 项目 Tab -->
-              <div id="ai-auto-task-project" class="tab-content" style="display: none;">
+              <div id="ai-standard-project" class="tab-content" style="display: none;">
                 <div class="filter-bar">
                   <div class="filter-combo" data-filter-type="task-name">
                     <select class="filter-combo-select">
@@ -1616,7 +1623,7 @@
               </div>
 
               <!-- 单元 Tab -->
-              <div id="ai-auto-task-unit" class="tab-content" style="display: none;">
+              <div id="ai-standard-unit" class="tab-content" style="display: none;">
                 <div class="filter-bar">
                   <div class="filter-combo" data-filter-type="task-name">
                     <select class="filter-combo-select">
@@ -1766,6 +1773,458 @@
                     <input type="text" class="jump-input" value="1" />
                     <span>页</span>
                   </div>
+                </div>
+              </div>
+              </div>
+
+              <!-- 全域投放 Tab（内含 账户 / 项目 / 单元 子页签） -->
+              <div id="ai-auto-task-global" class="tab-content" style="display: none;">
+                <div class="tabs" id="ai-global-tabs" style="margin-bottom: 12px;">
+                  <button class="tab active" onclick="switchAiScopeTab('global','account')">账户</button>
+                  <button class="tab" onclick="switchAiScopeTab('global','project')">项目</button>
+                  <button class="tab" onclick="switchAiScopeTab('global','unit')">单元</button>
+                </div>
+
+                <!-- 账户子页签 -->
+                <div id="ai-global-account" class="tab-content">
+                <div class="filter-bar">
+                  <div class="filter-combo" data-filter-type="task-name">
+                    <select class="filter-combo-select">
+                      <option>任务名称</option>
+                      <option>任务ID</option>
+                    </select>
+                    <input type="text" class="filter-combo-input" placeholder="请输入" />
+                  </div>
+                  <div class="filter-combo" data-filter-type="account-name">
+                    <select class="filter-combo-select">
+                      <option>账户名称</option>
+                      <option>账户ID</option>
+                      <option>账户列表ID</option>
+                    </select>
+                    <input type="text" class="filter-combo-input" placeholder="请输入" />
+                  </div>
+                  <div class="filter-combo" data-filter-type="drama-name">
+                    <select class="filter-combo-select">
+                      <option>短剧名称</option>
+                      <option>短剧ID</option>
+                    </select>
+                    <input type="text" class="filter-combo-input" placeholder="请输入" />
+                  </div>
+                  <select class="filter-select">
+                    <option value="">请选择业务场景</option>
+                    <option value="dyy-iaa">端原生IAA</option>
+                    <option value="dyy-pay">端原生付费</option>
+                  </select>
+                  <select class="filter-select">
+                    <option value="">请选择竞价策略</option>
+                    <option value="stable-cost">稳定成本</option>
+                    <option value="max-convert">最大转化</option>
+                  </select>
+                  <select class="filter-select">
+                    <option value="">请选择创建人</option>
+                    <option value="nake">娜可</option>
+                    <option value="huanxue">还音</option>
+                  </select>
+                  <div class="filter-actions">
+                    <button class="btn btn-info btn-sm" onclick="searchAiScopeRow('global','account')">查询</button>
+                    <button class="btn btn-outline btn-sm" onclick="resetAiScopeFilters('global','account')">重置</button>
+                  </div>
+                </div>
+
+                <div class="filter-status">已选择<span id="aiGlobalAccountSelectedCount">0</span>个 <span class="link" onclick="batchRetryAiRows('账户')">重试</span></div>
+
+                <div class="table-card">
+                  <div class="table-wrapper">
+                    <table class="data-table">
+                      <thead>
+                        <tr>
+                          <th class="checkbox-col"><input type="checkbox" id="selectAllAiGlobalAccounts" onclick="toggleSelectAllAiRows('selectAllAiGlobalAccounts','ai-global-account-checkbox','aiGlobalAccountSelectedCount')" /></th>
+                          <th>ID</th>
+                          <th>账户信息</th>
+                          <th>任务信息</th>
+                          <th>项目数</th>
+                          <th>单元数</th>
+                          <th>操作</th>
+                          <th>投放短剧</th>
+                          <th>业务场景</th>
+                          <th>竞价策略</th>
+                          <th>创建人</th>
+                          <th>创建时间</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td><input type="checkbox" class="ai-global-account-checkbox" onchange="updateAiRowSelectedCount('ai-global-account','aiGlobalAccountSelectedCount')" /></td>
+                          <td>5200141</td>
+                          <td>
+                            <span class="link" onclick="drillAiGlobalAccountToProject(5200141)">JL-MAD-AI-全域一组-01</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7648215203578102101</div>
+                          </td>
+                          <td>
+                            <span class="link">任务1</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:1</div>
+                          </td>
+                          <td><span class="link">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功2</span><span class="stat-row-empty">失败0</span></div></div></td>
+                          <td><span class="link">4</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功4</span><span class="stat-row-empty">失败0</span></div></div></td>
+                          <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('账户',5200141)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('账户',5200141)">重试</button></div></td>
+                          <td>短剧1<br /><span style="color:var(--color-text-tertiary);">ID:1001</span></td>
+                          <td>端原生付费</td>
+                          <td>最大转化</td>
+                          <td>娜可</td>
+                          <td>2026-10-20 11:10:33</td>
+                        </tr>
+                        <tr>
+                          <td><input type="checkbox" class="ai-global-account-checkbox" onchange="updateAiRowSelectedCount('ai-global-account','aiGlobalAccountSelectedCount')" /></td>
+                          <td>5200142</td>
+                          <td>
+                            <span class="link" onclick="drillAiGlobalAccountToProject(5200142)">JL-MAD-AI-全域一组-02</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7648215203578102102</div>
+                          </td>
+                          <td>
+                            <span class="link">任务1</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:1</div>
+                          </td>
+                          <td><span class="link">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功1</span><span class="stat-fail-text fail-clickable" onclick="openAiAutoFailDetail(5200142, 'JL-MAD-AI-全域一组-02', 'project', 1)">失败1</span></div></div></td>
+                          <td><span class="link">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功2</span><span class="stat-row-empty">失败0</span></div></div></td>
+                          <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('账户',5200142)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('账户',5200142)">重试</button></div></td>
+                          <td>短剧1<br /><span style="color:var(--color-text-tertiary);">ID:1001</span></td>
+                          <td>端原生IAA</td>
+                          <td>稳定成本</td>
+                          <td>娜可</td>
+                          <td>2026-10-20 11:10:36</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div class="pagination">
+                    <span class="pagination-info">共 2 条</span>
+                    <div class="pagination-pages">
+                      <button class="page-btn" onclick="changePage('prev')">&lt;</button>
+                      <button class="page-btn active" onclick="changePage(1)">1</button>
+                      <button class="page-btn" onclick="changePage('next')">&gt;</button>
+                    </div>
+                    <select class="page-size-select">
+                      <option value="20">20 条/页</option>
+                      <option value="50">50 条/页</option>
+                      <option value="100">100 条/页</option>
+                    </select>
+                    <span>跳至</span>
+                    <input type="text" class="jump-input" value="1" />
+                    <span>页</span>
+                  </div>
+                </div>
+                </div>
+
+                <!-- 项目子页签 -->
+                <div id="ai-global-project" class="tab-content" style="display: none;">
+                <div class="filter-bar">
+                  <div class="filter-combo" data-filter-type="task-name">
+                    <select class="filter-combo-select">
+                      <option>任务名称</option>
+                      <option>任务ID</option>
+                    </select>
+                    <input type="text" class="filter-combo-input" placeholder="请输入" />
+                  </div>
+                  <div class="filter-combo" data-filter-type="account-name">
+                    <select class="filter-combo-select">
+                      <option>账户名称</option>
+                      <option>账户ID</option>
+                    </select>
+                    <input type="text" class="filter-combo-input" placeholder="请输入" />
+                  </div>
+                  <div class="filter-combo" data-filter-type="project-name">
+                    <select class="filter-combo-select">
+                      <option>项目名称</option>
+                      <option>项目ID</option>
+                    </select>
+                    <input type="text" class="filter-combo-input" placeholder="请输入" />
+                  </div>
+                  <div class="filter-combo" data-filter-type="drama-name">
+                    <select class="filter-combo-select">
+                      <option>短剧名称</option>
+                      <option>短剧ID</option>
+                    </select>
+                    <input type="text" class="filter-combo-input" placeholder="请输入" />
+                  </div>
+                  <select class="filter-select">
+                    <option value="">请选择上传状态</option>
+                    <option value="success">成功</option>
+                    <option value="fail">失败</option>
+                  </select>
+                  <select class="filter-select">
+                    <option value="">请选择业务场景</option>
+                    <option value="dyy-iaa">端原生IAA</option>
+                    <option value="dyy-pay">端原生付费</option>
+                  </select>
+                  <select class="filter-select">
+                    <option value="">请选择竞价策略</option>
+                    <option value="stable-cost">稳定成本</option>
+                    <option value="max-convert">最大转化</option>
+                  </select>
+                  <select class="filter-select">
+                    <option value="">请选择创建人</option>
+                    <option value="nake">娜可</option>
+                    <option value="huanxue">还音</option>
+                  </select>
+                  <div class="filter-actions">
+                    <button class="btn btn-info btn-sm" onclick="searchAiScopeRow('global','project')">查询</button>
+                    <button class="btn btn-outline btn-sm" onclick="resetAiScopeFilters('global','project')">重置</button>
+                  </div>
+                </div>
+
+                <div class="filter-status">已选择<span id="aiGlobalProjectSelectedCount">0</span>个 <span class="link" onclick="batchRetryAiRows('项目')">重试</span></div>
+
+                <div class="table-card">
+                  <div class="table-wrapper">
+                    <table class="data-table">
+                      <thead>
+                        <tr>
+                          <th class="checkbox-col"><input type="checkbox" id="selectAllAiGlobalProjects" onclick="toggleSelectAllAiRows('selectAllAiGlobalProjects','ai-global-project-checkbox','aiGlobalProjectSelectedCount')" /></th>
+                          <th>ID</th>
+                          <th>项目信息</th>
+                          <th>上传状态</th>
+                          <th>单元数</th>
+                          <th>操作</th>
+                          <th>竞价策略</th>
+                          <th>日预算</th>
+                          <th>ROI系数</th>
+                          <th>账户信息</th>
+                          <th>任务信息</th>
+                          <th>投放短剧</th>
+                          <th>业务场景</th>
+                          <th>创建人</th>
+                          <th>创建时间</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td><input type="checkbox" class="ai-global-project-checkbox" onchange="updateAiRowSelectedCount('ai-global-project','aiGlobalProjectSelectedCount')" /></td>
+                          <td>91012</td>
+                          <td>
+                            <span class="link" onclick="drillAiGlobalProjectToUnit(91012)">任务1-短剧1-全域-项目A</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7455532211009911</div>
+                          </td>
+                          <td><span class="tag tag-success">成功</span></td>
+                          <td><span class="link">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功2</span><span class="stat-row-empty">失败0</span></div></div></td>
+                          <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('项目',91012)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('项目',91012)">重试</button></div></td>
+                          <td>最大转化</td>
+                          <td>1000</td>
+                          <td>--</td>
+                          <td>
+                            JL-MAD-AI-全域一组-01
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7648215203578102101</div>
+                          </td>
+                          <td>
+                            任务1
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:1</div>
+                          </td>
+                          <td>短剧1<br /><span style="color:var(--color-text-tertiary);">ID:1001</span></td>
+                          <td>端原生付费</td>
+                          <td>娜可</td>
+                          <td>2026-10-20 11:10:35</td>
+                        </tr>
+                        <tr>
+                          <td><input type="checkbox" class="ai-global-project-checkbox" onchange="updateAiRowSelectedCount('ai-global-project','aiGlobalProjectSelectedCount')" /></td>
+                          <td>91013</td>
+                          <td>
+                            <span class="link" onclick="drillAiGlobalProjectToUnit(91013)">任务1-短剧1-全域-项目B</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7455532211009912</div>
+                          </td>
+                          <td><span class="tag tag-error">失败</span></td>
+                          <td><span class="link">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功1</span><span class="stat-fail-text fail-clickable" onclick="openAiAutoFailDetail(91013, '任务1-短剧1-全域-项目B', 'unit', 1)">失败1</span></div></div></td>
+                          <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('项目',91013)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('项目',91013)">重试</button></div></td>
+                          <td>稳定成本</td>
+                          <td>3000</td>
+                          <td>1.03</td>
+                          <td>
+                            JL-MAD-AI-全域一组-02
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7648215203578102102</div>
+                          </td>
+                          <td>
+                            任务1
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:1</div>
+                          </td>
+                          <td>短剧1<br /><span style="color:var(--color-text-tertiary);">ID:1001</span></td>
+                          <td>端原生IAA</td>
+                          <td>娜可</td>
+                          <td>2026-10-20 11:10:38</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div class="pagination">
+                    <span class="pagination-info">共 2 条</span>
+                    <div class="pagination-pages">
+                      <button class="page-btn" onclick="changePage('prev')">&lt;</button>
+                      <button class="page-btn active" onclick="changePage(1)">1</button>
+                      <button class="page-btn" onclick="changePage('next')">&gt;</button>
+                    </div>
+                    <select class="page-size-select">
+                      <option value="20">20 条/页</option>
+                      <option value="50">50 条/页</option>
+                      <option value="100">100 条/页</option>
+                    </select>
+                    <span>跳至</span>
+                    <input type="text" class="jump-input" value="1" />
+                    <span>页</span>
+                  </div>
+                </div>
+                </div>
+
+                <!-- 单元子页签 -->
+                <div id="ai-global-unit" class="tab-content" style="display: none;">
+                <div class="filter-bar">
+                  <div class="filter-combo" data-filter-type="task-name">
+                    <select class="filter-combo-select">
+                      <option>任务名称</option>
+                      <option>任务ID</option>
+                    </select>
+                    <input type="text" class="filter-combo-input" placeholder="请输入" />
+                  </div>
+                  <div class="filter-combo" data-filter-type="account-name">
+                    <select class="filter-combo-select">
+                      <option>账户名称</option>
+                      <option>账户ID</option>
+                    </select>
+                    <input type="text" class="filter-combo-input" placeholder="请输入" />
+                  </div>
+                  <div class="filter-combo" data-filter-type="project-name">
+                    <select class="filter-combo-select">
+                      <option>项目名称</option>
+                      <option>项目ID</option>
+                    </select>
+                    <input type="text" class="filter-combo-input" placeholder="请输入" />
+                  </div>
+                  <div class="filter-combo" data-filter-type="unit-name">
+                    <select class="filter-combo-select">
+                      <option>单元名称</option>
+                      <option>单元ID</option>
+                    </select>
+                    <input type="text" class="filter-combo-input" placeholder="请输入" />
+                  </div>
+                  <select class="filter-select">
+                    <option value="">请选择上传状态</option>
+                    <option value="success">成功</option>
+                    <option value="fail">失败</option>
+                  </select>
+                  <select class="filter-select">
+                    <option value="">请选择业务场景</option>
+                    <option value="dyy-iaa">端原生IAA</option>
+                    <option value="dyy-pay">端原生付费</option>
+                  </select>
+                  <select class="filter-select">
+                    <option value="">请选择竞价策略</option>
+                    <option value="stable-cost">稳定成本</option>
+                    <option value="max-convert">最大转化</option>
+                  </select>
+                  <select class="filter-select">
+                    <option value="">请选择创建人</option>
+                    <option value="nake">娜可</option>
+                    <option value="huanxue">还音</option>
+                  </select>
+                  <div class="filter-actions">
+                    <button class="btn btn-info btn-sm" onclick="searchAiScopeRow('global','unit')">查询</button>
+                    <button class="btn btn-outline btn-sm" onclick="resetAiScopeFilters('global','unit')">重置</button>
+                  </div>
+                </div>
+
+                <div class="filter-status">已选择<span id="aiGlobalUnitSelectedCount">0</span>个 <span class="link" onclick="batchRetryAiRows('单元')">重试</span></div>
+
+                <div class="table-card">
+                  <div class="table-wrapper">
+                    <table class="data-table">
+                      <thead>
+                        <tr>
+                          <th class="checkbox-col"><input type="checkbox" id="selectAllAiGlobalUnits" onclick="toggleSelectAllAiRows('selectAllAiGlobalUnits','ai-global-unit-checkbox','aiGlobalUnitSelectedCount')" /></th>
+                          <th>ID</th>
+                          <th>单元信息</th>
+                          <th>上传状态</th>
+                          <th>操作</th>
+                          <th>竞价策略</th>
+                          <th>业务场景</th>
+                          <th>项目信息</th>
+                          <th>账户信息</th>
+                          <th>任务信息</th>
+                          <th>创建人</th>
+                          <th>创建时间</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td><input type="checkbox" class="ai-global-unit-checkbox" onchange="updateAiRowSelectedCount('ai-global-unit','aiGlobalUnitSelectedCount')" /></td>
+                          <td>31021</td>
+                          <td>
+                            <span class="link" onclick="showAiAutoUnitDetail(31021)">任务1-短剧1-全域-项目A-单元1</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:6611223344557711</div>
+                          </td>
+                          <td><span class="tag tag-success">成功</span></td>
+                          <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('单元',31021)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('单元',31021)">重试</button></div></td>
+                          <td>最大转化</td>
+                          <td>端原生付费</td>
+                          <td>
+                            任务1-短剧1-全域-项目A
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7455532211009911</div>
+                          </td>
+                          <td>
+                            JL-MAD-AI-全域一组-01
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7648215203578102101</div>
+                          </td>
+                          <td>
+                            任务1
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:1</div>
+                          </td>
+                          <td>娜可</td>
+                          <td>2026-10-20 11:10:40</td>
+                        </tr>
+                        <tr>
+                          <td><input type="checkbox" class="ai-global-unit-checkbox" onchange="updateAiRowSelectedCount('ai-global-unit','aiGlobalUnitSelectedCount')" /></td>
+                          <td>31020</td>
+                          <td>
+                            <span class="link" onclick="showAiAutoUnitDetail(31020)">任务1-短剧1-全域-项目B-单元1</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:6611223344557722</div>
+                          </td>
+                          <td><span class="tag tag-error">失败</span></td>
+                          <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('单元',31020)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('单元',31020)">重试</button></div></td>
+                          <td>稳定成本</td>
+                          <td>端原生IAA</td>
+                          <td>
+                            任务1-短剧1-全域-项目B
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7455532211009912</div>
+                          </td>
+                          <td>
+                            JL-MAD-AI-全域一组-02
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7648215203578102102</div>
+                          </td>
+                          <td>
+                            任务1
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:1</div>
+                          </td>
+                          <td>娜可</td>
+                          <td>2026-10-20 11:10:43</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div class="pagination">
+                    <span class="pagination-info">共 2 条</span>
+                    <div class="pagination-pages">
+                      <button class="page-btn" onclick="changePage('prev')">&lt;</button>
+                      <button class="page-btn active" onclick="changePage(1)">1</button>
+                      <button class="page-btn" onclick="changePage('next')">&gt;</button>
+                    </div>
+                    <select class="page-size-select">
+                      <option value="20">20 条/页</option>
+                      <option value="50">50 条/页</option>
+                      <option value="100">100 条/页</option>
+                    </select>
+                    <span>跳至</span>
+                    <input type="text" class="jump-input" value="1" />
+                    <span>页</span>
+                  </div>
+                </div>
                 </div>
               </div>
             </div>
