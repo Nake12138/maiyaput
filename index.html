@@ -2564,6 +2564,17 @@
         document.getElementById('ai-task-drawer').classList.remove('open');
       }
 
+      /* 通用按钮组（segmented-control）：点击切换选中，同组内互斥 */
+      document.addEventListener('click', function (event) {
+        var item = event.target.closest('.segmented-item');
+        if (!item) return;
+        var group = item.closest('.segmented-control');
+        if (!group) return;
+        group.querySelectorAll('.segmented-item').forEach(function (btn) {
+          btn.classList.toggle('active', btn === item);
+        });
+      });
+
       function submitAiTask() {
         alert('保存成功（抽屉字段待补充）');
         closeAiTaskDrawer();
