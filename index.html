@@ -1347,21 +1347,14 @@
                     </div>
 
                     <div class="tabs ai-std-subtabs" id="ai-std-subtabs" style="margin-bottom: 20px;">
-                      <button class="tab active" onclick="switchAiStdSubTab('stable')">稳定成本</button>
-                      <button class="tab" onclick="switchAiStdSubTab('max')">最大转化</button>
+                      <button class="tab active" onclick="switchAiStdSubTab('stable-pay')">稳定成本-付费</button>
+                      <button class="tab" onclick="switchAiStdSubTab('stable-iaa')">稳定成本-IAA</button>
+                      <button class="tab" onclick="switchAiStdSubTab('max-pay')">最大转化-付费</button>
+                      <button class="tab" onclick="switchAiStdSubTab('max-iaa')">最大转化-IAA</button>
                     </div>
 
-                    <!-- 稳定成本 -->
-                    <div id="ai-std-stable" class="ai-std-pane">
-                      <div class="form-row">
-                        <div class="form-item">
-                          <label class="form-label">业务场景</label>
-                          <div class="segmented-control">
-                            <button class="segmented-item active" type="button">付费</button>
-                            <button class="segmented-item" type="button">IAA</button>
-                          </div>
-                        </div>
-                      </div>
+                    <!-- 稳定成本-付费 -->
+                    <div id="ai-std-stable-pay" class="ai-std-pane">
                       <div class="form-row">
                         <div class="form-item">
                           <label class="form-label">星广联投</label>
@@ -1395,7 +1388,7 @@
                       <div class="form-row">
                         <div class="form-item">
                           <label class="form-label"><span class="required-star">*</span> 日预算</label>
-                          <input type="text" class="form-input" value="100.00" style="color: var(--color-error);" />
+                          <input type="text" class="form-input" placeholder="请输入" />
                         </div>
                       </div>
                       <div class="form-row">
@@ -1410,17 +1403,42 @@
                       </div>
                     </div>
 
-                    <!-- 最大转化 -->
-                    <div id="ai-std-max" class="ai-std-pane" style="display: none;">
+                    <!-- 稳定成本-IAA -->
+                    <div id="ai-std-stable-iaa" class="ai-std-pane" style="display: none;">
                       <div class="form-row">
                         <div class="form-item">
-                          <label class="form-label">业务场景</label>
+                          <label class="form-label">星广联投</label>
                           <div class="segmented-control">
-                            <button class="segmented-item active" type="button">付费</button>
-                            <button class="segmented-item" type="button">IAA</button>
+                            <button class="segmented-item active" type="button">开启</button>
+                            <button class="segmented-item" type="button">关闭</button>
                           </div>
                         </div>
                       </div>
+                      <div class="form-row">
+                        <div class="form-item">
+                          <label class="form-label">AIGC</label>
+                          <div class="segmented-control">
+                            <button class="segmented-item active" type="button">开启</button>
+                            <button class="segmented-item" type="button">关闭</button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-item">
+                          <label class="form-label"><span class="required-star">*</span> ROI系数</label>
+                          <input type="text" class="form-input" placeholder="请输入" />
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-item">
+                          <label class="form-label"><span class="required-star">*</span> 日预算</label>
+                          <input type="text" class="form-input" placeholder="请输入" />
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- 最大转化-付费 -->
+                    <div id="ai-std-max-pay" class="ai-std-pane" style="display: none;">
                       <div class="form-row">
                         <div class="form-item">
                           <label class="form-label">星广联投</label>
@@ -1443,8 +1461,8 @@
                         <div class="form-item">
                           <label class="form-label">深度优化目标</label>
                           <div class="segmented-control">
-                            <button class="segmented-item" type="button">无</button>
-                            <button class="segmented-item active" type="button">付费ROI</button>
+                            <button class="segmented-item active" type="button">无</button>
+                            <button class="segmented-item" type="button">付费ROI</button>
                           </div>
                         </div>
                       </div>
@@ -1462,6 +1480,35 @@
                             <option>充值面板1</option>
                             <option>充值面板2</option>
                           </select>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- 最大转化-IAA -->
+                    <div id="ai-std-max-iaa" class="ai-std-pane" style="display: none;">
+                      <div class="form-row">
+                        <div class="form-item">
+                          <label class="form-label">星广联投</label>
+                          <div class="segmented-control">
+                            <button class="segmented-item active" type="button">开启</button>
+                            <button class="segmented-item" type="button">关闭</button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-item">
+                          <label class="form-label">AIGC</label>
+                          <div class="segmented-control">
+                            <button class="segmented-item active" type="button">开启</button>
+                            <button class="segmented-item" type="button">关闭</button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-item">
+                          <label class="form-label"><span class="required-star">*</span> 日预算</label>
+                          <input type="text" class="form-input" value="100.00" style="color: var(--color-error);" />
+                          <span style="margin-left: 8px; font-size: 12px; color: var(--color-text-tertiary); white-space: nowrap;">固定100</span>
                         </div>
                       </div>
                     </div>
@@ -2497,16 +2544,16 @@
         document.querySelectorAll('#ai-task-drawer-tabs .tab').forEach(function (tab, index) {
           tab.classList.toggle('active', names[index] === tabName);
         });
-        if (tabName === 'standard') switchAiStdSubTab('stable');
+        if (tabName === 'standard') switchAiStdSubTab('stable-pay');
       }
 
-      /* 标准投放页签内子页签：稳定成本 / 最大转化 */
+      /* 标准投放页签内子页签：稳定成本-付费 / 稳定成本-IAA / 最大转化-付费 / 最大转化-IAA */
       function switchAiStdSubTab(subName) {
-        var panes = { stable: 'ai-std-stable', max: 'ai-std-max' };
+        var panes = { 'stable-pay': 'ai-std-stable-pay', 'stable-iaa': 'ai-std-stable-iaa', 'max-pay': 'ai-std-max-pay', 'max-iaa': 'ai-std-max-iaa' };
         Object.keys(panes).forEach(function (key) {
           document.getElementById(panes[key]).style.display = key === subName ? 'block' : 'none';
         });
-        var names = ['stable', 'max'];
+        var names = ['stable-pay', 'stable-iaa', 'max-pay', 'max-iaa'];
         document.querySelectorAll('#ai-std-subtabs .tab').forEach(function (tab, index) {
           tab.classList.toggle('active', names[index] === subName);
         });
