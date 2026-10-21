@@ -1254,6 +1254,7 @@
                           <td>
                             <div class="row-actions">
                               <button class="row-action-btn" onclick="openAiTaskDrawer('任务1', '1')">编辑</button>
+                              <button class="row-action-btn" onclick="openAiModifyLogDrawer('任务1', '1')">日志</button>
                             </div>
                           </td>
                         </tr>
@@ -1312,8 +1313,8 @@
                           </td>
                           <td>90</td>
                           <td>2026-10-20 12:30:00</td>
-                          <td>2026-10-20 10:30:00</td>
-                          <td>2026-10-20 11:30:00</td>
+                          <td><span class="link" onclick="switchAiAutoTaskTab('standard')">2026-10-20 10:30:00</span></td>
+                          <td><span class="link" onclick="switchAiAutoTaskTab('global')">2026-10-20 11:30:00</span></td>
                           <td>
                             <div class="row-actions">
                               <button class="row-action-btn" onclick="openAiTaskLogDrawer()">执行日志</button>
@@ -1375,8 +1376,8 @@
                     <option value="huanxue">还音</option>
                   </select>
                   <div class="filter-actions">
-                    <button class="btn btn-info btn-sm" onclick="searchAiAutoTaskSub('account')">查询</button>
-                    <button class="btn btn-outline btn-sm" onclick="resetAiAutoTaskSubFilters('account')">重置</button>
+                    <button class="btn btn-info btn-sm" onclick="searchAiScopeRow('standard','account')">查询</button>
+                    <button class="btn btn-outline btn-sm" onclick="resetAiScopeFilters('standard','account')">重置</button>
                   </div>
                 </div>
 
@@ -1403,7 +1404,7 @@
                       </thead>
                       <tbody>
                         <tr>
-                          <td><input type="checkbox" class="ai-account-checkbox" onchange="updateAiRowSelectedCount('account')" /></td>
+                          <td><input type="checkbox" class="ai-account-checkbox" onchange="updateAiRowSelectedCount('ai-account','aiAccountSelectedCount')" /></td>
                           <td>5200131</td>
                           <td>
                             <span class="link" onclick="drillAiAccountToProject(5200131)">JL-MAD-AI-短剧一组-01</span>
@@ -1423,7 +1424,7 @@
                           <td>2026-10-20 10:12:33</td>
                         </tr>
                         <tr>
-                          <td><input type="checkbox" class="ai-account-checkbox" onchange="updateAiRowSelectedCount('account')" /></td>
+                          <td><input type="checkbox" class="ai-account-checkbox" onchange="updateAiRowSelectedCount('ai-account','aiAccountSelectedCount')" /></td>
                           <td>5200132</td>
                           <td>
                             <span class="link" onclick="drillAiAccountToProject(5200132)">JL-MAD-AI-短剧一组-02</span>
@@ -1517,8 +1518,8 @@
                     <option value="huanxue">还音</option>
                   </select>
                   <div class="filter-actions">
-                    <button class="btn btn-info btn-sm" onclick="searchAiAutoTaskSub('project')">查询</button>
-                    <button class="btn btn-outline btn-sm" onclick="resetAiAutoTaskSubFilters('project')">重置</button>
+                    <button class="btn btn-info btn-sm" onclick="searchAiScopeRow('standard','project')">查询</button>
+                    <button class="btn btn-outline btn-sm" onclick="resetAiScopeFilters('standard','project')">重置</button>
                   </div>
                 </div>
 
@@ -1548,7 +1549,7 @@
                       </thead>
                       <tbody>
                         <tr>
-                          <td><input type="checkbox" class="ai-project-checkbox" onchange="updateAiRowSelectedCount('project')" /></td>
+                          <td><input type="checkbox" class="ai-project-checkbox" onchange="updateAiRowSelectedCount('ai-project','aiProjectSelectedCount')" /></td>
                           <td>90012</td>
                           <td>
                             <span class="link" onclick="drillAiProjectToUnit(90012)">任务1-短剧1-激活</span>
@@ -1574,7 +1575,7 @@
                           <td>2026-10-20 10:12:35</td>
                         </tr>
                         <tr>
-                          <td><input type="checkbox" class="ai-project-checkbox" onchange="updateAiRowSelectedCount('project')" /></td>
+                          <td><input type="checkbox" class="ai-project-checkbox" onchange="updateAiRowSelectedCount('ai-project','aiProjectSelectedCount')" /></td>
                           <td>90013</td>
                           <td>
                             <span class="link" onclick="drillAiProjectToUnit(90013)">任务1-短剧1-召回</span>
@@ -1674,8 +1675,8 @@
                     <option value="huanxue">还音</option>
                   </select>
                   <div class="filter-actions">
-                    <button class="btn btn-info btn-sm" onclick="searchAiAutoTaskSub('unit')">查询</button>
-                    <button class="btn btn-outline btn-sm" onclick="resetAiAutoTaskSubFilters('unit')">重置</button>
+                    <button class="btn btn-info btn-sm" onclick="searchAiScopeRow('standard','unit')">查询</button>
+                    <button class="btn btn-outline btn-sm" onclick="resetAiScopeFilters('standard','unit')">重置</button>
                   </div>
                 </div>
 
@@ -1702,7 +1703,7 @@
                       </thead>
                       <tbody>
                         <tr>
-                          <td><input type="checkbox" class="ai-unit-checkbox" onchange="updateAiRowSelectedCount('unit')" /></td>
+                          <td><input type="checkbox" class="ai-unit-checkbox" onchange="updateAiRowSelectedCount('ai-unit','aiUnitSelectedCount')" /></td>
                           <td>30021</td>
                           <td>
                             <span class="link" onclick="showAiAutoUnitDetail(30021)">任务1-短剧1-激活-单元1</span>
@@ -1728,7 +1729,7 @@
                           <td>2026-10-20 10:12:40</td>
                         </tr>
                         <tr>
-                          <td><input type="checkbox" class="ai-unit-checkbox" onchange="updateAiRowSelectedCount('unit')" /></td>
+                          <td><input type="checkbox" class="ai-unit-checkbox" onchange="updateAiRowSelectedCount('ai-unit','aiUnitSelectedCount')" /></td>
                           <td>30020</td>
                           <td>
                             <span class="link" onclick="showAiAutoUnitDetail(30020)">任务1-短剧1-召回-单元1</span>
@@ -2795,6 +2796,57 @@
               </div>
             </div>
 
+            <!-- 任务修改日志抽屉 -->
+            <div id="ai-modify-log-overlay" class="drawer-overlay" onclick="closeAiModifyLogDrawer()"></div>
+            <div id="ai-modify-log-drawer" class="drawer drawer-wide">
+              <div class="drawer-card">
+                <div class="drawer-header">
+                  <h3 class="drawer-title" id="ai-modify-log-title">任务1-修改日志</h3>
+                  <button class="drawer-close" onclick="closeAiModifyLogDrawer()">×</button>
+                </div>
+                <div class="drawer-body">
+                  <div class="table-card" style="border-radius: 4px;">
+                    <div class="table-wrapper">
+                      <table class="data-table">
+                        <thead>
+                          <tr>
+                            <th>操作人</th>
+                            <th>更新时间</th>
+                            <th>变更内容</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>芸之</td>
+                            <td>2026-10-21 14:40:27</td>
+                            <td>运行间隔：180分钟 -&gt; 30分钟</td>
+                          </tr>
+                          <tr>
+                            <td>芸之</td>
+                            <td>2026-10-21 14:40:18</td>
+                            <td>新建任务</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div class="pagination" style="justify-content: flex-end;">
+                    <span class="pagination-info">共 2 条</span>
+                    <div class="pagination-pages">
+                      <button class="page-btn" onclick="changePage('prev')">&lt;</button>
+                      <button class="page-btn active" onclick="changePage(1)">1</button>
+                      <button class="page-btn" onclick="changePage('next')">&gt;</button>
+                    </div>
+                    <select class="page-size-select">
+                      <option value="10" selected>10 条/页</option>
+                      <option value="20">20 条/页</option>
+                      <option value="50">50 条/页</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <!-- 短剧数量弹框 -->
             <div id="ai-drama-count-modal" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.45); z-index: 1200; align-items: center; justify-content: center;" onclick="closeAiDramaCountModal(event)">
               <div style="background: #fff; border-radius: 12px; width: 640px; max-width: 90vw; box-shadow: 0 25px 80px rgba(0, 0, 0, 0.35);" onclick="event.stopPropagation()">
@@ -3687,7 +3739,10 @@
       }
 
       /* ===== AI素材推广 · 自动化任务页 ===== */
-      var AI_AUTO_TASK_TABS = ['task', 'drama', 'account', 'project', 'unit'];
+      /* 一级页签：任务 / 短剧 / 标准投放 / 全域投放；标准投放与全域投放各自内含 账户/项目/单元 三个子页签 */
+      var AI_AUTO_TASK_TABS = ['task', 'drama', 'standard', 'global'];
+      var AI_SCOPE_TABS = ['account', 'project', 'unit'];
+      var AI_SCOPE_LABELS = { account: '账户', project: '项目', unit: '单元' };
 
       function switchAiAutoTaskTab(tabName) {
         AI_AUTO_TASK_TABS.forEach(function (name) {
@@ -3697,11 +3752,28 @@
         document.querySelectorAll('#ai-auto-task-tabs .tab').forEach(function (tab, index) {
           tab.classList.toggle('active', AI_AUTO_TASK_TABS[index] === tabName);
         });
+        /* 进入标准投放 / 全域投放时，保留该分组内部的子页签状态（默认账户） */
+        if (tabName === 'standard' || tabName === 'global') {
+          var activeSub = document.querySelector('#ai-' + tabName + '-tabs .tab.active');
+          var activeIndex = activeSub ? Array.prototype.indexOf.call(activeSub.parentNode.children, activeSub) : 0;
+          switchAiScopeTab(tabName, AI_SCOPE_TABS[activeIndex] || 'account');
+        }
       }
 
-      /* 账户 / 项目 / 单元 Tab 的筛选项带入（名称下钻用） */
-      function setAiAutoTaskFilter(tabKey, filterType, optionText, value) {
-        var root = document.getElementById('ai-auto-task-' + tabKey);
+      /* 标准投放 / 全域投放 内部的 账户 / 项目 / 单元 子页签 */
+      function switchAiScopeTab(scope, tabName) {
+        AI_SCOPE_TABS.forEach(function (name) {
+          var el = document.getElementById('ai-' + scope + '-' + name);
+          if (el) el.style.display = name === tabName ? 'block' : 'none';
+        });
+        document.querySelectorAll('#ai-' + scope + '-tabs .tab').forEach(function (tab, index) {
+          tab.classList.toggle('active', AI_SCOPE_TABS[index] === tabName);
+        });
+      }
+
+      /* 子页签的筛选项带入（名称下钻用） */
+      function setAiScopeFilter(scope, tabKey, filterType, optionText, value) {
+        var root = document.getElementById('ai-' + scope + '-' + tabKey);
         if (!root) return;
         var combo = root.querySelector('[data-filter-type="' + filterType + '"]');
         if (!combo) return;
@@ -3712,22 +3784,36 @@
       }
 
       function drillAiAccountToProject(accountId) {
-        switchAiAutoTaskTab('project');
-        setAiAutoTaskFilter('project', 'account-name', '账户ID', accountId);
+        switchAiAutoTaskTab('standard');
+        switchAiScopeTab('standard', 'project');
+        setAiScopeFilter('standard', 'project', 'account-name', '账户ID', accountId);
       }
 
       function drillAiProjectToUnit(projectId) {
-        switchAiAutoTaskTab('unit');
-        setAiAutoTaskFilter('unit', 'project-name', '项目ID', projectId);
+        switchAiAutoTaskTab('standard');
+        switchAiScopeTab('standard', 'unit');
+        setAiScopeFilter('standard', 'unit', 'project-name', '项目ID', projectId);
       }
 
-      function searchAiAutoTaskSub(tabKey) {
-        var names = { account: '账户', project: '项目', unit: '单元' };
-        alert('查询' + (names[tabKey] || tabKey) + '列表');
+      function drillAiGlobalAccountToProject(accountId) {
+        switchAiAutoTaskTab('global');
+        switchAiScopeTab('global', 'project');
+        setAiScopeFilter('global', 'project', 'account-name', '账户ID', accountId);
       }
 
-      function resetAiAutoTaskSubFilters(tabKey) {
-        var root = document.getElementById('ai-auto-task-' + tabKey);
+      function drillAiGlobalProjectToUnit(projectId) {
+        switchAiAutoTaskTab('global');
+        switchAiScopeTab('global', 'unit');
+        setAiScopeFilter('global', 'unit', 'project-name', '项目ID', projectId);
+      }
+
+      function searchAiScopeRow(scope, tabKey) {
+        var scopeLabel = scope === 'global' ? '全域投放' : '标准投放';
+        alert('查询' + scopeLabel + (AI_SCOPE_LABELS[tabKey] || tabKey) + '列表');
+      }
+
+      function resetAiScopeFilters(scope, tabKey) {
+        var root = document.getElementById('ai-' + scope + '-' + tabKey);
         if (!root) return;
         root.querySelectorAll('.filter-select').forEach(function (s) { s.selectedIndex = 0; });
         root.querySelectorAll('.filter-input, .filter-combo-input').forEach(function (i) { i.value = ''; });
@@ -3741,10 +3827,10 @@
         if (el) el.textContent = checked ? boxes.length : 0;
       }
 
-      function updateAiRowSelectedCount(tabKey) {
-        var map = { account: 'aiAccountSelectedCount', project: 'aiProjectSelectedCount', unit: 'aiUnitSelectedCount' };
-        var el = document.getElementById(map[tabKey]);
-        if (el) el.textContent = document.querySelectorAll('.ai-' + tabKey + '-checkbox:checked').length;
+      function updateAiRowSelectedCount(cssPrefix, countId) {
+        var el = document.getElementById(countId);
+        if (!el) return;
+        el.textContent = document.querySelectorAll('.' + cssPrefix + '-checkbox:checked').length;
       }
 
       function batchRetryAiRows(type) {
@@ -3800,8 +3886,9 @@
 
       /* 短剧名下钻：切换到账户 Tab 并带入短剧ID筛选项 */
       function drillAiDramaToAccount(dramaId) {
-        switchAiAutoTaskTab('account');
-        setAiAutoTaskFilter('account', 'drama-name', '短剧ID', dramaId);
+        switchAiAutoTaskTab('standard');
+        switchAiScopeTab('standard', 'account');
+        setAiScopeFilter('standard', 'account', 'drama-name', '短剧ID', dramaId);
       }
 
       /* 新增/编辑抽屉：标题为「任务名（ID: x）」，新增场景回退为通用标题 */
@@ -3869,6 +3956,18 @@
       function closeAiTaskLogDrawer() {
         document.getElementById('ai-task-log-overlay').classList.remove('open');
         document.getElementById('ai-task-log-drawer').classList.remove('open');
+      }
+
+      /* 任务修改日志抽屉 */
+      function openAiModifyLogDrawer(taskName, taskId) {
+        document.getElementById('ai-modify-log-title').textContent = (taskName ? taskName : '任务') + '-修改日志';
+        document.getElementById('ai-modify-log-overlay').classList.add('open');
+        document.getElementById('ai-modify-log-drawer').classList.add('open');
+      }
+
+      function closeAiModifyLogDrawer() {
+        document.getElementById('ai-modify-log-overlay').classList.remove('open');
+        document.getElementById('ai-modify-log-drawer').classList.remove('open');
       }
 
       /* 执行日志 · 标准投放内子页签：稳定成本-付费 / 稳定成本-IAA / 最大转化-付费 / 最大转化-IAA */
