@@ -1414,8 +1414,8 @@
                             <span class="link">任务1</span>
                             <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:1</div>
                           </td>
-                          <td><span class="link">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功2</span><span class="stat-row-empty">失败0</span></div></div></td>
-                          <td><span class="link">4</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功3</span><span class="stat-fail-text fail-clickable" onclick="openAiAutoFailDetail(5200131, 'JL-MAD-AI-短剧一组-01', 'unit', 1)">失败1</span></div></div></td>
+                          <td><span class="link" onclick="drillAiAccountToProject(5200131)">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功2</span><span class="stat-row-empty">失败0</span></div></div></td>
+                          <td><span class="link" onclick="drillAiAccountToUnit(5200131)">4</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功3</span><span class="stat-fail-text fail-clickable" onclick="openAiAutoFailDetail(5200131, 'JL-MAD-AI-短剧一组-01', 'unit', 1)">失败1</span></div></div></td>
                           <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('账户',5200131)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('账户',5200131)">重试</button></div></td>
                           <td>短剧1<br /><span style="color:var(--color-text-tertiary);">ID:1001</span></td>
                           <td>端原生付费</td>
@@ -1434,8 +1434,8 @@
                             <span class="link">任务1</span>
                             <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:1</div>
                           </td>
-                          <td><span class="link">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功1</span><span class="stat-fail-text fail-clickable" onclick="openAiAutoFailDetail(5200132, 'JL-MAD-AI-短剧一组-02', 'project', 1)">失败1</span></div></div></td>
-                          <td><span class="link">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功2</span><span class="stat-row-empty">失败0</span></div></div></td>
+                          <td><span class="link" onclick="drillAiAccountToProject(5200132)">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功1</span><span class="stat-fail-text fail-clickable" onclick="openAiAutoFailDetail(5200132, 'JL-MAD-AI-短剧一组-02', 'project', 1)">失败1</span></div></div></td>
+                          <td><span class="link" onclick="drillAiAccountToUnit(5200132)">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功2</span><span class="stat-row-empty">失败0</span></div></div></td>
                           <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('账户',5200132)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('账户',5200132)">重试</button></div></td>
                           <td>短剧1<br /><span style="color:var(--color-text-tertiary);">ID:1001</span></td>
                           <td>端原生IAA</td>
@@ -1480,6 +1480,7 @@
                     <select class="filter-combo-select">
                       <option>账户名称</option>
                       <option>账户ID</option>
+                      <option>账户列表ID</option>
                     </select>
                     <input type="text" class="filter-combo-input" placeholder="请输入" />
                   </div>
@@ -1487,6 +1488,7 @@
                     <select class="filter-combo-select">
                       <option>项目名称</option>
                       <option>项目ID</option>
+                      <option>项目列表ID</option>
                     </select>
                     <input type="text" class="filter-combo-input" placeholder="请输入" />
                   </div>
@@ -1557,7 +1559,7 @@
                             <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7455532211008899</div>
                           </td>
                           <td><span class="tag tag-success">成功</span></td>
-                          <td><span class="link">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功2</span><span class="stat-row-empty">失败0</span></div></div></td>
+                          <td><span class="link" onclick="drillAiProjectToUnit(90012)">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功2</span><span class="stat-row-empty">失败0</span></div></div></td>
                           <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('项目',90012)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('项目',90012)">重试</button></div></td>
                           <td>短剧1<br /><span style="color:var(--color-text-tertiary);">ID:1001</span></td>
                           <td>最大转化</td>
@@ -1584,7 +1586,7 @@
                             <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7455532211007788</div>
                           </td>
                           <td><span class="tag tag-error">失败</span></td>
-                          <td><span class="link">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功1</span><span class="stat-fail-text fail-clickable" onclick="openAiAutoFailDetail(90013, '任务1-短剧1-召回', 'unit', 1)">失败1</span></div></div></td>
+                          <td><span class="link" onclick="drillAiProjectToUnit(90013)">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功1</span><span class="stat-fail-text fail-clickable" onclick="openAiAutoFailDetail(90013, '任务1-短剧1-召回', 'unit', 1)">失败1</span></div></div></td>
                           <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('项目',90013)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('项目',90013)">重试</button></div></td>
                           <td>短剧1<br /><span style="color:var(--color-text-tertiary);">ID:1001</span></td>
                           <td>稳定成本</td>
@@ -1639,6 +1641,7 @@
                     <select class="filter-combo-select">
                       <option>账户名称</option>
                       <option>账户ID</option>
+                      <option>账户列表ID</option>
                     </select>
                     <input type="text" class="filter-combo-input" placeholder="请输入" />
                   </div>
@@ -1646,6 +1649,7 @@
                     <select class="filter-combo-select">
                       <option>项目名称</option>
                       <option>项目ID</option>
+                      <option>项目列表ID</option>
                     </select>
                     <input type="text" class="filter-combo-input" placeholder="请输入" />
                   </div>
@@ -1879,8 +1883,8 @@
                             <span class="link">任务1</span>
                             <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:1</div>
                           </td>
-                          <td><span class="link">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功2</span><span class="stat-row-empty">失败0</span></div></div></td>
-                          <td><span class="link">4</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功4</span><span class="stat-row-empty">失败0</span></div></div></td>
+                          <td><span class="link" onclick="drillAiGlobalAccountToProject(5200141)">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功2</span><span class="stat-row-empty">失败0</span></div></div></td>
+                          <td><span class="link" onclick="drillAiGlobalAccountToUnit(5200141)">4</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功4</span><span class="stat-row-empty">失败0</span></div></div></td>
                           <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('账户',5200141)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('账户',5200141)">重试</button></div></td>
                           <td>短剧1<br /><span style="color:var(--color-text-tertiary);">ID:1001</span></td>
                           <td>端原生付费</td>
@@ -1899,8 +1903,8 @@
                             <span class="link">任务1</span>
                             <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:1</div>
                           </td>
-                          <td><span class="link">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功1</span><span class="stat-fail-text fail-clickable" onclick="openAiAutoFailDetail(5200142, 'JL-MAD-AI-全域一组-02', 'project', 1)">失败1</span></div></div></td>
-                          <td><span class="link">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功2</span><span class="stat-row-empty">失败0</span></div></div></td>
+                          <td><span class="link" onclick="drillAiGlobalAccountToProject(5200142)">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功1</span><span class="stat-fail-text fail-clickable" onclick="openAiAutoFailDetail(5200142, 'JL-MAD-AI-全域一组-02', 'project', 1)">失败1</span></div></div></td>
+                          <td><span class="link" onclick="drillAiGlobalAccountToUnit(5200142)">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功2</span><span class="stat-row-empty">失败0</span></div></div></td>
                           <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('账户',5200142)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('账户',5200142)">重试</button></div></td>
                           <td>短剧1<br /><span style="color:var(--color-text-tertiary);">ID:1001</span></td>
                           <td>端原生IAA</td>
@@ -1945,6 +1949,7 @@
                     <select class="filter-combo-select">
                       <option>账户名称</option>
                       <option>账户ID</option>
+                      <option>账户列表ID</option>
                     </select>
                     <input type="text" class="filter-combo-input" placeholder="请输入" />
                   </div>
@@ -1952,6 +1957,7 @@
                     <select class="filter-combo-select">
                       <option>项目名称</option>
                       <option>项目ID</option>
+                      <option>项目列表ID</option>
                     </select>
                     <input type="text" class="filter-combo-input" placeholder="请输入" />
                   </div>
@@ -2022,7 +2028,7 @@
                             <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7455532211009911</div>
                           </td>
                           <td><span class="tag tag-success">成功</span></td>
-                          <td><span class="link">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功2</span><span class="stat-row-empty">失败0</span></div></div></td>
+                          <td><span class="link" onclick="drillAiGlobalProjectToUnit(91012)">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功2</span><span class="stat-row-empty">失败0</span></div></div></td>
                           <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('项目',91012)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('项目',91012)">重试</button></div></td>
                           <td>短剧1<br /><span style="color:var(--color-text-tertiary);">ID:1001</span></td>
                           <td>最大转化</td>
@@ -2049,7 +2055,7 @@
                             <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7455532211009912</div>
                           </td>
                           <td><span class="tag tag-error">失败</span></td>
-                          <td><span class="link">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功1</span><span class="stat-fail-text fail-clickable" onclick="openAiAutoFailDetail(91013, '任务1-短剧1-全域-项目B', 'unit', 1)">失败1</span></div></div></td>
+                          <td><span class="link" onclick="drillAiGlobalProjectToUnit(91013)">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功1</span><span class="stat-fail-text fail-clickable" onclick="openAiAutoFailDetail(91013, '任务1-短剧1-全域-项目B', 'unit', 1)">失败1</span></div></div></td>
                           <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('项目',91013)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('项目',91013)">重试</button></div></td>
                           <td>短剧1<br /><span style="color:var(--color-text-tertiary);">ID:1001</span></td>
                           <td>稳定成本</td>
@@ -2104,6 +2110,7 @@
                     <select class="filter-combo-select">
                       <option>账户名称</option>
                       <option>账户ID</option>
+                      <option>账户列表ID</option>
                     </select>
                     <input type="text" class="filter-combo-input" placeholder="请输入" />
                   </div>
@@ -2111,6 +2118,7 @@
                     <select class="filter-combo-select">
                       <option>项目名称</option>
                       <option>项目ID</option>
+                      <option>项目列表ID</option>
                     </select>
                     <input type="text" class="filter-combo-input" placeholder="请输入" />
                   </div>
@@ -3799,7 +3807,7 @@
         });
       }
 
-      /* 子页签的筛选项带入（名称下钻用） */
+      /* 子页签的筛选项带入（下钻用）：先切前缀（名称/ID），再填值 */
       function setAiScopeFilter(scope, tabKey, filterType, optionText, value) {
         var root = document.getElementById('ai-' + scope + '-' + tabKey);
         if (!root) return;
@@ -3807,32 +3815,56 @@
         if (!combo) return;
         var select = combo.querySelector('.filter-combo-select');
         var input = combo.querySelector('.filter-combo-input');
-        if (select) select.value = optionText;
+        if (select) {
+          var hit = -1;
+          Array.prototype.forEach.call(select.options, function (opt, i) {
+            if (opt.text === optionText) hit = i;
+          });
+          if (hit > -1) select.selectedIndex = hit;
+        }
         if (input) input.value = value;
       }
 
       function drillAiAccountToProject(accountId) {
         switchAiAutoTaskTab('standard');
         switchAiScopeTab('standard', 'project');
-        setAiScopeFilter('standard', 'project', 'account-name', '账户ID', accountId);
+        resetAiScopeFilters('standard', 'project');
+        setAiScopeFilter('standard', 'project', 'account-name', '账户列表ID', accountId);
+      }
+
+      function drillAiAccountToUnit(accountId) {
+        switchAiAutoTaskTab('standard');
+        switchAiScopeTab('standard', 'unit');
+        resetAiScopeFilters('standard', 'unit');
+        setAiScopeFilter('standard', 'unit', 'account-name', '账户列表ID', accountId);
       }
 
       function drillAiProjectToUnit(projectId) {
         switchAiAutoTaskTab('standard');
         switchAiScopeTab('standard', 'unit');
-        setAiScopeFilter('standard', 'unit', 'project-name', '项目ID', projectId);
+        resetAiScopeFilters('standard', 'unit');
+        setAiScopeFilter('standard', 'unit', 'project-name', '项目列表ID', projectId);
       }
 
       function drillAiGlobalAccountToProject(accountId) {
         switchAiAutoTaskTab('global');
         switchAiScopeTab('global', 'project');
-        setAiScopeFilter('global', 'project', 'account-name', '账户ID', accountId);
+        resetAiScopeFilters('global', 'project');
+        setAiScopeFilter('global', 'project', 'account-name', '账户列表ID', accountId);
+      }
+
+      function drillAiGlobalAccountToUnit(accountId) {
+        switchAiAutoTaskTab('global');
+        switchAiScopeTab('global', 'unit');
+        resetAiScopeFilters('global', 'unit');
+        setAiScopeFilter('global', 'unit', 'account-name', '账户列表ID', accountId);
       }
 
       function drillAiGlobalProjectToUnit(projectId) {
         switchAiAutoTaskTab('global');
         switchAiScopeTab('global', 'unit');
-        setAiScopeFilter('global', 'unit', 'project-name', '项目ID', projectId);
+        resetAiScopeFilters('global', 'unit');
+        setAiScopeFilter('global', 'unit', 'project-name', '项目列表ID', projectId);
       }
 
       function searchAiScopeRow(scope, tabKey) {
