@@ -2351,11 +2351,13 @@
                   </div>
 
                   <div id="ai-drawer-standard" class="ai-drawer-pane">
-                    <div class="tabs ai-std-subtabs" id="ai-std-subtabs" style="margin-bottom: 20px;">
-                      <button class="tab active" onclick="switchAiStdSubTab('stable-pay')">稳定成本-付费</button>
-                      <button class="tab" onclick="switchAiStdSubTab('stable-iaa')">稳定成本-IAA</button>
-                      <button class="tab" onclick="switchAiStdSubTab('max-pay')">最大转化-付费</button>
-                      <button class="tab" onclick="switchAiStdSubTab('max-iaa')">最大转化-IAA</button>
+                    <div class="ai-std-subtabs-wrap">
+                      <div class="tabs ai-std-subtabs" id="ai-std-subtabs">
+                        <button class="tab active" onclick="switchAiStdSubTab('stable-pay')">稳定成本-付费</button>
+                        <button class="tab" onclick="switchAiStdSubTab('stable-iaa')">稳定成本-IAA</button>
+                        <button class="tab" onclick="switchAiStdSubTab('max-pay')">最大转化-付费</button>
+                        <button class="tab" onclick="switchAiStdSubTab('max-iaa')">最大转化-IAA</button>
+                      </div>
                     </div>
                     <div id="ai-std-stable-pay" class="ai-std-pane">
                       <div class="ai-schedule-section">

@@ -3452,8 +3452,13 @@ body {
 }
 
 #ai-task-drawer .drawer-body {
-  padding: 12px 24px 24px;
+  padding: 0 24px 24px;
   background: #f7f8fa;
+}
+
+/* 顶部留白放在首张卡片上，避免滚动内容从吸顶条上方穿过 */
+#ai-task-drawer .drawer-body > .ai-schedule-section:first-child {
+  margin-top: 12px;
 }
 
 /* 模块卡片 */
@@ -3510,6 +3515,16 @@ body {
 }
 
 /* 一级页签：等距排布（配合行内 gap:36px） */
+
+/* 模式子页签：滚动时吸顶固定在抽屉顶部，便于随时切换 */
+#ai-task-drawer .ai-std-subtabs-wrap {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: #f7f8fa;
+  padding: 12px 0 8px;
+  margin-bottom: 12px;
+}
 
 /* 模式子页签：胶囊分段样式 */
 #ai-task-drawer .ai-std-subtabs {
