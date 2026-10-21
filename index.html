@@ -192,6 +192,13 @@
                   <span class="nav-greatgrandchild-item" data-page="roi3-material-update">素材更新</span>
                 </div>
                 <span class="nav-grandchild-item has-children">
+                  <span>AI素材推广</span>
+                  <span class="nav-grandchild-caret">▶</span>
+                </span>
+                <div class="nav-greatgrandchildren">
+                  <span class="nav-greatgrandchild-item" data-page="ai-auto-task">自动化任务</span>
+                </div>
+                <span class="nav-grandchild-item has-children">
                   <span>标准推广</span>
                   <span class="nav-grandchild-caret">▶</span>
                 </span>
@@ -1183,6 +1190,250 @@
             </div>
           </div>
 
+          <!-- AI素材推广 · 自动化任务 -->
+          <div id="page-ai-auto-task" class="page">
+            <div class="breadcrumb">
+              <a href="#" onclick="showPage('dashboard')">首页</a>
+              <span class="breadcrumb-sep">/</span>
+              <span>巨量</span>
+              <span class="breadcrumb-sep">/</span>
+              <span>推广管理</span>
+              <span class="breadcrumb-sep">/</span>
+              <span>AI素材推广</span>
+              <span class="breadcrumb-sep">/</span>
+              <span>自动化任务</span>
+            </div>
+
+            <div class="content-card">
+              <div class="tabs-bar">
+                <div class="tabs" id="ai-auto-task-tabs">
+                  <button class="tab active" onclick="switchAiAutoTaskTab('task')">任务</button>
+                  <button class="tab" onclick="switchAiAutoTaskTab('drama')">短剧</button>
+                </div>
+              </div>
+
+              <!-- 任务 Tab -->
+              <div id="ai-auto-task-task" class="tab-content">
+                <div class="filter-bar">
+                  <div class="filter-combo" data-filter-type="task-name">
+                    <select class="filter-combo-select">
+                      <option>任务名称</option>
+                      <option>任务ID</option>
+                    </select>
+                    <input type="text" class="filter-combo-input" placeholder="请输入" />
+                  </div>
+                  <div class="filter-actions">
+                    <button class="btn btn-info btn-sm" onclick="searchAiAutoTask()">查询</button>
+                    <button class="btn btn-outline btn-sm" onclick="resetAiAutoTaskFilters()">重置</button>
+                    <button class="btn btn-primary btn-sm" onclick="openAiTaskDrawer()">新增任务</button>
+                  </div>
+                </div>
+
+                <div class="table-card">
+                  <div class="table-wrapper">
+                    <table class="data-table">
+                      <thead>
+                        <tr>
+                          <th>ID</th>
+                          <th>任务</th>
+                          <th>创建人</th>
+                          <th>创建时间</th>
+                          <th>操作</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>1</td>
+                          <td><span class="link" onclick="drillAiTaskToDrama('1')">任务1</span></td>
+                          <td>娜可</td>
+                          <td>2026-10-20 10:00:00</td>
+                          <td>
+                            <div class="row-actions">
+                              <button class="row-action-btn" onclick="openAiTaskDrawer()">编辑</button>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 短剧 Tab -->
+              <div id="ai-auto-task-drama" class="tab-content" style="display: none;">
+                <div class="filter-bar">
+                  <div class="filter-combo" data-filter-type="drama-name">
+                    <select class="filter-combo-select">
+                      <option>短剧名称</option>
+                      <option>短剧ID</option>
+                    </select>
+                    <input type="text" class="filter-combo-input" placeholder="请输入" />
+                  </div>
+                  <div class="filter-combo" data-filter-type="task-name">
+                    <select class="filter-combo-select">
+                      <option>任务名称</option>
+                      <option>任务ID</option>
+                    </select>
+                    <input type="text" class="filter-combo-input" placeholder="请输入" />
+                  </div>
+                  <div class="filter-actions">
+                    <button class="btn btn-info btn-sm" onclick="searchAiDramaList()">查询</button>
+                    <button class="btn btn-outline btn-sm" onclick="resetAiDramaFilters()">重置</button>
+                  </div>
+                </div>
+
+                <div class="table-card">
+                  <div class="table-wrapper">
+                    <table class="data-table">
+                      <thead>
+                        <tr>
+                          <th>短剧</th>
+                          <th>所属任务</th>
+                          <th>最近一次执行时间</th>
+                          <th>操作</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                            <span class="link">短剧1</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 1001</div>
+                          </td>
+                          <td>
+                            <span class="link">任务1</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 1</div>
+                          </td>
+                          <td>2026-10-20 10:30:00</td>
+                          <td>
+                            <div class="row-actions">
+                              <button class="row-action-btn" onclick="openAiTaskLogDrawer()">执行日志</button>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 新增/编辑抽屉：AI素材自动化任务 -->
+            <div id="ai-task-drawer-overlay" class="drawer-overlay" onclick="closeAiTaskDrawer()"></div>
+            <div id="ai-task-drawer" class="drawer drawer-narrow">
+              <div class="drawer-card">
+                <div class="drawer-header" style="gap: 12px;">
+                  <button class="drawer-close" onclick="closeAiTaskDrawer()" style="order: -1;">×</button>
+                  <h3 class="drawer-title" id="ai-task-drawer-title" style="font-size: 17px;">AI素材自动化任务</h3>
+                </div>
+                <div class="drawer-body" style="padding: 0 24px 24px;">
+                  <div class="tabs" id="ai-task-drawer-tabs" style="justify-content: space-between; margin: 0 -24px 20px; padding: 0 24px;">
+                    <button class="tab active" style="padding-left: 0;" onclick="switchAiTaskDrawerTab('standard')">标准投放（娜可）</button>
+                    <button class="tab" onclick="switchAiTaskDrawerTab('global')">全域投放（野可）</button>
+                    <button class="tab" onclick="switchAiTaskDrawerTab('loss')">控损管理（长河）</button>
+                  </div>
+
+                  <div id="ai-drawer-standard" class="ai-drawer-pane">
+                    <div class="form-row">
+                      <div class="form-item">
+                        <label class="form-label">短剧范围</label>
+                        <input type="text" class="form-input" placeholder="请选择短剧范围" />
+                      </div>
+                    </div>
+                    <div style="font-size: 12px; color: var(--color-text-tertiary); margin-top: 12px;">具体字段待补充</div>
+                  </div>
+
+                  <div id="ai-drawer-global" class="ai-drawer-pane" style="display: none;">
+                    <div class="form-row">
+                      <div class="form-item">
+                        <label class="form-label">投放配置</label>
+                        <input type="text" class="form-input" placeholder="待补充" />
+                      </div>
+                    </div>
+                    <div style="font-size: 12px; color: var(--color-text-tertiary); margin-top: 12px;">具体字段待补充</div>
+                  </div>
+
+                  <div id="ai-drawer-loss" class="ai-drawer-pane" style="display: none;">
+                    <div class="form-row">
+                      <div class="form-item">
+                        <label class="form-label">控损配置</label>
+                        <input type="text" class="form-input" placeholder="待补充" />
+                      </div>
+                    </div>
+                    <div style="font-size: 12px; color: var(--color-text-tertiary); margin-top: 12px;">具体字段待补充</div>
+                  </div>
+                </div>
+                <div class="drawer-footer">
+                  <button class="btn btn-outline" onclick="closeAiTaskDrawer()">取消</button>
+                  <button class="btn btn-primary" onclick="submitAiTask()">保存</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 执行日志抽屉 -->
+            <div id="ai-task-log-overlay" class="drawer-overlay" onclick="closeAiTaskLogDrawer()"></div>
+            <div id="ai-task-log-drawer" class="drawer drawer-wide">
+              <div class="drawer-card">
+                <div class="drawer-header">
+                  <h3 class="drawer-title" id="ai-task-log-title">任务1-短剧1</h3>
+                  <button class="drawer-close" onclick="closeAiTaskLogDrawer()">×</button>
+                </div>
+                <div class="drawer-body">
+                  <div class="tabs" id="ai-task-log-tabs" style="margin-bottom: 16px;">
+                    <button class="tab active" onclick="switchAiLogTab('standard')">标准投放</button>
+                    <button class="tab" onclick="switchAiLogTab('push')">全域推送</button>
+                    <button class="tab" onclick="switchAiLogTab('boost')">达标放量</button>
+                  </div>
+                  <div id="ai-log-standard" class="ai-log-pane">
+                    <div class="table-card" style="border-radius: 4px;">
+                      <div class="table-wrapper">
+                        <table class="data-table">
+                          <thead>
+                            <tr>
+                              <th>素材</th>
+                              <th>账户</th>
+                              <th>项目</th>
+                              <th>单元</th>
+                              <th>时间</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td><span class="link" onclick="openAiMaterialModal('素材20', '20')">20</span></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td>2026-10-20 10:30:00</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="ai-log-push" class="ai-log-pane" style="display: none;">
+                    <div class="table-card" style="border-radius: 4px; padding: 40px; text-align: center; color: var(--color-text-tertiary);">全域推送日志 - 待补充</div>
+                  </div>
+                  <div id="ai-log-boost" class="ai-log-pane" style="display: none;">
+                    <div class="table-card" style="border-radius: 4px; padding: 40px; text-align: center; color: var(--color-text-tertiary);">达标放量日志 - 待补充</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 素材信息弹框 -->
+            <div id="ai-material-modal" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.45); z-index: 1200; align-items: center; justify-content: center;" onclick="closeAiMaterialModal(event)">
+              <div style="background: #fff; border-radius: 12px; width: 420px; max-width: 90vw; box-shadow: 0 25px 80px rgba(0, 0, 0, 0.35);" onclick="event.stopPropagation()">
+                <div style="padding: 16px 20px; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: space-between;">
+                  <h3 style="margin: 0; font-size: 16px; font-weight: 600; color: #111827;">素材信息</h3>
+                  <button onclick="closeAiMaterialModal()" style="border: none; background: none; font-size: 22px; color: #6b7280; cursor: pointer; line-height: 1;">×</button>
+                </div>
+                <div style="padding: 20px; font-size: 14px; line-height: 2.2; color: #374151;">
+                  <div>素材名：<span id="ai-material-name">--</span></div>
+                  <div>素材ID：<span id="ai-material-id">--</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- 半自动投放 -->
           <div id="page-semi-auto-delivery" class="page">
             <div class="breadcrumb">
@@ -2027,6 +2278,113 @@
 
       function showTaskLog(id) {
         alert('查看任务日志：' + id);
+      }
+
+      /* ===== AI素材推广 · 自动化任务页 ===== */
+      function switchAiAutoTaskTab(tabName) {
+        ['task', 'drama'].forEach(function (name) {
+          var el = document.getElementById('ai-auto-task-' + name);
+          if (el) el.style.display = name === tabName ? 'block' : 'none';
+        });
+        var names = ['task', 'drama'];
+        document.querySelectorAll('#ai-auto-task-tabs .tab').forEach(function (tab, index) {
+          tab.classList.toggle('active', names[index] === tabName);
+        });
+      }
+
+      function searchAiAutoTask() {
+        alert('查询AI素材自动化任务');
+      }
+
+      function resetAiAutoTaskFilters() {
+        var root = document.getElementById('ai-auto-task-task');
+        root.querySelectorAll('.filter-combo-input').forEach(function (i) { i.value = ''; });
+      }
+
+      function searchAiDramaList() {
+        alert('查询短剧列表');
+      }
+
+      function resetAiDramaFilters() {
+        var root = document.getElementById('ai-auto-task-drama');
+        root.querySelectorAll('.filter-combo-input').forEach(function (i) { i.value = ''; });
+      }
+
+      /* 任务名称下钻：切换到短剧 Tab 并带入任务ID筛选项 */
+      function drillAiTaskToDrama(taskId) {
+        switchAiAutoTaskTab('drama');
+        var root = document.getElementById('ai-auto-task-drama');
+        var combo = root.querySelector('[data-filter-type="task-name"]');
+        if (combo) {
+          var select = combo.querySelector('.filter-combo-select');
+          var input = combo.querySelector('.filter-combo-input');
+          if (select) select.value = '任务ID';
+          if (input) input.value = taskId;
+        }
+      }
+
+      /* 新增/编辑抽屉 */
+      function openAiTaskDrawer() {
+        document.getElementById('ai-task-drawer-title').textContent = 'AI素材自动化任务';
+        switchAiTaskDrawerTab('standard');
+        document.getElementById('ai-task-drawer-overlay').classList.add('open');
+        document.getElementById('ai-task-drawer').classList.add('open');
+      }
+
+      function switchAiTaskDrawerTab(tabName) {
+        var panes = { standard: 'ai-drawer-standard', global: 'ai-drawer-global', loss: 'ai-drawer-loss' };
+        Object.keys(panes).forEach(function (key) {
+          var pane = document.getElementById(panes[key]);
+          if (pane) pane.style.display = key === tabName ? 'block' : 'none';
+        });
+        var names = ['standard', 'global', 'loss'];
+        document.querySelectorAll('#ai-task-drawer-tabs .tab').forEach(function (tab, index) {
+          tab.classList.toggle('active', names[index] === tabName);
+        });
+      }
+
+      function closeAiTaskDrawer() {
+        document.getElementById('ai-task-drawer-overlay').classList.remove('open');
+        document.getElementById('ai-task-drawer').classList.remove('open');
+      }
+
+      function submitAiTask() {
+        alert('保存成功（抽屉字段待补充）');
+        closeAiTaskDrawer();
+      }
+
+      /* 执行日志抽屉 */
+      function openAiTaskLogDrawer() {
+        document.getElementById('ai-task-log-overlay').classList.add('open');
+        document.getElementById('ai-task-log-drawer').classList.add('open');
+      }
+
+      function closeAiTaskLogDrawer() {
+        document.getElementById('ai-task-log-overlay').classList.remove('open');
+        document.getElementById('ai-task-log-drawer').classList.remove('open');
+      }
+
+      function switchAiLogTab(tabName) {
+        var panes = { standard: 'ai-log-standard', push: 'ai-log-push', boost: 'ai-log-boost' };
+        Object.keys(panes).forEach(function (key) {
+          document.getElementById(panes[key]).style.display = key === tabName ? 'block' : 'none';
+        });
+        var names = ['standard', 'push', 'boost'];
+        document.querySelectorAll('#ai-task-log-tabs .tab').forEach(function (tab, index) {
+          tab.classList.toggle('active', names[index] === tabName);
+        });
+      }
+
+      /* 素材信息弹框 */
+      function openAiMaterialModal(name, id) {
+        document.getElementById('ai-material-name').textContent = name || '--';
+        document.getElementById('ai-material-id').textContent = id || '--';
+        document.getElementById('ai-material-modal').style.display = 'flex';
+      }
+
+      function closeAiMaterialModal(event) {
+        if (event && event.target !== document.getElementById('ai-material-modal')) return;
+        document.getElementById('ai-material-modal').style.display = 'none';
       }
 
       /* ===== 账户 / 项目 / 单元 Tab 通用交互 ===== */
