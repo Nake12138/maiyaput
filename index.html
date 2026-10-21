@@ -1339,13 +1339,157 @@
                   </div>
 
                   <div id="ai-drawer-standard" class="ai-drawer-pane">
-                    <div class="form-row">
+                    <div class="form-row" style="margin-bottom: 16px;">
                       <div class="form-item">
                         <label class="form-label">短剧范围</label>
                         <input type="text" class="form-input" placeholder="请选择短剧范围" />
                       </div>
                     </div>
-                    <div style="font-size: 12px; color: var(--color-text-tertiary); margin-top: 12px;">具体字段待补充</div>
+
+                    <div class="tabs ai-std-subtabs" id="ai-std-subtabs" style="margin-bottom: 20px;">
+                      <button class="tab active" onclick="switchAiStdSubTab('stable')">稳定成本</button>
+                      <button class="tab" onclick="switchAiStdSubTab('max')">最大转化</button>
+                    </div>
+
+                    <!-- 稳定成本 -->
+                    <div id="ai-std-stable" class="ai-std-pane">
+                      <div class="form-row">
+                        <div class="form-item">
+                          <label class="form-label">投放内容</label>
+                          <div class="segmented-control">
+                            <button class="segmented-item active" type="button">端原生</button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-item">
+                          <label class="form-label">业务场景</label>
+                          <div class="segmented-control">
+                            <button class="segmented-item active" type="button">付费</button>
+                            <button class="segmented-item" type="button">IAA</button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-item">
+                          <label class="form-label">星广联投</label>
+                          <div class="segmented-control">
+                            <button class="segmented-item active" type="button">开启</button>
+                            <button class="segmented-item" type="button">关闭</button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-item">
+                          <label class="form-label">AIGC</label>
+                          <div class="segmented-control">
+                            <button class="segmented-item active" type="button">开启</button>
+                            <button class="segmented-item" type="button">关闭</button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-item">
+                          <label class="form-label"><span class="tip-icon">?</span> ROI系数</label>
+                          <input type="text" class="form-input" placeholder="请输入（选填）" />
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-item">
+                          <label class="form-label"><span class="required-star">*</span> 出价</label>
+                          <input type="text" class="form-input" placeholder="请输入" />
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-item">
+                          <label class="form-label"><span class="required-star">*</span> 日预算</label>
+                          <input type="text" class="form-input" value="100.00" style="color: var(--color-error);" />
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-item">
+                          <label class="form-label"><span class="required-star">*</span> 充值面板</label>
+                          <select class="form-input">
+                            <option value="" selected disabled>充值面板</option>
+                            <option>充值面板1</option>
+                            <option>充值面板2</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- 最大转化 -->
+                    <div id="ai-std-max" class="ai-std-pane" style="display: none;">
+                      <div class="form-row">
+                        <div class="form-item">
+                          <label class="form-label">投放内容</label>
+                          <div class="segmented-control">
+                            <button class="segmented-item active" type="button">端原生</button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-item">
+                          <label class="form-label">业务场景</label>
+                          <div class="segmented-control">
+                            <button class="segmented-item active" type="button">付费</button>
+                            <button class="segmented-item" type="button">IAA</button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-item">
+                          <label class="form-label">星广联投</label>
+                          <div class="segmented-control">
+                            <button class="segmented-item active" type="button">开启</button>
+                            <button class="segmented-item" type="button">关闭</button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-item">
+                          <label class="form-label">AIGC</label>
+                          <div class="segmented-control">
+                            <button class="segmented-item active" type="button">开启</button>
+                            <button class="segmented-item" type="button">关闭</button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-item">
+                          <label class="form-label">深度优化目标</label>
+                          <div class="segmented-control">
+                            <button class="segmented-item" type="button">无</button>
+                            <button class="segmented-item active" type="button">付费ROI</button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-item">
+                          <label class="form-label"><span class="required-star">*</span> 日预算</label>
+                          <input type="text" class="form-input" value="100.00" style="color: var(--color-error);" />
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-item">
+                          <label class="form-label"><span class="required-star">*</span> 充值面板</label>
+                          <select class="form-input">
+                            <option value="" selected disabled>充值面板</option>
+                            <option>充值面板1</option>
+                            <option>充值面板2</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-item">
+                          <label class="form-label">文案库范围</label>
+                          <div class="segmented-control">
+                            <button class="segmented-item active" type="button">不限</button>
+                            <button class="segmented-item" type="button">仅本人创建</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
 
                   <div id="ai-drawer-global" class="ai-drawer-pane" style="display: none;">
@@ -2377,6 +2521,19 @@
         var names = ['standard', 'global', 'loss'];
         document.querySelectorAll('#ai-task-drawer-tabs .tab').forEach(function (tab, index) {
           tab.classList.toggle('active', names[index] === tabName);
+        });
+        if (tabName === 'standard') switchAiStdSubTab('stable');
+      }
+
+      /* 标准投放页签内子页签：稳定成本 / 最大转化 */
+      function switchAiStdSubTab(subName) {
+        var panes = { stable: 'ai-std-stable', max: 'ai-std-max' };
+        Object.keys(panes).forEach(function (key) {
+          document.getElementById(panes[key]).style.display = key === subName ? 'block' : 'none';
+        });
+        var names = ['stable', 'max'];
+        document.querySelectorAll('#ai-std-subtabs .tab').forEach(function (tab, index) {
+          tab.classList.toggle('active', names[index] === subName);
         });
       }
 

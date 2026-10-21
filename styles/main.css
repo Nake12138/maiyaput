@@ -3374,3 +3374,32 @@ body {
   color: var(--color-text-primary);
   background: var(--color-white);
 }
+
+/* AI素材自动化任务抽屉：标准投放子页签 */
+.ai-std-subtabs {
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: 16px;
+}
+
+.ai-std-subtabs .tab {
+  font-size: 13px;
+}
+
+.required-star {
+  color: var(--color-error);
+  margin-right: 2px;
+}
+
+.tip-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1px solid var(--color-text-tertiary);
+  color: var(--color-text-tertiary);
+  font-size: 10px;
+  margin-right: 4px;
+  vertical-align: 1px;
+}
