@@ -2402,8 +2402,7 @@
                                 <button class="segmented-item active" type="button">不限</button>
                                 <button class="segmented-item" type="button">自定义</button>
                               </div>
-                              <input type="text" class="form-input ai-repeat-input" style="display: none; width: 130px; flex: none;" placeholder="请输入次数" oninput="limitPositiveInt(this)" />
-                              <span class="form-item-helper ai-repeat-helper" style="display: none;">不填写默认为1</span>
+                              <input type="text" class="form-input ai-repeat-input" style="display: none; width: 130px; flex: none;" placeholder="不填写默认为1" oninput="limitPositiveInt(this)" />
                             </div>
                           </div>
                         </div>
@@ -2502,8 +2501,7 @@
                                 <button class="segmented-item active" type="button">不限</button>
                                 <button class="segmented-item" type="button">自定义</button>
                               </div>
-                              <input type="text" class="form-input ai-repeat-input" style="display: none; width: 130px; flex: none;" placeholder="请输入次数" oninput="limitPositiveInt(this)" />
-                              <span class="form-item-helper ai-repeat-helper" style="display: none;">不填写默认为1</span>
+                              <input type="text" class="form-input ai-repeat-input" style="display: none; width: 130px; flex: none;" placeholder="不填写默认为1" oninput="limitPositiveInt(this)" />
                             </div>
                           </div>
                         </div>
@@ -2596,8 +2594,7 @@
                                 <button class="segmented-item active" type="button">不限</button>
                                 <button class="segmented-item" type="button">自定义</button>
                               </div>
-                              <input type="text" class="form-input ai-repeat-input" style="display: none; width: 130px; flex: none;" placeholder="请输入次数" oninput="limitPositiveInt(this)" />
-                              <span class="form-item-helper ai-repeat-helper" style="display: none;">不填写默认为1</span>
+                              <input type="text" class="form-input ai-repeat-input" style="display: none; width: 130px; flex: none;" placeholder="不填写默认为1" oninput="limitPositiveInt(this)" />
                             </div>
                           </div>
                         </div>
@@ -2693,8 +2690,7 @@
                                 <button class="segmented-item active" type="button">不限</button>
                                 <button class="segmented-item" type="button">自定义</button>
                               </div>
-                              <input type="text" class="form-input ai-repeat-input" style="display: none; width: 130px; flex: none;" placeholder="请输入次数" oninput="limitPositiveInt(this)" />
-                              <span class="form-item-helper ai-repeat-helper" style="display: none;">不填写默认为1</span>
+                              <input type="text" class="form-input ai-repeat-input" style="display: none; width: 130px; flex: none;" placeholder="不填写默认为1" oninput="limitPositiveInt(this)" />
                             </div>
                           </div>
                         </div>
@@ -4091,12 +4087,10 @@
           var row = group.closest('.form-field-inline');
           if (!row) return;
           var input = row.querySelector('.ai-repeat-input');
-          var helper = row.querySelector('.ai-repeat-helper');
           if (input) {
             input.style.display = isNew ? 'block' : 'none';
             input.value = '';
           }
-          if (helper) helper.style.display = isNew ? 'block' : 'none';
         });
       }
 
@@ -4142,12 +4136,10 @@
         if (!row) return;
         var show = item.textContent.trim() === '自定义';
         var input = row.querySelector('.ai-repeat-input');
-        var helper = row.querySelector('.ai-repeat-helper');
         if (input) {
           input.style.display = show ? 'block' : 'none';
           if (!show) input.value = '';
         }
-        if (helper) helper.style.display = show ? 'block' : 'none';
       });
 
       function limitPositiveInt(input) {
