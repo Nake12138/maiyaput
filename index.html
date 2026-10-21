@@ -184,19 +184,19 @@
               </span>
               <div class="nav-grandchildren">
                 <span class="nav-grandchild-item has-children">
+                  <span>AI素材推广</span>
+                  <span class="nav-grandchild-caret">▶</span>
+                </span>
+                <div class="nav-greatgrandchildren">
+                  <span class="nav-greatgrandchild-item" data-page="ai-auto-task">自动化任务</span>
+                </div>
+                <span class="nav-grandchild-item has-children">
                   <span>全域推广</span>
                   <span class="nav-grandchild-caret">▶</span>
                 </span>
                 <div class="nav-greatgrandchildren">
                   <span class="nav-greatgrandchild-item" data-page="roi3-auto-delivery">自动化投放</span>
                   <span class="nav-greatgrandchild-item" data-page="roi3-material-update">素材更新</span>
-                </div>
-                <span class="nav-grandchild-item has-children">
-                  <span>AI素材推广</span>
-                  <span class="nav-grandchild-caret">▶</span>
-                </span>
-                <div class="nav-greatgrandchildren">
-                  <span class="nav-greatgrandchild-item" data-page="ai-auto-task">自动化任务</span>
                 </div>
                 <span class="nav-grandchild-item has-children">
                   <span>标准推广</span>
@@ -1281,6 +1281,12 @@
                     </select>
                     <input type="text" class="filter-combo-input" placeholder="请输入" />
                   </div>
+                  <select class="filter-select" id="ai-drama-status-filter">
+                    <option value="">请选择测出状态</option>
+                    <option value="tested">测出</option>
+                    <option value="untested">未测出</option>
+                    <option value="testing">测试中</option>
+                  </select>
                   <div class="filter-actions">
                     <button class="btn btn-info btn-sm" onclick="searchAiDramaList()">查询</button>
                     <button class="btn btn-outline btn-sm" onclick="resetAiDramaFilters()">重置</button>
@@ -1294,11 +1300,11 @@
                         <tr>
                           <th>短剧</th>
                           <th>所属任务</th>
+                          <th>测出状态</th>
                           <th>AI素材</th>
                           <th>素材更新时间</th>
                           <th>最近一次执行时间（标准）</th>
                           <th>最近一次执行时间（全域）</th>
-                          <th>操作</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -1311,15 +1317,41 @@
                             <span class="link">任务1</span>
                             <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 1</div>
                           </td>
+                          <td><span class="tag tag-success">测出</span></td>
                           <td>90</td>
                           <td>2026-10-20 12:30:00</td>
-                          <td><span class="link" onclick="switchAiAutoTaskTab('standard')">2026-10-20 10:30:00</span></td>
-                          <td><span class="link" onclick="switchAiAutoTaskTab('global')">2026-10-20 11:30:00</span></td>
+                          <td><span class="link" onclick="drillAiDramaToScope('standard', '1001', '1')">2026-10-20 10:30:00</span></td>
+                          <td><span class="link" onclick="drillAiDramaToScope('global', '1001', '1')">2026-10-20 11:30:00</span></td>
+                        </tr>
+                        <tr>
                           <td>
-                            <div class="row-actions">
-                              <button class="row-action-btn" onclick="openAiTaskLogDrawer()">执行日志</button>
-                            </div>
+                            <span class="link" onclick="drillAiDramaToAccount('1002')">短剧2</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 1002</div>
                           </td>
+                          <td>
+                            <span class="link">任务1</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 1</div>
+                          </td>
+                          <td><span class="tag tag-warning">测试中</span></td>
+                          <td>60</td>
+                          <td>2026-10-20 12:10:00</td>
+                          <td><span class="link" onclick="drillAiDramaToScope('standard', '1002', '1')">2026-10-20 09:30:00</span></td>
+                          <td><span class="link" onclick="drillAiDramaToScope('global', '1002', '1')">2026-10-20 09:50:00</span></td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <span class="link" onclick="drillAiDramaToAccount('1003')">短剧3</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 1003</div>
+                          </td>
+                          <td>
+                            <span class="link">任务2</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 2</div>
+                          </td>
+                          <td><span class="tag tag-default">未测出</span></td>
+                          <td>30</td>
+                          <td>2026-10-20 11:20:00</td>
+                          <td><span class="link" onclick="drillAiDramaToScope('standard', '1003', '2')">2026-10-20 08:10:00</span></td>
+                          <td><span class="link" onclick="drillAiDramaToScope('global', '1003', '2')">2026-10-20 08:40:00</span></td>
                         </tr>
                       </tbody>
                     </table>
@@ -3825,6 +3857,7 @@
         if (input) input.value = value;
       }
 
+      /* 账户列表 → 项目列表 / 单元列表（带入账户列表第一列ID） */
       function drillAiAccountToProject(accountId) {
         switchAiAutoTaskTab('standard');
         switchAiScopeTab('standard', 'project');
@@ -3839,6 +3872,7 @@
         setAiScopeFilter('standard', 'unit', 'account-name', '账户列表ID', accountId);
       }
 
+      /* 项目列表 → 单元列表（带入项目列表第一列ID） */
       function drillAiProjectToUnit(projectId) {
         switchAiAutoTaskTab('standard');
         switchAiScopeTab('standard', 'unit');
@@ -3929,6 +3963,8 @@
       function resetAiDramaFilters() {
         var root = document.getElementById('ai-auto-task-drama');
         root.querySelectorAll('.filter-combo-input').forEach(function (i) { i.value = ''; });
+        var status = document.getElementById('ai-drama-status-filter');
+        if (status) status.value = '';
       }
 
       /* 任务名称下钻：切换到短剧 Tab 并带入任务ID筛选项 */
@@ -3942,6 +3978,14 @@
           if (select) select.value = '任务ID';
           if (input) input.value = taskId;
         }
+      }
+
+      /* 短剧列表执行时间下钻：切到标准投放 / 全域投放的账户子页签，带入短剧ID + 任务ID */
+      function drillAiDramaToScope(scope, dramaId, taskId) {
+        switchAiAutoTaskTab(scope);
+        switchAiScopeTab(scope, 'account');
+        setAiScopeFilter(scope, 'account', 'drama-name', '短剧ID', dramaId);
+        setAiScopeFilter(scope, 'account', 'task-name', '任务ID', taskId);
       }
 
       /* 短剧名下钻：切换到账户 Tab 并带入短剧ID筛选项 */
