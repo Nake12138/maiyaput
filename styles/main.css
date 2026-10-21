@@ -3436,3 +3436,129 @@ body {
   opacity: 1;
   visibility: visible;
 }
+
+/* ============================================================
+   AI素材推广 · 任务抽屉（#ai-task-drawer）视觉优化
+   - 模块卡片化（短剧范围 / 基建数量 / 投放配置 / 项目排期）
+   - 表单两列栅格，缩短纵向长度
+   - 模式子页签改胶囊分段样式，与一级页签区分层级
+   ============================================================ */
+#ai-task-drawer .drawer-card {
+  width: min(760px, calc(100vw - 100px));
+}
+
+#ai-task-drawer .drawer-header {
+  padding: 16px 24px;
+}
+
+#ai-task-drawer .drawer-body {
+  padding: 16px 24px 24px;
+  background: #f7f8fa;
+}
+
+/* 模块卡片 */
+#ai-task-drawer .ai-schedule-section {
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+#ai-task-drawer .ai-schedule-section:last-child {
+  margin-bottom: 0;
+}
+
+#ai-task-drawer .form-section-title {
+  margin-bottom: 14px;
+}
+
+/* 表单两列栅格：模块内字段自动两两配对，缩短纵向长度 */
+#ai-task-drawer .ai-schedule-section {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 16px;
+  align-items: start;
+}
+
+#ai-task-drawer .form-row {
+  display: contents;
+  margin-bottom: 0;
+}
+
+#ai-task-drawer .ai-schedule-section .form-section-title,
+#ai-task-drawer .ai-schedule-section > .link,
+#ai-task-drawer .ai-schedule-section > div:not(.form-row) {
+  grid-column: 1 / -1;
+}
+
+#ai-task-drawer .form-item {
+  min-width: 0;
+}
+
+#ai-task-drawer .form-label {
+  line-height: 1.4;
+}
+
+/* 输入焦点态 */
+#ai-task-drawer .form-input:focus,
+#ai-task-drawer .form-select:focus {
+  border-color: var(--color-info);
+  box-shadow: 0 0 0 3px rgba(22, 119, 255, 0.1);
+}
+
+/* 字段辅助说明（不填写默认N） */
+#ai-task-drawer .form-item-helper {
+  font-size: 12px;
+  color: var(--color-text-tertiary);
+  line-height: 1.5;
+  margin-top: 2px;
+}
+
+/* 一级页签：等距排布（配合行内 gap:36px） */
+
+/* 模式子页签：胶囊分段样式 */
+#ai-task-drawer .ai-std-subtabs {
+  background: #e9ecf1;
+  border-bottom: none;
+  border-radius: 8px;
+  padding: 3px;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+#ai-task-drawer .ai-std-subtabs .tab {
+  flex: 1;
+  text-align: center;
+  padding: 7px 0;
+  font-size: 13px;
+  border-radius: 6px;
+  color: var(--color-text-secondary);
+}
+
+#ai-task-drawer .ai-std-subtabs .tab.active {
+  background: var(--color-white);
+  color: var(--color-info);
+  font-weight: 600;
+  border-radius: 6px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+#ai-task-drawer .ai-std-subtabs .tab.active::after {
+  display: none;
+}
+
+/* 短剧范围行距微调 */
+#ai-task-drawer .ai-schedule-section .link {
+  margin-bottom: 4px;
+}
+
+/* 底部按钮 */
+#ai-task-drawer .drawer-footer {
+  padding: 12px 24px;
+  background: var(--color-white);
+}
+
+#ai-task-drawer .drawer-footer .btn {
+  min-width: 76px;
+}
