@@ -1254,6 +1254,7 @@
                           <td>
                             <div class="row-actions">
                               <button class="row-action-btn" onclick="openAiTaskDrawer('任务1', '1')">编辑</button>
+                              <button class="row-action-btn" onclick="copyAiTask('任务1', '1')">复制</button>
                               <button class="row-action-btn" onclick="openAiModifyLogDrawer('任务1', '1')">日志</button>
                             </div>
                           </td>
@@ -1283,9 +1284,10 @@
                   </div>
                   <select class="filter-select" id="ai-drama-status-filter">
                     <option value="">请选择测出状态</option>
+                    <option value="pending">待测试</option>
+                    <option value="testing">测试中</option>
                     <option value="tested">测出</option>
                     <option value="untested">未测出</option>
-                    <option value="testing">测试中</option>
                   </select>
                   <div class="filter-actions">
                     <button class="btn btn-info btn-sm" onclick="searchAiDramaList()">查询</button>
@@ -1307,6 +1309,7 @@
                           <th>最近一次执行时间（全域）</th>
                         </tr>
                       </thead>
+                      <!-- 测出状态规则：任务执行后 AI素材 < 90 → 待测试；AI素材 >= 90 → 测试中；测试完成后按控损结果 → 测出 / 未测出 -->
                       <tbody>
                         <tr>
                           <td>
@@ -1332,7 +1335,7 @@
                             <span class="link">任务1</span>
                             <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 1</div>
                           </td>
-                          <td><span class="tag tag-warning">测试中</span></td>
+                          <td><span class="tag tag-info">待测试</span></td>
                           <td>60</td>
                           <td>2026-10-20 12:10:00</td>
                           <td><span class="link" onclick="drillAiDramaToScope('standard', '1002', '1')">2026-10-20 09:30:00</span></td>
@@ -1348,10 +1351,25 @@
                             <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 2</div>
                           </td>
                           <td><span class="tag tag-default">未测出</span></td>
-                          <td>30</td>
+                          <td>95</td>
                           <td>2026-10-20 11:20:00</td>
                           <td><span class="link" onclick="drillAiDramaToScope('standard', '1003', '2')">2026-10-20 08:10:00</span></td>
                           <td><span class="link" onclick="drillAiDramaToScope('global', '1003', '2')">2026-10-20 08:40:00</span></td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <span class="link" onclick="drillAiDramaToAccount('1004')">短剧4</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 1004</div>
+                          </td>
+                          <td>
+                            <span class="link">任务2</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 2</div>
+                          </td>
+                          <td><span class="tag tag-warning">测试中</span></td>
+                          <td>120</td>
+                          <td>2026-10-20 11:00:00</td>
+                          <td><span class="link" onclick="drillAiDramaToScope('standard', '1004', '2')">2026-10-20 07:30:00</span></td>
+                          <td><span class="link" onclick="drillAiDramaToScope('global', '1004', '2')">2026-10-20 07:50:00</span></td>
                         </tr>
                       </tbody>
                     </table>
@@ -4002,6 +4020,13 @@
         switchAiTaskDrawerTab('standard');
         document.getElementById('ai-task-drawer-overlay').classList.add('open');
         document.getElementById('ai-task-drawer').classList.add('open');
+      }
+
+      /* 复制任务：沿用编辑抽屉，带入原任务配置，标题标注来源任务 */
+      function copyAiTask(taskName, taskId) {
+        openAiTaskDrawer(taskName, taskId);
+        document.getElementById('ai-task-drawer-title').textContent =
+          (taskName || 'AI素材自动化任务') + '（复制自 ID: ' + taskId + '）';
       }
 
       function switchAiTaskDrawerTab(tabName) {
