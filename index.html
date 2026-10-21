@@ -1236,6 +1236,7 @@
                         <tr>
                           <th>ID</th>
                           <th>任务</th>
+                          <th>短剧数量</th>
                           <th>创建人</th>
                           <th>创建时间</th>
                           <th>操作</th>
@@ -1245,6 +1246,7 @@
                         <tr>
                           <td>1</td>
                           <td><span class="link" onclick="drillAiTaskToDrama('1')">任务1</span></td>
+                          <td><span class="link" onclick="openAiDramaCountModal('任务1')">1</span></td>
                           <td>娜可</td>
                           <td>2026-10-20 10:00:00</td>
                           <td>
@@ -1290,6 +1292,8 @@
                           <th>短剧</th>
                           <th>所属任务</th>
                           <th>最近一次执行时间</th>
+                          <th>AI素材</th>
+                          <th>素材更新时间</th>
                           <th>操作</th>
                         </tr>
                       </thead>
@@ -1304,6 +1308,8 @@
                             <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 1</div>
                           </td>
                           <td>2026-10-20 10:30:00</td>
+                          <td>90</td>
+                          <td>2026-10-20 12:30:00</td>
                           <td>
                             <div class="row-actions">
                               <button class="row-action-btn" onclick="openAiTaskLogDrawer()">执行日志</button>
@@ -1414,6 +1420,36 @@
                   </div>
                   <div id="ai-log-boost" class="ai-log-pane" style="display: none;">
                     <div class="table-card" style="border-radius: 4px; padding: 40px; text-align: center; color: var(--color-text-tertiary);">达标放量日志 - 待补充</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 短剧数量弹框 -->
+            <div id="ai-drama-count-modal" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.45); z-index: 1200; align-items: center; justify-content: center;" onclick="closeAiDramaCountModal(event)">
+              <div style="background: #fff; border-radius: 12px; width: 640px; max-width: 90vw; box-shadow: 0 25px 80px rgba(0, 0, 0, 0.35);" onclick="event.stopPropagation()">
+                <div style="padding: 16px 20px; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: space-between;">
+                  <h3 style="margin: 0; font-size: 16px; font-weight: 600; color: #111827;" id="ai-drama-count-title">任务1-短剧列表</h3>
+                  <button onclick="closeAiDramaCountModal()" style="border: none; background: none; font-size: 22px; color: #6b7280; cursor: pointer; line-height: 1;">×</button>
+                </div>
+                <div style="padding: 20px;">
+                  <div class="table-wrapper" style="max-height: 420px; overflow-y: auto; border: 1px solid #e5e7eb; border-radius: 8px;">
+                    <table class="data-table">
+                      <thead>
+                        <tr>
+                          <th>短剧名称</th>
+                          <th>AI素材</th>
+                          <th>素材更新时间</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>短剧1</td>
+                          <td>90</td>
+                          <td>2026-10-20 10:30:00</td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               </div>
@@ -2386,6 +2422,17 @@
       function closeAiMaterialModal(event) {
         if (event && event.target !== document.getElementById('ai-material-modal')) return;
         document.getElementById('ai-material-modal').style.display = 'none';
+      }
+
+      /* 短剧数量弹框 */
+      function openAiDramaCountModal(taskName) {
+        document.getElementById('ai-drama-count-title').textContent = (taskName || '任务') + '-短剧列表';
+        document.getElementById('ai-drama-count-modal').style.display = 'flex';
+      }
+
+      function closeAiDramaCountModal(event) {
+        if (event && event.target !== document.getElementById('ai-drama-count-modal')) return;
+        document.getElementById('ai-drama-count-modal').style.display = 'none';
       }
 
       /* ===== 账户 / 项目 / 单元 Tab 通用交互 ===== */
