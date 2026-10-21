@@ -4058,8 +4058,29 @@
         document.getElementById('ai-task-drawer-title').textContent =
           taskName && taskId ? taskName + '（ID: ' + taskId + '）' : 'AI素材自动化任务';
         switchAiTaskDrawerTab('standard');
+        /* 新建任务时素材重复次数默认「自定义」；编辑/复制沿用「不限」 */
+        setAiRepeatTimesDefault(!(taskName && taskId));
         document.getElementById('ai-task-drawer-overlay').classList.add('open');
         document.getElementById('ai-task-drawer').classList.add('open');
+      }
+
+      /* 素材重复次数默认值：新建=自定义（显示次数输入框），编辑/复制=不限 */
+      function setAiRepeatTimesDefault(isNew) {
+        var target = isNew ? '自定义' : '不限';
+        document.querySelectorAll('#ai-task-drawer .segmented-control[data-toggle-custom="1"]').forEach(function (group) {
+          group.querySelectorAll('.segmented-item').forEach(function (btn) {
+            btn.classList.toggle('active', btn.textContent.trim() === target);
+          });
+          var row = group.closest('.form-field-inline');
+          if (!row) return;
+          var input = row.querySelector('.ai-repeat-input');
+          var helper = row.querySelector('.ai-repeat-helper');
+          if (input) {
+            input.style.display = isNew ? 'block' : 'none';
+            input.value = '';
+          }
+          if (helper) helper.style.display = isNew ? 'block' : 'none';
+        });
       }
 
       /* 复制任务：沿用编辑抽屉，带入原任务配置，标题标注来源任务 */
