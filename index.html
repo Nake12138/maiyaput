@@ -2353,13 +2353,20 @@
                   <div id="ai-drawer-standard" class="ai-drawer-pane">
                     <div class="ai-std-subtabs-wrap">
                       <div class="tabs ai-std-subtabs" id="ai-std-subtabs">
-                        <button class="tab active" onclick="switchAiStdSubTab('stable-pay')">稳定成本-付费</button>
-                        <button class="tab" onclick="switchAiStdSubTab('stable-iaa')">稳定成本-IAA</button>
-                        <button class="tab" onclick="switchAiStdSubTab('max-pay')">最大转化-付费</button>
-                        <button class="tab" onclick="switchAiStdSubTab('max-iaa')">最大转化-IAA</button>
+                        <button class="tab active" onclick="switchAiStdSubTab('stable-pay')"><span class="mode-dot" id="ai-mode-dot-stable-pay"></span>稳定成本-付费</button>
+                        <button class="tab" onclick="switchAiStdSubTab('stable-iaa')"><span class="mode-dot" id="ai-mode-dot-stable-iaa"></span>稳定成本-IAA</button>
+                        <button class="tab" onclick="switchAiStdSubTab('max-pay')"><span class="mode-dot" id="ai-mode-dot-max-pay"></span>最大转化-付费</button>
+                        <button class="tab" onclick="switchAiStdSubTab('max-iaa')"><span class="mode-dot" id="ai-mode-dot-max-iaa"></span>最大转化-IAA</button>
                       </div>
                     </div>
-                    <div id="ai-std-stable-pay" class="ai-std-pane">
+                    <div id="ai-std-stable-pay" class="ai-std-pane" data-mode="stable-pay">
+                      <div class="ai-mode-enable">
+                        <span>启用该模式投放</span>
+                        <label class="toggle-switch">
+                          <input type="checkbox" checked onchange="onAiModeToggle(this)" />
+                          <span class="toggle-slider"></span>
+                        </label>
+                      </div>
                       <div class="ai-schedule-section">
                         <h4 class="form-section-title">基建数量/单剧</h4>
                         <div class="form-row">
@@ -2456,7 +2463,13 @@
                       </div>
                     </div>
 
-                    <div id="ai-std-stable-iaa" class="ai-std-pane" style="display: none;">
+                    <div id="ai-std-stable-iaa" class="ai-std-pane" data-mode="stable-iaa" style="display: none;">                      <div class="ai-mode-enable">
+                        <span>启用该模式投放</span>
+                        <label class="toggle-switch">
+                          <input type="checkbox" checked onchange="onAiModeToggle(this)" />
+                          <span class="toggle-slider"></span>
+                        </label>
+                      </div>
                       <div class="ai-schedule-section">
                         <h4 class="form-section-title">基建数量/单剧</h4>
                         <div class="form-row">
@@ -2546,7 +2559,13 @@
                       </div>
                     </div>
 
-                    <div id="ai-std-max-pay" class="ai-std-pane" style="display: none;">
+                    <div id="ai-std-max-pay" class="ai-std-pane" data-mode="max-pay" style="display: none;">                      <div class="ai-mode-enable">
+                        <span>启用该模式投放</span>
+                        <label class="toggle-switch">
+                          <input type="checkbox" checked onchange="onAiModeToggle(this)" />
+                          <span class="toggle-slider"></span>
+                        </label>
+                      </div>
                       <div class="ai-schedule-section">
                         <h4 class="form-section-title">基建数量/单剧</h4>
                         <div class="form-row">
@@ -2639,7 +2658,13 @@
                       </div>
                     </div>
 
-                    <div id="ai-std-max-iaa" class="ai-std-pane" style="display: none;">
+                    <div id="ai-std-max-iaa" class="ai-std-pane" data-mode="max-iaa" style="display: none;">                      <div class="ai-mode-enable">
+                        <span>启用该模式投放</span>
+                        <label class="toggle-switch">
+                          <input type="checkbox" checked onchange="onAiModeToggle(this)" />
+                          <span class="toggle-slider"></span>
+                        </label>
+                      </div>
                       <div class="ai-schedule-section">
                         <h4 class="form-section-title">基建数量/单剧</h4>
                         <div class="form-row">
@@ -4154,8 +4179,42 @@
         });
       });
 
+      /* 模式启用开关：未启用的模式不投放，保存时不校验其必填项 */
+      var AI_MODE_NAMES = { 'stable-pay': '稳定成本-付费', 'stable-iaa': '稳定成本-IAA', 'max-pay': '最大转化-付费', 'max-iaa': '最大转化-IAA' };
+
+      function onAiModeToggle(inputEl) {
+        var pane = inputEl.closest('.ai-std-pane');
+        if (!pane) return;
+        var enabled = inputEl.checked;
+        pane.classList.toggle('mode-disabled', !enabled);
+        var dot = document.getElementById('ai-mode-dot-' + pane.getAttribute('data-mode'));
+        if (dot) dot.classList.toggle('off', !enabled);
+      }
+
       function submitAiTask() {
-        alert('保存成功（抽屉字段待补充）');
+        var errors = [];
+        var firstErrorPane = null;
+        document.querySelectorAll('#ai-task-drawer .ai-std-pane[data-mode]').forEach(function (pane) {
+          var toggle = pane.querySelector('.ai-mode-enable input');
+          if (toggle && !toggle.checked) return; /* 未启用：跳过校验 */
+          var mode = pane.getAttribute('data-mode');
+          pane.querySelectorAll('.form-item').forEach(function (item) {
+            var label = item.querySelector('.form-label');
+            if (!label || !label.querySelector('.required-star')) return;
+            var field = item.querySelector('input.form-input, select.form-input');
+            if (field && !String(field.value).trim()) {
+              errors.push(AI_MODE_NAMES[mode] + '：' + label.textContent.replace(/\*/g, '').trim());
+              if (!firstErrorPane) firstErrorPane = pane;
+            }
+          });
+        });
+        if (errors.length) {
+          switchAiTaskDrawerTab('standard');
+          if (firstErrorPane) switchAiStdSubTab(firstErrorPane.getAttribute('data-mode'));
+          alert('请完善以下必填项：\n· ' + errors.join('\n· '));
+          return;
+        }
+        alert('保存成功');
         closeAiTaskDrawer();
       }
 

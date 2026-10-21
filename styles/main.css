@@ -3571,3 +3571,32 @@ body {
 #ai-task-drawer .drawer-footer .btn {
   min-width: 76px;
 }
+
+/* 模式启用开关行 + 页签启停状态点 */
+#ai-task-drawer .ai-mode-enable {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+#ai-task-drawer .ai-std-pane.mode-disabled > *:not(.ai-mode-enable) {
+  opacity: 0.45;
+}
+
+#ai-task-drawer .mode-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-success);
+  margin-right: 6px;
+  vertical-align: 2px;
+}
+
+#ai-task-drawer .mode-dot.off {
+  background: #c0c4cc;
+}
