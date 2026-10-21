@@ -3479,6 +3479,10 @@ body {
   flex-wrap: wrap;
   gap: 14px 16px;
   align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+#ai-task-drawer .form-row:last-child {
   margin-bottom: 0;
 }
 
