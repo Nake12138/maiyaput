@@ -1376,13 +1376,13 @@
                           <th>ID</th>
                           <th>账户信息</th>
                           <th>任务信息</th>
-                          <th>投放短剧</th>
                           <th>项目数</th>
                           <th>单元数</th>
+                          <th>操作</th>
+                          <th>投放短剧</th>
                           <th>业务场景</th>
                           <th>创建人</th>
                           <th>创建时间</th>
-                          <th>操作</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -1397,13 +1397,13 @@
                             <span class="link">任务1</span>
                             <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:1</div>
                           </td>
-                          <td>短剧1<br /><span style="color:var(--color-text-tertiary);">ID:1001</span></td>
                           <td><span class="link">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功2</span><span class="stat-row-empty">失败0</span></div></div></td>
                           <td><span class="link">4</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功3</span><span class="stat-fail-text fail-clickable" onclick="openAiAutoFailDetail(5200131, 'JL-MAD-AI-短剧一组-01', 'unit', 1)">失败1</span></div></div></td>
+                          <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('账户',5200131)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('账户',5200131)">重试</button></div></td>
+                          <td>短剧1<br /><span style="color:var(--color-text-tertiary);">ID:1001</span></td>
                           <td>崛原生免费</td>
                           <td>娜可</td>
                           <td>2026-10-20 10:12:33</td>
-                          <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('账户',5200131)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('账户',5200131)">重试</button></div></td>
                         </tr>
                         <tr>
                           <td><input type="checkbox" class="ai-account-checkbox" onchange="updateAiRowSelectedCount('account')" /></td>
@@ -1416,13 +1416,13 @@
                             <span class="link">任务1</span>
                             <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:1</div>
                           </td>
-                          <td>短剧1<br /><span style="color:var(--color-text-tertiary);">ID:1001</span></td>
                           <td><span class="link">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功1</span><span class="stat-fail-text fail-clickable" onclick="openAiAutoFailDetail(5200132, 'JL-MAD-AI-短剧一组-02', 'project', 1)">失败1</span></div></div></td>
                           <td><span class="link">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功2</span><span class="stat-row-empty">失败0</span></div></div></td>
+                          <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('账户',5200132)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('账户',5200132)">重试</button></div></td>
+                          <td>短剧1<br /><span style="color:var(--color-text-tertiary);">ID:1001</span></td>
                           <td>崛原生免费</td>
                           <td>娜可</td>
                           <td>2026-10-20 10:12:36</td>
-                          <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('账户',5200132)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('账户',5200132)">重试</button></div></td>
                         </tr>
                       </tbody>
                     </table>
@@ -1505,16 +1505,16 @@
                           <th>ID</th>
                           <th>项目信息</th>
                           <th>上传状态</th>
+                          <th>单元数</th>
+                          <th>操作</th>
                           <th>竞价策略</th>
                           <th>日预算</th>
-                          <th>单元数</th>
                           <th>账户信息</th>
                           <th>任务信息</th>
                           <th>投放短剧</th>
                           <th>业务场景</th>
                           <th>创建人</th>
                           <th>创建时间</th>
-                          <th>操作</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -1526,9 +1526,10 @@
                             <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7455532211008899</div>
                           </td>
                           <td><span class="tag tag-success">成功</span></td>
+                          <td><span class="link">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功2</span><span class="stat-row-empty">失败0</span></div></div></td>
+                          <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('项目',90012)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('项目',90012)">重试</button></div></td>
                           <td>最大转化</td>
                           <td>1000</td>
-                          <td><span class="link">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功2</span><span class="stat-row-empty">失败0</span></div></div></td>
                           <td>
                             JL-MAD-AI-短剧一组-01
                             <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7648215203578101780</div>
@@ -1541,7 +1542,6 @@
                           <td>崛原生免费</td>
                           <td>娜可</td>
                           <td>2026-10-20 10:12:35</td>
-                          <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('项目',90012)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('项目',90012)">重试</button></div></td>
                         </tr>
                         <tr>
                           <td><input type="checkbox" class="ai-project-checkbox" onchange="updateAiRowSelectedCount('project')" /></td>
@@ -1551,9 +1551,10 @@
                             <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7455532211007788</div>
                           </td>
                           <td><span class="tag tag-error">失败</span></td>
+                          <td><span class="link">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功1</span><span class="stat-fail-text fail-clickable" onclick="openAiAutoFailDetail(90013, '任务1-短剧1-召回', 'unit', 1)">失败1</span></div></div></td>
+                          <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('项目',90013)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('项目',90013)">重试</button></div></td>
                           <td>稳定成本</td>
                           <td>3000</td>
-                          <td><span class="link">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功1</span><span class="stat-fail-text fail-clickable" onclick="openAiAutoFailDetail(90013, '任务1-短剧1-召回', 'unit', 1)">失败1</span></div></div></td>
                           <td>
                             JL-MAD-AI-短剧一组-02
                             <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7648215203578101666</div>
@@ -1566,7 +1567,6 @@
                           <td>崛原生免费</td>
                           <td>娜可</td>
                           <td>2026-10-20 10:12:38</td>
-                          <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('项目',90013)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('项目',90013)">重试</button></div></td>
                         </tr>
                       </tbody>
                     </table>
@@ -1649,6 +1649,7 @@
                           <th>ID</th>
                           <th>单元信息</th>
                           <th>上传状态</th>
+                          <th>操作</th>
                           <th>竞价策略</th>
                           <th>ROI系数</th>
                           <th>出价</th>
@@ -1658,7 +1659,6 @@
                           <th>任务信息</th>
                           <th>创建人</th>
                           <th>创建时间</th>
-                          <th>操作</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -1670,6 +1670,7 @@
                             <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:6611223344556677</div>
                           </td>
                           <td><span class="tag tag-success">成功</span></td>
+                          <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('单元',30021)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('单元',30021)">重试</button></div></td>
                           <td>最大转化</td>
                           <td>--</td>
                           <td>--</td>
@@ -1688,7 +1689,6 @@
                           </td>
                           <td>娜可</td>
                           <td>2026-10-20 10:12:40</td>
-                          <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('单元',30021)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('单元',30021)">重试</button></div></td>
                         </tr>
                         <tr>
                           <td><input type="checkbox" class="ai-unit-checkbox" onchange="updateAiRowSelectedCount('unit')" /></td>
@@ -1698,6 +1698,7 @@
                             <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:6611223344555566</div>
                           </td>
                           <td><span class="tag tag-error">失败</span></td>
+                          <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('单元',30020)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('单元',30020)">重试</button></div></td>
                           <td>稳定成本</td>
                           <td>1.03</td>
                           <td>0.8</td>
@@ -1716,7 +1717,6 @@
                           </td>
                           <td>娜可</td>
                           <td>2026-10-20 10:12:43</td>
-                          <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('单元',30020)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('单元',30020)">重试</button></div></td>
                         </tr>
                       </tbody>
                     </table>
@@ -3091,7 +3091,7 @@
       }
 
       function openAiAutoFailDetail(id, name, level, failCount) {
-        openFailDetailModal(id, name, level, failCount, 'auto');
+        openFailDetailModal(id, name, level, failCount, 'ai');
       }
 
       function searchAiAutoTask() {
@@ -3446,8 +3446,17 @@
           { name: '任务十二-项目B-召回-单元02', id: '130046', parent: '任务十二-项目B-召回', parentId: '90012', account: 'JL-MAD-IAA-二组-京服..', accountId: '5166', error: { code: 40011, message: '出价低于该版位最低出价限制', request_id: '20261010150012E5056789012EF01235' } }
         ]
       };
+      /* AI素材推广·自动化任务 - 失败明细数据 */
+      var AI_FAIL_DETAIL_DATA = {
+        project: [
+          { name: '任务1-短剧1-召回', id: '90013', parent: null, account: 'JL-MAD-AI-短剧一组-02', accountId: '5200132', error: { code: 40003, message: '定向包与账户可投范围不匹配', request_id: '20261020101233A1012345678ABCDEF01' } }
+        ],
+        unit: [
+          { name: '任务1-短剧1-激活-单元2', id: '30022', parent: '任务1-短剧1-激活', parentId: '90012', account: 'JL-MAD-AI-短剧一组-01', accountId: '5200131', error: { code: 40010, message: '创意素材审核未通过，请更换素材', request_id: '20261020101233B2023456789BCDEF012' } },
+          { name: '任务1-短剧1-召回-单元1', id: '30020', parent: '任务1-短剧1-召回', parentId: '90013', account: 'JL-MAD-AI-短剧一组-02', accountId: '5200132', error: { code: 40011, message: '出价低于该版位最低出价限制', request_id: '20261020101243C3034567890CDEF013' } }
+        ]
+      };
       var semiFailDetailState = { taskId: null, taskName: '', level: 'project', failCount: 0, source: 'semi' };
-
       function openSemiFailDetail(taskId, taskName, level, failCount) {
         openFailDetailModal(taskId, taskName, level, failCount, 'semi');
       }
@@ -3474,14 +3483,15 @@
 
       function renderSemiFailDetail() {
         var meta = SEMI_FAIL_DETAIL_META[semiFailDetailState.level];
-        var dataSource = semiFailDetailState.source === 'auto' ? AUTO_FAIL_DETAIL_DATA : SEMI_FAIL_DETAIL_DATA;
+        var FAIL_DETAIL_SOURCES = { semi: SEMI_FAIL_DETAIL_DATA, auto: AUTO_FAIL_DETAIL_DATA, ai: AI_FAIL_DETAIL_DATA };
+        var dataSource = FAIL_DETAIL_SOURCES[semiFailDetailState.source] || SEMI_FAIL_DETAIL_DATA;
         var rows = dataSource[semiFailDetailState.level] || [];
         var titleName = semiFailDetailState.taskName || '（未命名）';
         var titleIdStr = semiFailDetailState.taskId != null ? '(ID:' + semiFailDetailState.taskId + ')' : '';
         document.getElementById('semi-fail-detail-title').textContent =
           '失败明细 - ' + titleName + titleIdStr + ' - ' + meta.label;
         document.getElementById('semi-fail-detail-pagination-info').innerHTML =
-          '共 <strong>' + semiFailDetailState.failCount + '</strong> 条';
+          '共 <strong>' + (rows.length || semiFailDetailState.failCount) + '</strong> 条';
 
         var head = '<tr><th class="checkbox-col"><input type="checkbox" onclick="toggleSemiFailDetailAll(this)" /></th>';
         head += '<th>' + meta.nameCol + '</th>';
