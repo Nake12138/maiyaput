@@ -1208,7 +1208,7 @@
               <div class="tabs-bar">
                 <div class="tabs" id="ai-auto-task-tabs">
                   <button class="tab active" onclick="switchAiAutoTaskTab('task')">任务模板</button>
-                  <button class="tab" onclick="switchAiAutoTaskTab('drama')">短剧任务</button>
+                  <button class="tab" onclick="switchAiAutoTaskTab('drama')">执行记录</button>
                   <button class="tab" onclick="switchAiAutoTaskTab('standard')">标准投放</button>
                   <button class="tab" onclick="switchAiAutoTaskTab('global')">全域投放</button>
                 </div>
@@ -1310,8 +1310,8 @@
                   </div>
                   <div class="filter-combo" data-filter-type="task-name">
                     <select class="filter-combo-select">
-                      <option>任务名称</option>
-                      <option>任务ID</option>
+                      <option>任务模板名称</option>
+                      <option>任务模板ID</option>
                     </select>
                     <input type="text" class="filter-combo-input" placeholder="请输入" />
                   </div>
@@ -1322,7 +1322,6 @@
                   </select>
                   <select class="filter-select" id="ai-drama-status-filter">
                     <option value="">请选择测出状态</option>
-                    <option value="pending">待测试</option>
                     <option value="testing">测试中</option>
                     <option value="tested">测出</option>
                     <option value="untested">未测出</option>
@@ -1338,14 +1337,6 @@
                   </div>
                 </div>
 
-                <div class="drama-switch-tip">
-                  开关控制该短剧任务是否继续执行（继续执行 = 短剧测试 + 新素材投放）。仅当开关开启且测出状态为「测出」时，后续产生的新素材才按任务配置投放；测出状态为「未测出」时开关锁定为关闭，并自动取消该短剧的白名单标签。
-                </div>
-
-                <div class="drama-switch-tip">
-                  测出状态判定：短剧打上投放标签后，AI素材 <b>≥ 90</b> 即为「测试中」并开始 3 天测试期；AI素材 <b>&lt; 90</b> 为「待测试」，待素材累积达到 90 后自动转为「测试中」。测试期结束按控损结果回写「测出 / 未测出」。
-                </div>
-
                 <div class="table-card">
                   <div class="table-wrapper">
                     <table class="data-table">
@@ -1354,7 +1345,7 @@
                           <th>ID</th>
                           <th>开关</th>
                           <th>短剧</th>
-                          <th>所属任务</th>
+                          <th>任务模板</th>
                           <th>测出状态</th>
                           <th>AI素材</th>
                           <th>素材更新时间</th>
@@ -1365,9 +1356,8 @@
                         </tr>
                       </thead>
                       <!-- 测出状态规则：
-                           1) 任务执行后 AI素材 < 90 → 待测试；AI素材 >= 90（含等于 90）→ 测试中，并开始 3 天测试期
-                           2) 待测试状态下，后续任务执行时 AI素材累积达到 90 → 自动转为测试中（临界值 90 计入测试中，不做“大于 90”判定）
-                           3) 3 天测试期内按控损结果回写 → 测出 / 未测出；3 天结束仍未达标 → 未测出 -->
+                           1) AI素材 >= 90（含等于 90）→ 测试中，并开始 3 天测试期
+                           2) 3 天测试期内按控损结果回写 → 测出 / 未测出；3 天结束仍未达标 → 未测出 -->
                       <tbody>
                         <tr>
                           <td>5001</td>
@@ -1396,36 +1386,6 @@
                           <td>
                             <div class="row-actions">
                               <button class="row-action-btn" onclick="openAiModifyLogDrawer('任务1-短剧1', '5001', 'tested')">日志</button>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>5002</td>
-                          <td>
-                            <div class="drama-switch-cell">
-                              <label class="toggle-switch" title="控制该短剧任务是否继续执行（短剧测试 + 新素材投放）">
-                                <input type="checkbox" checked onchange="toggleAiDramaTask(this)" />
-                                <span class="toggle-slider"></span>
-                              </label>
-                            </div>
-                          </td>
-                          <td>
-                            <span class="link" onclick="drillAiDramaToAccount('5002')">短剧2</span>
-                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 1002</div>
-                          </td>
-                          <td>
-                            <span>任务1</span>
-                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 1</div>
-                          </td>
-                          <td data-col="test-status"><span class="tag tag-info">待测试</span></td>
-                          <td>60</td>
-                          <td>2026-10-20 12:10:00</td>
-                          <td><span class="link" onclick="drillAiDramaToScope('standard', '5002')">2026-10-20 09:30:00</span></td>
-                          <td><span class="link" onclick="drillAiDramaToScope('global', '5002')">2026-10-20 09:50:00</span></td>
-                          <td>娜可</td>
-                          <td>
-                            <div class="row-actions">
-                              <button class="row-action-btn" onclick="openAiModifyLogDrawer('任务1-短剧2', '5002', 'pending')">日志</button>
                             </div>
                           </td>
                         </tr>
@@ -3713,14 +3673,6 @@
                             <td>开启短剧任务，AI素材数量：120，大于90。短剧任务测出状态：测试中</td>
                           </tr>
                         </tbody>
-                        <!-- 短剧任务 · 待测试：任务开启但素材数不足 90 -->
-                        <tbody id="ai-modify-log-body-pending" style="display: none;">
-                          <tr>
-                            <td>系统</td>
-                            <td>2026-10-21 11:00:00</td>
-                            <td>开启短剧任务，AI素材数量：60，小于90。短剧任务测出状态：待测试</td>
-                          </tr>
-                        </tbody>
                         <!-- 短剧任务 · 未测出：两种触发路径（3天测试期结束未达标 / 用户手动关闭）示例并列展示 -->
                         <tbody id="ai-modify-log-body-untested" style="display: none;">
                           <tr>
@@ -4806,7 +4758,7 @@
         if (creator) creator.value = '';
       }
 
-      /* 任务名称下钻：切换到短剧 Tab 并带入任务ID筛选项 */
+      /* 任务模板下钻：切换到短剧 Tab 并带入任务模板ID筛选项 */
       function drillAiTaskToDrama(taskId) {
         switchAiAutoTaskTab('drama');
         var root = document.getElementById('ai-auto-task-drama');
@@ -4814,7 +4766,7 @@
         if (combo) {
           var select = combo.querySelector('.filter-combo-select');
           var input = combo.querySelector('.filter-combo-input');
-          if (select) select.value = '任务ID';
+          if (select) select.value = '任务模板ID';
           if (input) input.value = taskId;
         }
       }
@@ -4847,7 +4799,6 @@
       /*
        * 短剧任务开关：控制该短剧任务是否继续执行（继续执行 = 短剧测试 + 新素材投放）
        * - 测出：关闭后状态仍为「测出」，但后续产生的新素材不再投放
-       * - 待测试：关闭后状态仍为「待测试」，不再执行短剧测试与新素材投放
        * - 测试中：关闭后任务终止，测出状态改为「未测出」，且不可再开启
        * - 未测出：开关默认关闭且禁用，不支持开启
        */
@@ -4866,8 +4817,6 @@
             showAiToast('已关闭：测试中任务终止，测出状态更新为「未测出」，已自动取消该短剧的白名单标签，且不再支持开启');
           } else if (status === '测出') {
             showAiToast('已关闭：短剧测试与新素材投放均已停止，后续产生的新素材不再投放');
-          } else if (status === '待测试') {
-            showAiToast('已关闭：短剧测试与新素材投放均已停止');
           }
         } else {
           showAiToast(
@@ -5759,13 +5708,13 @@
 
       /*
        * 修改日志抽屉（任务列表 / 短剧任务共用）
-       * scope：task（任务修改日志，默认）/ tested / testing / pending / untested（短剧任务各测出状态）
+       * scope：task（任务修改日志，默认）/ tested / testing / untested（短剧任务各测出状态）
        */
       function openAiModifyLogDrawer(taskName, taskId, scope) {
         document.getElementById('ai-modify-log-title').textContent = (taskName ? taskName : '任务') + '-修改日志';
         var key = scope || 'task';
-        var scopes = ['task', 'tested', 'testing', 'pending', 'untested'];
-        var counts = { task: 2, tested: 3, testing: 1, pending: 1, untested: 3 };
+        var scopes = ['task', 'tested', 'testing', 'untested'];
+        var counts = { task: 2, tested: 3, testing: 1, untested: 3 };
         scopes.forEach(function (name) {
           var body = document.getElementById('ai-modify-log-body-' + name);
           if (body) body.style.display = name === key ? '' : 'none';
