@@ -1208,7 +1208,7 @@
               <div class="tabs-bar">
                 <div class="tabs" id="ai-auto-task-tabs">
                   <button class="tab active" onclick="switchAiAutoTaskTab('task')">任务</button>
-                  <button class="tab" onclick="switchAiAutoTaskTab('drama')">短剧</button>
+                  <button class="tab" onclick="switchAiAutoTaskTab('drama')">短剧任务</button>
                   <button class="tab" onclick="switchAiAutoTaskTab('standard')">标准投放</button>
                   <button class="tab" onclick="switchAiAutoTaskTab('global')">全域投放</button>
                 </div>
@@ -1294,10 +1294,17 @@
               <!-- 短剧 Tab -->
               <div id="ai-auto-task-drama" class="tab-content" style="display: none;">
                 <div class="filter-bar">
+                  <div class="filter-combo" data-filter-type="drama-task-id">
+                    <select class="filter-combo-select">
+                      <option>ID</option>
+                    </select>
+                    <input type="text" class="filter-combo-input" placeholder="请输入" />
+                  </div>
                   <div class="filter-combo" data-filter-type="drama-name">
                     <select class="filter-combo-select">
                       <option>短剧名称</option>
                       <option>短剧ID</option>
+                      <option>短剧任务ID</option>
                     </select>
                     <input type="text" class="filter-combo-input" placeholder="请输入" />
                   </div>
@@ -1308,6 +1315,11 @@
                     </select>
                     <input type="text" class="filter-combo-input" placeholder="请输入" />
                   </div>
+                  <select class="filter-select" id="ai-drama-creator-filter">
+                    <option value="">请选择创建人</option>
+                    <option value="nake">娜可</option>
+                    <option value="huanxue">还音</option>
+                  </select>
                   <select class="filter-select" id="ai-drama-status-filter">
                     <option value="">请选择测出状态</option>
                     <option value="pending">待测试</option>
@@ -1315,10 +1327,23 @@
                     <option value="tested">测出</option>
                     <option value="untested">未测出</option>
                   </select>
+                  <select class="filter-select" id="ai-drama-switch-filter">
+                    <option value="">请选择开关状态</option>
+                    <option value="on">开启</option>
+                    <option value="off">关闭</option>
+                  </select>
                   <div class="filter-actions">
                     <button class="btn btn-info btn-sm" onclick="searchAiDramaList()">查询</button>
                     <button class="btn btn-outline btn-sm" onclick="resetAiDramaFilters()">重置</button>
                   </div>
+                </div>
+
+                <div class="drama-switch-tip">
+                  开关控制该短剧任务是否继续执行（继续执行 = 短剧测试 + 新素材投放）。仅当开关开启且测出状态为「测出」时，后续产生的新素材才按任务配置投放；测出状态为「未测出」时开关锁定为关闭，并自动取消该短剧的白名单标签。
+                </div>
+
+                <div class="drama-switch-tip">
+                  测出状态判定：短剧打上投放标签后，AI素材 <b>≥ 90</b> 即为「测试中」并开始 3 天测试期；AI素材 <b>&lt; 90</b> 为「待测试」，待素材累积达到 90 后自动转为「测试中」。测试期结束按控损结果回写「测出 / 未测出」。
                 </div>
 
                 <div class="table-card">
@@ -1326,6 +1351,8 @@
                     <table class="data-table">
                       <thead>
                         <tr>
+                          <th>ID</th>
+                          <th>开关</th>
                           <th>短剧</th>
                           <th>所属任务</th>
                           <th>测出状态</th>
@@ -1333,69 +1360,134 @@
                           <th>素材更新时间</th>
                           <th>最近一次执行时间（标准）</th>
                           <th>最近一次执行时间（全域）</th>
+                          <th>创建人</th>
+                          <th>操作</th>
                         </tr>
                       </thead>
-                      <!-- 测出状态规则：任务执行后 AI素材 < 90 → 待测试；AI素材 >= 90 → 测试中；测试完成后按控损结果 → 测出 / 未测出 -->
+                      <!-- 测出状态规则：
+                           1) 任务执行后 AI素材 < 90 → 待测试；AI素材 >= 90（含等于 90）→ 测试中，并开始 3 天测试期
+                           2) 待测试状态下，后续任务执行时 AI素材累积达到 90 → 自动转为测试中（临界值 90 计入测试中，不做“大于 90”判定）
+                           3) 3 天测试期内按控损结果回写 → 测出 / 未测出；3 天结束仍未达标 → 未测出 -->
                       <tbody>
                         <tr>
+                          <td>5001</td>
                           <td>
-                            <span class="link" onclick="drillAiDramaToAccount('1001')">短剧1</span>
+                            <div class="drama-switch-cell">
+                              <label class="toggle-switch" title="控制该短剧任务是否继续执行（短剧测试 + 新素材投放）">
+                                <input type="checkbox" checked onchange="toggleAiDramaTask(this)" />
+                                <span class="toggle-slider"></span>
+                              </label>
+                            </div>
+                          </td>
+                          <td>
+                            <span class="link" onclick="drillAiDramaToAccount('5001')">短剧1</span>
                             <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 1001</div>
                           </td>
                           <td>
                             <span>任务1</span>
                             <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 1</div>
                           </td>
-                          <td><span class="tag tag-success">测出</span></td>
-                          <td>90</td>
+                          <td data-col="test-status"><span class="tag tag-success">测出</span></td>
+                          <td>125</td>
                           <td>2026-10-20 12:30:00</td>
-                          <td><span class="link" onclick="drillAiDramaToScope('standard', '1001', '1')">2026-10-20 10:30:00</span></td>
-                          <td><span class="link" onclick="drillAiDramaToScope('global', '1001', '1')">2026-10-20 11:30:00</span></td>
+                          <td><span class="link" onclick="drillAiDramaToScope('standard', '5001')">2026-10-20 10:30:00</span></td>
+                          <td><span class="link" onclick="drillAiDramaToScope('global', '5001')">2026-10-20 11:30:00</span></td>
+                          <td>娜可</td>
+                          <td>
+                            <div class="row-actions">
+                              <button class="row-action-btn" onclick="openAiModifyLogDrawer('任务1-短剧1', '5001', 'tested')">日志</button>
+                            </div>
+                          </td>
                         </tr>
                         <tr>
+                          <td>5002</td>
                           <td>
-                            <span class="link" onclick="drillAiDramaToAccount('1002')">短剧2</span>
+                            <div class="drama-switch-cell">
+                              <label class="toggle-switch" title="控制该短剧任务是否继续执行（短剧测试 + 新素材投放）">
+                                <input type="checkbox" checked onchange="toggleAiDramaTask(this)" />
+                                <span class="toggle-slider"></span>
+                              </label>
+                            </div>
+                          </td>
+                          <td>
+                            <span class="link" onclick="drillAiDramaToAccount('5002')">短剧2</span>
                             <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 1002</div>
                           </td>
                           <td>
                             <span>任务1</span>
                             <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 1</div>
                           </td>
-                          <td><span class="tag tag-info">待测试</span></td>
+                          <td data-col="test-status"><span class="tag tag-info">待测试</span></td>
                           <td>60</td>
                           <td>2026-10-20 12:10:00</td>
-                          <td><span class="link" onclick="drillAiDramaToScope('standard', '1002', '1')">2026-10-20 09:30:00</span></td>
-                          <td><span class="link" onclick="drillAiDramaToScope('global', '1002', '1')">2026-10-20 09:50:00</span></td>
+                          <td><span class="link" onclick="drillAiDramaToScope('standard', '5002')">2026-10-20 09:30:00</span></td>
+                          <td><span class="link" onclick="drillAiDramaToScope('global', '5002')">2026-10-20 09:50:00</span></td>
+                          <td>娜可</td>
+                          <td>
+                            <div class="row-actions">
+                              <button class="row-action-btn" onclick="openAiModifyLogDrawer('任务1-短剧2', '5002', 'pending')">日志</button>
+                            </div>
+                          </td>
                         </tr>
                         <tr>
+                          <td>5003</td>
                           <td>
-                            <span class="link" onclick="drillAiDramaToAccount('1003')">短剧3</span>
+                            <div class="drama-switch-cell">
+                              <label class="toggle-switch is-disabled" title="未测出状态不支持开启">
+                                <input type="checkbox" disabled onchange="toggleAiDramaTask(this)" />
+                                <span class="toggle-slider"></span>
+                              </label>
+                            </div>
+                          </td>
+                          <td>
+                            <span class="link" onclick="drillAiDramaToAccount('5003')">短剧3</span>
                             <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 1003</div>
                           </td>
                           <td>
                             <span>任务2</span>
                             <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 2</div>
                           </td>
-                          <td><span class="tag tag-default">未测出</span></td>
+                          <td data-col="test-status"><span class="tag tag-default">未测出</span></td>
                           <td>95</td>
                           <td>2026-10-20 11:20:00</td>
-                          <td><span class="link" onclick="drillAiDramaToScope('standard', '1003', '2')">2026-10-20 08:10:00</span></td>
-                          <td><span class="link" onclick="drillAiDramaToScope('global', '1003', '2')">2026-10-20 08:40:00</span></td>
+                          <td><span class="link" onclick="drillAiDramaToScope('standard', '5003')">2026-10-20 08:10:00</span></td>
+                          <td><span class="link" onclick="drillAiDramaToScope('global', '5003')">2026-10-20 08:40:00</span></td>
+                          <td>还音</td>
+                          <td>
+                            <div class="row-actions">
+                              <button class="row-action-btn" onclick="openAiModifyLogDrawer('任务2-短剧3', '5003', 'untested')">日志</button>
+                            </div>
+                          </td>
                         </tr>
                         <tr>
+                          <td>5004</td>
                           <td>
-                            <span class="link" onclick="drillAiDramaToAccount('1004')">短剧4</span>
+                            <div class="drama-switch-cell">
+                              <label class="toggle-switch" title="控制该短剧任务是否继续执行（短剧测试 + 新素材投放）">
+                                <input type="checkbox" checked onchange="toggleAiDramaTask(this)" />
+                                <span class="toggle-slider"></span>
+                              </label>
+                            </div>
+                          </td>
+                          <td>
+                            <span class="link" onclick="drillAiDramaToAccount('5004')">短剧4</span>
                             <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 1004</div>
                           </td>
                           <td>
                             <span>任务2</span>
                             <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 2</div>
                           </td>
-                          <td><span class="tag tag-warning">测试中</span></td>
+                          <td data-col="test-status"><span class="tag tag-warning">测试中</span></td>
                           <td>120</td>
                           <td>2026-10-20 11:00:00</td>
-                          <td><span class="link" onclick="drillAiDramaToScope('standard', '1004', '2')">2026-10-20 07:30:00</span></td>
-                          <td><span class="link" onclick="drillAiDramaToScope('global', '1004', '2')">2026-10-20 07:50:00</span></td>
+                          <td><span class="link" onclick="drillAiDramaToScope('standard', '5004')">2026-10-20 07:30:00</span></td>
+                          <td><span class="link" onclick="drillAiDramaToScope('global', '5004')">2026-10-20 07:50:00</span></td>
+                          <td>还音</td>
+                          <td>
+                            <div class="row-actions">
+                              <button class="row-action-btn" onclick="openAiModifyLogDrawer('任务2-短剧4', '5004', 'testing')">日志</button>
+                            </div>
+                          </td>
                         </tr>
                       </tbody>
                     </table>
@@ -1433,6 +1525,7 @@
                     <select class="filter-combo-select">
                       <option>短剧名称</option>
                       <option>短剧ID</option>
+                      <option>短剧任务ID</option>
                     </select>
                     <input type="text" class="filter-combo-input" placeholder="请输入" />
                   </div>
@@ -1572,6 +1665,7 @@
                     <select class="filter-combo-select">
                       <option>短剧名称</option>
                       <option>短剧ID</option>
+                      <option>短剧任务ID</option>
                     </select>
                     <input type="text" class="filter-combo-input" placeholder="请输入" />
                   </div>
@@ -1733,6 +1827,7 @@
                     <select class="filter-combo-select">
                       <option>短剧名称</option>
                       <option>短剧ID</option>
+                      <option>短剧任务ID</option>
                     </select>
                     <input type="text" class="filter-combo-input" placeholder="请输入" />
                   </div>
@@ -1872,57 +1967,84 @@
               </div>
               </div>
 
-              <!-- 全域投放 Tab（内含 账户 / 项目 / 单元 子页签） -->
+              <!-- 全域投放 Tab（内含 账户 / 项目 / 素材更新明细 子页签） -->
               <div id="ai-auto-task-global" class="tab-content" style="display: none;">
                 <div class="tabs" id="ai-global-tabs" style="margin-bottom: 12px;">
                   <button class="tab active" onclick="switchAiScopeTab('global','account')">账户</button>
                   <button class="tab" onclick="switchAiScopeTab('global','project')">项目</button>
-                  <button class="tab" onclick="switchAiScopeTab('global','unit')">单元</button>
+                  <button class="tab" onclick="switchAiScopeTab('global','material')">素材更新明细</button>
                 </div>
 
-                <!-- 账户子页签 -->
+                <!-- 账户子页签（全域投放 R3 · P3，由项目数据按账户聚合） -->
                 <div id="ai-global-account" class="tab-content">
                 <div class="filter-bar">
-                  <div class="filter-combo" data-filter-type="task-name">
-                    <select class="filter-combo-select">
-                      <option>任务名称</option>
-                      <option>任务ID</option>
+                  <div class="filter-bar-row">
+                    <div class="filter-range">
+                      <span class="filter-range-label">创建时间</span>
+                      <input type="text" placeholder="开始时间" />
+                      <span class="filter-range-tilde">-</span>
+                      <input type="text" placeholder="结束时间" />
+                      <button type="button" class="filter-range-pick" title="选择日期">📅</button>
+                      <span class="filter-range-unit">月</span>
+                    </div>
+                    <select class="filter-select">
+                      <option value="">请选择创建人</option>
+                      <option value="nake">娜可</option>
+                      <option value="huanxue">还音</option>
                     </select>
-                    <input type="text" class="filter-combo-input" placeholder="请输入" />
+                    <div class="filter-combo" data-filter-type="task-name">
+                      <select class="filter-combo-select">
+                        <option>任务名称</option>
+                        <option>任务ID</option>
+                      </select>
+                      <input type="text" class="filter-combo-input" placeholder="请输入" />
+                    </div>
+                    <div class="filter-combo" data-filter-type="account-name">
+                      <select class="filter-combo-select">
+                        <option>账户名称</option>
+                        <option>账户ID</option>
+                      </select>
+                      <input type="text" class="filter-combo-input" placeholder="请输入" />
+                    </div>
+                    <div class="filter-combo" data-filter-type="drama-name">
+                      <select class="filter-combo-select">
+                        <option>短剧名称</option>
+                        <option>短剧ID</option>
+                      </select>
+                      <input type="text" class="filter-combo-input" placeholder="请输入" />
+                    </div>
+                    <div class="filter-combo" data-filter-type="douyin-name">
+                      <select class="filter-combo-select">
+                        <option>抖音号名称</option>
+                        <option>抖音号ID</option>
+                      </select>
+                      <input type="text" class="filter-combo-input" placeholder="请输入" />
+                    </div>
                   </div>
-                  <div class="filter-combo" data-filter-type="account-name">
-                    <select class="filter-combo-select">
-                      <option>账户名称</option>
-                      <option>账户ID</option>
-                      <option>账户列表ID</option>
+                  <div class="filter-bar-row">
+                    <select class="filter-select" id="ai-global-exec-status-filter">
+                      <option value="">请选择执行状态</option>
+                      <option value="uploading">上传中</option>
+                      <option value="success">上传成功</option>
+                      <option value="fail">上传失败</option>
                     </select>
-                    <input type="text" class="filter-combo-input" placeholder="请输入" />
-                  </div>
-                  <div class="filter-combo" data-filter-type="drama-name">
-                    <select class="filter-combo-select">
-                      <option>短剧名称</option>
-                      <option>短剧ID</option>
+                    <select class="filter-select">
+                      <option value="">请选择执行类型</option>
+                      <option value="random">随机</option>
+                      <option value="drama">一户一剧</option>
+                      <option value="douyin">一户一抖音号</option>
+                      <option value="multi">一户多抖音号</option>
                     </select>
-                    <input type="text" class="filter-combo-input" placeholder="请输入" />
-                  </div>
-                  <select class="filter-select">
-                    <option value="">请选择业务场景</option>
-                    <option value="dyy-iaa">端原生IAA</option>
-                    <option value="dyy-pay">端原生付费</option>
-                  </select>
-                  <select class="filter-select">
-                    <option value="">请选择竞价策略</option>
-                    <option value="stable-cost">稳定成本</option>
-                    <option value="max-convert">最大转化</option>
-                  </select>
-                  <select class="filter-select">
-                    <option value="">请选择创建人</option>
-                    <option value="nake">娜可</option>
-                    <option value="huanxue">还音</option>
-                  </select>
-                  <div class="filter-actions">
-                    <button class="btn btn-info btn-sm" onclick="searchAiScopeRow('global','account')">查询</button>
-                    <button class="btn btn-outline btn-sm" onclick="resetAiScopeFilters('global','account')">重置</button>
+                    <div class="filter-combo" data-filter-type="exec-id">
+                      <select class="filter-combo-select">
+                        <option>执行ID</option>
+                      </select>
+                      <input type="text" class="filter-combo-input" placeholder="请输入" />
+                    </div>
+                    <div class="filter-actions">
+                      <button class="btn btn-info btn-sm" onclick="searchAiScopeRow('global','account')">查询</button>
+                      <button class="btn btn-outline btn-sm" onclick="resetAiScopeFilters('global','account')">重置</button>
+                    </div>
                   </div>
                 </div>
 
@@ -1934,75 +2056,174 @@
                       <thead>
                         <tr>
                           <th class="checkbox-col"><input type="checkbox" id="selectAllAiGlobalAccounts" onclick="toggleSelectAllAiRows('selectAllAiGlobalAccounts','ai-global-account-checkbox','aiGlobalAccountSelectedCount')" /></th>
-                          <th>ID</th>
+                          <th>执行ID</th>
                           <th>账户信息</th>
                           <th>任务信息</th>
-                          <th>项目数</th>
-                          <th>单元数</th>
-                          <th>操作</th>
                           <th>投放短剧</th>
-                          <th>业务场景</th>
-                          <th>竞价策略</th>
-                          <th>创建人</th>
+                          <th>投放抖音号</th>
+                          <th>商品库</th>
+                          <th>提交项目数</th>
+                          <th>操作</th>
+                          <th>执行类型</th>
                           <th>创建时间</th>
+                          <th>执行状态</th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr>
                           <td><input type="checkbox" class="ai-global-account-checkbox" onchange="updateAiRowSelectedCount('ai-global-account','aiGlobalAccountSelectedCount')" /></td>
-                          <td>5200141</td>
+                          <td>11621709</td>
                           <td>
-                            <span class="link" onclick="drillAiGlobalAccountToProject(5200141)">JL-MAD-AI-全域一组-01</span>
-                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7648215203578102101</div>
+                            <span class="link">LO-重庆安歇传媒沙坪坝九分-漫剧2681</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:1879384023453847</div>
                           </td>
                           <td>
-                            <span class="link">任务1</span>
-                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:1</div>
+                            <span class="link">老几漫剧 LO九分部分抖音号</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:6876</div>
                           </td>
-                          <td><span class="link" onclick="drillAiGlobalAccountToProject(5200141)">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功2</span><span class="stat-row-empty">失败0</span></div></div></td>
-                          <td><span class="link" onclick="drillAiGlobalAccountToUnit(5200141)">4</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功4</span><span class="stat-row-empty">失败0</span></div></div></td>
-                          <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('账户',5200141)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('账户',5200141)">重试</button></div></td>
-                          <td>短剧1<br /><span style="color:var(--color-text-tertiary);">ID:1001</span></td>
-                          <td>端原生付费</td>
-                          <td>最大转化</td>
-                          <td>娜可</td>
-                          <td>2026-10-20 11:10:33</td>
+                          <td>总裁的神秘保安[萧唐谦版] <span class="link" title="查看更多短剧">+1</span></td>
+                          <td>
+                            <span class="link">拿破仑漫剧</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:30437270440</div>
+                            <span class="link" title="查看更多抖音号">+23</span>
+                          </td>
+                          <td><span class="link">25</span><div style="font-size: 12px; color: var(--color-text-tertiary);">待上传</div></td>
+                          <td><span class="link">25</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功0</span><span class="stat-row-empty">失败0</span></div></div></td>
+                          <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('账户',11621709)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('账户',11621709)">重试</button></div></td>
+                          <td>随机</td>
+                          <td>2026-10-21 15:27:22</td>
+                          <td><span class="ai-exec-status"><span class="ai-exec-dot uploading"></span>上传中</span></td>
                         </tr>
                         <tr>
                           <td><input type="checkbox" class="ai-global-account-checkbox" onchange="updateAiRowSelectedCount('ai-global-account','aiGlobalAccountSelectedCount')" /></td>
-                          <td>5200142</td>
+                          <td>11621705</td>
                           <td>
-                            <span class="link" onclick="drillAiGlobalAccountToProject(5200142)">JL-MAD-AI-全域一组-02</span>
-                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7648215203578102102</div>
+                            <span class="link">XN-睿之旭巴南五分-真人IAA7167-40</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:1874039568714249</div>
                           </td>
                           <td>
-                            <span class="link">任务1</span>
-                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:1</div>
+                            <span class="link">粥一-真人剧-巴南五分</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:13154</div>
                           </td>
-                          <td><span class="link" onclick="drillAiGlobalAccountToProject(5200142)">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功1</span><span class="stat-fail-text fail-clickable" onclick="openAiAutoFailDetail(5200142, 'JL-MAD-AI-全域一组-02', 'project', 1)">失败1</span></div></div></td>
-                          <td><span class="link" onclick="drillAiGlobalAccountToUnit(5200142)">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功2</span><span class="stat-row-empty">失败0</span></div></div></td>
-                          <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('账户',5200142)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('账户',5200142)">重试</button></div></td>
-                          <td>短剧1<br /><span style="color:var(--color-text-tertiary);">ID:1001</span></td>
-                          <td>端原生IAA</td>
-                          <td>稳定成本</td>
-                          <td>娜可</td>
-                          <td>2026-10-20 11:10:36</td>
+                          <td>修仙满级回来后，我儿孙满堂了[番茄]</td>
+                          <td>
+                            <span class="link">开心麻花剧场</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:29189866273</div>
+                          </td>
+                          <td><span class="link">2</span><div style="font-size: 12px; color: var(--color-text-tertiary);">待上传</div></td>
+                          <td><span class="link">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功0</span><span class="stat-row-empty">失败0</span></div></div></td>
+                          <td><div class="row-actions"><button class="row-action-btn" disabled>刷新</button> <button class="row-action-btn" disabled>重试</button></div></td>
+                          <td>一户一抖音号</td>
+                          <td>2026-10-21 15:27:21</td>
+                          <td><span class="ai-exec-status"><span class="ai-exec-dot uploading"></span>上传中</span></td>
+                        </tr>
+                        <tr>
+                          <td><input type="checkbox" class="ai-global-account-checkbox" onchange="updateAiRowSelectedCount('ai-global-account','aiGlobalAccountSelectedCount')" /></td>
+                          <td>11621705</td>
+                          <td>
+                            <span class="link">XN-睿之旭巴南五分-真人IAA7167-31</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:187403962781364</div>
+                          </td>
+                          <td>
+                            <span class="link">粥一-真人剧-巴南五分</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:13154</div>
+                          </td>
+                          <td>爸爸去世后黄毛弟弟成了我的监护人(番茄)</td>
+                          <td>
+                            <span class="link">彫有引力</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:2826334260</div>
+                          </td>
+                          <td><span class="link">1</span><div style="font-size: 12px; color: var(--color-text-tertiary);">待上传</div></td>
+                          <td><span class="link">1</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功0</span><span class="stat-row-empty">失败0</span></div></div></td>
+                          <td><div class="row-actions"><button class="row-action-btn" disabled>刷新</button> <button class="row-action-btn" disabled>重试</button></div></td>
+                          <td>一户一抖音号</td>
+                          <td>2026-10-21 15:27:21</td>
+                          <td><span class="ai-exec-status"><span class="ai-exec-dot uploading"></span>上传中</span></td>
+                        </tr>
+                        <tr>
+                          <td><input type="checkbox" class="ai-global-account-checkbox" onchange="updateAiRowSelectedCount('ai-global-account','aiGlobalAccountSelectedCount')" /></td>
+                          <td>11621705</td>
+                          <td>
+                            <span class="link">XN-睿之旭巴南五分-真人IAA7167-86</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:1874039616376804</div>
+                          </td>
+                          <td>
+                            <span class="link">粥一-真人剧-巴南五分</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:13154</div>
+                          </td>
+                          <td>爸爸去世后黄毛弟弟成了我的监护人(番茄)</td>
+                          <td>
+                            <span class="link">漫剧放映厅</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:53320542756</div>
+                          </td>
+                          <td><span class="link">1</span><div style="font-size: 12px; color: var(--color-text-tertiary);">待上传</div></td>
+                          <td><span class="link">1</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功0</span><span class="stat-row-empty">失败0</span></div></div></td>
+                          <td><div class="row-actions"><button class="row-action-btn" disabled>刷新</button> <button class="row-action-btn" disabled>重试</button></div></td>
+                          <td>一户一抖音号</td>
+                          <td>2026-10-21 15:27:21</td>
+                          <td><span class="ai-exec-status"><span class="ai-exec-dot uploading"></span>上传中</span></td>
+                        </tr>
+                        <tr>
+                          <td><input type="checkbox" class="ai-global-account-checkbox" onchange="updateAiRowSelectedCount('ai-global-account','aiGlobalAccountSelectedCount')" /></td>
+                          <td>11621705</td>
+                          <td>
+                            <span class="link">XN-睿之旭巴南五分-真人IAA7167-54</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:1874039583331657</div>
+                          </td>
+                          <td>
+                            <span class="link">粥一-真人剧-巴南五分</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:13154</div>
+                          </td>
+                          <td>爸爸去世后黄毛弟弟成了我的监护人(番茄)</td>
+                          <td>
+                            <span class="link">鹏越漫剧场</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:5429156196</div>
+                          </td>
+                          <td><span class="link">1</span><div style="font-size: 12px; color: var(--color-text-tertiary);">待上传</div></td>
+                          <td><span class="link">1</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功0</span><span class="stat-row-empty">失败0</span></div></div></td>
+                          <td><div class="row-actions"><button class="row-action-btn" disabled>刷新</button> <button class="row-action-btn" disabled>重试</button></div></td>
+                          <td>一户一抖音号</td>
+                          <td>2026-10-21 15:27:21</td>
+                          <td><span class="ai-exec-status"><span class="ai-exec-dot uploading"></span>上传中</span></td>
+                        </tr>
+                        <tr>
+                          <td><input type="checkbox" class="ai-global-account-checkbox" onchange="updateAiRowSelectedCount('ai-global-account','aiGlobalAccountSelectedCount')" /></td>
+                          <td>11621705</td>
+                          <td>
+                            <span class="link">XN-睿之旭巴南五分-真人IAA7167-62</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:1874039691483795</div>
+                          </td>
+                          <td>
+                            <span class="link">粥一-真人剧-巴南五分</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:13154</div>
+                          </td>
+                          <td>爸爸去世后黄毛弟弟成了我的监护人(番茄)</td>
+                          <td>
+                            <span class="link">熊大漫剧</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:53771746605</div>
+                          </td>
+                          <td><span class="link">1</span><div style="font-size: 12px; color: var(--color-text-tertiary);">待上传</div></td>
+                          <td><span class="link">1</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功0</span><span class="stat-row-empty">失败0</span></div></div></td>
+                          <td><div class="row-actions"><button class="row-action-btn" disabled>刷新</button> <button class="row-action-btn" disabled>重试</button></div></td>
+                          <td>一户一抖音号</td>
+                          <td>2026-10-21 15:27:21</td>
+                          <td><span class="ai-exec-status"><span class="ai-exec-dot uploading"></span>上传中</span></td>
                         </tr>
                       </tbody>
                     </table>
                   </div>
 
                   <div class="pagination">
-                    <span class="pagination-info">共 2 条</span>
+                    <span class="pagination-info">共 6 条</span>
                     <div class="pagination-pages">
                       <button class="page-btn" onclick="changePage('prev')">&lt;</button>
                       <button class="page-btn active" onclick="changePage(1)">1</button>
                       <button class="page-btn" onclick="changePage('next')">&gt;</button>
                     </div>
                     <select class="page-size-select">
-                      <option value="20">20 条/页</option>
                       <option value="50">50 条/页</option>
                       <option value="100">100 条/页</option>
+                      <option value="200">200 条/页</option>
                     </select>
                     <span>跳至</span>
                     <input type="text" class="jump-input" value="1" />
@@ -2011,159 +2232,264 @@
                 </div>
                 </div>
 
-                <!-- 项目子页签 -->
+                <!-- 项目子页签（全域投放 R3 · P2） -->
                 <div id="ai-global-project" class="tab-content" style="display: none;">
                 <div class="filter-bar">
-                  <div class="filter-combo" data-filter-type="task-name">
-                    <select class="filter-combo-select">
-                      <option>任务名称</option>
-                      <option>任务ID</option>
+                  <div class="filter-bar-row">
+                    <div class="filter-range">
+                      <span class="filter-range-label">创建时间</span>
+                      <input type="text" placeholder="开始时间" />
+                      <span class="filter-range-tilde">-</span>
+                      <input type="text" placeholder="结束时间" />
+                      <button type="button" class="filter-range-pick" title="选择日期">📅</button>
+                      <span class="filter-range-unit">月</span>
+                    </div>
+                    <select class="filter-select">
+                      <option value="">请选择创建人</option>
+                      <option value="nake">娜可</option>
+                      <option value="huanxue">还音</option>
                     </select>
-                    <input type="text" class="filter-combo-input" placeholder="请输入" />
+                    <div class="filter-combo" data-filter-type="task-name">
+                      <select class="filter-combo-select">
+                        <option>任务名称</option>
+                        <option>任务ID</option>
+                      </select>
+                      <input type="text" class="filter-combo-input" placeholder="请输入" />
+                    </div>
+                    <div class="filter-combo" data-filter-type="account-name">
+                      <select class="filter-combo-select">
+                        <option>账户名称</option>
+                        <option>账户ID</option>
+                      </select>
+                      <input type="text" class="filter-combo-input" placeholder="请输入" />
+                    </div>
+                    <div class="filter-combo" data-filter-type="project-name">
+                      <select class="filter-combo-select">
+                        <option>项目名称</option>
+                        <option>项目ID</option>
+                      </select>
+                      <input type="text" class="filter-combo-input" placeholder="请输入" />
+                    </div>
                   </div>
-                  <div class="filter-combo" data-filter-type="account-name">
-                    <select class="filter-combo-select">
-                      <option>账户名称</option>
-                      <option>账户ID</option>
-                      <option>账户列表ID</option>
+                  <div class="filter-bar-row">
+                    <div class="filter-combo" data-filter-type="drama-name">
+                      <select class="filter-combo-select">
+                        <option>短剧名称</option>
+                        <option>短剧ID</option>
+                      </select>
+                      <input type="text" class="filter-combo-input" placeholder="请输入" />
+                    </div>
+                    <div class="filter-combo" data-filter-type="douyin-name">
+                      <select class="filter-combo-select">
+                        <option>抖音号名称</option>
+                        <option>抖音号ID</option>
+                      </select>
+                      <input type="text" class="filter-combo-input" placeholder="请输入" />
+                    </div>
+                    <select class="filter-select" id="ai-global-submit-status-filter">
+                      <option value="">请选择项目提交状态</option>
+                      <option value="running">进行中</option>
+                      <option value="success">提交成功</option>
+                      <option value="fail">提交失败</option>
                     </select>
-                    <input type="text" class="filter-combo-input" placeholder="请输入" />
-                  </div>
-                  <div class="filter-combo" data-filter-type="project-name">
-                    <select class="filter-combo-select">
-                      <option>项目名称</option>
-                      <option>项目ID</option>
-                      <option>项目列表ID</option>
+                    <select class="filter-select">
+                      <option value="">请选择投放变现模式</option>
+                      <option value="mix">混合投放(IAP+IAA)</option>
+                      <option value="iap">用户付费(IAP)</option>
                     </select>
-                    <input type="text" class="filter-combo-input" placeholder="请输入" />
-                  </div>
-                  <div class="filter-combo" data-filter-type="drama-name">
-                    <select class="filter-combo-select">
-                      <option>短剧名称</option>
-                      <option>短剧ID</option>
+                    <select class="filter-select">
+                      <option value="">请选择执行类型</option>
+                      <option value="random">随机</option>
+                      <option value="drama">一户一剧</option>
+                      <option value="douyin">一户一抖音号</option>
+                      <option value="multi">一户多抖音号</option>
                     </select>
-                    <input type="text" class="filter-combo-input" placeholder="请输入" />
-                  </div>
-                  <select class="filter-select">
-                    <option value="">请选择上传状态</option>
-                    <option value="success">成功</option>
-                    <option value="fail">失败</option>
-                  </select>
-                  <select class="filter-select">
-                    <option value="">请选择业务场景</option>
-                    <option value="dyy-iaa">端原生IAA</option>
-                    <option value="dyy-pay">端原生付费</option>
-                  </select>
-                  <select class="filter-select">
-                    <option value="">请选择竞价策略</option>
-                    <option value="stable-cost">稳定成本</option>
-                    <option value="max-convert">最大转化</option>
-                  </select>
-                  <select class="filter-select">
-                    <option value="">请选择创建人</option>
-                    <option value="nake">娜可</option>
-                    <option value="huanxue">还音</option>
-                  </select>
-                  <div class="filter-actions">
-                    <button class="btn btn-info btn-sm" onclick="searchAiScopeRow('global','project')">查询</button>
-                    <button class="btn btn-outline btn-sm" onclick="resetAiScopeFilters('global','project')">重置</button>
+                    <div class="filter-combo" data-filter-type="exec-id">
+                      <select class="filter-combo-select">
+                        <option>执行ID</option>
+                      </select>
+                      <input type="text" class="filter-combo-input" placeholder="请输入" />
+                    </div>
+                    <div class="filter-actions">
+                      <button class="btn btn-info btn-sm" onclick="searchAiScopeRow('global','project')">查询</button>
+                      <button class="btn btn-outline btn-sm" onclick="resetAiScopeFilters('global','project')">重置</button>
+                    </div>
                   </div>
                 </div>
-
-                <div class="filter-status">已选择<span id="aiGlobalProjectSelectedCount">0</span>个 <span class="link" onclick="batchRetryAiRows('项目')">重试</span></div>
 
                 <div class="table-card">
                   <div class="table-wrapper">
                     <table class="data-table">
                       <thead>
                         <tr>
-                          <th class="checkbox-col"><input type="checkbox" id="selectAllAiGlobalProjects" onclick="toggleSelectAllAiRows('selectAllAiGlobalProjects','ai-global-project-checkbox','aiGlobalProjectSelectedCount')" /></th>
                           <th>ID</th>
                           <th>项目信息</th>
-                          <th>上传状态</th>
-                          <th>单元数</th>
-                          <th>操作</th>
-                          <th>投放短剧</th>
-                          <th>竞价策略</th>
-                          <th>日预算</th>
-                          <th>ROI系数</th>
-                          <th>账户信息</th>
                           <th>任务信息</th>
-                          <th>业务场景</th>
-                          <th>创建人</th>
+                          <th>账户信息</th>
+                          <th>投放短剧</th>
+                          <th>抖音号信息</th>
+                          <th>素材量</th>
+                          <th>项目提交状态</th>
+                          <th>操作</th>
+                          <th>投放变现模式</th>
+                          <th>全域ROI系数</th>
+                          <th>日预算</th>
+                          <th>执行类型</th>
                           <th>创建时间</th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr>
-                          
-                          <td><input type="checkbox" class="ai-global-project-checkbox" onchange="updateAiRowSelectedCount('ai-global-project','aiGlobalProjectSelectedCount')" /></td>
-                          <td>91012</td>
+                          <td>162603188</td>
                           <td>
-                            <span class="link" onclick="drillAiGlobalProjectToUnit(91012)">任务1-短剧1-全域-项目A</span>
-                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7455532211009911</div>
-                          </td>
-                          <td><span class="tag tag-success">成功</span></td>
-                          <td><span class="link" onclick="drillAiGlobalProjectToUnit(91012)">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功2</span><span class="stat-row-empty">失败0</span></div></div></td>
-                          <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('项目',91012)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('项目',91012)">重试</button></div></td>
-                          <td>短剧1<br /><span style="color:var(--color-text-tertiary);">ID:1001</span></td>
-                          <td>最大转化</td>
-                          <td>1000</td>
-                          <td>--</td>
-                          <td>
-                            JL-MAD-AI-全域一组-01
-                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7648215203578102101</div>
+                            <span class="link">汤圆#428310#A-14805_他偏要我（麦芽主_迷雾放映厅 #20261021</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:--</div>
                           </td>
                           <td>
-                            任务1
-                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:1</div>
+                            <span class="link">十三分-消耗-汤圆全域</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:14805</div>
                           </td>
-                          <td>端原生付费</td>
-                          <td>娜可</td>
-                          <td>2026-10-20 11:10:35</td>
+                          <td>
+                            <span class="link">SNK麦芽--端原生IAA 九龙坡十三分-258</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:186549347033351</div>
+                          </td>
+                          <td>
+                            <span class="link">他偏要我（麦芽主体）[端原生]</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:428310</div>
+                          </td>
+                          <td>
+                            <span class="link">迷雾放映厅</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:65982100298</div>
+                          </td>
+                          <td class="ai-material-cell" onclick="openAiMaterialUpload('project', 0)" title="点击查看素材上传详情">
+                            <div class="ai-material-submit">实际提交 --</div>
+                            <div class="ai-material-stat"><span class="wait">待上传5</span> <span class="ok">成功161</span> <span class="fail">失败0</span></div>
+                          </td>
+                          <td><span title="进行中">🕐 进行中</span></td>
+                          <td><div class="row-actions" style="flex-direction: column; align-items: flex-start; gap: 4px;"><button class="row-action-btn" onclick="refreshAiAutoRow('项目',162603188)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('项目',162603188)">重试</button></div></td>
+                          <td>混合投放(IAP+IAA)</td>
+                          <td>1.03</td>
+                          <td>99999</td>
+                          <td>随机</td>
+                          <td>2026-10-21 15:28:45</td>
                         </tr>
                         <tr>
-                          
-                          <td><input type="checkbox" class="ai-global-project-checkbox" onchange="updateAiRowSelectedCount('ai-global-project','aiGlobalProjectSelectedCount')" /></td>
-                          <td>91013</td>
+                          <td>162603189</td>
                           <td>
-                            <span class="link" onclick="drillAiGlobalProjectToUnit(91013)">任务1-短剧1-全域-项目B</span>
-                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7455532211009912</div>
+                            <span class="link">汤圆#22445#A-14805_女医逆袭记[端原_迷雾放映厅 #20261021</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:--</div>
                           </td>
-                          <td><span class="tag tag-error">失败</span></td>
-                          <td><span class="link" onclick="drillAiGlobalProjectToUnit(91013)">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功1</span><span class="stat-fail-text fail-clickable" onclick="openAiAutoFailDetail(91013, '任务1-短剧1-全域-项目B', 'unit', 1)">失败1</span></div></div></td>
-                          <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('项目',91013)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('项目',91013)">重试</button></div></td>
-                          <td>短剧1<br /><span style="color:var(--color-text-tertiary);">ID:1001</span></td>
-                          <td>稳定成本</td>
-                          <td>3000</td>
+                          <td>
+                            <span class="link">十三分-消耗-汤圆全域</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:14805</div>
+                          </td>
+                          <td>
+                            <span class="link">LO明瑞玉-端原生IAA 九龙坡十三分-113</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:1876933925018632</div>
+                          </td>
+                          <td>
+                            <span class="link">女医逆袭记[端原生]</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:22445</div>
+                          </td>
+                          <td>
+                            <span class="link">迷雾放映厅</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:65982100298</div>
+                          </td>
+                          <td class="ai-material-cell" onclick="openAiMaterialUpload('project', 1)" title="点击查看素材上传详情">
+                            <div class="ai-material-submit">实际提交 --</div>
+                            <div class="ai-material-stat"><span class="wait">待上传0</span> <span class="ok">成功186</span> <span class="fail">失败0</span></div>
+                          </td>
+                          <td><span title="进行中">🕐 进行中</span></td>
+                          <td><div class="row-actions" style="flex-direction: column; align-items: flex-start; gap: 4px;"><button class="row-action-btn" onclick="refreshAiAutoRow('项目',162603189)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('项目',162603189)">重试</button></div></td>
+                          <td>混合投放(IAP+IAA)</td>
                           <td>1.03</td>
+                          <td>99999</td>
+                          <td>随机</td>
+                          <td>2026-10-21 15:28:45</td>
+                        </tr>
+                        <tr>
+                          <td>162603190</td>
                           <td>
-                            JL-MAD-AI-全域一组-02
-                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7648215203578102102</div>
+                            <span class="link">汤圆#22376#A-14805_望北思南[端原生_甜柚动漫剧场 #20261021</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:--</div>
                           </td>
                           <td>
-                            任务1
-                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:1</div>
+                            <span class="link">十三分-消耗-汤圆全域</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:14805</div>
                           </td>
-                          <td>端原生IAA</td>
-                          <td>娜可</td>
-                          <td>2026-10-20 11:10:38</td>
+                          <td>
+                            <span class="link">LO成都麦芽--端原生IAA 九龙坡十三分-86</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:187693528433523</div>
+                          </td>
+                          <td>
+                            <span class="link">望北思南[端原生]</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:22376</div>
+                          </td>
+                          <td>
+                            <span class="link">甜柚动漫剧场</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:1815380397</div>
+                          </td>
+                          <td class="ai-material-cell" onclick="openAiMaterialUpload('project', 2)" title="点击查看素材上传详情">
+                            <div class="ai-material-submit">实际提交 --</div>
+                            <div class="ai-material-stat"><span class="wait">待上传0</span> <span class="ok">成功1</span> <span class="fail">失败0</span></div>
+                          </td>
+                          <td><span title="进行中">🕐 进行中</span></td>
+                          <td><div class="row-actions" style="flex-direction: column; align-items: flex-start; gap: 4px;"><button class="row-action-btn" onclick="refreshAiAutoRow('项目',162603190)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('项目',162603190)">重试</button></div></td>
+                          <td>混合投放(IAP+IAA)</td>
+                          <td>1.03</td>
+                          <td>99999</td>
+                          <td>随机</td>
+                          <td>2026-10-21 15:28:45</td>
+                        </tr>
+                        <tr>
+                          <td>162603191</td>
+                          <td>
+                            <span class="link">汤圆#31879#A-14805_逆流婚,不退!_我是麦秸短剧 #20261021</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:--</div>
+                          </td>
+                          <td>
+                            <span class="link">十三分-消耗-汤圆全域</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:14805</div>
+                          </td>
+                          <td>
+                            <span class="link">LO重庆拾七-端原生IAA 九龙坡十三分-26</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:187693380707666</div>
+                          </td>
+                          <td>
+                            <span class="link">逆流婚，不退！我是麦秸短剧</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:31879</div>
+                          </td>
+                          <td>
+                            <span class="link">麦秸短剧</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:3764758545</div>
+                          </td>
+                          <td class="ai-material-cell" onclick="openAiMaterialUpload('project', 3)" title="点击查看素材上传详情">
+                            <div class="ai-material-submit">实际提交 --</div>
+                            <div class="ai-material-stat"><span class="wait">待上传0</span> <span class="ok">成功2</span> <span class="fail">失败0</span></div>
+                          </td>
+                          <td><span title="进行中">🕐 进行中</span></td>
+                          <td><div class="row-actions" style="flex-direction: column; align-items: flex-start; gap: 4px;"><button class="row-action-btn" onclick="refreshAiAutoRow('项目',162603191)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('项目',162603191)">重试</button></div></td>
+                          <td>混合投放(IAP+IAA)</td>
+                          <td>1.03</td>
+                          <td>99999</td>
+                          <td>随机</td>
+                          <td>2026-10-21 15:28:45</td>
                         </tr>
                       </tbody>
                     </table>
                   </div>
 
                   <div class="pagination">
-                    <span class="pagination-info">共 2 条</span>
+                    <span class="pagination-info">共 4 条</span>
                     <div class="pagination-pages">
                       <button class="page-btn" onclick="changePage('prev')">&lt;</button>
                       <button class="page-btn active" onclick="changePage(1)">1</button>
                       <button class="page-btn" onclick="changePage('next')">&gt;</button>
                     </div>
                     <select class="page-size-select">
-                      <option value="20">20 条/页</option>
                       <option value="50">50 条/页</option>
                       <option value="100">100 条/页</option>
+                      <option value="200">200 条/页</option>
                     </select>
                     <span>跳至</span>
                     <input type="text" class="jump-input" value="1" />
@@ -2172,13 +2498,13 @@
                 </div>
                 </div>
 
-                <!-- 单元子页签 -->
-                <div id="ai-global-unit" class="tab-content" style="display: none;">
+                <!-- 素材更新明细子页签（全域投放 R3 · P4） -->
+                <div id="ai-global-material" class="tab-content" style="display: none;">
                 <div class="filter-bar">
-                  <div class="filter-combo" data-filter-type="task-name">
+                  <div class="filter-combo" data-filter-type="project-name">
                     <select class="filter-combo-select">
-                      <option>任务名称</option>
-                      <option>任务ID</option>
+                      <option>项目名称</option>
+                      <option>项目ID</option>
                     </select>
                     <input type="text" class="filter-combo-input" placeholder="请输入" />
                   </div>
@@ -2186,15 +2512,6 @@
                     <select class="filter-combo-select">
                       <option>账户名称</option>
                       <option>账户ID</option>
-                      <option>账户列表ID</option>
-                    </select>
-                    <input type="text" class="filter-combo-input" placeholder="请输入" />
-                  </div>
-                  <div class="filter-combo" data-filter-type="project-name">
-                    <select class="filter-combo-select">
-                      <option>项目名称</option>
-                      <option>项目ID</option>
-                      <option>项目列表ID</option>
                     </select>
                     <input type="text" class="filter-combo-input" placeholder="请输入" />
                   </div>
@@ -2205,124 +2522,310 @@
                     </select>
                     <input type="text" class="filter-combo-input" placeholder="请输入" />
                   </div>
-                  <div class="filter-combo" data-filter-type="unit-name">
+                  <select class="filter-select">
+                    <option value="">模糊</option>
+                    <option value="exact">精准</option>
+                  </select>
+                  <div class="filter-combo" data-filter-type="task-name">
                     <select class="filter-combo-select">
-                      <option>单元名称</option>
-                      <option>单元ID</option>
+                      <option>任务名称</option>
+                      <option>任务ID</option>
                     </select>
                     <input type="text" class="filter-combo-input" placeholder="请输入" />
                   </div>
-                  <select class="filter-select">
-                    <option value="">请选择上传状态</option>
-                    <option value="success">成功</option>
+                  <select class="filter-select" id="ai-material-status-filter">
+                    <option value="">请选择更新状态</option>
+                    <option value="done">完成</option>
                     <option value="fail">失败</option>
+                    <option value="pending">待上传</option>
+                    <option value="uploading">上传中</option>
                   </select>
-                  <select class="filter-select">
-                    <option value="">请选择业务场景</option>
-                    <option value="dyy-iaa">端原生IAA</option>
-                    <option value="dyy-pay">端原生付费</option>
-                  </select>
-                  <select class="filter-select">
-                    <option value="">请选择竞价策略</option>
-                    <option value="stable-cost">稳定成本</option>
-                    <option value="max-convert">最大转化</option>
-                  </select>
-                  <select class="filter-select">
-                    <option value="">请选择创建人</option>
-                    <option value="nake">娜可</option>
-                    <option value="huanxue">还音</option>
-                  </select>
+                  <div class="filter-combo" data-filter-type="douyin">
+                    <select class="filter-combo-select">
+                      <option>包含</option>
+                      <option>不包含</option>
+                    </select>
+                    <input type="text" class="filter-combo-input" placeholder="抖音号" />
+                  </div>
                   <div class="filter-actions">
-                    <button class="btn btn-info btn-sm" onclick="searchAiScopeRow('global','unit')">查询</button>
-                    <button class="btn btn-outline btn-sm" onclick="resetAiScopeFilters('global','unit')">重置</button>
+                    <button class="btn btn-info btn-sm" onclick="searchAiScopeRow('global','material')">查询</button>
+                    <button class="btn btn-outline btn-sm" onclick="resetAiScopeFilters('global','material')">重置</button>
                   </div>
                 </div>
-
-                <div class="filter-status">已选择<span id="aiGlobalUnitSelectedCount">0</span>个 <span class="link" onclick="batchRetryAiRows('单元')">重试</span></div>
 
                 <div class="table-card">
                   <div class="table-wrapper">
                     <table class="data-table">
                       <thead>
                         <tr>
-                          <th class="checkbox-col"><input type="checkbox" id="selectAllAiGlobalUnits" onclick="toggleSelectAllAiRows('selectAllAiGlobalUnits','ai-global-unit-checkbox','aiGlobalUnitSelectedCount')" /></th>
-                          <th>ID</th>
-                          <th>单元信息</th>
-                          <th>上传状态</th>
-                          <th>操作</th>
-                          <th>投放短剧</th>
-                          <th>竞价策略</th>
-                          <th>业务场景</th>
-                          <th>项目信息</th>
-                          <th>账户信息</th>
+                          <th>执行ID</th>
+                          <th>项目名称</th>
+                          <th>账户名称</th>
+                          <th>短剧名称</th>
                           <th>任务信息</th>
-                          <th>创建人</th>
+                          <th>抖音号信息</th>
+                          <th>素材量</th>
+                          <th>更新状态</th>
+                          <th>操作</th>
+                          <th>更新完成时间</th>
                           <th>创建时间</th>
                         </tr>
                       </thead>
-                      <tbody>
+                      <tbody id="ai-material-tbody">
                         <tr>
-                          
-                          <td><input type="checkbox" class="ai-global-unit-checkbox" onchange="updateAiRowSelectedCount('ai-global-unit','aiGlobalUnitSelectedCount')" /></td>
-                          <td>31021</td>
+                          <td>516511</td>
                           <td>
-                            <span class="link" onclick="showAiAutoUnitDetail(31021)">任务1-短剧1-全域-项目A-单元1</span>
-                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:6611223344557711</div>
-                          </td>
-                          <td><span class="tag tag-success">成功</span></td>
-                          <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('单元',31021)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('单元',31021)">重试</button></div></td>
-                          <td>短剧1<br /><span style="color:var(--color-text-tertiary);">ID:1001</span></td>
-                          <td>最大转化</td>
-                          <td>端原生付费</td>
-                          <td>
-                            任务1-短剧1-全域-项目A
-                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7455532211009911</div>
+                            <span class="link">桐唱#519394#A-1279...</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:76965821598554193442</div>
                           </td>
                           <td>
-                            JL-MAD-AI-全域一组-01
-                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7648215203578102101</div>
+                            <span class="link">AAX-猫漫剧-lAA番茄...</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:1877290764836163</div>
                           </td>
                           <td>
-                            任务1
-                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:1</div>
+                            十二年血汗被夺走，...
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:519394</div>
                           </td>
-                          <td>娜可</td>
-                          <td>2026-10-20 11:10:40</td>
+                          <td>
+                            <span class="link">自动更新素材</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:273</div>
+                          </td>
+                          <td>
+                            <span class="link">无限爱看剧</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:67926956225</div>
+                          </td>
+                          <td class="ai-material-cell" onclick="openAiMaterialUpload('material', 0)" title="点击查看素材上传详情">
+                            <div class="ai-material-submit">实际提交 --</div>
+                            <div class="ai-material-stat"><span class="wait">待上传0</span> <span class="ok">成功0</span> <span class="fail">失败1</span></div>
+                          </td>
+                          <td><i class="ai-update-warn">!</i> 失败</td>
+                          <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('素材更新明细',516511)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('素材更新明细',516511)">重试</button></div></td>
+                          <td>2026-10-21 12:15:03</td>
+                          <td>2026-10-21 12:15:03</td>
                         </tr>
                         <tr>
-                          
-                          <td><input type="checkbox" class="ai-global-unit-checkbox" onchange="updateAiRowSelectedCount('ai-global-unit','aiGlobalUnitSelectedCount')" /></td>
-                          <td>31020</td>
+                          <td>516511</td>
                           <td>
-                            <span class="link" onclick="showAiAutoUnitDetail(31020)">任务1-短剧1-全域-项目B-单元1</span>
-                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:6611223344557722</div>
-                          </td>
-                          <td><span class="tag tag-error">失败</span></td>
-                          <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('单元',31020)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('单元',31020)">重试</button></div></td>
-                          <td>短剧1<br /><span style="color:var(--color-text-tertiary);">ID:1001</span></td>
-                          <td>稳定成本</td>
-                          <td>端原生IAA</td>
-                          <td>
-                            任务1-短剧1-全域-项目B
-                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7455532211009912</div>
+                            <span class="link">桐唱#520982#A-1279...</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:769653087119510568938</div>
                           </td>
                           <td>
-                            JL-MAD-AI-全域一组-02
-                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7648215203578102102</div>
+                            <span class="link">AAX-猫漫剧-lAA番茄...</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:1877084560463095</div>
                           </td>
                           <td>
-                            任务1
-                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:1</div>
+                            穿书拒婚态，嫁得良...
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:520982</div>
                           </td>
-                          <td>娜可</td>
-                          <td>2026-10-20 11:10:43</td>
+                          <td>
+                            <span class="link">自动更新素材</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:273</div>
+                          </td>
+                          <td>
+                            <span class="link">无限爱看剧</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:67926956225</div>
+                          </td>
+                          <td class="ai-material-cell" onclick="openAiMaterialUpload('material', 1)" title="点击查看素材上传详情">
+                            <div class="ai-material-submit">实际提交 --</div>
+                            <div class="ai-material-stat"><span class="wait">待上传0</span> <span class="ok">成功0</span> <span class="fail">失败0</span></div>
+                          </td>
+                          <td>完成</td>
+                          <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('素材更新明细',516511)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('素材更新明细',516511)">重试</button></div></td>
+                          <td>2026-10-21 12:15:03</td>
+                          <td>2026-10-21 12:15:03</td>
+                        </tr>
+                        <tr>
+                          <td>516512</td>
+                          <td>
+                            <span class="link">桐唱#391376#A-1279...</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7695460209711019570</div>
+                          </td>
+                          <td>
+                            <span class="link">AX-猫漫剧-lAA番茄...</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:1877740152863432</div>
+                          </td>
+                          <td>
+                            开局拜仙尊为师你兄...
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:391378</div>
+                          </td>
+                          <td>
+                            <span class="link">自动更新素材</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:274</div>
+                          </td>
+                          <td>
+                            <span class="link">清风短剧社</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:71203948566</div>
+                          </td>
+                          <td class="ai-material-cell" onclick="openAiMaterialUpload('material', 2)" title="点击查看素材上传详情">
+                            <div class="ai-material-submit">实际提交 --</div>
+                            <div class="ai-material-stat"><span class="wait">待上传0</span> <span class="ok">成功0</span> <span class="fail">失败0</span></div>
+                          </td>
+                          <td>完成</td>
+                          <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('素材更新明细',516512)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('素材更新明细',516512)">重试</button></div></td>
+                          <td>2026-10-21 12:15:03</td>
+                          <td>2026-10-21 12:15:03</td>
+                        </tr>
+                        <tr>
+                          <td>516512</td>
+                          <td>
+                            <span class="link">桐唱#391376#A-1279...</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:76965753390907998258</div>
+                          </td>
+                          <td>
+                            <span class="link">AX-猫漫剧-lAA番茄...</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:1878444347166919</div>
+                          </td>
+                          <td>
+                            开局拜仙尊为师你兄...
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:391378</div>
+                          </td>
+                          <td>
+                            <span class="link">自动更新素材</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:274</div>
+                          </td>
+                          <td>
+                            <span class="link">清风短剧社</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:71203948566</div>
+                          </td>
+                          <td class="ai-material-cell" onclick="openAiMaterialUpload('material', 3)" title="点击查看素材上传详情">
+                            <div class="ai-material-submit">实际提交 --</div>
+                            <div class="ai-material-stat"><span class="wait">待上传0</span> <span class="ok">成功0</span> <span class="fail">失败0</span></div>
+                          </td>
+                          <td>完成</td>
+                          <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('素材更新明细',516512)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('素材更新明细',516512)">重试</button></div></td>
+                          <td>2026-10-21 12:15:03</td>
+                          <td>2026-10-21 12:15:03</td>
+                        </tr>
+                        <tr>
+                          <td>516513</td>
+                          <td>
+                            <span class="link">桐唱#509567#A-1279...</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7696222277037044746</div>
+                          </td>
+                          <td>
+                            <span class="link">AX-猫漫剧-lAA番茄...</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:1878292983375843</div>
+                          </td>
+                          <td>
+                            一桶泡面，断了八年...
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:509567</div>
+                          </td>
+                          <td>
+                            <span class="link">自动更新素材</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:275</div>
+                          </td>
+                          <td>
+                            <span class="link">好剧日更中</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:82305174930</div>
+                          </td>
+                          <td class="ai-material-cell" onclick="openAiMaterialUpload('material', 4)" title="点击查看素材上传详情">
+                            <div class="ai-material-submit">实际提交 --</div>
+                            <div class="ai-material-stat"><span class="wait">待上传0</span> <span class="ok">成功0</span> <span class="fail">失败1</span></div>
+                          </td>
+                          <td><i class="ai-update-warn">!</i> 失败</td>
+                          <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('素材更新明细',516513)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('素材更新明细',516513)">重试</button></div></td>
+                          <td>2026-10-21 12:15:03</td>
+                          <td>2026-10-21 12:15:03</td>
+                        </tr>
+                        <tr>
+                          <td>516513</td>
+                          <td>
+                            <span class="link">桐唱#520982#A-1279...</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7696506809192469011</div>
+                          </td>
+                          <td>
+                            <span class="link">AAX-猫漫剧-lAA番茄...</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:1877290750741185</div>
+                          </td>
+                          <td>
+                            穿书拒婚态，嫁得良...
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:520982</div>
+                          </td>
+                          <td>
+                            <span class="link">自动更新素材</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:275</div>
+                          </td>
+                          <td>
+                            <span class="link">好剧日更中</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:82305174930</div>
+                          </td>
+                          <td class="ai-material-cell" onclick="openAiMaterialUpload('material', 5)" title="点击查看素材上传详情">
+                            <div class="ai-material-submit">实际提交 --</div>
+                            <div class="ai-material-stat"><span class="wait">待上传0</span> <span class="ok">成功0</span> <span class="fail">失败0</span></div>
+                          </td>
+                          <td>完成</td>
+                          <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('素材更新明细',516513)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('素材更新明细',516513)">重试</button></div></td>
+                          <td>2026-10-21 12:15:03</td>
+                          <td>2026-10-21 12:15:03</td>
+                        </tr>
+                        <tr>
+                          <td>516514</td>
+                          <td>
+                            <span class="link">桐唱#391376#A-1279...</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7695460209711019570</div>
+                          </td>
+                          <td>
+                            <span class="link">AX-猫漫剧-lAA番茄...</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:1877740152863433</div>
+                          </td>
+                          <td>
+                            开局拜仙尊为师你兄...
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:391378</div>
+                          </td>
+                          <td>
+                            <span class="link">自动更新素材</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:276</div>
+                          </td>
+                          <td>
+                            <span class="link">无限爱看剧</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:67926956225</div>
+                          </td>
+                          <td class="ai-material-cell" onclick="openAiMaterialUpload('material', 6)" title="点击查看素材上传详情">
+                            <div class="ai-material-submit">实际提交 --</div>
+                            <div class="ai-material-stat"><span class="wait">待上传2</span> <span class="ok">成功3</span> <span class="fail">失败0</span></div>
+                          </td>
+                          <td><i class="ai-update-warn">!</i> 上传中</td>
+                          <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('素材更新明细',516514)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('素材更新明细',516514)">重试</button></div></td>
+                          <td>2026-10-21 12:15:03</td>
+                          <td>2026-10-21 12:15:03</td>
+                        </tr>
+                        <tr>
+                          <td>516514</td>
+                          <td>
+                            <span class="link">桐唱#509567#A-1279...</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7696222277037044747</div>
+                          </td>
+                          <td>
+                            <span class="link">AX-猫漫剧-lAA番茄...</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:1878292983375844</div>
+                          </td>
+                          <td>
+                            一桶泡面，断了八年...
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:509567</div>
+                          </td>
+                          <td>
+                            <span class="link">自动更新素材</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:276</div>
+                          </td>
+                          <td>
+                            <span class="link">清风短剧社</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:71203948566</div>
+                          </td>
+                          <td class="ai-material-cell" onclick="openAiMaterialUpload('material', 7)" title="点击查看素材上传详情">
+                            <div class="ai-material-submit">实际提交 --</div>
+                            <div class="ai-material-stat"><span class="wait">待上传1</span> <span class="ok">成功0</span> <span class="fail">失败0</span></div>
+                          </td>
+                          <td><i class="ai-update-warn">!</i> 待上传</td>
+                          <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('素材更新明细',516514)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('素材更新明细',516514)">重试</button></div></td>
+                          <td>2026-10-21 12:15:03</td>
+                          <td>2026-10-21 12:15:03</td>
                         </tr>
                       </tbody>
                     </table>
                   </div>
 
                   <div class="pagination">
-                    <span class="pagination-info">共 2 条</span>
+                    <span class="pagination-info">共 8 条</span>
                     <div class="pagination-pages">
                       <button class="page-btn" onclick="changePage('prev')">&lt;</button>
                       <button class="page-btn active" onclick="changePage(1)">1</button>
@@ -2433,6 +2936,7 @@
                           </div>
                         </div>
                       </div>
+                      <div class="ai-std-extra-slot"></div>
                       <div class="ai-schedule-section">
                         <h4 class="form-section-title">投放配置</h4>
                         <div class="form-row">
@@ -2532,6 +3036,7 @@
                           </div>
                         </div>
                       </div>
+                      <div class="ai-std-extra-slot"></div>
                       <div class="ai-schedule-section">
                         <h4 class="form-section-title">投放配置</h4>
                         <div class="form-row">
@@ -2625,6 +3130,7 @@
                           </div>
                         </div>
                       </div>
+                      <div class="ai-std-extra-slot"></div>
                       <div class="ai-schedule-section">
                         <h4 class="form-section-title">投放配置</h4>
                         <div class="form-row">
@@ -2721,6 +3227,7 @@
                           </div>
                         </div>
                       </div>
+                      <div class="ai-std-extra-slot"></div>
                       <div class="ai-schedule-section">
                         <h4 class="form-section-title">投放配置</h4>
                         <div class="form-row">
@@ -2764,44 +3271,224 @@
                   </div>
 
                   <div id="ai-drawer-global" class="ai-drawer-pane" style="display: none;">
+
+                    <!-- 区块一：执行设置 -->
+                    <div class="ai-schedule-section">
+                      <h4 class="form-section-title">执行设置</h4>
+
+                      <div class="form-row" style="display: block;">
+                        <div class="form-item">
+                          <label class="form-label"><span class="required-star">*</span> 执行类型</label>
+                          <div class="ai-card-group" id="aiExecCards"></div>
+                        </div>
+                      </div>
+
+                      <div class="form-row" id="ai-row-proj">
+                        <div class="form-item" style="flex: 1;">
+                          <label class="form-label">账户下项目数</label>
+                          <div class="ai-inline-field">
+                            <input type="number" class="form-input" id="aiProjCount" min="1" max="500" placeholder="请输入" />
+                            <span class="ai-field-hint">不填写默认400，上限500</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="form-row" style="display: block;">
+                        <div class="form-item">
+                          <label class="form-label"><span class="required-star">*</span> 素材分配方式</label>
+                          <div class="ai-card-group cols-2" id="aiMatCards"></div>
+                        </div>
+                      </div>
+
+                      <div class="form-row" id="ai-row-mat" style="display: none;">
+                        <div class="form-item" style="flex: 1;">
+                          <label class="form-label"><span class="required-star">*</span> 项目下素材数</label>
+                          <div class="ai-inline-field">
+                            <input type="number" class="form-input" id="aiMatCount" min="1" placeholder="请输入" oninput="clearAiRowError('ai-row-mat')" />
+                            <span class="ai-field-hint">默认100</span>
+                          </div>
+                          <div class="ai-field-err">「项目统一」时项目下素材数必填，请输入正整数（默认100）</div>
+                        </div>
+                      </div>
+
+                      <div class="form-row">
+                        <div class="form-item" style="flex: 1;">
+                          <label class="form-label">AIGC素材</label>
+                          <div class="ai-inline-field">
+                            <label class="toggle-switch" title="开启后将自动生成 AIGC 素材">
+                              <input type="checkbox" id="aiAigcSwitch" checked onchange="onAiAigcToggle(this)" />
+                              <span class="toggle-slider"></span>
+                            </label>
+                            <span class="ai-field-hint">开启后将自动生成 AIGC 素材</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- 区块二：抖音号范围 -->
+                    <div class="ai-schedule-section">
+                      <h4 class="form-section-title">抖音号范围</h4>
+
+                      <div class="form-row" id="ai-row-dy">
+                        <div class="form-item" style="flex: 1;">
+                          <label class="form-label"><span class="required-star">*</span> 抖音号（项目）</label>
+                          <div class="ai-inline-field">
+                            <div class="segmented-control" data-seg="aiDyScope">
+                              <button class="segmented-item active" type="button" data-v="custom" onclick="setAiSeg(this)">自定义</button>
+                              <button class="segmented-item" type="button" data-v="pkg" onclick="setAiSeg(this)">抖音号包</button>
+                            </div>
+                            <input type="text" class="form-input" id="aiDyPick" readonly placeholder="请选择" onclick="openAiResPicker('douyin')" style="cursor: pointer; max-width: 220px;" />
+                            <button class="btn btn-outline btn-sm" type="button" id="aiDyPkgBtn" style="display: none;" onclick="openAiDyPkg()">选择抖音号包</button>
+                          </div>
+                          <div class="ai-chips" id="aiChipsDy"></div>
+                          <div class="ai-field-err">请选择抖音号（项目）</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- 区块三：投放账户 -->
+                    <div class="ai-schedule-section">
+                      <h4 class="form-section-title">
+                        <span class="tip-icon" data-tip="主体包 / 应用包 / 账户包为预设资源集合，仅可选择已授权且状态正常的资源">?</span>投放账户
+                      </h4>
+
+                      <div class="form-row">
+                        <div class="form-item" style="flex: 1;">
+                          <label class="form-label">主体包</label>
+                          <div class="ai-inline-field">
+                            <button class="btn btn-outline btn-sm" type="button" onclick="openAiResPicker('subject')">选择主体包</button>
+                            <div class="ai-chips flat" id="aiChipsSubject"></div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="form-row">
+                        <div class="form-item" style="flex: 1;">
+                          <label class="form-label">应用包</label>
+                          <div class="ai-inline-field">
+                            <button class="btn btn-outline btn-sm" type="button" onclick="openAiResPicker('app')">选择应用包</button>
+                            <div class="ai-chips flat" id="aiChipsApp"></div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="form-row">
+                        <div class="form-item" style="flex: 1;">
+                          <label class="form-label">账户包</label>
+                          <div class="ai-inline-field">
+                            <button class="btn btn-outline btn-sm" type="button" onclick="openAiResPicker('account')">选择账户包</button>
+                            <div class="ai-chips flat" id="aiChipsAccount"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- 区块四：投放配置 -->
                     <div class="ai-schedule-section">
                       <h4 class="form-section-title">投放配置</h4>
+
                       <div class="form-row">
-                        <div class="form-item">
-                          <input type="text" class="form-input" placeholder="待补充" />
+                        <div class="form-item" style="flex: 1;">
+                          <label class="form-label"><span class="required-star">*</span> 投放变现模式</label>
+                          <div class="segmented-control" data-seg="aiRevenue">
+                            <button class="segmented-item active" type="button" data-v="mix" onclick="setAiSeg(this)">混合投放（IAP+IAA）</button>
+                            <button class="segmented-item" type="button" data-v="iap" onclick="setAiSeg(this)">用户付费（IAP）</button>
+                          </div>
                         </div>
                       </div>
-                      <div style="font-size: 12px; color: var(--color-text-tertiary);">具体字段待补充</div>
+
+                      <div class="form-row" id="ai-row-roi">
+                        <div class="form-item" style="flex: 1;">
+                          <label class="form-label"><span class="required-star">*</span> 全域ROI系数</label>
+                          <input type="number" class="form-input" id="aiRoi" min="0" step="0.01" placeholder="请输入" oninput="clearAiRowError('ai-row-roi')" />
+                          <div class="ai-field-err">请输入大于 0 的全域ROI系数</div>
+                        </div>
+                      </div>
+
+                      <div class="form-row" id="ai-row-budget">
+                        <div class="form-item" style="flex: 1;">
+                          <label class="form-label"><span class="required-star">*</span> 日预算</label>
+                          <input type="number" class="form-input" id="aiBudget" min="0" step="1" placeholder="请输入" oninput="clearAiRowError('ai-row-budget')" />
+                          <div class="ai-field-err">请输入大于 0 的日预算</div>
+                        </div>
+                      </div>
+
+                      <div class="form-row" id="ai-row-ep">
+                        <div class="form-item" style="flex: 1;">
+                          <label class="form-label"><span class="required-star">*</span> IAA链接最小起始集</label>
+                          <select class="form-input" id="aiEpisode">
+                            <option>第1集</option>
+                            <option selected>第2集</option>
+                            <option>第3集</option>
+                            <option>第4集</option>
+                            <option>第5集</option>
+                            <option>第6集</option>
+                            <option>第7集</option>
+                            <option>第8集</option>
+                            <option>第9集</option>
+                            <option>第10集</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="form-row">
+                        <div class="form-item" style="flex: 1;">
+                          <label class="form-label">文案库范围</label>
+                          <div class="segmented-control" data-seg="aiCopy">
+                            <button class="segmented-item active" type="button" data-v="all" onclick="setAiSeg(this)">不限</button>
+                            <button class="segmented-item" type="button" data-v="mine" onclick="setAiSeg(this)">仅本人创建</button>
+                          </div>
+                        </div>
+                      </div>
                     </div>
+
+                    <!-- 区块五：项目排期 -->
                     <div class="ai-schedule-section">
                       <h4 class="form-section-title">项目排期</h4>
+
                       <div class="form-row">
-                        <div class="form-item">
-                          <label class="form-label">开投时间</label>
-                          <div class="segmented-control">
-                            <button class="segmented-item active" type="button">今天</button>
-                            <button class="segmented-item" type="button">明天</button>
+                        <div class="form-item" style="flex: 1;">
+                          <label class="form-label">开始投放时间</label>
+                          <div class="segmented-control" data-seg="aiStartDate">
+                            <button class="segmented-item active" type="button" data-v="today" onclick="setAiSeg(this)">今天</button>
+                            <button class="segmented-item" type="button" data-v="tomorrow" onclick="setAiSeg(this)">明天</button>
                           </div>
                         </div>
                       </div>
-                      <div class="form-row">
-                        <div class="form-item">
+
+                      <div class="form-row" id="ai-row-days">
+                        <div class="form-item" style="flex: 1;">
                           <label class="form-label"><span class="required-star">*</span> 投放天数</label>
-                          <div class="segmented-control">
-                            <button class="segmented-item active" type="button">不限</button>
-                            <button class="segmented-item" type="button">指定天数</button>
+                          <div class="ai-inline-field">
+                            <div class="segmented-control" data-seg="aiDays">
+                              <button class="segmented-item active" type="button" data-v="unlimited" onclick="setAiSeg(this)">不限</button>
+                              <button class="segmented-item" type="button" data-v="custom" onclick="setAiSeg(this)">指定天数</button>
+                            </div>
+                            <input type="number" class="form-input" id="aiDays" min="1" placeholder="请输入天数" style="display: none; max-width: 150px;" oninput="clearAiRowError('ai-row-days')" />
                           </div>
+                          <div class="ai-field-err">请输入大于 0 的投放天数</div>
                         </div>
                       </div>
-                      <div class="form-row">
-                        <div class="form-item">
+
+                      <div class="form-row" id="ai-row-period">
+                        <div class="form-item" style="flex: 1;">
                           <label class="form-label"><span class="required-star">*</span> 投放时段</label>
-                          <div class="segmented-control">
-                            <button class="segmented-item active" type="button">不限</button>
-                            <button class="segmented-item" type="button">指定时间段</button>
+                          <div class="ai-inline-field">
+                            <div class="segmented-control" data-seg="aiPeriod">
+                              <button class="segmented-item active" type="button" data-v="unlimited" onclick="setAiSeg(this)">不限</button>
+                              <button class="segmented-item" type="button" data-v="custom" onclick="setAiSeg(this)">指定时段</button>
+                            </div>
+                            <span id="aiPeriodPick" style="display: none; align-items: center; gap: 6px;">
+                              <input type="time" class="form-input" id="aiPeriodStart" value="00:00" style="max-width: 130px;" oninput="clearAiRowError('ai-row-period')" />
+                              <span>至</span>
+                              <input type="time" class="form-input" id="aiPeriodEnd" value="23:59" style="max-width: 130px;" oninput="clearAiRowError('ai-row-period')" />
+                            </span>
                           </div>
+                          <div class="ai-field-err">请选择完整的投放时段</div>
                         </div>
                       </div>
+
+                      <div class="ai-drawer-foot-tip">接口默认传参：开始投放时间 = 今天 · 投放天数 = 不限 · 投放时段 = 不限</div>
                     </div>
                   </div>
 
@@ -2820,6 +3507,115 @@
                 <div class="drawer-footer">
                   <button class="btn btn-outline" onclick="closeAiTaskDrawer()">取消</button>
                   <button class="btn btn-primary" onclick="submitAiTask()">保存</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 全域投放 · 资源选择弹窗（抖音号 / 主体包 / 应用包 / 账户包） -->
+            <div id="ai-res-picker-overlay" class="modal-overlay" onclick="closeAiResPicker()"></div>
+            <div id="ai-res-picker-modal" class="modal">
+              <div class="modal-card" style="width: min(560px, calc(100vw - 40px));">
+                <div class="modal-header">
+                  <span id="ai-res-picker-title">选择抖音号</span>
+                  <button class="modal-close" onclick="closeAiResPicker()">×</button>
+                </div>
+                <div class="modal-body">
+                  <input type="text" class="form-input ai-pick-search" id="ai-res-picker-search" placeholder="请输入名称 / ID 搜索" oninput="renderAiResPickerList()" />
+                  <div class="ai-pick-list" id="ai-res-picker-list"></div>
+                </div>
+                <div class="modal-footer">
+                  <span style="margin-right: auto; font-size: 13px; color: var(--color-text-secondary);">已选 <strong id="ai-res-picker-count" style="color: var(--color-info);">0</strong> 项</span>
+                  <button class="btn btn-outline" onclick="closeAiResPicker()">取消</button>
+                  <button class="btn btn-primary" onclick="confirmAiResPicker()">确定</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 全域投放 · 抖音号包表格选择器 -->
+            <div id="ai-dy-pkg-overlay" class="modal-overlay" onclick="closeAiDyPkg()"></div>
+            <div id="ai-dy-pkg-modal" class="modal ai-pkg-modal">
+              <div class="modal-card">
+                <div class="modal-header">
+                  <span>选择抖音号包</span>
+                  <button class="modal-close" onclick="closeAiDyPkg()">×</button>
+                </div>
+                <div class="modal-body">
+                  <div class="ai-pkg-filter">
+                    <div class="filter-combo">
+                      <select class="filter-combo-select" id="ai-pkg-field" onchange="aiPkgState.field = this.value; aiPkgState.page = 1; applyAiPkgFilter();">
+                        <option value="name">抖音号包名称</option>
+                        <option value="id">抖音号包ID</option>
+                      </select>
+                      <input type="text" class="filter-combo-input" id="ai-pkg-kw" placeholder="请输入" onkeydown="if(event.key==='Enter'){aiPkgState.kw=this.value;aiPkgState.page=1;applyAiPkgFilter();}" />
+                    </div>
+                    <select class="filter-select" id="ai-pkg-creator" onchange="aiPkgState.creator = this.value; aiPkgState.page = 1; applyAiPkgFilter();">
+                      <option value="">请选择创建人</option>
+                    </select>
+                    <button class="btn btn-info btn-sm" onclick="aiPkgState.kw = document.getElementById('ai-pkg-kw').value; aiPkgState.page = 1; applyAiPkgFilter();">查询</button>
+                    <button class="btn btn-outline btn-sm" onclick="resetAiPkgFilter()">重置</button>
+                  </div>
+
+                  <div class="ai-pkg-meta">已选择：<b id="ai-pkg-count">0</b></div>
+
+                  <div class="table-wrapper">
+                    <table class="data-table">
+                      <thead>
+                        <tr>
+                          <th style="width: 48px;"><span class="ai-ck2" id="ai-pkg-all" onclick="toggleAiPkgPage()">✓</span></th>
+                          <th style="width: 70px;">ID</th>
+                          <th>抖音号包名称</th>
+                          <th style="width: 100px;">备注</th>
+                          <th style="width: 100px;">抖音号数量</th>
+                          <th style="width: 90px;">创建人</th>
+                          <th style="width: 160px;">创建时间</th>
+                          <th style="width: 160px;">更新时间</th>
+                        </tr>
+                      </thead>
+                      <tbody id="ai-pkg-body"></tbody>
+                    </table>
+                  </div>
+
+                  <div class="ai-pkg-pager" id="ai-pkg-pager"></div>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-outline" onclick="closeAiDyPkg()">取消</button>
+                  <button class="btn btn-primary" onclick="confirmAiDyPkg()">确定</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 全域投放 · 素材上传详情（素材更新明细入口） -->
+            <div id="ai-upload-overlay" class="modal-overlay" onclick="closeAiMaterialUpload()"></div>
+            <div id="ai-upload-modal" class="modal ai-upload-modal">
+              <div class="modal-card">
+                <div class="modal-header">
+                  <span id="ai-upload-title">素材上传详情</span>
+                  <button class="modal-close" onclick="closeAiMaterialUpload()">×</button>
+                </div>
+                <div class="modal-body">
+                  <div class="ai-upload-summary" id="ai-upload-summary">统计上传总数: <b id="ai-upload-total">0</b></div>
+                  <div class="ai-upload-filter" id="ai-upload-filter" style="display: none;">
+                    <span style="font-size: 13px; color: var(--color-text-secondary);">上传状态：</span>
+                    <select class="filter-select" id="ai-upload-status" onchange="renderAiUploadTable()">
+                      <option value="all">全部</option>
+                      <option value="pending">待上传</option>
+                      <option value="success">成功</option>
+                      <option value="fail">失败</option>
+                    </select>
+                  </div>
+                  <div class="ai-upload-table-wrap">
+                    <table class="modal-table">
+                      <thead>
+                        <tr>
+                          <th style="width: 70px;" id="ai-upload-col-idx">序列</th>
+                          <th>素材名称</th>
+                          <th style="width: 120px;">上传状态</th>
+                        </tr>
+                      </thead>
+                      <tbody id="ai-upload-tbody"></tbody>
+                    </table>
+                  </div>
+                  <div class="ai-upload-pager" id="ai-upload-pager" style="display: none;"></div>
                 </div>
               </div>
             </div>
@@ -2979,7 +3775,7 @@
                             <th>变更内容</th>
                           </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="ai-modify-log-body-task">
                           <tr>
                             <td>芸之</td>
                             <td>2026-10-21 14:40:27</td>
@@ -2991,11 +3787,63 @@
                             <td>新建任务</td>
                           </tr>
                         </tbody>
+                        <!-- 短剧任务 · 测出路径：开启任务 → 测试期内判定回写 → 测出后素材更新 -->
+                        <tbody id="ai-modify-log-body-tested" style="display: none;">
+                          <tr>
+                            <td>系统</td>
+                            <td>2026-10-20 12:30:00</td>
+                            <td>素材更新，新增素材数量：30</td>
+                          </tr>
+                          <tr>
+                            <td>系统</td>
+                            <td>2026-10-19 18:20:00</td>
+                            <td>测试期内判定回写。短剧任务测出状态：测出</td>
+                          </tr>
+                          <tr>
+                            <td>系统</td>
+                            <td>2026-10-18 09:00:00</td>
+                            <td>开启短剧任务，AI素材数量：95，大于90。短剧任务测出状态：测试中</td>
+                          </tr>
+                        </tbody>
+                        <!-- 短剧任务 · 测试中：任务开启且素材数达标，进入 3 天测试期 -->
+                        <tbody id="ai-modify-log-body-testing" style="display: none;">
+                          <tr>
+                            <td>系统</td>
+                            <td>2026-10-21 09:40:00</td>
+                            <td>开启短剧任务，AI素材数量：120，大于90。短剧任务测出状态：测试中</td>
+                          </tr>
+                        </tbody>
+                        <!-- 短剧任务 · 待测试：任务开启但素材数不足 90 -->
+                        <tbody id="ai-modify-log-body-pending" style="display: none;">
+                          <tr>
+                            <td>系统</td>
+                            <td>2026-10-21 11:00:00</td>
+                            <td>开启短剧任务，AI素材数量：60，小于90。短剧任务测出状态：待测试</td>
+                          </tr>
+                        </tbody>
+                        <!-- 短剧任务 · 未测出：两种触发路径（3天测试期结束未达标 / 用户手动关闭）示例并列展示 -->
+                        <tbody id="ai-modify-log-body-untested" style="display: none;">
+                          <tr>
+                            <td>系统</td>
+                            <td>2026-10-20 18:00:00</td>
+                            <td>3 天测试期结束未达标。短剧任务测出状态：未测出</td>
+                          </tr>
+                          <tr>
+                            <td>芸之</td>
+                            <td>2026-10-20 15:30:00</td>
+                            <td>用户手动关闭短剧任务。短剧任务测出状态：未测出</td>
+                          </tr>
+                          <tr>
+                            <td>系统</td>
+                            <td>2026-10-18 09:10:00</td>
+                            <td>开启短剧任务，AI素材数量：95，大于90。短剧任务测出状态：测试中</td>
+                          </tr>
+                        </tbody>
                       </table>
                     </div>
                   </div>
                   <div class="pagination" style="justify-content: flex-end;">
-                    <span class="pagination-info">共 2 条</span>
+                    <span class="pagination-info" id="ai-modify-log-count">共 2 条</span>
                     <div class="pagination-pages">
                       <button class="page-btn" onclick="changePage('prev')">&lt;</button>
                       <button class="page-btn active" onclick="changePage(1)">1</button>
@@ -3903,10 +4751,13 @@
       }
 
       /* ===== AI素材推广 · 自动化任务页 ===== */
-      /* 一级页签：任务 / 短剧 / 标准投放 / 全域投放；标准投放与全域投放各自内含 账户/项目/单元 三个子页签 */
+      /* 一级页签：任务 / 短剧 / 标准投放 / 全域投放；标准投放内含 账户/项目/单元，全域投放内含 账户/项目/素材更新明细 */
       var AI_AUTO_TASK_TABS = ['task', 'drama', 'standard', 'global'];
-      var AI_SCOPE_TABS = ['account', 'project', 'unit'];
-      var AI_SCOPE_LABELS = { account: '账户', project: '项目', unit: '单元' };
+      var AI_SCOPE_TABS = {
+        standard: ['account', 'project', 'unit'],
+        global: ['account', 'project', 'material']
+      };
+      var AI_SCOPE_LABELS = { account: '账户', project: '项目', unit: '单元', material: '素材更新明细' };
 
       function switchAiAutoTaskTab(tabName) {
         AI_AUTO_TASK_TABS.forEach(function (name) {
@@ -3920,18 +4771,18 @@
         if (tabName === 'standard' || tabName === 'global') {
           var activeSub = document.querySelector('#ai-' + tabName + '-tabs .tab.active');
           var activeIndex = activeSub ? Array.prototype.indexOf.call(activeSub.parentNode.children, activeSub) : 0;
-          switchAiScopeTab(tabName, AI_SCOPE_TABS[activeIndex] || 'account');
+          switchAiScopeTab(tabName, AI_SCOPE_TABS[tabName][activeIndex] || 'account');
         }
       }
 
-      /* 标准投放 / 全域投放 内部的 账户 / 项目 / 单元 子页签 */
+      /* 标准投放（账户/项目/单元） / 全域投放（账户/项目/素材更新明细） 内部子页签 */
       function switchAiScopeTab(scope, tabName) {
-        AI_SCOPE_TABS.forEach(function (name) {
+        AI_SCOPE_TABS[scope].forEach(function (name) {
           var el = document.getElementById('ai-' + scope + '-' + name);
           if (el) el.style.display = name === tabName ? 'block' : 'none';
         });
         document.querySelectorAll('#ai-' + scope + '-tabs .tab').forEach(function (tab, index) {
-          tab.classList.toggle('active', AI_SCOPE_TABS[index] === tabName);
+          tab.classList.toggle('active', AI_SCOPE_TABS[scope][index] === tabName);
         });
       }
 
@@ -3981,20 +4832,6 @@
         switchAiScopeTab('global', 'project');
         resetAiScopeFilters('global', 'project');
         setAiScopeFilter('global', 'project', 'account-name', '账户列表ID', accountId);
-      }
-
-      function drillAiGlobalAccountToUnit(accountId) {
-        switchAiAutoTaskTab('global');
-        switchAiScopeTab('global', 'unit');
-        resetAiScopeFilters('global', 'unit');
-        setAiScopeFilter('global', 'unit', 'account-name', '账户列表ID', accountId);
-      }
-
-      function drillAiGlobalProjectToUnit(projectId) {
-        switchAiAutoTaskTab('global');
-        switchAiScopeTab('global', 'unit');
-        resetAiScopeFilters('global', 'unit');
-        setAiScopeFilter('global', 'unit', 'project-name', '项目列表ID', projectId);
       }
 
       function searchAiScopeRow(scope, tabKey) {
@@ -4063,6 +4900,10 @@
         root.querySelectorAll('.filter-combo-input').forEach(function (i) { i.value = ''; });
         var status = document.getElementById('ai-drama-status-filter');
         if (status) status.value = '';
+        var sw = document.getElementById('ai-drama-switch-filter');
+        if (sw) sw.value = '';
+        var creator = document.getElementById('ai-drama-creator-filter');
+        if (creator) creator.value = '';
       }
 
       /* 任务名称下钻：切换到短剧 Tab 并带入任务ID筛选项 */
@@ -4079,18 +4920,70 @@
       }
 
       /* 短剧列表执行时间下钻：切到标准投放 / 全域投放的账户子页签，带入短剧ID + 任务ID */
-      function drillAiDramaToScope(scope, dramaId, taskId) {
+      function drillAiDramaToScope(scope, dramaTaskId) {
         switchAiAutoTaskTab(scope);
         switchAiScopeTab(scope, 'account');
-        setAiScopeFilter(scope, 'account', 'drama-name', '短剧ID', dramaId);
-        setAiScopeFilter(scope, 'account', 'task-name', '任务ID', taskId);
+        resetAiScopeFilters(scope, 'account');
+        setAiScopeFilter(scope, 'account', 'drama-name', '短剧任务ID', dramaTaskId);
+      }
+
+      /* 轻提示 */
+      function showAiToast(msg) {
+        var el = document.getElementById('ai-toast');
+        if (!el) {
+          el = document.createElement('div');
+          el.id = 'ai-toast';
+          el.className = 'ai-toast';
+          document.body.appendChild(el);
+        }
+        el.textContent = msg;
+        el.classList.add('show');
+        clearTimeout(el._timer);
+        el._timer = setTimeout(function () {
+          el.classList.remove('show');
+        }, 3200);
+      }
+
+      /*
+       * 短剧任务开关：控制该短剧任务是否继续执行（继续执行 = 短剧测试 + 新素材投放）
+       * - 测出：关闭后状态仍为「测出」，但后续产生的新素材不再投放
+       * - 待测试：关闭后状态仍为「待测试」，不再执行短剧测试与新素材投放
+       * - 测试中：关闭后任务终止，测出状态改为「未测出」，且不可再开启
+       * - 未测出：开关默认关闭且禁用，不支持开启
+       */
+      function toggleAiDramaTask(input) {
+        var row = input.closest('tr');
+        var statusCell = row.querySelector('[data-col="test-status"]');
+        var status = statusCell ? statusCell.textContent.trim() : '';
+
+        if (!input.checked) {
+          if (status === '测试中') {
+            statusCell.innerHTML = '<span class="tag tag-default">未测出</span>';
+            input.disabled = true;
+            var label = input.closest('.toggle-switch');
+            label.classList.add('is-disabled');
+            label.title = '未测出状态不支持开启';
+            showAiToast('已关闭：测试中任务终止，测出状态更新为「未测出」，已自动取消该短剧的白名单标签，且不再支持开启');
+          } else if (status === '测出') {
+            showAiToast('已关闭：短剧测试与新素材投放均已停止，后续产生的新素材不再投放');
+          } else if (status === '待测试') {
+            showAiToast('已关闭：短剧测试与新素材投放均已停止');
+          }
+        } else {
+          showAiToast(
+            status === '测出'
+              ? '已开启：继续执行，后续产生的新素材将按任务配置投放'
+              : '已开启：继续执行短剧测试'
+          );
+        }
       }
 
       /* 短剧名下钻：切换到账户 Tab 并带入短剧ID筛选项 */
-      function drillAiDramaToAccount(dramaId) {
+      function drillAiDramaToAccount(dramaTaskId) {
         switchAiAutoTaskTab('standard');
         switchAiScopeTab('standard', 'account');
-        setAiScopeFilter('standard', 'account', 'drama-name', '短剧ID', dramaId);
+        resetAiScopeFilters('standard', 'account');
+        setAiScopeFilter('standard', 'account', 'drama-name', '短剧任务ID', dramaTaskId);
       }
 
       /* 新增/编辑抽屉：标题为「任务名（ID: x）」，新增场景回退为通用标题 */
@@ -4202,6 +5095,717 @@
         if (dot) dot.classList.toggle('off', !enabled);
       }
 
+      /* ============================================================
+       * 全域投放（R3）· 任务抽屉配置面板 / 资源选择 / 素材上传详情
+       * 「抖音号范围」「投放账户」两个区块同时用于：全域投放页签 + 标准投放四种模式
+       * 来源：飞书《测剧自动化「全域投放（R3）」模块 PRD v1.3》配套原型
+       * ============================================================ */
+
+      /* 资源区块的作用域：global（全域投放页签）+ standard 四种模式 */
+      var AI_STD_MODES = ['stable-pay', 'stable-iaa', 'max-pay', 'max-iaa'];
+      var AI_RES_SCOPES = ['global'].concat(AI_STD_MODES);
+
+      /* 执行类型（3 选 1） */
+      var AI_EXEC_OPTIONS = [
+        { v: 'random', t: '随机', d: '将所需短剧x抖音号组合生成项目随机放进不同账号（该账户后续仅用于随机模式，无项目后释放）' },
+        { v: 'drama', t: '一户一剧', d: '将同一部剧不同抖音号组合生成项目放进一个账户中（该账户后续仅用于该剧，无项目后释放）' },
+        { v: 'douyin', t: '一户一抖音号', d: '将同一个抖音号不同短剧组合生成项目放进一个账户中（该账户后续仅用于该抖音号，无项目后释放）' }
+      ];
+      /* 素材分配方式（2 选 1） */
+      var AI_MAT_OPTIONS = [
+        { v: 'unified', t: '项目统一', d: '同一部短视频的每个项目素材相同' },
+        { v: 'even', t: '项目均分', d: '同一部短视频的每个项目下素材根据总可投放素材均分（每个项目素材不重复）' }
+      ];
+      var aiExecV = 'drama';  /* 默认 一户一剧 */
+      var aiMatV = 'even';    /* 默认 项目均分 */
+      var aiSegValues = {};
+      var aiAigcOn = true;
+
+      var AI_RES = {
+        douyin: [
+          { id: 'D4001', nm: '野可剧场', ds: '抖音号 4001 · 已授权' },
+          { id: 'D4002', nm: '星河追剧社', ds: '抖音号 4002 · 已授权' },
+          { id: 'D4003', nm: '午夜放映厅', ds: '抖音号 4003 · 已授权' },
+          { id: 'D4004', nm: '速看短剧', ds: '抖音号 4004 · 已授权' },
+          { id: 'D4005', nm: '剧能说', ds: '抖音号 4005 · 已授权' },
+          { id: 'D4006', nm: '一小时追剧', ds: '抖音号 4006 · 待授权' }
+        ],
+        subject: [
+          { id: 'S1001', nm: '杭州星野文化传媒有限公司', ds: '主体ID 1001 · 已认证' },
+          { id: 'S1002', nm: '重庆两江影视文化有限公司', ds: '主体ID 1002 · 已认证' },
+          { id: 'S1003', nm: '北京短剧科技有限公司', ds: '主体ID 1003 · 已认证' },
+          { id: 'S1004', nm: '广州映界文化传播有限公司', ds: '主体ID 1004 · 审核中' }
+        ],
+        app: [
+          { id: 'A2001', nm: '野可短剧', ds: '应用ID 2001 · iOS / Android' },
+          { id: 'A2002', nm: '星河剧场', ds: '应用ID 2002 · iOS / Android' },
+          { id: 'A2003', nm: '速看短剧', ds: '应用ID 2003 · Android' }
+        ],
+        account: [
+          { id: 'C3001', nm: '巨量-星野-01', ds: '12 个账户 · 可用' },
+          { id: 'C3002', nm: '巨量-星野-02', ds: '8 个账户 · 可用' },
+          { id: 'C3003', nm: '巨量-两江-01', ds: '20 个账户 · 可用' },
+          { id: 'C3004', nm: '巨量-测试组', ds: '4 个账户 · 余额不足' }
+        ]
+      };
+      var AI_RES_TITLES = { douyin: '选择抖音号', subject: '选择主体包', app: '选择应用包', account: '选择账户包' };
+
+      /* 每个作用域一份已选资源（示例默认已选，保证「保存」开箱可用） */
+      function defaultAiResSel() {
+        return {
+          douyin: [
+            { id: 'D4001', nm: '野可剧场', ds: '抖音号 4001 · 已授权' },
+            { id: 'D4002', nm: '星河追剧社', ds: '抖音号 4002 · 已授权' }
+          ],
+          douyinPkg: [],
+          subject: [{ id: 'S1001', nm: '杭州星野文化传媒有限公司', ds: '主体ID 1001 · 已认证' }],
+          app: [{ id: 'A2001', nm: '野可短剧', ds: '应用ID 2001 · iOS / Android' }],
+          account: [{ id: 'C3001', nm: '巨量-星野-01', ds: '12 个账户 · 可用' }]
+        };
+      }
+      var aiResState = {};
+      var aiDyScopeMap = {};
+      AI_RES_SCOPES.forEach(function (key) {
+        aiResState[key] = defaultAiResSel();
+        aiDyScopeMap[key] = 'custom';
+        aiSegValues['aiDyScope|' + key] = 'custom';
+      });
+      var aiPickType = null;
+      var aiPickTemp = [];
+      var aiPickerScope = 'global';
+      var aiDyPkgScope = 'global';
+
+      /* 抖音号包示例数据 */
+      var AI_PKG_CREATORS = ['爱江', '阳天', '操作瓜', '东阳', '浩钦', '娜可'];
+      var AI_PKG_TPL = ['东阳-%s', '短剧矩阵包-%s', '测试包-%s', '漫剧投放包-%s', '野可抖音号包-%s', '阳天-标准最大抖音号'];
+      var AI_PKG_DATA = (function () {
+        function pad(n) { return (n < 10 ? '0' : '') + n; }
+        function fmt(y, mo, d, h, mi, s) { return y + '-' + pad(mo) + '-' + pad(d) + ' ' + pad(h) + ':' + pad(mi) + ':' + pad(s); }
+        var list = [];
+        for (var i = 0; i < 46; i++) {
+          var id = 94 - i;
+          var t = fmt(2026, 10, 20 - Math.floor(i / 8), 23 - (i % 12), (i * 13) % 60, (i * 29) % 60);
+          list.push({
+            id: id,
+            name: AI_PKG_TPL[i % AI_PKG_TPL.length].replace('%s', pad(id)),
+            note: i % 9 === 0 ? '操作瓜' : '--',
+            num: (i * 7) % 7 + 2,
+            creator: AI_PKG_CREATORS[i % AI_PKG_CREATORS.length],
+            ct: t,
+            ut: t
+          });
+        }
+        return list;
+      })();
+      var aiPkgState = { page: 1, size: 10, field: 'name', kw: '', creator: '', temp: [], view: AI_PKG_DATA };
+
+      /* 素材上传详情：素材更新明细行（index 对应 ai-global-material 表格行） */
+      var AI_MATERIAL_ROWS = [
+        { exec: '516511', proj: '桐唱#519394#A-1279...', wait: 0, ok: 0, fail: 1 },
+        { exec: '516511', proj: '桐唱#520982#A-1279...', wait: 0, ok: 0, fail: 0 },
+        { exec: '516512', proj: '桐唱#391376#A-1279...', wait: 0, ok: 0, fail: 0 },
+        { exec: '516512', proj: '桐唱#391376#A-1279...', wait: 0, ok: 0, fail: 0 },
+        { exec: '516513', proj: '桐唱#509567#A-1279...', wait: 0, ok: 0, fail: 1 },
+        { exec: '516513', proj: '桐唱#520982#A-1279...', wait: 0, ok: 0, fail: 0 },
+        { exec: '516514', proj: '桐唱#391376#A-1279...', wait: 2, ok: 3, fail: 0 },
+        { exec: '516514', proj: '桐唱#509567#A-1279...', wait: 1, ok: 0, fail: 0 }
+      ];
+      /* 素材上传详情：项目页行（index 对应 ai-global-project 表格行） */
+      var AI_PROJECT_ROWS = [
+        { exec: '11621853', proj: '汤圆#428310#A-14805_他偏要我（麦芽主_迷雾放映厅 #20261021', wait: 5, ok: 161, fail: 0 },
+        { exec: '11621854', proj: '汤圆#22445#A-14805_女医逆袭记[端原_迷雾放映厅 #20261021', wait: 0, ok: 186, fail: 0 },
+        { exec: '11621855', proj: '汤圆#22376#A-14805_望北思南[端原生_甜柚动漫剧场 #20261021', wait: 0, ok: 1, fail: 0 },
+        { exec: '11621856', proj: '汤圆#31879#A-14805_逆流婚,不退!_我是麦秸短剧 #20261021', wait: 0, ok: 2, fail: 0 }
+      ];
+      var AI_UPLOAD_PRESET = [
+        { id: '6643836741', name: '月光下的你10钩-耿耿-25二创2.3（五组）.mp4', mid: '1406535' },
+        { id: '6643836740', name: '(new)新02二创-可莉-他偏要4.6（冰玫瑰）06钩子.mp4', mid: '1788818' },
+        { id: '6643836739', name: '(new)新新01二创-月璃-他偏要4.6（冰玫瑰）6钩.mp4', mid: '1788870' },
+        { id: '6643836738', name: '他偏要宠_小轩-棠树-4.24-二创尾11-05.mp4', mid: '1873084' },
+        { id: '6643836737', name: '超新(new)01二创-小岛-他偏要5.9（冰玫瑰）6钩.mp4', mid: '1933892' },
+        { id: '6643836736', name: '超新(new)03二创-小岛-他偏要5.9（冰玫瑰）6钩.mp4', mid: '1933907' },
+        { id: '6643836735', name: '清辉照芳菲-半梦-飞鸟-3.2-二创-4钩-2.mp4', mid: '4819742' },
+        { id: '6643836734', name: '清辉照芳菲-神劫-二创-3.3-飞天猫-01.mp4', mid: '4855920' },
+        { id: '6643836733', name: '月光下的你-路漫漫-3.4-04二创混剪.mp4', mid: '4867288' },
+        { id: '6643836732', name: '清辉照芳菲-半梦-飞鸟-3.5-AI二创-4钩-4.mp4', mid: '4891873' },
+        { id: '6643836731', name: '月光下的你-秋叶-3.5-二创-03.mp4', mid: '4896989' },
+        { id: '6643836730', name: '一念情深处经年-暖夏-5.13-内部AI二创-2-爽歪歪-随戏-片段.mp4', mid: '7530221' },
+        { id: '6643836729', name: '芳菲赴临州-沐芽-10.7-AI二创-1-2-爽歪歪-2钩-片段-合集.mp4', mid: '15421233' }
+      ];
+      var aiUploadState = { mode: 'material', idx: 0, page: 1, size: 20, status: 'all', all: [] };
+
+      /* ---- 作用域相关的 DOM id：global 沿用原名，标准投放各模式加后缀 ---- */
+      function aiScopeId(base, scopeKey) {
+        return scopeKey === 'global' ? base : base + '-' + scopeKey;
+      }
+
+      /* ---- 卡片选择：执行类型 / 素材分配方式 ---- */
+      function renderAiExecCards() {
+        document.getElementById('aiExecCards').innerHTML = AI_EXEC_OPTIONS.map(function (e) {
+          return '<div class="ai-card ' + (e.v === aiExecV ? 'on' : '') + '" onclick="pickAiCard(\'exec\',\'' + e.v + '\')">'
+            + '<div class="ai-card-t"><span class="ai-card-ck">✓</span>' + e.t + '</div>'
+            + '<div class="ai-card-d">' + e.d + '</div></div>';
+        }).join('');
+        document.getElementById('aiMatCards').innerHTML = AI_MAT_OPTIONS.map(function (m) {
+          return '<div class="ai-card ' + (m.v === aiMatV ? 'on' : '') + '" onclick="pickAiCard(\'mat\',\'' + m.v + '\')">'
+            + '<div class="ai-card-t"><span class="ai-card-ck">✓</span>' + m.t + '</div>'
+            + '<div class="ai-card-d">' + m.d + '</div></div>';
+        }).join('');
+      }
+
+      function pickAiCard(kind, v) {
+        if (kind === 'exec') { aiExecV = v; syncAiExecRule(); } else { aiMatV = v; syncAiMatRule(); }
+        renderAiExecCards();
+      }
+
+      /* 执行类型 = 一户一剧 时，隐藏「账户下项目数」并清空 */
+      function syncAiExecRule() {
+        var hide = aiExecV === 'drama';
+        document.getElementById('ai-row-proj').style.display = hide ? 'none' : 'flex';
+        if (hide) document.getElementById('aiProjCount').value = '';
+      }
+
+      /* 素材分配方式 = 项目统一 时显示并要求项目下素材数；= 项目均分 时隐藏并清空 */
+      function syncAiMatRule() {
+        var need = aiMatV === 'unified';
+        document.getElementById('ai-row-mat').style.display = need ? 'flex' : 'none';
+        if (!need) document.getElementById('aiMatCount').value = '';
+      }
+
+      function onAiAigcToggle(input) {
+        aiAigcOn = input.checked;
+        showAiToast('AIGC素材已' + (aiAigcOn ? '开启' : '关闭'));
+      }
+
+      /* ---- 抖音号范围 + 投放账户 区块模板（全域投放 / 标准投放四模式共用） ---- */
+      function aiResBlockHtml(scopeKey) {
+        var isPkg = aiDyScopeMap[scopeKey] === 'pkg';
+        var pkgTypes = [
+          { k: 'subject', t: '主体包' },
+          { k: 'app', t: '应用包' },
+          { k: 'account', t: '账户包' }
+        ];
+        var html = ''
+          + '<div class="ai-schedule-section">'
+          + '<h4 class="form-section-title">抖音号范围</h4>'
+          + '<div class="form-row" id="' + aiScopeId('ai-row-dy', scopeKey) + '">'
+          + '<div class="form-item" style="flex: 1;">'
+          + '<label class="form-label"><span class="required-star">*</span> 抖音号（项目）</label>'
+          + '<div class="ai-inline-field">'
+          + '<div class="segmented-control" data-seg="aiDyScope|' + scopeKey + '">'
+          + '<button class="segmented-item' + (isPkg ? '' : ' active') + '" type="button" data-v="custom" onclick="setAiSeg(this)">自定义</button>'
+          + '<button class="segmented-item' + (isPkg ? ' active' : '') + '" type="button" data-v="pkg" onclick="setAiSeg(this)">抖音号包</button>'
+          + '</div>'
+          + '<input type="text" class="form-input" id="' + aiScopeId('aiDyPick', scopeKey) + '" readonly placeholder="请选择"'
+          + ' onclick="openAiResPicker(\'douyin\',\'' + scopeKey + '\')"'
+          + ' style="cursor: pointer; max-width: 220px;' + (isPkg ? ' display: none;' : '') + '" />'
+          + '<button class="btn btn-outline btn-sm" type="button" id="' + aiScopeId('aiDyPkgBtn', scopeKey) + '"'
+          + ' style="display: ' + (isPkg ? 'inline-flex' : 'none') + ';" onclick="openAiDyPkg(\'' + scopeKey + '\')">选择抖音号包</button>'
+          + '</div>'
+          + '<div class="ai-chips" id="' + aiScopeId('aiChipsDy', scopeKey) + '"></div>'
+          + '<div class="ai-field-err">请选择抖音号（项目）</div>'
+          + '</div></div></div>'
+          + '<div class="ai-schedule-section">'
+          + '<h4 class="form-section-title"><span class="tip-icon" data-tip="主体包 / 应用包 / 账户包为预设资源集合，仅可选择已授权且状态正常的资源">?</span>投放账户</h4>';
+        pkgTypes.forEach(function (p) {
+          html += '<div class="form-row"><div class="form-item" style="flex: 1;">'
+            + '<label class="form-label">' + p.t + '</label>'
+            + '<div class="ai-inline-field">'
+            + '<button class="btn btn-outline btn-sm" type="button" onclick="openAiResPicker(\'' + p.k + '\',\'' + scopeKey + '\')">选择' + p.t + '</button>'
+            + '<div class="ai-chips flat" id="' + aiScopeId('aiChips' + p.k.charAt(0).toUpperCase() + p.k.slice(1), scopeKey) + '"></div>'
+            + '</div></div></div>';
+        });
+        html += '</div>';
+        return html;
+      }
+
+      /* 标准投放四种模式：在「基建数量/单剧」后挂载 抖音号范围 + 投放账户 */
+      function mountAiStdResBlocks() {
+        document.querySelectorAll('#ai-task-drawer .ai-std-extra-slot').forEach(function (slot) {
+          var pane = slot.closest('.ai-std-pane');
+          var mode = pane ? pane.getAttribute('data-mode') : 'global';
+          slot.innerHTML = aiResBlockHtml(mode);
+          renderAiChips(mode);
+        });
+      }
+
+      /* ---- 分段控件 ---- */
+      function setAiSeg(btn) {
+        var group = btn.closest('.segmented-control');
+        if (!group) return;
+        group.querySelectorAll('.segmented-item').forEach(function (b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        var raw = group.getAttribute('data-seg') || '';
+        var parts = raw.split('|');
+        var base = parts[0];
+        var scopeKey = parts[1] || 'global';
+        var v = btn.getAttribute('data-v');
+        aiSegValues[raw] = v;
+        if (base === 'aiDyScope') {
+          aiDyScopeMap[scopeKey] = v;
+          syncAiDyScope(scopeKey);
+          if (v === 'pkg') showAiToast('已切换为按「抖音号包」选择');
+        } else if (base === 'aiRevenue') {
+          aiSegValues.aiRevenue = v;
+          syncAiRevenue();
+        } else if (base === 'aiDays') {
+          aiSegValues.aiDays = v;
+          syncAiDays();
+        } else if (base === 'aiPeriod') {
+          aiSegValues.aiPeriod = v;
+          syncAiPeriod();
+        } else {
+          aiSegValues[base] = v;
+        }
+      }
+
+      function syncAiDyScope(scopeKey) {
+        scopeKey = scopeKey || 'global';
+        var isPkg = aiDyScopeMap[scopeKey] === 'pkg';
+        var pick = document.getElementById(aiScopeId('aiDyPick', scopeKey));
+        var btn = document.getElementById(aiScopeId('aiDyPkgBtn', scopeKey));
+        if (pick) pick.style.display = isPkg ? 'none' : '';
+        if (btn) btn.style.display = isPkg ? 'inline-flex' : 'none';
+        renderAiChips(scopeKey);
+      }
+
+      function syncAiRevenue() {
+        document.getElementById('ai-row-ep').style.display = aiSegValues.aiRevenue === 'iap' ? 'none' : 'flex';
+      }
+
+      function syncAiDays() {
+        var custom = aiSegValues.aiDays === 'custom';
+        document.getElementById('aiDays').style.display = custom ? '' : 'none';
+        if (!custom) document.getElementById('aiDays').value = '';
+      }
+
+      function syncAiPeriod() {
+        var custom = aiSegValues.aiPeriod === 'custom';
+        document.getElementById('aiPeriodPick').style.display = custom ? 'inline-flex' : 'none';
+        if (!custom) {
+          document.getElementById('aiPeriodStart').value = '00:00';
+          document.getElementById('aiPeriodEnd').value = '23:59';
+        }
+      }
+
+      function clearAiRowError(rowId) { markAiRowError(rowId, false); }
+
+      function markAiRowError(rowId, on) {
+        var row = document.getElementById(rowId);
+        if (row) row.classList.toggle('is-error', !!on);
+      }
+
+      /* ---- 资源选择弹窗（抖音号 / 主体包 / 应用包 / 账户包） ---- */
+      function openAiResPicker(type, scopeKey) {
+        aiPickType = type;
+        aiPickerScope = scopeKey || 'global';
+        aiPickTemp = aiResState[aiPickerScope][type].map(function (r) { return r.id; });
+        document.getElementById('ai-res-picker-title').textContent = AI_RES_TITLES[type];
+        document.getElementById('ai-res-picker-search').value = '';
+        renderAiResPickerList();
+        document.getElementById('ai-res-picker-overlay').classList.add('open');
+        document.getElementById('ai-res-picker-modal').classList.add('open');
+      }
+
+      function closeAiResPicker() {
+        document.getElementById('ai-res-picker-overlay').classList.remove('open');
+        document.getElementById('ai-res-picker-modal').classList.remove('open');
+        aiPickType = null;
+      }
+
+      function renderAiResPickerList() {
+        if (!aiPickType) return;
+        var kw = document.getElementById('ai-res-picker-search').value.trim().toLowerCase();
+        var list = AI_RES[aiPickType].filter(function (r) {
+          return !kw || r.nm.toLowerCase().indexOf(kw) > -1 || r.id.toLowerCase().indexOf(kw) > -1;
+        });
+        var html = list.length ? list.map(function (r) {
+          return '<div class="ai-pick-item ' + (aiPickTemp.indexOf(r.id) > -1 ? 'on' : '') + '" onclick="toggleAiResPick(\'' + r.id + '\')">'
+            + '<span class="ck">✓</span><span class="nm">' + r.nm + '</span><span class="ds">' + r.ds + '</span></div>';
+        }).join('') : '<div class="ai-pick-empty">未找到匹配项</div>';
+        document.getElementById('ai-res-picker-list').innerHTML = html;
+        document.getElementById('ai-res-picker-count').textContent = aiPickTemp.length;
+      }
+
+      function toggleAiResPick(id) {
+        var i = aiPickTemp.indexOf(id);
+        if (i > -1) aiPickTemp.splice(i, 1); else aiPickTemp.push(id);
+        renderAiResPickerList();
+      }
+
+      function confirmAiResPicker() {
+        if (!aiPickType) return;
+        aiResState[aiPickerScope][aiPickType] = AI_RES[aiPickType].filter(function (r) { return aiPickTemp.indexOf(r.id) > -1; });
+        var n = aiResState[aiPickerScope][aiPickType].length;
+        var title = AI_RES_TITLES[aiPickType];
+        var scope = aiPickerScope;
+        closeAiResPicker();
+        renderAiChips(scope);
+        showAiToast(n ? '已选择 ' + n + ' 项（' + title.replace('选择', '') + '）' : '已清空当前选择');
+      }
+
+      function removeAiRes(type, id, scopeKey) {
+        var scope = scopeKey || 'global';
+        aiResState[scope][type] = aiResState[scope][type].filter(function (x) { return String(x.id) !== String(id); });
+        renderAiChips(scope);
+      }
+
+      function renderAiChips(scopeKey) {
+        scopeKey = scopeKey || 'global';
+        var sel = aiResState[scopeKey];
+        if (!sel) return;
+        ['subject', 'app', 'account'].forEach(function (k) {
+          var box = document.getElementById(aiScopeId('aiChips' + k.charAt(0).toUpperCase() + k.slice(1), scopeKey));
+          if (!box) return;
+          box.innerHTML = sel[k].map(function (r) {
+            return '<span class="ai-chip"><span class="nm">' + r.nm + '</span>'
+              + '<span class="x" onclick="removeAiRes(\'' + k + '\',\'' + r.id + '\',\'' + scopeKey + '\')">✕</span></span>';
+          }).join('');
+        });
+        var key = aiDyScopeMap[scopeKey] === 'custom' ? 'douyin' : 'douyinPkg';
+        var dyBox = document.getElementById(aiScopeId('aiChipsDy', scopeKey));
+        if (dyBox) {
+          dyBox.innerHTML = sel[key].map(function (r) {
+            return '<span class="ai-chip"><span class="nm">' + r.nm + '</span>'
+              + '<span class="x" onclick="removeAiRes(\'' + key + '\',\'' + r.id + '\',\'' + scopeKey + '\')">✕</span></span>';
+          }).join('');
+        }
+        var pick = document.getElementById(aiScopeId('aiDyPick', scopeKey));
+        if (pick) pick.value = sel[key].length ? '已选 ' + sel[key].length + ' 个' : '';
+      }
+
+      /* ---- 抖音号包：表格选择器 ---- */
+      function openAiDyPkg(scopeKey) {
+        aiDyPkgScope = scopeKey || 'global';
+        aiPkgState.temp = aiResState[aiDyPkgScope].douyinPkg.map(function (r) { return r.id; });
+        aiPkgState.kw = '';
+        aiPkgState.creator = '';
+        aiPkgState.field = 'name';
+        aiPkgState.page = 1;
+        document.getElementById('ai-pkg-kw').value = '';
+        document.getElementById('ai-pkg-creator').value = '';
+        document.getElementById('ai-pkg-field').value = 'name';
+        applyAiPkgFilter();
+        document.getElementById('ai-dy-pkg-overlay').classList.add('open');
+        document.getElementById('ai-dy-pkg-modal').classList.add('open');
+      }
+
+      function closeAiDyPkg() {
+        document.getElementById('ai-dy-pkg-overlay').classList.remove('open');
+        document.getElementById('ai-dy-pkg-modal').classList.remove('open');
+      }
+
+      function applyAiPkgFilter() {
+        var kw = String(aiPkgState.kw).trim().toLowerCase();
+        aiPkgState.view = AI_PKG_DATA.filter(function (r) {
+          var hitKw = !kw || (aiPkgState.field === 'id' ? String(r.id).indexOf(kw) > -1 : r.name.toLowerCase().indexOf(kw) > -1);
+          return hitKw && (!aiPkgState.creator || r.creator === aiPkgState.creator);
+        });
+        var max = Math.max(1, Math.ceil(aiPkgState.view.length / aiPkgState.size));
+        if (aiPkgState.page > max) aiPkgState.page = max;
+        renderAiPkgTable();
+        renderAiPkgPager();
+        document.getElementById('ai-pkg-count').textContent = aiPkgState.temp.length;
+      }
+
+      function aiPkgPageRows() {
+        return aiPkgState.view.slice((aiPkgState.page - 1) * aiPkgState.size, aiPkgState.page * aiPkgState.size);
+      }
+
+      function renderAiPkgTable() {
+        var rows = aiPkgPageRows();
+        var body = document.getElementById('ai-pkg-body');
+        body.innerHTML = rows.length ? rows.map(function (r) {
+          return '<tr style="cursor:pointer;' + (aiPkgState.temp.indexOf(r.id) > -1 ? ' background:#f2f8ff;' : '') + '" onclick="toggleAiPkg(' + r.id + ')">'
+            + '<td><span class="ai-ck2 ' + (aiPkgState.temp.indexOf(r.id) > -1 ? 'on' : '') + '">✓</span></td>'
+            + '<td>' + r.id + '</td>'
+            + '<td title="' + r.name + '">' + r.name + '</td>'
+            + '<td>' + r.note + '</td>'
+            + '<td>' + r.num + '</td>'
+            + '<td>' + r.creator + '</td>'
+            + '<td>' + r.ct + '</td>'
+            + '<td>' + r.ut + '</td></tr>';
+        }).join('') : '<tr class="ai-pkg-empty"><td colspan="8">暂无数据</td></tr>';
+        var allOn = rows.length > 0 && rows.every(function (r) { return aiPkgState.temp.indexOf(r.id) > -1; });
+        document.getElementById('ai-pkg-all').classList.toggle('on', allOn);
+      }
+
+      function toggleAiPkg(id) {
+        var i = aiPkgState.temp.indexOf(id);
+        if (i > -1) aiPkgState.temp.splice(i, 1); else aiPkgState.temp.push(id);
+        renderAiPkgTable();
+        document.getElementById('ai-pkg-count').textContent = aiPkgState.temp.length;
+      }
+
+      function toggleAiPkgPage() {
+        var rows = aiPkgPageRows();
+        var allOn = rows.length > 0 && rows.every(function (r) { return aiPkgState.temp.indexOf(r.id) > -1; });
+        rows.forEach(function (r) {
+          var i = aiPkgState.temp.indexOf(r.id);
+          if (allOn) { if (i > -1) aiPkgState.temp.splice(i, 1); }
+          else if (i === -1) aiPkgState.temp.push(r.id);
+        });
+        renderAiPkgTable();
+        document.getElementById('ai-pkg-count').textContent = aiPkgState.temp.length;
+      }
+
+      function aiPkgGo(p) {
+        var max = Math.max(1, Math.ceil(aiPkgState.view.length / aiPkgState.size));
+        aiPkgState.page = Math.min(Math.max(1, p), max);
+        renderAiPkgTable();
+        renderAiPkgPager();
+      }
+
+      function resetAiPkgFilter() {
+        aiPkgState.kw = '';
+        aiPkgState.creator = '';
+        aiPkgState.field = 'name';
+        aiPkgState.page = 1;
+        document.getElementById('ai-pkg-kw').value = '';
+        document.getElementById('ai-pkg-creator').value = '';
+        document.getElementById('ai-pkg-field').value = 'name';
+        applyAiPkgFilter();
+        showAiToast('已重置筛选条件');
+      }
+
+      function aiPkgPageList(total, cur) {
+        if (total <= 7) {
+          var arr0 = [];
+          for (var i = 1; i <= total; i++) arr0.push(i);
+          return arr0;
+        }
+        var start = Math.max(1, cur - 2), end = Math.min(total, start + 4);
+        if (end - start < 4) start = Math.max(1, end - 4);
+        var arr = [];
+        if (start > 1) { arr.push(1); if (start > 2) arr.push('...'); }
+        for (var p = start; p <= end; p++) arr.push(p);
+        if (end < total) { if (end < total - 1) arr.push('...'); arr.push(total); }
+        return arr;
+      }
+
+      function renderAiPkgPager() {
+        var total = Math.max(1, Math.ceil(aiPkgState.view.length / aiPkgState.size));
+        var nums = aiPkgPageList(total, aiPkgState.page).map(function (p) {
+          if (p === '...') return '<button class="pg2 dots" disabled>…</button>';
+          return '<button class="pg2 ' + (p === aiPkgState.page ? 'on' : '') + '" onclick="aiPkgGo(' + p + ')">' + p + '</button>';
+        }).join('');
+        document.getElementById('ai-pkg-pager').innerHTML =
+          '<span>共 ' + aiPkgState.view.length + ' 条</span>'
+          + '<button class="pg2"' + (aiPkgState.page <= 1 ? ' disabled' : '') + ' onclick="aiPkgGo(' + (aiPkgState.page - 1) + ')">‹</button>'
+          + nums
+          + '<button class="pg2"' + (aiPkgState.page >= total ? ' disabled' : '') + ' onclick="aiPkgGo(' + (aiPkgState.page + 1) + ')">›</button>'
+          + '<span class="ai-pkg-jump">跳至<input value="' + aiPkgState.page + '" onkeydown="if(event.key===\'Enter\'){aiPkgGo(parseInt(this.value,10)||1);}" onblur="aiPkgGo(parseInt(this.value,10)||1);">页</span>';
+      }
+
+      function confirmAiDyPkg() {
+        aiResState[aiDyPkgScope].douyinPkg = AI_PKG_DATA.filter(function (r) { return aiPkgState.temp.indexOf(r.id) > -1; })
+          .map(function (r) { return { id: r.id, nm: r.name }; });
+        var n = aiResState[aiDyPkgScope].douyinPkg.length;
+        var scope = aiDyPkgScope;
+        closeAiDyPkg();
+        renderAiChips(scope);
+        showAiToast(n ? '已选择 ' + n + ' 个抖音号包' : '已清空抖音号包');
+      }
+
+      /* ---- 保存校验（全域投放）：抖音号 → 全域ROI系数 → 日预算 → 项目下素材数 → 天数 → 时段 ---- */
+      function validateAiGlobal() {
+        var key = aiDyScopeMap.global === 'custom' ? 'douyin' : 'douyinPkg';
+        if (!aiResState.global[key].length) {
+          markAiRowError('ai-row-dy', true);
+          return { ok: false, msg: aiDyScopeMap.global === 'custom' ? '请选择抖音号（项目）' : '请选择抖音号包' };
+        }
+        markAiRowError('ai-row-dy', false);
+
+        var roi = parseFloat(document.getElementById('aiRoi').value);
+        var badRoi = !(roi > 0);
+        markAiRowError('ai-row-roi', badRoi);
+        if (badRoi) return { ok: false, msg: '请输入大于 0 的全域ROI系数', focus: 'aiRoi' };
+
+        var budget = parseFloat(document.getElementById('aiBudget').value);
+        var badBudget = !(budget > 0);
+        markAiRowError('ai-row-budget', badBudget);
+        if (badBudget) return { ok: false, msg: '请输入大于 0 的日预算', focus: 'aiBudget' };
+
+        if (aiMatV === 'unified') {
+          var mat = parseInt(document.getElementById('aiMatCount').value, 10);
+          if (!mat || mat < 1) {
+            markAiRowError('ai-row-mat', true);
+            return { ok: false, msg: '「项目统一」时项目下素材数必填，请输入正整数（默认100）', focus: 'aiMatCount' };
+          }
+        }
+        markAiRowError('ai-row-mat', false);
+
+        if (aiSegValues.aiDays === 'custom') {
+          var d = parseInt(document.getElementById('aiDays').value, 10);
+          if (!(d > 0)) {
+            markAiRowError('ai-row-days', true);
+            return { ok: false, msg: '请输入大于 0 的投放天数', focus: 'aiDays' };
+          }
+        }
+        markAiRowError('ai-row-days', false);
+
+        if (aiSegValues.aiPeriod === 'custom') {
+          var s = document.getElementById('aiPeriodStart').value;
+          var e = document.getElementById('aiPeriodEnd').value;
+          if (!s || !e) {
+            markAiRowError('ai-row-period', true);
+            return { ok: false, msg: '请选择完整的投放时段' };
+          }
+        }
+        markAiRowError('ai-row-period', false);
+        return { ok: true };
+      }
+
+      function buildAiGlobalSummary() {
+        var revTxt = aiSegValues.aiRevenue === 'iap' ? '用户付费（IAP）' : '混合投放（IAP+IAA）';
+        var epTxt = aiSegValues.aiRevenue === 'iap' ? '' : ' · 起始 ' + document.getElementById('aiEpisode').value;
+        var dayTxt = aiSegValues.aiDays === 'custom' ? '投放 ' + document.getElementById('aiDays').value + ' 天' : '天数不限';
+        var periodTxt = aiSegValues.aiPeriod === 'custom'
+          ? '时段 ' + document.getElementById('aiPeriodStart').value + '-' + document.getElementById('aiPeriodEnd').value
+          : '时段不限';
+        return '配置已保存：' + revTxt
+          + ' · ROI ' + document.getElementById('aiRoi').value
+          + ' · 日预算 ' + document.getElementById('aiBudget').value + ' 元'
+          + epTxt + ' · ' + dayTxt + ' · ' + periodTxt
+          + ' · AIGC素材' + (aiAigcOn ? '开' : '关');
+      }
+
+      /* ---- 素材上传详情弹窗（项目页 D1 / 素材更新明细 D2） ---- */
+      function openAiMaterialUpload(mode, idx) {
+        var row = mode === 'project' ? AI_PROJECT_ROWS[idx] : AI_MATERIAL_ROWS[idx];
+        if (!row) return;
+        var filterRow = document.getElementById('ai-upload-filter');
+        var pager = document.getElementById('ai-upload-pager');
+        var colIdx = document.getElementById('ai-upload-col-idx');
+        aiUploadState.mode = mode;
+        aiUploadState.idx = idx;
+        aiUploadState.page = 1;
+        aiUploadState.status = 'all';
+        document.getElementById('ai-upload-status').value = 'all';
+
+        var items = [];
+        var total = row.wait + row.ok + row.fail;
+        for (var i = 0; i < total; i++) {
+          var preset = AI_UPLOAD_PRESET[i];
+          var status;
+          if (i >= total - row.wait) status = 'pending';
+          else if (i >= total - row.wait - row.fail) status = 'fail';
+          else status = 'success';
+          items.push({
+            id: preset ? preset.id : String(6643836741 - i),
+            name: preset ? preset.name : 'AI二创素材-' + (i + 1) + '.mp4',
+            mid: preset ? preset.mid : String(1406535 + i * 37),
+            status: status
+          });
+        }
+        aiUploadState.all = items;
+
+        if (mode === 'project') {
+          document.getElementById('ai-upload-title').textContent = row.exec + '+' + row.proj + '—素材上传详情';
+          document.getElementById('ai-upload-summary').innerHTML =
+            '预计上传总数 <span class="cnt-blue">' + total + '</span>'
+            + ' · 待上传 <span class="cnt-yellow">' + row.wait + '</span>'
+            + ' · 成功 <span class="cnt-green">' + row.ok + '</span>'
+            + ' · 失败 <span class="cnt-red">' + row.fail + '</span>';
+          filterRow.style.display = 'flex';
+          pager.style.display = 'flex';
+          colIdx.textContent = 'ID';
+        } else {
+          document.getElementById('ai-upload-title').textContent = row.exec + '- ' + row.proj + '-素材上传详情';
+          document.getElementById('ai-upload-summary').innerHTML = '统计上传总数: <b id="ai-upload-total">' + total + '</b>';
+          filterRow.style.display = 'none';
+          pager.style.display = 'none';
+          colIdx.textContent = '序列';
+        }
+        renderAiUploadTable();
+        document.getElementById('ai-upload-overlay').classList.add('open');
+        document.getElementById('ai-upload-modal').classList.add('open');
+      }
+
+      function renderAiUploadTable() {
+        var isProject = aiUploadState.mode === 'project';
+        var st = document.getElementById('ai-upload-status').value;
+        var rows = aiUploadState.all.filter(function (it) { return st === 'all' || it.status === st; });
+        var totalPage = Math.max(1, Math.ceil(rows.length / aiUploadState.size));
+        if (aiUploadState.page > totalPage) aiUploadState.page = 1;
+        var pageRows = isProject ? rows.slice((aiUploadState.page - 1) * aiUploadState.size, aiUploadState.page * aiUploadState.size) : rows;
+        var statusMap = {
+          success: ['ok', '成功'],
+          pending: ['wait', '待上传'],
+          fail: ['fail', '失败']
+        };
+        document.getElementById('ai-upload-tbody').innerHTML = pageRows.length ? pageRows.map(function (it, i) {
+          var s = statusMap[it.status];
+          var nameCell = isProject
+            ? it.name + '<div style="font-size:12px;color:var(--color-text-tertiary);">素材ID:' + it.id + '</div>'
+            : it.name + '<div style="font-size:12px;color:var(--color-text-tertiary);">素材ID:' + it.id + ' · 巨量ID:' + it.mid + '</div>';
+          return '<tr><td>' + (isProject ? it.id : (i + 1)) + '</td><td>' + nameCell + '</td>'
+            + '<td><span class="ai-upload-status"><span class="ai-upload-dot ' + s[0] + '"></span>' + s[1] + '</span></td></tr>';
+        }).join('') : '<tr><td colspan="3" style="padding:24px 0;text-align:center;color:var(--color-text-tertiary);">暂无数据</td></tr>';
+
+        if (isProject) {
+          document.getElementById('ai-upload-pager').innerHTML =
+            '<span>共 ' + rows.length + ' 条</span>'
+            + '<span class="pagination-pages">'
+            + '<button class="page-btn" onclick="aiUploadGo(' + (aiUploadState.page - 1) + ')">&lt;</button>'
+            + '<button class="page-btn active">' + aiUploadState.page + '</button>'
+            + '<button class="page-btn" onclick="aiUploadGo(' + (aiUploadState.page + 1) + ')">&gt;</button>'
+            + '</span><span>20 条/页</span>';
+        }
+      }
+
+      function aiUploadGo(p) {
+        var st = document.getElementById('ai-upload-status').value;
+        var rows = aiUploadState.all.filter(function (it) { return st === 'all' || it.status === st; });
+        var totalPage = Math.max(1, Math.ceil(rows.length / aiUploadState.size));
+        aiUploadState.page = Math.min(Math.max(1, p), totalPage);
+        renderAiUploadTable();
+        var wrap = document.querySelector('#ai-upload-modal .ai-upload-table-wrap');
+        if (wrap) wrap.scrollTop = 0;
+      }
+
+      function closeAiMaterialUpload() {
+        document.getElementById('ai-upload-overlay').classList.remove('open');
+        document.getElementById('ai-upload-modal').classList.remove('open');
+      }
+
+      /* ---- 初始化：全域投放面板 + 标准投放四模式的抖音号范围/投放账户 ---- */
+      function initAiGlobalPane() {
+        renderAiExecCards();
+        syncAiExecRule();
+        syncAiMatRule();
+        aiSegValues.aiRevenue = 'mix';
+        aiSegValues.aiCopy = 'all';
+        aiSegValues.aiStartDate = 'today';
+        aiSegValues.aiDays = 'unlimited';
+        aiSegValues.aiPeriod = 'unlimited';
+        syncAiRevenue();
+        syncAiDays();
+        syncAiPeriod();
+        mountAiStdResBlocks();
+        syncAiDyScope('global');
+        document.getElementById('aiRoi').value = '1.03';
+        document.getElementById('aiBudget').value = '99999';
+        var sel = document.getElementById('ai-pkg-creator');
+        if (sel && sel.options.length <= 1) {
+          AI_PKG_CREATORS.forEach(function (c) {
+            var o = document.createElement('option');
+            o.value = c;
+            o.textContent = c;
+            sel.appendChild(o);
+          });
+        }
+      }
+      initAiGlobalPane();
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+          closeAiResPicker();
+          closeAiDyPkg();
+          closeAiMaterialUpload();
+        }
+      });
+
       function submitAiTask() {
         var errors = [];
         var firstErrorPane = null;
@@ -4225,14 +5829,27 @@
           alert('请完善以下必填项：\n· ' + errors.join('\n· '));
           return;
         }
-        alert('保存成功');
+        /* 全域投放（R3）配置校验：抖音号 → 全域ROI系数 → 日预算 → 项目下素材数 → 投放天数 → 投放时段 */
+        var globalCheck = validateAiGlobal();
+        if (!globalCheck.ok) {
+          switchAiTaskDrawerTab('global');
+          showAiToast(globalCheck.msg);
+          if (globalCheck.focus) {
+            var globalFocus = document.getElementById(globalCheck.focus);
+            if (globalFocus) globalFocus.focus();
+          }
+          return;
+        }
+        showAiToast(buildAiGlobalSummary());
         closeAiTaskDrawer();
       }
 
-      /* 执行日志抽屉 */
-      function openAiTaskLogDrawer() {
+      /* 执行日志抽屉（任务列表 / 短剧任务共用；title 可选，传入后覆盖抽屉标题） */
+      function openAiTaskLogDrawer(title) {
+        if (title) document.getElementById('ai-task-log-title').textContent = title;
         document.getElementById('ai-task-log-overlay').classList.add('open');
         document.getElementById('ai-task-log-drawer').classList.add('open');
+        switchAiLogTab('standard');
         switchAiLogSubTab('stable-pay');
       }
 
@@ -4241,9 +5858,21 @@
         document.getElementById('ai-task-log-drawer').classList.remove('open');
       }
 
-      /* 任务修改日志抽屉 */
-      function openAiModifyLogDrawer(taskName, taskId) {
+      /*
+       * 修改日志抽屉（任务列表 / 短剧任务共用）
+       * scope：task（任务修改日志，默认）/ tested / testing / pending / untested（短剧任务各测出状态）
+       */
+      function openAiModifyLogDrawer(taskName, taskId, scope) {
         document.getElementById('ai-modify-log-title').textContent = (taskName ? taskName : '任务') + '-修改日志';
+        var key = scope || 'task';
+        var scopes = ['task', 'tested', 'testing', 'pending', 'untested'];
+        var counts = { task: 2, tested: 3, testing: 1, pending: 1, untested: 3 };
+        scopes.forEach(function (name) {
+          var body = document.getElementById('ai-modify-log-body-' + name);
+          if (body) body.style.display = name === key ? '' : 'none';
+        });
+        var cnt = document.getElementById('ai-modify-log-count');
+        if (cnt) cnt.textContent = '共 ' + (counts[key] || 0) + ' 条';
         document.getElementById('ai-modify-log-overlay').classList.add('open');
         document.getElementById('ai-modify-log-drawer').classList.add('open');
       }

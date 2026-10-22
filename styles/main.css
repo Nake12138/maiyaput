@@ -3600,3 +3600,507 @@ body {
 #ai-task-drawer .mode-dot.off {
   background: #c0c4cc;
 }
+
+/* ============ 短剧任务开关 ============ */
+.drama-switch-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.drama-switch-text {
+  font-size: 12px;
+  color: var(--color-success);
+}
+
+.drama-switch-text.off {
+  color: var(--color-text-tertiary);
+}
+
+.toggle-switch.is-disabled .toggle-slider {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============ 轻提示 ============ */
+.ai-toast {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 560px;
+  background: rgba(0, 0, 0, 0.82);
+  color: #fff;
+  font-size: 13px;
+  line-height: 1.5;
+  padding: 10px 16px;
+  border-radius: 4px;
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.ai-toast.show {
+  opacity: 1;
+}
+
+.drama-switch-tip {
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+  background: #f5f7fa;
+  border-left: 3px solid var(--color-info);
+  border-radius: 2px;
+}
+
+/* ============================================================
+   AI素材自动化任务 · 全域投放（R3）
+   来源：飞书《测剧自动化「全域投放（R3）」模块 PRD v1.3》配套原型
+   —— 任务抽屉配置面板 / 素材更新明细页 / 资源选择弹窗
+   ============================================================ */
+
+/* ---- 卡片选择：执行类型（3 选 1） / 素材分配方式（2 选 1） ---- */
+#ai-task-drawer .ai-card-group {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+#ai-task-drawer .ai-card-group.cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+#ai-task-drawer .ai-card {
+  position: relative;
+  padding: 10px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-white);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+#ai-task-drawer .ai-card:hover {
+  border-color: #a8ccff;
+}
+#ai-task-drawer .ai-card.on {
+  border-color: var(--color-info);
+  background: #f2f8ff;
+}
+#ai-task-drawer .ai-card-t {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  line-height: 1.4;
+}
+#ai-task-drawer .ai-card-ck {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  border: 1px solid #c9ccd4;
+  border-radius: 3px;
+  background: var(--color-white);
+  color: transparent;
+  font-size: 10px;
+  line-height: 12px;
+  text-align: center;
+}
+#ai-task-drawer .ai-card.on .ai-card-ck {
+  background: var(--color-info);
+  border-color: var(--color-info);
+  color: #fff;
+}
+#ai-task-drawer .ai-card-d {
+  margin-top: 5px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--color-text-tertiary);
+}
+
+/* ---- 已选资源标签（抖音号 / 主体包 / 应用包 / 账户包） ---- */
+#ai-task-drawer .ai-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+#ai-task-drawer .ai-chips.flat {
+  margin-top: 0;
+  align-items: center;
+}
+#ai-task-drawer .ai-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 300px;
+  padding: 2px 8px;
+  border: 1px solid #d6e6ff;
+  border-radius: var(--radius-sm);
+  background: #f2f8ff;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--color-text-secondary);
+}
+#ai-task-drawer .ai-chip .nm {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#ai-task-drawer .ai-chip .x {
+  flex: none;
+  cursor: pointer;
+  color: var(--color-text-tertiary);
+}
+#ai-task-drawer .ai-chip .x:hover {
+  color: var(--color-error);
+}
+
+/* ---- 字段提示 / 校验错误态 ---- */
+#ai-task-drawer .ai-field-hint {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--color-text-tertiary);
+}
+#ai-task-drawer .ai-field-err {
+  display: none;
+  margin-top: 4px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--color-error);
+}
+#ai-task-drawer .form-row.is-error .ai-field-err {
+  display: block;
+}
+#ai-task-drawer .form-row.is-error .form-input {
+  border-color: var(--color-error);
+}
+#ai-task-drawer .ai-inline-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+#ai-task-drawer .ai-inline-field .form-input {
+  flex: 1;
+  min-width: 140px;
+}
+
+/* ---- 抽屉页脚说明 ---- */
+#ai-task-drawer .ai-drawer-foot-tip {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--color-text-tertiary);
+}
+
+/* ---- 资源选择弹窗（抖音号 / 主体包 / 应用包 / 账户包） ---- */
+.ai-pick-search {
+  width: 100%;
+}
+.ai-pick-list {
+  max-height: 300px;
+  overflow-y: auto;
+  margin-top: 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+.ai-pick-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--color-border-light);
+}
+.ai-pick-item:last-child {
+  border-bottom: none;
+}
+.ai-pick-item:hover {
+  background: var(--color-bg-hover);
+}
+.ai-pick-item .ck {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  border: 1px solid #c9ccd4;
+  border-radius: 3px;
+  color: transparent;
+  font-size: 10px;
+  line-height: 12px;
+  text-align: center;
+}
+.ai-pick-item.on .ck {
+  background: var(--color-info);
+  border-color: var(--color-info);
+  color: #fff;
+}
+.ai-pick-item .nm {
+  color: var(--color-text-primary);
+}
+.ai-pick-item .ds {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--color-text-tertiary);
+}
+.ai-pick-empty {
+  padding: 24px 0;
+  text-align: center;
+  font-size: 13px;
+  color: var(--color-text-tertiary);
+}
+
+/* ---- 抖音号包 · 表格选择器 ---- */
+.ai-pkg-modal .modal-card {
+  width: min(1000px, calc(100vw - 40px));
+}
+.ai-pkg-filter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.ai-pkg-meta {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+.ai-pkg-meta b {
+  color: var(--color-info);
+}
+.ai-pkg-pager {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-top: 12px;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+.ai-pkg-pager .pg2 {
+  min-width: 28px;
+  height: 28px;
+  padding: 0 6px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-white);
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+}
+.ai-pkg-pager .pg2:hover {
+  border-color: var(--color-info);
+  color: var(--color-info);
+}
+.ai-pkg-pager .pg2.on {
+  border-color: var(--color-info);
+  background: var(--color-info);
+  color: #fff;
+}
+.ai-pkg-pager .pg2[disabled] {
+  color: var(--color-text-tertiary);
+  cursor: not-allowed;
+  border-color: var(--color-border);
+  background: var(--color-bg-soft);
+}
+.ai-pkg-pager .pg2.dots {
+  border: none;
+  background: transparent;
+  cursor: default;
+}
+.ai-pkg-jump {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 4px;
+}
+.ai-pkg-jump input {
+  width: 48px;
+  height: 28px;
+  padding: 0 6px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  text-align: center;
+}
+.ai-ck2 {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 1px solid #c9ccd4;
+  border-radius: 3px;
+  color: transparent;
+  font-size: 10px;
+  line-height: 12px;
+  text-align: center;
+  cursor: pointer;
+}
+.ai-ck2.on {
+  background: var(--color-info);
+  border-color: var(--color-info);
+  color: #fff;
+}
+.ai-pkg-empty td {
+  padding: 32px 0;
+  text-align: center;
+  color: var(--color-text-tertiary);
+}
+
+/* ---- 素材更新明细 · 素材量单元格 ---- */
+.ai-material-cell {
+  cursor: pointer;
+}
+.ai-material-cell:hover .ai-material-submit {
+  text-decoration: underline;
+}
+.ai-material-submit {
+  color: var(--color-text-secondary);
+}
+.ai-material-stat {
+  margin-top: 2px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--color-text-tertiary);
+}
+.ai-material-stat .wait {
+  color: var(--color-warning);
+}
+.ai-material-stat .ok {
+  color: var(--color-success);
+}
+.ai-material-stat .fail {
+  color: var(--color-error);
+}
+.ai-update-warn {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radius-circle);
+  background: var(--color-warning);
+  color: #fff;
+  font-size: 11px;
+  font-style: normal;
+  line-height: 14px;
+  text-align: center;
+}
+
+/* ---- 素材上传详情弹窗 ---- */
+.ai-upload-modal .modal-card {
+  width: min(720px, calc(100vw - 40px));
+}
+.ai-upload-summary {
+  margin-bottom: 12px;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+.ai-upload-summary b {
+  color: var(--color-info);
+}
+.ai-upload-table-wrap {
+  max-height: 380px;
+  overflow-y: auto;
+}
+.ai-upload-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.ai-upload-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-circle);
+  background: var(--color-warning);
+  animation: ai-upload-pulse 1.2s ease-in-out infinite;
+}
+.ai-upload-dot.ok {
+  background: var(--color-success);
+  animation: none;
+}
+.ai-upload-dot.fail {
+  background: var(--color-error);
+  animation: none;
+}
+.ai-upload-dot.wait {
+  background: var(--color-warning);
+}
+@keyframes ai-upload-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(0.75);
+  }
+}
+
+/* ---- 执行状态（状态点 + 文案） ---- */
+.ai-exec-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+.ai-exec-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-circle);
+  background: var(--color-info);
+  flex: none;
+}
+.ai-exec-dot.uploading {
+  background: var(--color-info);
+  animation: ai-upload-pulse 1.2s ease-in-out infinite;
+}
+.ai-exec-dot.success {
+  background: var(--color-success);
+}
+.ai-exec-dot.fail {
+  background: var(--color-error);
+}
+
+/* ---- 素材上传详情弹窗 · 汇总与筛选 ---- */
+.ai-upload-summary .cnt-blue {
+  color: var(--color-info);
+  font-weight: 600;
+}
+.ai-upload-summary .cnt-yellow {
+  color: var(--color-warning);
+  font-weight: 600;
+}
+.ai-upload-summary .cnt-green {
+  color: var(--color-success);
+  font-weight: 600;
+}
+.ai-upload-summary .cnt-red {
+  color: var(--color-error);
+  font-weight: 600;
+}
+.ai-upload-filter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.ai-upload-filter .filter-select {
+  width: 160px;
+}
+.ai-upload-pager {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 12px;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+.ai-upload-pager .pagination-pages {
+  display: flex;
+  gap: 4px;
+}
