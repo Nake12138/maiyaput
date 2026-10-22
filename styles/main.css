@@ -4104,3 +4104,20 @@ body {
   display: flex;
   gap: 4px;
 }
+
+/* 标准投放挂载区块（抖音号范围/投放账户）：末尾与下一模块保持相同间距 */
+#ai-task-drawer .ai-std-extra-slot > .ai-schedule-section:last-child {
+  margin-bottom: 12px;
+}
+
+/* 全域投放模式启用开关：关闭时置灰面板内容 */
+#ai-task-drawer .ai-drawer-pane.mode-disabled > *:not(.ai-mode-enable) {
+  opacity: 0.45;
+}
+
+/* 抽屉页签上的模式开启数汇总（如 3/4） */
+#ai-task-drawer .ai-tab-mode-count {
+  font-size: 12px;
+  color: var(--color-text-tertiary);
+  margin-left: 6px;
+}

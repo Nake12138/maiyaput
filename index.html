@@ -2874,8 +2874,8 @@
                   </div>
 
                   <div class="tabs" id="ai-task-drawer-tabs" style="margin: 0 -24px 16px; padding: 0 24px; gap: 36px;">
-                    <button class="tab active" style="padding-left: 0;" onclick="switchAiTaskDrawerTab('standard')">标准投放</button>
-                    <button class="tab" onclick="switchAiTaskDrawerTab('global')">全域投放</button>
+                    <button class="tab active" style="padding-left: 0;" onclick="switchAiTaskDrawerTab('standard')">标准投放<span class="ai-tab-mode-count" id="ai-std-mode-count">4/4</span></button>
+                    <button class="tab" onclick="switchAiTaskDrawerTab('global')">全域投放<span class="ai-tab-mode-count" id="ai-global-mode-count">1/1</span></button>
                     <button class="tab" onclick="switchAiTaskDrawerTab('loss')">控损管理</button>
                   </div>
 
@@ -2938,7 +2938,7 @@
                       </div>
                       <div class="ai-std-extra-slot"></div>
                       <div class="ai-schedule-section">
-                        <h4 class="form-section-title">投放配置</h4>
+                        <h4 class="form-section-title"><span class="tip-icon" data-tip="端原生付费-稳定成本：优化目标：付费；深度优化目标：如果填写ROI系数，深度优化目标为付费ROI，不填写则没有深度优化目标">?</span>投放配置</h4>
                         <div class="form-row">
                           <div class="form-item">
                             <label class="form-label"><span class="tip-icon" data-tip="如果填写ROI系数，深度优化目标为 付费ROI，不填写则没有 深度优化目标">?</span> ROI系数</label>
@@ -2955,6 +2955,15 @@
                           <div class="form-item">
                             <label class="form-label"><span class="required-star">*</span> 日预算</label>
                             <input type="text" class="form-input" placeholder="请输入" />
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-item" style="flex: 1;">
+                            <label class="form-label">文案库范围</label>
+                            <div class="segmented-control" data-seg="aiCopy|stable-pay">
+                              <button class="segmented-item active" type="button" data-v="all" onclick="setAiSeg(this)">不限</button>
+                              <button class="segmented-item" type="button" data-v="mine" onclick="setAiSeg(this)">仅本人创建</button>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -3038,7 +3047,7 @@
                       </div>
                       <div class="ai-std-extra-slot"></div>
                       <div class="ai-schedule-section">
-                        <h4 class="form-section-title">投放配置</h4>
+                        <h4 class="form-section-title"><span class="tip-icon" data-tip="端原生IAA-稳定成本：优化目标：激活；深度优化目标：广告变现ROI">?</span>投放配置</h4>
                         <div class="form-row">
                           <div class="form-item">
                             <label class="form-label"><span class="required-star">*</span> ROI系数</label>
@@ -3049,6 +3058,15 @@
                           <div class="form-item">
                             <label class="form-label"><span class="required-star">*</span> 日预算</label>
                             <input type="text" class="form-input" placeholder="请输入" />
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-item" style="flex: 1;">
+                            <label class="form-label">文案库范围</label>
+                            <div class="segmented-control" data-seg="aiCopy|stable-iaa">
+                              <button class="segmented-item active" type="button" data-v="all" onclick="setAiSeg(this)">不限</button>
+                              <button class="segmented-item" type="button" data-v="mine" onclick="setAiSeg(this)">仅本人创建</button>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -3132,7 +3150,7 @@
                       </div>
                       <div class="ai-std-extra-slot"></div>
                       <div class="ai-schedule-section">
-                        <h4 class="form-section-title">投放配置</h4>
+                        <h4 class="form-section-title"><span class="tip-icon" data-tip="端原生付费-最大转化：优化目标：付费；深度优化目标：用户选择为无或付费ROI">?</span>投放配置</h4>
                         <div class="form-row">
                           <div class="form-item">
                             <label class="form-label">深度优化目标</label>
@@ -3146,6 +3164,15 @@
                           <div class="form-item">
                             <label class="form-label"><span class="required-star">*</span> 日预算</label>
                             <input type="text" class="form-input" value="100.00" style="color: var(--color-error);" />
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-item" style="flex: 1;">
+                            <label class="form-label">文案库范围</label>
+                            <div class="segmented-control" data-seg="aiCopy|max-pay">
+                              <button class="segmented-item active" type="button" data-v="all" onclick="setAiSeg(this)">不限</button>
+                              <button class="segmented-item" type="button" data-v="mine" onclick="setAiSeg(this)">仅本人创建</button>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -3229,11 +3256,20 @@
                       </div>
                       <div class="ai-std-extra-slot"></div>
                       <div class="ai-schedule-section">
-                        <h4 class="form-section-title">投放配置</h4>
+                        <h4 class="form-section-title"><span class="tip-icon" data-tip="端原生IAA-最大转化：优化目标：激活；深度优化目标：无">?</span>投放配置</h4>
                         <div class="form-row">
                           <div class="form-item">
                             <label class="form-label"><span class="required-star">*</span> <span class="tip-icon" data-tip="最大转化-IAA 日预算固定为 100，不支持修改">?</span> 日预算</label>
                             <input type="text" class="form-input" value="100" disabled />
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-item" style="flex: 1;">
+                            <label class="form-label">文案库范围</label>
+                            <div class="segmented-control" data-seg="aiCopy|max-iaa">
+                              <button class="segmented-item active" type="button" data-v="all" onclick="setAiSeg(this)">不限</button>
+                              <button class="segmented-item" type="button" data-v="mine" onclick="setAiSeg(this)">仅本人创建</button>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -3271,6 +3307,13 @@
                   </div>
 
                   <div id="ai-drawer-global" class="ai-drawer-pane" style="display: none;">
+                    <div class="ai-mode-enable">
+                      <span>启用该模式投放</span>
+                      <label class="toggle-switch">
+                        <input type="checkbox" checked onchange="onAiGlobalModeToggle(this)" />
+                        <span class="toggle-slider"></span>
+                      </label>
+                    </div>
 
                     <!-- 区块一：执行设置 -->
                     <div class="ai-schedule-section">
@@ -5093,6 +5136,30 @@
         pane.classList.toggle('mode-disabled', !enabled);
         var dot = document.getElementById('ai-mode-dot-' + pane.getAttribute('data-mode'));
         if (dot) dot.classList.toggle('off', !enabled);
+        updateAiModeCounts();
+      }
+
+      /* 全域投放启用开关：功能与样式同标准投放四种模式 */
+      function onAiGlobalModeToggle(inputEl) {
+        var pane = document.getElementById('ai-drawer-global');
+        if (!pane) return;
+        pane.classList.toggle('mode-disabled', !inputEl.checked);
+        updateAiModeCounts();
+      }
+
+      /* 抽屉页签汇总各投放模式的开启状态：标准投放 n/4、全域投放 n/1 */
+      function updateAiModeCounts() {
+        var enabled = 0;
+        AI_STD_MODES.forEach(function (mode) {
+          var pane = document.getElementById('ai-std-' + mode);
+          var toggle = pane ? pane.querySelector('.ai-mode-enable input') : null;
+          if (!toggle || toggle.checked) enabled++;
+        });
+        var stdEl = document.getElementById('ai-std-mode-count');
+        if (stdEl) stdEl.textContent = enabled + '/' + AI_STD_MODES.length;
+        var globalToggle = document.querySelector('#ai-drawer-global .ai-mode-enable input');
+        var globalEl = document.getElementById('ai-global-mode-count');
+        if (globalEl) globalEl.textContent = (!globalToggle || globalToggle.checked ? '1' : '0') + '/1';
       }
 
       /* ============================================================
@@ -5784,6 +5851,7 @@
         syncAiPeriod();
         mountAiStdResBlocks();
         syncAiDyScope('global');
+        updateAiModeCounts();
         document.getElementById('aiRoi').value = '1.03';
         document.getElementById('aiBudget').value = '99999';
         var sel = document.getElementById('ai-pkg-creator');
@@ -5829,16 +5897,19 @@
           alert('请完善以下必填项：\n· ' + errors.join('\n· '));
           return;
         }
-        /* 全域投放（R3）配置校验：抖音号 → 全域ROI系数 → 日预算 → 项目下素材数 → 投放天数 → 投放时段 */
-        var globalCheck = validateAiGlobal();
-        if (!globalCheck.ok) {
-          switchAiTaskDrawerTab('global');
-          showAiToast(globalCheck.msg);
-          if (globalCheck.focus) {
-            var globalFocus = document.getElementById(globalCheck.focus);
-            if (globalFocus) globalFocus.focus();
+        /* 全域投放（R3）配置校验（未启用全域投放时跳过）：抖音号 → 全域ROI系数 → 日预算 → 项目下素材数 → 投放天数 → 投放时段 */
+        var globalToggle = document.querySelector('#ai-drawer-global .ai-mode-enable input');
+        if (!globalToggle || globalToggle.checked) {
+          var globalCheck = validateAiGlobal();
+          if (!globalCheck.ok) {
+            switchAiTaskDrawerTab('global');
+            showAiToast(globalCheck.msg);
+            if (globalCheck.focus) {
+              var globalFocus = document.getElementById(globalCheck.focus);
+              if (globalFocus) globalFocus.focus();
+            }
+            return;
           }
-          return;
         }
         showAiToast(buildAiGlobalSummary());
         closeAiTaskDrawer();
