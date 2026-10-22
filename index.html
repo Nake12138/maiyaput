@@ -2863,25 +2863,6 @@
                   <button class="drawer-close" onclick="closeAiTaskDrawer()" style="margin-left: auto;">×</button>
                 </div>
                 <div class="drawer-body">
-                  <!-- 短剧范围：三个模块（标准投放 / 全域投放 / 控损管理）共用，位于页签上方 -->
-                  <div class="ai-schedule-section">
-                    <h4 class="form-section-title">短剧范围</h4>
-
-                    <div style="display: flex; align-items: center; gap: 12px; margin: 16px 0 8px;">
-                      <select class="form-input" style="width: 140px; flex: none;">
-                        <option>短剧标签</option>
-                        <option>剧名</option>
-                      </select>
-                      <select class="form-input" style="width: 140px; flex: none;">
-                        <option selected>包含</option>
-                        <option>不包含</option>
-                      </select>
-                      <input type="text" class="form-input" style="flex: 1;" placeholder="请选择" />
-                    </div>
-                    <span class="link" style="font-size: 13px; display: inline-block; margin-bottom: 8px;" onclick="alert('添加短剧范围')">添加短剧范围</span>
-
-                  </div>
-
                   <div class="tabs" id="ai-task-drawer-tabs" style="margin: 0 -24px 16px; padding: 0 24px; gap: 36px;">
                     <button class="tab active" style="padding-left: 0;" onclick="switchAiTaskDrawerTab('standard')">标准投放<span class="ai-tab-mode-count" id="ai-std-mode-count">4/4</span></button>
                     <button class="tab" onclick="switchAiTaskDrawerTab('global')">全域投放<span class="ai-tab-mode-count" id="ai-global-mode-count">1/1</span></button>
@@ -2976,36 +2957,6 @@
                           </div>
                         </div>
                       </div>
-                      <div class="ai-schedule-section">
-                        <h4 class="form-section-title">项目排期</h4>
-                        <div class="form-row">
-                          <div class="form-item">
-                            <label class="form-label">开投时间</label>
-                            <div class="segmented-control">
-                              <button class="segmented-item active" type="button">今天</button>
-                              <button class="segmented-item" type="button">明天</button>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="form-row">
-                          <div class="form-item">
-                            <label class="form-label"><span class="required-star">*</span> 投放天数</label>
-                            <div class="segmented-control">
-                              <button class="segmented-item active" type="button">不限</button>
-                              <button class="segmented-item" type="button">指定天数</button>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="form-row">
-                          <div class="form-item">
-                            <label class="form-label"><span class="required-star">*</span> 投放时段</label>
-                            <div class="segmented-control">
-                              <button class="segmented-item active" type="button">不限</button>
-                              <button class="segmented-item" type="button">指定时间段</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
                     </div>
 
                     <div id="ai-std-stable-iaa" class="ai-std-pane" data-mode="stable-iaa" style="display: none;">                      <div class="ai-mode-enable">
@@ -3075,36 +3026,6 @@
                             <div class="segmented-control" data-seg="aiCopy|stable-iaa">
                               <button class="segmented-item active" type="button" data-v="all" onclick="setAiSeg(this)">不限</button>
                               <button class="segmented-item" type="button" data-v="mine" onclick="setAiSeg(this)">仅本人创建</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="ai-schedule-section">
-                        <h4 class="form-section-title">项目排期</h4>
-                        <div class="form-row">
-                          <div class="form-item">
-                            <label class="form-label">开投时间</label>
-                            <div class="segmented-control">
-                              <button class="segmented-item active" type="button">今天</button>
-                              <button class="segmented-item" type="button">明天</button>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="form-row">
-                          <div class="form-item">
-                            <label class="form-label"><span class="required-star">*</span> 投放天数</label>
-                            <div class="segmented-control">
-                              <button class="segmented-item active" type="button">不限</button>
-                              <button class="segmented-item" type="button">指定天数</button>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="form-row">
-                          <div class="form-item">
-                            <label class="form-label"><span class="required-star">*</span> 投放时段</label>
-                            <div class="segmented-control">
-                              <button class="segmented-item active" type="button">不限</button>
-                              <button class="segmented-item" type="button">指定时间段</button>
                             </div>
                           </div>
                         </div>
@@ -3185,36 +3106,6 @@
                           </div>
                         </div>
                       </div>
-                      <div class="ai-schedule-section">
-                        <h4 class="form-section-title">项目排期</h4>
-                        <div class="form-row">
-                          <div class="form-item">
-                            <label class="form-label">开投时间</label>
-                            <div class="segmented-control">
-                              <button class="segmented-item active" type="button">今天</button>
-                              <button class="segmented-item" type="button">明天</button>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="form-row">
-                          <div class="form-item">
-                            <label class="form-label"><span class="required-star">*</span> 投放天数</label>
-                            <div class="segmented-control">
-                              <button class="segmented-item active" type="button">不限</button>
-                              <button class="segmented-item" type="button">指定天数</button>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="form-row">
-                          <div class="form-item">
-                            <label class="form-label"><span class="required-star">*</span> 投放时段</label>
-                            <div class="segmented-control">
-                              <button class="segmented-item active" type="button">不限</button>
-                              <button class="segmented-item" type="button">指定时间段</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
                     </div>
 
                     <div id="ai-std-max-iaa" class="ai-std-pane" data-mode="max-iaa" style="display: none;">                      <div class="ai-mode-enable">
@@ -3278,36 +3169,6 @@
                             <div class="segmented-control" data-seg="aiCopy|max-iaa">
                               <button class="segmented-item active" type="button" data-v="all" onclick="setAiSeg(this)">不限</button>
                               <button class="segmented-item" type="button" data-v="mine" onclick="setAiSeg(this)">仅本人创建</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="ai-schedule-section">
-                        <h4 class="form-section-title">项目排期</h4>
-                        <div class="form-row">
-                          <div class="form-item">
-                            <label class="form-label">开投时间</label>
-                            <div class="segmented-control">
-                              <button class="segmented-item active" type="button">今天</button>
-                              <button class="segmented-item" type="button">明天</button>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="form-row">
-                          <div class="form-item">
-                            <label class="form-label"><span class="required-star">*</span> 投放天数</label>
-                            <div class="segmented-control">
-                              <button class="segmented-item active" type="button">不限</button>
-                              <button class="segmented-item" type="button">指定天数</button>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="form-row">
-                          <div class="form-item">
-                            <label class="form-label"><span class="required-star">*</span> 投放时段</label>
-                            <div class="segmented-control">
-                              <button class="segmented-item active" type="button">不限</button>
-                              <button class="segmented-item" type="button">指定时间段</button>
                             </div>
                           </div>
                         </div>
@@ -3494,54 +3355,7 @@
                       </div>
                     </div>
 
-                    <!-- 区块五：项目排期 -->
-                    <div class="ai-schedule-section">
-                      <h4 class="form-section-title">项目排期</h4>
-
-                      <div class="form-row">
-                        <div class="form-item" style="flex: 1;">
-                          <label class="form-label">开始投放时间</label>
-                          <div class="segmented-control" data-seg="aiStartDate">
-                            <button class="segmented-item active" type="button" data-v="today" onclick="setAiSeg(this)">今天</button>
-                            <button class="segmented-item" type="button" data-v="tomorrow" onclick="setAiSeg(this)">明天</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="form-row" id="ai-row-days">
-                        <div class="form-item" style="flex: 1;">
-                          <label class="form-label"><span class="required-star">*</span> 投放天数</label>
-                          <div class="ai-inline-field">
-                            <div class="segmented-control" data-seg="aiDays">
-                              <button class="segmented-item active" type="button" data-v="unlimited" onclick="setAiSeg(this)">不限</button>
-                              <button class="segmented-item" type="button" data-v="custom" onclick="setAiSeg(this)">指定天数</button>
-                            </div>
-                            <input type="number" class="form-input" id="aiDays" min="1" placeholder="请输入天数" style="display: none; max-width: 150px;" oninput="clearAiRowError('ai-row-days')" />
-                          </div>
-                          <div class="ai-field-err">请输入大于 0 的投放天数</div>
-                        </div>
-                      </div>
-
-                      <div class="form-row" id="ai-row-period">
-                        <div class="form-item" style="flex: 1;">
-                          <label class="form-label"><span class="required-star">*</span> 投放时段</label>
-                          <div class="ai-inline-field">
-                            <div class="segmented-control" data-seg="aiPeriod">
-                              <button class="segmented-item active" type="button" data-v="unlimited" onclick="setAiSeg(this)">不限</button>
-                              <button class="segmented-item" type="button" data-v="custom" onclick="setAiSeg(this)">指定时段</button>
-                            </div>
-                            <span id="aiPeriodPick" style="display: none; align-items: center; gap: 6px;">
-                              <input type="time" class="form-input" id="aiPeriodStart" value="00:00" style="max-width: 130px;" oninput="clearAiRowError('ai-row-period')" />
-                              <span>至</span>
-                              <input type="time" class="form-input" id="aiPeriodEnd" value="23:59" style="max-width: 130px;" oninput="clearAiRowError('ai-row-period')" />
-                            </span>
-                          </div>
-                          <div class="ai-field-err">请选择完整的投放时段</div>
-                        </div>
-                      </div>
-
-                      <div class="ai-drawer-foot-tip">接口默认传参：开始投放时间 = 今天 · 投放天数 = 不限 · 投放时段 = 不限</div>
-                    </div>
+                    <div class="ai-drawer-foot-tip">接口默认传参：开始投放时间 = 今天 · 投放天数 = 不限 · 投放时段 = 不限</div>
                   </div>
 
                   <div id="ai-drawer-loss" class="ai-drawer-pane" style="display: none;">
@@ -5449,20 +5263,10 @@
         document.getElementById('ai-row-ep').style.display = aiSegValues.aiRevenue === 'iap' ? 'none' : 'flex';
       }
 
-      function syncAiDays() {
-        var custom = aiSegValues.aiDays === 'custom';
-        document.getElementById('aiDays').style.display = custom ? '' : 'none';
-        if (!custom) document.getElementById('aiDays').value = '';
-      }
+      /* 项目排期模块已去除，接口固定传参：开始投放时间 = 今天 · 投放天数 = 不限 · 投放时段 = 不限 */
+      function syncAiDays() {}
 
-      function syncAiPeriod() {
-        var custom = aiSegValues.aiPeriod === 'custom';
-        document.getElementById('aiPeriodPick').style.display = custom ? 'inline-flex' : 'none';
-        if (!custom) {
-          document.getElementById('aiPeriodStart').value = '00:00';
-          document.getElementById('aiPeriodEnd').value = '23:59';
-        }
-      }
+      function syncAiPeriod() {}
 
       function clearAiRowError(rowId) { markAiRowError(rowId, false); }
 
@@ -5711,34 +5515,15 @@
         }
         markAiRowError('ai-row-mat', false);
 
-        if (aiSegValues.aiDays === 'custom') {
-          var d = parseInt(document.getElementById('aiDays').value, 10);
-          if (!(d > 0)) {
-            markAiRowError('ai-row-days', true);
-            return { ok: false, msg: '请输入大于 0 的投放天数', focus: 'aiDays' };
-          }
-        }
-        markAiRowError('ai-row-days', false);
-
-        if (aiSegValues.aiPeriod === 'custom') {
-          var s = document.getElementById('aiPeriodStart').value;
-          var e = document.getElementById('aiPeriodEnd').value;
-          if (!s || !e) {
-            markAiRowError('ai-row-period', true);
-            return { ok: false, msg: '请选择完整的投放时段' };
-          }
-        }
-        markAiRowError('ai-row-period', false);
+        /* 项目排期字段已去除，不校验：投放天数 / 投放时段固定为不限 */
         return { ok: true };
       }
 
       function buildAiGlobalSummary() {
         var revTxt = aiSegValues.aiRevenue === 'iap' ? '用户付费（IAP）' : '混合投放（IAP+IAA）';
         var epTxt = aiSegValues.aiRevenue === 'iap' ? '' : ' · 起始 ' + document.getElementById('aiEpisode').value;
-        var dayTxt = aiSegValues.aiDays === 'custom' ? '投放 ' + document.getElementById('aiDays').value + ' 天' : '天数不限';
-        var periodTxt = aiSegValues.aiPeriod === 'custom'
-          ? '时段 ' + document.getElementById('aiPeriodStart').value + '-' + document.getElementById('aiPeriodEnd').value
-          : '时段不限';
+        var dayTxt = '天数不限';
+        var periodTxt = '时段不限';
         return '配置已保存：' + revTxt
           + ' · ROI ' + document.getElementById('aiRoi').value
           + ' · 日预算 ' + document.getElementById('aiBudget').value + ' 元'
