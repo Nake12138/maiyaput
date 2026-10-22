@@ -1224,6 +1224,11 @@
                     </select>
                     <input type="text" class="filter-combo-input" placeholder="请输入" />
                   </div>
+                  <select class="filter-select" id="ai-task-creator-filter">
+                    <option value="">请选择创建人</option>
+                    <option value="nake">娜可</option>
+                    <option value="huanxue">还音</option>
+                  </select>
                   <div class="filter-actions">
                     <button class="btn btn-info btn-sm" onclick="searchAiAutoTask()">查询</button>
                     <button class="btn btn-outline btn-sm" onclick="resetAiAutoTaskFilters()">重置</button>
@@ -1241,6 +1246,8 @@
                           <th>短剧数量</th>
                           <th>创建人</th>
                           <th>创建时间</th>
+                          <th>更新人</th>
+                          <th>更新时间 <span class="tip-icon" data-tip="仅记录任务配置的修改；短剧数量因新增短剧自动变化时，不记录更新人与更新时间">?</span></th>
                           <th>操作</th>
                         </tr>
                       </thead>
@@ -1251,11 +1258,30 @@
                           <td><span class="link" onclick="openAiDramaCountModal('任务1')">1</span></td>
                           <td>娜可</td>
                           <td>2026-10-20 10:00:00</td>
+                          <td>还音</td>
+                          <td>2026-10-21 15:30:00</td>
                           <td>
                             <div class="row-actions">
                               <button class="row-action-btn" onclick="openAiTaskDrawer('任务1', '1')">编辑</button>
                               <button class="row-action-btn" onclick="copyAiTask('任务1', '1')">复制</button>
                               <button class="row-action-btn" onclick="openAiModifyLogDrawer('任务1', '1')">日志</button>
+                            </div>
+                          </td>
+                        </tr>
+                        <!-- 任务2：短剧数量因新增短剧自动变化，未修改过任务配置 → 更新人/更新时间不记录 -->
+                        <tr>
+                          <td>2</td>
+                          <td><span class="link" onclick="drillAiTaskToDrama('2')">任务2</span></td>
+                          <td><span class="link" onclick="openAiDramaCountModal('任务2')">2</span></td>
+                          <td>还音</td>
+                          <td>2026-10-19 09:20:00</td>
+                          <td>--</td>
+                          <td>--</td>
+                          <td>
+                            <div class="row-actions">
+                              <button class="row-action-btn" onclick="openAiTaskDrawer('任务2', '2')">编辑</button>
+                              <button class="row-action-btn" onclick="copyAiTask('任务2', '2')">复制</button>
+                              <button class="row-action-btn" onclick="openAiModifyLogDrawer('任务2', '2')">日志</button>
                             </div>
                           </td>
                         </tr>
@@ -4024,6 +4050,8 @@
       function resetAiAutoTaskFilters() {
         var root = document.getElementById('ai-auto-task-task');
         root.querySelectorAll('.filter-combo-input').forEach(function (i) { i.value = ''; });
+        var creator = document.getElementById('ai-task-creator-filter');
+        if (creator) creator.value = '';
       }
 
       function searchAiDramaList() {
