@@ -4986,11 +4986,23 @@
       }
 
       /* ---- 任务模板：状态开关（生效 / 停用）与批量开关 ---- */
+      /* 单个开关：切换前二次确认，取消则回弹为原状态 */
       function toggleAiTaskSwitch(input) {
         var row = input.closest('tr');
         var name = row ? row.querySelector('.link') : null;
         var taskName = name ? name.textContent.trim() : '该任务';
-        showAiToast('任务「' + taskName + '」已' + (input.checked ? '生效' : '停用'));
+        var subject = '任务「' + taskName + '」';
+        if (!confirm(aiTaskSwitchConfirmTip(input.checked ? 'on' : 'off', subject))) {
+          input.checked = !input.checked;
+          return;
+        }
+        showAiToast(subject + '已' + (input.checked ? '生效' : '停用'));
+      }
+
+      /* 二次确认文案（单个 / 批量共用） */
+      function aiTaskSwitchConfirmTip(v, subject) {
+        if (v === 'on') return '确认将' + subject + '置为「生效」？生效后任务将按配置继续自动投放。';
+        return '确认将' + subject + '置为「停用」？停用后任务不再自动投放，已产生的执行记录不受影响。';
       }
 
       function toggleSelectAllAiTaskRows(master) {
@@ -5046,6 +5058,12 @@
 
         if (!targets.length) {
           showAiToast('所选数据的状态已为「' + (isOn ? '生效' : '停用') + '」，无需重复设置');
+          return;
+        }
+
+        /* 批量操作二次确认：取消则保留当前勾选，不做任何变更 */
+        if (!confirm(aiTaskSwitchConfirmTip(isOn ? 'on' : 'off', '选中的 ' + targets.length + ' 个任务模板'))) {
+          showAiToast('已取消批量' + (isOn ? '开启' : '关闭'));
           return;
         }
 
