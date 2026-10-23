@@ -1280,6 +1280,7 @@
                               </label>
                             </div>
                           </td>
+                          <td><span class="link" onclick="drillAiTaskToDrama('1')">任务1</span></td>
                           <td><span class="link" onclick="openAiDramaCountModal('任务1')">1</span></td>
                           <td>娜可</td>
                           <td>2026-10-20 10:00:00</td>
@@ -1305,6 +1306,7 @@
                               </label>
                             </div>
                           </td>
+                          <td><span class="link" onclick="drillAiTaskToDrama('2')">任务2</span></td>
                           <td><span class="link" onclick="openAiDramaCountModal('任务2')">2</span></td>
                           <td>还音</td>
                           <td>2026-10-19 09:20:00</td>
@@ -4864,11 +4866,30 @@
 
       /*
        * 短剧任务开关：控制该短剧任务是否继续执行（继续执行 = 短剧测试 + 新素材投放）
+       * - 开启 / 关闭均需二次确认，取消则开关恢复原状态
        * - 测出：关闭后状态仍为「测出」，但后续产生的新素材不再投放
        * - 测试中：关闭后任务终止，测出状态改为「未测出」，且不可再开启
        * - 未测出：开关默认关闭且禁用，不支持开启
        */
       function toggleAiDramaTask(input) {
+        var row = input.closest('tr');
+        var statusCell = row.querySelector('[data-col="test-status"]');
+        var status = statusCell ? statusCell.textContent.trim() : '';
+        var turningOn = input.checked;
+
+        var cfm = '确认' + (turningOn ? '开启' : '关闭') + '该执行记录？';
+        if (turningOn) {
+          cfm += status === '测出' ? '开启后将继续执行，后续产生的新素材将按所属任务模板配置投放。' : '开启后将继续执行短剧测试。';
+        } else if (status === '测试中') {
+          cfm += '该执行记录将终止，测出状态更新为「未测出」且不再支持开启。';
+        } else {
+          cfm += '关闭后短剧测试与新素材投放将停止，后续产生的新素材不再投放。';
+        }
+        if (!confirm(cfm)) {
+          input.checked = !turningOn; /* 取消则恢复原状态 */
+          return;
+        }
+
         var msg = applyAiDramaSwitch(input, input.checked);
         if (msg) showAiToast((input.checked ? '已开启：' : '已关闭：') + msg);
       }
@@ -4916,7 +4937,7 @@
       /*
        * 执行记录：批量开关（菜单选择 开启 / 关闭）
        * - 未测出的行开关禁用，不参与批量操作，单独计数提示
-       * - 关闭命中「测试中」的行时，先二次确认（该操作不可逆：置为未测出且不可再开启）
+       * - 批量开启 / 关闭均需二次确认；确认文案说明操作影响，关闭命中「测试中」时额外说明不可逆
        */
       /* 批量设置开关菜单：展开 / 收起（点击空白处自动收起） */
       function toggleAiDramaBatchMenu(e) {
@@ -4953,20 +4974,24 @@
           targets.push(sw);
         });
 
-        if (!isOn) {
-          var testingCount = targets.filter(function (sw) {
-            var cell = sw.closest('tr').querySelector('[data-col="test-status"]');
-            return cell && cell.textContent.trim() === '测试中';
-          }).length;
-          if (testingCount && !confirm('选中的数据中有 ' + testingCount + ' 条处于「测试中」，关闭后测出状态将更新为「未测出」且不再支持开启，确认继续？')) {
-            return;
-          }
-        }
-
         if (!targets.length) {
           showAiToast(skip ? '所选 ' + skip + ' 条为「未测出」，不支持设置开关' : '所选数据的开关已为目标状态，无需重复设置');
           return;
         }
+
+        /* 批量开启 / 关闭均需二次确认 */
+        var testingCount = targets.filter(function (sw) {
+          var cell = sw.closest('tr').querySelector('[data-col="test-status"]');
+          return cell && cell.textContent.trim() === '测试中';
+        }).length;
+        var cfm = '确认批量' + (isOn ? '开启' : '关闭') + '选中的 ' + targets.length + ' 条执行记录？';
+        if (isOn) {
+          cfm += '开启后将继续执行短剧测试 / 新素材投放。';
+        } else {
+          cfm += '关闭后短剧测试与新素材投放将停止。';
+          if (testingCount) cfm += '其中 ' + testingCount + ' 条处于「测试中」，关闭后测出状态将更新为「未测出」且不再支持开启。';
+        }
+        if (!confirm(cfm)) return;
 
         targets.forEach(function (sw) {
           sw.checked = isOn;
