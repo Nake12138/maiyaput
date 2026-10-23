@@ -1418,7 +1418,7 @@
                             <span class="link" onclick="drillAiDramaToAccount('5001')">短剧1</span>
                             <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 1001</div>
                           </td>
-                          <td data-task-id="1">
+                          <td>
                             <span>任务1</span>
                             <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 1</div>
                           </td>
@@ -1449,7 +1449,7 @@
                             <span class="link" onclick="drillAiDramaToAccount('5003')">短剧3</span>
                             <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 1003</div>
                           </td>
-                          <td data-task-id="2">
+                          <td>
                             <span>任务2</span>
                             <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 2</div>
                           </td>
@@ -1480,7 +1480,7 @@
                             <span class="link" onclick="drillAiDramaToAccount('5004')">短剧4</span>
                             <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 1004</div>
                           </td>
-                          <td data-task-id="2">
+                          <td>
                             <span>任务2</span>
                             <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 2</div>
                           </td>
@@ -4986,75 +4986,23 @@
       }
 
       /* ---- 任务模板：状态开关（生效 / 停用）与批量开关 ---- */
-      /* 单个开关：切换前二次确认，取消则回弹为原状态；关停时其下执行记录同步关停 */
+      /* 单个开关：切换前二次确认，取消则回弹为原状态 */
       function toggleAiTaskSwitch(input) {
         var row = input.closest('tr');
         var name = row ? row.querySelector('.link') : null;
         var taskName = name ? name.textContent.trim() : '该任务';
-        var taskId = row ? row.children[1].textContent.trim() : '';
         var subject = '任务「' + taskName + '」';
-        var info = input.checked ? null : aiDramaInfoOf(taskId);
-        if (!confirm(aiTaskSwitchConfirmTip(input.checked ? 'on' : 'off', subject, info))) {
+        if (!confirm(aiTaskSwitchConfirmTip(input.checked ? 'on' : 'off', subject))) {
           input.checked = !input.checked;
           return;
         }
-        if (input.checked) {
-          showAiToast(subject + '已生效，任务将按配置继续自动投放');
-          return;
-        }
-        var res = stopAiDramaOfTask(taskId);
-        showAiToast(subject + '已停用：' + aiStopDramaSummary(res));
+        showAiToast(subject + '已' + (input.checked ? '生效' : '停用'));
       }
 
-      /* 任务模板关停涉及的执行记录统计：total=可关停条数，toUntested=其中处于测试中的条数 */
-      function aiDramaInfoOf(taskId) {
-        var total = 0, toUntested = 0;
-        aiLinkedDramaRows(taskId).forEach(function (r) {
-          var sw = r.querySelector('.drama-switch-cell input');
-          if (!sw || sw.disabled) return; /* 已关停或未测出，不重复处理 */
-          total++;
-          var st = r.querySelector('[data-col="test-status"]');
-          if (st && st.textContent.trim() === '测试中') toUntested++;
-        });
-        return { total: total, toUntested: toUntested };
-      }
-
-      /* 任务模板关停 → 其下执行记录全部关停，测试中记录测出状态转为未测出并禁用开关 */
-      function stopAiDramaOfTask(taskId) {
-        var stopped = 0, toUntested = 0;
-        aiLinkedDramaRows(taskId).forEach(function (r) {
-          var sw = r.querySelector('.drama-switch-cell input');
-          if (!sw || sw.disabled) return;
-          stopped++;
-          var st = r.querySelector('[data-col="test-status"]');
-          if (st && st.textContent.trim() === '测试中') toUntested++;
-          sw.checked = false;
-          applyAiDramaSwitch(sw, false);
-        });
-        return { stopped: stopped, toUntested: toUntested };
-      }
-
-      /* 任务模板 ID → 归属于它的执行记录行 */
-      function aiLinkedDramaRows(taskId) {
-        var rows = [];
-        if (!taskId) return rows;
-        document.querySelectorAll('#ai-auto-task-drama tbody tr').forEach(function (r) {
-          if (r.querySelector('[data-task-id="' + taskId + '"]')) rows.push(r);
-        });
-        return rows;
-      }
-
-      /* 二次确认文案（单个 / 批量共用，info 参数暂不参与文案） */
-      function aiTaskSwitchConfirmTip(v, subject, info) {
+      /* 二次确认文案（单个 / 批量共用） */
+      function aiTaskSwitchConfirmTip(v, subject) {
         if (v === 'on') return '确认将' + subject + '置为「生效」？生效后任务将按配置继续自动投放。';
         return '确认将' + subject + '置为「停用」？停用后任务不再自动投放，已产生的执行记录不受影响。';
-      }
-
-      function aiStopDramaSummary(res) {
-        if (!res.stopped) return '其下没有需要关停的执行记录';
-        var msg = '其下 ' + res.stopped + ' 条执行记录已同步关停';
-        if (res.toUntested) msg += '，其中 ' + res.toUntested + ' 条「测试中」记录测出状态已流转更新为「未测出」且不再支持开启';
-        return msg;
       }
 
       function toggleSelectAllAiTaskRows(master) {
@@ -5119,20 +5067,8 @@
           return;
         }
 
-        /* 批量关停：各任务模板下的执行记录同步关停，测出状态按规则流转 */
-        var res = { stopped: 0, toUntested: 0 };
-        targets.forEach(function (sw) {
-          sw.checked = isOn;
-          if (isOn) return;
-          var row = sw.closest('tr');
-          var taskId = row ? row.children[1].textContent.trim() : '';
-          var r = stopAiDramaOfTask(taskId);
-          res.stopped += r.stopped;
-          res.toUntested += r.toUntested;
-        });
-        var msg = '已批量' + (isOn ? '开启' : '关闭') + ' ' + targets.length + ' 条';
-        if (!isOn && res.stopped) msg += '：' + aiStopDramaSummary(res);
-        showAiToast(msg);
+        targets.forEach(function (sw) { sw.checked = isOn; });
+        showAiToast('已批量' + (isOn ? '开启' : '关闭') + ' ' + targets.length + ' 条');
         clearAiTaskSelection();
       }
 
