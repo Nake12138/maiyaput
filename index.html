@@ -2908,14 +2908,14 @@
                   <button class="drawer-close" onclick="closeAiTaskDrawer()" style="margin-left: auto;">×</button>
                 </div>
                 <div class="drawer-body">
-                  <!-- 基本信息：任务名称（自定义）+ 状态（生效 / 停用），三个模块共用 -->
+                  <!-- 基本信息：任务模板名称（自定义）+ 状态（生效 / 停用），三个模块共用 -->
                   <div class="ai-schedule-section">
                     <h4 class="form-section-title">基本信息</h4>
                     <div class="form-row" id="ai-row-task-name">
                       <div class="form-item">
-                        <label class="form-label"><span class="required-star">*</span> 任务名称</label>
-                        <input type="text" class="form-input" id="aiTaskName" maxlength="20" placeholder="请输入任务名称" oninput="clearAiTaskNameErr()" />
-                        <div class="ai-field-err" id="aiTaskNameErr">请输入任务名称</div>
+                        <label class="form-label"><span class="required-star">*</span> 任务模板名称</label>
+                        <input type="text" class="form-input" id="aiTaskName" maxlength="20" placeholder="请输入任务模板名称" oninput="clearAiTaskNameErr()" />
+                        <div class="ai-field-err" id="aiTaskNameErr">请输入任务模板名称</div>
                       </div>
                     </div>
                     <div class="form-row">
@@ -5015,8 +5015,8 @@
       function toggleAiTaskSwitch(input) {
         var row = input.closest('tr');
         var name = row ? row.querySelector('.link') : null;
-        var taskName = name ? name.textContent.trim() : '该任务';
-        var subject = '任务「' + taskName + '」';
+        var taskName = name ? name.textContent.trim() : '该任务模板';
+        var subject = '任务模板「' + taskName + '」';
         if (!confirm(aiTaskSwitchConfirmTip(input.checked ? 'on' : 'off', subject))) {
           input.checked = !input.checked;
           return;
@@ -5115,7 +5115,7 @@
         document.getElementById('ai-task-drawer-title').textContent =
           taskName && taskId ? taskName + '（ID: ' + taskId + '）' : 'AI素材自动化任务';
         switchAiTaskDrawerTab('standard');
-        /* 任务名称：编辑/复制带入原名称，新增时清空待填 */
+        /* 任务模板名称：编辑/复制带入原名称，新增时清空待填 */
         var nameField = document.getElementById('aiTaskName');
         if (nameField) nameField.value = taskName || '';
         clearAiTaskNameErr();
@@ -5948,12 +5948,12 @@
       });
 
       function submitAiTask() {
-        /* 基本信息：任务名称必填 */
+        /* 基本信息：任务模板名称必填 */
         var nameField = document.getElementById('aiTaskName');
         if (nameField && !String(nameField.value).trim()) {
           markAiRowError('ai-row-task-name', true);
           nameField.focus();
-          showAiToast('请输入任务名称');
+          showAiToast('请输入任务模板名称');
           return;
         }
         markAiRowError('ai-row-task-name', false);
