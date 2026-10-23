@@ -1294,17 +1294,22 @@
               <!-- 短剧 Tab -->
               <div id="ai-auto-task-drama" class="tab-content" style="display: none;">
                 <div class="filter-bar">
+                  <!-- 筛选项顺序与表格列顺序保持一致：ID → 开关 → 短剧 → 任务模板 → 测出状态 → 创建人 -->
                   <div class="filter-combo" data-filter-type="drama-task-id">
                     <select class="filter-combo-select">
                       <option>ID</option>
                     </select>
                     <input type="text" class="filter-combo-input" placeholder="请输入" />
                   </div>
+                  <select class="filter-select" id="ai-drama-switch-filter">
+                    <option value="">请选择开关状态</option>
+                    <option value="on">开启</option>
+                    <option value="off">关闭</option>
+                  </select>
                   <div class="filter-combo" data-filter-type="drama-name">
                     <select class="filter-combo-select">
                       <option>短剧名称</option>
                       <option>短剧ID</option>
-                      <option>短剧任务ID</option>
                     </select>
                     <input type="text" class="filter-combo-input" placeholder="请输入" />
                   </div>
@@ -1315,25 +1320,30 @@
                     </select>
                     <input type="text" class="filter-combo-input" placeholder="请输入" />
                   </div>
-                  <select class="filter-select" id="ai-drama-creator-filter">
-                    <option value="">请选择创建人</option>
-                    <option value="nake">娜可</option>
-                    <option value="huanxue">还音</option>
-                  </select>
                   <select class="filter-select" id="ai-drama-status-filter">
                     <option value="">请选择测出状态</option>
                     <option value="testing">测试中</option>
                     <option value="tested">测出</option>
                     <option value="untested">未测出</option>
                   </select>
-                  <select class="filter-select" id="ai-drama-switch-filter">
-                    <option value="">请选择开关状态</option>
-                    <option value="on">开启</option>
-                    <option value="off">关闭</option>
+                  <select class="filter-select" id="ai-drama-creator-filter">
+                    <option value="">请选择创建人</option>
+                    <option value="nake">娜可</option>
+                    <option value="huanxue">还音</option>
                   </select>
                   <div class="filter-actions">
                     <button class="btn btn-info btn-sm" onclick="searchAiDramaList()">查询</button>
                     <button class="btn btn-outline btn-sm" onclick="resetAiDramaFilters()">重置</button>
+                  </div>
+                </div>
+
+                <!-- 批量开关：勾选数据后，点击链接在菜单中选择开启 / 关闭（同标准投放「已选择N个 重试」样式） -->
+                <div class="filter-status drama-batch-bar">
+                  <span>已选择<span class="batch-count" id="aiDramaSelectedCount">0</span>条</span>
+                  <span class="link" onclick="toggleAiDramaBatchMenu(event)">批量开关</span>
+                  <div class="ai-drama-batch-menu" id="aiDramaBatchMenu" style="display: none;">
+                    <div class="batch-menu-item" onclick="batchSetAiDramaSwitch(true)">开启</div>
+                    <div class="batch-menu-item" onclick="batchSetAiDramaSwitch(false)">关闭</div>
                   </div>
                 </div>
 
@@ -1342,6 +1352,7 @@
                     <table class="data-table">
                       <thead>
                         <tr>
+                          <th class="checkbox-col"><input type="checkbox" id="selectAllAiDramaRows" onclick="toggleSelectAllAiDramaRows(this)" title="全选本页" /></th>
                           <th>ID</th>
                           <th>开关</th>
                           <th>短剧</th>
@@ -1360,6 +1371,7 @@
                            2) 3 天测试期内按控损结果回写 → 测出 / 未测出；3 天结束仍未达标 → 未测出 -->
                       <tbody>
                         <tr>
+                          <td><input type="checkbox" class="ai-drama-row-checkbox" onchange="updateAiDramaSelectedCount()" /></td>
                           <td>5001</td>
                           <td>
                             <div class="drama-switch-cell">
@@ -1390,6 +1402,7 @@
                           </td>
                         </tr>
                         <tr>
+                          <td><input type="checkbox" class="ai-drama-row-checkbox" onchange="updateAiDramaSelectedCount()" /></td>
                           <td>5003</td>
                           <td>
                             <div class="drama-switch-cell">
@@ -1420,6 +1433,7 @@
                           </td>
                         </tr>
                         <tr>
+                          <td><input type="checkbox" class="ai-drama-row-checkbox" onchange="updateAiDramaSelectedCount()" /></td>
                           <td>5004</td>
                           <td>
                             <div class="drama-switch-cell">
@@ -4751,6 +4765,7 @@
         if (sw) sw.value = '';
         var creator = document.getElementById('ai-drama-creator-filter');
         if (creator) creator.value = '';
+        clearAiDramaSelection();
       }
 
       /* 任务模板下钻：切换到短剧 Tab 并带入任务模板ID筛选项 */
@@ -4798,28 +4813,120 @@
        * - 未测出：开关默认关闭且禁用，不支持开启
        */
       function toggleAiDramaTask(input) {
+        var msg = applyAiDramaSwitch(input, input.checked);
+        if (msg) showAiToast((input.checked ? '已开启：' : '已关闭：') + msg);
+      }
+
+      /* 应用开关变更并返回提示文案（单行与批量共用） */
+      function applyAiDramaSwitch(input, checked) {
         var row = input.closest('tr');
         var statusCell = row.querySelector('[data-col="test-status"]');
         var status = statusCell ? statusCell.textContent.trim() : '';
 
-        if (!input.checked) {
+        if (!checked) {
           if (status === '测试中') {
             statusCell.innerHTML = '<span class="tag tag-default">未测出</span>';
             input.disabled = true;
             var label = input.closest('.toggle-switch');
             label.classList.add('is-disabled');
             label.title = '未测出状态不支持开启';
-            showAiToast('已关闭：测试中任务终止，测出状态更新为「未测出」，已自动取消该短剧的白名单标签，且不再支持开启');
-          } else if (status === '测出') {
-            showAiToast('已关闭：短剧测试与新素材投放均已停止，后续产生的新素材不再投放');
+            return '测试中任务终止，测出状态更新为「未测出」，已自动取消该短剧的白名单标签，且不再支持开启';
           }
-        } else {
-          showAiToast(
-            status === '测出'
-              ? '已开启：继续执行，后续产生的新素材将按任务配置投放'
-              : '已开启：继续执行短剧测试'
-          );
+          if (status === '测出') return '短剧测试与新素材投放均已停止，后续产生的新素材不再投放';
+          return '';
         }
+        return status === '测出' ? '继续执行，后续产生的新素材将按任务配置投放' : '继续执行短剧测试';
+      }
+
+      /* 执行记录：全选 / 选中计数 */
+      function toggleSelectAllAiDramaRows(master) {
+        var boxes = document.querySelectorAll('.ai-drama-row-checkbox');
+        boxes.forEach(function (cb) { cb.checked = master.checked; });
+        updateAiDramaSelectedCount();
+      }
+
+      function updateAiDramaSelectedCount() {
+        var boxes = document.querySelectorAll('.ai-drama-row-checkbox');
+        var n = document.querySelectorAll('.ai-drama-row-checkbox:checked').length;
+        var el = document.getElementById('aiDramaSelectedCount');
+        if (el) el.textContent = n;
+        var master = document.getElementById('selectAllAiDramaRows');
+        if (master) {
+          master.checked = n > 0 && n === boxes.length;
+          master.indeterminate = n > 0 && n < boxes.length;
+        }
+      }
+
+      /*
+       * 执行记录：批量开关（菜单选择 开启 / 关闭）
+       * - 未测出的行开关禁用，不参与批量操作，单独计数提示
+       * - 关闭命中「测试中」的行时，先二次确认（该操作不可逆：置为未测出且不可再开启）
+       */
+      /* 批量设置开关菜单：展开 / 收起（点击空白处自动收起） */
+      function toggleAiDramaBatchMenu(e) {
+        if (e && e.stopPropagation) e.stopPropagation();
+        var menu = document.getElementById('aiDramaBatchMenu');
+        if (!menu) return;
+        var show = menu.style.display === 'none';
+        menu.style.display = show ? 'block' : 'none';
+        if (show) {
+          var closeFn = function () {
+            menu.style.display = 'none';
+            document.removeEventListener('click', closeFn);
+          };
+          setTimeout(function () { document.addEventListener('click', closeFn); }, 0);
+        }
+      }
+
+      function batchSetAiDramaSwitch(isOn) {
+        var menu = document.getElementById('aiDramaBatchMenu');
+        if (menu) menu.style.display = 'none';
+        var selected = document.querySelectorAll('.ai-drama-row-checkbox:checked');
+        if (!selected.length) {
+          showAiToast('请先勾选需要批量设置的数据');
+          return;
+        }
+
+        var targets = [];
+        var skip = 0;
+        selected.forEach(function (cb) {
+          var row = cb.closest('tr');
+          var sw = row ? row.querySelector('.drama-switch-cell input') : null;
+          if (!sw || sw.disabled) { skip++; return; }
+          if (sw.checked === isOn) return; /* 已是目标状态，不重复处理 */
+          targets.push(sw);
+        });
+
+        if (!isOn) {
+          var testingCount = targets.filter(function (sw) {
+            var cell = sw.closest('tr').querySelector('[data-col="test-status"]');
+            return cell && cell.textContent.trim() === '测试中';
+          }).length;
+          if (testingCount && !confirm('选中的数据中有 ' + testingCount + ' 条处于「测试中」，关闭后测出状态将更新为「未测出」且不再支持开启，确认继续？')) {
+            return;
+          }
+        }
+
+        if (!targets.length) {
+          showAiToast(skip ? '所选 ' + skip + ' 条为「未测出」，不支持设置开关' : '所选数据的开关已为目标状态，无需重复设置');
+          return;
+        }
+
+        targets.forEach(function (sw) {
+          sw.checked = isOn;
+          applyAiDramaSwitch(sw, isOn);
+        });
+
+        var msg = '已批量' + (isOn ? '开启' : '关闭') + ' ' + targets.length + ' 条';
+        if (skip) msg += '；' + skip + ' 条为「未测出」，不支持设置开关，已跳过';
+        showAiToast(msg);
+        clearAiDramaSelection();
+      }
+
+      /* 批量操作完成后清空勾选 */
+      function clearAiDramaSelection() {
+        document.querySelectorAll('.ai-drama-row-checkbox').forEach(function (cb) { cb.checked = false; });
+        updateAiDramaSelectedCount();
       }
 
       /* 短剧名下钻：切换到账户 Tab 并带入短剧ID筛选项 */

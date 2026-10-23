@@ -3617,6 +3617,44 @@ body {
   color: var(--color-text-tertiary);
 }
 
+/* 执行记录：勾选后批量设置开关 */
+.filter-status.drama-batch-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  position: relative;
+}
+
+.filter-status.drama-batch-bar .batch-count {
+  padding: 0 2px;
+  color: var(--color-text-primary);
+  font-weight: 500;
+}
+
+.ai-drama-batch-menu {
+  position: absolute;
+  top: calc(100% - 4px);
+  left: 86px;
+  z-index: 20;
+  min-width: 96px;
+  background: var(--color-white);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  padding: 4px 0;
+}
+
+.ai-drama-batch-menu .batch-menu-item {
+  padding: 6px 12px;
+  font-size: 13px;
+  color: var(--color-text-primary);
+  cursor: pointer;
+}
+
+.ai-drama-batch-menu .batch-menu-item:hover {
+  background: var(--color-bg-hover);
+}
+
 .toggle-switch.is-disabled .toggle-slider {
   opacity: 0.5;
   cursor: not-allowed;
