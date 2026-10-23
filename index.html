@@ -3857,13 +3857,8 @@
                             <td>新建任务</td>
                           </tr>
                         </tbody>
-                        <!-- 短剧任务 · 测出路径：开启任务 → 测试期内判定回写 → 测出后素材更新 -->
+                        <!-- 短剧任务 · 测出路径：开启任务 → 测试期内判定回写（一期不监控后续素材更新，故无素材更新类日志） -->
                         <tbody id="ai-modify-log-body-tested" style="display: none;">
-                          <tr>
-                            <td>系统</td>
-                            <td>2026-10-20 12:30:00</td>
-                            <td>素材更新，新增素材数量：30</td>
-                          </tr>
                           <tr>
                             <td>系统</td>
                             <td>2026-10-19 18:20:00</td>
@@ -6321,7 +6316,7 @@
         document.getElementById('ai-modify-log-title').textContent = (taskName ? taskName : '任务') + '-修改日志';
         var key = scope || 'task';
         var scopes = ['task', 'tested', 'testing', 'untested'];
-        var counts = { task: 2, tested: 3, testing: 1, untested: 3 };
+        var counts = { task: 2, tested: 2, testing: 1, untested: 3 };
         scopes.forEach(function (name) {
           var body = document.getElementById('ai-modify-log-body-' + name);
           if (body) body.style.display = name === key ? '' : 'none';
