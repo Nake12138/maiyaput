@@ -1236,13 +1236,25 @@
                   </div>
                 </div>
 
+                <!-- 批量开关：勾选数据后，点击「批量开关」在菜单中选择 生效 / 停用（同执行记录列表） -->
+                <div class="filter-status drama-batch-bar">
+                  <span>已选择<span class="batch-count" id="aiTaskSelectedCount">0</span>条</span>
+                  <span class="link" onclick="toggleAiTaskBatchMenu(event)">批量开关</span>
+                  <div class="ai-drama-batch-menu" id="aiTaskBatchMenu" style="display: none;">
+                    <div class="batch-menu-item" onclick="batchSetAiTaskSwitch(true)">开启</div>
+                    <div class="batch-menu-item" onclick="batchSetAiTaskSwitch(false)">关闭</div>
+                  </div>
+                </div>
+
                 <div class="table-card">
                   <div class="table-wrapper">
                     <table class="data-table">
                       <thead>
                         <tr>
+                          <th class="checkbox-col"><input type="checkbox" id="selectAllAiTaskRows" onclick="toggleSelectAllAiTaskRows(this)" title="全选本页" /></th>
                           <th>ID</th>
-                          <th>任务</th>
+                          <th>任务模板</th>
+                          <th>状态</th>
                           <th>短剧数量</th>
                           <th>创建人</th>
                           <th>创建时间</th>
@@ -1253,8 +1265,17 @@
                       </thead>
                       <tbody>
                         <tr>
+                          <td><input type="checkbox" class="ai-task-row-checkbox" onchange="updateAiTaskSelectedCount()" /></td>
                           <td>1</td>
                           <td><span class="link" onclick="drillAiTaskToDrama('1')">任务1</span></td>
+                          <td data-col="task-status">
+                            <div class="drama-switch-cell">
+                              <label class="toggle-switch" title="生效：任务按配置执行；停用：任务不执行">
+                                <input type="checkbox" checked onchange="toggleAiTaskSwitch(this)" />
+                                <span class="toggle-slider"></span>
+                              </label>
+                            </div>
+                          </td>
                           <td><span class="link" onclick="openAiDramaCountModal('任务1')">1</span></td>
                           <td>娜可</td>
                           <td>2026-10-20 10:00:00</td>
@@ -1270,8 +1291,17 @@
                         </tr>
                         <!-- 任务2：短剧数量因新增短剧自动变化，未修改过任务配置 → 更新人/更新时间不记录 -->
                         <tr>
+                          <td><input type="checkbox" class="ai-task-row-checkbox" onchange="updateAiTaskSelectedCount()" /></td>
                           <td>2</td>
                           <td><span class="link" onclick="drillAiTaskToDrama('2')">任务2</span></td>
+                          <td data-col="task-status">
+                            <div class="drama-switch-cell">
+                              <label class="toggle-switch" title="生效：任务按配置执行；停用：任务不执行">
+                                <input type="checkbox" checked onchange="toggleAiTaskSwitch(this)" />
+                                <span class="toggle-slider"></span>
+                              </label>
+                            </div>
+                          </td>
                           <td><span class="link" onclick="openAiDramaCountModal('任务2')">2</span></td>
                           <td>还音</td>
                           <td>2026-10-19 09:20:00</td>
@@ -2873,6 +2903,27 @@
                   <button class="drawer-close" onclick="closeAiTaskDrawer()" style="margin-left: auto;">×</button>
                 </div>
                 <div class="drawer-body">
+                  <!-- 基本信息：任务名称（自定义）+ 状态（生效 / 停用），三个模块共用 -->
+                  <div class="ai-schedule-section">
+                    <h4 class="form-section-title">基本信息</h4>
+                    <div class="form-row" id="ai-row-task-name">
+                      <div class="form-item">
+                        <label class="form-label"><span class="required-star">*</span> 任务名称</label>
+                        <input type="text" class="form-input" id="aiTaskName" maxlength="20" placeholder="请输入任务名称" oninput="clearAiTaskNameErr()" />
+                        <div class="ai-field-err" id="aiTaskNameErr">请输入任务名称</div>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="form-item">
+                        <label class="form-label">状态</label>
+                        <div class="segmented-control" data-seg="aiTaskStatus">
+                          <button class="segmented-item active" type="button" data-v="on" onclick="setAiSeg(this)">生效</button>
+                          <button class="segmented-item" type="button" data-v="off" onclick="setAiSeg(this)">停用</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                   <div class="tabs" id="ai-task-drawer-tabs" style="margin: 0 -24px 16px; padding: 0 24px; gap: 36px;">
                     <button class="tab active" style="padding-left: 0;" onclick="switchAiTaskDrawerTab('standard')">标准投放<span class="ai-tab-mode-count" id="ai-std-mode-count">4/4</span></button>
                     <button class="tab" onclick="switchAiTaskDrawerTab('global')">全域投放<span class="ai-tab-mode-count" id="ai-global-mode-count">1/1</span></button>
@@ -4929,6 +4980,80 @@
         updateAiDramaSelectedCount();
       }
 
+      /* ---- 任务模板：状态开关（生效 / 停用）与批量开关 ---- */
+      function toggleAiTaskSwitch(input) {
+        var row = input.closest('tr');
+        var name = row ? row.querySelector('.link') : null;
+        var taskName = name ? name.textContent.trim() : '该任务';
+        showAiToast('任务「' + taskName + '」已' + (input.checked ? '生效' : '停用'));
+      }
+
+      function toggleSelectAllAiTaskRows(master) {
+        document.querySelectorAll('.ai-task-row-checkbox').forEach(function (cb) { cb.checked = master.checked; });
+        updateAiTaskSelectedCount();
+      }
+
+      function updateAiTaskSelectedCount() {
+        var boxes = document.querySelectorAll('.ai-task-row-checkbox');
+        var n = document.querySelectorAll('.ai-task-row-checkbox:checked').length;
+        var el = document.getElementById('aiTaskSelectedCount');
+        if (el) el.textContent = n;
+        var master = document.getElementById('selectAllAiTaskRows');
+        if (master) {
+          master.checked = n > 0 && n === boxes.length;
+          master.indeterminate = n > 0 && n < boxes.length;
+        }
+      }
+
+      /* 批量开关菜单：展开 / 收起（点击空白处自动收起） */
+      function toggleAiTaskBatchMenu(e) {
+        if (e && e.stopPropagation) e.stopPropagation();
+        var menu = document.getElementById('aiTaskBatchMenu');
+        if (!menu) return;
+        var show = menu.style.display === 'none';
+        menu.style.display = show ? 'block' : 'none';
+        if (show) {
+          var closeFn = function () {
+            menu.style.display = 'none';
+            document.removeEventListener('click', closeFn);
+          };
+          setTimeout(function () { document.addEventListener('click', closeFn); }, 0);
+        }
+      }
+
+      function batchSetAiTaskSwitch(isOn) {
+        var menu = document.getElementById('aiTaskBatchMenu');
+        if (menu) menu.style.display = 'none';
+        var selected = document.querySelectorAll('.ai-task-row-checkbox:checked');
+        if (!selected.length) {
+          showAiToast('请先勾选需要批量设置的数据');
+          return;
+        }
+
+        var targets = [];
+        selected.forEach(function (cb) {
+          var row = cb.closest('tr');
+          var sw = row ? row.querySelector('[data-col="task-status"] input') : null;
+          if (!sw || sw.disabled) return;
+          if (sw.checked === isOn) return; /* 已是目标状态，不重复处理 */
+          targets.push(sw);
+        });
+
+        if (!targets.length) {
+          showAiToast('所选数据的状态已为「' + (isOn ? '生效' : '停用') + '」，无需重复设置');
+          return;
+        }
+
+        targets.forEach(function (sw) { sw.checked = isOn; });
+        showAiToast('已批量' + (isOn ? '开启' : '关闭') + ' ' + targets.length + ' 条');
+        clearAiTaskSelection();
+      }
+
+      function clearAiTaskSelection() {
+        document.querySelectorAll('.ai-task-row-checkbox').forEach(function (cb) { cb.checked = false; });
+        updateAiTaskSelectedCount();
+      }
+
       /* 短剧名下钻：切换到账户 Tab 并带入短剧ID筛选项 */
       function drillAiDramaToAccount(dramaTaskId) {
         switchAiAutoTaskTab('standard');
@@ -4942,10 +5067,31 @@
         document.getElementById('ai-task-drawer-title').textContent =
           taskName && taskId ? taskName + '（ID: ' + taskId + '）' : 'AI素材自动化任务';
         switchAiTaskDrawerTab('standard');
+        /* 任务名称：编辑/复制带入原名称，新增时清空待填 */
+        var nameField = document.getElementById('aiTaskName');
+        if (nameField) nameField.value = taskName || '';
+        clearAiTaskNameErr();
+        setAiTaskStatusDefault('on');
         /* 新建任务时素材重复次数默认「自定义」；编辑/复制沿用「不限」 */
         setAiRepeatTimesDefault(!(taskName && taskId));
         document.getElementById('ai-task-drawer-overlay').classList.add('open');
         document.getElementById('ai-task-drawer').classList.add('open');
+      }
+
+      /* 任务状态默认值：on=生效 / off=停用（打开抽屉时默认生效） */
+      function setAiTaskStatusDefault(v) {
+        var group = document.querySelector('#ai-task-drawer .segmented-control[data-seg="aiTaskStatus"]');
+        if (group) {
+          group.querySelectorAll('.segmented-item').forEach(function (btn) {
+            btn.classList.toggle('active', btn.getAttribute('data-v') === v);
+          });
+        }
+        aiSegValues.aiTaskStatus = v;
+      }
+
+      function clearAiTaskNameErr() {
+        var row = document.getElementById('ai-row-task-name');
+        if (row) row.classList.remove('is-error');
       }
 
       /* 素材重复次数默认值：新建=自定义（显示次数输入框），编辑/复制=不限 */
@@ -5754,6 +5900,16 @@
       });
 
       function submitAiTask() {
+        /* 基本信息：任务名称必填 */
+        var nameField = document.getElementById('aiTaskName');
+        if (nameField && !String(nameField.value).trim()) {
+          markAiRowError('ai-row-task-name', true);
+          nameField.focus();
+          showAiToast('请输入任务名称');
+          return;
+        }
+        markAiRowError('ai-row-task-name', false);
+
         var errors = [];
         var firstErrorPane = null;
         document.querySelectorAll('#ai-task-drawer .ai-std-pane[data-mode]').forEach(function (pane) {
@@ -5790,7 +5946,9 @@
             return;
           }
         }
-        showAiToast(buildAiGlobalSummary());
+        var nameTxt = '任务「' + document.getElementById('aiTaskName').value.trim() + '」';
+        var statusTxt = aiSegValues.aiTaskStatus === 'off' ? '停用' : '生效';
+        showAiToast(nameTxt + '（' + statusTxt + '）已保存：' + buildAiGlobalSummary().replace('配置已保存：', ''));
         closeAiTaskDrawer();
       }
 
