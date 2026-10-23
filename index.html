@@ -1219,11 +1219,16 @@
                 <div class="filter-bar">
                   <div class="filter-combo" data-filter-type="task-name">
                     <select class="filter-combo-select">
-                      <option>任务名称</option>
-                      <option>任务ID</option>
+                      <option>任务模板名称</option>
+                      <option>任务模板ID</option>
                     </select>
                     <input type="text" class="filter-combo-input" placeholder="请输入" />
                   </div>
+                  <select class="filter-select" id="ai-task-status-filter">
+                    <option value="">请选择状态</option>
+                    <option value="on">生效</option>
+                    <option value="off">停用</option>
+                  </select>
                   <select class="filter-select" id="ai-task-creator-filter">
                     <option value="">请选择创建人</option>
                     <option value="nake">娜可</option>
@@ -1267,7 +1272,6 @@
                         <tr>
                           <td><input type="checkbox" class="ai-task-row-checkbox" onchange="updateAiTaskSelectedCount()" /></td>
                           <td>1</td>
-                          <td><span class="link" onclick="drillAiTaskToDrama('1')">任务1</span></td>
                           <td data-col="task-status">
                             <div class="drama-switch-cell">
                               <label class="toggle-switch" title="生效：任务按配置执行；停用：任务不执行">
@@ -1293,7 +1297,6 @@
                         <tr>
                           <td><input type="checkbox" class="ai-task-row-checkbox" onchange="updateAiTaskSelectedCount()" /></td>
                           <td>2</td>
-                          <td><span class="link" onclick="drillAiTaskToDrama('2')">任务2</span></td>
                           <td data-col="task-status">
                             <div class="drama-switch-cell">
                               <label class="toggle-switch" title="生效：任务按配置执行；停用：任务不执行">
@@ -4801,6 +4804,8 @@
         root.querySelectorAll('.filter-combo-input').forEach(function (i) { i.value = ''; });
         var creator = document.getElementById('ai-task-creator-filter');
         if (creator) creator.value = '';
+        var status = document.getElementById('ai-task-status-filter');
+        if (status) status.value = '';
       }
 
       function searchAiDramaList() {
