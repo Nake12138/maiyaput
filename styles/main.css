@@ -4148,3 +4148,190 @@ body {
   color: var(--color-text-tertiary);
   margin-left: 6px;
 }
+
+    /* ============ 测出设置页签（评审会调整：原控损管理模块取消，配置并入新建任务；样式沿用本抽屉设计系统） ============ */
+    #ai-task-drawer .ai-loss-note {
+      font-size: 12px;
+      color: var(--color-text-secondary);
+      background: var(--color-info-bg);
+      border: 1px dashed var(--color-info);
+      border-radius: 6px;
+      padding: 8px 12px;
+      margin-bottom: 12px;
+      line-height: 1.6;
+    }
+    #ai-task-drawer .ai-loss-note b { color: var(--color-text-primary); }
+    #ai-task-drawer .loss-new-tag {
+      display: inline-block;
+      font-size: 11px;
+      background: var(--color-info);
+      color: #fff;
+      border-radius: 3px;
+      padding: 0 6px;
+      line-height: 18px;
+      margin-right: 6px;
+      font-weight: 500;
+      vertical-align: 1px;
+    }
+    #ai-task-drawer .loss-cond-helper {
+      font-size: 12px;
+      color: var(--color-text-tertiary);
+      margin: 2px 0 8px;
+    }
+    #ai-task-drawer .loss-judge-zone {
+      border: 1px dashed var(--color-border);
+      border-radius: 6px;
+      padding: 12px;
+      background: var(--color-bg-soft);
+    }
+    #ai-task-drawer .loss-judge-group { margin-bottom: 10px; }
+    #ai-task-drawer .loss-jg-label {
+      font-size: 12px;
+      color: var(--color-text-tertiary);
+      margin-bottom: 6px;
+    }
+    #ai-task-drawer .loss-cond-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+    #ai-task-drawer .loss-cond-row .form-input { height: 30px; }
+    #ai-task-drawer .loss-row-del {
+      color: var(--color-text-tertiary);
+      cursor: pointer;
+      font-size: 16px;
+      line-height: 1;
+      padding: 0 2px;
+    }
+    #ai-task-drawer .loss-row-del:hover { color: var(--color-error); }
+    #ai-task-drawer .loss-row-add {
+      width: 22px;
+      height: 22px;
+      border: 1px solid var(--color-info);
+      color: var(--color-info);
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      cursor: pointer;
+      background: var(--color-white);
+      flex-shrink: 0;
+      line-height: 1;
+    }
+    #ai-task-drawer .loss-row-add:hover { background: var(--color-info-bg); }
+    #ai-task-drawer .loss-judge-tools {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 2px;
+    }
+    #ai-task-drawer .loss-or-btn {
+      color: var(--color-info);
+      font-size: 13px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    #ai-task-drawer .loss-or-btn:hover { text-decoration: underline; }
+    #ai-task-drawer .loss-del-group {
+      color: var(--color-text-tertiary);
+      font-size: 13px;
+      cursor: pointer;
+      margin-left: auto;
+    }
+    #ai-task-drawer .loss-del-group:hover { color: var(--color-error); }
+    #ai-task-drawer .loss-group-sep {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 2px 0 10px;
+    }
+    #ai-task-drawer .loss-group-sep .line { flex: 1; border-top: 1px solid var(--color-border-light); }
+    #ai-task-drawer .loss-group-sep .word { font-size: 12px; color: var(--color-text-tertiary); }
+    #ai-task-drawer .loss-warn-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      font-size: 13px;
+      color: var(--color-text-secondary);
+    }
+    #ai-task-drawer .loss-rd {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+    }
+    #ai-task-drawer .loss-num-sm { width: 90px; flex: none; }
+    #ai-task-drawer .loss-common-tag {
+      display: inline-block;
+      font-size: 11px;
+      background: var(--color-success-bg, #f0f9eb);
+      color: var(--color-success, #52c41a);
+      border: 1px solid var(--color-success, #52c41a);
+      border-radius: 3px;
+      padding: 0 6px;
+      line-height: 18px;
+      margin-left: 8px;
+      font-weight: 500;
+      vertical-align: 1px;
+    }
+    #ai-task-drawer .loss-apply-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 12px;
+      border: 1px solid var(--color-border-light);
+      border-radius: 6px;
+      margin-bottom: 8px;
+      background: var(--color-bg-soft);
+      flex-wrap: wrap;
+    }
+    #ai-task-drawer .loss-apply-name {
+      font-size: 13px;
+      color: var(--color-text-primary);
+      font-weight: 500;
+      width: 110px;
+      flex: none;
+    }
+    #ai-task-drawer .loss-apply-ctrl {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--color-text-secondary);
+      flex: 1;
+      min-width: 260px;
+    }
+    /* 触发操作折叠面板（默认收起，点击标题展开）+ 追加操作二期禁用置灰 */
+    #ai-task-drawer .loss-fold-head { cursor: pointer; user-select: none; }
+    #ai-task-drawer .loss-fold-head:hover { color: var(--color-info); }
+    #ai-task-drawer .loss-fold-arrow {
+      display: inline-block;
+      font-size: 12px;
+      color: var(--color-text-tertiary);
+      margin-left: 8px;
+      vertical-align: 1px;
+      transition: transform 0.2s;
+    }
+    #ai-task-drawer .loss-fold-head.open .loss-fold-arrow { transform: rotate(90deg); }
+    #ai-task-drawer .loss-phase2-tag {
+      display: inline-block;
+      font-size: 11px;
+      background: var(--color-bg-soft);
+      color: var(--color-text-tertiary);
+      border: 1px solid var(--color-border-light);
+      border-radius: 3px;
+      padding: 0 6px;
+      line-height: 18px;
+      margin-left: 8px;
+      font-weight: 500;
+      vertical-align: 1px;
+    }
+    #ai-task-drawer .loss-fold-disabled { opacity: 0.62; }
+    #ai-task-drawer .loss-fold-disabled .segmented-item { cursor: not-allowed; }
+    #ai-task-drawer .loss-fold-disabled .form-input:disabled { background: var(--color-bg-soft); color: var(--color-text-tertiary); cursor: not-allowed; }

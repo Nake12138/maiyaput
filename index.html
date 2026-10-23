@@ -2932,7 +2932,7 @@
                   <div class="tabs" id="ai-task-drawer-tabs" style="margin: 0 -24px 16px; padding: 0 24px; gap: 36px;">
                     <button class="tab active" style="padding-left: 0;" onclick="switchAiTaskDrawerTab('standard')">标准投放<span class="ai-tab-mode-count" id="ai-std-mode-count">4/4</span></button>
                     <button class="tab" onclick="switchAiTaskDrawerTab('global')">全域投放<span class="ai-tab-mode-count" id="ai-global-mode-count">1/1</span></button>
-                    <button class="tab" onclick="switchAiTaskDrawerTab('loss')">测剧规则</button>
+                    <button class="tab" onclick="switchAiTaskDrawerTab('loss')">测出设置<span class="loss-new-tag" style="margin:0 0 0 4px;">本期新增</span></button>
                   </div>
 
                   <div id="ai-drawer-standard" class="ai-drawer-pane">
@@ -3422,10 +3422,155 @@
                     </div>
                   </div>
 
-                  <div id="ai-drawer-loss" class="ai-drawer-pane" style="display: none;">
+                                    <div id="ai-drawer-loss" class="ai-drawer-pane" style="display: none;">
+                    <div class="ai-std-subtabs-wrap">
+                      <div class="tabs ai-std-subtabs" id="ai-loss-subtabs">
+                        <button class="tab active" type="button" onclick="switchAiLossSubTab('std')">CBO测出</button>
+                        <button class="tab" type="button" onclick="switchAiLossSubTab('qy')">常规+全域测出</button>
+                      </div>
+                    </div>
+
+                    <div id="ai-loss-std" class="ai-loss-pane">
+                      <div class="ai-loss-note"><span class="loss-new-tag">本期新增</span>CBO测出：数据按 <b>CBO 的 IAA + IAP</b> 口径、以<b>素材维度</b>计算（指标为素材级 消耗 / ROI，运算符：大于 / 小于 / 介于）。<b>素材满足判断条件即该素材测出</b>（CBO测出 / 常规+全域测出 任一板块达标均执行）；测出后按公共触发操作<b>第二轮只追加 AI 二创素材（追加操作二期开发，本期不自动追加）</b>；发送<b>飞书卡片</b>（<b>按素材逐条发送</b>：素材ID + 所属短剧（剧名 / 短剧 ID）+ 判断数据 + <b>需要追加的素材类型【AI二创】</b>，业务可直观查看放剧），并推送通知至 <b>AI 素材、短剧列表、创建任务</b>（均附素材类型【AI二创】），同时写入该短剧「日志」弹窗的<b>测出日志</b>（推送附<b>有消耗的短剧 ID</b>，日志附<b>测出素材 ID</b>、该短剧<b>有消耗的素材 ID</b>与<b>追加素材类型：AI二创</b>）；触发操作与警告设置为两个板块的<b>公共配置</b>。测出结果于「短剧任务」Tab 的测出状态中展示（列内展示已测出素材）。</div>
+                      <div class="ai-schedule-section">
+                        <h4 class="form-section-title">触发条件</h4>
+                        <div class="form-row">
+                          <div class="form-item">
+                            <label class="form-label"><span class="required-star">*</span> <span class="tip-icon" data-tip="组内条件为「且」关系，组间为「或」关系，每组判断项数值必填">?</span> 判断条件</label>
+                            <div class="loss-cond-helper">满足以下判断条件时该素材测出（指标按素材维度计算）</div>
+                            <div class="loss-judge-zone" id="loss-std-judgeZone"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div id="ai-loss-qy" class="ai-loss-pane" style="display: none;">
+                      <div class="ai-loss-note"><span class="loss-new-tag">本期新增</span>常规+全域测出：数据按 <b>标准稳定成本 IAA + IAP 与全域数据合计、扣除 CBO 数据</b>后的口径、以<b>素材维度</b>计算（指标为素材级 消耗 / ROI / <b>GMV</b>，运算符：大于 / 小于 / 介于）。<b>素材满足判断条件即该素材测出</b>（CBO测出 / 常规+全域测出 任一板块达标均执行）；测出后按公共触发操作<b>第二轮只追加 AI 二创素材（追加操作二期开发，本期不自动追加）</b>；发送<b>飞书卡片</b>（<b>按素材逐条发送</b>：素材ID + 所属短剧（剧名 / 短剧 ID）+ 判断数据 + <b>需要追加的素材类型【AI二创】</b>，业务可直观查看放剧），并推送通知至 <b>AI 素材、短剧列表、创建任务</b>（均附素材类型【AI二创】），同时写入该短剧「日志」弹窗的<b>测出日志</b>（推送附<b>有消耗的短剧 ID</b>，日志附<b>测出素材 ID</b>、该短剧<b>有消耗的素材 ID</b>与<b>追加素材类型：AI二创</b>）；触发操作与警告设置为两个板块的<b>公共配置</b>。测出结果于「短剧任务」Tab 的测出状态中展示（列内展示已测出素材）。</div>
+                      <div class="ai-schedule-section">
+                        <h4 class="form-section-title">触发条件</h4>
+                        <div class="form-row">
+                          <div class="form-item">
+                            <label class="form-label"><span class="required-star">*</span> <span class="tip-icon" data-tip="组内条件为「且」关系，组间为「或」关系，每组判断项数值必填">?</span> 判断条件</label>
+                            <div class="loss-cond-helper">满足以下判断条件时该素材测出（指标按素材维度计算）</div>
+                            <div class="loss-judge-zone" id="loss-qy-judgeZone"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- 触发操作 / 警告设置：CBO测出 与 常规+全域测出 公共配置（子Tab 外置）；触发操作默认折叠，追加操作二期开发本期禁用 -->
                     <div class="ai-schedule-section">
-                      <h4 class="form-section-title">测剧规则</h4>
-                      <div style="font-size: 13px; color: var(--color-text-tertiary);">待合并原型（详看长河需求）</div>
+                      <h4 class="form-section-title loss-fold-head" id="loss-apply-foldHead" onclick="toggleLossFold()">触发操作<span class="loss-common-tag">公共设置</span><span class="loss-phase2-tag">追加操作 · 二期开发</span><span class="loss-fold-arrow">▸</span></h4>
+                      <div class="form-row loss-fold-body" id="loss-apply-foldBody" style="display: none;">
+                        <div class="form-item loss-fold-disabled">
+                          <label class="form-label"><span class="required-star">*</span> <span class="tip-icon" data-tip="按业务范围分别配置是否追加 AI 二创素材；素材测出后按该素材所属短剧的业务范围执行对应配置">?</span> 是否追加素材<span style="font-weight: normal; font-size: 12px; color: var(--color-text-secondary);">（追加类型：AI 二创）</span></label>
+                          <div class="loss-cond-helper">追加操作二期开发，本期暂不开放（开关与阈值禁用、默认「否」，不自动追加）；CBO测出 / 常规+全域测出 共用，按业务范围分别设置；第二轮追加素材类型：AI 二创</div>
+                          <div class="loss-apply-row">
+                            <span class="loss-apply-name">稳定成本-付费</span>
+                            <div class="loss-apply-ctrl">
+                              <div class="segmented-control">
+                                <button class="segmented-item active" type="button" disabled onclick="toggleLossAppend('pay', this)">否</button>
+                                <button class="segmented-item" type="button" disabled onclick="toggleLossAppend('pay', this)">是</button>
+                              </div>
+                              <div id="loss-pay-appendRow" style="display: none;">
+                                <div class="form-field-inline">
+                                  <span>新增 AI 二创素材大于等于</span>
+                                  <input type="text" class="form-input" id="loss-pay-appendVal" style="width: 110px; flex: none;" placeholder="请输入" oninput="limitPositiveInt(this)" disabled />
+                                  <span>后追加素材</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="loss-apply-row">
+                            <span class="loss-apply-name">稳定成本-IAA</span>
+                            <div class="loss-apply-ctrl">
+                              <div class="segmented-control">
+                                <button class="segmented-item active" type="button" disabled onclick="toggleLossAppend('iaa', this)">否</button>
+                                <button class="segmented-item" type="button" disabled onclick="toggleLossAppend('iaa', this)">是</button>
+                              </div>
+                              <div id="loss-iaa-appendRow" style="display: none;">
+                                <div class="form-field-inline">
+                                  <span>新增 AI 二创素材大于等于</span>
+                                  <input type="text" class="form-input" id="loss-iaa-appendVal" style="width: 110px; flex: none;" placeholder="请输入" oninput="limitPositiveInt(this)" disabled />
+                                  <span>后追加素材</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="loss-apply-row">
+                            <span class="loss-apply-name">最大转化-付费</span>
+                            <div class="loss-apply-ctrl">
+                              <div class="segmented-control">
+                                <button class="segmented-item active" type="button" disabled onclick="toggleLossAppend('maxpay', this)">否</button>
+                                <button class="segmented-item" type="button" disabled onclick="toggleLossAppend('maxpay', this)">是</button>
+                              </div>
+                              <div id="loss-maxpay-appendRow" style="display: none;">
+                                <div class="form-field-inline">
+                                  <span>新增 AI 二创素材大于等于</span>
+                                  <input type="text" class="form-input" id="loss-maxpay-appendVal" style="width: 110px; flex: none;" placeholder="请输入" oninput="limitPositiveInt(this)" disabled />
+                                  <span>后追加素材</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="loss-apply-row">
+                            <span class="loss-apply-name">最大转化-IAA</span>
+                            <div class="loss-apply-ctrl">
+                              <div class="segmented-control">
+                                <button class="segmented-item active" type="button" disabled onclick="toggleLossAppend('maxiaa', this)">否</button>
+                                <button class="segmented-item" type="button" disabled onclick="toggleLossAppend('maxiaa', this)">是</button>
+                              </div>
+                              <div id="loss-maxiaa-appendRow" style="display: none;">
+                                <div class="form-field-inline">
+                                  <span>新增 AI 二创素材大于等于</span>
+                                  <input type="text" class="form-input" id="loss-maxiaa-appendVal" style="width: 110px; flex: none;" placeholder="请输入" oninput="limitPositiveInt(this)" disabled />
+                                  <span>后追加素材</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="loss-apply-row">
+                            <span class="loss-apply-name">全域</span>
+                            <div class="loss-apply-ctrl">
+                              <div class="segmented-control">
+                                <button class="segmented-item active" type="button" disabled onclick="toggleLossAppend('global', this)">否</button>
+                                <button class="segmented-item" type="button" disabled onclick="toggleLossAppend('global', this)">是</button>
+                              </div>
+                              <div id="loss-global-appendRow" style="display: none;">
+                                <div class="form-field-inline">
+                                  <span>新增 AI 二创素材大于等于</span>
+                                  <input type="text" class="form-input" id="loss-global-appendVal" style="width: 110px; flex: none;" placeholder="请输入" oninput="limitPositiveInt(this)" disabled />
+                                  <span>后追加素材</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <span class="form-item-helper">追加操作二期开发，本期暂不开放：开关与阈值均禁用、默认「否」（不自动追加）。二期开放后，选择「是」则素材测出时统计任务创建侧新增的 AI 二创素材，大于等于阈值即自动追加（第二轮只追加 AI 二创素材），并同步通知 AI 素材制作；阈值为正整数。任一板块素材测出达标即按该素材所属短剧的业务范围执行追加；测出通知（飞书卡片、AI 素材、短剧列表、创建任务、测出日志）均带需要追加的素材类型【AI二创】；飞书卡片按素材逐条发送（素材ID + 所属短剧 + 判断数据 + 素材类型），并写入该短剧「日志」弹窗的测出日志。</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="ai-schedule-section">
+                      <h4 class="form-section-title">警告设置<span class="loss-common-tag">公共设置</span></h4>
+                      <div class="form-row">
+                        <div class="form-item">
+                          <div class="loss-warn-row">
+                            <span class="loss-warn-label">警告方式：</span>
+                            <label class="loss-rd"><input type="radio" name="loss-warnWay" checked />飞书</label>
+                          </div>
+                          <div class="loss-warn-row">
+                            <span class="loss-warn-label">警告频率：</span>
+                            <input type="text" class="form-input loss-num-sm" id="loss-warnFreq" value="30" oninput="limitPositiveInt(this)" />
+                            <span>分钟提醒一次</span>
+                          </div>
+                          <div class="loss-warn-row" style="margin-bottom: 0;">
+                            <span class="loss-warn-label">警告范围：</span>
+                            <label class="loss-rd"><input type="checkbox" checked />本人</label>
+                            <label class="loss-rd"><input type="checkbox" />上级</label>
+                            <label class="loss-rd"><input type="checkbox" onchange="toggleLossAssign(this)" />指定用户</label>
+                            <input type="text" class="form-input" id="loss-assignInput" style="width: 200px; display: none;" placeholder="请选择指定用户" />
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -5946,6 +6091,160 @@
           closeAiMaterialUpload();
         }
       });
+
+      var LOSS_JUDGE = {
+        std: [
+          { key: 'consume', name: '消耗', cals: ['累计', '当日'] },
+          { key: 'roi', name: 'ROI', cals: null }
+        ],
+        qy: [
+          { key: 'consume', name: '消耗', cals: ['累计', '当日'] },
+          { key: 'roi', name: 'ROI', cals: null },
+          { key: 'gmv', name: 'GMV', cals: ['累计', '当日'] }
+        ]
+      };
+      var LOSS_OPS = ['大于', '小于', '介于'];
+      var lossGroups = {
+        std: [[{ cond: 'consume', cal: '累计', op: '大于', val: '500' }]],
+        qy: [[{ cond: 'consume', cal: '累计', op: '大于', val: '500' }]]
+      };
+
+      function lossCondByKey(mode, key) {
+        var list = LOSS_JUDGE[mode];
+        for (var i = 0; i < list.length; i++) {
+          if (list[i].key === key) return list[i];
+        }
+        return null;
+      }
+
+      /* 测出设置子页签：CBO测出 / 常规+全域测出 */
+      function switchAiLossSubTab(subName) {
+        var panes = { std: 'ai-loss-std', qy: 'ai-loss-qy' };
+        Object.keys(panes).forEach(function (key) {
+          document.getElementById(panes[key]).style.display = key === subName ? 'block' : 'none';
+        });
+        var names = ['std', 'qy'];
+        document.querySelectorAll('#ai-loss-subtabs .tab').forEach(function (tab, index) {
+          tab.classList.toggle('active', names[index] === subName);
+        });
+      }
+
+      /* 判断条件组渲染：组内「且」，组间「或」 */
+      function renderLossJudge(mode) {
+        var zone = document.getElementById('loss-' + mode + '-judgeZone');
+        var groups = lossGroups[mode];
+        var html = '';
+        for (var g = 0; g < groups.length; g++) {
+          html += '<div class="loss-judge-group">';
+          html += '<div class="loss-jg-label">' + (g === 0 ? (groups.length > 1 ? '满足其一（或）：' : '满足以下判断条件：') : '或者，满足：') + '</div>';
+          var rows = groups[g];
+          for (var r = 0; r < rows.length; r++) {
+            var row = rows[r];
+            var c = lossCondByKey(mode, row.cond);
+            if (r > 0) html += '<div class="loss-jg-label" style="color:var(--color-info);">且：</div>';
+            html += '<div class="loss-cond-row">';
+            html += '<select class="form-input" style="width:150px;flex:none;" onchange="setLossJudgeCond(\'' + mode + '\',' + g + ',' + r + ',this.value)">';
+            var list = LOSS_JUDGE[mode];
+            for (var j = 0; j < list.length; j++) {
+              html += '<option value="' + list[j].key + '"' + (list[j].key === row.cond ? ' selected' : '') + '>' + list[j].name + '</option>';
+            }
+            html += '</select>';
+            if (c.cals) {
+              html += '<select class="form-input" style="width:92px;flex:none;" onchange="setLossJudgeCal(\'' + mode + '\',' + g + ',' + r + ',this.value)">';
+              for (var k = 0; k < c.cals.length; k++) {
+                html += '<option' + (c.cals[k] === row.cal ? ' selected' : '') + '>' + c.cals[k] + '</option>';
+              }
+              html += '</select>';
+            }
+            html += '<select class="form-input" style="width:100px;flex:none;" onchange="setLossJudgeOp(\'' + mode + '\',' + g + ',' + r + ',this.value)">';
+            for (var m = 0; m < LOSS_OPS.length; m++) {
+              html += '<option' + (LOSS_OPS[m] === row.op ? ' selected' : '') + '>' + LOSS_OPS[m] + '</option>';
+            }
+            html += '</select>';
+            if (row.op === '介于') {
+              html += '<input type="text" class="form-input" style="width:110px;flex:none;" value="' + row.val + '" placeholder="下限" oninput="limitPositiveInt(this)" onchange="setLossJudgeVal(\'' + mode + '\',' + g + ',' + r + ',this.value)" />';
+              html += '<span style="flex:none;color:rgba(0,0,0,0.45);">～</span>';
+              html += '<input type="text" class="form-input" style="width:110px;flex:none;" value="' + (row.val2 || '') + '" placeholder="上限" oninput="limitPositiveInt(this)" onchange="setLossJudgeVal2(\'' + mode + '\',' + g + ',' + r + ',this.value)" />';
+            } else {
+              html += '<input type="text" class="form-input" style="width:120px;flex:none;" value="' + row.val + '" placeholder="请输入" oninput="limitPositiveInt(this)" onchange="setLossJudgeVal(\'' + mode + '\',' + g + ',' + r + ',this.value)" />';
+            }
+            html += '<span class="loss-row-add" title="在此行后新增规则（且）" onclick="addLossJudgeRowAfter(\'' + mode + '\',' + g + ',' + r + ')">＋</span>';
+            if (rows.length > 1) html += '<span class="loss-row-del" title="删除该条件" onclick="delLossJudgeRow(\'' + mode + '\',' + g + ',' + r + ')">×</span>';
+            html += '</div>';
+          }
+          html += '<div class="loss-judge-tools">';
+          html += '<span class="loss-or-btn" onclick="addLossGroup(\'' + mode + '\')"><b>＋</b> 或者</span>';
+          if (g > 0) html += '<span class="loss-del-group" onclick="delLossGroup(\'' + mode + '\',' + g + ')">删除该组</span>';
+          html += '</div>';
+          html += '</div>';
+          if (g < groups.length - 1) html += '<div class="loss-group-sep"><span class="line"></span><span class="word">或</span><span class="line"></span></div>';
+        }
+        zone.innerHTML = html;
+      }
+
+      function setLossJudgeCond(mode, g, r, key) {
+        var c = lossCondByKey(mode, key);
+        var row = lossGroups[mode][g][r];
+        row.cond = key;
+        row.cal = c.cals ? (c.cals.indexOf(row.cal) >= 0 ? row.cal : c.cals[0]) : '';
+        renderLossJudge(mode);
+      }
+      function setLossJudgeCal(mode, g, r, v) { lossGroups[mode][g][r].cal = v; }
+      function setLossJudgeOp(mode, g, r, v) {
+        var row = lossGroups[mode][g][r];
+        row.op = v;
+        if (v === '介于' && !row.val2) row.val2 = '';
+        renderLossJudge(mode);
+      }
+      function setLossJudgeVal(mode, g, r, v) { lossGroups[mode][g][r].val = v; }
+      function setLossJudgeVal2(mode, g, r, v) { lossGroups[mode][g][r].val2 = v; }
+
+      function addLossJudgeRowAfter(mode, g, r) {
+        lossGroups[mode][g].splice(r + 1, 0, { cond: 'consume', cal: '累计', op: '大于', val: '' });
+        renderLossJudge(mode);
+      }
+      function addLossGroup(mode) {
+        lossGroups[mode].push([{ cond: 'consume', cal: '累计', op: '大于', val: '' }]);
+        renderLossJudge(mode);
+      }
+      function delLossGroup(mode, g) {
+        lossGroups[mode].splice(g, 1);
+        renderLossJudge(mode);
+      }
+      function delLossJudgeRow(mode, g, r) {
+        lossGroups[mode][g].splice(r, 1);
+        renderLossJudge(mode);
+      }
+
+      /* 警告范围-指定用户（警告设置为公共配置，无板块前缀） */
+      function toggleLossAssign(ck) {
+        document.getElementById('loss-assignInput').style.display = ck.checked ? 'inline-block' : 'none';
+      }
+
+      /* 触发操作折叠（默认收起，点击标题展开/收起；追加操作二期开发，本期配置禁用） */
+      function toggleLossFold() {
+        var body = document.getElementById('loss-apply-foldBody');
+        var head = document.getElementById('loss-apply-foldHead');
+        if (!body || !head) return;
+        var collapsed = body.style.display === 'none';
+        body.style.display = collapsed ? '' : 'none';
+        head.classList.toggle('open', collapsed);
+      }
+
+      /* 是否追加素材（公共触发操作，按业务范围 pay / iaa / maxpay / maxiaa / global 分别配置）——追加操作二期开发，本期开关与阈值 disabled；二期开放后选「是」显示阈值输入行，选「否」隐藏并清空 */
+      function toggleLossAppend(mode, btn) {
+        var row = document.getElementById('loss-' + mode + '-appendRow');
+        if (!row) return;
+        var show = btn.textContent.trim() === '是';
+        row.style.display = show ? 'block' : 'none';
+        if (!show) {
+          var input = document.getElementById('loss-' + mode + '-appendVal');
+          if (input) input.value = '';
+        }
+      }
+
+      renderLossJudge('std');
+      renderLossJudge('qy');
 
       function submitAiTask() {
         /* 基本信息：任务模板名称必填 */
