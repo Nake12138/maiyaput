@@ -5599,7 +5599,7 @@
           + '<h4 class="form-section-title">抖音号范围</h4>'
           + '<div class="form-row" id="' + aiScopeId('ai-row-dy', scopeKey) + '">'
           + '<div class="form-item" style="flex: 1;">'
-          + '<label class="form-label"><span class="required-star">*</span> 抖音号（项目）</label>'
+          + '<label class="form-label"><span class="required-star">*</span> <span class="tip-icon" data-tip="每个单元按顺序轮询选择此处配置的抖音号">?</span> 抖音号（单元）</label>'
           + '<div class="ai-inline-field">'
           + '<div class="segmented-control" data-seg="aiDyScope|' + scopeKey + '">'
           + '<button class="segmented-item' + (isPkg ? '' : ' active') + '" type="button" data-v="custom" onclick="setAiSeg(this)">自定义</button>'
@@ -5612,7 +5612,7 @@
           + ' style="display: ' + (isPkg ? 'inline-flex' : 'none') + ';" onclick="openAiDyPkg(\'' + scopeKey + '\')">选择抖音号包</button>'
           + '</div>'
           + '<div class="ai-chips" id="' + aiScopeId('aiChipsDy', scopeKey) + '"></div>'
-          + '<div class="ai-field-err">请选择抖音号（项目）</div>'
+          + '<div class="ai-field-err">请选择抖音号（单元）</div>'
           + '</div></div></div>'
           + '<div class="ai-schedule-section">'
           + '<h4 class="form-section-title"><span class="tip-icon" data-tip="不配置以下内容将根据预算出价自动匹配可投放账户">?</span>投放账户</h4>';
