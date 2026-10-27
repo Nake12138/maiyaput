@@ -1237,7 +1237,7 @@
                   <div class="filter-actions">
                     <button class="btn btn-info btn-sm" onclick="searchAiAutoTask()">查询</button>
                     <button class="btn btn-outline btn-sm" onclick="resetAiAutoTaskFilters()">重置</button>
-                    <button class="btn btn-primary btn-sm" onclick="openAiTaskDrawer()">新增任务</button>
+                    <button class="btn btn-primary btn-sm" onclick="openAiTaskDrawer()">新增任务模板</button>
                   </div>
                 </div>
 
@@ -1410,7 +1410,7 @@
                           <td>5001</td>
                           <td>
                             <div class="drama-switch-cell">
-                              <label class="toggle-switch" title="控制该短剧任务是否继续执行（短剧测试 + 新素材投放）">
+                              <label class="toggle-switch" title="控制该执行记录是否继续执行（短剧测试 + 新素材投放）">
                                 <input type="checkbox" checked onchange="toggleAiDramaTask(this)" />
                                 <span class="toggle-slider"></span>
                               </label>
@@ -1472,7 +1472,7 @@
                           <td>5004</td>
                           <td>
                             <div class="drama-switch-cell">
-                              <label class="toggle-switch" title="控制该短剧任务是否继续执行（短剧测试 + 新素材投放）">
+                              <label class="toggle-switch" title="控制该执行记录是否继续执行（短剧测试 + 新素材投放）">
                                 <input type="checkbox" checked onchange="toggleAiDramaTask(this)" />
                                 <span class="toggle-slider"></span>
                               </label>
@@ -2901,12 +2901,12 @@
               </div>
             </div>
 
-            <!-- 新增/编辑抽屉：AI素材自动化任务 -->
+            <!-- 新增/编辑抽屉：AI素材任务模板 -->
             <div id="ai-task-drawer-overlay" class="drawer-overlay" onclick="closeAiTaskDrawer()"></div>
             <div id="ai-task-drawer" class="drawer drawer-narrow">
               <div class="drawer-card">
                 <div class="drawer-header" style="align-items: flex-start; gap: 12px;">
-                  <h3 class="drawer-title" id="ai-task-drawer-title" style="font-size: 17px;">AI素材自动化任务</h3>
+                  <h3 class="drawer-title" id="ai-task-drawer-title" style="font-size: 17px;">AI素材任务模板</h3>
                   <button class="drawer-close" onclick="closeAiTaskDrawer()" style="margin-left: auto;">×</button>
                 </div>
                 <div class="drawer-body">
@@ -3433,7 +3433,7 @@
                     </div>
 
                     <div id="ai-loss-std" class="ai-loss-pane">
-                      <div class="ai-loss-note"><span class="loss-new-tag">本期新增</span>CBO测出：数据按 <b>CBO 的 IAA + IAP</b> 口径、以<b>素材维度</b>计算（指标为素材级 消耗 / ROI，运算符：大于 / 小于 / 介于）。<b>素材满足判断条件即该素材测出</b>（CBO测出 / 常规+全域测出 任一板块达标均执行）；测出后按公共触发操作<b>第二轮只追加 AI 二创素材（追加操作二期开发，本期不自动追加）</b>；发送<b>飞书卡片</b>（<b>按素材逐条发送</b>：素材ID + 所属短剧（剧名 / 短剧 ID）+ 判断数据 + <b>需要追加的素材类型【AI二创】</b>，业务可直观查看放剧），并推送通知至 <b>AI 素材、短剧列表、创建任务</b>（均附素材类型【AI二创】），同时写入该短剧「日志」弹窗的<b>测出日志</b>（推送附<b>有消耗的短剧 ID</b>，日志附<b>测出素材 ID</b>、该短剧<b>有消耗的素材 ID</b>与<b>追加素材类型：AI二创</b>）；触发操作与警告设置为两个板块的<b>公共配置</b>。测出结果于「短剧任务」Tab 的测出状态中展示（列内展示已测出素材）。</div>
+                      <div class="ai-loss-note"><span class="loss-new-tag">本期新增</span>CBO测出：数据按 <b>CBO 的 IAA + IAP</b> 口径、以<b>素材维度</b>计算（指标为素材级 消耗 / ROI，运算符：大于 / 小于 / 介于）。<b>素材满足判断条件即该素材测出</b>（CBO测出 / 常规+全域测出 任一板块达标均执行）；测出后按公共触发操作<b>第二轮只追加 AI 二创素材（追加操作二期开发，本期不自动追加）</b>；发送<b>飞书卡片</b>（<b>按素材逐条发送</b>：素材ID + 所属短剧（剧名 / 短剧 ID）+ 判断数据 + <b>需要追加的素材类型【AI二创】</b>，业务可直观查看放剧），并推送通知至 <b>AI 素材、短剧列表、创建任务</b>（均附素材类型【AI二创】），同时写入该短剧「日志」弹窗的<b>测出日志</b>（推送附<b>有消耗的短剧 ID</b>，日志附<b>测出素材 ID</b>、该短剧<b>有消耗的素材 ID</b>与<b>追加素材类型：AI二创</b>）；触发操作与警告设置为两个板块的<b>公共配置</b>。测出结果于「执行记录」Tab 的测出状态中展示（列内展示已测出素材）。</div>
                       <div class="ai-schedule-section">
                         <h4 class="form-section-title">触发条件</h4>
                         <div class="form-row">
@@ -3447,7 +3447,7 @@
                     </div>
 
                     <div id="ai-loss-qy" class="ai-loss-pane" style="display: none;">
-                      <div class="ai-loss-note"><span class="loss-new-tag">本期新增</span>常规+全域测出：数据按 <b>标准稳定成本 IAA + IAP 与全域数据合计、扣除 CBO 数据</b>后的口径、以<b>素材维度</b>计算（指标为素材级 消耗 / ROI / <b>GMV</b>，运算符：大于 / 小于 / 介于）。<b>素材满足判断条件即该素材测出</b>（CBO测出 / 常规+全域测出 任一板块达标均执行）；测出后按公共触发操作<b>第二轮只追加 AI 二创素材（追加操作二期开发，本期不自动追加）</b>；发送<b>飞书卡片</b>（<b>按素材逐条发送</b>：素材ID + 所属短剧（剧名 / 短剧 ID）+ 判断数据 + <b>需要追加的素材类型【AI二创】</b>，业务可直观查看放剧），并推送通知至 <b>AI 素材、短剧列表、创建任务</b>（均附素材类型【AI二创】），同时写入该短剧「日志」弹窗的<b>测出日志</b>（推送附<b>有消耗的短剧 ID</b>，日志附<b>测出素材 ID</b>、该短剧<b>有消耗的素材 ID</b>与<b>追加素材类型：AI二创</b>）；触发操作与警告设置为两个板块的<b>公共配置</b>。测出结果于「短剧任务」Tab 的测出状态中展示（列内展示已测出素材）。</div>
+                      <div class="ai-loss-note"><span class="loss-new-tag">本期新增</span>常规+全域测出：数据按 <b>标准稳定成本 IAA + IAP 与全域数据合计、扣除 CBO 数据</b>后的口径、以<b>素材维度</b>计算（指标为素材级 消耗 / ROI / <b>GMV</b>，运算符：大于 / 小于 / 介于）。<b>素材满足判断条件即该素材测出</b>（CBO测出 / 常规+全域测出 任一板块达标均执行）；测出后按公共触发操作<b>第二轮只追加 AI 二创素材（追加操作二期开发，本期不自动追加）</b>；发送<b>飞书卡片</b>（<b>按素材逐条发送</b>：素材ID + 所属短剧（剧名 / 短剧 ID）+ 判断数据 + <b>需要追加的素材类型【AI二创】</b>，业务可直观查看放剧），并推送通知至 <b>AI 素材、短剧列表、创建任务</b>（均附素材类型【AI二创】），同时写入该短剧「日志」弹窗的<b>测出日志</b>（推送附<b>有消耗的短剧 ID</b>，日志附<b>测出素材 ID</b>、该短剧<b>有消耗的素材 ID</b>与<b>追加素材类型：AI二创</b>）；触发操作与警告设置为两个板块的<b>公共配置</b>。测出结果于「执行记录」Tab 的测出状态中展示（列内展示已测出素材）。</div>
                       <div class="ai-schedule-section">
                         <h4 class="form-section-title">触发条件</h4>
                         <div class="form-row">
@@ -3783,46 +3783,46 @@
                           <tr>
                             <td>芸之</td>
                             <td>2026-10-21 14:40:18</td>
-                            <td>新建任务</td>
+                            <td>新建任务模板</td>
                           </tr>
                         </tbody>
-                        <!-- 短剧任务 · 测出路径：开启任务 → 测试期内判定回写（一期不监控后续素材更新，故无素材更新类日志） -->
+                        <!-- 执行记录 · 测出路径：开启任务 → 测试期内判定回写（一期不监控后续素材更新，故无素材更新类日志） -->
                         <tbody id="ai-modify-log-body-tested" style="display: none;">
                           <tr>
                             <td>系统</td>
                             <td>2026-10-19 18:20:00</td>
-                            <td>测试期内判定回写。短剧任务测出状态：测出</td>
+                            <td>测试期内判定回写。执行记录测出状态：测出</td>
                           </tr>
                           <tr>
                             <td>系统</td>
                             <td>2026-10-18 09:00:00</td>
-                            <td>开启短剧任务，AI素材数量：95，大于90。短剧任务测出状态：测试中</td>
+                            <td>开启执行记录，AI素材数量：95，大于90。执行记录测出状态：测试中</td>
                           </tr>
                         </tbody>
-                        <!-- 短剧任务 · 测试中：任务开启且素材数达标，进入 3 天测试期 -->
+                        <!-- 执行记录 · 测试中：任务开启且素材数达标，进入 3 天测试期 -->
                         <tbody id="ai-modify-log-body-testing" style="display: none;">
                           <tr>
                             <td>系统</td>
                             <td>2026-10-21 09:40:00</td>
-                            <td>开启短剧任务，AI素材数量：120，大于90。短剧任务测出状态：测试中</td>
+                            <td>开启执行记录，AI素材数量：120，大于90。执行记录测出状态：测试中</td>
                           </tr>
                         </tbody>
-                        <!-- 短剧任务 · 未测出：两种触发路径（3天测试期结束未达标 / 用户手动关闭）示例并列展示 -->
+                        <!-- 执行记录 · 未测出：两种触发路径（3天测试期结束未达标 / 用户手动关闭）示例并列展示 -->
                         <tbody id="ai-modify-log-body-untested" style="display: none;">
                           <tr>
                             <td>系统</td>
                             <td>2026-10-20 18:00:00</td>
-                            <td>3 天测试期结束未达标。短剧任务测出状态：未测出</td>
+                            <td>3 天测试期结束未达标。执行记录测出状态：未测出</td>
                           </tr>
                           <tr>
                             <td>芸之</td>
                             <td>2026-10-20 15:30:00</td>
-                            <td>用户手动关闭短剧任务。短剧任务测出状态：未测出</td>
+                            <td>用户手动关闭执行记录。执行记录测出状态：未测出</td>
                           </tr>
                           <tr>
                             <td>系统</td>
                             <td>2026-10-18 09:10:00</td>
-                            <td>开启短剧任务，AI素材数量：95，大于90。短剧任务测出状态：测试中</td>
+                            <td>开启执行记录，AI素材数量：95，大于90。执行记录测出状态：测试中</td>
                           </tr>
                         </tbody>
                       </table>
@@ -5534,7 +5534,7 @@
       }
 
       function searchAiAutoTask() {
-        alert('查询AI素材自动化任务');
+        alert('查询AI素材任务模板');
       }
 
       function resetAiAutoTaskFilters() {
@@ -5601,7 +5601,7 @@
       }
 
       /*
-       * 短剧任务开关：控制该短剧任务是否继续执行（继续执行 = 短剧测试 + 新素材投放）
+       * 执行记录开关：控制该执行记录是否继续执行（继续执行 = 短剧测试 + 新素材投放）
        * - 开启 / 关闭均需二次确认，取消则开关恢复原状态
        * - 测出：关闭后状态仍为「测出」，但后续产生的新素材不再投放
        * - 测试中：关闭后任务终止，测出状态改为「未测出」，且不可再开启
@@ -5929,7 +5929,7 @@
       /* 新增/编辑抽屉：标题为「任务名（ID: x）」，新增场景回退为通用标题 */
       function openAiTaskDrawer(taskName, taskId) {
         document.getElementById('ai-task-drawer-title').textContent =
-          taskName && taskId ? taskName + '（ID: ' + taskId + '）' : 'AI素材自动化任务';
+          taskName && taskId ? taskName + '（ID: ' + taskId + '）' : 'AI素材任务模板';
         switchAiTaskDrawerTab('standard');
         /* 任务模板名称：编辑/复制带入原名称，新增时清空待填 */
         var nameField = document.getElementById('aiTaskName');
@@ -5979,7 +5979,7 @@
       function copyAiTask(taskName, taskId) {
         openAiTaskDrawer(taskName, taskId);
         document.getElementById('ai-task-drawer-title').textContent =
-          (taskName || 'AI素材自动化任务') + '（复制自 ID: ' + taskId + '）';
+          (taskName || 'AI素材任务模板') + '（复制自 ID: ' + taskId + '）';
       }
 
       function switchAiTaskDrawerTab(tabName) {
@@ -6969,13 +6969,13 @@
             return;
           }
         }
-        var nameTxt = '任务「' + document.getElementById('aiTaskName').value.trim() + '」';
+        var nameTxt = '任务模板「' + document.getElementById('aiTaskName').value.trim() + '」';
         var statusTxt = aiSegValues.aiTaskStatus === 'off' ? '停用' : '生效';
         showAiToast(nameTxt + '（' + statusTxt + '）已保存：' + buildAiGlobalSummary().replace('配置已保存：', ''));
         closeAiTaskDrawer();
       }
 
-      /* 执行日志抽屉（任务列表 / 短剧任务共用；title 可选，传入后覆盖抽屉标题） */
+      /* 执行日志抽屉（任务列表 / 执行记录共用；title 可选，传入后覆盖抽屉标题） */
       function openAiTaskLogDrawer(title) {
         if (title) document.getElementById('ai-task-log-title').textContent = title;
         document.getElementById('ai-task-log-overlay').classList.add('open');
@@ -6990,8 +6990,8 @@
       }
 
       /*
-       * 修改日志抽屉（任务列表 / 短剧任务共用）
-       * scope：task（任务修改日志，默认）/ tested / testing / untested（短剧任务各测出状态）
+       * 修改日志抽屉（任务列表 / 执行记录共用）
+       * scope：task（任务模板修改日志，默认）/ tested / testing / untested（执行记录各测出状态）
        */
       function openAiModifyLogDrawer(taskName, taskId, scope) {
         document.getElementById('ai-modify-log-title').textContent = (taskName ? taskName : '任务') + '-修改日志';
