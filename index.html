@@ -1494,6 +1494,8 @@
                           <td>还音</td>
                           <td>
                             <div class="row-actions">
+                              <!-- 重新投放：仅「测试中」状态展示；标准/全域均报错时系统自动选账户新增投放记录 -->
+                              <button class="row-action-btn redeploy-btn" onclick="retryAiDramaRedeploy('5004', '任务2', '短剧4')">重新投放</button>
                               <button class="row-action-btn" onclick="openAiModifyLogDrawer('任务2-短剧4', '5004', 'testing')">日志</button>
                             </div>
                           </td>
@@ -3581,79 +3583,6 @@
               </div>
             </div>
 
-            <!-- 全域投放 · 资源选择弹窗（抖音号 / 主体包 / 应用包 / 账户包） -->
-            <div id="ai-res-picker-overlay" class="modal-overlay" onclick="closeAiResPicker()"></div>
-            <div id="ai-res-picker-modal" class="modal">
-              <div class="modal-card" style="width: min(560px, calc(100vw - 40px));">
-                <div class="modal-header">
-                  <span id="ai-res-picker-title">选择抖音号</span>
-                  <button class="modal-close" onclick="closeAiResPicker()">×</button>
-                </div>
-                <div class="modal-body">
-                  <input type="text" class="form-input ai-pick-search" id="ai-res-picker-search" placeholder="请输入名称 / ID 搜索" oninput="renderAiResPickerList()" />
-                  <div class="ai-pick-list" id="ai-res-picker-list"></div>
-                </div>
-                <div class="modal-footer">
-                  <span style="margin-right: auto; font-size: 13px; color: var(--color-text-secondary);">已选 <strong id="ai-res-picker-count" style="color: var(--color-info);">0</strong> 项</span>
-                  <button class="btn btn-outline" onclick="closeAiResPicker()">取消</button>
-                  <button class="btn btn-primary" onclick="confirmAiResPicker()">确定</button>
-                </div>
-              </div>
-            </div>
-
-            <!-- 全域投放 · 抖音号包表格选择器 -->
-            <div id="ai-dy-pkg-overlay" class="modal-overlay" onclick="closeAiDyPkg()"></div>
-            <div id="ai-dy-pkg-modal" class="modal ai-pkg-modal">
-              <div class="modal-card">
-                <div class="modal-header">
-                  <span>选择抖音号包</span>
-                  <button class="modal-close" onclick="closeAiDyPkg()">×</button>
-                </div>
-                <div class="modal-body">
-                  <div class="ai-pkg-filter">
-                    <div class="filter-combo">
-                      <select class="filter-combo-select" id="ai-pkg-field" onchange="aiPkgState.field = this.value; aiPkgState.page = 1; applyAiPkgFilter();">
-                        <option value="name">抖音号包名称</option>
-                        <option value="id">抖音号包ID</option>
-                      </select>
-                      <input type="text" class="filter-combo-input" id="ai-pkg-kw" placeholder="请输入" onkeydown="if(event.key==='Enter'){aiPkgState.kw=this.value;aiPkgState.page=1;applyAiPkgFilter();}" />
-                    </div>
-                    <select class="filter-select" id="ai-pkg-creator" onchange="aiPkgState.creator = this.value; aiPkgState.page = 1; applyAiPkgFilter();">
-                      <option value="">请选择创建人</option>
-                    </select>
-                    <button class="btn btn-info btn-sm" onclick="aiPkgState.kw = document.getElementById('ai-pkg-kw').value; aiPkgState.page = 1; applyAiPkgFilter();">查询</button>
-                    <button class="btn btn-outline btn-sm" onclick="resetAiPkgFilter()">重置</button>
-                  </div>
-
-                  <div class="ai-pkg-meta">已选择：<b id="ai-pkg-count">0</b></div>
-
-                  <div class="table-wrapper">
-                    <table class="data-table">
-                      <thead>
-                        <tr>
-                          <th style="width: 48px;"><span class="ai-ck2" id="ai-pkg-all" onclick="toggleAiPkgPage()">✓</span></th>
-                          <th style="width: 70px;">ID</th>
-                          <th>抖音号包名称</th>
-                          <th style="width: 100px;">备注</th>
-                          <th style="width: 100px;">抖音号数量</th>
-                          <th style="width: 90px;">创建人</th>
-                          <th style="width: 160px;">创建时间</th>
-                          <th style="width: 160px;">更新时间</th>
-                        </tr>
-                      </thead>
-                      <tbody id="ai-pkg-body"></tbody>
-                    </table>
-                  </div>
-
-                  <div class="ai-pkg-pager" id="ai-pkg-pager"></div>
-                </div>
-                <div class="modal-footer">
-                  <button class="btn btn-outline" onclick="closeAiDyPkg()">取消</button>
-                  <button class="btn btn-primary" onclick="confirmAiDyPkg()">确定</button>
-                </div>
-              </div>
-            </div>
-
             <!-- 全域投放 · 素材上传详情（素材更新明细入口） -->
             <div id="ai-upload-overlay" class="modal-overlay" onclick="closeAiMaterialUpload()"></div>
             <div id="ai-upload-modal" class="modal ai-upload-modal">
@@ -3942,6 +3871,24 @@
                       </tbody>
                     </table>
                   </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 重新投放确认弹框（通用确认样式） -->
+            <div id="ai-redeploy-overlay" class="modal-overlay" onclick="closeAiRedeployConfirm()"></div>
+            <div id="ai-redeploy-modal" class="modal">
+              <div class="modal-card" style="width: min(460px, calc(100vw - 40px));">
+                <div class="modal-header">
+                  <span>重新投放</span>
+                  <button class="modal-close" onclick="closeAiRedeployConfirm()">×</button>
+                </div>
+                <div class="modal-body">
+                  <p id="ai-redeploy-confirm-text" style="margin: 0; font-size: 14px; line-height: 1.9; color: var(--color-text-primary);"></p>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-outline" onclick="closeAiRedeployConfirm()">取消</button>
+                  <button class="btn btn-primary" onclick="confirmAiRedeploy()">确认重新投放</button>
                 </div>
               </div>
             </div>
@@ -4593,113 +4540,546 @@
             </div>
           </div>
 
-    <!-- New Task Modal -->
-    <div
-      id="modal-new-task"
-      style="
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.6);
-        z-index: 1000;
-        align-items: center;
-        justify-content: center;
-      "
-      onclick="closeNewTaskModal(event)"
-    >
-      <div
-        style="
-          background: white;
-          border-radius: 16px;
-          width: 560px;
-          max-width: 90vw;
-          max-height: 85vh;
-          overflow: hidden;
-          box-shadow: 0 25px 80px rgba(0, 0, 0, 0.35);
-        "
-        onclick="event.stopPropagation()"
-      >
-        <div
-          style="
-            padding: 20px 24px;
-            border-bottom: 1px solid #e5e7eb;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: #f9fafb;
-          "
-        >
-          <h3 id="modal-new-task-title" style="margin: 0; font-size: 18px; font-weight: 600; color: #111827;">新建自动化任务</h3>
-          <button
-            onclick="closeNewTaskModal()"
-            style="
-              border: none;
-              background: none;
-              font-size: 24px;
-              color: #6b7280;
-              cursor: pointer;
-              padding: 4px;
-              line-height: 1;
-            "
-          >
-            ×
-          </button>
+    <!-- 全域投放 · 资源选择弹窗（抖音号 / 主体包 / 应用包 / 账户包） -->
+    <div id="ai-res-picker-overlay" class="modal-overlay" onclick="closeAiResPicker()"></div>
+    <div id="ai-res-picker-modal" class="modal">
+      <div class="modal-card" style="width: min(560px, calc(100vw - 40px));">
+        <div class="modal-header">
+          <span id="ai-res-picker-title">选择抖音号</span>
+          <button class="modal-close" onclick="closeAiResPicker()">×</button>
         </div>
-        <div style="padding: 24px; overflow-y: auto; max-height: calc(85vh - 140px);">
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-            <div>
-              <label style="display: block; font-size: 14px; font-weight: 500; margin-bottom: 8px; color: #374151;">
-                任务名称 <span style="color: #ef4444;">*</span>
-              </label>
-              <input type="text" placeholder="请输入任务名称" style="width: 100%; padding: 10px 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 14px; box-sizing: border-box;" />
-            </div>
-            <div>
-              <label style="display: block; font-size: 14px; font-weight: 500; margin-bottom: 8px; color: #374151;">
-                业务场景 <span style="color: #ef4444;">*</span>
-              </label>
-              <select style="width: 100%; padding: 10px 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 14px; background: white; box-sizing: border-box;">
-                <option>请选择业务场景</option>
-                <option>崛原生免费</option>
-              </select>
-            </div>
-          </div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 16px;">
-            <div>
-              <label style="display: block; font-size: 14px; font-weight: 500; margin-bottom: 8px; color: #374151;">
-                报价策略 <span style="color: #ef4444;">*</span>
-              </label>
-              <select style="width: 100%; padding: 10px 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 14px; background: white; box-sizing: border-box;">
-                <option>请选择报价策略</option>
-                <option>最大转化</option>
-                <option>稳定成本</option>
-              </select>
-            </div>
-            <div>
-              <label style="display: block; font-size: 14px; font-weight: 500; margin-bottom: 8px; color: #374151;">ROI 系数</label>
-              <input type="number" placeholder="请输入 ROI 系数" style="width: 100%; padding: 10px 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 14px; box-sizing: border-box;" />
-            </div>
-          </div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 16px;">
-            <div>
-              <label style="display: block; font-size: 14px; font-weight: 500; margin-bottom: 8px; color: #374151;">日预算</label>
-              <input type="number" placeholder="请输入日预算" style="width: 100%; padding: 10px 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 14px; box-sizing: border-box;" />
-            </div>
-            <div>
-              <label style="display: block; font-size: 14px; font-weight: 500; margin-bottom: 8px; color: #374151;">执行间隔（分钟）</label>
-              <input type="number" value="10" placeholder="请输入执行间隔" style="width: 100%; padding: 10px 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 14px; box-sizing: border-box;" />
-            </div>
-          </div>
-          <div style="margin-top: 16px;">
-            <label style="display: block; font-size: 14px; font-weight: 500; margin-bottom: 8px; color: #374151;">备注</label>
-            <textarea rows="3" placeholder="请输入备注" style="width: 100%; padding: 10px 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 14px; resize: none; box-sizing: border-box;"></textarea>
-          </div>
+        <div class="modal-body">
+          <input type="text" class="form-input ai-pick-search" id="ai-res-picker-search" placeholder="请输入名称 / ID 搜索" oninput="renderAiResPickerList()" />
+          <div class="ai-pick-list" id="ai-res-picker-list"></div>
         </div>
-        <div style="padding: 16px 24px; border-top: 1px solid #e5e7eb; display: flex; justify-content: flex-end; gap: 12px; background: #f9fafb;">
-          <button onclick="closeNewTaskModal()" class="btn btn-outline" style="padding: 10px 24px; border-radius: 50px; font-size: 14px;">取消</button>
-          <button onclick="submitNewTask()" class="btn btn-primary" style="padding: 10px 24px; border-radius: 50px; font-size: 14px;">保存</button>
+        <div class="modal-footer">
+          <span style="margin-right: auto; font-size: 13px; color: var(--color-text-secondary);">已选 <strong id="ai-res-picker-count" style="color: var(--color-info);">0</strong> 项</span>
+          <button class="btn btn-outline" onclick="closeAiResPicker()">取消</button>
+          <button class="btn btn-primary" onclick="confirmAiResPicker()">确定</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 全域投放 · 抖音号包表格选择器 -->
+    <div id="ai-dy-pkg-overlay" class="modal-overlay" onclick="closeAiDyPkg()"></div>
+    <div id="ai-dy-pkg-modal" class="modal ai-pkg-modal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <span>选择抖音号包</span>
+          <button class="modal-close" onclick="closeAiDyPkg()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="ai-pkg-filter">
+            <div class="filter-combo">
+              <select class="filter-combo-select" id="ai-pkg-field" onchange="aiPkgState.field = this.value; aiPkgState.page = 1; applyAiPkgFilter();">
+                <option value="name">抖音号包名称</option>
+                <option value="id">抖音号包ID</option>
+              </select>
+              <input type="text" class="filter-combo-input" id="ai-pkg-kw" placeholder="请输入" onkeydown="if(event.key==='Enter'){aiPkgState.kw=this.value;aiPkgState.page=1;applyAiPkgFilter();}" />
+            </div>
+            <select class="filter-select" id="ai-pkg-creator" onchange="aiPkgState.creator = this.value; aiPkgState.page = 1; applyAiPkgFilter();">
+              <option value="">请选择创建人</option>
+            </select>
+            <button class="btn btn-info btn-sm" onclick="aiPkgState.kw = document.getElementById('ai-pkg-kw').value; aiPkgState.page = 1; applyAiPkgFilter();">查询</button>
+            <button class="btn btn-outline btn-sm" onclick="resetAiPkgFilter()">重置</button>
+          </div>
+
+          <div class="ai-pkg-meta">已选择：<b id="ai-pkg-count">0</b></div>
+
+          <div class="table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th style="width: 48px;"><span class="ai-ck2" id="ai-pkg-all" onclick="toggleAiPkgPage()">✓</span></th>
+                  <th style="width: 70px;">ID</th>
+                  <th>抖音号包名称</th>
+                  <th style="width: 100px;">备注</th>
+                  <th style="width: 100px;">抖音号数量</th>
+                  <th style="width: 90px;">创建人</th>
+                  <th style="width: 160px;">创建时间</th>
+                  <th style="width: 160px;">更新时间</th>
+                </tr>
+              </thead>
+              <tbody id="ai-pkg-body"></tbody>
+            </table>
+          </div>
+
+          <div class="ai-pkg-pager" id="ai-pkg-pager"></div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline" onclick="closeAiDyPkg()">取消</button>
+          <button class="btn btn-primary" onclick="confirmAiDyPkg()">确定</button>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- 新建/编辑 ：巨量短剧自动化任务抽屉（国内投放 · 标准推广 · 自动化任务）
+         表单较长，点击遮罩不关闭，避免误触丢失已填内容 -->
+    <div id="modal-new-task-overlay" class="drawer-overlay"></div>
+    <div id="modal-new-task" class="drawer drawer-wide">
+      <div class="task-modal-card">
+        <div class="drawer-header task-modal-header">
+          <h3 class="drawer-title" id="modal-new-task-title">新建巨量短剧自动化任务</h3>
+          <button class="drawer-close" onclick="closeNewTaskModal()">&times;</button>
+        </div>
+
+        <div class="drawer-body task-modal-body">
+          <!-- ===== 基本信息 ===== -->
+          <section class="task-section">
+            <h4 class="task-section-title">基本信息</h4>
+
+            <div class="task-row" id="ntRowName">
+              <label class="task-label"><i class="req">*</i>任务名称：</label>
+              <div class="task-ctrl">
+                <input type="text" class="form-input task-w-md" id="ntTaskName" maxlength="40" placeholder="请输入任务名称" />
+              </div>
+            </div>
+
+            <div class="task-row">
+              <label class="task-label"><i class="req">*</i>状态：</label>
+              <div class="task-ctrl">
+                <div class="segmented-control" data-seg="ntStatus">
+                  <button class="segmented-item active" type="button" data-v="on" onclick="setNtSeg(this)">生效</button>
+                  <button class="segmented-item" type="button" data-v="off" onclick="setNtSeg(this)">停用</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-row">
+              <label class="task-label"><i class="req">*</i>生效时间：</label>
+              <div class="task-ctrl stack">
+                <div class="task-time-list" id="ntTimeRanges">
+                  <div class="task-time-range">
+                    <input type="time" class="form-input task-w-time" value="00:00:00" step="1" />
+                    <span class="task-sep">~</span>
+                    <input type="time" class="form-input task-w-time" value="23:59:59" step="1" />
+                  </div>
+                </div>
+                <a class="form-link" onclick="addNtTimeRange()">添加时间范围</a>
+              </div>
+            </div>
+
+            <div class="task-row" id="ntRowInterval">
+              <label class="task-label"><i class="req">*</i>执行频率：</label>
+              <div class="task-ctrl">
+                <span class="task-text">间隔</span>
+                <input type="text" class="form-input task-w-sm" id="ntInterval" placeholder="执行频率" oninput="limitPositiveInt(this)" />
+                <span class="task-text">分钟执行一次</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- ===== 短剧范围 ===== -->
+          <section class="task-section">
+            <h4 class="task-section-title">短剧范围</h4>
+            <div id="ntDramaScopeList">
+              <div class="task-row indent">
+                <div class="task-ctrl">
+                  <select class="form-select task-w-sm">
+                    <option>短剧标签</option>
+                    <option>短剧名称</option>
+                    <option>短剧ID</option>
+                  </select>
+                  <select class="form-select task-w-xs">
+                    <option>包含</option>
+                    <option>不包含</option>
+                    <option>等于</option>
+                  </select>
+                  <input type="text" class="form-input task-w-lg" placeholder="请选择" />
+                </div>
+              </div>
+            </div>
+            <div class="task-row indent">
+              <div class="task-ctrl">
+                <a class="form-link" onclick="addNtDramaScope()">添加短剧范围</a>
+              </div>
+            </div>
+          </section>
+
+          <!-- ===== 基础数量/单剧 ===== -->
+          <section class="task-section">
+            <h4 class="task-section-title">基础数量/单剧</h4>
+
+            <div class="task-row">
+              <label class="task-label"><i class="req">*</i><i class="tip-icon" data-tip="单剧每日可执行的基础次数。选择「不限」时不限制每日执行次数；选择「自定义」时按填写次数执行">?</i>基础次数/天：</label>
+              <div class="task-ctrl">
+                <div class="segmented-control" data-seg="ntBaseTimes">
+                  <button class="segmented-item active" type="button" data-v="none" onclick="setNtSeg(this)">不限</button>
+                  <button class="segmented-item" type="button" data-v="custom" onclick="setNtSeg(this)">自定义</button>
+                </div>
+                <input type="text" class="form-input task-w-sm" id="ntBaseTimesCustom" placeholder="请输入" style="display: none;" oninput="limitPositiveInt(this)" />
+              </div>
+            </div>
+
+            <div class="task-row">
+              <label class="task-label">基础总次数：</label>
+              <div class="task-ctrl">
+                <input type="text" class="form-input task-w-sm" id="ntBaseTotal" placeholder="请输入" oninput="limitPositiveInt(this)" />
+                <span class="task-hint">不填写默认20</span>
+              </div>
+            </div>
+
+            <div class="task-row" id="ntRowAccount">
+              <label class="task-label"><i class="req">*</i>投放账户数：</label>
+              <div class="task-ctrl">
+                <input type="text" class="form-input task-w-sm" id="ntAccountCount" placeholder="请输入" oninput="limitPositiveInt(this)" />
+              </div>
+            </div>
+
+            <div class="task-row" id="ntRowProject">
+              <label class="task-label"><i class="req">*</i><i class="tip-icon" data-tip="仅选择账户：剩余可投项目数 &gt;= 此处配置的项目数。账户下限制最多 30 个项目">?</i>账户下项目数：</label>
+              <div class="task-ctrl">
+                <input type="text" class="form-input task-w-sm" id="ntProjectCount" placeholder="请输入" oninput="limitPositiveInt(this)" />
+              </div>
+            </div>
+
+            <div class="task-row">
+              <label class="task-label">项目下单元数：</label>
+              <div class="task-ctrl">
+                <input type="text" class="form-input task-w-sm" id="ntUnitCount" placeholder="请输入" oninput="limitPositiveInt(this)" />
+                <span class="task-hint">不填写默认15</span>
+              </div>
+            </div>
+
+            <div class="task-row">
+              <label class="task-label">单元下创意数：</label>
+              <div class="task-ctrl">
+                <input type="text" class="form-input task-w-sm" id="ntCreativeCount" placeholder="请输入" oninput="limitPositiveInt(this)" />
+                <span class="task-hint">不填写默认30</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- ===== 素材配置/单剧 ===== -->
+          <section class="task-section">
+            <h4 class="task-section-title">素材配置/单剧</h4>
+
+            <div class="task-row">
+              <label class="task-label"><i class="req">*</i>素材选择方式：</label>
+              <div class="task-ctrl">
+                <div class="segmented-control" data-seg="ntMatMode">
+                  <button class="segmented-item active" type="button" data-v="time" onclick="setNtSeg(this)">按时间</button>
+                  <button class="segmented-item" type="button" data-v="sort" onclick="setNtSeg(this)">按排序</button>
+                  <button class="segmented-item" type="button" data-v="custom" onclick="setNtSeg(this)">自定义</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-row">
+              <label class="task-label"><i class="tip-icon" data-tip="从素材库中选择参与自动投放的素材文件夹，可多选；不选择时默认使用全部素材">?</i>素材范围：</label>
+              <div class="task-ctrl">
+                <button class="btn btn-outline btn-sm" type="button" onclick="openTaskFolderPicker()">选择文件夹</button>
+                <div class="task-chips" id="ntFolderChips"></div>
+              </div>
+            </div>
+
+            <div class="task-row" id="ntRowMatCreate">
+              <label class="task-label"><i class="req">*</i>素材创建时间：</label>
+              <div class="task-ctrl stack">
+                <div class="segmented-control" data-seg="ntMatCreateTime">
+                  <button class="segmented-item" type="button" data-v="3h" onclick="setNtSeg(this)">3小时</button>
+                  <button class="segmented-item" type="button" data-v="1d" onclick="setNtSeg(this)">1天</button>
+                  <button class="segmented-item" type="button" data-v="3d" onclick="setNtSeg(this)">3天</button>
+                  <button class="segmented-item" type="button" data-v="7d" onclick="setNtSeg(this)">7天</button>
+                  <button class="segmented-item" type="button" data-v="15d" onclick="setNtSeg(this)">15天</button>
+                  <button class="segmented-item" type="button" data-v="30d" onclick="setNtSeg(this)">30天</button>
+                  <button class="segmented-item active" type="button" data-v="custom" onclick="setNtSeg(this)">自定义</button>
+                </div>
+                <div class="task-inline" id="ntMatCreateTimeCustom">
+                  <select class="form-select task-w-xs">
+                    <option>近</option>
+                    <option>累计</option>
+                  </select>
+                  <input type="text" class="form-input task-w-sm" placeholder="请输入" oninput="limitPositiveInt(this)" />
+                  <select class="form-select task-w-xs">
+                    <option>天</option>
+                    <option>小时</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-row" id="ntRowMatCost">
+              <label class="task-label"><i class="req">*</i>素材消耗：</label>
+              <div class="task-ctrl stack">
+                <div class="segmented-control" data-seg="ntMatCost">
+                  <button class="segmented-item" type="button" data-v="none" onclick="setNtSeg(this)">不限</button>
+                  <button class="segmented-item active" type="button" data-v="custom" onclick="setNtSeg(this)">自定义</button>
+                </div>
+                <div class="task-inline" id="ntMatCostCustom">
+                  <select class="form-select task-w-xs">
+                    <option>累计</option>
+                    <option>近1天</option>
+                    <option>近3天</option>
+                    <option>近7天</option>
+                    <option>近15天</option>
+                    <option>近30天</option>
+                  </select>
+                  <select class="form-select task-w-xxs">
+                    <option>&gt;=</option>
+                    <option>&lt;=</option>
+                    <option>=</option>
+                  </select>
+                  <input type="text" class="form-input task-w-sm" placeholder="请输入" />
+                </div>
+              </div>
+            </div>
+
+            <div class="task-row" id="ntRowMatDuration">
+              <label class="task-label"><i class="req">*</i>素材时长：</label>
+              <div class="task-ctrl stack">
+                <div class="segmented-control" data-seg="ntMatDuration">
+                  <button class="segmented-item active" type="button" data-v="none" onclick="setNtSeg(this)">不限</button>
+                  <button class="segmented-item" type="button" data-v="custom" onclick="setNtSeg(this)">自定义</button>
+                </div>
+                <div class="task-inline" id="ntMatDurationCustom" style="display: none;">
+                  <select class="form-select task-w-xxs">
+                    <option>&gt;=</option>
+                    <option>&lt;=</option>
+                  </select>
+                  <input type="text" class="form-input task-w-sm" placeholder="请输入" oninput="limitPositiveInt(this)" />
+                  <span class="task-hint">秒</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-row">
+              <label class="task-label">任务素材去重：</label>
+              <div class="task-ctrl">
+                <div class="segmented-control" data-seg="ntMatDedup">
+                  <button class="segmented-item" type="button" data-v="on" onclick="setNtSeg(this)">开启</button>
+                  <button class="segmented-item active" type="button" data-v="off" onclick="setNtSeg(this)">关闭</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-row">
+              <label class="task-label"><i class="tip-icon" data-tip="同一素材在同一单元内可重复投放的次数。选择「自定义」时按填写次数执行，不填写默认为 1">?</i>单元重复次数：</label>
+              <div class="task-ctrl">
+                <div class="segmented-control" data-seg="ntUnitRepeat">
+                  <button class="segmented-item active" type="button" data-v="none" onclick="setNtSeg(this)">不限</button>
+                  <button class="segmented-item" type="button" data-v="custom" onclick="setNtSeg(this)">自定义</button>
+                </div>
+                <input type="text" class="form-input task-w-sm" id="ntUnitRepeatCustom" placeholder="请输入" style="display: none;" oninput="limitPositiveInt(this)" />
+                <span class="task-hint">不填写默认1</span>
+              </div>
+            </div>
+
+            <div class="task-row">
+              <label class="task-label">素材重复范围：</label>
+              <div class="task-ctrl">
+                <div class="segmented-control" data-seg="ntMatRepeatScope">
+                  <button class="segmented-item" type="button" data-v="single" onclick="setNtSeg(this)">单个账户</button>
+                  <button class="segmented-item active" type="button" data-v="all" onclick="setNtSeg(this)">全量账户</button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ===== 投放账户 ===== -->
+          <section class="task-section">
+            <h4 class="task-section-title"><i class="tip-icon" data-tip="不配置以下内容将根据预算出价自动匹配可投放账户">?</i>投放账户</h4>
+
+            <div class="task-row">
+              <label class="task-label">主体包：</label>
+              <div class="task-ctrl">
+                <button class="btn btn-outline btn-sm" type="button" onclick="openAiResPicker('subject', 'newtask')">选择主体包</button>
+                <div class="task-chips" id="aiChipsSubject-newtask"></div>
+              </div>
+            </div>
+
+            <div class="task-row">
+              <label class="task-label">应用包：</label>
+              <div class="task-ctrl">
+                <button class="btn btn-outline btn-sm" type="button" onclick="openAiResPicker('app', 'newtask')">选择应用包</button>
+                <div class="task-chips" id="aiChipsApp-newtask"></div>
+              </div>
+            </div>
+
+            <div class="task-row">
+              <label class="task-label">账户包：</label>
+              <div class="task-ctrl">
+                <button class="btn btn-outline btn-sm" type="button" onclick="openAiResPicker('account', 'newtask')">选择账户包</button>
+                <div class="task-chips" id="aiChipsAccount-newtask"></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ===== 抖音号范围 ===== -->
+          <section class="task-section">
+            <h4 class="task-section-title">抖音号范围</h4>
+
+            <div class="task-row" id="ntRowDy">
+              <label class="task-label"><i class="req">*</i>抖音号（项目）：</label>
+              <div class="task-ctrl">
+                <div class="segmented-control" data-seg="aiDyScope|newtask">
+                  <button class="segmented-item active" type="button" data-v="custom" onclick="setAiSeg(this)">自定义</button>
+                  <button class="segmented-item" type="button" data-v="pkg" onclick="setAiSeg(this)">抖音号包</button>
+                </div>
+                <input type="text" class="form-input task-w-md" id="aiDyPick-newtask" readonly placeholder="请选择" style="cursor: pointer;" onclick="openAiResPicker('douyin', 'newtask')" />
+                <button class="btn btn-outline btn-sm" type="button" id="aiDyPkgBtn-newtask" style="display: none;" onclick="openAiDyPkg('newtask')">选择抖音号包</button>
+                <div class="task-chips" id="aiChipsDy-newtask"></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ===== 投放配置 ===== -->
+          <section class="task-section">
+            <h4 class="task-section-title">投放配置</h4>
+
+            <div class="task-row">
+              <label class="task-label">投放内容：</label>
+              <div class="task-ctrl">
+                <div class="segmented-control">
+                  <button class="segmented-item active" type="button" data-v="native">端原生</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-row">
+              <label class="task-label">业务场景：</label>
+              <div class="task-ctrl">
+                <div class="segmented-control" data-seg="ntBizScene">
+                  <button class="segmented-item" type="button" data-v="pay" onclick="setNtSeg(this)">付费</button>
+                  <button class="segmented-item active" type="button" data-v="iaa" onclick="setNtSeg(this)">IAA</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-row">
+              <label class="task-label">星广联投：</label>
+              <div class="task-ctrl">
+                <div class="segmented-control" data-seg="ntStarUnion">
+                  <button class="segmented-item active" type="button" data-v="on" onclick="setNtSeg(this)">开启</button>
+                  <button class="segmented-item" type="button" data-v="off" onclick="setNtSeg(this)">关闭</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-row">
+              <label class="task-label">AIGC：</label>
+              <div class="task-ctrl">
+                <div class="segmented-control" data-seg="ntAigc">
+                  <button class="segmented-item active" type="button" data-v="on" onclick="setNtSeg(this)">开启</button>
+                  <button class="segmented-item" type="button" data-v="off" onclick="setNtSeg(this)">关闭</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-row" id="ntRowBidType">
+              <label class="task-label"><i class="req">*</i>竞价策略：</label>
+              <div class="task-ctrl">
+                <div class="segmented-control" data-seg="ntBidType">
+                  <button class="segmented-item active" type="button" data-v="stable" onclick="setNtSeg(this)">稳定成本</button>
+                  <button class="segmented-item" type="button" data-v="max" onclick="setNtSeg(this)">最大转化</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-row" id="ntRowRoi">
+              <label class="task-label"><i class="req">*</i>ROI系数：</label>
+              <div class="task-ctrl">
+                <input type="text" class="form-input task-w-sm" id="ntRoi" placeholder="请输入" />
+              </div>
+            </div>
+
+            <div class="task-row" id="ntRowBudget">
+              <label class="task-label"><i class="req">*</i>日预算：</label>
+              <div class="task-ctrl">
+                <input type="text" class="form-input task-w-sm" id="ntBudget" placeholder="请输入" oninput="limitPositiveInt(this)" />
+              </div>
+            </div>
+
+            <div class="task-row">
+              <label class="task-label">文案库范围：</label>
+              <div class="task-ctrl">
+                <div class="segmented-control" data-seg="ntCopyScope">
+                  <button class="segmented-item active" type="button" data-v="all" onclick="setNtSeg(this)">不限</button>
+                  <button class="segmented-item" type="button" data-v="mine" onclick="setNtSeg(this)">仅本人创建</button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ===== 项目排期 ===== -->
+          <section class="task-section">
+            <h4 class="task-section-title">项目排期</h4>
+
+            <div class="task-row">
+              <label class="task-label"><i class="req">*</i><i class="tip-icon" data-tip="自定义：按下方开投时间 / 投放天数 / 投放时段排期；自动：由系统按短剧数量与账户余量自动分配">?</i>排期方式：</label>
+              <div class="task-ctrl">
+                <div class="segmented-control" data-seg="ntScheduleMode">
+                  <button class="segmented-item active" type="button" data-v="custom" onclick="setNtSeg(this)">自定义</button>
+                  <button class="segmented-item" type="button" data-v="auto" onclick="setNtSeg(this)">自动</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-row">
+              <label class="task-label">开投时间：</label>
+              <div class="task-ctrl">
+                <div class="segmented-control" data-seg="ntStartDay">
+                  <button class="segmented-item active" type="button" data-v="today" onclick="setNtSeg(this)">今天</button>
+                  <button class="segmented-item" type="button" data-v="tomorrow" onclick="setNtSeg(this)">明天</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-row">
+              <label class="task-label"><i class="req">*</i>投放天数：</label>
+              <div class="task-ctrl">
+                <div class="segmented-control" data-seg="ntDays">
+                  <button class="segmented-item active" type="button" data-v="none" onclick="setNtSeg(this)">不限</button>
+                  <button class="segmented-item" type="button" data-v="limit" onclick="setNtSeg(this)">指定天数</button>
+                </div>
+                <div class="task-inline" id="ntDaysCustom" style="display: none;">
+                  <input type="text" class="form-input task-w-sm" placeholder="请输入" oninput="limitPositiveInt(this)" />
+                  <span class="task-hint">天</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-row">
+              <label class="task-label"><i class="req">*</i>投放时段：</label>
+              <div class="task-ctrl">
+                <div class="segmented-control" data-seg="ntPeriod">
+                  <button class="segmented-item active" type="button" data-v="none" onclick="setNtSeg(this)">不限</button>
+                  <button class="segmented-item" type="button" data-v="limit" onclick="setNtSeg(this)">指定时间段</button>
+                </div>
+                <div class="task-inline" id="ntPeriodCustom" style="display: none;">
+                  <input type="time" class="form-input task-w-time" value="00:00:00" step="1" />
+                  <span class="task-sep">~</span>
+                  <input type="time" class="form-input task-w-time" value="23:59:59" step="1" />
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <div class="drawer-footer task-modal-footer">
+          <button class="btn btn-outline" onclick="closeNewTaskModal()">取消</button>
+          <button class="btn btn-primary" onclick="submitNewTask()">确定</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 素材文件夹选择器（素材范围） -->
+    <div id="task-folder-overlay" class="modal-overlay" onclick="closeTaskFolderPicker()"></div>
+    <div id="task-folder-modal" class="modal">
+      <div class="modal-card" style="width: min(560px, calc(100vw - 40px));">
+        <div class="modal-header">
+          <span>选择素材文件夹</span>
+          <button class="modal-close" onclick="closeTaskFolderPicker()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <input type="text" class="form-input" id="taskFolderSearch" placeholder="请输入文件夹名称搜索" oninput="renderTaskFolderList()" style="margin-bottom: 12px;" />
+          <div class="task-folder-list" id="taskFolderList"></div>
+        </div>
+        <div class="modal-footer">
+          <span style="margin-right: auto; font-size: 13px; color: var(--color-text-secondary);">已选 <b id="taskFolderCount" style="color: var(--color-info);">0</b> 项</span>
+          <button class="btn btn-outline" onclick="closeTaskFolderPicker()">取消</button>
+          <button class="btn btn-primary" onclick="confirmTaskFolderPicker()">确定</button>
         </div>
       </div>
     </div>
@@ -4747,21 +5127,229 @@
         updateAutoTaskSelectedCount();
       }
 
-      function openNewTaskModal(title) {
+      /* ===== 巨量短剧自动化任务：新建/编辑弹框 ===== */
+      var ntSegValues = {};
+      var ntFolders = [];       /* 已选素材文件夹 */
+      var ntFolderTemp = [];    /* 文件夹弹框临时选择 */
+
+      var NT_FOLDER_DATA = [
+        { id: 'F2001', name: '番茄漫画-二创素材', num: 128, creator: '娜可' },
+        { id: 'F2002', name: '番茄漫画-原片', num: 36, creator: '娜可' },
+        { id: 'F2003', name: '完璧归赵-AI二创', num: 214, creator: '还音' },
+        { id: 'F2004', name: '老臣素材-混剪', num: 89, creator: '还音' },
+        { id: 'F2005', name: '新增付费-钩子片段', num: 47, creator: '娜可' },
+        { id: 'F2006', name: '公共素材池', num: 320, creator: '操作瓜' },
+        { id: 'F2007', name: '测试素材（勿投）', num: 12, creator: '操作瓜' }
+      ];
+
+      /* 弹框初始态快照：每次「新建」前还原，避免上次填写/追加的条件残留 */
+      var NT_BODY_DEFAULT = (function () {
+        var b = document.querySelector('#modal-new-task .task-modal-body');
+        return b ? b.innerHTML : null;
+      })();
+
+      function openNewTaskModal(title, name) {
+        var el = document.getElementById('modal-new-task');
+        if (!el) return;
+        resetNewTaskForm();
         var titleEl = document.getElementById('modal-new-task-title');
-        if (titleEl) titleEl.textContent = title || '新建自动化任务';
-        document.getElementById('modal-new-task').style.display = 'flex';
+        if (titleEl) titleEl.textContent = title || '新建巨量短剧自动化任务';
+        var nameInput = document.getElementById('ntTaskName');
+        if (nameInput) nameInput.value = name || '';
+        var ov = document.getElementById('modal-new-task-overlay');
+        if (ov) ov.classList.add('open');
+        el.classList.add('open');
+        document.body.style.overflow = 'hidden';
+        var body = el.querySelector('.task-modal-body');
+        if (body) body.scrollTop = 0;
+        if (typeof renderAiChips === 'function') renderAiChips('newtask');
       }
 
-      function closeNewTaskModal(event) {
-        if (!event || event.target === document.getElementById('modal-new-task')) {
-          document.getElementById('modal-new-task').style.display = 'none';
+      function resetNewTaskForm() {
+        var body = document.querySelector('#modal-new-task .task-modal-body');
+        if (body && NT_BODY_DEFAULT !== null) body.innerHTML = NT_BODY_DEFAULT;
+        ntSegValues = {};
+        ntFolders = [];
+        ntFolderTemp = [];
+        if (typeof aiResState !== 'undefined' && aiResState.newtask) {
+          aiResState.newtask = { douyin: [], douyinPkg: [], subject: [], app: [], account: [] };
+          aiDyScopeMap.newtask = 'custom';
         }
       }
 
+      function closeNewTaskModal(event) {
+        /* 表单较长，遮罩点击不关闭，仅 × / 取消 生效 */
+        if (event && event.type === 'click') return;
+        var el = document.getElementById('modal-new-task');
+        if (el) el.classList.remove('open');
+        var ov = document.getElementById('modal-new-task-overlay');
+        if (ov) ov.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+
+      /* 分段控件：切换选中态 + 联动显示自定义输入 */
+      function setNtSeg(btn) {
+        var group = btn.closest('.segmented-control');
+        if (!group) return;
+        group.querySelectorAll('.segmented-item').forEach(function (b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        var key = group.getAttribute('data-seg') || '';
+        var v = btn.getAttribute('data-v');
+        ntSegValues[key] = v;
+        if (key === 'ntBaseTimes') showNtPanel('ntBaseTimesCustom', v === 'custom');
+        if (key === 'ntUnitRepeat') showNtPanel('ntUnitRepeatCustom', v === 'custom');
+        if (key === 'ntMatCreateTime') showNtPanel('ntMatCreateTimeCustom', v === 'custom');
+        if (key === 'ntMatCost') showNtPanel('ntMatCostCustom', v === 'custom');
+        if (key === 'ntMatDuration') showNtPanel('ntMatDurationCustom', v === 'custom');
+        if (key === 'ntDays') showNtPanel('ntDaysCustom', v === 'limit');
+        if (key === 'ntPeriod') showNtPanel('ntPeriodCustom', v === 'limit');
+      }
+
+      function showNtPanel(id, on) {
+        var el = document.getElementById(id);
+        if (el) el.style.display = on ? '' : 'none';
+      }
+
+      /* 生效时间：追加一个时间范围 */
+      function addNtTimeRange() {
+        var list = document.getElementById('ntTimeRanges');
+        if (!list) return;
+        var row = document.createElement('div');
+        row.className = 'task-time-range';
+        row.innerHTML = '<input type="time" class="form-input task-w-time" value="00:00:00" step="1" />'
+          + '<span class="task-sep">~</span>'
+          + '<input type="time" class="form-input task-w-time" value="23:59:59" step="1" />'
+          + '<button type="button" class="task-del" title="删除" onclick="removeNtTimeRange(this)">&times;</button>';
+        list.appendChild(row);
+      }
+
+      function removeNtTimeRange(btn) {
+        var row = btn.closest('.task-time-range');
+        if (row) row.remove();
+      }
+
+      /* 短剧范围：追加一条条件 */
+      function addNtDramaScope() {
+        var list = document.getElementById('ntDramaScopeList');
+        if (!list) return;
+        var row = document.createElement('div');
+        row.className = 'task-row indent';
+        row.innerHTML = '<div class="task-ctrl">'
+          + '<select class="form-select task-w-sm"><option>短剧标签</option><option>短剧名称</option><option>短剧ID</option></select>'
+          + '<select class="form-select task-w-xs"><option>包含</option><option>不包含</option><option>等于</option></select>'
+          + '<input type="text" class="form-input task-w-lg" placeholder="请选择" />'
+          + '<button type="button" class="task-del" title="删除" onclick="removeNtDramaScope(this)">&times;</button>'
+          + '</div>';
+        list.appendChild(row);
+      }
+
+      function removeNtDramaScope(btn) {
+        var row = btn.closest('.task-row');
+        var list = document.getElementById('ntDramaScopeList');
+        if (row && list && list.children.length > 1) row.remove();
+        else showAiToast('至少保留一条短剧范围');
+      }
+
+      /* 素材范围：文件夹选择器 */
+      function openTaskFolderPicker() {
+        ntFolderTemp = ntFolders.map(function (f) { return f.id; });
+        var search = document.getElementById('taskFolderSearch');
+        if (search) search.value = '';
+        renderTaskFolderList();
+        document.getElementById('task-folder-overlay').classList.add('open');
+        document.getElementById('task-folder-modal').classList.add('open');
+      }
+
+      function closeTaskFolderPicker() {
+        document.getElementById('task-folder-overlay').classList.remove('open');
+        document.getElementById('task-folder-modal').classList.remove('open');
+      }
+
+      function renderTaskFolderList() {
+        var kw = (document.getElementById('taskFolderSearch').value || '').trim().toLowerCase();
+        var list = NT_FOLDER_DATA.filter(function (f) {
+          return !kw || f.name.toLowerCase().indexOf(kw) > -1 || f.id.toLowerCase().indexOf(kw) > -1;
+        });
+        var box = document.getElementById('taskFolderList');
+        box.innerHTML = list.length ? list.map(function (f) {
+          var on = ntFolderTemp.indexOf(f.id) > -1;
+          return '<div class="task-folder-item' + (on ? ' on' : '') + '" onclick="toggleTaskFolder(\'' + f.id + '\')">'
+            + '<span class="ck">&#10003;</span>'
+            + '<span class="nm">' + f.name + '</span>'
+            + '<span class="ds">' + f.num + ' 个素材</span>'
+            + '</div>';
+        }).join('') : '<div class="task-folder-empty">未找到匹配的文件夹</div>';
+        document.getElementById('taskFolderCount').textContent = ntFolderTemp.length;
+      }
+
+      function toggleTaskFolder(id) {
+        var i = ntFolderTemp.indexOf(id);
+        if (i > -1) ntFolderTemp.splice(i, 1); else ntFolderTemp.push(id);
+        renderTaskFolderList();
+      }
+
+      function confirmTaskFolderPicker() {
+        ntFolders = NT_FOLDER_DATA.filter(function (f) { return ntFolderTemp.indexOf(f.id) > -1; });
+        renderNtFolderChips();
+        closeTaskFolderPicker();
+        showAiToast(ntFolders.length ? '已选择 ' + ntFolders.length + ' 个素材文件夹' : '已清空素材范围');
+      }
+
+      function renderNtFolderChips() {
+        var box = document.getElementById('ntFolderChips');
+        if (!box) return;
+        box.innerHTML = ntFolders.map(function (f) {
+          return '<span class="task-chip"><span class="nm">' + f.name + '</span>'
+            + '<span class="x" onclick="removeNtFolder(\'' + f.id + '\')">&times;</span></span>';
+        }).join('');
+      }
+
+      function removeNtFolder(id) {
+        ntFolders = ntFolders.filter(function (f) { return f.id !== id; });
+        renderNtFolderChips();
+      }
+
+      /* 校验 + 提交 */
+      function clearNtErrors() {
+        document.querySelectorAll('#modal-new-task .task-row.is-error').forEach(function (r) { r.classList.remove('is-error'); });
+      }
+
+      function ntMarkError(rowId) {
+        var row = document.getElementById(rowId);
+        if (row) row.classList.add('is-error');
+      }
+
       function submitNewTask() {
-        alert('新建任务已保存');
+        clearNtErrors();
+        var miss = [];
+        function need(rowId, value, label) {
+          if (String(value || '').trim() === '') {
+            if (rowId) ntMarkError(rowId);
+            miss.push(label);
+          }
+        }
+        need('ntRowName', document.getElementById('ntTaskName').value, '任务名称');
+        need('ntRowInterval', document.getElementById('ntInterval').value, '执行频率');
+        need('ntRowAccount', document.getElementById('ntAccountCount').value, '投放账户数');
+        need('ntRowProject', document.getElementById('ntProjectCount').value, '账户下项目数');
+        need('ntRowRoi', document.getElementById('ntRoi').value, 'ROI系数');
+        need('ntRowBudget', document.getElementById('ntBudget').value, '日预算');
+        var dyScope = (typeof aiDyScopeMap !== 'undefined' && aiDyScopeMap.newtask) || 'custom';
+        var dySel = (typeof aiResState !== 'undefined' && aiResState.newtask)
+          ? aiResState.newtask[dyScope === 'custom' ? 'douyin' : 'douyinPkg']
+          : [];
+        if (!dySel || !dySel.length) {
+          ntMarkError('ntRowDy');
+          miss.push(dyScope === 'custom' ? '抖音号（项目）' : '抖音号包');
+        }
+        if (miss.length) {
+          showAiToast('请完善必填项：' + miss.join('、'));
+          var firstErr = document.querySelector('#modal-new-task .task-row.is-error');
+          if (firstErr && firstErr.scrollIntoView) firstErr.scrollIntoView({ block: 'center', behavior: 'smooth' });
+          return;
+        }
         closeNewTaskModal();
+        showAiToast('自动化任务已保存，将按执行频率开始运行');
       }
 
       /* ===== 名称下钻：切换 Tab 并自动带入对应列表的筛选项 ===== */
@@ -4795,12 +5383,20 @@
         drillTaskToAccount(id);
       }
 
+      /* 自动化任务列表：ID → 任务名称（编辑/复制时带入弹框） */
+      var AUTO_TASK_NAMES = {
+        '15530': '任务二：番茄漫画激活活跃用户',
+        '15523': '任务十二：番茄漫画完璧归赵召回',
+        '15508': '任务五：番茄漫画新增付费混投'
+      };
+
       function editTask(id) {
-        openNewTaskModal('编辑自动化任务');
+        openNewTaskModal('编辑巨量短剧自动化任务', AUTO_TASK_NAMES[id] || '');
       }
 
       function copyTask(id) {
-        openNewTaskModal('复制自动化任务');
+        var name = AUTO_TASK_NAMES[id] || '';
+        openNewTaskModal('复制巨量短剧自动化任务', name ? name + '-副本' : '');
       }
 
       function showTaskLog(id) {
@@ -5150,6 +5746,86 @@
         updateAiDramaSelectedCount();
       }
 
+      /*
+       * 重新投放：仅「测试中」状态展示。标准 / 全域投放均报错（多为账户维度故障）时触发：
+       * 系统按所属任务模板配置的账户范围随机选择符合要求的账户，在标准投放与全域投放列表中
+       * 各新增一条投放记录（不修改原有记录）；不新建执行记录，测出状态保持「测试中」并重置测试时间。
+       */
+      function retryAiDramaRedeploy(recordId, taskName, dramaName) {
+        var modal = document.getElementById('ai-redeploy-modal');
+        modal.dataset.recordId = recordId;
+        document.getElementById('ai-redeploy-confirm-text').textContent =
+          '确认重新投放「' + taskName + '-' + dramaName + '」？系统将按任务模板配置重新发起标准投放与全域投放，并重置测试时间。';
+        document.getElementById('ai-redeploy-overlay').classList.add('open');
+        modal.classList.add('open');
+      }
+
+      function closeAiRedeployConfirm() {
+        document.getElementById('ai-redeploy-overlay').classList.remove('open');
+        document.getElementById('ai-redeploy-modal').classList.remove('open');
+      }
+
+      function confirmAiRedeploy() {
+        var recordId = document.getElementById('ai-redeploy-modal').dataset.recordId || '';
+        closeAiRedeployConfirm();
+
+        /* 标准投放 · 账户列表新增投放记录（系统自动选择的账户，示例：JL-MAD-AI-短剧一组-03） */
+        var stdTbody = document.querySelector('#ai-standard-account tbody');
+        if (stdTbody) {
+          var stdTr = document.createElement('tr');
+          stdTr.innerHTML =
+            '<td><input type="checkbox" class="ai-account-checkbox" onchange="updateAiRowSelectedCount(\'ai-account\',\'aiAccountSelectedCount\')" /></td>' +
+            '<td>5200133</td>' +
+            '<td><span class="link" onclick="drillAiAccountToProject(5200133)">JL-MAD-AI-短剧一组-03</span>' +
+            '<div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7648215203578101999</div></td>' +
+            '<td><span class="link" onclick="drillAiAccountToProject(5200133)">0</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功0</span><span class="stat-row-empty">失败0</span></div></div></td>' +
+            '<td><span class="link" onclick="drillAiAccountToUnit(5200133)">0</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功0</span><span class="stat-row-empty">失败0</span></div></div></td>' +
+            '<td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow(\'账户\',5200133)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow(\'账户\',5200133)">重试</button></div></td>' +
+            '<td>短剧4<br /><span style="color:var(--color-text-tertiary);">ID:1004</span></td><td>' + recordId + '</td>' +
+            '<td>端原生付费</td>' +
+            '<td>稳定成本</td>' +
+            '<td><span class="link">任务2</span><div style="font-size: 12px; color: var(--color-text-tertiary);">ID:2</div></td>' +
+            '<td>还音</td>' +
+            '<td>2026-10-27 11:40:00</td>';
+          stdTbody.insertBefore(stdTr, stdTbody.firstChild);
+        }
+
+        /* 全域投放 · 账户列表新增投放记录（同账户） */
+        var gblTbody = document.querySelector('#ai-global-account tbody');
+        if (gblTbody) {
+          var gblTr = document.createElement('tr');
+          gblTr.innerHTML =
+            '<td><input type="checkbox" class="ai-global-account-checkbox" onchange="updateAiRowSelectedCount(\'ai-global-account\',\'aiGlobalAccountSelectedCount\')" /></td>' +
+            '<td>11621710</td>' +
+            '<td><span class="link">JL-MAD-AI-短剧一组-03</span>' +
+            '<div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7648215203578101999</div></td>' +
+            '<td>短剧4 <span style="color:var(--color-text-tertiary);">ID:1004</span></td><td>' + recordId + '</td>' +
+            '<td><span class="link">拿破仑漫剧</span>' +
+            '<div style="font-size: 12px; color: var(--color-text-tertiary);">ID:30437270440</div></td>' +
+            '<td><span class="link">25</span><div style="font-size: 12px; color: var(--color-text-tertiary);">待上传</div></td>' +
+            '<td><span class="link">25</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功0</span><span class="stat-row-empty">失败0</span></div></div></td>' +
+            '<td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow(\'账户\',11621710)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow(\'账户\',11621710)">重试</button></div></td>' +
+            '<td>随机</td>' +
+            '<td><span class="link">任务2</span><div style="font-size: 12px; color: var(--color-text-tertiary);">ID:2</div></td>' +
+            '<td>2026-10-27 11:40:00</td>' +
+            '<td><span class="ai-exec-status"><span class="ai-exec-dot uploading"></span>上传中</span></td>';
+          gblTbody.insertBefore(gblTr, gblTbody.firstChild);
+        }
+
+        /* 修改日志（执行记录维度 · 测试中场景）新增一条，操作人 = 触发用户 */
+        var logBody = document.getElementById('ai-modify-log-body-testing');
+        if (logBody) {
+          var logTr = document.createElement('tr');
+          logTr.innerHTML =
+            '<td>还音</td>' +
+            '<td>2026-10-27 11:55:00</td>' +
+            '<td>重新投放。标准投放与全域投放已重新发起，测试时间已重置。</td>';
+          logBody.insertBefore(logTr, logBody.firstChild);
+        }
+
+        showAiToast('已重新发起标准投放与全域投放（执行记录ID：' + recordId + '），系统自动选择符合要求的账户');
+      }
+
       /* ---- 任务模板：状态开关（生效 / 停用）与批量开关 ---- */
       /* 单个开关：切换前二次确认，取消则回弹为原状态 */
       function toggleAiTaskSwitch(input) {
@@ -5479,6 +6155,11 @@
         aiDyScopeMap[key] = 'custom';
         aiSegValues['aiDyScope|' + key] = 'custom';
       });
+
+      /* 巨量自动化任务新建弹框：复用资源选择器（主体包 / 应用包 / 账户包 / 抖音号包） */
+      aiResState.newtask = { douyin: [], douyinPkg: [], subject: [], app: [], account: [] };
+      aiDyScopeMap.newtask = 'custom';
+      aiSegValues['aiDyScope|newtask'] = 'custom';
       var aiPickType = null;
       var aiPickTemp = [];
       var aiPickerScope = 'global';
@@ -6316,10 +6997,11 @@
         document.getElementById('ai-modify-log-title').textContent = (taskName ? taskName : '任务') + '-修改日志';
         var key = scope || 'task';
         var scopes = ['task', 'tested', 'testing', 'untested'];
-        var counts = { task: 2, tested: 2, testing: 1, untested: 3 };
+        var counts = {};
         scopes.forEach(function (name) {
           var body = document.getElementById('ai-modify-log-body-' + name);
           if (body) body.style.display = name === key ? '' : 'none';
+          if (body) counts[name] = body.querySelectorAll('tr').length;
         });
         var cnt = document.getElementById('ai-modify-log-count');
         if (cnt) cnt.textContent = '共 ' + (counts[key] || 0) + ' 条';
