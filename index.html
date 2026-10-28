@@ -4931,8 +4931,8 @@
             <div class="task-row">
               <label class="task-label">投放内容：</label>
               <div class="task-ctrl">
-                <div class="segmented-control">
-                  <button class="segmented-item active" type="button" data-v="native">端原生</button>
+                <div class="segmented-control" data-seg="ntAdType">
+                  <button class="segmented-item active" type="button" data-v="native" onclick="setNtSeg(this)">端原生</button>
                 </div>
               </div>
             </div>
@@ -4988,6 +4988,22 @@
               <label class="task-label"><i class="req">*</i>日预算：</label>
               <div class="task-ctrl">
                 <input type="text" class="form-input task-w-sm" id="ntBudget" placeholder="请输入" oninput="limitPositiveInt(this)" />
+              </div>
+            </div>
+
+            <!-- 付费起始集：投放内容=端原生 且 业务场景=付费 时展示 -->
+            <div class="task-row" id="ntRowPayStart" style="display: none;">
+              <label class="task-label">付费起始集：</label>
+              <div class="task-ctrl">
+                <input type="text" class="form-input task-w-md" id="ntPayStart" placeholder="不输入则随机选取默认链接" oninput="limitPositiveInt(this)" />
+              </div>
+            </div>
+
+            <!-- 广告起始集：投放内容=端原生 且 业务场景=IAA 时展示 -->
+            <div class="task-row" id="ntRowAdStart">
+              <label class="task-label">广告起始集：</label>
+              <div class="task-ctrl">
+                <input type="text" class="form-input task-w-md" id="ntAdStart" placeholder="不输入则随机选取默认链接" oninput="limitPositiveInt(this)" />
               </div>
             </div>
 
@@ -5163,6 +5179,7 @@
         var body = el.querySelector('.task-modal-body');
         if (body) body.scrollTop = 0;
         if (typeof renderAiChips === 'function') renderAiChips('newtask');
+        if (typeof updateNtStartEpisode === 'function') updateNtStartEpisode();
       }
 
       function resetNewTaskForm() {
@@ -5203,6 +5220,27 @@
         if (key === 'ntMatDuration') showNtPanel('ntMatDurationCustom', v === 'custom');
         if (key === 'ntDays') showNtPanel('ntDaysCustom', v === 'limit');
         if (key === 'ntPeriod') showNtPanel('ntPeriodCustom', v === 'limit');
+        if (key === 'ntAdType' || key === 'ntBizScene') updateNtStartEpisode();
+      }
+
+      /* 起始集字段：端原生+付费 → 付费起始集；端原生+IAA → 广告起始集。
+         两者互斥，切换时清空已填值，避免串值 */
+      function updateNtStartEpisode() {
+        var scene = 'iaa';
+        var activeScene = document.querySelector('#modal-new-task .segmented-control[data-seg="ntBizScene"] .segmented-item.active');
+        if (activeScene) scene = activeScene.getAttribute('data-v');
+        var activeAdType = document.querySelector('#modal-new-task .segmented-control[data-seg="ntAdType"] .segmented-item.active');
+        var adType = activeAdType ? activeAdType.getAttribute('data-v') : 'native';
+
+        var isPay = (adType === 'native' && scene === 'pay');
+        var isIaa = (adType === 'native' && scene === 'iaa');
+        showNtPanel('ntRowPayStart', isPay);
+        showNtPanel('ntRowAdStart', isIaa);
+
+        var payInput = document.getElementById('ntPayStart');
+        var adInput = document.getElementById('ntAdStart');
+        if (payInput && !isPay) payInput.value = '';
+        if (adInput && !isIaa) adInput.value = '';
       }
 
       function showNtPanel(id, on) {
