@@ -3388,12 +3388,14 @@ body {
 .required-star {
   color: var(--color-error);
   margin-right: 2px;
+  flex-shrink: 0;
 }
 
 .tip-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex: 0 0 14px;
   width: 14px;
   height: 14px;
   border-radius: 50%;
