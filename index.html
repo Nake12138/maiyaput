@@ -1577,6 +1577,7 @@
                           <th class="checkbox-col"><input type="checkbox" id="selectAllAiAccounts" onclick="toggleSelectAllAiRows('selectAllAiAccounts','ai-account-checkbox','aiAccountSelectedCount')" /></th>
                           <th>ID</th>
                           <th>账户信息</th>
+                          <th>商品库</th>
                           <th>项目数</th>
                           <th>单元数</th>
                           <th>操作</th>
@@ -1597,6 +1598,7 @@
                             <span class="link" onclick="drillAiAccountToProject(5200131)">JL-MAD-AI-短剧一组-01</span>
                             <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7648215203578101780</div>
                           </td>
+                          <td><span class="product-lib-status success">成功</span></td>
                           <td><span class="link" onclick="drillAiAccountToProject(5200131)">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功2</span><span class="stat-row-empty">失败0</span></div></div></td>
                           <td><span class="link" onclick="drillAiAccountToUnit(5200131)">4</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功3</span><span class="stat-fail-text fail-clickable" onclick="openAiAutoFailDetail(5200131, 'JL-MAD-AI-短剧一组-01', 'unit', 1)">失败1</span></div></div></td>
                           <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('账户',5200131)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('账户',5200131)">重试</button></div></td>
@@ -1617,6 +1619,12 @@
                             <span class="link" onclick="drillAiAccountToProject(5200132)">JL-MAD-AI-短剧一组-02</span>
                             <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7648215203578101666</div>
                           </td>
+                          <td>
+                            <div class="stat-stack">
+                              <div class="stat-row"><span class="product-lib-status failed" onclick="openAiProductLibError(5200132, '商品库同步失败：商品 1001 审核未通过，无法加入商品库（错误码 40193）')">失败</span></div>
+                              <div class="stat-row"><span class="product-lib-error" title="商品库同步失败：商品 1001 审核未通过，无法加入商品库（错误码 40193）">商品库同步失败：商品 1001 审核未通过，无法加入商品库（错误码 40193）</span></div>
+                            </div>
+                          </td>
                           <td><span class="link" onclick="drillAiAccountToProject(5200132)">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功1</span><span class="stat-fail-text fail-clickable" onclick="openAiAutoFailDetail(5200132, 'JL-MAD-AI-短剧一组-02', 'project', 1)">失败1</span></div></div></td>
                           <td><span class="link" onclick="drillAiAccountToUnit(5200132)">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功2</span><span class="stat-row-empty">失败0</span></div></div></td>
                           <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('账户',5200132)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('账户',5200132)">重试</button></div></td>
@@ -1630,12 +1638,33 @@
                           <td>娜可</td>
                           <td>2026-10-20 10:12:36</td>
                         </tr>
+                        <tr>
+                          <td><input type="checkbox" class="ai-account-checkbox" onchange="updateAiRowSelectedCount('ai-account','aiAccountSelectedCount')" /></td>
+                          <td>5200133</td>
+                          <td>
+                            <span class="link" onclick="drillAiAccountToProject(5200133)">JL-MAD-AI-短剧一组-03</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7648215203578101999</div>
+                          </td>
+                          <td><span class="product-lib-status running">进行中</span></td>
+                          <td><span class="link" onclick="drillAiAccountToProject(5200133)">1</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功0</span><span class="stat-row-empty">失败0</span></div></div></td>
+                          <td><span class="link" onclick="drillAiAccountToUnit(5200133)">0</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功0</span><span class="stat-row-empty">失败0</span></div></div></td>
+                          <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('账户',5200133)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('账户',5200133)">重试</button></div></td>
+                          <td>短剧2<br /><span style="color:var(--color-text-tertiary);">ID:1002</span></td><td>5002</td>
+                          <td>端原生IAA</td>
+                          <td>稳定成本</td>
+                          <td>
+                            <span class="link">任务2</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:2</div>
+                          </td>
+                          <td>还音</td>
+                          <td>2026-10-20 10:15:02</td>
+                        </tr>
                       </tbody>
                     </table>
                   </div>
 
                   <div class="pagination">
-                    <span class="pagination-info">共 2 条</span>
+                    <span class="pagination-info">共 3 条</span>
                     <div class="pagination-pages">
                       <button class="page-btn" onclick="changePage('prev')">&lt;</button>
                       <button class="page-btn active" onclick="changePage(1)">1</button>
@@ -5565,6 +5594,11 @@
 
       function showAiAutoUnitDetail(id) {
         alert('查看单元详情：' + id);
+      }
+
+      /* 商品库同步失败：展示完整报错信息 */
+      function openAiProductLibError(id, msg) {
+        alert('商品库同步失败\n账户列表ID：' + id + '\n报错信息：' + msg);
       }
 
       function openAiAutoFailDetail(id, name, level, failCount) {
