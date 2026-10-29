@@ -1410,11 +1410,8 @@ body {
 .product-lib-status.success { color: var(--color-success); }
 .product-lib-status.failed {
   color: var(--color-error);
-  cursor: pointer;
-  text-decoration: underline;
-  text-underline-offset: 2px;
+  cursor: help;
 }
-.product-lib-status.failed:hover { opacity: .8; }
 .product-lib-error {
   font-size: 12px;
   line-height: 1.5;
@@ -1423,6 +1420,7 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  cursor: help;
 }
 
 /* ============ Fail detail modal cells ============ */

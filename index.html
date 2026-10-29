@@ -1598,7 +1598,7 @@
                             <span class="link" onclick="drillAiAccountToProject(5200131)">JL-MAD-AI-短剧一组-01</span>
                             <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7648215203578101780</div>
                           </td>
-                          <td><span class="product-lib-status success">成功</span></td>
+                          <td><span class="product-lib-status success" title="商品库名称：漫剧商品库&#10;商品库ID：8184139660478227&#10;商品名称：无限进化：我从蝼蚁化龙麟[番茄漫剧]&#10;商品ID：1793239808737306554">成功</span></td>
                           <td><span class="link" onclick="drillAiAccountToProject(5200131)">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功2</span><span class="stat-row-empty">失败0</span></div></div></td>
                           <td><span class="link" onclick="drillAiAccountToUnit(5200131)">4</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功3</span><span class="stat-fail-text fail-clickable" onclick="openAiAutoFailDetail(5200131, 'JL-MAD-AI-短剧一组-01', 'unit', 1)">失败1</span></div></div></td>
                           <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('账户',5200131)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('账户',5200131)">重试</button></div></td>
@@ -1621,7 +1621,7 @@
                           </td>
                           <td>
                             <div class="stat-stack">
-                              <div class="stat-row"><span class="product-lib-status failed" onclick="openAiProductLibError(5200132, '商品库同步失败：商品 1001 审核未通过，无法加入商品库（错误码 40193）')">失败</span></div>
+                              <div class="stat-row"><span class="product-lib-status failed" title="商品库同步失败：商品 1001 审核未通过，无法加入商品库（错误码 40193）">失败</span></div>
                               <div class="stat-row"><span class="product-lib-error" title="商品库同步失败：商品 1001 审核未通过，无法加入商品库（错误码 40193）">商品库同步失败：商品 1001 审核未通过，无法加入商品库（错误码 40193）</span></div>
                             </div>
                           </td>
@@ -5594,11 +5594,6 @@
 
       function showAiAutoUnitDetail(id) {
         alert('查看单元详情：' + id);
-      }
-
-      /* 商品库同步失败：展示完整报错信息 */
-      function openAiProductLibError(id, msg) {
-        alert('商品库同步失败\n账户列表ID：' + id + '\n报错信息：' + msg);
       }
 
       function openAiAutoFailDetail(id, name, level, failCount) {
