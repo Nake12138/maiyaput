@@ -3034,7 +3034,7 @@
                         </div>
                         <div class="form-row">
                           <div class="form-item">
-                            <label class="form-label"><span class="required-star">*</span> 出价</label>
+                            <label class="form-label"><span class="required-star">*</span> <span class="tip-icon" data-tip="选取规则：向上就近选取 &gt;= 出价-1 的付费链接，无符合的链接则选取最大出价的一条">?</span> 出价</label>
                             <input type="text" class="form-input" placeholder="请输入" />
                           </div>
                         </div>
@@ -3189,7 +3189,7 @@
                         </div>
                         <div class="form-row">
                           <div class="form-item">
-                            <label class="form-label"><span class="required-star">*</span> 出价</label>
+                            <label class="form-label"><span class="required-star">*</span> <span class="tip-icon" data-tip="仅用于选取付费链接，巨量侧无对应字段。选取规则：向上就近选取 &gt;= 出价-1 的付费链接，无符合的链接则选取最大出价的一条">?</span> 出价</label>
                             <input type="text" class="form-input" placeholder="请输入正数，最多 2 位小数" oninput="limitPositiveAmount(this)" />
                           </div>
                         </div>
@@ -7029,7 +7029,11 @@
             if (!label || !label.querySelector('.required-star')) return;
             var field = item.querySelector('input.form-input, select.form-input');
             if (field && !String(field.value).trim()) {
-              errors.push(AI_MODE_NAMES[mode] + '：' + label.textContent.replace(/\*/g, '').trim());
+              /* 取字段名时剔除 tip 图标自带的「?」，避免报错文案出现「? 出价」 */
+              var labelClone = label.cloneNode(true);
+              var tipIconEl = labelClone.querySelector('.tip-icon');
+              if (tipIconEl) tipIconEl.remove();
+              errors.push(AI_MODE_NAMES[mode] + '：' + labelClone.textContent.replace(/\*/g, '').trim());
               if (!firstErrorPane) firstErrorPane = pane;
             }
           });

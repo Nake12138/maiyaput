@@ -3454,6 +3454,7 @@ body {
   color: var(--color-text-secondary);
   text-align: left;
   white-space: normal;
+  word-break: break-all;
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.15s ease;
