@@ -3189,6 +3189,12 @@
                         </div>
                         <div class="form-row">
                           <div class="form-item">
+                            <label class="form-label"><span class="required-star">*</span> 出价</label>
+                            <input type="text" class="form-input" placeholder="请输入正数，最多 2 位小数" oninput="limitPositiveAmount(this)" />
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-item">
                             <label class="form-label"><span class="required-star">*</span> 日预算</label>
                             <input type="text" class="form-input" value="100.00" style="color: var(--color-error);" />
                           </div>
@@ -6092,6 +6098,18 @@
 
       function limitPositiveInt(input) {
         var value = input.value.replace(/[^\d]/g, '').replace(/^0+/, '');
+        if (input.value !== value) input.value = value;
+      }
+
+      /* 正数金额：仅数字与一个小数点，最多 2 位小数（不限制 >0，便于输入 0.xx 中间态） */
+      function limitPositiveAmount(input) {
+        var raw = input.value.replace(/[^\d.]/g, '');
+        var dot = raw.indexOf('.');
+        var intPart = dot >= 0 ? raw.slice(0, dot) : raw;
+        var decPart = dot >= 0 ? raw.slice(dot + 1).replace(/\./g, '') : '';
+        intPart = intPart.replace(/^0+(?=\d)/, '');
+        if (decPart.length > 2) decPart = decPart.slice(0, 2);
+        var value = dot >= 0 ? intPart + '.' + decPart : intPart;
         if (input.value !== value) input.value = value;
       }
 
