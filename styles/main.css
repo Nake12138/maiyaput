@@ -5105,9 +5105,13 @@ body {
   font-size: 13px;
   color: var(--color-success);
 }
-.ai-unit-mat-fail {
+.ai-unit-mat-pending {
   font-size: 13px;
-  color: var(--color-error);
+  color: var(--color-warning);
+}
+.ai-unit-mat-removed {
+  font-size: 13px;
+  color: var(--color-text-tertiary);
 }
 .ai-unit-mat-empty {
   text-align: center;

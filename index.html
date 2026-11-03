@@ -5441,7 +5441,8 @@
             <select class="filter-select" id="ai-unit-mat-status" onchange="renderAiUnitMaterialTable()">
               <option value="">全部</option>
               <option value="success">上传成功</option>
-              <option value="fail">上传失败</option>
+              <option value="pending">待上传</option>
+              <option value="removed">自动剔除</option>
             </select>
             <span class="ai-unit-mat-total" id="ai-unit-mat-total">共 0 条</span>
           </div>
@@ -7068,14 +7069,19 @@
       var AI_UNIT_MATERIAL = {
         30021: [
           { name: '短剧1-激活-竖版-原生播放页-AI混剪-01', id: '16027550', status: 'success' },
-          { name: '短剧1-激活-竖版-原生播放页-AI混剪-02', id: '16027544', status: 'success' }
+          { name: '短剧1-激活-竖版-原生播放页-AI混剪-02', id: '16027544', status: 'pending' }
         ],
         30020: [
           { name: '短剧1-召回-竖版-原生播放页-AI混剪-01', id: '16027531', status: 'success' },
-          { name: '短剧1-召回-竖版-原生播放页-AI混剪-02', id: '16027528', status: 'fail' }
+          { name: '短剧1-召回-竖版-原生播放页-AI混剪-02', id: '16027528', status: 'removed' }
         ]
       };
       var aiUnitMatUnitId = '';
+      var AI_UNIT_MAT_STATUS = {
+        success: { text: '上传成功', cls: 'ai-unit-mat-ok' },
+        pending: { text: '待上传', cls: 'ai-unit-mat-pending' },
+        removed: { text: '自动剔除', cls: 'ai-unit-mat-removed' }
+      };
 
       function openAiUnitMaterialModal(unitId) {
         aiUnitMatUnitId = String(unitId);
@@ -7105,12 +7111,12 @@
           return;
         }
         body.innerHTML = view.map(function (r) {
-          var ok = r.status === 'success';
+          var stt = AI_UNIT_MAT_STATUS[r.status] || AI_UNIT_MAT_STATUS.pending;
           return '<tr>' +
             '<td><div class="ai-unit-mat-thumb"><span class="ai-unit-mat-play"></span></div></td>' +
             '<td><div class="ai-unit-mat-name">' + r.name + '</div>' +
             '<div class="ai-unit-mat-id">ID: ' + r.id + '</div></td>' +
-            '<td><span class="' + (ok ? 'ai-unit-mat-ok' : 'ai-unit-mat-fail') + '">' + (ok ? '上传成功' : '上传失败') + '</span></td>' +
+            '<td><span class="' + stt.cls + '">' + stt.text + '</span></td>' +
             '</tr>';
         }).join('');
       }
