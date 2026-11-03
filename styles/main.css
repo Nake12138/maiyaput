@@ -4710,3 +4710,407 @@ body {
   font-size: 13px;
   color: var(--color-text-tertiary);
 }
+
+/* ============================================================
+   全域推广 · 自动化投放（roi3）· 新建任务弹框 + 列表工具
+   复用 #modal-new-task 的表单样式体系 + AI 抽屉的卡片选择样式
+   ============================================================ */
+
+#modal-roi3-new-task-overlay.drawer-overlay {
+  z-index: 1000;
+}
+
+#modal-roi3-new-task.drawer {
+  z-index: 1001;
+}
+
+#modal-roi3-new-task .task-modal-card {
+  width: min(760px, calc(100vw - 64px));
+  height: 100vh;
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  overflow: hidden;
+  box-shadow: -8px 0 32px rgba(0, 0, 0, 0.16);
+  animation: drawer-slide-in 0.28s ease-out;
+}
+
+#modal-roi3-new-task .task-modal-header {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+#modal-roi3-new-task .task-modal-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+#modal-roi3-new-task .task-modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 20px 20px;
+  background: #f5f6f8;
+}
+
+#modal-roi3-new-task .task-modal-footer {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 12px 20px;
+  border-top: 1px solid var(--color-border);
+  background: #fff;
+}
+
+#modal-roi3-new-task .task-modal-footer .btn {
+  min-width: 76px;
+  justify-content: center;
+}
+
+#modal-roi3-new-task .task-section {
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 16px 20px 18px;
+  margin-bottom: 12px;
+}
+
+#modal-roi3-new-task .task-section:last-child {
+  margin-bottom: 0;
+}
+
+#modal-roi3-new-task .task-section-title {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0 0 18px;
+  padding: 0 0 12px 12px;
+  position: relative;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+#modal-roi3-new-task .task-section-title::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 2px;
+  width: 3px;
+  height: 15px;
+  border-radius: 2px;
+  background: var(--color-info);
+}
+
+#modal-roi3-new-task .task-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+#modal-roi3-new-task .task-row:last-child {
+  margin-bottom: 0;
+}
+
+#modal-roi3-new-task .task-row.indent {
+  padding-left: 128px;
+}
+
+#modal-roi3-new-task .task-row.is-error .form-input,
+#modal-roi3-new-task .task-row.is-error .form-select {
+  border-color: var(--color-error);
+}
+
+#modal-roi3-new-task .task-row.is-error .segmented-control {
+  box-shadow: 0 0 0 1px var(--color-error);
+}
+
+#modal-roi3-new-task .task-row.is-error .task-label {
+  color: var(--color-error);
+}
+
+#modal-roi3-new-task .task-label {
+  flex: 0 0 116px;
+  width: 116px;
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 13px;
+  line-height: 32px;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+#modal-roi3-new-task .task-ctrl {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+}
+
+#modal-roi3-new-task .task-ctrl.stack {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+#modal-roi3-new-task .task-inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+#modal-roi3-new-task .task-time-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#modal-roi3-new-task .task-time-range {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#modal-roi3-new-task .task-w-xxs { width: 76px; flex: none; }
+#modal-roi3-new-task .task-w-xs { width: 96px; flex: none; }
+#modal-roi3-new-task .task-w-sm { width: 124px; flex: none; }
+#modal-roi3-new-task .task-w-md { width: 240px; flex: none; }
+#modal-roi3-new-task .task-w-lg { width: 100%; max-width: 380px; }
+#modal-roi3-new-task .task-w-time { width: 122px; flex: none; }
+
+#modal-roi3-new-task .task-text { font-size: 13px; color: var(--color-text-primary); }
+#modal-roi3-new-task .task-hint { font-size: 12px; color: var(--color-text-tertiary); }
+#modal-roi3-new-task .task-sep { color: var(--color-text-tertiary); }
+#modal-roi3-new-task .req { color: var(--color-error); font-style: normal; margin-right: 2px; }
+#modal-roi3-new-task .segmented-control { flex: none; }
+#modal-roi3-new-task .form-link { font-size: 13px; line-height: 1.4; }
+
+#modal-roi3-new-task .task-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+#modal-roi3-new-task .task-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 24px;
+  padding: 0 8px;
+  border-radius: 4px;
+  background: var(--color-info-bg);
+  color: var(--color-info);
+  font-size: 12px;
+}
+
+#modal-roi3-new-task .task-chip .x { cursor: pointer; opacity: 0.7; font-size: 12px; }
+#modal-roi3-new-task .task-chip .x:hover { opacity: 1; }
+
+#modal-roi3-new-task .task-del {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  border-radius: 4px;
+  color: var(--color-text-tertiary);
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  flex: none;
+}
+
+#modal-roi3-new-task .task-del:hover { color: var(--color-error); background: var(--color-bg-hover); }
+
+/* 卡片选择：执行类型 / 素材分配方式 */
+#modal-roi3-new-task .ai-card-group {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+#modal-roi3-new-task .ai-card-group.cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+#modal-roi3-new-task .ai-card {
+  position: relative;
+  padding: 10px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-white);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+#modal-roi3-new-task .ai-card:hover { border-color: #a8ccff; }
+
+#modal-roi3-new-task .ai-card.on {
+  border-color: var(--color-info);
+  background: #f2f8ff;
+}
+
+#modal-roi3-new-task .ai-card-t {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  line-height: 1.4;
+}
+
+#modal-roi3-new-task .ai-card-ck {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  border: 1px solid #c9ccd4;
+  border-radius: 3px;
+  background: var(--color-white);
+  color: transparent;
+  font-size: 10px;
+  line-height: 12px;
+  text-align: center;
+}
+
+#modal-roi3-new-task .ai-card.on .ai-card-ck {
+  background: var(--color-info);
+  border-color: var(--color-info);
+  color: #fff;
+}
+
+#modal-roi3-new-task .ai-card-d {
+  margin-top: 5px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--color-text-tertiary);
+}
+
+/* 已选资源标签（抖音号 / 主体包 / 应用包 / 账户包） */
+#modal-roi3-new-task .ai-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+#modal-roi3-new-task .ai-chips.flat {
+  margin-top: 0;
+  align-items: center;
+}
+
+#modal-roi3-new-task .ai-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 300px;
+  padding: 2px 8px;
+  border: 1px solid #d6e6ff;
+  border-radius: var(--radius-sm);
+  background: #f2f8ff;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--color-text-secondary);
+}
+
+#modal-roi3-new-task .ai-chip .nm {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#modal-roi3-new-task .ai-chip .x { flex: none; cursor: pointer; color: var(--color-text-tertiary); }
+#modal-roi3-new-task .ai-chip .x:hover { color: var(--color-error); }
+
+/* 列表工具条（列设置 / 全屏图标） */
+.roi3-table-tools {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 2px 4px 8px;
+  color: var(--color-text-tertiary);
+  font-size: 15px;
+  line-height: 1;
+}
+
+.roi3-table-tools span { cursor: pointer; }
+.roi3-table-tools span:hover { color: var(--color-info); }
+
+.sort-mark {
+  font-size: 11px;
+  color: var(--color-text-tertiary);
+  cursor: pointer;
+}
+
+/* ---- AI 自动化 · 单元素材上传详情弹框 ---- */
+.ai-unit-mat-modal .modal-card {
+  width: min(760px, calc(100vw - 40px));
+}
+.ai-unit-mat-filter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.ai-unit-mat-label {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+.ai-unit-mat-total {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  margin-left: 4px;
+}
+.ai-unit-mat-thumb {
+  width: 40px;
+  height: 56px;
+  border-radius: 4px;
+  background: linear-gradient(160deg, #4b5063, #23252f 62%, #3b4053);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ai-unit-mat-play {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 6px 0 6px 10px;
+  border-color: transparent transparent transparent rgba(255, 255, 255, .92);
+  margin-left: 2px;
+}
+.ai-unit-mat-name {
+  font-size: 13px;
+  color: var(--color-text-primary);
+  line-height: 1.5;
+}
+.ai-unit-mat-id {
+  font-size: 12px;
+  color: var(--color-text-tertiary);
+  margin-top: 2px;
+}
+.ai-unit-mat-ok {
+  font-size: 13px;
+  color: var(--color-success);
+}
+.ai-unit-mat-fail {
+  font-size: 13px;
+  color: var(--color-error);
+}
+.ai-unit-mat-empty {
+  text-align: center;
+  color: var(--color-text-tertiary);
+  padding: 24px 0;
+}

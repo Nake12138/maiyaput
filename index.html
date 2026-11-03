@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>短剧投放系统</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles/main.css?v=20261009a" />
+    <link rel="stylesheet" href="styles/main.css?v=20261029a" />
     <link rel="stylesheet" href="styles/theme-antd.css?v=20261009a" />
   </head>
   <body class="theme-antd">
@@ -1934,6 +1934,7 @@
                           <th class="checkbox-col"><input type="checkbox" id="selectAllAiUnits" onclick="toggleSelectAllAiRows('selectAllAiUnits','ai-unit-checkbox','aiUnitSelectedCount')" /></th>
                           <th>ID</th>
                           <th>单元信息</th>
+                          <th>创意素材</th>
                           <th>上传状态</th>
                           <th>操作</th>
                           <th>投放短剧</th>
@@ -1953,9 +1954,10 @@
                           <td><input type="checkbox" class="ai-unit-checkbox" onchange="updateAiRowSelectedCount('ai-unit','aiUnitSelectedCount')" /></td>
                           <td>30021</td>
                           <td>
-                            <span class="link" onclick="showAiAutoUnitDetail(30021)">任务1-短剧1-激活-单元1</span>
+                            <span>任务1-短剧1-激活-单元1</span>
                             <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:6611223344556677</div>
                           </td>
+                          <td><span class="link" title="查看素材上传详情" onclick="openAiUnitMaterialModal(30021)">2</span></td>
                           <td><span class="tag tag-success">成功</span></td>
                           <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('单元',30021)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('单元',30021)">重试</button></div></td>
                           <td>短剧1<br /><span style="color:var(--color-text-tertiary);">ID:1001</span></td><td>5001</td>
@@ -1981,9 +1983,10 @@
                           <td><input type="checkbox" class="ai-unit-checkbox" onchange="updateAiRowSelectedCount('ai-unit','aiUnitSelectedCount')" /></td>
                           <td>30020</td>
                           <td>
-                            <span class="link" onclick="showAiAutoUnitDetail(30020)">任务1-短剧1-召回-单元1</span>
+                            <span>任务1-短剧1-召回-单元1</span>
                             <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:6611223344555566</div>
                           </td>
+                          <td><span class="link" title="查看素材上传详情" onclick="openAiUnitMaterialModal(30020)">2</span></td>
                           <td><span class="tag tag-error">失败</span></td>
                           <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAiAutoRow('单元',30020)">刷新</button> <button class="row-action-btn" onclick="retryAiAutoRow('单元',30020)">重试</button></div></td>
                           <td>短剧1<br /><span style="color:var(--color-text-tertiary);">ID:1001</span></td><td>5001</td>
@@ -3944,6 +3947,781 @@
           </div>
 
           <!-- 半自动投放 -->
+          <!-- ===== 全域推广 · 自动化投放 ===== -->
+          <div id="page-roi3-auto-delivery" class="page">
+            <div class="breadcrumb">
+              <a href="#" onclick="showPage('dashboard')">首页</a>
+              <span class="breadcrumb-sep">/</span>
+              <span>巨量</span>
+              <span class="breadcrumb-sep">/</span>
+              <span>推广管理</span>
+              <span class="breadcrumb-sep">/</span>
+              <span>全域推广</span>
+              <span class="breadcrumb-sep">/</span>
+              <span>自动化投放</span>
+            </div>
+
+            <div class="content-card">
+              <div class="tabs-bar">
+                <div class="tabs" id="roi3-auto-delivery-tabs">
+                  <button class="tab active" onclick="switchRoi3Tab('task')">任务</button>
+                  <button class="tab" onclick="switchRoi3Tab('account')">账户</button>
+                  <button class="tab" onclick="switchRoi3Tab('project')">项目</button>
+                </div>
+              </div>
+
+              <!-- 任务 Tab -->
+              <div id="roi3-auto-delivery-task" class="tab-content">
+                <div class="filter-bar">
+                  <div class="filter-combo" data-filter-type="roi3-task-name">
+                    <select class="filter-combo-select">
+                      <option>任务名称</option>
+                      <option>任务ID</option>
+                    </select>
+                    <input type="text" class="filter-combo-input" placeholder="请输入任务名称" />
+                  </div>
+                  <select class="filter-select">
+                    <option value="">请选择状态</option>
+                    <option value="on">生效</option>
+                    <option value="off">停用</option>
+                  </select>
+                  <select class="filter-select">
+                    <option value="">请选择创建人</option>
+                    <option>娜可</option>
+                    <option>乐萱</option>
+                  </select>
+                  <select class="filter-select">
+                    <option value="">按历史模式</option>
+                    <option>按最新模式</option>
+                  </select>
+                  <div class="filter-actions">
+                    <button class="btn btn-info btn-sm" onclick="showAiToast('查询任务列表')">查询</button>
+                    <button class="btn btn-outline btn-sm" onclick="resetRoi3Filters('task')">重置</button>
+                    <button class="btn btn-primary btn-sm" style="margin-left: auto; border-radius: 14px; padding: 4px 16px;" onclick="openRoi3NewTask()">+ 新建任务</button>
+                  </div>
+                </div>
+
+                <div class="roi3-table-tools">
+                  <span title="列设置">⚙</span>
+                  <span title="全屏">⛶</span>
+                </div>
+
+                <div class="table-card">
+                  <div class="table-wrapper">
+                    <table class="data-table">
+                      <thead>
+                        <tr>
+                          <th>ID</th>
+                          <th>任务名称</th>
+                          <th>状态</th>
+                          <th>间隔（分钟） <span class="sort-mark">⇅</span></th>
+                          <th>投放变现模式</th>
+                          <th>全域ROI系数</th>
+                          <th>日预算</th>
+                          <th>上次执行/创建时间</th>
+                          <th>创建人</th>
+                          <th>更新人</th>
+                          <th>更新时间 <span class="sort-mark">⇅</span></th>
+                          <th>操作</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>278</td>
+                          <td><span class="link" onclick="openRoi3NewTask('编辑任务', '复制_复制_素材上限验证-393')">复制_复制_素材上限验证-393...</span></td>
+                          <td><span style="color: var(--color-success); font-weight: 600;">生效</span></td>
+                          <td>101</td>
+                          <td>混合投放</td>
+                          <td>1</td>
+                          <td>300</td>
+                          <td>2026-10-29 16:40:01</td>
+                          <td>乐萱</td>
+                          <td>娜可</td>
+                          <td>2026-10-29 16:39:41</td>
+                          <td>
+                            <div class="row-actions">
+                              <button class="row-action-btn" onclick="openRoi3NewTask('编辑任务', '复制_复制_素材上限验证-393')">编辑</button>
+                              <button class="row-action-btn" onclick="openRoi3NewTask('复制任务', '复制_复制_素材上限验证-393')">复制</button>
+                              <button class="row-action-btn" onclick="showAiToast('查看任务修改日志')">日志</button>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>277</td>
+                          <td><span class="link" onclick="openRoi3NewTask('编辑任务', '复制_素材上限验证-3939077')">复制_素材上限验证-3939077-...</span></td>
+                          <td><span style="color: var(--color-error); font-weight: 600;">停用</span></td>
+                          <td>10</td>
+                          <td>混合投放</td>
+                          <td>1</td>
+                          <td>300</td>
+                          <td>2026-10-29 11:57:36</td>
+                          <td>乐萱</td>
+                          <td>乐萱</td>
+                          <td>2026-10-29 12:01:30</td>
+                          <td>
+                            <div class="row-actions">
+                              <button class="row-action-btn" onclick="openRoi3NewTask('编辑任务', '复制_素材上限验证-3939077')">编辑</button>
+                              <button class="row-action-btn" onclick="openRoi3NewTask('复制任务', '复制_素材上限验证-3939077')">复制</button>
+                              <button class="row-action-btn" onclick="showAiToast('查看任务修改日志')">日志</button>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>276</td>
+                          <td><span class="link" onclick="openRoi3NewTask('编辑任务', '素材上限验证-3939077-18584')">素材上限验证-3939077-18584...</span></td>
+                          <td><span style="color: var(--color-error); font-weight: 600;">停用</span></td>
+                          <td>10</td>
+                          <td>混合投放</td>
+                          <td>1</td>
+                          <td>300</td>
+                          <td>2026-10-29 12:04:43</td>
+                          <td>乐萱</td>
+                          <td>乐萱</td>
+                          <td>2026-10-29 12:07:18</td>
+                          <td>
+                            <div class="row-actions">
+                              <button class="row-action-btn" onclick="openRoi3NewTask('编辑任务', '素材上限验证-3939077-18584')">编辑</button>
+                              <button class="row-action-btn" onclick="openRoi3NewTask('复制任务', '素材上限验证-3939077-18584')">复制</button>
+                              <button class="row-action-btn" onclick="showAiToast('查看任务修改日志')">日志</button>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>275</td>
+                          <td><span class="link" onclick="openRoi3NewTask('编辑任务', '复制_复制_素材上限验证-186')">复制_复制_素材上限验证-186...</span></td>
+                          <td><span style="color: var(--color-error); font-weight: 600;">停用</span></td>
+                          <td>10</td>
+                          <td>混合投放</td>
+                          <td>1</td>
+                          <td>300</td>
+                          <td>2026-10-29 11:48:35</td>
+                          <td>乐萱</td>
+                          <td>乐萱</td>
+                          <td>2026-10-29 11:52:45</td>
+                          <td>
+                            <div class="row-actions">
+                              <button class="row-action-btn" onclick="openRoi3NewTask('编辑任务', '复制_复制_素材上限验证-186')">编辑</button>
+                              <button class="row-action-btn" onclick="openRoi3NewTask('复制任务', '复制_复制_素材上限验证-186')">复制</button>
+                              <button class="row-action-btn" onclick="showAiToast('查看任务修改日志')">日志</button>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>274</td>
+                          <td><span class="link" onclick="openRoi3NewTask('编辑任务', '素材上限验证-联讯号-18771')">素材上限验证-联讯号-18771...</span></td>
+                          <td><span style="color: var(--color-error); font-weight: 600;">停用</span></td>
+                          <td>10</td>
+                          <td>混合投放</td>
+                          <td>1</td>
+                          <td>300</td>
+                          <td>2026-10-29 11:46:42</td>
+                          <td>乐萱</td>
+                          <td>乐萱</td>
+                          <td>2026-10-29 11:52:56</td>
+                          <td>
+                            <div class="row-actions">
+                              <button class="row-action-btn" onclick="openRoi3NewTask('编辑任务', '素材上限验证-联讯号-18771')">编辑</button>
+                              <button class="row-action-btn" onclick="openRoi3NewTask('复制任务', '素材上限验证-联讯号-18771')">复制</button>
+                              <button class="row-action-btn" onclick="showAiToast('查看任务修改日志')">日志</button>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>273</td>
+                          <td><span class="link" onclick="openRoi3NewTask('编辑任务', '复制_复制_素材上限验证-186')">复制_复制_素材上限验证-186...</span></td>
+                          <td><span style="color: var(--color-error); font-weight: 600;">停用</span></td>
+                          <td>10</td>
+                          <td>混合投放</td>
+                          <td>1</td>
+                          <td>300</td>
+                          <td>--</td>
+                          <td>乐萱</td>
+                          <td>乐萱</td>
+                          <td>2026-10-29 10:46:19</td>
+                          <td>
+                            <div class="row-actions">
+                              <button class="row-action-btn" onclick="openRoi3NewTask('编辑任务', '复制_复制_素材上限验证-186')">编辑</button>
+                              <button class="row-action-btn" onclick="openRoi3NewTask('复制任务', '复制_复制_素材上限验证-186')">复制</button>
+                              <button class="row-action-btn" onclick="showAiToast('查看任务修改日志')">日志</button>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>272</td>
+                          <td><span class="link" onclick="openRoi3NewTask('编辑任务', '复制_素材上限验证-1862064')">复制_素材上限验证-1862064...</span></td>
+                          <td><span style="color: var(--color-error); font-weight: 600;">停用</span></td>
+                          <td>10</td>
+                          <td>混合投放</td>
+                          <td>1</td>
+                          <td>300</td>
+                          <td>--</td>
+                          <td>乐萱</td>
+                          <td>乐萱</td>
+                          <td>2026-10-29 10:45:23</td>
+                          <td>
+                            <div class="row-actions">
+                              <button class="row-action-btn" onclick="openRoi3NewTask('编辑任务', '复制_素材上限验证-1862064')">编辑</button>
+                              <button class="row-action-btn" onclick="openRoi3NewTask('复制任务', '复制_素材上限验证-1862064')">复制</button>
+                              <button class="row-action-btn" onclick="showAiToast('查看任务修改日志')">日志</button>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>271</td>
+                          <td><span class="link" onclick="openRoi3NewTask('编辑任务', '素材上限验证-18620644534')">素材上限验证-18620644534...</span></td>
+                          <td><span style="color: var(--color-error); font-weight: 600;">停用</span></td>
+                          <td>10</td>
+                          <td>混合投放</td>
+                          <td>1</td>
+                          <td>300</td>
+                          <td>2026-10-29 10:41:01</td>
+                          <td>乐萱</td>
+                          <td>乐萱</td>
+                          <td>2026-10-29 10:42:54</td>
+                          <td>
+                            <div class="row-actions">
+                              <button class="row-action-btn" onclick="openRoi3NewTask('编辑任务', '素材上限验证-18620644534')">编辑</button>
+                              <button class="row-action-btn" onclick="openRoi3NewTask('复制任务', '素材上限验证-18620644534')">复制</button>
+                              <button class="row-action-btn" onclick="showAiToast('查看任务修改日志')">日志</button>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div class="pagination">
+                    <span class="pagination-info">共 22 项</span>
+                    <div class="pagination-pages">
+                      <button class="page-btn" onclick="changePage('prev')">&lt;</button>
+                      <button class="page-btn active" onclick="changePage(1)">1</button>
+                      <button class="page-btn" onclick="changePage(2)">2</button>
+                      <button class="page-btn" onclick="changePage(3)">3</button>
+                      <button class="page-btn" onclick="changePage('next')">&gt;</button>
+                    </div>
+                    <select class="page-size-select">
+                      <option value="20">20 条/页</option>
+                      <option value="50" selected>50 条/页</option>
+                      <option value="100">100 条/页</option>
+                    </select>
+                    <span>跳至</span>
+                    <input type="text" class="jump-input" value="1" />
+                    <span>页</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 账户 Tab -->
+              <div id="roi3-auto-delivery-account" class="tab-content" style="display: none;">
+                <div class="filter-bar">
+                  <div class="filter-bar-row">
+                    <div class="filter-range">
+                      <span class="filter-range-label">创建时间</span>
+                      <input type="text" placeholder="开始时间" />
+                      <span class="filter-range-tilde">-</span>
+                      <input type="text" placeholder="结束时间" />
+                      <button type="button" class="filter-range-pick" title="选择日期">📅</button>
+                      <span class="filter-range-unit">月</span>
+                    </div>
+                    <select class="filter-select">
+                      <option value="">请选择创建人</option>
+                      <option>娜可</option>
+                      <option>乐萱</option>
+                    </select>
+                    <div class="filter-combo" data-filter-type="roi3-acc-task-name">
+                      <select class="filter-combo-select">
+                        <option>任务名称</option>
+                        <option>任务ID</option>
+                      </select>
+                      <input type="text" class="filter-combo-input" placeholder="请输入" />
+                    </div>
+                    <div class="filter-combo" data-filter-type="roi3-acc-account-name">
+                      <select class="filter-combo-select">
+                        <option>账户名称</option>
+                        <option>账户ID</option>
+                      </select>
+                      <input type="text" class="filter-combo-input" placeholder="请输入" />
+                    </div>
+                    <select class="filter-select">
+                      <option value="">请选择短剧</option>
+                      <option>被拒婚后，全家偷听我心声逆天改命</option>
+                      <option>游子归家</option>
+                    </select>
+                    <select class="filter-select">
+                      <option value="">请选择抖音号</option>
+                      <option>爆量转动</option>
+                      <option>每日一撞</option>
+                    </select>
+                  </div>
+                  <div class="filter-bar-row">
+                    <select class="filter-select">
+                      <option value="">请选择执行状态</option>
+                      <option>失效</option>
+                      <option>成功</option>
+                      <option>上传中</option>
+                    </select>
+                    <select class="filter-select">
+                      <option value="">请选择执行类型</option>
+                      <option>随机</option>
+                      <option>一户一剧</option>
+                      <option>一户一抖音号</option>
+                    </select>
+                    <div class="filter-combo" data-filter-type="roi3-acc-exec-id">
+                      <select class="filter-combo-select">
+                        <option>执行ID</option>
+                      </select>
+                      <input type="text" class="filter-combo-input" placeholder="请输入执行ID" />
+                    </div>
+                    <div class="filter-actions">
+                      <button class="btn btn-info btn-sm" onclick="showAiToast('查询账户列表')">查询</button>
+                      <button class="btn btn-outline btn-sm" onclick="resetRoi3Filters('account')">重置</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="filter-status">已选择<span id="roi3AccountSelectedCount">0</span>个 <span class="link" onclick="roi3BatchRetry()">重试</span></div>
+
+                <div class="roi3-table-tools">
+                  <span title="列设置">⚙</span>
+                  <span title="全屏">⛶</span>
+                </div>
+
+                <div class="table-card">
+                  <div class="table-wrapper">
+                    <table class="data-table">
+                      <thead>
+                        <tr>
+                          <th class="checkbox-col"><input type="checkbox" id="selectAllRoi3Accounts" onclick="toggleSelectAllRoi3Accounts(this)" title="全选本页" /></th>
+                          <th>执行ID</th>
+                          <th>账户信息</th>
+                          <th>任务信息</th>
+                          <th>投放短剧</th>
+                          <th>投放抖音号</th>
+                          <th>提交项目数</th>
+                          <th>操作</th>
+                          <th>执行类型</th>
+                          <th>创建时间</th>
+                          <th>执行状态</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td><input type="checkbox" class="roi3-account-checkbox" onchange="updateRoi3AccountSelectedCount()" /></td>
+                          <td>36508</td>
+                          <td>
+                            <span class="link">snk-情感剧-IAA喜剧-图文混剪巴扎黑-0分-116</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 1858422859408387</div>
+                          </td>
+                          <td>
+                            <span class="link">复制_复制-素材上限验证-3939077-</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 278</div>
+                          </td>
+                          <td>
+                            <span class="link">被拒婚后，全家偷听我心声逆天改命</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:3939077</div>
+                          </td>
+                          <td>
+                            <span class="link">爆量转动</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 90746833110</div>
+                            <span class="link" title="查看更多抖音号">+1</span>
+                          </td>
+                          <td><span class="link">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功: 2</span><span class="stat-row-empty">失充: 0</span></div></div></td>
+                          <td><div class="row-actions"><button class="row-action-btn" onclick="roi3RefreshRow('账户', 36508)">刷新</button> <button class="row-action-btn" onclick="roi3RetryRow('账户', 36508)">重试</button></div></td>
+                          <td>随机</td>
+                          <td>2026-10-29 12:41:46</td>
+                          <td><span style="color: var(--color-error); font-weight: 600;">失效</span></td>
+                        </tr>
+                        <tr>
+                          <td><input type="checkbox" class="roi3-account-checkbox" onchange="updateRoi3AccountSelectedCount()" /></td>
+                          <td>36507</td>
+                          <td>
+                            <span class="link">snk-情感剧-IAA喜剧-图文混剪巴扎黑-0分-116</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 1858422859408387</div>
+                          </td>
+                          <td>
+                            <span class="link">复制_复制-素材上限验证-3939077-</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 278</div>
+                          </td>
+                          <td>
+                            <span class="link">被拒婚后，全家偷听我心声逆天改命</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:3939077</div>
+                          </td>
+                          <td>
+                            <span class="link">爆量转动</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 5230643736</div>
+                          </td>
+                          <td><span class="link">1</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功: 1</span><span class="stat-row-empty">失充: 0</span></div></div></td>
+                          <td><div class="row-actions"><button class="row-action-btn" onclick="roi3RefreshRow('账户', 36507)">刷新</button> <button class="row-action-btn" onclick="roi3RetryRow('账户', 36507)">重试</button></div></td>
+                          <td>随机</td>
+                          <td>2026-10-29 12:31:42</td>
+                          <td><span style="color: var(--color-error); font-weight: 600;">失效</span></td>
+                        </tr>
+                        <tr>
+                          <td><input type="checkbox" class="roi3-account-checkbox" onchange="updateRoi3AccountSelectedCount()" /></td>
+                          <td>36503</td>
+                          <td>
+                            <span class="link">snk-情感剧-IAA喜剧-图文混剪巴扎黑-0分-116</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 1858422859408387</div>
+                          </td>
+                          <td>
+                            <span class="link">复制_复制-素材上限验证-3939077-</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 276</div>
+                          </td>
+                          <td>
+                            <span class="link">被拒婚后，全家偷听我心声逆天改命</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:3939077</div>
+                          </td>
+                          <td>
+                            <span class="link">爆量转动</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 18737484606</div>
+                            <span class="link" title="查看更多抖音号">+2</span>
+                          </td>
+                          <td><span class="link">3</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功: 1</span><span class="stat-fail-text">失充: 2</span></div></div></td>
+                          <td><div class="row-actions"><button class="row-action-btn" onclick="roi3RefreshRow('账户', 36503)">刷新</button> <button class="row-action-btn" onclick="roi3RetryRow('账户', 36503)">重试</button></div></td>
+                          <td>随机</td>
+                          <td>2026-10-29 12:01:38</td>
+                          <td><span style="color: var(--color-error); font-weight: 600;">失效</span></td>
+                        </tr>
+                        <tr>
+                          <td><input type="checkbox" class="roi3-account-checkbox" onchange="updateRoi3AccountSelectedCount()" /></td>
+                          <td>36502</td>
+                          <td>
+                            <span class="link">snk-情感剧-IAA喜剧-图文混剪巴扎黑-0分-116</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 1858422859408387</div>
+                          </td>
+                          <td>
+                            <span class="link">复制_复制-素材上限验证-3939077-</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 277</div>
+                          </td>
+                          <td>
+                            <span class="link">被拒婚后，全家偷听我心声逆天改命</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:3939077</div>
+                          </td>
+                          <td>
+                            <span class="link">每日一撞</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 80941169477</div>
+                          </td>
+                          <td><span class="link">4</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功: 0</span><span class="stat-fail-text">失充: 4</span></div></div></td>
+                          <td><div class="row-actions"><button class="row-action-btn" onclick="roi3RefreshRow('账户', 36502)">刷新</button> <button class="row-action-btn" onclick="roi3RetryRow('账户', 36502)">重试</button></div></td>
+                          <td>随机</td>
+                          <td>2026-10-29 11:57:35</td>
+                          <td><span style="color: var(--color-error); font-weight: 600;">失效</span></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div class="pagination">
+                    <span class="pagination-info">共 118 项</span>
+                    <div class="pagination-pages">
+                      <button class="page-btn" onclick="changePage('prev')">&lt;</button>
+                      <button class="page-btn active" onclick="changePage(1)">1</button>
+                      <button class="page-btn" onclick="changePage(2)">2</button>
+                      <button class="page-btn" onclick="changePage(3)">3</button>
+                      <button class="page-btn" onclick="changePage('next')">&gt;</button>
+                    </div>
+                    <select class="page-size-select">
+                      <option value="20">20 条/页</option>
+                      <option value="50" selected>50 条/页</option>
+                      <option value="100">100 条/页</option>
+                    </select>
+                    <span>跳至</span>
+                    <input type="text" class="jump-input" value="1" />
+                    <span>页</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 项目 Tab -->
+              <div id="roi3-auto-delivery-project" class="tab-content" style="display: none;">
+                <div class="filter-bar">
+                  <div class="filter-bar-row">
+                    <div class="filter-range">
+                      <span class="filter-range-label">创建时间</span>
+                      <input type="text" placeholder="开始时间" />
+                      <span class="filter-range-tilde">-</span>
+                      <input type="text" placeholder="结束时间" />
+                      <button type="button" class="filter-range-pick" title="选择日期">📅</button>
+                      <span class="filter-range-unit">月</span>
+                    </div>
+                    <select class="filter-select">
+                      <option value="">请选择创建人</option>
+                      <option>娜可</option>
+                      <option>乐萱</option>
+                    </select>
+                    <div class="filter-combo" data-filter-type="roi3-proj-task-name">
+                      <select class="filter-combo-select">
+                        <option>任务名称</option>
+                        <option>任务ID</option>
+                      </select>
+                      <input type="text" class="filter-combo-input" placeholder="请输入" />
+                    </div>
+                    <div class="filter-combo" data-filter-type="roi3-proj-account-name">
+                      <select class="filter-combo-select">
+                        <option>账户名称</option>
+                        <option>账户ID</option>
+                      </select>
+                      <input type="text" class="filter-combo-input" placeholder="请输入" />
+                    </div>
+                    <div class="filter-combo" data-filter-type="roi3-proj-name">
+                      <select class="filter-combo-select">
+                        <option>项目名称</option>
+                        <option>项目ID</option>
+                      </select>
+                      <input type="text" class="filter-combo-input" placeholder="请输入项目ID" />
+                    </div>
+                    <select class="filter-select">
+                      <option value="">请选择短剧</option>
+                      <option>被拒婚后，全家偷听我心声逆天改命</option>
+                      <option>游子归家</option>
+                    </select>
+                  </div>
+                  <div class="filter-bar-row">
+                    <select class="filter-select">
+                      <option value="">请选择抖音号</option>
+                      <option>爆量转动</option>
+                      <option>每日一撞</option>
+                    </select>
+                    <select class="filter-select">
+                      <option value="">项目提交状态</option>
+                      <option>失效</option>
+                      <option>成功</option>
+                      <option>部分成功</option>
+                    </select>
+                    <select class="filter-select">
+                      <option value="">请选择投放变现模式</option>
+                      <option>混合投放（IAP+IAA）</option>
+                      <option>用户付费（IAP）</option>
+                    </select>
+                    <select class="filter-select">
+                      <option value="">请选择执行类型</option>
+                      <option>随机</option>
+                      <option>一户一剧</option>
+                      <option>一户一抖音号</option>
+                    </select>
+                    <div class="filter-combo" data-filter-type="roi3-proj-exec-id">
+                      <select class="filter-combo-select">
+                        <option>执行ID</option>
+                      </select>
+                      <input type="text" class="filter-combo-input" placeholder="请输入执行ID" />
+                    </div>
+                    <div class="filter-combo" data-filter-type="roi3-proj-id">
+                      <select class="filter-combo-select">
+                        <option>项目ID</option>
+                      </select>
+                      <input type="text" class="filter-combo-input" placeholder="请输入项目ID" />
+                    </div>
+                    <div class="filter-actions">
+                      <button class="btn btn-info btn-sm" onclick="showAiToast('查询项目列表')">查询</button>
+                      <button class="btn btn-outline btn-sm" onclick="resetRoi3Filters('project')">重置</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="roi3-table-tools">
+                  <span title="列设置">⚙</span>
+                  <span title="全屏">⛶</span>
+                </div>
+
+                <div class="table-card">
+                  <div class="table-wrapper">
+                    <table class="data-table">
+                      <thead>
+                        <tr>
+                          <th>ID</th>
+                          <th>项目信息</th>
+                          <th>任务信息</th>
+                          <th>账户信息</th>
+                          <th>投放短剧</th>
+                          <th>抖音号信息</th>
+                          <th>素材量</th>
+                          <th>项目提交状态</th>
+                          <th>操作</th>
+                          <th>投放变现模式</th>
+                          <th>全域ROI系数</th>
+                          <th>日预算</th>
+                          <th>执行类型</th>
+                          <th>创建时间</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>6251</td>
+                          <td>
+                            <span class="link">乐量#393007#A-278_假少爷倒塌了，全家跪地爆娘#20261029</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:--</div>
+                          </td>
+                          <td>
+                            <span class="link">复制_复制-素材上限验证-3939077-</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 278</div>
+                          </td>
+                          <td>
+                            <span class="link">snk-情感剧-IAA喜剧-图文混剪巴扎黑-0分-116</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 1858422859408387</div>
+                          </td>
+                          <td>
+                            <span class="link">被拒婚后，全家偷听我心声逆天改命</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:3939077</div>
+                          </td>
+                          <td>
+                            <span class="link">每日一撞</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 80941169477</div>
+                          </td>
+                          <td>
+                            <div>实际提交 <span class="link">--</span></div>
+                            <div class="stat-stack"><div class="stat-row"><span style="color: var(--color-info);">待上传0</span> <span class="stat-success-text">成功2</span> <span class="stat-fail-text">失败3</span></div></div>
+                          </td>
+                          <td>
+                            <div style="color: var(--color-error); font-size: 12px;">⊗ 账户:ut18584228594...</div>
+                            <div style="color: var(--color-error); font-size: 12px;">失效</div>
+                          </td>
+                          <td><div class="row-actions"><button class="row-action-btn" onclick="roi3RefreshRow('项目', 6251)">刷新</button> <button class="row-action-btn" onclick="roi3RetryRow('项目', 6251)">重试</button></div></td>
+                          <td>混合投放<br /><span style="font-size: 12px; color: var(--color-text-tertiary);">(IAP+IAA)</span></td>
+                          <td>1</td>
+                          <td>300</td>
+                          <td>随机</td>
+                          <td>2026-10-29 12:41:46</td>
+                        </tr>
+                        <tr>
+                          <td>6250</td>
+                          <td>
+                            <span class="link">乐量#393007#A-278_假少爷倒塌了，全家跪地爆娘#20261029</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:--</div>
+                          </td>
+                          <td>
+                            <span class="link">复制_复制-素材上限验证-3939077-</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 278</div>
+                          </td>
+                          <td>
+                            <span class="link">snk-情感剧-IAA喜剧-图文混剪巴扎黑-0分-116</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 1858422859408387</div>
+                          </td>
+                          <td>
+                            <span class="link">被拒婚后，全家偷听我心声逆天改命</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:3939077</div>
+                          </td>
+                          <td>
+                            <span class="link">爆量转动</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 90746833110</div>
+                          </td>
+                          <td>
+                            <div>实际提交 <span class="link">--</span></div>
+                            <div class="stat-stack"><div class="stat-row"><span style="color: var(--color-info);">待上传0</span> <span class="stat-success-text">成功2</span> <span class="stat-fail-text">失败3</span></div></div>
+                          </td>
+                          <td>
+                            <div style="color: var(--color-error); font-size: 12px;">⊗ 账户:ut18584228594...</div>
+                            <div style="color: var(--color-error); font-size: 12px;">失效</div>
+                          </td>
+                          <td><div class="row-actions"><button class="row-action-btn" onclick="roi3RefreshRow('项目', 6250)">刷新</button> <button class="row-action-btn" onclick="roi3RetryRow('项目', 6250)">重试</button></div></td>
+                          <td>混合投放<br /><span style="font-size: 12px; color: var(--color-text-tertiary);">(IAP+IAA)</span></td>
+                          <td>1</td>
+                          <td>300</td>
+                          <td>随机</td>
+                          <td>2026-10-29 12:41:46</td>
+                        </tr>
+                        <tr>
+                          <td>6249</td>
+                          <td>
+                            <span class="link">乐量#393007#A-278_假少爷倒塌了，全家跪地爆娘#20261029</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:--</div>
+                          </td>
+                          <td>
+                            <span class="link">复制_复制-素材上限验证-3939077-</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 276</div>
+                          </td>
+                          <td>
+                            <span class="link">snk-情感剧-IAA喜剧-图文混剪巴扎黑-0分-116</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 1858422859408387</div>
+                          </td>
+                          <td>
+                            <span class="link">被拒婚后，全家偷听我心声逆天改命</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:3939077</div>
+                          </td>
+                          <td>
+                            <span class="link">爆量转动</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 5230643736</div>
+                          </td>
+                          <td>
+                            <div>实际提交 <span class="link">--</span></div>
+                            <div class="stat-stack"><div class="stat-row"><span style="color: var(--color-info);">待上传0</span> <span class="stat-success-text">成功1</span> <span class="stat-fail-text">失败6</span></div></div>
+                          </td>
+                          <td>
+                            <div style="color: var(--color-error); font-size: 12px;">⊗ 账户:ut18584228594...</div>
+                            <div style="color: var(--color-error); font-size: 12px;">失效</div>
+                          </td>
+                          <td><div class="row-actions"><button class="row-action-btn" onclick="roi3RefreshRow('项目', 6249)">刷新</button> <button class="row-action-btn" onclick="roi3RetryRow('项目', 6249)">重试</button></div></td>
+                          <td>混合投放<br /><span style="font-size: 12px; color: var(--color-text-tertiary);">(IAP+IAA)</span></td>
+                          <td>1</td>
+                          <td>300</td>
+                          <td>随机</td>
+                          <td>2026-10-29 12:31:42</td>
+                        </tr>
+                        <tr>
+                          <td>6248</td>
+                          <td>
+                            <span class="link">乐量#393007#A-278_假少爷倒塌了，全家跪地爆娘#20261029</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:--</div>
+                          </td>
+                          <td>
+                            <span class="link">复制_复制-素材上限验证-3939077-</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 277</div>
+                          </td>
+                          <td>
+                            <span class="link">snk-情感剧-IAA喜剧-图文混剪巴扎黑-0分-116</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 1858422859408387</div>
+                          </td>
+                          <td>
+                            <span class="link">被拒婚后，全家偷听我心声逆天改命</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:3939077</div>
+                          </td>
+                          <td>
+                            <span class="link">每日一撞</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 80941169477</div>
+                          </td>
+                          <td>
+                            <div>实际提交 <span class="link">--</span></div>
+                            <div class="stat-stack"><div class="stat-row"><span style="color: var(--color-info);">待上传0</span> <span class="stat-success-text">成功0</span> <span class="stat-fail-text">失败0</span></div></div>
+                          </td>
+                          <td>
+                            <div style="color: var(--color-error); font-size: 12px;">⊗ 账户:ut18584228594...</div>
+                            <div style="color: var(--color-error); font-size: 12px;">失效</div>
+                          </td>
+                          <td><div class="row-actions"><button class="row-action-btn" onclick="roi3RefreshRow('项目', 6248)">刷新</button> <button class="row-action-btn" onclick="roi3RetryRow('项目', 6248)">重试</button></div></td>
+                          <td>混合投放<br /><span style="font-size: 12px; color: var(--color-text-tertiary);">(IAP+IAA)</span></td>
+                          <td>1</td>
+                          <td>300</td>
+                          <td>随机</td>
+                          <td>2026-10-29 11:57:35</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div class="pagination">
+                    <span class="pagination-info">共 234 项</span>
+                    <div class="pagination-pages">
+                      <button class="page-btn" onclick="changePage('prev')">&lt;</button>
+                      <button class="page-btn active" onclick="changePage(1)">1</button>
+                      <button class="page-btn" onclick="changePage(2)">2</button>
+                      <button class="page-btn" onclick="changePage(3)">3</button>
+                      <button class="page-btn" onclick="changePage(4)">4</button>
+                      <button class="page-btn" onclick="changePage(5)">5</button>
+                      <button class="page-btn" onclick="changePage('next')">&gt;</button>
+                    </div>
+                    <select class="page-size-select">
+                      <option value="20">20 条/页</option>
+                      <option value="50" selected>50 条/页</option>
+                      <option value="100">100 条/页</option>
+                    </select>
+                    <span>跳至</span>
+                    <input type="text" class="jump-input" value="1" />
+                    <span>页</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div id="page-semi-auto-delivery" class="page">
             <div class="breadcrumb">
               <a href="#" onclick="showPage('dashboard')">首页</a>
@@ -4649,6 +5427,40 @@
     </div>
 
 
+    <!-- 单元 · 素材上传详情弹框（标准投放 · 单元列表「创意素材」点击） -->
+    <div id="ai-unit-mat-overlay" class="modal-overlay" onclick="closeAiUnitMaterialModal()"></div>
+    <div id="ai-unit-mat-modal" class="modal ai-unit-mat-modal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <span>素材上传详情</span>
+          <button class="modal-close" onclick="closeAiUnitMaterialModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="ai-unit-mat-filter">
+            <span class="ai-unit-mat-label">上传状态：</span>
+            <select class="filter-select" id="ai-unit-mat-status" onchange="renderAiUnitMaterialTable()">
+              <option value="">全部</option>
+              <option value="success">上传成功</option>
+              <option value="fail">上传失败</option>
+            </select>
+            <span class="ai-unit-mat-total" id="ai-unit-mat-total">共 0 条</span>
+          </div>
+          <div class="table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th style="width: 96px;">预览</th>
+                  <th>素材名称</th>
+                  <th style="width: 120px;">上传状态</th>
+                </tr>
+              </thead>
+              <tbody id="ai-unit-mat-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- 新建/编辑 ：巨量短剧自动化任务抽屉（国内投放 · 标准推广 · 自动化任务）
          表单较长，点击遮罩不关闭，避免误触丢失已填内容 -->
     <div id="modal-new-task-overlay" class="drawer-overlay"></div>
@@ -5115,6 +5927,400 @@
       </div>
     </div>
 
+    <!-- 全域推广 · 自动化投放 新建任务弹框 -->
+    <div id="modal-roi3-new-task-overlay" class="drawer-overlay"></div>
+    <div id="modal-roi3-new-task" class="drawer drawer-wide">
+      <div class="task-modal-card">
+        <div class="drawer-header task-modal-header">
+          <h3 class="drawer-title" id="modal-roi3-new-task-title">新建任务</h3>
+          <button class="drawer-close" onclick="closeRoi3NewTask()">&times;</button>
+        </div>
+
+        <div class="drawer-body task-modal-body">
+          <!-- ===== 任务基本信息 ===== -->
+          <section class="task-section">
+            <h4 class="task-section-title">任务基本信息</h4>
+
+            <div class="task-row" id="roi3RowName">
+              <label class="task-label"><i class="req">*</i>任务名称：</label>
+              <div class="task-ctrl">
+                <input type="text" class="form-input task-w-md" id="roi3TaskName" maxlength="40" placeholder="请输入" />
+              </div>
+            </div>
+
+            <div class="task-row">
+              <label class="task-label"><i class="req">*</i>状态：</label>
+              <div class="task-ctrl">
+                <div class="segmented-control" data-seg="roi3Status">
+                  <button class="segmented-item active" type="button" data-v="on" onclick="setRoi3Seg(this)">生效</button>
+                  <button class="segmented-item" type="button" data-v="off" onclick="setRoi3Seg(this)">停用</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-row">
+              <label class="task-label"><i class="req">*</i>生效时间：</label>
+              <div class="task-ctrl stack">
+                <div class="task-time-list" id="roi3TimeRanges">
+                  <div class="task-time-range">
+                    <input type="time" class="form-input task-w-time" value="00:00:00" step="1" />
+                    <span class="task-sep">~</span>
+                    <input type="time" class="form-input task-w-time" value="23:59:59" step="1" />
+                  </div>
+                </div>
+                <a class="form-link" onclick="addRoi3TimeRange()">添加时间范围</a>
+              </div>
+            </div>
+
+            <div class="task-row" id="roi3RowInterval">
+              <label class="task-label"><i class="req">*</i>执行频率：</label>
+              <div class="task-ctrl">
+                <span class="task-text">间隔</span>
+                <input type="text" class="form-input task-w-sm" id="roi3Interval" placeholder="请输入" oninput="limitPositiveInt(this)" />
+                <span class="task-text">分钟执行一次</span>
+              </div>
+            </div>
+
+            <div class="task-row">
+              <label class="task-label"><i class="req">*</i>执行次数：</label>
+              <div class="task-ctrl">
+                <div class="segmented-control" data-seg="roi3ExecTimes">
+                  <button class="segmented-item active" type="button" data-v="none" onclick="setRoi3Seg(this)">不限</button>
+                  <button class="segmented-item" type="button" data-v="custom" onclick="setRoi3Seg(this)">自定义</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-row" id="roi3RowExecTotal" style="display: none;">
+              <label class="task-label">执行总次数：</label>
+              <div class="task-ctrl">
+                <input type="text" class="form-input task-w-sm" id="roi3ExecTotal" placeholder="请输入" oninput="limitPositiveInt(this)" />
+              </div>
+            </div>
+          </section>
+
+          <!-- ===== 执行设置 ===== -->
+          <section class="task-section">
+            <h4 class="task-section-title">执行设置</h4>
+
+            <div class="task-row">
+              <label class="task-label"><i class="req">*</i>执行类型：</label>
+              <div class="task-ctrl">
+                <div class="ai-card-group" id="roi3ExecCards" style="width: 100%;"></div>
+              </div>
+            </div>
+
+            <div class="task-row" id="roi3RowProjCount">
+              <label class="task-label">账户下项目数：</label>
+              <div class="task-ctrl">
+                <input type="text" class="form-input task-w-sm" id="roi3ProjCount" placeholder="请输入" oninput="limitPositiveInt(this)" />
+                <span class="task-hint">不填默认400，上限500</span>
+              </div>
+            </div>
+
+            <div class="task-row">
+              <label class="task-label"><i class="req">*</i>素材分配方式：</label>
+              <div class="task-ctrl">
+                <div class="ai-card-group cols-2" id="roi3MatCards" style="width: 100%;"></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ===== 短剧范围 ===== -->
+          <section class="task-section">
+            <h4 class="task-section-title">短剧范围</h4>
+            <div id="roi3DramaScopeList">
+              <div class="task-row indent" id="roi3RowDramaScope">
+                <div class="task-ctrl">
+                  <select class="form-select task-w-sm">
+                    <option>短剧标签</option>
+                    <option>短剧名称</option>
+                    <option>短剧ID</option>
+                  </select>
+                  <select class="form-select task-w-xs">
+                    <option>包含</option>
+                    <option>不包含</option>
+                    <option>等于</option>
+                  </select>
+                  <input type="text" class="form-input task-w-lg" placeholder="请选择" />
+                </div>
+              </div>
+            </div>
+            <div class="task-row indent">
+              <div class="task-ctrl">
+                <a class="form-link" onclick="addRoi3DramaScope()">添加筛选范围</a>
+              </div>
+            </div>
+          </section>
+
+          <!-- ===== 抖音号范围 ===== -->
+          <section class="task-section">
+            <h4 class="task-section-title">抖音号范围</h4>
+
+            <div class="task-row" id="roi3RowDy">
+              <label class="task-label"><i class="req">*</i>抖音号（项目）：</label>
+              <div class="task-ctrl">
+                <div class="segmented-control" data-seg="aiDyScope|roi3new">
+                  <button class="segmented-item active" type="button" data-v="custom" onclick="setAiSeg(this)">自定义</button>
+                  <button class="segmented-item" type="button" data-v="pkg" onclick="setAiSeg(this)">抖音号包</button>
+                </div>
+                <input type="text" class="form-input task-w-md" id="aiDyPick-roi3new" readonly placeholder="请选择" style="cursor: pointer;" onclick="openAiResPicker('douyin', 'roi3new')" />
+                <button class="btn btn-outline btn-sm" type="button" id="aiDyPkgBtn-roi3new" style="display: none;" onclick="openAiDyPkg('roi3new')">选择抖音号包</button>
+                <div class="ai-chips" id="aiChipsDy-roi3new"></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ===== 投放账户 ===== -->
+          <section class="task-section">
+            <h4 class="task-section-title">投放账户</h4>
+
+            <div class="task-row">
+              <label class="task-label">主体：</label>
+              <div class="task-ctrl">
+                <button class="btn btn-outline btn-sm" type="button" onclick="openAiResPicker('subject', 'roi3new')">选择主体包</button>
+                <div class="ai-chips flat" id="aiChipsSubject-roi3new"></div>
+              </div>
+            </div>
+
+            <div class="task-row">
+              <label class="task-label">应用：</label>
+              <div class="task-ctrl">
+                <button class="btn btn-outline btn-sm" type="button" onclick="openAiResPicker('app', 'roi3new')">选择应用包</button>
+                <div class="ai-chips flat" id="aiChipsApp-roi3new"></div>
+              </div>
+            </div>
+
+            <div class="task-row">
+              <label class="task-label">账户：</label>
+              <div class="task-ctrl">
+                <button class="btn btn-outline btn-sm" type="button" onclick="openAiResPicker('account', 'roi3new')">选择账户包</button>
+                <div class="ai-chips flat" id="aiChipsAccount-roi3new"></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ===== 素材配置 ===== -->
+          <section class="task-section">
+            <h4 class="task-section-title">素材配置</h4>
+
+            <div class="task-row">
+              <label class="task-label"><i class="req">*</i>素材池投放方式：</label>
+              <div class="task-ctrl">
+                <div class="segmented-control" data-seg="roi3MatPool">
+                  <button class="segmented-item active" type="button" data-v="time" onclick="setRoi3Seg(this)">按时间</button>
+                  <button class="segmented-item" type="button" data-v="rank" onclick="setRoi3Seg(this)">按排名</button>
+                  <button class="segmented-item" type="button" data-v="custom" onclick="setRoi3Seg(this)">自定义</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-row">
+              <label class="task-label"><i class="tip-icon" data-tip="从素材库中选择参与自动投放的素材文件夹，可多选；不选择时默认使用全部素材">?</i>素材范围：</label>
+              <div class="task-ctrl">
+                <button class="btn btn-outline btn-sm" type="button" onclick="openTaskFolderPicker('roi3')">选择文件夹</button>
+                <div class="task-chips" id="roi3FolderChips"></div>
+              </div>
+            </div>
+
+            <div class="task-row" id="roi3RowMatCreate">
+              <label class="task-label"><i class="req">*</i>素材创建时间：</label>
+              <div class="task-ctrl stack">
+                <div class="segmented-control" data-seg="roi3MatCreateTime">
+                  <button class="segmented-item" type="button" data-v="3h" onclick="setRoi3Seg(this)">3小时</button>
+                  <button class="segmented-item" type="button" data-v="1d" onclick="setRoi3Seg(this)">1天</button>
+                  <button class="segmented-item" type="button" data-v="3d" onclick="setRoi3Seg(this)">3天</button>
+                  <button class="segmented-item" type="button" data-v="7d" onclick="setRoi3Seg(this)">7天</button>
+                  <button class="segmented-item" type="button" data-v="15d" onclick="setRoi3Seg(this)">15天</button>
+                  <button class="segmented-item" type="button" data-v="30d" onclick="setRoi3Seg(this)">30天</button>
+                  <button class="segmented-item active" type="button" data-v="custom" onclick="setRoi3Seg(this)">自定义</button>
+                </div>
+                <div class="task-inline" id="roi3MatCreateTimeCustom">
+                  <select class="form-select task-w-xs">
+                    <option>近</option>
+                    <option>累计</option>
+                  </select>
+                  <input type="text" class="form-input task-w-sm" placeholder="请输入" oninput="limitPositiveInt(this)" />
+                  <select class="form-select task-w-xs">
+                    <option>天</option>
+                    <option>小时</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-row" id="roi3RowMatCost">
+              <label class="task-label"><i class="req">*</i>素材消耗：</label>
+              <div class="task-ctrl stack">
+                <div class="segmented-control" data-seg="roi3MatCost">
+                  <button class="segmented-item" type="button" data-v="none" onclick="setRoi3Seg(this)">不限</button>
+                  <button class="segmented-item active" type="button" data-v="custom" onclick="setRoi3Seg(this)">自定义</button>
+                </div>
+                <div class="task-inline" id="roi3MatCostCustom">
+                  <select class="form-select task-w-xs">
+                    <option>累计</option>
+                    <option>近1天</option>
+                    <option>近3天</option>
+                    <option>近7天</option>
+                    <option>近15天</option>
+                    <option>近30天</option>
+                  </select>
+                  <select class="form-select task-w-xxs">
+                    <option>&gt;=</option>
+                    <option>&lt;=</option>
+                    <option>=</option>
+                  </select>
+                  <input type="text" class="form-input task-w-sm" placeholder="请输入" />
+                </div>
+              </div>
+            </div>
+
+            <div class="task-row" id="roi3RowMatDuration">
+              <label class="task-label"><i class="req">*</i>素材时长：</label>
+              <div class="task-ctrl stack">
+                <div class="segmented-control" data-seg="roi3MatDuration">
+                  <button class="segmented-item active" type="button" data-v="none" onclick="setRoi3Seg(this)">不限</button>
+                  <button class="segmented-item" type="button" data-v="custom" onclick="setRoi3Seg(this)">自定义</button>
+                </div>
+                <div class="task-inline" id="roi3MatDurationCustom" style="display: none;">
+                  <select class="form-select task-w-xxs">
+                    <option>&gt;=</option>
+                    <option>&lt;=</option>
+                  </select>
+                  <input type="text" class="form-input task-w-sm" placeholder="请输入" oninput="limitPositiveInt(this)" />
+                  <span class="task-hint">秒</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-row">
+              <label class="task-label"><i class="req">*</i>素材数量：</label>
+              <div class="task-ctrl">
+                <div class="segmented-control" data-seg="roi3MatCount">
+                  <button class="segmented-item active" type="button" data-v="all" onclick="setRoi3Seg(this)">全部</button>
+                  <button class="segmented-item" type="button" data-v="custom" onclick="setRoi3Seg(this)">自定义</button>
+                </div>
+                <input type="text" class="form-input task-w-sm" id="roi3MatCountCustom" placeholder="请输入" style="display: none;" oninput="limitPositiveInt(this)" />
+              </div>
+            </div>
+
+            <div class="task-row">
+              <label class="task-label">AIGC素材：</label>
+              <div class="task-ctrl">
+                <label class="toggle-switch" title="开启后将自动生成 AIGC 素材">
+                  <input type="checkbox" checked onchange="onRoi3AigcToggle(this)" />
+                  <span class="toggle-slider"></span>
+                </label>
+                <span class="task-hint">开启后将自动生成 AIGC 素材</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- ===== 投放配置 ===== -->
+          <section class="task-section">
+            <h4 class="task-section-title">投放配置</h4>
+
+            <div class="task-row">
+              <label class="task-label"><i class="req">*</i>投放变现模式：</label>
+              <div class="task-ctrl">
+                <div class="segmented-control" data-seg="roi3RevMode">
+                  <button class="segmented-item active" type="button" data-v="mix" onclick="setRoi3Seg(this)">混合投放（IAP+IAA）</button>
+                  <button class="segmented-item" type="button" data-v="iap" onclick="setRoi3Seg(this)">用户付费（IAP）</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-row" id="roi3RowRoi">
+              <label class="task-label"><i class="req">*</i>全域ROI系数：</label>
+              <div class="task-ctrl">
+                <input type="text" class="form-input task-w-sm" id="roi3Roi" placeholder="请输入" />
+              </div>
+            </div>
+
+            <div class="task-row" id="roi3RowBudget">
+              <label class="task-label"><i class="req">*</i>日预算：</label>
+              <div class="task-ctrl">
+                <input type="text" class="form-input task-w-sm" id="roi3Budget" placeholder="请输入" oninput="limitPositiveInt(this)" />
+              </div>
+            </div>
+
+            <!-- IAA持续到多少集：投放变现模式=混合投放 时展示 -->
+            <div class="task-row" id="roi3RowIaaEpisode">
+              <label class="task-label">IAA持续到多少集：</label>
+              <div class="task-ctrl">
+                <select class="form-select task-w-sm">
+                  <option>第1集</option>
+                  <option selected>第2集</option>
+                  <option>第3集</option>
+                  <option>第4集</option>
+                  <option>第5集</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="task-row">
+              <label class="task-label">文案来源范围：</label>
+              <div class="task-ctrl">
+                <div class="segmented-control" data-seg="roi3CopyScope">
+                  <button class="segmented-item active" type="button" data-v="all" onclick="setRoi3Seg(this)">不限</button>
+                  <button class="segmented-item" type="button" data-v="mine" onclick="setRoi3Seg(this)">仅本人创建</button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ===== 项目排刷 ===== -->
+          <section class="task-section">
+            <h4 class="task-section-title">项目排刷</h4>
+
+            <div class="task-row">
+              <label class="task-label">开刷时间：</label>
+              <div class="task-ctrl">
+                <div class="segmented-control" data-seg="roi3StartDay">
+                  <button class="segmented-item active" type="button" data-v="today" onclick="setRoi3Seg(this)">今天</button>
+                  <button class="segmented-item" type="button" data-v="tomorrow" onclick="setRoi3Seg(this)">明天</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-row">
+              <label class="task-label"><i class="req">*</i>投放天数：</label>
+              <div class="task-ctrl">
+                <div class="segmented-control" data-seg="roi3Days">
+                  <button class="segmented-item active" type="button" data-v="none" onclick="setRoi3Seg(this)">不限</button>
+                  <button class="segmented-item" type="button" data-v="limit" onclick="setRoi3Seg(this)">指定天数</button>
+                </div>
+                <div class="task-inline" id="roi3DaysCustom" style="display: none;">
+                  <input type="text" class="form-input task-w-sm" placeholder="请输入" oninput="limitPositiveInt(this)" />
+                  <span class="task-hint">天</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-row">
+              <label class="task-label"><i class="req">*</i>投放时段：</label>
+              <div class="task-ctrl">
+                <div class="segmented-control" data-seg="roi3Period">
+                  <button class="segmented-item active" type="button" data-v="none" onclick="setRoi3Seg(this)">不限</button>
+                  <button class="segmented-item" type="button" data-v="limit" onclick="setRoi3Seg(this)">指定时段</button>
+                </div>
+                <div class="task-inline" id="roi3PeriodCustom" style="display: none;">
+                  <input type="time" class="form-input task-w-time" value="00:00:00" step="1" />
+                  <span class="task-sep">~</span>
+                  <input type="time" class="form-input task-w-time" value="23:59:59" step="1" />
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <div class="drawer-footer task-modal-footer">
+          <button class="btn btn-outline" onclick="closeRoi3NewTask()">取 消</button>
+          <button class="btn btn-primary" onclick="submitRoi3NewTask()">确 定</button>
+        </div>
+      </div>
+    </div>
+
     <!-- 素材文件夹选择器（素材范围） -->
     <div id="task-folder-overlay" class="modal-overlay" onclick="closeTaskFolderPicker()"></div>
     <div id="task-folder-modal" class="modal">
@@ -5323,9 +6529,13 @@
         else showAiToast('至少保留一条短剧范围');
       }
 
-      /* 素材范围：文件夹选择器 */
-      function openTaskFolderPicker() {
-        ntFolderTemp = ntFolders.map(function (f) { return f.id; });
+      /* 素材范围：文件夹选择器（target：nt=自动化任务弹框 / roi3=全域推广新建任务弹框） */
+      var folderPickTarget = 'nt';
+      var roi3Folders = [];
+
+      function openTaskFolderPicker(target) {
+        folderPickTarget = target || 'nt';
+        ntFolderTemp = (folderPickTarget === 'roi3' ? roi3Folders : ntFolders).map(function (f) { return f.id; });
         var search = document.getElementById('taskFolderSearch');
         if (search) search.value = '';
         renderTaskFolderList();
@@ -5362,10 +6572,30 @@
       }
 
       function confirmTaskFolderPicker() {
-        ntFolders = NT_FOLDER_DATA.filter(function (f) { return ntFolderTemp.indexOf(f.id) > -1; });
-        renderNtFolderChips();
+        var picked = NT_FOLDER_DATA.filter(function (f) { return ntFolderTemp.indexOf(f.id) > -1; });
+        if (folderPickTarget === 'roi3') {
+          roi3Folders = picked;
+          renderRoi3FolderChips();
+        } else {
+          ntFolders = picked;
+          renderNtFolderChips();
+        }
         closeTaskFolderPicker();
-        showAiToast(ntFolders.length ? '已选择 ' + ntFolders.length + ' 个素材文件夹' : '已清空素材范围');
+        showAiToast(picked.length ? '已选择 ' + picked.length + ' 个素材文件夹' : '已清空素材范围');
+      }
+
+      function renderRoi3FolderChips() {
+        var box = document.getElementById('roi3FolderChips');
+        if (!box) return;
+        box.innerHTML = roi3Folders.map(function (f) {
+          return '<span class="task-chip"><span class="nm">' + f.name + '</span>'
+            + '<span class="x" onclick="removeRoi3Folder(\'' + f.id + '\')">&times;</span></span>';
+        }).join('');
+      }
+
+      function removeRoi3Folder(id) {
+        roi3Folders = roi3Folders.filter(function (f) { return f.id !== id; });
+        renderRoi3FolderChips();
       }
 
       function renderNtFolderChips() {
@@ -5423,6 +6653,242 @@
         }
         closeNewTaskModal();
         showAiToast('自动化任务已保存，将按执行频率开始运行');
+      }
+
+      /* ===== 全域推广 · 自动化投放：页面页签 / 列表交互 / 新建任务弹框 ===== */
+
+      /* ---- 一级页签：任务 / 账户 / 项目 ---- */
+      function switchRoi3Tab(tabName) {
+        ['task', 'account', 'project'].forEach(function (name) {
+          var el = document.getElementById('roi3-auto-delivery-' + name);
+          if (el) el.style.display = 'none';
+        });
+        var target = document.getElementById('roi3-auto-delivery-' + tabName);
+        if (target) target.style.display = 'block';
+        document.querySelectorAll('#roi3-auto-delivery-tabs .tab').forEach(function (tab) {
+          tab.classList.toggle('active', tab.textContent.trim() === ({ task: '任务', account: '账户', project: '项目' })[tabName]);
+        });
+        if (window.location.hash !== '#roi3-auto-delivery') window.location.hash = 'roi3-auto-delivery';
+      }
+
+      function resetRoi3Filters(tabName) {
+        var root = document.getElementById('roi3-auto-delivery-' + tabName);
+        if (!root) return;
+        root.querySelectorAll('.filter-select').forEach(function (s) { s.selectedIndex = 0; });
+        root.querySelectorAll('.filter-input, .filter-combo-input').forEach(function (i) { i.value = ''; });
+        root.querySelectorAll('.filter-range input').forEach(function (i) { i.value = ''; });
+        showAiToast('已重置筛选条件');
+      }
+
+      function updateRoi3AccountSelectedCount() {
+        var boxes = document.querySelectorAll('#roi3-auto-delivery-account .roi3-account-checkbox');
+        var n = document.querySelectorAll('#roi3-auto-delivery-account .roi3-account-checkbox:checked').length;
+        var el = document.getElementById('roi3AccountSelectedCount');
+        if (el) el.textContent = n;
+        var all = document.getElementById('selectAllRoi3Accounts');
+        if (all) all.checked = n > 0 && n === boxes.length;
+      }
+
+      function toggleSelectAllRoi3Accounts(input) {
+        document.querySelectorAll('#roi3-auto-delivery-account .roi3-account-checkbox').forEach(function (cb) { cb.checked = input.checked; });
+        updateRoi3AccountSelectedCount();
+      }
+
+      function roi3BatchRetry() {
+        var n = document.querySelectorAll('#roi3-auto-delivery-account .roi3-account-checkbox:checked').length;
+        if (!n) { showAiToast('请先勾选需要重试的数据'); return; }
+        showAiToast('已对选中的 ' + n + ' 条执行记录发起重试');
+      }
+
+      function roi3RefreshRow(kind, id) {
+        showAiToast('已刷新「' + kind + '」执行记录 ' + id + ' 的最新状态');
+      }
+
+      function roi3RetryRow(kind, id) {
+        showAiToast('已对「' + kind + '」执行记录 ' + id + ' 发起重试');
+      }
+
+      /* ---- 新建任务弹框 ---- */
+      var roi3SegValues = {};
+      var roi3ExecV = 'random';   /* 执行类型默认：随机 */
+      var roi3MatV = 'even';      /* 素材分配方式默认：项目均分 */
+      var roi3AigcOn = true;
+
+      /* 弹框初始态快照：每次「新建」前还原，避免上次填写/追加的条件残留 */
+      var ROI3_BODY_DEFAULT = (function () {
+        var b = document.querySelector('#modal-roi3-new-task .task-modal-body');
+        return b ? b.innerHTML : null;
+      })();
+
+      function openRoi3NewTask(title, name) {
+        var el = document.getElementById('modal-roi3-new-task');
+        if (!el) return;
+        /* 还原表单初始态 */
+        var body = el.querySelector('.task-modal-body');
+        if (body && ROI3_BODY_DEFAULT !== null) body.innerHTML = ROI3_BODY_DEFAULT;
+        roi3SegValues = {};
+        roi3Folders = [];
+        if (typeof aiResState !== 'undefined' && aiResState.roi3new) {
+          aiResState.roi3new = { douyin: [], douyinPkg: [], subject: [], app: [], account: [] };
+          aiDyScopeMap.roi3new = 'custom';
+        }
+        renderRoi3Cards();
+        if (typeof renderAiChips === 'function') renderAiChips('roi3new');
+        var titleEl = document.getElementById('modal-roi3-new-task-title');
+        if (titleEl) titleEl.textContent = title || '新建任务';
+        var nameInput = document.getElementById('roi3TaskName');
+        if (nameInput) nameInput.value = name || '';
+        var ov = document.getElementById('modal-roi3-new-task-overlay');
+        if (ov) ov.classList.add('open');
+        el.classList.add('open');
+        document.body.style.overflow = 'hidden';
+        if (body) body.scrollTop = 0;
+      }
+
+      function closeRoi3NewTask(event) {
+        /* 表单较长，遮罩点击不关闭，仅 × / 取消 生效 */
+        if (event && event.type === 'click') return;
+        var el = document.getElementById('modal-roi3-new-task');
+        if (el) el.classList.remove('open');
+        var ov = document.getElementById('modal-roi3-new-task-overlay');
+        if (ov) ov.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+
+      /* 分段控件：切换选中态 + 联动显示自定义输入 */
+      function setRoi3Seg(btn) {
+        var group = btn.closest('.segmented-control');
+        if (!group) return;
+        group.querySelectorAll('.segmented-item').forEach(function (b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        var key = group.getAttribute('data-seg') || '';
+        var v = btn.getAttribute('data-v');
+        roi3SegValues[key] = v;
+        if (key === 'roi3ExecTimes') showRoi3Panel('roi3RowExecTotal', v === 'custom');
+        if (key === 'roi3MatCreateTime') showRoi3Panel('roi3MatCreateTimeCustom', v === 'custom');
+        if (key === 'roi3MatCost') showRoi3Panel('roi3MatCostCustom', v === 'custom');
+        if (key === 'roi3MatDuration') showRoi3Panel('roi3MatDurationCustom', v === 'custom');
+        if (key === 'roi3MatCount') showRoi3Panel('roi3MatCountCustom', v === 'custom');
+        if (key === 'roi3RevMode') showRoi3Panel('roi3RowIaaEpisode', v === 'mix');
+        if (key === 'roi3Days') showRoi3Panel('roi3DaysCustom', v === 'limit');
+        if (key === 'roi3Period') showRoi3Panel('roi3PeriodCustom', v === 'limit');
+      }
+
+      function showRoi3Panel(id, on) {
+        var el = document.getElementById(id);
+        if (el) el.style.display = on ? '' : 'none';
+      }
+
+      /* 卡片选择：执行类型（3 选 1） / 素材分配方式（2 选 1），复用 AI 模块选项文案 */
+      function renderRoi3Cards() {
+        var execBox = document.getElementById('roi3ExecCards');
+        var matBox = document.getElementById('roi3MatCards');
+        if (execBox) {
+          execBox.innerHTML = AI_EXEC_OPTIONS.map(function (e) {
+            return '<div class="ai-card ' + (e.v === roi3ExecV ? 'on' : '') + '" onclick="pickRoi3Card(\'exec\',\'' + e.v + '\')">'
+              + '<div class="ai-card-t"><span class="ai-card-ck">✓</span>' + e.t + '</div>'
+              + '<div class="ai-card-d">' + e.d + '</div></div>';
+          }).join('');
+        }
+        if (matBox) {
+          matBox.innerHTML = AI_MAT_OPTIONS.map(function (m) {
+            return '<div class="ai-card ' + (m.v === roi3MatV ? 'on' : '') + '" onclick="pickRoi3Card(\'mat\',\'' + m.v + '\')">'
+              + '<div class="ai-card-t"><span class="ai-card-ck">✓</span>' + m.t + '</div>'
+              + '<div class="ai-card-d">' + m.d + '</div></div>';
+          }).join('');
+        }
+      }
+
+      function pickRoi3Card(kind, v) {
+        if (kind === 'exec') {
+          roi3ExecV = v;
+          /* 执行类型 = 一户一剧 时，隐藏「账户下项目数」并清空 */
+          var hide = v === 'drama';
+          showRoi3Panel('roi3RowProjCount', !hide);
+          if (hide) { var inp = document.getElementById('roi3ProjCount'); if (inp) inp.value = ''; }
+        } else {
+          roi3MatV = v;
+        }
+        renderRoi3Cards();
+      }
+
+      function onRoi3AigcToggle(input) {
+        roi3AigcOn = input.checked;
+        showAiToast('AIGC素材已' + (roi3AigcOn ? '开启' : '关闭'));
+      }
+
+      /* 生效时间：追加一个时间范围 */
+      function addRoi3TimeRange() {
+        var list = document.getElementById('roi3TimeRanges');
+        if (!list) return;
+        var row = document.createElement('div');
+        row.className = 'task-time-range';
+        row.innerHTML = '<input type="time" class="form-input task-w-time" value="00:00:00" step="1" />'
+          + '<span class="task-sep">~</span>'
+          + '<input type="time" class="form-input task-w-time" value="23:59:59" step="1" />'
+          + '<button type="button" class="task-del" title="删除" onclick="removeRoi3TimeRange(this)">&times;</button>';
+        list.appendChild(row);
+      }
+
+      function removeRoi3TimeRange(btn) {
+        var row = btn.closest('.task-time-range');
+        if (row) row.remove();
+      }
+
+      /* 短剧范围：追加一条条件 */
+      function addRoi3DramaScope() {
+        var list = document.getElementById('roi3DramaScopeList');
+        if (!list) return;
+        var row = document.createElement('div');
+        row.className = 'task-row indent';
+        row.innerHTML = '<div class="task-ctrl">'
+          + '<select class="form-select task-w-sm"><option>短剧标签</option><option>短剧名称</option><option>短剧ID</option></select>'
+          + '<select class="form-select task-w-xs"><option>包含</option><option>不包含</option><option>等于</option></select>'
+          + '<input type="text" class="form-input task-w-lg" placeholder="请选择" />'
+          + '<button type="button" class="task-del" title="删除" onclick="removeRoi3DramaScope(this)">&times;</button>'
+          + '</div>';
+        list.appendChild(row);
+      }
+
+      function removeRoi3DramaScope(btn) {
+        var row = btn.closest('.task-row');
+        var list = document.getElementById('roi3DramaScopeList');
+        if (row && list && list.children.length > 1) row.remove();
+        else showAiToast('至少保留一条短剧范围');
+      }
+
+      /* 校验 + 提交 */
+      function submitRoi3NewTask() {
+        document.querySelectorAll('#modal-roi3-new-task .task-row.is-error').forEach(function (r) { r.classList.remove('is-error'); });
+        var miss = [];
+        function need(rowId, value, label) {
+          if (String(value || '').trim() === '') {
+            var row = document.getElementById(rowId);
+            if (row) row.classList.add('is-error');
+            miss.push(label);
+          }
+        }
+        need('roi3RowName', document.getElementById('roi3TaskName').value, '任务名称');
+        need('roi3RowInterval', document.getElementById('roi3Interval').value, '执行频率');
+        need('roi3RowRoi', document.getElementById('roi3Roi').value, '全域ROI系数');
+        need('roi3RowBudget', document.getElementById('roi3Budget').value, '日预算');
+        var dyScope = (typeof aiDyScopeMap !== 'undefined' && aiDyScopeMap.roi3new) || 'custom';
+        var dySel = (typeof aiResState !== 'undefined' && aiResState.roi3new)
+          ? aiResState.roi3new[dyScope === 'custom' ? 'douyin' : 'douyinPkg']
+          : [];
+        if (!dySel || !dySel.length) {
+          var dyRow = document.getElementById('roi3RowDy');
+          if (dyRow) dyRow.classList.add('is-error');
+          miss.push(dyScope === 'custom' ? '抖音号（项目）' : '抖音号包');
+        }
+        if (miss.length) {
+          showAiToast('请完善必填项：' + miss.join('、'));
+          var firstErr = document.querySelector('#modal-roi3-new-task .task-row.is-error');
+          if (firstErr && firstErr.scrollIntoView) firstErr.scrollIntoView({ block: 'center', behavior: 'smooth' });
+          return;
+        }
+        closeRoi3NewTask();
+        showAiToast('全域推广自动化任务已保存，将按执行频率开始运行');
       }
 
       /* ===== 名称下钻：切换 Tab 并自动带入对应列表的筛选项 ===== */
@@ -5598,8 +7064,55 @@
         alert('重试' + type + '：' + id);
       }
 
-      function showAiAutoUnitDetail(id) {
-        alert('查看单元详情：' + id);
+      /* ---- 标准投放 · 单元创意素材上传详情 ---- */
+      var AI_UNIT_MATERIAL = {
+        30021: [
+          { name: '短剧1-激活-竖版-原生播放页-AI混剪-01', id: '16027550', status: 'success' },
+          { name: '短剧1-激活-竖版-原生播放页-AI混剪-02', id: '16027544', status: 'success' }
+        ],
+        30020: [
+          { name: '短剧1-召回-竖版-原生播放页-AI混剪-01', id: '16027531', status: 'success' },
+          { name: '短剧1-召回-竖版-原生播放页-AI混剪-02', id: '16027528', status: 'fail' }
+        ]
+      };
+      var aiUnitMatUnitId = '';
+
+      function openAiUnitMaterialModal(unitId) {
+        aiUnitMatUnitId = String(unitId);
+        var sel = document.getElementById('ai-unit-mat-status');
+        if (sel) sel.value = '';
+        renderAiUnitMaterialTable();
+        document.getElementById('ai-unit-mat-overlay').classList.add('open');
+        document.getElementById('ai-unit-mat-modal').classList.add('open');
+      }
+
+      function closeAiUnitMaterialModal() {
+        document.getElementById('ai-unit-mat-overlay').classList.remove('open');
+        document.getElementById('ai-unit-mat-modal').classList.remove('open');
+      }
+
+      function renderAiUnitMaterialTable() {
+        var rows = AI_UNIT_MATERIAL[aiUnitMatUnitId] || [];
+        var sel = document.getElementById('ai-unit-mat-status');
+        var st = sel ? sel.value : '';
+        var view = rows.filter(function (r) { return !st || r.status === st; });
+        var total = document.getElementById('ai-unit-mat-total');
+        if (total) total.textContent = '共 ' + view.length + ' 条';
+        var body = document.getElementById('ai-unit-mat-body');
+        if (!body) return;
+        if (!view.length) {
+          body.innerHTML = '<tr><td colspan="3" class="ai-unit-mat-empty">暂无素材</td></tr>';
+          return;
+        }
+        body.innerHTML = view.map(function (r) {
+          var ok = r.status === 'success';
+          return '<tr>' +
+            '<td><div class="ai-unit-mat-thumb"><span class="ai-unit-mat-play"></span></div></td>' +
+            '<td><div class="ai-unit-mat-name">' + r.name + '</div>' +
+            '<div class="ai-unit-mat-id">ID: ' + r.id + '</div></td>' +
+            '<td><span class="' + (ok ? 'ai-unit-mat-ok' : 'ai-unit-mat-fail') + '">' + (ok ? '上传成功' : '上传失败') + '</span></td>' +
+            '</tr>';
+        }).join('');
       }
 
       function openAiAutoFailDetail(id, name, level, failCount) {
@@ -6245,6 +7758,10 @@
       aiResState.newtask = { douyin: [], douyinPkg: [], subject: [], app: [], account: [] };
       aiDyScopeMap.newtask = 'custom';
       aiSegValues['aiDyScope|newtask'] = 'custom';
+      /* 全域推广 · 自动化投放 新建任务弹框：同样复用资源选择器 */
+      aiResState.roi3new = { douyin: [], douyinPkg: [], subject: [], app: [], account: [] };
+      aiDyScopeMap.roi3new = 'custom';
+      aiSegValues['aiDyScope|roi3new'] = 'custom';
       var aiPickType = null;
       var aiPickTemp = [];
       var aiPickerScope = 'global';
