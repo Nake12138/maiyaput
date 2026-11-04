@@ -1088,6 +1088,7 @@
                         <th class="checkbox-col"><input type="checkbox" id="selectAllUnits" onclick="toggleSelectAllAutoRows('selectAllUnits','auto-unit-checkbox','autoUnitSelectedCount')" /></th>
                         <th>ID</th>
                         <th>单元信息</th>
+                          <th>创意素材</th>
                         <th>上传状态</th>
                         <th>操作</th>
                         <th>小程序</th>
@@ -1109,7 +1110,7 @@
                         <td>
                           <span class="link" onclick="showAutoUnitDetail(30021)">任务二-项目A-单元1</span>
                           <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:6611223344556677</div>
-                        </td>
+                        </td><td><span class="link" title="查看素材上传详情" onclick="openUnitMaterialModal('auto', '30021')">3</span></td>
                         <td><span class="tag tag-success">成功</span></td>
                         <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAutoRow('单元',30021)">刷新</button> <button class="row-action-btn" onclick="retryAutoRow('单元',30021)">重试</button></div></td>
                         <td>剧点-番茄漫画小程序</td>
@@ -1138,7 +1139,7 @@
                         <td>
                           <span class="link" onclick="showAutoUnitDetail(30020)">任务十二-项目B-单元1</span>
                           <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:6611223344555566</div>
-                        </td>
+                        </td><td><span class="link" title="查看素材上传详情" onclick="openUnitMaterialModal('auto', '30020')">3</span></td>
                         <td><span class="tag tag-error">失败</span></td>
                         <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAutoRow('单元',30020)">刷新</button> <button class="row-action-btn" onclick="retryAutoRow('单元',30020)">重试</button></div></td>
                         <td>剧点-番茄漫画小程序</td>
@@ -5270,6 +5271,7 @@
                           <th class="checkbox-col"><input type="checkbox" id="selectAllSemiUnits" onclick="toggleSelectAllSemiRows('selectAllSemiUnits','semi-unit-checkbox','semiUnitSelectedCount')" /></th>
                           <th>ID</th>
                           <th>单元信息</th>
+                          <th>创意素材</th>
                           <th>所属项目</th>
                           <th>小程序</th>
                           <th>竞价策略</th>
@@ -5287,7 +5289,7 @@
                           <td>
                             <span class="link" onclick="alert('查看单元详情 unit_209183')">谁言寸草心-单元-A01</span>
                             <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: unit_209183</div>
-                          </td>
+                          </td><td><span class="link" title="查看素材上传详情" onclick="openUnitMaterialModal('semi', 'unit_209183')">3</span></td>
                           <td>
                             <span class="link" onclick="drillSemiProjectToUnit(80812)">谁言寸草心-小程序-A</span>
                             <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: prj_80812</div>
@@ -5311,7 +5313,7 @@
                           <td>
                             <span class="link" onclick="alert('查看单元详情 unit_209182')">谁言寸草心-单元-A02</span>
                             <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: unit_209182</div>
-                          </td>
+                          </td><td><span class="link" title="查看素材上传详情" onclick="openUnitMaterialModal('semi', 'unit_209182')">3</span></td>
                           <td>
                             <span class="link" onclick="drillSemiProjectToUnit(80812)">谁言寸草心-小程序-A</span>
                             <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: prj_80812</div>
@@ -5456,6 +5458,41 @@
                 </tr>
               </thead>
               <tbody id="ai-unit-mat-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 单元 · 素材上传详情弹框（标准投放-自动化任务 / 半自动投放 单元列表「创意素材」点击） -->
+    <div id="unit-mat-overlay" class="modal-overlay" onclick="closeUnitMaterialModal()"></div>
+    <div id="unit-mat-modal" class="modal ai-unit-mat-modal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <span>素材上传详情</span>
+          <button class="modal-close" onclick="closeUnitMaterialModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="ai-unit-mat-filter">
+            <span class="ai-unit-mat-label">上传状态：</span>
+            <select class="filter-select" id="unit-mat-status" onchange="renderUnitMaterialTable()">
+              <option value="">全部</option>
+              <option value="success">上传成功</option>
+              <option value="pending">待上传</option>
+              <option value="removed">自动剔除</option>
+            </select>
+            <span class="ai-unit-mat-total" id="unit-mat-total">共 0 条</span>
+          </div>
+          <div class="table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th style="width: 96px;">预览</th>
+                  <th>素材名称</th>
+                  <th style="width: 280px;">上传状态</th>
+                </tr>
+              </thead>
+              <tbody id="unit-mat-body"></tbody>
             </table>
           </div>
         </div>
@@ -7082,6 +7119,91 @@
         pending: { text: '待上传', cls: 'ai-unit-mat-pending' },
         removed: { text: '自动剔除', cls: 'ai-unit-mat-removed' }
       };
+
+      // ---- 标准投放 · 自动化任务 / 半自动投放：单元「创意素材」素材上传详情 ----
+      var UNIT_MATERIAL_REASON = '当前营销账户下不存在 video_id';
+      var UNIT_MATERIAL = {
+        auto: {
+          '30021': [
+            { name: '任务二-项目A-激活-竖版-原生播放页-01', id: '16027550', status: 'success' },
+            { name: '任务二-项目A-激活-竖版-原生播放页-02', id: '16027544', status: 'pending' },
+            { name: '任务二-项目A-激活-竖版-原生播放页-03', id: '16027531', status: 'removed', time: '2026-11-03 02:16:41' }
+          ],
+          '30020': [
+            { name: '任务二-项目A-召回-竖版-原生播放页-01', id: '16027528', status: 'success' },
+            { name: '任务二-项目A-召回-竖版-原生播放页-02', id: '16027521', status: 'removed', time: '2026-11-03 02:41:07' },
+            { name: '任务二-项目A-召回-竖版-原生播放页-03', id: '16027519', status: 'removed', time: '2026-11-03 02:41:52' }
+          ]
+        },
+        semi: {
+          'unit_209183': [
+            { name: '谁言寸草心-竖版-原生播放页-01', id: '16034201', status: 'success' },
+            { name: '谁言寸草心-竖版-原生播放页-02', id: '16034202', status: 'removed', time: '2026-11-03 03:08:15' },
+            { name: '谁言寸草心-竖版-原生播放页-03', id: '16034203', status: 'pending' }
+          ],
+          'unit_209182': [
+            { name: '谁言寸草心-召回-竖版-原生播放页-01', id: '16034188', status: 'success' },
+            { name: '谁言寸草心-召回-竖版-原生播放页-02', id: '16034189', status: 'pending' },
+            { name: '谁言寸草心-召回-竖版-原生播放页-03', id: '16034190', status: 'removed', time: '2026-11-03 03:22:36' }
+          ]
+        }
+      };
+      var UNIT_MAT_STATUS = {
+        success: { text: '上传成功', cls: 'ai-unit-mat-ok' },
+        pending: { text: '待上传', cls: 'ai-unit-mat-pending' },
+        removed: { text: '自动剔除', cls: 'ai-unit-mat-removed' }
+      };
+      var unitMatScope = '';
+      var unitMatUnitId = '';
+
+      function openUnitMaterialModal(scope, unitId) {
+        unitMatScope = scope;
+        unitMatUnitId = String(unitId);
+        var sel = document.getElementById('unit-mat-status');
+        if (sel) sel.value = '';
+        renderUnitMaterialTable();
+        document.getElementById('unit-mat-overlay').classList.add('open');
+        document.getElementById('unit-mat-modal').classList.add('open');
+      }
+
+      function closeUnitMaterialModal() {
+        document.getElementById('unit-mat-overlay').classList.remove('open');
+        document.getElementById('unit-mat-modal').classList.remove('open');
+      }
+
+      function renderUnitMaterialTable() {
+        var rows = (UNIT_MATERIAL[unitMatScope] || {})[unitMatUnitId] || [];
+        if (!rows.length) {
+          rows = [
+            { name: '素材-竖版-原生播放页-01', id: '16027550', status: 'success' },
+            { name: '素材-竖版-原生播放页-02', id: '16027531', status: 'removed', time: '--' }
+          ];
+        }
+        var sel = document.getElementById('unit-mat-status');
+        var st = sel ? sel.value : '';
+        var view = rows.filter(function (r) { return !st || r.status === st; });
+        var total = document.getElementById('unit-mat-total');
+        if (total) total.textContent = '共 ' + view.length + ' 条';
+        var body = document.getElementById('unit-mat-body');
+        if (!body) return;
+        if (!view.length) {
+          body.innerHTML = '<tr><td colspan="3" class="ai-unit-mat-empty">暂无素材</td></tr>';
+          return;
+        }
+        body.innerHTML = view.map(function (r) {
+          var stt = UNIT_MAT_STATUS[r.status] || UNIT_MAT_STATUS.pending;
+          var extra = r.status === 'removed'
+            ? '<div class="ai-unit-mat-reason">剔除原因：' + UNIT_MATERIAL_REASON + '</div>' +
+              '<div class="ai-unit-mat-id">剔除时间：' + (r.time || '--') + '</div>'
+            : '';
+          return '<tr>' +
+            '<td><div class="ai-unit-mat-thumb"><span class="ai-unit-mat-play"></span></div></td>' +
+            '<td><div class="ai-unit-mat-name">' + r.name + '</div>' +
+            '<div class="ai-unit-mat-id">ID: ' + r.id + '</div></td>' +
+            '<td><span class="' + stt.cls + '">' + stt.text + '</span>' + extra + '</td>' +
+            '</tr>';
+        }).join('');
+      }
 
       function openAiUnitMaterialModal(unitId) {
         aiUnitMatUnitId = String(unitId);
