@@ -7093,12 +7093,29 @@
         alert('查询' + scopeLabel + (AI_SCOPE_LABELS[tabKey] || tabKey) + '列表');
       }
 
+      function aiTodayStr() {
+        var d = new Date();
+        var m = d.getMonth() + 1, day = d.getDate();
+        return d.getFullYear() + '-' + (m < 10 ? '0' + m : m) + '-' + (day < 10 ? '0' + day : day);
+      }
+
+      // 标准投放 账户/项目/单元 创建时间默认选中当天
+      function applyStdCtimeDefault() {
+        ['account', 'project', 'unit'].forEach(function (t) {
+          var root = document.getElementById('ai-standard-' + t);
+          if (!root) return;
+          root.querySelectorAll('.filter-range input').forEach(function (i) { i.value = aiTodayStr(); });
+        });
+      }
+      document.addEventListener('DOMContentLoaded', applyStdCtimeDefault);
+
       function resetAiScopeFilters(scope, tabKey) {
         var root = document.getElementById('ai-' + scope + '-' + tabKey);
         if (!root) return;
         root.querySelectorAll('.filter-select, .filter-combo-select').forEach(function (s) { s.selectedIndex = 0; });
         root.querySelectorAll('.filter-input, .filter-combo-input').forEach(function (i) { i.value = ''; });
-        root.querySelectorAll('.filter-range input').forEach(function (i) { i.value = ''; });
+        var def = scope === 'standard' ? aiTodayStr() : '';
+        root.querySelectorAll('.filter-range input').forEach(function (i) { i.value = def; });
       }
 
       function toggleSelectAllAiRows(masterId, childClass, countId) {
