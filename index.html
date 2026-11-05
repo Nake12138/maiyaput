@@ -1518,6 +1518,14 @@
                 <!-- 账户子页签 -->
                 <div id="ai-standard-account" class="tab-content">
                 <div class="filter-bar">
+                    <div class="filter-range">
+                      <span class="filter-range-label">创建时间</span>
+                      <input type="text" placeholder="开始时间" />
+                      <span class="filter-range-tilde">-</span>
+                      <input type="text" placeholder="结束时间" />
+                      <button type="button" class="filter-range-pick" title="选择日期">📅</button>
+                      <span class="filter-range-unit">月</span>
+                    </div>
                   <div class="filter-combo" data-filter-type="task-name">
                     <select class="filter-combo-select">
                       <option>任务模板名称</option>
@@ -1686,6 +1694,14 @@
               <!-- 项目 Tab -->
               <div id="ai-standard-project" class="tab-content" style="display: none;">
                 <div class="filter-bar">
+                    <div class="filter-range">
+                      <span class="filter-range-label">创建时间</span>
+                      <input type="text" placeholder="开始时间" />
+                      <span class="filter-range-tilde">-</span>
+                      <input type="text" placeholder="结束时间" />
+                      <button type="button" class="filter-range-pick" title="选择日期">📅</button>
+                      <span class="filter-range-unit">月</span>
+                    </div>
                   <div class="filter-combo" data-filter-type="task-name">
                     <select class="filter-combo-select">
                       <option>任务模板名称</option>
@@ -1855,6 +1871,14 @@
               <!-- 单元 Tab -->
               <div id="ai-standard-unit" class="tab-content" style="display: none;">
                 <div class="filter-bar">
+                    <div class="filter-range">
+                      <span class="filter-range-label">创建时间</span>
+                      <input type="text" placeholder="开始时间" />
+                      <span class="filter-range-tilde">-</span>
+                      <input type="text" placeholder="结束时间" />
+                      <button type="button" class="filter-range-pick" title="选择日期">📅</button>
+                      <span class="filter-range-unit">月</span>
+                    </div>
                   <div class="filter-combo" data-filter-type="task-name">
                     <select class="filter-combo-select">
                       <option>任务模板名称</option>
@@ -7074,6 +7098,7 @@
         if (!root) return;
         root.querySelectorAll('.filter-select, .filter-combo-select').forEach(function (s) { s.selectedIndex = 0; });
         root.querySelectorAll('.filter-input, .filter-combo-input').forEach(function (i) { i.value = ''; });
+        root.querySelectorAll('.filter-range input').forEach(function (i) { i.value = ''; });
       }
 
       function toggleSelectAllAiRows(masterId, childClass, countId) {
