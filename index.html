@@ -11516,9 +11516,20 @@
         if (!root) return;
         root.querySelectorAll('.filter-select').forEach(function (s) { s.selectedIndex = 0; });
         root.querySelectorAll('.filter-input, .filter-combo-input').forEach(function (i) { i.value = ''; });
-        root.querySelectorAll('.filter-range input').forEach(function (i) { i.value = ''; });
+        root.querySelectorAll('.filter-range input').forEach(function (i) { i.value = aiTodayStr(); });
         root.querySelectorAll('.drill-hit').forEach(function (el) { el.classList.remove('drill-hit'); });
       }
+
+      /* 任务 / 账户 / 项目 三个列表的「创建时间」默认选中当天 */
+      function rsApplyCtimeDefault() {
+        ['task', 'account', 'project'].forEach(function (t) {
+          var root = document.getElementById('roi3-semi-' + t);
+          if (!root) return;
+          root.querySelectorAll('.filter-range input').forEach(function (i) { i.value = aiTodayStr(); });
+        });
+      }
+      rsApplyCtimeDefault();
+      document.addEventListener('DOMContentLoaded', rsApplyCtimeDefault);
 
       function resetRoi3SemiFilters(tabName) {
         resetRoi3SemiFilterValues(tabName);
