@@ -635,6 +635,16 @@ body {
   background: #40a9ff;
 }
 
+.btn-danger {
+  background: var(--color-error);
+  color: var(--color-white);
+}
+
+.btn-danger:hover {
+  background: #ff7875;
+  color: var(--color-white);
+}
+
 .btn-sm {
   padding: 4px 12px;
   font-size: 12px;
@@ -5124,4 +5134,106 @@ body {
   color: var(--color-error);
   margin-top: 4px;
   line-height: 1.5;
+}
+
+/* ============ 资产管理（左组织树 + 右内容） ============ */
+.asset-layout {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+}
+
+.asset-tree-panel {
+  width: 230px;
+  min-width: 230px;
+  border-right: 1px solid var(--color-border);
+  padding-right: 14px;
+  display: flex;
+  flex-direction: column;
+}
+
+.asset-tree-search {
+  width: 100%;
+  padding: 6px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: inherit;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+
+.asset-tree-search:focus {
+  outline: none;
+  border-color: var(--color-info);
+}
+
+.asset-tree-all {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  padding: 4px 0;
+  cursor: pointer;
+}
+
+.asset-tree-scroll {
+  overflow-y: auto;
+  max-height: 620px;
+}
+
+.asset-tree-group-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  padding: 5px 0;
+  cursor: pointer;
+  user-select: none;
+}
+
+.asset-tree-caret {
+  display: inline-block;
+  width: 12px;
+  font-size: 10px;
+  color: var(--color-text-tertiary);
+  transition: transform 0.15s;
+}
+
+.asset-tree-group.open > .asset-tree-group-header .asset-tree-caret {
+  transform: rotate(90deg);
+}
+
+.asset-tree-children {
+  display: none;
+  padding-left: 18px;
+}
+
+.asset-tree-group.open > .asset-tree-children {
+  display: block;
+}
+
+.asset-tree-leaf {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  padding: 4px 0;
+  cursor: pointer;
+}
+
+.asset-tree-leaf span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.asset-main {
+  flex: 1;
+  min-width: 0;
+  padding-left: 16px;
 }
