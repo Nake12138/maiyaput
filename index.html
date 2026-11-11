@@ -1331,7 +1331,15 @@
               <!-- 短剧 Tab -->
               <div id="ai-auto-task-drama" class="tab-content" style="display: none;">
                 <div class="filter-bar">
-                  <!-- 筛选项顺序与表格列顺序保持一致：ID → 开关 → 短剧 → 任务模板 → 测出状态 → 创建人 -->
+                  <!-- 创建时间置于筛选区首位（同标准投放 账户/项目/单元 口径，默认选中当天）；其余筛选项顺序与表格列顺序保持一致：ID → 开关 → 短剧 → 任务模板 → 测出状态 → 创建人 -->
+                  <div class="filter-range">
+                    <span class="filter-range-label">创建时间</span>
+                    <input type="text" placeholder="开始时间" />
+                    <span class="filter-range-tilde">-</span>
+                    <input type="text" placeholder="结束时间" />
+                    <button type="button" class="filter-range-pick" title="选择日期">📅</button>
+                    <span class="filter-range-unit">月</span>
+                  </div>
                   <div class="filter-combo" data-filter-type="drama-task-id">
                     <select class="filter-combo-select">
                       <option>ID</option>
@@ -1400,6 +1408,7 @@
                           <th>最近一次执行时间（标准）</th>
                           <th>最近一次执行时间（全域）</th>
                           <th>创建人</th>
+                          <th>创建时间</th>
                           <th>操作</th>
                         </tr>
                       </thead>
@@ -1432,6 +1441,7 @@
                           <td><span class="link" onclick="drillAiDramaToScope('standard', '5001')">2026-10-20 10:30:00</span></td>
                           <td><span class="link" onclick="drillAiDramaToScope('global', '5001')">2026-10-20 11:30:00</span></td>
                           <td>小C</td>
+                          <td>2026-10-20 09:00:00</td>
                           <td>
                             <div class="row-actions">
                               <button class="row-action-btn" onclick="openAiModifyLogDrawer('任务1-短剧1', '5001', 'tested')">日志</button>
@@ -1463,6 +1473,7 @@
                           <td><span class="link" onclick="drillAiDramaToScope('standard', '5003')">2026-10-20 08:10:00</span></td>
                           <td><span class="link" onclick="drillAiDramaToScope('global', '5003')">2026-10-20 08:40:00</span></td>
                           <td>小B</td>
+                          <td>2026-10-20 08:00:00</td>
                           <td>
                             <div class="row-actions">
                               <button class="row-action-btn" onclick="openAiModifyLogDrawer('任务2-短剧3', '5003', 'untested')">日志</button>
@@ -1494,6 +1505,7 @@
                           <td><span class="link" onclick="drillAiDramaToScope('standard', '5004')">2026-10-20 07:30:00</span></td>
                           <td><span class="link" onclick="drillAiDramaToScope('global', '5004')">2026-10-20 07:50:00</span></td>
                           <td>小B</td>
+                          <td>2026-10-20 07:00:00</td>
                           <td>
                             <div class="row-actions">
                               <!-- 重新投放：仅「测试中」状态展示；标准/全域均报错时系统自动选账户新增投放记录 -->
@@ -13619,10 +13631,10 @@
         return d.getFullYear() + '-' + (m < 10 ? '0' + m : m) + '-' + (day < 10 ? '0' + day : day);
       }
 
-      // 标准投放 账户/项目/单元 创建时间默认选中当天
+      // 标准投放 账户/项目/单元 与 执行记录 创建时间默认选中当天
       function applyStdCtimeDefault() {
-        ['account', 'project', 'unit'].forEach(function (t) {
-          var root = document.getElementById('ai-standard-' + t);
+        ['ai-standard-account', 'ai-standard-project', 'ai-standard-unit', 'ai-auto-task-drama'].forEach(function (id) {
+          var root = document.getElementById(id);
           if (!root) return;
           root.querySelectorAll('.filter-range input').forEach(function (i) { i.value = aiTodayStr(); });
         });
@@ -13835,6 +13847,7 @@
         if (sw) sw.value = '';
         var creator = document.getElementById('ai-drama-creator-filter');
         if (creator) creator.value = '';
+        root.querySelectorAll('.filter-range input').forEach(function (i) { i.value = aiTodayStr(); });
         clearAiDramaSelection();
       }
 
