@@ -1446,8 +1446,8 @@
                           <td>2026-10-20 09:00:00</td>
                           <td>
                             <div class="row-actions">
-                              <button class="row-action-btn" onclick="openAiModifyLogDrawer('任务1-短剧1', '5001', 'tested')">日志</button>
-                              <button class="row-action-btn" onclick="openAiExecLogDrawer('短剧1', '1001')">执行日志</button>
+                              <!-- 日志：执行日志抽屉（按模式展示投放执行结果，失败模式支持重试）；原修改日志入口与执行日志重复，已收敛 -->
+                              <button class="row-action-btn" onclick="openAiExecLogDrawer('短剧1', '1001')">日志</button>
                             </div>
                           </td>
                         </tr>
@@ -1479,8 +1479,7 @@
                           <td>2026-10-20 08:00:00</td>
                           <td>
                             <div class="row-actions">
-                              <button class="row-action-btn" onclick="openAiModifyLogDrawer('任务2-短剧3', '5003', 'untested')">日志</button>
-                              <button class="row-action-btn" onclick="openAiExecLogDrawer('短剧3', '1003')">执行日志</button>
+                              <button class="row-action-btn" onclick="openAiExecLogDrawer('短剧3', '1003')">日志</button>
                             </div>
                           </td>
                         </tr>
@@ -1514,8 +1513,7 @@
                             <div class="row-actions">
                               <!-- 重新投放：仅「测试中」状态展示；标准/全域均报错时系统自动选账户新增投放记录 -->
                               <button class="row-action-btn redeploy-btn" onclick="retryAiDramaRedeploy('5004', '任务2', '短剧4')">重新投放</button>
-                              <button class="row-action-btn" onclick="openAiModifyLogDrawer('任务2-短剧4', '5004', 'testing')">日志</button>
-                              <button class="row-action-btn" onclick="openAiExecLogDrawer('短剧4', '1004')">执行日志</button>
+                              <button class="row-action-btn" onclick="openAiExecLogDrawer('短剧4', '1004')">日志</button>
                             </div>
                           </td>
                         </tr>
@@ -4084,13 +4082,14 @@
                   <!-- 已选数量：单个 = 1 条，批量 = 勾选条数 -->
                   <p id="aiRedeployCount" style="margin: 0 0 8px; font-size: 13px; color: var(--color-text-secondary);">已选择 1 条</p>
                   <p id="ai-redeploy-confirm-text" style="margin: 0 0 12px; font-size: 14px; line-height: 1.9; color: var(--color-text-primary);"></p>
-                  <!-- 投放模式：默认全不勾选，至少选一种；仅重投所选模式，已成功的模式不会被重复投放 -->
+                  <!-- 投放模式：默认全不勾选，支持全选；至少选一种；仅重投所选模式，已成功的模式不会被重复投放 -->
                   <div class="checkbox-group" id="aiRedeployModes" style="gap: 12px 20px;">
-                    <label class="checkbox-label"><input type="checkbox" value="稳定成本-付费" onchange="clearAiRedeployModeErr()" />稳定成本-付费</label>
-                    <label class="checkbox-label"><input type="checkbox" value="稳定成本-免费" onchange="clearAiRedeployModeErr()" />稳定成本-免费</label>
-                    <label class="checkbox-label"><input type="checkbox" value="最大转化-付费" onchange="clearAiRedeployModeErr()" />最大转化-付费</label>
-                    <label class="checkbox-label"><input type="checkbox" value="最大转化-免费" onchange="clearAiRedeployModeErr()" />最大转化-免费</label>
-                    <label class="checkbox-label"><input type="checkbox" value="全域投放" onchange="clearAiRedeployModeErr()" />全域投放</label>
+                    <label class="checkbox-label"><input type="checkbox" id="aiRedeployAllModes" onchange="toggleAiRedeployAllModes(this.checked)" />全选</label>
+                    <label class="checkbox-label"><input type="checkbox" class="ai-redeploy-mode" value="稳定成本-付费" onchange="onAiRedeployModeChange()" />稳定成本-付费</label>
+                    <label class="checkbox-label"><input type="checkbox" class="ai-redeploy-mode" value="稳定成本-免费" onchange="onAiRedeployModeChange()" />稳定成本-免费</label>
+                    <label class="checkbox-label"><input type="checkbox" class="ai-redeploy-mode" value="最大转化-付费" onchange="onAiRedeployModeChange()" />最大转化-付费</label>
+                    <label class="checkbox-label"><input type="checkbox" class="ai-redeploy-mode" value="最大转化-免费" onchange="onAiRedeployModeChange()" />最大转化-免费</label>
+                    <label class="checkbox-label"><input type="checkbox" class="ai-redeploy-mode" value="全域投放" onchange="onAiRedeployModeChange()" />全域投放</label>
                   </div>
                   <p id="aiRedeployModeErr" style="display: none; margin: 8px 0 0; font-size: 12px; color: var(--color-error);">请至少选择一种投放模式</p>
                 </div>
@@ -14220,6 +14219,23 @@
         if (err) err.style.display = 'none';
       }
 
+      /* 全选 / 取消全选投放模式 */
+      function toggleAiRedeployAllModes(all) {
+        document.querySelectorAll('#aiRedeployModes .ai-redeploy-mode').forEach(function (cb) { cb.checked = all; });
+        var master = document.getElementById('aiRedeployAllModes');
+        if (master) master.checked = all;
+        clearAiRedeployModeErr();
+      }
+
+      /* 单个模式勾选变化：同步全选态（全选中才勾「全选」）并清错误提示 */
+      function onAiRedeployModeChange() {
+        var total = document.querySelectorAll('#aiRedeployModes .ai-redeploy-mode');
+        var checked = document.querySelectorAll('#aiRedeployModes .ai-redeploy-mode:checked');
+        var master = document.getElementById('aiRedeployAllModes');
+        if (master) master.checked = total.length > 0 && checked.length === total.length;
+        clearAiRedeployModeErr();
+      }
+
       /* 重新投放（批量）：仅「测试中」记录可重新投放（入口由勾选数据控制），按所选模式对每条执行记录重新发起 */
       function batchAiDramaRedeploy() {
         var n = document.querySelectorAll('.ai-drama-row-checkbox:checked').length;
@@ -14232,7 +14248,7 @@
         resetAiRedeployModes();
         document.getElementById('aiRedeployCount').textContent = '已选择 ' + n + ' 条';
         document.getElementById('ai-redeploy-confirm-text').textContent =
-          '确认对已勾选的 ' + n + ' 条执行记录发起重新投放？请选择需要重新发起的投放模式（至少一种），系统将对每条执行记录仅按所选模式重新发起投放并重置测试时间。';
+          '请选择需要重新发起的投放模式（至少一种），系统将对每条执行记录仅按所选模式重新发起投放并重置测试时间。';
         document.getElementById('ai-redeploy-overlay').classList.add('open');
         modal.classList.add('open');
       }
@@ -14245,7 +14261,7 @@
       function confirmAiRedeploy() {
         var modal = document.getElementById('ai-redeploy-modal');
         var modes = [];
-        document.querySelectorAll('#aiRedeployModes input:checked').forEach(function (cb) { modes.push(cb.value); });
+        document.querySelectorAll('#aiRedeployModes .ai-redeploy-mode:checked').forEach(function (cb) { modes.push(cb.value); });
         if (!modes.length) {
           var err = document.getElementById('aiRedeployModeErr');
           if (err) err.style.display = 'block';
