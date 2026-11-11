@@ -3004,12 +3004,13 @@
                         <label class="form-label"><span class="required-star">*</span> 生效时间</label>
                         <div class="task-time-list" id="aiTaskTimeRanges">
                           <div class="task-time-range">
-                            <input type="time" class="form-input task-w-time" value="00:00:00" step="1" />
+                            <input type="time" class="form-input task-w-time" value="00:00:00" step="1" oninput="clearAiTaskTimeErr()" />
                             <span class="task-sep">~</span>
-                            <input type="time" class="form-input task-w-time" value="23:59:59" step="1" />
+                            <input type="time" class="form-input task-w-time" value="23:59:59" step="1" oninput="clearAiTaskTimeErr()" />
                           </div>
                         </div>
                         <a class="form-link" onclick="addAiTaskTimeRange()">添加时间范围</a>
+                        <div class="ai-field-err" id="aiTaskTimeErr"></div>
                       </div>
                     </div>
                   </div>
@@ -14284,15 +14285,56 @@
         if (row) row.classList.remove('is-error');
       }
 
+      /* 任务模板抽屉 · 生效时间错误提示（is-error 时 .ai-field-err 才显示） */
+      function clearAiTaskTimeErr() {
+        var row = document.getElementById('ai-row-task-time');
+        if (row) row.classList.remove('is-error');
+      }
+
+      function showAiTaskTimeErr(msg, focusInput) {
+        var row = document.getElementById('ai-row-task-time');
+        var err = document.getElementById('aiTaskTimeErr');
+        if (err) err.textContent = msg;
+        if (row) row.classList.add('is-error');
+        if (focusInput) {
+          if (focusInput.scrollIntoView) focusInput.scrollIntoView({ block: 'center' });
+          focusInput.focus();
+        }
+      }
+
+      /* 生效时间校验（PRD G3 / G4）：每段结束时间须晚于开始时间；多段时间范围互不重叠 */
+      function validateAiTaskTimeRanges() {
+        var list = document.getElementById('aiTaskTimeRanges');
+        if (!list) return { ok: true };
+        var rows = [];
+        list.querySelectorAll('.task-time-range').forEach(function (r, i) {
+          var inputs = r.querySelectorAll('input[type="time"]');
+          rows.push({ idx: i + 1, start: inputs[0] ? inputs[0].value : '', end: inputs[1] ? inputs[1].value : '', inputs: inputs });
+        });
+        for (var i = 0; i < rows.length; i++) {
+          var row = rows[i];
+          if (!row.start || !row.end || row.end <= row.start) {
+            return { ok: false, msg: '生效时间第 ' + row.idx + ' 段：结束时间须晚于开始时间', focus: row.inputs[1] };
+          }
+        }
+        var sorted = rows.slice().sort(function (a, b) { return a.start < b.start ? -1 : 1; });
+        for (var j = 1; j < sorted.length; j++) {
+          if (sorted[j].start < sorted[j - 1].end) {
+            return { ok: false, msg: '生效时间第 ' + sorted[j - 1].idx + ' 段与第 ' + sorted[j].idx + ' 段时间范围重叠', focus: sorted[j].inputs[0] };
+          }
+        }
+        return { ok: true };
+      }
+
       /* 任务模板抽屉 · 生效时间：追加一个时间范围（同全域推广-自动化投放） */
       function addAiTaskTimeRange() {
         var list = document.getElementById('aiTaskTimeRanges');
         if (!list) return;
         var row = document.createElement('div');
         row.className = 'task-time-range';
-        row.innerHTML = '<input type="time" class="form-input task-w-time" value="00:00:00" step="1" />'
+        row.innerHTML = '<input type="time" class="form-input task-w-time" value="00:00:00" step="1" oninput="clearAiTaskTimeErr()" />'
           + '<span class="task-sep">~</span>'
-          + '<input type="time" class="form-input task-w-time" value="23:59:59" step="1" />'
+          + '<input type="time" class="form-input task-w-time" value="23:59:59" step="1" oninput="clearAiTaskTimeErr()" />'
           + '<button type="button" class="task-del" title="删除" onclick="removeAiTaskTimeRange(this)">&times;</button>';
         list.appendChild(row);
       }
@@ -15292,6 +15334,15 @@
           return;
         }
         markAiRowError('ai-row-task-name', false);
+
+        /* 生效时间校验（基本信息）：结束时间须晚于开始时间、多段互不重叠 */
+        var timeCheck = validateAiTaskTimeRanges();
+        if (!timeCheck.ok) {
+          showAiTaskTimeErr(timeCheck.msg, timeCheck.focus);
+          showAiToast(timeCheck.msg);
+          return;
+        }
+        clearAiTaskTimeErr();
 
         var errors = [];
         var firstErrorPane = null;
