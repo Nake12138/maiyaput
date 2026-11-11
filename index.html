@@ -1385,9 +1385,9 @@
                 <!-- 批量开关：勾选数据后，点击链接在菜单中选择开启 / 关闭（同标准投放「已选择N个 重试」样式） -->
                 <div class="filter-status drama-batch-bar">
                   <span>已选择<span class="batch-count" id="aiDramaSelectedCount">0</span>条</span>
-                  <span class="link" onclick="toggleAiDramaBatchMenu(event)">批量开关</span>
-                  <!-- 批量重新投放：仅「测试中」记录可重新投放，勾选后按所选模式批量重新发起 -->
-                  <span class="link" onclick="batchAiDramaRedeploy()">批量重新投放</span>
+                  <span class="link" onclick="toggleAiDramaBatchMenu(event)">任务开关</span>
+                  <!-- 重新投放：仅「测试中」记录可重新投放，勾选后按所选模式批量重新发起 -->
+                  <span class="link" onclick="batchAiDramaRedeploy()">重新投放</span>
                   <div class="ai-drama-batch-menu" id="aiDramaBatchMenu" style="display: none;">
                     <div class="batch-menu-item" onclick="batchSetAiDramaSwitch(true)">开启</div>
                     <div class="batch-menu-item" onclick="batchSetAiDramaSwitch(false)">关闭</div>
@@ -4081,6 +4081,8 @@
                   <button class="modal-close" onclick="closeAiRedeployConfirm()">×</button>
                 </div>
                 <div class="modal-body">
+                  <!-- 已选数量：单个 = 1 条，批量 = 勾选条数 -->
+                  <p id="aiRedeployCount" style="margin: 0 0 8px; font-size: 13px; color: var(--color-text-secondary);">已选择 1 条</p>
                   <p id="ai-redeploy-confirm-text" style="margin: 0 0 12px; font-size: 14px; line-height: 1.9; color: var(--color-text-primary);"></p>
                   <!-- 投放模式：默认全不勾选，至少选一种；仅重投所选模式，已成功的模式不会被重复投放 -->
                   <div class="checkbox-group" id="aiRedeployModes" style="gap: 12px 20px;">
@@ -14199,8 +14201,9 @@
         modal.dataset.recordId = recordId;
         delete modal.dataset.batchCount;
         resetAiRedeployModes();
+        document.getElementById('aiRedeployCount').textContent = '已选择 1 条';
         document.getElementById('ai-redeploy-confirm-text').textContent =
-          '确认重新投放「' + taskName + '-' + dramaName + '」？请选择需要重新发起的投放模式（至少一种），系统将仅按所选模式重新发起投放并重置测试时间，未勾选的已成功模式不会被重复投放。';
+          '确认重新投放「' + taskName + '-' + dramaName + '」？请选择需要重新发起的投放模式（至少一种），系统将仅按所选模式重新发起投放并重置测试时间。';
         document.getElementById('ai-redeploy-overlay').classList.add('open');
         modal.classList.add('open');
       }
@@ -14217,7 +14220,7 @@
         if (err) err.style.display = 'none';
       }
 
-      /* 批量重新投放：仅「测试中」记录可重新投放（入口由勾选数据控制），按所选模式对每条执行记录重新发起 */
+      /* 重新投放（批量）：仅「测试中」记录可重新投放（入口由勾选数据控制），按所选模式对每条执行记录重新发起 */
       function batchAiDramaRedeploy() {
         var n = document.querySelectorAll('.ai-drama-row-checkbox:checked').length;
         if (!n) {
@@ -14227,8 +14230,9 @@
         var modal = document.getElementById('ai-redeploy-modal');
         modal.dataset.batchCount = n;
         resetAiRedeployModes();
+        document.getElementById('aiRedeployCount').textContent = '已选择 ' + n + ' 条';
         document.getElementById('ai-redeploy-confirm-text').textContent =
-          '确认对已勾选的 ' + n + ' 条执行记录发起重新投放？请选择需要重新发起的投放模式（至少一种），系统将对每条执行记录仅按所选模式重新发起投放并重置测试时间，未勾选的已成功模式不会被重复投放。';
+          '确认对已勾选的 ' + n + ' 条执行记录发起重新投放？请选择需要重新发起的投放模式（至少一种），系统将对每条执行记录仅按所选模式重新发起投放并重置测试时间。';
         document.getElementById('ai-redeploy-overlay').classList.add('open');
         modal.classList.add('open');
       }
