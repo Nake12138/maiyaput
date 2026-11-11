@@ -3537,6 +3537,38 @@ body {
   line-height: 1.4;
 }
 
+/* 生效时间：时间范围组件（同全域推广-自动化投放「生效时间」） */
+#ai-task-drawer .task-time-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#ai-task-drawer .task-time-range {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#ai-task-drawer .task-w-time { width: 122px; flex: none; }
+#ai-task-drawer .task-sep { color: var(--color-text-tertiary); }
+#ai-task-drawer .form-link { font-size: 13px; line-height: 1.4; }
+
+#ai-task-drawer .task-del {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  border-radius: 4px;
+  color: var(--color-text-tertiary);
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  flex: none;
+}
+
+#ai-task-drawer .task-del:hover { color: var(--color-error); background: var(--color-bg-hover); }
+
 /* 输入焦点态 */
 #ai-task-drawer .form-input:focus,
 #ai-task-drawer .form-select:focus {

@@ -2980,7 +2980,7 @@
                   <button class="drawer-close" onclick="closeAiTaskDrawer()" style="margin-left: auto;">×</button>
                 </div>
                 <div class="drawer-body">
-                  <!-- 基本信息：任务模板名称（自定义）+ 状态（生效 / 停用），三个模块共用 -->
+                  <!-- 基本信息：任务模板名称（自定义）+ 状态（生效 / 停用）+ 生效时间（时间范围，避免夜间素材生成后立即投放空耗），三个模块共用 -->
                   <div class="ai-schedule-section">
                     <h4 class="form-section-title">基本信息</h4>
                     <div class="form-row" id="ai-row-task-name">
@@ -2997,6 +2997,19 @@
                           <button class="segmented-item active" type="button" data-v="on" onclick="setAiSeg(this)">生效</button>
                           <button class="segmented-item" type="button" data-v="off" onclick="setAiSeg(this)">停用</button>
                         </div>
+                      </div>
+                    </div>
+                    <div class="form-row" id="ai-row-task-time">
+                      <div class="form-item">
+                        <label class="form-label"><span class="required-star">*</span> 生效时间</label>
+                        <div class="task-time-list" id="aiTaskTimeRanges">
+                          <div class="task-time-range">
+                            <input type="time" class="form-input task-w-time" value="00:00:00" step="1" />
+                            <span class="task-sep">~</span>
+                            <input type="time" class="form-input task-w-time" value="23:59:59" step="1" />
+                          </div>
+                        </div>
+                        <a class="form-link" onclick="addAiTaskTimeRange()">添加时间范围</a>
                       </div>
                     </div>
                   </div>
@@ -14269,6 +14282,24 @@
       function clearAiTaskNameErr() {
         var row = document.getElementById('ai-row-task-name');
         if (row) row.classList.remove('is-error');
+      }
+
+      /* 任务模板抽屉 · 生效时间：追加一个时间范围（同全域推广-自动化投放） */
+      function addAiTaskTimeRange() {
+        var list = document.getElementById('aiTaskTimeRanges');
+        if (!list) return;
+        var row = document.createElement('div');
+        row.className = 'task-time-range';
+        row.innerHTML = '<input type="time" class="form-input task-w-time" value="00:00:00" step="1" />'
+          + '<span class="task-sep">~</span>'
+          + '<input type="time" class="form-input task-w-time" value="23:59:59" step="1" />'
+          + '<button type="button" class="task-del" title="删除" onclick="removeAiTaskTimeRange(this)">&times;</button>';
+        list.appendChild(row);
+      }
+
+      function removeAiTaskTimeRange(btn) {
+        var row = btn.closest('.task-time-range');
+        if (row) row.remove();
       }
 
       /* 素材重复次数默认值：新建=自定义（显示次数输入框），编辑/复制=不限 */
