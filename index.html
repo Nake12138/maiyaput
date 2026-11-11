@@ -1386,6 +1386,8 @@
                 <div class="filter-status drama-batch-bar">
                   <span>已选择<span class="batch-count" id="aiDramaSelectedCount">0</span>条</span>
                   <span class="link" onclick="toggleAiDramaBatchMenu(event)">批量开关</span>
+                  <!-- 批量重新投放：仅「测试中」记录可重新投放，勾选后按所选模式批量重新发起 -->
+                  <span class="link" onclick="batchAiDramaRedeploy()">批量重新投放</span>
                   <div class="ai-drama-batch-menu" id="aiDramaBatchMenu" style="display: none;">
                     <div class="batch-menu-item" onclick="batchSetAiDramaSwitch(true)">开启</div>
                     <div class="batch-menu-item" onclick="batchSetAiDramaSwitch(false)">关闭</div>
@@ -1445,6 +1447,7 @@
                           <td>
                             <div class="row-actions">
                               <button class="row-action-btn" onclick="openAiModifyLogDrawer('任务1-短剧1', '5001', 'tested')">日志</button>
+                              <button class="row-action-btn" onclick="openAiExecLogDrawer('短剧1', '1001')">执行日志</button>
                             </div>
                           </td>
                         </tr>
@@ -1477,6 +1480,7 @@
                           <td>
                             <div class="row-actions">
                               <button class="row-action-btn" onclick="openAiModifyLogDrawer('任务2-短剧3', '5003', 'untested')">日志</button>
+                              <button class="row-action-btn" onclick="openAiExecLogDrawer('短剧3', '1003')">执行日志</button>
                             </div>
                           </td>
                         </tr>
@@ -1511,6 +1515,7 @@
                               <!-- 重新投放：仅「测试中」状态展示；标准/全域均报错时系统自动选账户新增投放记录 -->
                               <button class="row-action-btn redeploy-btn" onclick="retryAiDramaRedeploy('5004', '任务2', '短剧4')">重新投放</button>
                               <button class="row-action-btn" onclick="openAiModifyLogDrawer('任务2-短剧4', '5004', 'testing')">日志</button>
+                              <button class="row-action-btn" onclick="openAiExecLogDrawer('短剧4', '1004')">执行日志</button>
                             </div>
                           </td>
                         </tr>
@@ -3965,16 +3970,127 @@
               </div>
             </div>
 
-            <!-- 重新投放确认弹框（通用确认样式） -->
+            <!-- 执行日志抽屉（执行记录维度：按模式展示投放执行结果，失败模式支持重试） -->
+            <div id="ai-exec-log-overlay" class="drawer-overlay" onclick="closeAiExecLogDrawer()"></div>
+            <div id="ai-exec-log-drawer" class="drawer drawer-wide">
+              <div class="drawer-card">
+                <div class="drawer-header">
+                  <h3 class="drawer-title" id="ai-exec-log-title">短剧4（ID: 1004）</h3>
+                  <button class="drawer-close" onclick="closeAiExecLogDrawer()">×</button>
+                </div>
+                <div class="drawer-body">
+                  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                    <span style="font-size: 14px; font-weight: 600; color: var(--color-text-primary);">执行日志</span>
+                    <button class="btn btn-outline btn-sm" onclick="refreshAiExecLog()">刷新</button>
+                  </div>
+                  <div class="table-card" style="border-radius: 4px;">
+                    <div class="table-wrapper">
+                      <table class="data-table">
+                        <thead>
+                          <tr>
+                            <th>时间</th>
+                            <th>类型</th>
+                            <th>模式</th>
+                            <th>结果</th>
+                            <th>说明</th>
+                            <th>操作人</th>
+                            <th>操作</th>
+                          </tr>
+                        </thead>
+                        <tbody id="aiExecLogBody">
+                          <tr>
+                            <td>2026-11-11 00:10:30</td>
+                            <td>投放执行</td>
+                            <td>全域投放</td>
+                            <td><span class="tag tag-error">失败</span></td>
+                            <td>账户投放执行失败：余额不足或无可用专用账户</td>
+                            <td>admin</td>
+                            <!-- 重试：仅失败的「投放执行」行展示；重试成功后在日志顶部新增一条成功记录，失败记录保留可再次重试 -->
+                            <td><div class="row-actions"><button class="row-action-btn redeploy-btn" onclick="retryAiExecLogRow(this)">重试</button></div></td>
+                          </tr>
+                          <tr>
+                            <td>2026-11-11 00:10:30</td>
+                            <td>投放执行</td>
+                            <td>稳定成本-免费</td>
+                            <td><span class="tag tag-success">成功</span></td>
+                            <td>稳定成本-免费执行完成，本次执行第3条</td>
+                            <td>admin</td>
+                            <td></td>
+                          </tr>
+                          <tr>
+                            <td>2026-11-11 00:10:30</td>
+                            <td>投放执行</td>
+                            <td>稳定成本-付费</td>
+                            <td><span class="tag tag-success">成功</span></td>
+                            <td>稳定成本-付费执行完成，本次执行第1条</td>
+                            <td>admin</td>
+                            <td></td>
+                          </tr>
+                          <tr>
+                            <td>2026-11-11 00:10:30</td>
+                            <td>投放执行</td>
+                            <td>最大转化-免费</td>
+                            <td><span class="tag tag-success">成功</span></td>
+                            <td>最大转化-免费执行完成，本次执行第1条</td>
+                            <td>admin</td>
+                            <td></td>
+                          </tr>
+                          <tr>
+                            <td>2026-11-11 00:10:30</td>
+                            <td>投放执行</td>
+                            <td>最大转化-付费</td>
+                            <td><span class="tag tag-success">成功</span></td>
+                            <td>最大转化-付费执行完成，本次执行第1条</td>
+                            <td>admin</td>
+                            <td></td>
+                          </tr>
+                          <tr>
+                            <td>2026-11-11 00:10:30</td>
+                            <td>测剧状态</td>
+                            <td>--</td>
+                            <td><span class="link">无 → 测出中</span></td>
+                            <td>开启短剧任务，可投素材数超过 90，短剧测出状态更新为测剧中</td>
+                            <td>admin</td>
+                            <td></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div class="pagination" style="justify-content: flex-end;">
+                    <span class="pagination-info">共 6 条</span>
+                    <div class="pagination-pages">
+                      <button class="page-btn" onclick="changePage('prev')">&lt;</button>
+                      <button class="page-btn active" onclick="changePage(1)">1</button>
+                      <button class="page-btn" onclick="changePage('next')">&gt;</button>
+                    </div>
+                    <select class="page-size-select">
+                      <option value="10" selected>10 条/页</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 重新投放确认弹框（通用确认样式；需选择至少一种投放模式） -->
             <div id="ai-redeploy-overlay" class="modal-overlay" onclick="closeAiRedeployConfirm()"></div>
             <div id="ai-redeploy-modal" class="modal">
-              <div class="modal-card" style="width: min(460px, calc(100vw - 40px));">
+              <div class="modal-card" style="width: min(520px, calc(100vw - 40px));">
                 <div class="modal-header">
                   <span>重新投放</span>
                   <button class="modal-close" onclick="closeAiRedeployConfirm()">×</button>
                 </div>
                 <div class="modal-body">
-                  <p id="ai-redeploy-confirm-text" style="margin: 0; font-size: 14px; line-height: 1.9; color: var(--color-text-primary);"></p>
+                  <p id="ai-redeploy-confirm-text" style="margin: 0 0 12px; font-size: 14px; line-height: 1.9; color: var(--color-text-primary);"></p>
+                  <!-- 投放模式：默认全不勾选，至少选一种；仅重投所选模式，已成功的模式不会被重复投放 -->
+                  <div class="checkbox-group" id="aiRedeployModes" style="gap: 12px 20px;">
+                    <label class="checkbox-label"><input type="checkbox" value="稳定成本-付费" onchange="clearAiRedeployModeErr()" />稳定成本-付费</label>
+                    <label class="checkbox-label"><input type="checkbox" value="稳定成本-免费" onchange="clearAiRedeployModeErr()" />稳定成本-免费</label>
+                    <label class="checkbox-label"><input type="checkbox" value="最大转化-付费" onchange="clearAiRedeployModeErr()" />最大转化-付费</label>
+                    <label class="checkbox-label"><input type="checkbox" value="最大转化-免费" onchange="clearAiRedeployModeErr()" />最大转化-免费</label>
+                    <label class="checkbox-label"><input type="checkbox" value="全域投放" onchange="clearAiRedeployModeErr()" />全域投放</label>
+                  </div>
+                  <p id="aiRedeployModeErr" style="display: none; margin: 8px 0 0; font-size: 12px; color: var(--color-error);">请至少选择一种投放模式</p>
                 </div>
                 <div class="modal-footer">
                   <button class="btn btn-outline" onclick="closeAiRedeployConfirm()">取消</button>
@@ -14075,14 +14191,44 @@
 
       /*
        * 重新投放：仅「测试中」状态展示。标准 / 全域投放均报错（多为账户维度故障）时触发：
-       * 系统按所属任务模板配置的账户范围随机选择符合要求的账户，在标准投放与全域投放列表中
-       * 各新增一条投放记录（不修改原有记录）；不新建执行记录，测出状态保持「测试中」并重置测试时间。
+       * 用户手动勾选需重投的模式（5 种至少一种，默认全不勾选），系统按所选模式重新发起投放
+       * 并重置测试时间；未勾选的已成功模式不会被重复投放；不新建执行记录。
        */
       function retryAiDramaRedeploy(recordId, taskName, dramaName) {
         var modal = document.getElementById('ai-redeploy-modal');
         modal.dataset.recordId = recordId;
+        delete modal.dataset.batchCount;
+        resetAiRedeployModes();
         document.getElementById('ai-redeploy-confirm-text').textContent =
-          '确认重新投放「' + taskName + '-' + dramaName + '」？系统将按任务模板配置重新发起标准投放与全域投放，并重置测试时间。';
+          '确认重新投放「' + taskName + '-' + dramaName + '」？请选择需要重新发起的投放模式（至少一种），系统将仅按所选模式重新发起投放并重置测试时间，未勾选的已成功模式不会被重复投放。';
+        document.getElementById('ai-redeploy-overlay').classList.add('open');
+        modal.classList.add('open');
+      }
+
+      /* 重置模式勾选与错误提示（单个 / 批量重新投放共用） */
+      function resetAiRedeployModes() {
+        document.querySelectorAll('#aiRedeployModes input[type="checkbox"]').forEach(function (cb) { cb.checked = false; });
+        var err = document.getElementById('aiRedeployModeErr');
+        if (err) err.style.display = 'none';
+      }
+
+      function clearAiRedeployModeErr() {
+        var err = document.getElementById('aiRedeployModeErr');
+        if (err) err.style.display = 'none';
+      }
+
+      /* 批量重新投放：仅「测试中」记录可重新投放（入口由勾选数据控制），按所选模式对每条执行记录重新发起 */
+      function batchAiDramaRedeploy() {
+        var n = document.querySelectorAll('.ai-drama-row-checkbox:checked').length;
+        if (!n) {
+          showAiToast('请先勾选需要重新投放的执行记录');
+          return;
+        }
+        var modal = document.getElementById('ai-redeploy-modal');
+        modal.dataset.batchCount = n;
+        resetAiRedeployModes();
+        document.getElementById('ai-redeploy-confirm-text').textContent =
+          '确认对已勾选的 ' + n + ' 条执行记录发起重新投放？请选择需要重新发起的投放模式（至少一种），系统将对每条执行记录仅按所选模式重新发起投放并重置测试时间，未勾选的已成功模式不会被重复投放。';
         document.getElementById('ai-redeploy-overlay').classList.add('open');
         modal.classList.add('open');
       }
@@ -14093,7 +14239,17 @@
       }
 
       function confirmAiRedeploy() {
-        var recordId = document.getElementById('ai-redeploy-modal').dataset.recordId || '';
+        var modal = document.getElementById('ai-redeploy-modal');
+        var modes = [];
+        document.querySelectorAll('#aiRedeployModes input:checked').forEach(function (cb) { modes.push(cb.value); });
+        if (!modes.length) {
+          var err = document.getElementById('aiRedeployModeErr');
+          if (err) err.style.display = 'block';
+          return; /* 未选模式：不关闭弹框，阻断提交 */
+        }
+        var recordId = modal.dataset.recordId || '';
+        var batchCount = modal.dataset.batchCount || '';
+        var scopeLabel = batchCount ? ('已勾选 ' + batchCount + ' 条执行记录') : ('执行记录ID：' + recordId);
         closeAiRedeployConfirm();
 
         /* 标准投放 · 账户列表新增投放记录（系统自动选择的账户，示例：JL-MAD-AI-短剧一组-03） */
@@ -14146,11 +14302,51 @@
           logTr.innerHTML =
             '<td>小B</td>' +
             '<td>2026-10-27 11:55:00</td>' +
-            '<td>重新投放。标准投放与全域投放已重新发起，测试时间已重置。</td>';
+            '<td>重新投放。已按所选模式（' + modes.join('、') + '）重新发起投放，测试时间已重置。</td>';
           logBody.insertBefore(logTr, logBody.firstChild);
         }
 
-        showAiToast('已重新发起标准投放与全域投放（执行记录ID：' + recordId + '），系统自动选择符合要求的账户');
+        showAiToast('重新投放已发起（' + scopeLabel + '），模式：' + modes.join('、') + '；系统自动选择符合要求的账户');
+      }
+
+      /* ---- 执行记录 · 执行日志抽屉（按模式展示投放执行结果，失败模式支持重试） ---- */
+      function openAiExecLogDrawer(dramaName, dramaId) {
+        document.getElementById('ai-exec-log-title').textContent = dramaName + '（ID: ' + dramaId + '）';
+        document.getElementById('ai-exec-log-overlay').classList.add('open');
+        document.getElementById('ai-exec-log-drawer').classList.add('open');
+      }
+
+      function closeAiExecLogDrawer() {
+        document.getElementById('ai-exec-log-overlay').classList.remove('open');
+        document.getElementById('ai-exec-log-drawer').classList.remove('open');
+      }
+
+      function refreshAiExecLog() {
+        showAiToast('执行日志已刷新');
+      }
+
+      /* 失败模式重试：确认后重新发起该模式投放，日志顶部新增一条成功记录；失败记录保留，支持再次重试 */
+      function retryAiExecLogRow(btn) {
+        var tr = btn.closest('tr');
+        var mode = tr.children[2].textContent.trim();
+        if (!confirm('确认重试「' + mode + '」投放？系统将重新发起该模式的投放执行。')) return;
+        var d = new Date();
+        function p(v) { return (v < 10 ? '0' : '') + v; }
+        var now = d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes()) + ':' + p(d.getSeconds());
+        var tbody = document.getElementById('aiExecLogBody');
+        if (tbody) {
+          var ntr = document.createElement('tr');
+          ntr.innerHTML =
+            '<td>' + now + '</td>' +
+            '<td>投放执行</td>' +
+            '<td>' + mode + '</td>' +
+            '<td><span class="tag tag-success">成功</span></td>' +
+            '<td>重试成功：已重新发起「' + mode + '」投放，本次执行第1条</td>' +
+            '<td>admin</td>' +
+            '<td></td>';
+          tbody.insertBefore(ntr, tbody.firstChild);
+        }
+        showAiToast('已重新发起「' + mode + '」投放');
       }
 
       /* ---- 任务模板：状态开关（生效 / 停用）与批量开关 ---- */
