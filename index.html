@@ -1385,7 +1385,7 @@
                 <!-- 批量开关：勾选数据后，点击链接在菜单中选择开启 / 关闭（同标准投放「已选择N个 重试」样式） -->
                 <div class="filter-status drama-batch-bar">
                   <span>已选择<span class="batch-count" id="aiDramaSelectedCount">0</span>条</span>
-                  <span class="link" onclick="toggleAiDramaBatchMenu(event)">任务开关</span>
+                  <span class="link" onclick="toggleAiDramaBatchMenu(event)">批量开关</span>
                   <!-- 重新投放：仅「测试中」记录可重新投放，勾选后按所选模式批量重新发起 -->
                   <span class="link" onclick="batchAiDramaRedeploy()">重新投放</span>
                   <div class="ai-drama-batch-menu" id="aiDramaBatchMenu" style="display: none;">
@@ -1447,7 +1447,7 @@
                           <td>
                             <div class="row-actions">
                               <!-- 日志：执行日志抽屉（按模式展示投放执行结果，失败模式支持重试）；原修改日志入口与执行日志重复，已收敛 -->
-                              <button class="row-action-btn" onclick="openAiExecLogDrawer('短剧1', '1001')">日志</button>
+                              <button class="row-action-btn" onclick="openAiExecLogDrawer('短剧1', '1001', '任务1')">日志</button>
                             </div>
                           </td>
                         </tr>
@@ -1479,7 +1479,7 @@
                           <td>2026-10-20 08:00:00</td>
                           <td>
                             <div class="row-actions">
-                              <button class="row-action-btn" onclick="openAiExecLogDrawer('短剧3', '1003')">日志</button>
+                              <button class="row-action-btn" onclick="openAiExecLogDrawer('短剧3', '1003', '任务2')">日志</button>
                             </div>
                           </td>
                         </tr>
@@ -1513,7 +1513,7 @@
                             <div class="row-actions">
                               <!-- 重新投放：仅「测试中」状态展示；标准/全域均报错时系统自动选账户新增投放记录 -->
                               <button class="row-action-btn redeploy-btn" onclick="retryAiDramaRedeploy('5004', '任务2', '短剧4')">重新投放</button>
-                              <button class="row-action-btn" onclick="openAiExecLogDrawer('短剧4', '1004')">日志</button>
+                              <button class="row-action-btn" onclick="openAiExecLogDrawer('短剧4', '1004', '任务2')">日志</button>
                             </div>
                           </td>
                         </tr>
@@ -3981,6 +3981,8 @@
                     <span style="font-size: 14px; font-weight: 600; color: var(--color-text-primary);">执行日志</span>
                     <button class="btn btn-outline btn-sm" onclick="refreshAiExecLog()">刷新</button>
                   </div>
+                  <!-- 生效任务模板提示：多条开启任务中仅更新时间最新的一条生效，未开启模式不可重试 -->
+                  <p id="aiExecLogTplHint" style="margin: 0 0 10px; font-size: 12px; color: var(--color-text-secondary);"></p>
                   <div class="table-card" style="border-radius: 4px;">
                     <div class="table-wrapper">
                       <table class="data-table">
@@ -4004,6 +4006,16 @@
                             <td>账户投放执行失败：余额不足或无可用专用账户</td>
                             <td>admin</td>
                             <!-- 重试：仅失败的「投放执行」行展示；重试成功后在日志顶部新增一条成功记录，失败记录保留可再次重试 -->
+                            <td><div class="row-actions"><button class="row-action-btn redeploy-btn" onclick="retryAiExecLogRow(this)">重试</button></div></td>
+                          </tr>
+                          <!-- 失败但该模式未在生效任务模板中开启：重试按钮禁选（由 openAiExecLogDrawer 按生效模板动态判定） -->
+                          <tr>
+                            <td>2026-11-11 00:10:30</td>
+                            <td>投放执行</td>
+                            <td>最大转化-免费</td>
+                            <td><span class="tag tag-error">失败</span></td>
+                            <td>创建项目失败：账户可用项目数不足</td>
+                            <td>admin</td>
                             <td><div class="row-actions"><button class="row-action-btn redeploy-btn" onclick="retryAiExecLogRow(this)">重试</button></div></td>
                           </tr>
                           <tr>
@@ -4056,7 +4068,7 @@
                     </div>
                   </div>
                   <div class="pagination" style="justify-content: flex-end;">
-                    <span class="pagination-info">共 6 条</span>
+                    <span class="pagination-info">共 7 条</span>
                     <div class="pagination-pages">
                       <button class="page-btn" onclick="changePage('prev')">&lt;</button>
                       <button class="page-btn active" onclick="changePage(1)">1</button>
@@ -4066,6 +4078,29 @@
                       <option value="10" selected>10 条/页</option>
                     </select>
                   </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 执行日志 · 重试确认弹框（统一确认样式，替代原生 confirm） -->
+            <div id="ai-exec-retry-overlay" class="modal-overlay" onclick="closeAiExecRetryConfirm()"></div>
+            <div id="ai-exec-retry-modal" class="modal">
+              <div class="modal-card" style="width: min(440px, calc(100vw - 40px));">
+                <div class="modal-header">
+                  <span>重试投放</span>
+                  <button class="modal-close" onclick="closeAiExecRetryConfirm()">×</button>
+                </div>
+                <div class="modal-body">
+                  <p style="margin: 0 0 14px; font-size: 14px; line-height: 1.9; color: var(--color-text-primary);">确认重试该模式的投放？系统将按生效任务模板重新发起投放执行。</p>
+                  <div style="padding: 10px 14px; background: var(--color-bg-hover, #f5f6f7); border-radius: 6px; font-size: 13px; line-height: 1.9; color: var(--color-text-secondary);">
+                    <div>投放模式：<span id="aiExecRetryMode" style="color: var(--color-text-primary); font-weight: 600;">--</span></div>
+                    <div>生效任务模板：<span id="aiExecRetryTask" style="color: var(--color-text-primary);">--</span></div>
+                    <div>重试成功后将在执行日志顶部新增一条成功记录，原失败记录保留</div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-outline" onclick="closeAiExecRetryConfirm()">取消</button>
+                  <button class="btn btn-primary" onclick="confirmAiExecRetry()">确认重试</button>
                 </div>
               </div>
             </div>
@@ -4081,10 +4116,15 @@
                 <div class="modal-body">
                   <!-- 已选数量：单个 = 1 条，批量 = 勾选条数 -->
                   <p id="aiRedeployCount" style="margin: 0 0 8px; font-size: 13px; color: var(--color-text-secondary);">已选择 1 条</p>
+                  <!-- 生效任务模板提示：多条开启任务中仅更新时间最新的一条生效，模式可勾选范围以其配置为准 -->
+                  <p id="aiRedeployTplHint" style="display: none; margin: 0 0 8px; font-size: 12px; color: var(--color-text-secondary);"></p>
                   <p id="ai-redeploy-confirm-text" style="margin: 0 0 12px; font-size: 14px; line-height: 1.9; color: var(--color-text-primary);"></p>
                   <!-- 投放模式：默认全不勾选，支持全选；至少选一种；仅重投所选模式，已成功的模式不会被重复投放 -->
-                  <div class="checkbox-group" id="aiRedeployModes" style="gap: 12px 20px;">
-                    <label class="checkbox-label"><input type="checkbox" id="aiRedeployAllModes" onchange="toggleAiRedeployAllModes(this.checked)" />全选</label>
+                  <!-- 「全选」独立成行 + 浅分隔线；5 个模式两列网格排布 -->
+                  <div style="padding-bottom: 10px; margin-bottom: 10px; border-bottom: 1px solid var(--color-border, #e5e7eb);">
+                    <label class="checkbox-label" style="font-weight: 600;"><input type="checkbox" id="aiRedeployAllModes" onchange="toggleAiRedeployAllModes(this.checked)" />全选</label>
+                  </div>
+                  <div class="checkbox-group" id="aiRedeployModes" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px;">
                     <label class="checkbox-label"><input type="checkbox" class="ai-redeploy-mode" value="稳定成本-付费" onchange="onAiRedeployModeChange()" />稳定成本-付费</label>
                     <label class="checkbox-label"><input type="checkbox" class="ai-redeploy-mode" value="稳定成本-免费" onchange="onAiRedeployModeChange()" />稳定成本-免费</label>
                     <label class="checkbox-label"><input type="checkbox" class="ai-redeploy-mode" value="最大转化-付费" onchange="onAiRedeployModeChange()" />最大转化-付费</label>
@@ -14191,9 +14231,43 @@
       }
 
       /*
+       * 任务模板模式配置（原型示例数据）：
+       * 多条「开启」的任务模板同时存在时，仅【更新时间最新】的那一条生效，
+       * 重新投放时只允许勾选生效任务模板中已开启（可用）的模式，未开启的模式禁选。
+       */
+      var AI_TASK_MODE_CONFIG = {
+        '任务1': ['稳定成本-付费', '稳定成本-免费', '最大转化-付费', '最大转化-免费', '全域投放'],
+        '任务2': ['稳定成本-付费', '稳定成本-免费', '全域投放']
+      };
+      var AI_TASK_ALL_MODES = ['稳定成本-付费', '稳定成本-免费', '最大转化-付费', '最大转化-免费', '全域投放'];
+
+      /* 取任务模板已开启的模式；未知模板按全部可用兜底 */
+      function aiTaskEnabledModes(taskName) {
+        var modes = AI_TASK_MODE_CONFIG[taskName];
+        return modes ? modes.slice() : AI_TASK_ALL_MODES.slice();
+      }
+
+      /* 按生效任务模板禁选未开启的模式：取消勾选 + 置灰 + 悬浮说明 */
+      function applyAiRedeployModeAvailability(enabledModes) {
+        document.querySelectorAll('#aiRedeployModes .ai-redeploy-mode').forEach(function (cb) {
+          var ok = enabledModes.indexOf(cb.value) >= 0;
+          cb.disabled = !ok;
+          cb.checked = false;
+          var label = cb.closest('.checkbox-label');
+          if (label) {
+            label.style.opacity = ok ? '' : '0.45';
+            label.style.cursor = ok ? '' : 'not-allowed';
+            label.title = ok ? '' : '该模式未在生效任务模板中开启，不可重新投放';
+          }
+        });
+        onAiRedeployModeChange();
+      }
+
+      /*
        * 重新投放：仅「测试中」状态展示。标准 / 全域投放均报错（多为账户维度故障）时触发：
        * 用户手动勾选需重投的模式（5 种至少一种，默认全不勾选），系统按所选模式重新发起投放
        * 并重置测试时间；未勾选的已成功模式不会被重复投放；不新建执行记录。
+       * 可勾选范围 = 生效任务模板（多条开启任务中更新时间最新的一条）已开启的模式。
        */
       function retryAiDramaRedeploy(recordId, taskName, dramaName) {
         var modal = document.getElementById('ai-redeploy-modal');
@@ -14201,15 +14275,23 @@
         delete modal.dataset.batchCount;
         resetAiRedeployModes();
         document.getElementById('aiRedeployCount').textContent = '已选择 1 条';
+        var hint = document.getElementById('aiRedeployTplHint');
+        if (hint) {
+          hint.style.display = 'block';
+          hint.textContent = '生效任务模板：' + taskName + '（多条开启任务中仅更新时间最新的一条生效）';
+        }
+        applyAiRedeployModeAvailability(aiTaskEnabledModes(taskName));
         document.getElementById('ai-redeploy-confirm-text').textContent =
           '确认重新投放「' + taskName + '-' + dramaName + '」？请选择需要重新发起的投放模式（至少一种），系统将仅按所选模式重新发起投放并重置测试时间。';
         document.getElementById('ai-redeploy-overlay').classList.add('open');
         modal.classList.add('open');
       }
 
-      /* 重置模式勾选与错误提示（单个 / 批量重新投放共用） */
+      /* 重置模式勾选与错误提示（单个 / 批量重新投放共用）；全选框在模式容器外，需单独重置 */
       function resetAiRedeployModes() {
         document.querySelectorAll('#aiRedeployModes input[type="checkbox"]').forEach(function (cb) { cb.checked = false; });
+        var all = document.getElementById('aiRedeployAllModes');
+        if (all) all.checked = false;
         var err = document.getElementById('aiRedeployModeErr');
         if (err) err.style.display = 'none';
       }
@@ -14219,34 +14301,59 @@
         if (err) err.style.display = 'none';
       }
 
-      /* 全选 / 取消全选投放模式 */
+      /* 全选 / 取消全选投放模式：未开启（禁用）的模式不参与 */
       function toggleAiRedeployAllModes(all) {
-        document.querySelectorAll('#aiRedeployModes .ai-redeploy-mode').forEach(function (cb) { cb.checked = all; });
+        document.querySelectorAll('#aiRedeployModes .ai-redeploy-mode').forEach(function (cb) {
+          if (cb.disabled) return;
+          cb.checked = all;
+        });
         var master = document.getElementById('aiRedeployAllModes');
         if (master) master.checked = all;
         clearAiRedeployModeErr();
       }
 
-      /* 单个模式勾选变化：同步全选态（全选中才勾「全选」）并清错误提示 */
+      /* 单个模式勾选变化：同步全选态（可用模式全选中才勾「全选」）并清错误提示 */
       function onAiRedeployModeChange() {
-        var total = document.querySelectorAll('#aiRedeployModes .ai-redeploy-mode');
-        var checked = document.querySelectorAll('#aiRedeployModes .ai-redeploy-mode:checked');
+        var total = [].slice.call(document.querySelectorAll('#aiRedeployModes .ai-redeploy-mode')).filter(function (cb) { return !cb.disabled; });
+        var checked = [].slice.call(document.querySelectorAll('#aiRedeployModes .ai-redeploy-mode:checked')).filter(function (cb) { return !cb.disabled; });
         var master = document.getElementById('aiRedeployAllModes');
         if (master) master.checked = total.length > 0 && checked.length === total.length;
         clearAiRedeployModeErr();
       }
 
-      /* 重新投放（批量）：仅「测试中」记录可重新投放（入口由勾选数据控制），按所选模式对每条执行记录重新发起 */
+      /*
+       * 重新投放（批量）：仅「测试中」记录可重新投放（入口由勾选数据控制），按所选模式对每条执行记录重新发起。
+       * 可勾选模式 = 各条执行记录生效任务模板已开启模式的【交集】（某条任务模板未开启的模式不能批量重投）。
+       */
       function batchAiDramaRedeploy() {
         var n = document.querySelectorAll('.ai-drama-row-checkbox:checked').length;
         if (!n) {
           showAiToast('请先勾选需要重新投放的执行记录');
           return;
         }
+        /* 逐条取归属任务模板的开启模式求交集；任务模板取该行「任务模板」列 */
+        var enabled = null;
+        document.querySelectorAll('.ai-drama-row-checkbox:checked').forEach(function (cb) {
+          var row = cb.closest('tr');
+          var cell = row ? row.children[4] : null;
+          var nameEl = cell ? cell.querySelector('span') : null;
+          var modes = aiTaskEnabledModes(nameEl ? nameEl.textContent.trim() : '');
+          enabled = enabled === null ? modes : enabled.filter(function (m) { return modes.indexOf(m) >= 0; });
+        });
+        if (!enabled || !enabled.length) {
+          showAiToast('所选执行记录的生效任务模板无共同开启的投放模式，无法批量重新投放');
+          return;
+        }
         var modal = document.getElementById('ai-redeploy-modal');
         modal.dataset.batchCount = n;
         resetAiRedeployModes();
         document.getElementById('aiRedeployCount').textContent = '已选择 ' + n + ' 条';
+        var hint = document.getElementById('aiRedeployTplHint');
+        if (hint) {
+          hint.style.display = 'block';
+          hint.textContent = '可重投模式按各条执行记录的生效任务模板（多条开启任务中仅更新时间最新的一条生效）取交集，未开启的模式禁选';
+        }
+        applyAiRedeployModeAvailability(enabled);
         document.getElementById('ai-redeploy-confirm-text').textContent =
           '请选择需要重新发起的投放模式（至少一种），系统将对每条执行记录仅按所选模式重新发起投放并重置测试时间。';
         document.getElementById('ai-redeploy-overlay').classList.add('open');
@@ -14326,14 +14433,41 @@
           logBody.insertBefore(logTr, logBody.firstChild);
         }
 
-        showAiToast('重新投放已发起（' + scopeLabel + '），模式：' + modes.join('、') + '；系统自动选择符合要求的账户');
+        showAiToast('重新投放已发起（' + scopeLabel + '），模式：' + modes.join('、'));
       }
 
       /* ---- 执行记录 · 执行日志抽屉（按模式展示投放执行结果，失败模式支持重试） ---- */
-      function openAiExecLogDrawer(dramaName, dramaId) {
+      function openAiExecLogDrawer(dramaName, dramaId, taskName) {
         document.getElementById('ai-exec-log-title').textContent = dramaName + '（ID: ' + dramaId + '）';
+        var drawer = document.getElementById('ai-exec-log-drawer');
+        drawer.dataset.taskName = taskName || '';
+        var hint = document.getElementById('aiExecLogTplHint');
+        if (hint) {
+          hint.textContent = taskName
+            ? '生效任务模板：' + taskName + '（多条开启任务中仅更新时间最新的一条生效），未开启的模式不可重试'
+            : '未开启的模式不可重试';
+        }
+        applyAiExecLogRetryAvailability();
         document.getElementById('ai-exec-log-overlay').classList.add('open');
-        document.getElementById('ai-exec-log-drawer').classList.add('open');
+        drawer.classList.add('open');
+      }
+
+      /* 重试可用性：仅当该行模式在生效任务模板中已开启时允许重试，未开启的模式禁用按钮 */
+      function applyAiExecLogRetryAvailability() {
+        var drawer = document.getElementById('ai-exec-log-drawer');
+        var taskName = drawer ? (drawer.dataset.taskName || '') : '';
+        var enabled = aiTaskEnabledModes(taskName);
+        document.querySelectorAll('#aiExecLogBody tr').forEach(function (tr) {
+          var btn = tr.querySelector('.redeploy-btn');
+          if (!btn) return;
+          var modeCell = tr.children[2];
+          var mode = modeCell ? modeCell.textContent.trim() : '';
+          var ok = enabled.indexOf(mode) >= 0;
+          btn.disabled = !ok;
+          btn.style.color = ok ? '' : 'var(--color-text-tertiary)';
+          btn.style.cursor = ok ? '' : 'not-allowed';
+          btn.title = ok ? '' : '该模式未在生效任务模板中开启，不可重试';
+        });
       }
 
       function closeAiExecLogDrawer() {
@@ -14342,14 +14476,45 @@
       }
 
       function refreshAiExecLog() {
+        applyAiExecLogRetryAvailability();
         showAiToast('执行日志已刷新');
       }
 
-      /* 失败模式重试：确认后重新发起该模式投放，日志顶部新增一条成功记录；失败记录保留，支持再次重试 */
+      /*
+       * 失败模式重试：点击打开统一确认弹框（原原生 confirm 已替换），确认后重新发起该模式投放，
+       * 日志顶部新增一条成功记录；失败记录保留，支持再次重试。
+       * 仅生效任务模板（多条开启任务中更新时间最新的一条）已开启的模式可重试，其余禁用。
+       */
       function retryAiExecLogRow(btn) {
         var tr = btn.closest('tr');
         var mode = tr.children[2].textContent.trim();
-        if (!confirm('确认重试「' + mode + '」投放？系统将重新发起该模式的投放执行。')) return;
+        var drawer = document.getElementById('ai-exec-log-drawer');
+        var taskName = drawer ? (drawer.dataset.taskName || '') : '';
+        if (aiTaskEnabledModes(taskName).indexOf(mode) < 0) {
+          btn.disabled = true;
+          showAiToast('「' + mode + '」未在生效任务模板中开启，不可重试');
+          return;
+        }
+        var modal = document.getElementById('ai-exec-retry-modal');
+        modal.dataset.mode = mode;
+        modal.dataset.task = taskName;
+        document.getElementById('aiExecRetryMode').textContent = mode;
+        document.getElementById('aiExecRetryTask').textContent = taskName || '--';
+        document.getElementById('ai-exec-retry-overlay').classList.add('open');
+        modal.classList.add('open');
+      }
+
+      function closeAiExecRetryConfirm() {
+        document.getElementById('ai-exec-retry-overlay').classList.remove('open');
+        document.getElementById('ai-exec-retry-modal').classList.remove('open');
+      }
+
+      /* 确认重试：写一条成功日志并轻提示 */
+      function confirmAiExecRetry() {
+        var modal = document.getElementById('ai-exec-retry-modal');
+        var mode = modal.dataset.mode || '';
+        var taskName = modal.dataset.task || '';
+        closeAiExecRetryConfirm();
         var d = new Date();
         function p(v) { return (v < 10 ? '0' : '') + v; }
         var now = d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes()) + ':' + p(d.getSeconds());
