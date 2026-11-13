@@ -18489,6 +18489,53 @@
         }
       };
 
+      /* 失败明细里出现的巨量接口错误码 */
+      HEIPI_KB['40001'] = {
+        title: '账户已失去该 TikTok 身份（授权）的访问权限',
+        points: [
+          '报错原文 You no longer have access to the TikTok account：投放用的身份授权已失效或被回收，不是素材问题。',
+          '到「资产管理」重新授权该账户对应的身份，或在编辑页换一个新的 identity 后重新提交。',
+          '若多个单元同一时间集中报这条，先确认是主体整体掉线还是单个身份过期，避免逐个重试。'
+        ],
+        tags: ['去资产管理重新授权', '同错误历史处理', '转人工']
+      };
+      HEIPI_KB['40003'] = {
+        title: '定向包与账户可投范围不匹配',
+        points: [
+          '定向包里包含该账户不可投的地域 / 人群 / 版位，巨量在提交阶段直接拒绝。',
+          '检查定向包是否从其他账户复用而来，按当前账户的可投范围重新生成一版。',
+          '换成账户自有定向包后点「重试」，不需要重建项目。'
+        ],
+        tags: ['查看定向包配置', '同错误历史处理', '转人工']
+      };
+      HEIPI_KB['40010'] = {
+        title: '创意素材审核未通过',
+        points: [
+          '素材本身被审核拦截（低质、重复、含违规元素），与账户、预算无关。',
+          '在素材库看该素材的审核意见，替换后重新提交；同一素材重试不会通过。',
+          '批量失败时先按素材维度聚合，优先换掉命中最多的一条，能一次性恢复大部分单元。'
+        ],
+        tags: ['查看素材审核意见', '同错误历史处理', '转人工']
+      };
+      HEIPI_KB['40011'] = {
+        title: '出价低于该版位最低出价限制',
+        points: [
+          '当前出价低于所选版位的最低价要求，属于参数校验失败。',
+          '提高出价到版位下限以上，或去掉该版位后重新提交。',
+          '如果是批量任务，检查任务里的出价策略是否统一按低价配置，避免整批被拦。'
+        ],
+        tags: ['查看版位最低出价', '同错误历史处理', '转人工']
+      };
+      HEIPI_KB['40012'] = {
+        title: '素材宽高比不符合版位要求',
+        points: [
+          '素材尺寸与所选版位不匹配（多数版位要求 9:16 竖版）。',
+          '替换成符合比例的素材，或将素材裁剪到版位要求后重新提交。',
+          '多版位混投时，建议一版位一素材，避免一个素材被部分版位拒绝。'
+        ],
+        tags: ['查看版位素材要求', '同错误历史处理', '转人工']
+      };
+
       var heipiStarted = false;
       var heipiDragInit = false;
 
@@ -18877,7 +18924,7 @@
             html += '<td><div class="fail-detail-name">' + r.parent + '</div><div class="fail-detail-id">ID: ' + r.parentId + '</div></td>';
           }
           html += '<td><div class="fail-detail-name">' + r.account + '</div><div class="fail-detail-id">ID: ' + r.accountId + '</div></td>';
-          html += '<td>' + renderSemiFailDetailError(r.error) + '</td>';
+          html += '<td>' + renderSemiFailDetailError(r, meta) + '</td>';
           html += '<td><div class="row-actions"><button class="row-action-btn" onclick="refreshSemiFailRow(\'' + r.name + '\')">刷新</button>' +
                   '<button class="row-action-btn" onclick="retrySemiFailRow(\'' + r.name + '\')">重试</button></div></td>';
           html += '</tr>';
@@ -18912,9 +18959,28 @@
         alert('重试 ' + SEMI_FAIL_DETAIL_META[semiFailDetailState.level].label + '「' + name + '」（原型占位）');
       }
 
-      function renderSemiFailDetailError(err) {
-        if (err && typeof err === 'object' && !Array.isArray(err)) err = err.message || '';
-        return '<span class="fail-detail-error" title="' + escapeSemiAttr(err) + '">' + err + '</span>';
+      function renderSemiFailDetailError(r, meta) {
+        var err = r ? r.error : '';
+        var code = '', msg = '';
+        if (err && typeof err === 'object' && !Array.isArray(err)) {
+          code = err.code != null ? String(err.code) : '';
+          msg = err.message || '';
+        } else {
+          msg = err == null ? '' : String(err);
+        }
+        var target = (meta && meta.label ? meta.label : '') + ' ' + (r ? r.name : '')
+          + (r && r.id ? '（ID:' + r.id + '）' : '')
+          + (code ? ' · 错误码 ' + code : '');
+        return '<div class="up-state up-state-block"'
+          + ' data-err-code="' + escapeSemiAttr(code) + '"'
+          + ' data-err-msg="' + escapeSemiAttr(msg) + '"'
+          + ' data-err-target="' + escapeSemiAttr(target) + '">'
+          + '<div class="up-err" onmouseenter="showUpErrTip(this)" onmouseleave="hideUpErrTip()">'
+          + '<i class="up-err-icon">!</i>'
+          + '<span class="up-err-text up-err-wrap">' + escapeSemiAttr(msg) + '</span>'
+          + '</div>'
+          + '<button class="ask-heipi-btn" onclick="askHeipi(this)"><i>✦</i>问黑皮</button>'
+          + '</div>';
       }
 
       function escapeSemiAttr(s) {
