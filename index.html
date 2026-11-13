@@ -18436,14 +18436,11 @@
         if (!tip || !state) return;
         var code = state.dataset.errCode || '';
         var msg = state.dataset.errMsg || '';
-        var target = state.dataset.errTarget || '';
-        var time = state.dataset.errTime || '';
         tip.innerHTML = ''
           + '<div class="up-err-tip-head"><span class="up-err-tip-title">报错详情</span>'
           + (code ? '<span class="up-err-tip-code">错误码 ' + code + '</span>' : '')
           + '</div>'
           + '<div class="up-err-tip-body">' + msg + '</div>'
-          + '<div class="up-err-tip-meta">' + [target, time].filter(Boolean).join(' · ') + '</div>'
           + '<div class="up-err-tip-foot">点击右侧「问黑皮」可让智能助手协助定位原因</div>';
         tip.classList.add('open');
         var rect = el.getBoundingClientRect();

@@ -5380,12 +5380,6 @@ body {
   word-break: break-word;
 }
 
-.up-err-tip-meta {
-  padding: 0 12px 10px;
-  color: var(--color-text-tertiary);
-  font-size: 11px;
-}
-
 .up-err-tip-foot {
   padding: 7px 12px;
   border-top: 1px dashed var(--color-border);
