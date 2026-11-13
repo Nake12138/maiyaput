@@ -9668,6 +9668,2481 @@
               }
             </script>
 
+          <!-- 关联绑定 -->
+          <div id="page-ocean-association-binding" class="page">
+            <div class="breadcrumb">
+              <a href="#" onclick="showPage('dashboard')">首页</a>
+              <span class="breadcrumb-sep">/</span>
+              <span>巨量</span>
+              <span class="breadcrumb-sep">/</span>
+              <span>关联绑定</span>
+            </div>
+
+            <style>
+              /* ===== 关联绑定页面局部样式 ===== */
+              .ob-cell-main { display: block; }
+              .ob-cell-sub { display: block; font-size: 12px; color: #9ca3af; margin-top: 2px; white-space: nowrap; }
+
+              /* 批量操作按钮（已选择行右侧） */
+              .ob-batch-btn { border: none; background: none; padding: 2px 4px; font-size: 13px; color: #bfbfbf; cursor: not-allowed; }
+              .ob-batch-btn:not(:disabled) { color: #1890ff; cursor: pointer; }
+              .ob-batch-btn:not(:disabled):hover { text-decoration: underline; }
+
+              /* 认领项目抽屉：加宽 */
+              .ob-drawer-xwide .drawer-card { width: min(1320px, calc(100vw - 60px)); margin-left: auto; }
+
+              /* 分配用户浮层 */
+              .ob-status-wrap { position: relative; display: inline-block; }
+              .ob-assign-popover { display: none; position: absolute; top: 30px; left: 88px; z-index: 30; width: 240px; padding: 14px 16px 12px; background: #fff; border: 1px solid #e5e7eb; border-radius: 6px; box-shadow: 0 6px 16px rgba(0,0,0,0.08); }
+              .ob-assign-popover.open { display: block; }
+              .ob-assign-popover .ob-popover-label { display: block; font-size: 13px; color: #374151; margin-bottom: 8px; }
+              .ob-assign-popover .ob-popover-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px; }
+
+              /* 局部 Toast */
+              .ob-toast { position: fixed; left: 50%; top: 24px; transform: translateX(-50%) translateY(-8px); padding: 10px 18px; background: rgba(0,0,0,0.78); color: #fff; border-radius: 4px; font-size: 14px; z-index: 3000; opacity: 0; pointer-events: none; transition: opacity 0.2s ease, transform 0.2s ease; }
+              .ob-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+            </style>
+
+            <div class="content-card">
+              <div class="tabs-bar">
+                <div class="tabs" id="ob-tabs">
+                  <button class="tab active" onclick="switchObTab('project')">项目</button>
+                  <button class="tab" onclick="switchObTab('unit')">单元</button>
+                </div>
+              </div>
+
+              <!-- ===== 项目页签 ===== -->
+              <div id="ob-project" class="tab-content">
+                <div class="filter-bar">
+                  <div class="filter-bar-row">
+                    <select class="filter-select" id="ob-proj-completeness" onchange="applyObCompleteness()">
+                      <option value="">请选择是否填写完整</option>
+                      <option value="complete">填写完整</option>
+                      <option value="incomplete" selected>填写不完整</option>
+                    </select>
+                    <div class="filter-combo">
+                      <select class="filter-combo-select"><option>项目ID</option><option>项目名称</option></select>
+                      <input type="text" class="filter-combo-input" placeholder="请输入" />
+                    </div>
+                    <select class="filter-select" id="ob-proj-drama-filter">
+                      <option value="">请选择短剧名称</option>
+                      <option>九龙梅花三十五分盟</option>
+                      <option>异月九龙坡六十六</option>
+                      <option>九江三十二分</option>
+                      <option>我家文曦霞沙冲区</option>
+                    </select>
+                    <select class="filter-select">
+                      <option value="">请选择小程序</option>
+                      <option>抹茶看剧原生付费</option>
+                      <option>抖音看剧原生/IAA</option>
+                      <option>番茄看剧</option>
+                    </select>
+                    <div class="filter-combo">
+                      <select class="filter-combo-select"><option>账户ID</option><option>账户名称</option></select>
+                      <input type="text" class="filter-combo-input" placeholder="账户ID / 账户名" />
+                    </div>
+                    <div class="filter-combo">
+                      <select class="filter-combo-select"><option>单元ID</option><option>单元名称</option></select>
+                      <input type="text" class="filter-combo-input" placeholder="请输入" />
+                    </div>
+                  </div>
+                  <div class="filter-bar-row">
+                    <input type="text" class="filter-input" style="width: 200px;" placeholder="请输入推广链接ID" />
+                    <select class="filter-select">
+                      <option value="">请选择用户</option>
+                      <option>秉嗪</option>
+                      <option>慕橙</option>
+                      <option>林瓦</option>
+                      <option>健崎</option>
+                    </select>
+                    <div class="filter-range">
+                      <span class="filter-range-label">创建时间</span>
+                      <input type="text" class="ob-date-start" />
+                      <span class="filter-range-tilde">-</span>
+                      <input type="text" class="ob-date-end" />
+                      <button type="button" class="filter-range-pick" title="选择日期">📅</button>
+                      <button type="button" class="filter-range-pick" title="按月选择">月</button>
+                    </div>
+                    <div class="filter-actions">
+                      <button class="btn btn-info btn-sm" onclick="alert('查询关联绑定项目列表')">查询</button>
+                      <button class="btn btn-outline btn-sm" onclick="resetObProjectFilters()">重置</button>
+                      <button class="btn btn-primary btn-sm" onclick="openObClaimDrawer()">认领项目</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="filter-status-bar">
+                  <span>已选择 <strong id="ob-proj-selected-count">0</strong> 个</span>
+                  <button type="button" class="ob-batch-btn" id="ob-btn-set-drama" disabled onclick="openObSetModal('drama')">设置短剧</button>
+                  <button type="button" class="ob-batch-btn" id="ob-btn-proj-unbind" disabled onclick="obUnbind('project')">解绑</button>
+                </div>
+
+                <div class="table-card">
+                  <div class="table-wrapper">
+                    <table class="data-table">
+                      <thead>
+                        <tr>
+                          <th class="checkbox-col"><input type="checkbox" id="ob-proj-select-all" onclick="obToggleSelectAll(this, 'ob-proj-checkbox', obProjUpdateSelected)" /></th>
+                          <th>项目</th>
+                          <th>投放短剧</th>
+                          <th>短剧</th>
+                          <th>小程序</th>
+                          <th>推广链接</th>
+                          <th>用户</th>
+                          <th>项目创建时间</th>
+                          <th>操作</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td class="checkbox-col"><input type="checkbox" class="ob-proj-checkbox" /></td>
+                          <td>
+                            <span class="ob-cell-main">00001</span>
+                            <span class="ob-cell-sub">ID: 17867533579507284571</span>
+                          </td>
+                          <td>
+                            <span class="ob-cell-main">DX-九龙梅花三十五分盟-INY-JA...</span>
+                            <span class="ob-cell-sub">ID: 18178736969813280</span>
+                          </td>
+                          <td data-ob-field="drama">—</td>
+                          <td>抹茶看剧原生付费</td>
+                          <td data-ob-field="link">—</td>
+                          <td>秉嗪</td>
+                          <td>2026-11-11 10:22:54</td>
+                          <td><div class="row-actions"><a href="#" class="link" onclick="obEditProjRow(this);return false;">编辑</a><a href="#" class="link" style="margin-left:8px;" onclick="obUnbindRow(this,'project');return false;">解绑</a></div></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="pagination">
+                    <span class="pagination-info">共 <strong>1</strong> 条</span>
+                    <div class="pagination-pages">
+                      <button class="page-btn" disabled>&lt;</button>
+                      <button class="page-btn active">1</button>
+                      <button class="page-btn" disabled>&gt;</button>
+                    </div>
+                    <select class="page-size-select"><option>10 条/页</option><option>20 条/页</option><option>50 条/页</option></select>
+                    <span>跳至</span>
+                    <input type="text" class="jump-input" value="1" />
+                    <span>页</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ===== 单元页签 ===== -->
+              <div id="ob-unit" class="tab-content" style="display: none;">
+                <div class="filter-bar">
+                  <div class="filter-bar-row">
+                    <select class="filter-select">
+                      <option value="">请选择是否填写完整</option>
+                      <option>填写完整</option>
+                      <option>填写不完整</option>
+                    </select>
+                    <div class="filter-combo">
+                      <select class="filter-combo-select"><option>项目ID</option><option>项目名称</option></select>
+                      <input type="text" class="filter-combo-input" placeholder="请输入" />
+                    </div>
+                    <select class="filter-select">
+                      <option value="">请选择短剧名称</option>
+                      <option>九龙梅花三十五分盟</option>
+                      <option>异月九龙坡六十六</option>
+                      <option>九江三十二分</option>
+                      <option>我家文曦霞沙冲区</option>
+                    </select>
+                    <select class="filter-select">
+                      <option value="">请选择小程序</option>
+                      <option>抹茶看剧原生付费</option>
+                      <option>抖音看剧原生/IAA</option>
+                      <option>番茄看剧</option>
+                    </select>
+                    <div class="filter-combo">
+                      <select class="filter-combo-select"><option>账户ID</option><option>账户名称</option></select>
+                      <input type="text" class="filter-combo-input" placeholder="账户ID / 账户名" />
+                    </div>
+                    <div class="filter-combo">
+                      <select class="filter-combo-select"><option>单元ID</option><option>单元名称</option></select>
+                      <input type="text" class="filter-combo-input" placeholder="请输入" />
+                    </div>
+                  </div>
+                  <div class="filter-bar-row">
+                    <input type="text" class="filter-input" style="width: 200px;" placeholder="请输入推广链接ID" />
+                    <select class="filter-select">
+                      <option value="">请选择充值面板</option>
+                      <option>通用面板</option>
+                      <option>超小额面板</option>
+                    </select>
+                    <select class="filter-select">
+                      <option value="">请选择周期代扣</option>
+                      <option>已开启</option>
+                      <option>无</option>
+                    </select>
+                    <select class="filter-select">
+                      <option value="">请选择用户</option>
+                      <option>慕橙</option>
+                      <option>林瓦</option>
+                      <option>健崎</option>
+                    </select>
+                    <div class="filter-range">
+                      <span class="filter-range-label">创建时间</span>
+                      <input type="text" class="ob-date-start" />
+                      <span class="filter-range-tilde">-</span>
+                      <input type="text" class="ob-date-end" />
+                      <button type="button" class="filter-range-pick" title="选择日期">📅</button>
+                      <button type="button" class="filter-range-pick" title="按月选择">月</button>
+                    </div>
+                    <div class="filter-actions">
+                      <button class="btn btn-info btn-sm" onclick="alert('查询关联绑定单元列表')">查询</button>
+                      <button class="btn btn-outline btn-sm" onclick="resetObUnitFilters()">重置</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="filter-status-bar">
+                  <span>已选择 <strong id="ob-unit-selected-count">0</strong> 个</span>
+                  <button type="button" class="ob-batch-btn" id="ob-btn-set-linkid" disabled onclick="openObSetModal('linkid')">设置推广链接ID</button>
+                  <button type="button" class="ob-batch-btn" id="ob-btn-set-recharge" disabled onclick="openObSetModal('recharge')">设置充值面板</button>
+                  <button type="button" class="ob-batch-btn" id="ob-btn-set-cycle" disabled onclick="openObSetModal('cycle')">设置周期代扣</button>
+                  <button type="button" class="ob-batch-btn" id="ob-btn-unit-unbind" disabled onclick="obUnbind('unit')">解绑</button>
+                </div>
+
+                <div class="table-card">
+                  <div class="table-wrapper">
+                    <table class="data-table">
+                      <thead>
+                        <tr>
+                          <th class="checkbox-col"><input type="checkbox" id="ob-unit-select-all" onclick="obToggleSelectAll(this, 'ob-unit-checkbox', obUnitUpdateSelected)" /></th>
+                          <th>单元</th>
+                          <th>项目</th>
+                          <th>投放短剧</th>
+                          <th>推广链接ID</th>
+                          <th>充值面板</th>
+                          <th>周期代扣</th>
+                          <th>短剧</th>
+                          <th>小程序</th>
+                          <th>用户</th>
+                          <th>单元创建时间</th>
+                          <th>操作</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td class="checkbox-col"><input type="checkbox" class="ob-unit-checkbox" /></td>
+                          <td>
+                            <span class="ob-cell-main">恒星索取软骨头-1</span>
+                            <span class="ob-cell-sub">ID: 770681245613642419</span>
+                          </td>
+                          <td>
+                            <span class="ob-cell-main">谩敌-402952-自动-确定_系数1.0...</span>
+                            <span class="ob-cell-sub">ID: 7706883542434787510</span>
+                          </td>
+                          <td>
+                            <span class="ob-cell-main">DX-异月九龙坡六十六-qp...</span>
+                            <span class="ob-cell-sub">ID: 18177675088418187</span>
+                          </td>
+                          <td data-ob-field="linkid">—</td>
+                          <td data-ob-field="recharge">—</td>
+                          <td data-ob-field="cycle">无</td>
+                          <td>—</td>
+                          <td>抖音看剧原生/IAA</td>
+                          <td>慕橙</td>
+                          <td>2026-11-11 15:28:49</td>
+                          <td><div class="row-actions"><a href="#" class="link" onclick="obEditUnitRow(this);return false;">编辑</a></div></td>
+                        </tr>
+                        <tr>
+                          <td class="checkbox-col"><input type="checkbox" class="ob-unit-checkbox" /></td>
+                          <td>
+                            <span class="ob-cell-main">2_165</span>
+                            <span class="ob-cell-sub">ID: 770681253427966918</span>
+                          </td>
+                          <td>
+                            <span class="ob-cell-main">谩敌-402952-自动-确定_系数1.0...</span>
+                            <span class="ob-cell-sub">ID: 7706883542434787510</span>
+                          </td>
+                          <td>
+                            <span class="ob-cell-main">snk-我家1-文曦霞沙冲区-...</span>
+                            <span class="ob-cell-sub">ID: 7706883174111763</span>
+                          </td>
+                          <td data-ob-field="linkid">—</td>
+                          <td data-ob-field="recharge">—</td>
+                          <td data-ob-field="cycle">无</td>
+                          <td>—</td>
+                          <td>抖音看剧原生/IAA</td>
+                          <td>林瓦</td>
+                          <td>2026-11-11 15:28:24</td>
+                          <td><div class="row-actions"><a href="#" class="link" onclick="obEditUnitRow(this);return false;">编辑</a></div></td>
+                        </tr>
+                        <tr>
+                          <td class="checkbox-col"><input type="checkbox" class="ob-unit-checkbox" /></td>
+                          <td>
+                            <span class="ob-cell-main">舅</span>
+                            <span class="ob-cell-sub">ID: 770681238179509936</span>
+                          </td>
+                          <td>
+                            <span class="ob-cell-main">谩禾-60919-自动-注意_系数1.0...</span>
+                            <span class="ob-cell-sub">ID: 770681770884622498</span>
+                          </td>
+                          <td>
+                            <span class="ob-cell-main">LC-九江三十二-分-满sa-sy...</span>
+                            <span class="ob-cell-sub">ID: 7788363267017793</span>
+                          </td>
+                          <td data-ob-field="linkid">—</td>
+                          <td data-ob-field="recharge">—</td>
+                          <td data-ob-field="cycle">无</td>
+                          <td>—</td>
+                          <td>抖音看剧原生/IAA</td>
+                          <td>健崎</td>
+                          <td>2026-11-11 15:28:20</td>
+                          <td><div class="row-actions"><a href="#" class="link" onclick="obEditUnitRow(this);return false;">编辑</a></div></td>
+                        </tr>
+                        <tr>
+                          <td class="checkbox-col"><input type="checkbox" class="ob-unit-checkbox" /></td>
+                          <td>
+                            <span class="ob-cell-main">苦难_3</span>
+                            <span class="ob-cell-sub">ID: 770681355882178253</span>
+                          </td>
+                          <td>
+                            <span class="ob-cell-main">过江rasse-1024-自动-确定...</span>
+                            <span class="ob-cell-sub">ID: 770683565095994</span>
+                          </td>
+                          <td>
+                            <span class="ob-cell-main">ov-九龙坡城三十一-分_配_1110...</span>
+                            <span class="ob-cell-sub">ID: 178145275081129</span>
+                          </td>
+                          <td data-ob-field="linkid">—</td>
+                          <td data-ob-field="recharge">—</td>
+                          <td data-ob-field="cycle">无</td>
+                          <td>—</td>
+                          <td>抖音看剧原生/IAA</td>
+                          <td>成配</td>
+                          <td>2026-11-11 15:25:37</td>
+                          <td><div class="row-actions"><a href="#" class="link" onclick="obEditUnitRow(this);return false;">编辑</a></div></td>
+                        </tr>
+                        <tr>
+                          <td class="checkbox-col"><input type="checkbox" class="ob-unit-checkbox" /></td>
+                          <td>
+                            <span class="ob-cell-main">念记剧珠_1</span>
+                            <span class="ob-cell-sub">ID: 770681402006195638</span>
+                          </td>
+                          <td>
+                            <span class="ob-cell-main">望政-402952-自动-确定_系数1.0...</span>
+                            <span class="ob-cell-sub">ID: 770688355609721030</span>
+                          </td>
+                          <td>
+                            <span class="ob-cell-main">SNK-香魂薄AA-毒之胞沙冲...</span>
+                            <span class="ob-cell-sub">ID: 18184573000812912</span>
+                          </td>
+                          <td data-ob-field="linkid">—</td>
+                          <td data-ob-field="recharge">—</td>
+                          <td data-ob-field="cycle">无</td>
+                          <td>—</td>
+                          <td>抖音看剧原生/IAA</td>
+                          <td>浩秋</td>
+                          <td>2026-11-11 15:23:31</td>
+                          <td><div class="row-actions"><a href="#" class="link" onclick="obEditUnitRow(this);return false;">编辑</a></div></td>
+                        </tr>
+                        <tr>
+                          <td class="checkbox-col"><input type="checkbox" class="ob-unit-checkbox" /></td>
+                          <td>
+                            <span class="ob-cell-main">赐冕_51387</span>
+                            <span class="ob-cell-sub">ID: 770681760820982281</span>
+                          </td>
+                          <td>
+                            <span class="ob-cell-main">谩禾-60919-自动-注意_系数1.0...</span>
+                            <span class="ob-cell-sub">ID: 770681770884622498</span>
+                          </td>
+                          <td>
+                            <span class="ob-cell-main">snk-我家1-文曦霞沙冲区-...</span>
+                            <span class="ob-cell-sub">ID: 7706883174111763</span>
+                          </td>
+                          <td data-ob-field="linkid">—</td>
+                          <td data-ob-field="recharge">—</td>
+                          <td data-ob-field="cycle">无</td>
+                          <td>—</td>
+                          <td>抖音看剧原生/IAA</td>
+                          <td>林瓦</td>
+                          <td>2026-11-11 15:23:25</td>
+                          <td><div class="row-actions"><a href="#" class="link" onclick="obEditUnitRow(this);return false;">编辑</a></div></td>
+                        </tr>
+                        <tr>
+                          <td class="checkbox-col"><input type="checkbox" class="ob-unit-checkbox" /></td>
+                          <td>
+                            <span class="ob-cell-main">2_104</span>
+                            <span class="ob-cell-sub">ID: 770680877537577503</span>
+                          </td>
+                          <td>
+                            <span class="ob-cell-main">谩乐-402952-自动-确定_系数1.0...</span>
+                            <span class="ob-cell-sub">ID: 770688307220608101</span>
+                          </td>
+                          <td>
+                            <span class="ob-cell-main">snk-我家1-文曦霞沙冲区-...</span>
+                            <span class="ob-cell-sub">ID: 7706883174111763</span>
+                          </td>
+                          <td data-ob-field="linkid">—</td>
+                          <td data-ob-field="recharge">—</td>
+                          <td data-ob-field="cycle">无</td>
+                          <td>—</td>
+                          <td>抖音看剧原生/IAA</td>
+                          <td>林瓦</td>
+                          <td>2026-11-11 15:16:53</td>
+                          <td><div class="row-actions"><a href="#" class="link" onclick="obEditUnitRow(this);return false;">编辑</a></div></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="pagination">
+                    <span class="pagination-info">共 <strong>107</strong> 条</span>
+                    <div class="pagination-pages">
+                      <button class="page-btn" disabled>&lt;</button>
+                      <button class="page-btn active">1</button>
+                      <button class="page-btn">2</button>
+                      <button class="page-btn">3</button>
+                      <button class="page-btn">4</button>
+                      <button class="page-btn">5</button>
+                      <button class="page-btn">…</button>
+                      <button class="page-btn">11</button>
+                      <button class="page-btn">&gt;</button>
+                    </div>
+                    <select class="page-size-select"><option>10 条/页</option><option>20 条/页</option><option>50 条/页</option></select>
+                    <span>跳至</span>
+                    <input type="text" class="jump-input" value="1" />
+                    <span>页</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 认领项目抽屉 -->
+            <div id="ob-claim-drawer-overlay" class="drawer-overlay" onclick="closeObClaimDrawer()"></div>
+            <div id="ob-claim-drawer" class="drawer ob-drawer-xwide">
+              <div class="drawer-card">
+                <div class="drawer-header">
+                  <span class="drawer-title">认领项目</span>
+                  <button class="drawer-close" onclick="closeObClaimDrawer()">×</button>
+                </div>
+                <div class="drawer-body">
+                  <div class="filter-bar" style="padding:12px;margin-bottom:12px;">
+                    <div class="filter-bar-row">
+                      <div class="filter-range">
+                        <span class="filter-range-label">创建时间</span>
+                        <input type="text" class="ob-date-start" />
+                        <span class="filter-range-tilde">-</span>
+                        <input type="text" class="ob-date-end" />
+                        <button type="button" class="filter-range-pick" title="选择日期">📅</button>
+                        <button type="button" class="filter-range-pick" title="按月选择">月</button>
+                      </div>
+                      <div class="filter-combo">
+                        <select class="filter-combo-select"><option>项目ID</option><option>项目名称</option></select>
+                        <input type="text" class="filter-combo-input" placeholder="请输入" />
+                      </div>
+                      <div class="filter-combo">
+                        <select class="filter-combo-select"><option>账户ID</option><option>账户名称</option></select>
+                        <input type="text" class="filter-combo-input" placeholder="账户ID / 账户名" />
+                      </div>
+                      <div class="filter-combo">
+                        <select class="filter-combo-select"><option>应用ID</option><option>应用名称</option></select>
+                        <input type="text" class="filter-combo-input" placeholder="请输入" />
+                      </div>
+                      <input type="text" class="filter-input" style="width: 160px;" placeholder="请输入主体名称" />
+                      <div class="filter-actions">
+                        <button class="btn btn-primary btn-sm" onclick="alert('查询可认领项目')">查询</button>
+                        <button class="btn btn-outline btn-sm" onclick="resetObClaimFilters()">重置</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="filter-status-bar ob-status-wrap" style="padding-top:0;">
+                    <span>已选择 <strong id="ob-claim-selected-count">0</strong> 个</span>
+                    <button type="button" class="ob-batch-btn" id="ob-btn-claim" disabled onclick="batchObClaim()">认领所选</button>
+                    <button type="button" class="ob-batch-btn" id="ob-btn-assign" disabled onclick="openObAssignPopover()">分配用户</button>
+                    <div class="ob-assign-popover" id="ob-assign-popover">
+                      <label class="ob-popover-label">请选择用户</label>
+                      <select class="form-select" id="ob-assign-user-select" style="width:100%;">
+                        <option value="">请选择用户</option>
+                        <option>秉嗪</option>
+                        <option>慕橙</option>
+                        <option>林瓦</option>
+                        <option>健崎</option>
+                        <option>成配</option>
+                        <option>浩秋</option>
+                      </select>
+                      <div class="ob-popover-actions">
+                        <button class="btn btn-outline btn-sm" onclick="closeObAssignPopover()">取消</button>
+                        <button class="btn btn-primary btn-sm" onclick="submitObAssignUser()">确定</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="table-card" style="border-radius:4px;">
+                    <div class="table-wrapper">
+                      <table class="data-table">
+                        <thead>
+                          <tr>
+                            <th class="checkbox-col"><input type="checkbox" id="ob-claim-select-all" onclick="obToggleSelectAll(this, 'ob-claim-checkbox', obClaimUpdateSelected)" /></th>
+                            <th>项目</th>
+                            <th>账户</th>
+                            <th>所属应用</th>
+                            <th>所属主体</th>
+                            <th>创建时间</th>
+                            <th>操作</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td colspan="7"><div class="empty-state"><div class="empty-state-icon">📭</div><div>暂无数据</div></div></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="pagination" style="justify-content:flex-end;">
+                      <span class="pagination-info">共 <strong>0</strong> 条</span>
+                      <div class="pagination-pages">
+                        <button class="page-btn" disabled>&lt;</button>
+                        <button class="page-btn active">1</button>
+                        <button class="page-btn" disabled>&gt;</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 通用设置弹框（设置短剧 / 推广链接ID / 充值面板 / 周期代扣） -->
+            <div id="ob-set-overlay" class="modal-overlay" onclick="closeObSetModal()"></div>
+            <div id="ob-set-modal" class="modal">
+              <div class="modal-card" style="width:420px;">
+                <div class="modal-header">
+                  <span class="modal-title" id="ob-set-title">设置</span>
+                  <button class="modal-close" onclick="closeObSetModal()">×</button>
+                </div>
+                <div class="modal-body" style="padding:20px 24px;">
+                  <div id="ob-set-input-wrap" style="display:none;">
+                    <input type="text" class="form-input" id="ob-set-input" style="width:100%;" placeholder="请输入" />
+                  </div>
+                  <div id="ob-set-select-wrap" style="display:none;">
+                    <select class="form-select" id="ob-set-select" style="width:100%;"></select>
+                  </div>
+                </div>
+                <div class="modal-footer" style="justify-content:flex-end;">
+                  <button class="btn btn-outline btn-sm" onclick="closeObSetModal()">取消</button>
+                  <button class="btn btn-primary btn-sm" onclick="submitObSetModal()">确定</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 解绑确认弹框 -->
+            <div id="ob-unbind-overlay" class="modal-overlay" onclick="closeObUnbindModal()"></div>
+            <div id="ob-unbind-modal" class="modal">
+              <div class="modal-card" style="width:380px;">
+                <div class="modal-body" style="display:flex;align-items:flex-start;gap:16px;padding:24px;">
+                  <div style="width:40px;height:40px;border-radius:50%;background:#fff7e6;display:flex;align-items:center;justify-content:center;font-size:20px;color:#faad14;flex-shrink:0;">!</div>
+                  <div>
+                    <div style="font-size:16px;font-weight:600;margin-bottom:8px;">是否确认解绑?</div>
+                    <div style="font-size:13px;color:#5c5c5c;line-height:1.6;">已选择 <strong id="ob-unbind-count">1</strong> 条数据</div>
+                  </div>
+                </div>
+                <div class="modal-footer" style="justify-content:flex-end;">
+                  <button class="btn btn-outline btn-sm" onclick="closeObUnbindModal()">取消</button>
+                  <button class="btn btn-primary btn-sm" onclick="submitObUnbind()">确定</button>
+                </div>
+              </div>
+            </div>
+
+            <div id="ob-toast" class="ob-toast" role="status" aria-live="polite"></div>
+
+            <script>
+              /* ===== 页签切换 ===== */
+              function switchObTab(name) {
+                document.querySelectorAll('#ob-tabs .tab').forEach(function (t, i) {
+                  t.classList.toggle('active', (name === 'project' && i === 0) || (name === 'unit' && i === 1));
+                });
+                document.getElementById('ob-project').style.display = name === 'project' ? '' : 'none';
+                document.getElementById('ob-unit').style.display = name === 'unit' ? '' : 'none';
+              }
+
+              /* ===== Toast ===== */
+              var _obToastTimer = null;
+              function obToast(text) {
+                var el = document.getElementById('ob-toast');
+                el.textContent = text;
+                el.classList.add('show');
+                if (_obToastTimer) clearTimeout(_obToastTimer);
+                _obToastTimer = setTimeout(function () { el.classList.remove('show'); }, 1800);
+              }
+
+              /* ===== 创建时间默认当天 ===== */
+              function obFillToday() {
+                var d = new Date();
+                var today = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+                document.querySelectorAll('#page-ocean-association-binding .ob-date-start, #page-ocean-association-binding .ob-date-end').forEach(function (el) { el.value = today; });
+              }
+              obFillToday();
+
+              /* ===== 通用勾选 ===== */
+              function obToggleSelectAll(el, cls, updateFn) {
+                document.querySelectorAll('#page-ocean-association-binding .' + cls).forEach(function (c) { c.checked = el.checked; });
+                updateFn();
+              }
+
+              /* ===== 项目页签选择 ===== */
+              function obProjSelectedCount() {
+                return document.querySelectorAll('#page-ocean-association-binding .ob-proj-checkbox:checked').length;
+              }
+              function obProjUpdateSelected() {
+                var n = obProjSelectedCount();
+                document.getElementById('ob-proj-selected-count').textContent = n;
+                document.getElementById('ob-btn-set-drama').disabled = n === 0;
+                document.getElementById('ob-btn-proj-unbind').disabled = n === 0;
+              }
+              document.querySelectorAll('#page-ocean-association-binding .ob-proj-checkbox').forEach(function (c) {
+                c.addEventListener('change', obProjUpdateSelected);
+              });
+
+              /* ===== 单元页签选择 ===== */
+              function obUnitSelectedCount() {
+                return document.querySelectorAll('#page-ocean-association-binding .ob-unit-checkbox:checked').length;
+              }
+              function obUnitUpdateSelected() {
+                var n = obUnitSelectedCount();
+                document.getElementById('ob-unit-selected-count').textContent = n;
+                ['ob-btn-set-linkid', 'ob-btn-set-recharge', 'ob-btn-set-cycle', 'ob-btn-unit-unbind'].forEach(function (id) {
+                  document.getElementById(id).disabled = n === 0;
+                });
+              }
+              document.querySelectorAll('#page-ocean-association-binding .ob-unit-checkbox').forEach(function (c) {
+                c.addEventListener('change', obUnitUpdateSelected);
+              });
+
+              /* ===== 项目页签：填写完整性筛选（默认「填写不完整」） ===== */
+              function applyObCompleteness() {
+                var mode = document.getElementById('ob-proj-completeness').value;
+                document.querySelectorAll('#page-ocean-association-binding .ob-proj-checkbox').forEach(function (cb) {
+                  var tr = cb.closest('tr');
+                  var drama = tr.querySelector('[data-ob-field="drama"]').textContent.trim();
+                  var link = tr.querySelector('[data-ob-field="link"]').textContent.trim();
+                  var isIncomplete = drama === '—' || drama === '' || link === '—' || link === '';
+                  var show = (mode === '') ? true : (mode === 'incomplete') ? isIncomplete : !isIncomplete;
+                  tr.style.display = show ? '' : 'none';
+                  if (!show && cb.checked) { cb.checked = false; }
+                });
+                var selAll = document.getElementById('ob-proj-select-all');
+                if (selAll) selAll.checked = false;
+                obProjUpdateSelected();
+              }
+              applyObCompleteness();
+
+              /* ===== 重置 ===== */
+              function resetObProjectFilters() {
+                document.querySelectorAll('#ob-project .filter-combo-input, #ob-project .filter-input').forEach(function (i) { i.value = ''; });
+                document.querySelectorAll('#ob-project .filter-select, #ob-project .filter-combo-select').forEach(function (s) { s.selectedIndex = 0; });
+                document.getElementById('ob-proj-completeness').value = 'incomplete';
+                obFillToday();
+                applyObCompleteness();
+              }
+              function resetObUnitFilters() {
+                document.querySelectorAll('#ob-unit .filter-combo-input, #ob-unit .filter-input').forEach(function (i) { i.value = ''; });
+                document.querySelectorAll('#ob-unit .filter-select, #ob-unit .filter-combo-select').forEach(function (s) { s.selectedIndex = 0; });
+                obFillToday();
+              }
+              function resetObClaimFilters() {
+                document.querySelectorAll('#ob-claim-drawer .filter-combo-input, #ob-claim-drawer .filter-input').forEach(function (i) { i.value = ''; });
+                document.querySelectorAll('#ob-claim-drawer .filter-combo-select').forEach(function (s) { s.selectedIndex = 0; });
+                obFillToday();
+              }
+
+              /* ===== 通用设置弹框 ===== */
+              var obSetMode = '';   // drama | linkid | recharge | cycle
+              var obSetConfig = {
+                drama:   { title: '设置短剧', type: 'select', options: ['九龙梅花三十五分盟', '异月九龙坡六十六', '九江三十二分', '我家文曦霞沙冲区'], field: 'drama', tab: 'project', empty: '—' },
+                linkid:  { title: '设置推广链接ID', type: 'input', field: 'linkid', tab: 'unit', empty: '—' },
+                recharge:{ title: '设置充值面板', type: 'select', options: ['通用面板', '超小额面板'], field: 'recharge', tab: 'unit', empty: '—' },
+                cycle:   { title: '设置周期代扣', type: 'select', options: ['已开启', '无'], field: 'cycle', tab: 'unit', empty: '无' }
+              };
+              function openObSetModal(mode) {
+                var cfg = obSetConfig[mode];
+                var count = cfg.tab === 'project' ? obProjSelectedCount() : obUnitSelectedCount();
+                if (count === 0) { alert('请先勾选数据'); return; }
+                obSetMode = mode;
+                document.getElementById('ob-set-title').textContent = cfg.title + '（已选 ' + count + ' 条）';
+                var inputWrap = document.getElementById('ob-set-input-wrap');
+                var selectWrap = document.getElementById('ob-set-select-wrap');
+                if (cfg.type === 'input') {
+                  inputWrap.style.display = '';
+                  selectWrap.style.display = 'none';
+                  document.getElementById('ob-set-input').value = '';
+                } else {
+                  inputWrap.style.display = 'none';
+                  selectWrap.style.display = '';
+                  var sel = document.getElementById('ob-set-select');
+                  sel.innerHTML = '<option value="">请选择</option>' + cfg.options.map(function (o) { return '<option>' + o + '</option>'; }).join('');
+                  sel.value = '';
+                }
+                document.getElementById('ob-set-overlay').classList.add('open');
+                document.getElementById('ob-set-modal').classList.add('open');
+              }
+              function closeObSetModal() {
+                document.getElementById('ob-set-overlay').classList.remove('open');
+                document.getElementById('ob-set-modal').classList.remove('open');
+              }
+              function submitObSetModal() {
+                var cfg = obSetConfig[obSetMode];
+                var val = '';
+                if (cfg.type === 'input') {
+                  val = document.getElementById('ob-set-input').value.trim();
+                  if (!val) { alert('请输入内容'); return; }
+                } else {
+                  val = document.getElementById('ob-set-select').value;
+                  if (!val) { alert('请选择'); return; }
+                }
+                var cls = cfg.tab === 'project' ? '.ob-proj-checkbox' : '.ob-unit-checkbox';
+                document.querySelectorAll('#page-ocean-association-binding ' + cls + ':checked').forEach(function (cb) {
+                  var td = cb.closest('tr').querySelector('[data-ob-field="' + cfg.field + '"]');
+                  if (td) td.textContent = val;
+                });
+                closeObSetModal();
+                obToast('设置成功');
+                if (cfg.tab === 'project') applyObCompleteness();
+              }
+
+              /* ===== 解绑 ===== */
+              var obUnbindTab = '';
+              function obUnbind(tab) {
+                var count = tab === 'project' ? obProjSelectedCount() : obUnitSelectedCount();
+                if (count === 0) { alert('请先勾选数据'); return; }
+                obUnbindTab = tab;
+                document.getElementById('ob-unbind-count').textContent = count;
+                document.getElementById('ob-unbind-overlay').classList.add('open');
+                document.getElementById('ob-unbind-modal').classList.add('open');
+              }
+              function obUnbindRow(btn, tab) {
+                var tr = btn.closest('tr');
+                var cb = tr.querySelector('input[type="checkbox"]');
+                document.querySelectorAll('#page-ocean-association-binding .ob-' + tab + '-checkbox').forEach(function (c) { c.checked = false; });
+                if (cb) cb.checked = true;
+                (tab === 'project' ? obProjUpdateSelected : obUnitUpdateSelected)();
+                obUnbind(tab);
+              }
+              function closeObUnbindModal() {
+                document.getElementById('ob-unbind-overlay').classList.remove('open');
+                document.getElementById('ob-unbind-modal').classList.remove('open');
+              }
+              function submitObUnbind() {
+                var cls = obUnbindTab === 'project' ? '.ob-proj-checkbox' : '.ob-unit-checkbox';
+                document.querySelectorAll('#page-ocean-association-binding ' + cls + ':checked').forEach(function (cb) {
+                  var tr = cb.closest('tr');
+                  tr.querySelectorAll('[data-ob-field]').forEach(function (td) {
+                    var f = td.getAttribute('data-ob-field');
+                    td.textContent = f === 'cycle' ? '无' : '—';
+                  });
+                  if (obUnbindTab === 'project') {
+                    var mini = tr.children[4];
+                    if (mini) mini.textContent = '—';
+                    cb.checked = false;
+                  } else {
+                    cb.checked = false;
+                  }
+                });
+                var selAll = document.getElementById(obUnbindTab === 'project' ? 'ob-proj-select-all' : 'ob-unit-select-all');
+                if (selAll) selAll.checked = false;
+                (obUnbindTab === 'project' ? obProjUpdateSelected : obUnitUpdateSelected)();
+                closeObUnbindModal();
+                obToast('解绑成功');
+                if (obUnbindTab === 'project') applyObCompleteness();
+              }
+
+              /* ===== 项目页签：行内编辑（短剧） ===== */
+              var obProjEditing = null;
+              var obProjEditOrig = '';
+              function obEditProjRow(btn) {
+                var tr = btn.closest('tr');
+                if (obProjEditing && obProjEditing !== tr) obCancelProjEdit();
+                var td = tr.querySelector('[data-ob-field="drama"]');
+                obProjEditing = tr;
+                obProjEditOrig = td.textContent.trim();
+                var cur = obProjEditOrig === '—' ? '' : obProjEditOrig;
+                td.innerHTML = '<select class="form-select" style="width:150px;padding:4px 8px;font-size:13px;">'
+                  + '<option value="">请选择短剧</option>'
+                  + obSetConfig.drama.options.map(function (o) { return '<option' + (o === cur ? ' selected' : '') + '>' + o + '</option>'; }).join('')
+                  + '</select>';
+                tr.querySelector('.row-actions').innerHTML = '<a href="#" class="link" onclick="obSaveProjEdit();return false;">保存</a><a href="#" class="link" style="margin-left:8px;" onclick="obCancelProjEdit();return false;">取消</a>';
+                tr.style.background = '#f6faff';
+              }
+              function obSaveProjEdit() {
+                if (!obProjEditing) return;
+                var td = obProjEditing.querySelector('[data-ob-field="drama"]');
+                var sel = td.querySelector('select');
+                td.textContent = sel.value || '—';
+                obFinishProjEdit();
+                obToast('保存成功');
+                applyObCompleteness();
+              }
+              function obCancelProjEdit() {
+                if (!obProjEditing) return;
+                obProjEditing.querySelector('[data-ob-field="drama"]').textContent = obProjEditOrig;
+                obFinishProjEdit();
+              }
+              function obFinishProjEdit() {
+                obProjEditing.querySelector('.row-actions').innerHTML = '<a href="#" class="link" onclick="obEditProjRow(this);return false;">编辑</a><a href="#" class="link" style="margin-left:8px;" onclick="obUnbindRow(this,\'project\');return false;">解绑</a>';
+                obProjEditing.style.background = '';
+                obProjEditing = null;
+              }
+
+              /* ===== 单元页签：行内编辑（推广链接ID / 充值面板 / 周期代扣） ===== */
+              var obUnitEditing = null;
+              var obUnitEditOrig = {};
+              function obEditUnitRow(btn) {
+                var tr = btn.closest('tr');
+                if (obUnitEditing && obUnitEditing !== tr) obCancelUnitEdit();
+                obUnitEditing = tr;
+                obUnitEditOrig = {};
+                ['linkid', 'recharge', 'cycle'].forEach(function (f) {
+                  var td = tr.querySelector('[data-ob-field="' + f + '"]');
+                  obUnitEditOrig[f] = td.textContent.trim();
+                  if (f === 'linkid') {
+                    var cur = obUnitEditOrig[f] === '—' ? '' : obUnitEditOrig[f];
+                    td.innerHTML = '<input type="text" class="form-input" style="width:140px;padding:4px 8px;font-size:13px;" value="' + cur + '" placeholder="请输入" />';
+                  } else if (f === 'recharge') {
+                    var cur2 = obUnitEditOrig[f] === '—' ? '' : obUnitEditOrig[f];
+                    td.innerHTML = '<select class="form-select" style="width:120px;padding:4px 8px;font-size:13px;">'
+                      + '<option value="">请选择</option>'
+                      + obSetConfig.recharge.options.map(function (o) { return '<option' + (o === cur2 ? ' selected' : '') + '>' + o + '</option>'; }).join('')
+                      + '</select>';
+                  } else {
+                    var cur3 = obUnitEditOrig[f] === '无' ? '' : obUnitEditOrig[f];
+                    td.innerHTML = '<select class="form-select" style="width:100px;padding:4px 8px;font-size:13px;">'
+                      + '<option value="">无</option>'
+                      + obSetConfig.cycle.options.map(function (o) { return '<option' + (o === cur3 ? ' selected' : '') + '>' + o + '</option>'; }).join('')
+                      + '</select>';
+                  }
+                });
+                tr.querySelector('.row-actions').innerHTML = '<a href="#" class="link" onclick="obSaveUnitEdit();return false;">保存</a><a href="#" class="link" style="margin-left:8px;" onclick="obCancelUnitEdit();return false;">取消</a>';
+                tr.style.background = '#f6faff';
+              }
+              function obSaveUnitEdit() {
+                if (!obUnitEditing) return;
+                ['linkid', 'recharge', 'cycle'].forEach(function (f) {
+                  var td = obUnitEditing.querySelector('[data-ob-field="' + f + '"]');
+                  var ctrl = td.querySelector('input, select');
+                  var val = ctrl ? ctrl.value.trim() : '';
+                  if (f === 'cycle') td.textContent = val || '无';
+                  else td.textContent = val || '—';
+                });
+                obFinishUnitEdit();
+                obToast('保存成功');
+              }
+              function obCancelUnitEdit() {
+                if (!obUnitEditing) return;
+                ['linkid', 'recharge', 'cycle'].forEach(function (f) {
+                  obUnitEditing.querySelector('[data-ob-field="' + f + '"]').textContent = obUnitEditOrig[f];
+                });
+                obFinishUnitEdit();
+              }
+              function obFinishUnitEdit() {
+                obUnitEditing.querySelector('.row-actions').innerHTML = '<a href="#" class="link" onclick="obEditUnitRow(this);return false;">编辑</a>';
+                obUnitEditing.style.background = '';
+                obUnitEditing = null;
+              }
+
+              /* ===== 认领项目抽屉 ===== */
+              function openObClaimDrawer() {
+                document.getElementById('ob-claim-drawer-overlay').classList.add('open');
+                document.getElementById('ob-claim-drawer').classList.add('open');
+                closeObAssignPopover();
+                obClaimUpdateSelected();
+              }
+              function closeObClaimDrawer() {
+                document.getElementById('ob-claim-drawer-overlay').classList.remove('open');
+                document.getElementById('ob-claim-drawer').classList.remove('open');
+                closeObAssignPopover();
+              }
+              function obClaimSelectedCount() {
+                return document.querySelectorAll('#page-ocean-association-binding .ob-claim-checkbox:checked').length;
+              }
+              function obClaimUpdateSelected() {
+                var n = obClaimSelectedCount();
+                document.getElementById('ob-claim-selected-count').textContent = n;
+                document.getElementById('ob-btn-claim').disabled = n === 0;
+                document.getElementById('ob-btn-assign').disabled = n === 0;
+              }
+              function batchObClaim() {
+                if (obClaimSelectedCount() === 0) { alert('请先勾选要认领的项目'); return; }
+                if (confirm('是否确认认领选中的项目?')) {
+                  document.querySelectorAll('#page-ocean-association-binding .ob-claim-checkbox').forEach(function (c) { c.checked = false; });
+                  document.getElementById('ob-claim-select-all').checked = false;
+                  obClaimUpdateSelected();
+                  obToast('认领成功');
+                }
+              }
+
+              /* ===== 分配用户浮层 ===== */
+              function openObAssignPopover() {
+                if (obClaimSelectedCount() === 0) { alert('请先勾选要分配的项目'); return; }
+                document.getElementById('ob-assign-popover').classList.add('open');
+              }
+              function closeObAssignPopover() {
+                var p = document.getElementById('ob-assign-popover');
+                if (p) p.classList.remove('open');
+              }
+              document.addEventListener('click', function (e) {
+                var popover = document.getElementById('ob-assign-popover');
+                if (!popover || !popover.classList.contains('open')) return;
+                if (popover.contains(e.target)) return;
+                if (e.target.closest && e.target.closest('.ob-batch-btn')) return;
+                popover.classList.remove('open');
+              });
+              function submitObAssignUser() {
+                var user = document.getElementById('ob-assign-user-select').value;
+                if (!user) { alert('请选择用户'); return; }
+                closeObAssignPopover();
+                document.querySelectorAll('#page-ocean-association-binding .ob-claim-checkbox').forEach(function (c) { c.checked = false; });
+                document.getElementById('ob-claim-select-all').checked = false;
+                obClaimUpdateSelected();
+                obToast('分配成功：' + user);
+              }
+            </script>
+          </div>
+
+          <!-- 账号管理 · RDS应用(一级) -->
+          <div id="page-ocean-rds" class="page">
+            <div class="breadcrumb">
+              <a href="#" onclick="showPage('dashboard')">首页</a>
+              <span class="breadcrumb-sep">/</span>
+              <span>巨量</span>
+              <span class="breadcrumb-sep">/</span>
+              <span>账号管理</span>
+              <span class="breadcrumb-sep">/</span>
+              <span>RDS应用(一级)</span>
+            </div>
+
+            <style>
+              /* ===== 账号管理公共局部样式 ===== */
+              .am-toast { position: fixed; left: 50%; top: 24px; transform: translateX(-50%) translateY(-8px); padding: 10px 18px; background: rgba(0,0,0,0.78); color: #fff; border-radius: 4px; font-size: 14px; z-index: 3000; opacity: 0; pointer-events: none; transition: opacity 0.2s ease, transform 0.2s ease; }
+              .am-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+              .am-hint-bar { padding: 8px 12px; background: #fdf6ec; border: 1px solid #faecd8; border-radius: 4px; color: #b8860b; font-size: 13px; margin-bottom: 12px; }
+              .am-push-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; font-size: 13px; color: var(--color-text-primary); }
+              .am-push-head .am-count b { color: var(--color-info); }
+              .am-push-head .link { margin-left: auto; }
+              .am-empty-cell { text-align: center; color: var(--color-text-tertiary); padding: 32px 0 !important; }
+              .am-spi-line { font-size: 13px; color: var(--color-text-secondary); margin-bottom: 6px; word-break: break-all; }
+              .am-spi-line .am-label { color: var(--color-text-tertiary); }
+              .am-spi-section { font-size: 14px; font-weight: 600; color: var(--color-text-primary); margin: 14px 0 8px; }
+              .am-spi-field { margin-bottom: 10px; }
+              .am-spi-field .am-field-label { display: block; font-size: 13px; color: var(--color-text-secondary); margin-bottom: 4px; }
+              .am-spi-field .am-req { color: var(--color-error); margin-right: 2px; }
+              .am-spi-field .form-input { width: 100%; }
+              .am-cb-main { display: block; }
+              .am-cb-sub { display: block; font-size: 12px; color: var(--color-text-tertiary); margin-top: 2px; white-space: nowrap; }
+              .am-cb-sub.red { color: var(--color-error); }
+              .am-acc-x { display: inline-block; width: 14px; height: 14px; line-height: 14px; text-align: center; border-radius: 50%; background: var(--color-error); color: #fff; font-size: 10px; font-style: normal; margin-right: 4px; }
+              .am-info-icon { font-style: normal; color: var(--color-info); font-size: 13px; margin-left: 2px; }
+              .am-text-danger { color: var(--color-error); }
+              .am-batch-link { border: none; background: none; padding: 2px 6px; font-size: 13px; color: #bfbfbf; cursor: not-allowed; }
+              .am-batch-link:not(:disabled) { color: var(--color-info); cursor: pointer; }
+              .am-batch-link:not(:disabled):hover { text-decoration: underline; }
+              .am-callback-text { margin-left: auto; font-size: 13px; color: var(--color-text-secondary); }
+              .am-callback-text b { color: var(--color-text-primary); font-weight: 500; }
+              .am-radio-row { display: flex; align-items: center; gap: 24px; margin: 10px 2px; font-size: 13px; color: var(--color-text-primary); }
+              .am-radio-row label { display: flex; align-items: center; gap: 4px; cursor: pointer; }
+              .am-drawer-wide2 .drawer-card { width: min(1240px, calc(100vw - 80px)); margin-left: auto; }
+              .am-drawer-xwide .drawer-card { width: min(1400px, calc(100vw - 40px)); margin-left: auto; }
+              .am-edit-icon { font-style: normal; margin-left: 4px; }
+            </style>
+
+            <div class="content-card">
+              <div class="filter-bar">
+                <div class="filter-bar-row">
+                  <div class="filter-combo">
+                    <select class="filter-combo-select"><option>组织名称</option><option>组织ID</option></select>
+                    <input type="text" class="filter-combo-input" placeholder="请输入组织名称" />
+                  </div>
+                  <div class="filter-actions">
+                    <button class="btn btn-info btn-sm" onclick="amToast('查询完成')">查询</button>
+                    <button class="btn btn-outline btn-sm" onclick="amResetFilters(this)">重置</button>
+                    <button class="btn btn-primary btn-sm" onclick="amToast('已发起授权')">授权</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="table-card">
+                <div class="table-wrapper">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>组织名称</th>
+                        <th>组织ID</th>
+                        <th>授权状态</th>
+                        <th>授权时间</th>
+                        <th>操作</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>25</td><td>组织009</td><td>9900000000000025</td>
+                        <td><span class="tag tag-success">已授权</span></td>
+                        <td>2026-07-06 15:32:54</td>
+                        <td><div class="row-actions"><a href="#" class="link" onclick="amRdsPush('组织009');return false;">推送账户</a><a href="#" class="link" style="margin-left:8px;" onclick="amRdsQuery('组织009');return false;">查询账户</a></div></td>
+                      </tr>
+                      <tr>
+                        <td>24</td><td>组织008</td><td>9900000000000024</td>
+                        <td><span class="tag tag-success">已授权</span></td>
+                        <td>2026-07-06 10:44:45</td>
+                        <td><div class="row-actions"><a href="#" class="link" onclick="amRdsPush('组织008');return false;">推送账户</a><a href="#" class="link" style="margin-left:8px;" onclick="amRdsQuery('组织008');return false;">查询账户</a></div></td>
+                      </tr>
+                      <tr>
+                        <td>23</td><td>组织007</td><td>9900000000000023</td>
+                        <td><span class="tag tag-success">已授权</span></td>
+                        <td>2026-06-23 16:55:17</td>
+                        <td><div class="row-actions"><a href="#" class="link" onclick="amRdsPush('组织007');return false;">推送账户</a><a href="#" class="link" style="margin-left:8px;" onclick="amRdsQuery('组织007');return false;">查询账户</a></div></td>
+                      </tr>
+                      <tr>
+                        <td>22</td><td>组织006</td><td>9900000000000022</td>
+                        <td><span class="tag tag-success">已授权</span></td>
+                        <td>2026-06-23 16:42:18</td>
+                        <td><div class="row-actions"><a href="#" class="link" onclick="amRdsPush('组织006');return false;">推送账户</a><a href="#" class="link" style="margin-left:8px;" onclick="amRdsQuery('组织006');return false;">查询账户</a></div></td>
+                      </tr>
+                      <tr>
+                        <td>21</td><td>组织005</td><td>9900000000000021</td>
+                        <td><span class="tag tag-success">已授权</span></td>
+                        <td>2026-06-23 16:41:42</td>
+                        <td><div class="row-actions"><a href="#" class="link" onclick="amRdsPush('组织005');return false;">推送账户</a><a href="#" class="link" style="margin-left:8px;" onclick="amRdsQuery('组织005');return false;">查询账户</a></div></td>
+                      </tr>
+                      <tr>
+                        <td>20</td><td>组织004</td><td>9900000000000020</td>
+                        <td><span class="tag tag-success">已授权</span></td>
+                        <td>2026-06-22 17:06:46</td>
+                        <td><div class="row-actions"><a href="#" class="link" onclick="amRdsPush('组织004');return false;">推送账户</a><a href="#" class="link" style="margin-left:8px;" onclick="amRdsQuery('组织004');return false;">查询账户</a></div></td>
+                      </tr>
+                      <tr>
+                        <td>19</td><td>组织003</td><td>9900000000000019</td>
+                        <td><span class="tag tag-success">已授权</span></td>
+                        <td>2026-06-11 11:27:56</td>
+                        <td><div class="row-actions"><a href="#" class="link" onclick="amRdsPush('组织003');return false;">推送账户</a><a href="#" class="link" style="margin-left:8px;" onclick="amRdsQuery('组织003');return false;">查询账户</a></div></td>
+                      </tr>
+                      <tr>
+                        <td>18</td><td>组织002</td><td>9900000000000018</td>
+                        <td><span class="tag tag-success">已授权</span></td>
+                        <td>2026-06-16 15:51:37</td>
+                        <td><div class="row-actions"><a href="#" class="link" onclick="amRdsPush('组织002');return false;">推送账户</a><a href="#" class="link" style="margin-left:8px;" onclick="amRdsQuery('组织002');return false;">查询账户</a></div></td>
+                      </tr>
+                      <tr>
+                        <td>17</td><td>组织001</td><td>9900000000000017</td>
+                        <td><span class="tag tag-success">已授权</span></td>
+                        <td>2026-05-22 10:39:10</td>
+                        <td><div class="row-actions"><a href="#" class="link" onclick="amRdsPush('组织001');return false;">推送账户</a><a href="#" class="link" style="margin-left:8px;" onclick="amRdsQuery('组织001');return false;">查询账户</a></div></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="pagination">
+                  <div class="pagination-pages">
+                    <button class="page-btn" disabled>&lt;</button>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">2</button>
+                    <button class="page-btn">3</button>
+                    <button class="page-btn">&gt;</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 推送账户 弹框 -->
+            <div id="am-push-overlay" class="modal-overlay" onclick="amClose('am-push')"></div>
+            <div id="am-push" class="modal">
+              <div class="modal-card" style="width: min(640px, calc(100vw - 40px));">
+                <div class="modal-header">
+                  <span id="am-push-title">推送账户</span>
+                  <button class="modal-close" onclick="amClose('am-push')">×</button>
+                </div>
+                <div class="modal-body">
+                  <div class="am-hint-bar">最多支持输入500个账户ID</div>
+                  <div class="am-push-head">
+                    <span>源输入账户ID <span class="am-count"><b id="am-push-count">0</b> / 500</span></span>
+                    <a href="#" class="link" onclick="amPushClear();return false;">清空</a>
+                  </div>
+                  <textarea id="am-push-textarea" class="form-input" rows="8" placeholder="请粘贴或逐行输入账户ID，回车换行" style="width: 100%; resize: vertical;" oninput="amPushCount()"></textarea>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-outline" onclick="amClose('am-push')">取消</button>
+                  <button class="btn btn-primary" onclick="amPushSubmit()">确定</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 查询账户 抽屉 -->
+            <div id="am-query-overlay" class="drawer-overlay" onclick="amClose('am-query')"></div>
+            <div id="am-query" class="drawer drawer-narrow">
+              <div class="drawer-card" style="width: min(560px, calc(100vw - 80px));">
+                <div class="drawer-header">
+                  <h3 class="drawer-title" id="am-query-title">查询账户</h3>
+                  <button class="drawer-close" onclick="amClose('am-query')">×</button>
+                </div>
+                <div class="drawer-body">
+                  <div class="filter-bar" style="margin-bottom: 12px;">
+                    <div class="filter-bar-row">
+                      <div class="filter-combo">
+                        <select class="filter-combo-select"><option>账户ID</option></select>
+                        <input type="text" class="filter-combo-input" placeholder="请输入账户ID" />
+                      </div>
+                      <div class="filter-actions">
+                        <button class="btn btn-info btn-sm" onclick="amToast('查询完成')">查询</button>
+                        <button class="btn btn-outline btn-sm" onclick="amResetFilters(this)">重置</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="table-card">
+                    <div class="table-wrapper">
+                      <table class="data-table">
+                        <thead>
+                          <tr><th>账户ID</th><th>推送状态</th></tr>
+                        </thead>
+                        <tbody>
+                          <tr><td class="am-empty-cell" colspan="2">暂无数据</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 账号管理 · 广告主应用(一级) -->
+          <div id="page-ocean-advertiser-app-first" class="page">
+            <div class="breadcrumb">
+              <a href="#" onclick="showPage('dashboard')">首页</a>
+              <span class="breadcrumb-sep">/</span>
+              <span>巨量</span>
+              <span class="breadcrumb-sep">/</span>
+              <span>账号管理</span>
+              <span class="breadcrumb-sep">/</span>
+              <span>广告主应用(一级)</span>
+            </div>
+
+            <div class="content-card">
+              <div class="filter-bar">
+                <div class="filter-bar-row">
+                  <div class="filter-combo">
+                    <select class="filter-combo-select"><option>应用名</option><option>APPID</option></select>
+                    <input type="text" class="filter-combo-input" placeholder="请输入应用名称或链接搜索" />
+                  </div>
+                  <div class="filter-actions">
+                    <button class="btn btn-info btn-sm" onclick="amToast('查询完成')">查询</button>
+                    <button class="btn btn-outline btn-sm" onclick="amResetFilters(this)">重置</button>
+                    <button class="btn btn-primary btn-sm" onclick="am1Edit(-1)">新增应用</button>
+                  </div>
+                  <span class="am-callback-text">回调地址: <b>https://nodj.youmanvideo.com/api/put/oceanengine/callback/first</b></span>
+                </div>
+              </div>
+
+              <div class="tabs-bar" style="justify-content: flex-end;">
+                <button class="btn btn-info btn-sm" onclick="amToast('操作日志（原型演示）')">操作日志</button>
+              </div>
+
+              <div class="table-card">
+                <div class="table-wrapper">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>APPID</th>
+                        <th>应用名</th>
+                        <th>组织名称</th>
+                        <th>状态</th>
+                        <th>创建时间</th>
+                        <th>修改时间</th>
+                        <th>操作</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>1</td><td>8800010000001</td>
+                        <td><span class="link">应用001</span><a href="#" class="link am-edit-icon" title="编辑" onclick="am1Edit(1,'应用001','8800010000001');return false;">✎</a></td>
+                        <td><span class="am-cb-main">应用001</span><span class="am-cb-sub">ID: 7700000000000001</span></td>
+                        <td><span class="tag tag-success">已授权</span></td>
+                        <td>2026-06-27 12:13:52</td><td>2026-11-10 19:51:23</td>
+                        <td><div class="row-actions"><button class="row-action-btn" style="color:#fff;background:var(--color-info);" onclick="am1Detail('应用001','8800010000001')">详情</button> <a href="#" class="link" onclick="amToast('已发起授权');return false;">授权</a> <a href="#" class="link" onclick="am1Edit(1,'应用001','8800010000001');return false;">编辑</a> <a href="#" class="link" onclick="am1Spi('应用001','8800010000001');return false;">全域SPI订阅</a> <a href="#" class="link" onclick="am1Sync();return false;">同步</a></div></td>
+                      </tr>
+                      <tr>
+                        <td>2</td><td>8800010000002</td>
+                        <td><span class="link">应用002</span><a href="#" class="link am-edit-icon" title="编辑" onclick="am1Edit(2,'应用002','8800010000002');return false;">✎</a></td>
+                        <td><span class="am-cb-main">应用002</span><span class="am-cb-sub">ID: 7700000000000002</span></td>
+                        <td><span class="tag tag-success">已授权</span></td>
+                        <td>2026-06-27 12:15:58</td><td>2026-11-10 19:51:23</td>
+                        <td><div class="row-actions"><button class="row-action-btn" style="color:#fff;background:var(--color-info);" onclick="am1Detail('应用002','8800010000002')">详情</button> <a href="#" class="link" onclick="amToast('已发起授权');return false;">授权</a> <a href="#" class="link" onclick="am1Edit(2,'应用002','8800010000002');return false;">编辑</a> <a href="#" class="link" onclick="am1Spi('应用002','8800010000002');return false;">全域SPI订阅</a> <a href="#" class="link" onclick="am1Sync();return false;">同步</a></div></td>
+                      </tr>
+                      <tr>
+                        <td>3</td><td>8800010000003</td>
+                        <td><span class="link">应用003</span><a href="#" class="link am-edit-icon" title="编辑" onclick="am1Edit(3,'应用003','8800010000003');return false;">✎</a></td>
+                        <td><span class="am-cb-main">应用003</span><span class="am-cb-sub">ID: 7700000000000003</span></td>
+                        <td><span class="tag tag-success">已授权</span></td>
+                        <td>2026-06-27 13:58:58</td><td>2026-11-10 19:51:23</td>
+                        <td><div class="row-actions"><button class="row-action-btn" style="color:#fff;background:var(--color-info);" onclick="am1Detail('应用003','8800010000003')">详情</button> <a href="#" class="link" onclick="amToast('已发起授权');return false;">授权</a> <a href="#" class="link" onclick="am1Edit(3,'应用003','8800010000003');return false;">编辑</a> <a href="#" class="link" onclick="am1Spi('应用003','8800010000003');return false;">全域SPI订阅</a> <a href="#" class="link" onclick="am1Sync();return false;">同步</a></div></td>
+                      </tr>
+                      <tr>
+                        <td>4</td><td>8800010000004</td>
+                        <td><span class="link">应用004</span><a href="#" class="link am-edit-icon" title="编辑" onclick="am1Edit(4,'应用004','8800010000004');return false;">✎</a></td>
+                        <td><span class="am-cb-main">应用004</span><span class="am-cb-sub">ID: 7700000000000004</span></td>
+                        <td><span class="tag tag-success">已授权</span></td>
+                        <td>2026-06-27 13:16:57</td><td>2026-11-10 19:51:23</td>
+                        <td><div class="row-actions"><button class="row-action-btn" style="color:#fff;background:var(--color-info);" onclick="am1Detail('应用004','8800010000004')">详情</button> <a href="#" class="link" onclick="amToast('已发起授权');return false;">授权</a> <a href="#" class="link" onclick="am1Edit(4,'应用004','8800010000004');return false;">编辑</a> <a href="#" class="link" onclick="am1Spi('应用004','8800010000004');return false;">全域SPI订阅</a> <a href="#" class="link" onclick="am1Sync();return false;">同步</a></div></td>
+                      </tr>
+                      <tr>
+                        <td>5</td><td>8800010000005</td>
+                        <td><span class="link">应用005</span><a href="#" class="link am-edit-icon" title="编辑" onclick="am1Edit(5,'应用005','8800010000005');return false;">✎</a></td>
+                        <td><span class="am-cb-main">应用005</span><span class="am-cb-sub">ID: 7700000000000005</span></td>
+                        <td><span class="tag tag-success">已授权</span></td>
+                        <td>2026-06-27 13:14:20</td><td>2026-11-11 06:21:22</td>
+                        <td><div class="row-actions"><button class="row-action-btn" style="color:#fff;background:var(--color-info);" onclick="am1Detail('应用005','8800010000005')">详情</button> <a href="#" class="link" onclick="amToast('已发起授权');return false;">授权</a> <a href="#" class="link" onclick="am1Edit(5,'应用005','8800010000005');return false;">编辑</a> <a href="#" class="link" onclick="am1Spi('应用005','8800010000005');return false;">全域SPI订阅</a> <a href="#" class="link" onclick="am1Sync();return false;">同步</a></div></td>
+                      </tr>
+                      <tr>
+                        <td>6</td><td>8800010000006</td>
+                        <td><span class="link">应用006</span><a href="#" class="link am-edit-icon" title="编辑" onclick="am1Edit(6,'应用006','8800010000006');return false;">✎</a></td>
+                        <td><span class="am-cb-main">应用006</span><span class="am-cb-sub">ID: 7700000000000006</span></td>
+                        <td><span class="tag tag-success">已授权</span></td>
+                        <td>2026-06-27 13:15:46</td><td>2026-11-10 19:51:23</td>
+                        <td><div class="row-actions"><button class="row-action-btn" style="color:#fff;background:var(--color-info);" onclick="am1Detail('应用006','8800010000006')">详情</button> <a href="#" class="link" onclick="amToast('已发起授权');return false;">授权</a> <a href="#" class="link" onclick="am1Edit(6,'应用006','8800010000006');return false;">编辑</a> <a href="#" class="link" onclick="am1Spi('应用006','8800010000006');return false;">全域SPI订阅</a> <a href="#" class="link" onclick="am1Sync();return false;">同步</a></div></td>
+                      </tr>
+                      <tr>
+                        <td>7</td><td>8800010000007</td>
+                        <td><span class="link">应用007</span><a href="#" class="link am-edit-icon" title="编辑" onclick="am1Edit(7,'应用007','8800010000007');return false;">✎</a></td>
+                        <td><span class="am-cb-main">应用007</span><span class="am-cb-sub">ID: 7700000000000007</span></td>
+                        <td><span class="tag tag-success">已授权</span></td>
+                        <td>2026-06-27 13:17:44</td><td>2026-11-10 19:51:23</td>
+                        <td><div class="row-actions"><button class="row-action-btn" style="color:#fff;background:var(--color-info);" onclick="am1Detail('应用007','8800010000007')">详情</button> <a href="#" class="link" onclick="amToast('已发起授权');return false;">授权</a> <a href="#" class="link" onclick="am1Edit(7,'应用007','8800010000007');return false;">编辑</a> <a href="#" class="link" onclick="am1Spi('应用007','8800010000007');return false;">全域SPI订阅</a> <a href="#" class="link" onclick="am1Sync();return false;">同步</a></div></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="pagination">
+                  <span class="pagination-info">共 <strong>22</strong> 条</span>
+                  <div class="pagination-pages">
+                    <button class="page-btn" disabled>&lt;</button>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn" disabled>&gt;</button>
+                  </div>
+                  <select class="page-size-select"><option>30 条/页</option><option>10 条/页</option><option>50 条/页</option></select>
+                </div>
+              </div>
+            </div>
+
+            <!-- 编辑应用 弹框 -->
+            <div id="am1-edit-overlay" class="modal-overlay" onclick="amClose('am1-edit')"></div>
+            <div id="am1-edit" class="modal">
+              <div class="modal-card" style="width: min(520px, calc(100vw - 40px));">
+                <div class="modal-header">
+                  <span id="am1-edit-title">编辑应用(ID:1)</span>
+                  <button class="modal-close" onclick="amClose('am1-edit')">×</button>
+                </div>
+                <div class="modal-body">
+                  <div class="form-item">
+                    <label class="form-label"><span style="color:var(--color-error);">*</span> 应用名：</label>
+                    <input type="text" class="form-input" id="am1-edit-name" style="width: 100%;" />
+                  </div>
+                  <div class="form-item">
+                    <label class="form-label"><span style="color:var(--color-error);">*</span> APPID：</label>
+                    <input type="text" class="form-input" id="am1-edit-appid" style="width: 100%;" />
+                  </div>
+                  <div class="form-item">
+                    <label class="form-label"><span style="color:var(--color-error);">*</span> secret：</label>
+                    <input type="text" class="form-input" id="am1-edit-secret" style="width: 100%;" value="6059d23a3eacf7ade1d8834315369dfc22351bcff" />
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-outline" onclick="amClose('am1-edit')">取消</button>
+                  <button class="btn btn-primary" onclick="amClose('am1-edit');amToast('保存成功')">确定</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 全域SPI订阅 弹框 -->
+            <div id="am1-spi-overlay" class="modal-overlay" onclick="amClose('am1-spi')"></div>
+            <div id="am1-spi" class="modal">
+              <div class="modal-card" style="width: min(560px, calc(100vw - 40px));">
+                <div class="modal-header">
+                  <span id="am1-spi-title">SPI订阅</span>
+                  <button class="modal-close" onclick="amClose('am1-spi')">×</button>
+                </div>
+                <div class="modal-body">
+                  <div class="am-spi-line"><span class="am-label">验证码: </span>3aed041955c34090bfcd7e694b262add</div>
+                  <div class="am-spi-line"><span class="am-label">回调地址: </span>https://nodj.youmanvideo.com/api/auto/spi/callback</div>
+                  <div class="am-spi-section">投放状态推送</div>
+                  <div class="am-spi-field">
+                    <label class="am-field-label">智蒙版全域项目状态实时推送：</label>
+                    <input type="text" class="form-input" value="187266398695911" />
+                  </div>
+                  <div class="am-spi-section">三方事件推送</div>
+                  <div class="am-spi-field">
+                    <label class="am-field-label">智蒙版全域项目配置实时变更：</label>
+                    <input type="text" class="form-input" value="1872664184490368" />
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-outline" onclick="amClose('am1-spi')">取消</button>
+                  <button class="btn btn-primary" onclick="amClose('am1-spi');amToast('保存成功')">确定</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 组织(二级) 抽屉 -->
+            <div id="am1-org-overlay" class="drawer-overlay" onclick="amClose('am1-org')"></div>
+            <div id="am1-org" class="drawer drawer-wide">
+              <div class="drawer-card">
+                <div class="drawer-header">
+                  <h3 class="drawer-title" id="am1-org-title">组织(二级)</h3>
+                  <button class="drawer-close" onclick="amClose('am1-org')">×</button>
+                </div>
+                <div class="drawer-body">
+                  <div class="table-card">
+                    <div class="table-wrapper">
+                      <table class="data-table">
+                        <thead>
+                          <tr><th>ID</th><th>组织名称(二级)</th><th>组织ID</th><th>创建时间</th></tr>
+                        </thead>
+                        <tbody>
+                          <tr><td>669</td><td>组织-投放中心</td><td>7700000000000669</td><td>2026-07-21 15:06:08</td></tr>
+                          <tr><td>9</td><td>组织-一组-满课生</td><td>7700000000000009</td><td>2026-06-27 12:14:11</td></tr>
+                          <tr><td>8</td><td>组织-一组-小卷棒</td><td>7700000000000008</td><td>2026-06-27 12:14:11</td></tr>
+                          <tr><td>7</td><td>待启用组织1-6</td><td>7700000000000007</td><td>2026-06-27 12:14:11</td></tr>
+                          <tr><td>6</td><td>待启用组织1-5</td><td>7700000000000006</td><td>2026-06-27 12:14:11</td></tr>
+                          <tr><td>5</td><td>待启用组织1-4</td><td>7700000000000005</td><td>2026-06-27 12:14:11</td></tr>
+                          <tr><td>4</td><td>待启用组织1-3</td><td>7700000000000004</td><td>2026-06-27 12:14:11</td></tr>
+                          <tr><td>3</td><td>待启用组织1-2</td><td>7700000000000003</td><td>2026-06-27 12:14:11</td></tr>
+                          <tr><td>2</td><td>待启用组织1-1</td><td>7700000000000002</td><td>2026-06-27 12:14:11</td></tr>
+                          <tr><td>1</td><td>组织-运营三部-共模</td><td>7700000000000001</td><td>2026-06-27 12:14:11</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="pagination">
+                      <span class="pagination-info">共 <strong>10</strong> 条</span>
+                      <div class="pagination-pages">
+                        <button class="page-btn" disabled>&lt;</button>
+                        <button class="page-btn active">1</button>
+                        <button class="page-btn" disabled>&gt;</button>
+                      </div>
+                      <select class="page-size-select"><option>30 条/页</option><option>10 条/页</option><option>50 条/页</option></select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 账号管理 · 广告主应用(二级) -->
+          <div id="page-ocean-advertiser-app" class="page">
+            <div class="breadcrumb">
+              <a href="#" onclick="showPage('dashboard')">首页</a>
+              <span class="breadcrumb-sep">/</span>
+              <span>巨量</span>
+              <span class="breadcrumb-sep">/</span>
+              <span>账号管理</span>
+              <span class="breadcrumb-sep">/</span>
+              <span>广告主应用(二级)</span>
+            </div>
+
+            <div class="content-card">
+              <div class="filter-bar">
+                <div class="filter-bar-row">
+                  <div class="filter-combo">
+                    <select class="filter-combo-select"><option>应用名</option><option>APPID</option></select>
+                    <input type="text" class="filter-combo-input" placeholder="请输入应用名称或链接搜索" />
+                  </div>
+                  <select class="filter-select">
+                    <option value="">所属主体</option>
+                    <option>来源A</option>
+                    <option>来源B</option>
+                  </select>
+                  <div class="filter-actions">
+                    <button class="btn btn-info btn-sm" onclick="amToast('查询完成')">查询</button>
+                    <button class="btn btn-primary btn-sm" onclick="am2Edit('')">新增</button>
+                  </div>
+                  <span class="am-callback-text">回调地址: <b>https://nkdj.youmanvideo.com/api/put/oceanengine/callback</b></span>
+                </div>
+              </div>
+
+              <div class="tabs-bar" style="justify-content: flex-end;">
+                <a href="#" class="link" onclick="amToast('操作日志（原型演示）');return false;">操作日志</a>
+              </div>
+
+              <div class="table-card">
+                <div class="table-wrapper">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>APPID</th>
+                        <th>应用名</th>
+                        <th>关联代理商应用</th>
+                        <th>状态</th>
+                        <th>同步消耗账户数量</th>
+                        <th>创建时间</th>
+                        <th>修改时间</th>
+                        <th>操作</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>101</td><td>8800020000001</td>
+                        <td><span class="link">应用101-广告主</span><a href="#" class="link am-edit-icon" title="编辑" onclick="am2Edit('应用101-广告主','8800020000001');return false;">✎</a></td>
+                        <td>—</td>
+                        <td><span class="tag tag-warning">未授权</span></td>
+                        <td>0/0</td>
+                        <td>2026-11-10 18:31:05</td><td>2026-11-10 18:31:05</td>
+                        <td><div class="row-actions"><button class="row-action-btn" style="color:#fff;background:var(--color-info);" onclick="am2Detail('应用101-广告主','8800020000001')">详情</button> <a href="#" class="link" onclick="amToast('已发起授权');return false;">授权</a> <a href="#" class="link" onclick="am2Edit('应用101-广告主','8800020000001');return false;">编辑</a> <a href="#" class="link" onclick="am2Spi('应用101-广告主','8800020000001');return false;">SPI订阅</a> <a href="#" class="link" onclick="amToast('同步成功');return false;">同步</a></div></td>
+                      </tr>
+                      <tr>
+                        <td>102</td><td>8800020000002</td>
+                        <td><span class="link">应用102-广告主</span><a href="#" class="link am-edit-icon" title="编辑" onclick="am2Edit('应用102-广告主','8800020000002');return false;">✎</a></td>
+                        <td><span class="am-cb-main"><span class="link">代理商应用101</span></span><span class="am-cb-sub">APPID:8800030000001</span></td>
+                        <td><span class="tag tag-success">已授权</span></td>
+                        <td>0/0</td>
+                        <td>2026-11-10 18:29:54</td><td>2026-11-11 14:29:54</td>
+                        <td><div class="row-actions"><button class="row-action-btn" style="color:#fff;background:var(--color-info);" onclick="am2Detail('应用102-广告主','8800020000002')">详情</button> <a href="#" class="link" onclick="amToast('已发起授权');return false;">授权</a> <a href="#" class="link" onclick="am2Edit('应用102-广告主','8800020000002');return false;">编辑</a> <a href="#" class="link" onclick="am2Spi('应用102-广告主','8800020000002');return false;">SPI订阅</a> <a href="#" class="link" onclick="amToast('同步成功');return false;">同步</a></div></td>
+                      </tr>
+                      <tr>
+                        <td>103</td><td>8800020000003</td>
+                        <td><span class="link">应用103-广告主</span><a href="#" class="link am-edit-icon" title="编辑" onclick="am2Edit('应用103-广告主','8800020000003');return false;">✎</a></td>
+                        <td><span class="am-cb-main"><span class="link">代理商应用102</span></span><span class="am-cb-sub">APPID:8800030000002</span></td>
+                        <td><span class="tag tag-success">已授权</span></td>
+                        <td>120/500</td>
+                        <td>2026-11-10 18:29:36</td><td>2026-11-10 18:29:36</td>
+                        <td><div class="row-actions"><button class="row-action-btn" style="color:#fff;background:var(--color-info);" onclick="am2Detail('应用103-广告主','8800020000003')">详情</button> <a href="#" class="link" onclick="amToast('已发起授权');return false;">授权</a> <a href="#" class="link" onclick="am2Edit('应用103-广告主','8800020000003');return false;">编辑</a> <a href="#" class="link" onclick="am2Spi('应用103-广告主','8800020000003');return false;">SPI订阅</a> <a href="#" class="link" onclick="amToast('同步成功');return false;">同步</a></div></td>
+                      </tr>
+                      <tr>
+                        <td>104</td><td>8800020000004</td>
+                        <td><span class="link">应用104-广告主</span><a href="#" class="link am-edit-icon" title="编辑" onclick="am2Edit('应用104-广告主','8800020000004');return false;">✎</a></td>
+                        <td>—</td>
+                        <td><span class="tag tag-warning">未授权</span></td>
+                        <td>0/0</td>
+                        <td>2026-11-07 10:07:58</td><td>2026-11-07 10:07:58</td>
+                        <td><div class="row-actions"><button class="row-action-btn" style="color:#fff;background:var(--color-info);" onclick="am2Detail('应用104-广告主','8800020000004')">详情</button> <a href="#" class="link" onclick="amToast('已发起授权');return false;">授权</a> <a href="#" class="link" onclick="am2Edit('应用104-广告主','8800020000004');return false;">编辑</a> <a href="#" class="link" onclick="am2Spi('应用104-广告主','8800020000004');return false;">SPI订阅</a> <a href="#" class="link" onclick="amToast('同步成功');return false;">同步</a></div></td>
+                      </tr>
+                      <tr>
+                        <td>105</td><td>8800020000005</td>
+                        <td><span class="link">应用105-广告主</span><a href="#" class="link am-edit-icon" title="编辑" onclick="am2Edit('应用105-广告主','8800020000005');return false;">✎</a></td>
+                        <td>—</td>
+                        <td><span class="tag tag-warning">未授权</span></td>
+                        <td>0/0</td>
+                        <td>2026-11-07 10:07:07</td><td>2026-11-07 10:07:07</td>
+                        <td><div class="row-actions"><button class="row-action-btn" style="color:#fff;background:var(--color-info);" onclick="am2Detail('应用105-广告主','8800020000005')">详情</button> <a href="#" class="link" onclick="amToast('已发起授权');return false;">授权</a> <a href="#" class="link" onclick="am2Edit('应用105-广告主','8800020000005');return false;">编辑</a> <a href="#" class="link" onclick="am2Spi('应用105-广告主','8800020000005');return false;">SPI订阅</a> <a href="#" class="link" onclick="amToast('同步成功');return false;">同步</a></div></td>
+                      </tr>
+                      <tr>
+                        <td>106</td><td>8800020000006</td>
+                        <td><span class="link">应用106-广告主</span><a href="#" class="link am-edit-icon" title="编辑" onclick="am2Edit('应用106-广告主','8800020000006');return false;">✎</a></td>
+                        <td><span class="am-cb-main"><span class="link">代理商应用103</span></span><span class="am-cb-sub">APPID:8800030000003</span></td>
+                        <td><span class="tag tag-success">已授权</span></td>
+                        <td>35/200</td>
+                        <td>2026-10-30 18:36:07</td><td>2026-11-11 10:36:07</td>
+                        <td><div class="row-actions"><button class="row-action-btn" style="color:#fff;background:var(--color-info);" onclick="am2Detail('应用106-广告主','8800020000006')">详情</button> <a href="#" class="link" onclick="amToast('已发起授权');return false;">授权</a> <a href="#" class="link" onclick="am2Edit('应用106-广告主','8800020000006');return false;">编辑</a> <a href="#" class="link" onclick="am2Spi('应用106-广告主','8800020000006');return false;">SPI订阅</a> <a href="#" class="link" onclick="amToast('同步成功');return false;">同步</a></div></td>
+                      </tr>
+                      <tr>
+                        <td>107</td><td>8800020000007</td>
+                        <td><span class="link">应用107-广告主</span><a href="#" class="link am-edit-icon" title="编辑" onclick="am2Edit('应用107-广告主','8800020000007');return false;">✎</a></td>
+                        <td><span class="am-cb-main"><span class="link">代理商应用103</span></span><span class="am-cb-sub">APPID:8800030000003</span></td>
+                        <td><span class="tag tag-success">已授权</span></td>
+                        <td>0/80</td>
+                        <td>2026-09-12 11:41:21</td><td>2026-11-10 02:41:21</td>
+                        <td><div class="row-actions"><button class="row-action-btn" style="color:#fff;background:var(--color-info);" onclick="am2Detail('应用107-广告主','8800020000007')">详情</button> <a href="#" class="link" onclick="amToast('已发起授权');return false;">授权</a> <a href="#" class="link" onclick="am2Edit('应用107-广告主','8800020000007');return false;">编辑</a> <a href="#" class="link" onclick="am2Spi('应用107-广告主','8800020000007');return false;">SPI订阅</a> <a href="#" class="link" onclick="amToast('同步成功');return false;">同步</a></div></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="pagination">
+                  <div class="pagination-pages">
+                    <button class="page-btn" disabled>&lt;</button>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">2</button>
+                    <button class="page-btn">3</button>
+                    <button class="page-btn">4</button>
+                    <button class="page-btn">5</button>
+                    <button class="page-btn">···</button>
+                    <button class="page-btn">79</button>
+                    <button class="page-btn">&gt;</button>
+                  </div>
+                  <select class="page-size-select"><option>10 条/页</option><option>30 条/页</option><option>50 条/页</option></select>
+                </div>
+              </div>
+            </div>
+
+            <!-- 编辑 弹框 -->
+            <div id="am2-edit-overlay" class="modal-overlay" onclick="amClose('am2-edit')"></div>
+            <div id="am2-edit" class="modal">
+              <div class="modal-card" style="width: min(480px, calc(100vw - 40px));">
+                <div class="modal-header">
+                  <span id="am2-edit-title">编辑应用</span>
+                  <button class="modal-close" onclick="amClose('am2-edit')">×</button>
+                </div>
+                <div class="modal-body">
+                  <div class="form-item">
+                    <label class="form-label"><span style="color:var(--color-error);">*</span> 应用名：</label>
+                    <input type="text" class="form-input" id="am2-edit-name" style="width: 100%;" />
+                  </div>
+                  <div class="form-item">
+                    <label class="form-label"><span style="color:var(--color-error);">*</span> appid：</label>
+                    <input type="text" class="form-input" id="am2-edit-appid" style="width: 100%;" />
+                  </div>
+                  <div class="form-item">
+                    <label class="form-label"><span style="color:var(--color-error);">*</span> secret：</label>
+                    <input type="text" class="form-input" id="am2-edit-secret" placeholder="请输入secret" style="width: 100%;" />
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-outline" onclick="amClose('am2-edit')">取消</button>
+                  <button class="btn btn-primary" onclick="amClose('am2-edit');amToast('保存成功')">确定</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 组织(二级) 抽屉 -->
+            <div id="am2-org-overlay" class="drawer-overlay" onclick="amClose('am2-org')"></div>
+            <div id="am2-org" class="drawer drawer-wide">
+              <div class="drawer-card">
+                <div class="drawer-header">
+                  <h3 class="drawer-title" id="am2-org-title" style="font-size: 15px;">组织(二级)</h3>
+                  <button class="drawer-close" onclick="amClose('am2-org')">×</button>
+                </div>
+                <div class="drawer-body">
+                  <div class="table-card">
+                    <div class="table-wrapper">
+                      <table class="data-table">
+                        <thead>
+                          <tr><th>ID</th><th>组织名称(二级)</th><th>组织ID</th><th>角色</th><th>授权状态</th><th>创建时间</th><th>操作</th></tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>2960</td>
+                            <td>组织-漫剧-猫原生新</td>
+                            <td>5500000000002960</td>
+                            <td></td>
+                            <td><span class="tag tag-success">有效</span></td>
+                            <td>2026-07-06 11:42:24</td>
+                            <td><div class="row-actions"><a href="#" class="link" onclick="am2OrgDetail('组织-漫剧-猫原生新','5500000000002960');return false;">详情</a> <button class="row-action-btn" style="color:#fff;background:var(--color-info);" onclick="amToast('同步子账户任务已提交')">同步子账户</button></div></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="pagination">
+                      <div class="pagination-pages">
+                        <button class="page-btn" disabled>&lt;</button>
+                        <button class="page-btn active">1</button>
+                        <button class="page-btn" disabled>&gt;</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 组织(三级) 抽屉 -->
+            <div id="am2-org3-overlay" class="drawer-overlay" onclick="amClose('am2-org3')"></div>
+            <div id="am2-org3" class="drawer drawer-wide am-drawer-wide2">
+              <div class="drawer-card">
+                <div class="drawer-header">
+                  <h3 class="drawer-title" id="am2-org3-title" style="font-size: 15px;">组织(三级)</h3>
+                  <button class="drawer-close" onclick="amClose('am2-org3')">×</button>
+                </div>
+                <div class="drawer-body">
+                  <div class="table-card">
+                    <div class="table-wrapper">
+                      <table class="data-table">
+                        <thead>
+                          <tr><th>ID</th><th>组织名称(三级)</th><th>组织ID</th><th>分配小组</th><th>消耗主体</th><th>账户数量</th><th>操作</th></tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>2960</td><td>无</td><td>5500000000002960</td><td>--</td><td>--</td><td>--</td>
+                            <td><a href="#" class="link" onclick="amToast('该组织暂无账户');return false;">详情</a></td>
+                          </tr>
+                          <tr>
+                            <td>1690064</td><td>组织-三级A-付费新</td><td>5500000000016914</td>
+                            <td><a href="#" class="link" onclick="amToast('分配小组（原型演示）');return false;">✎ 1</a></td>
+                            <td><a href="#" class="link" onclick="amToast('消耗主体（原型演示）');return false;">✎</a></td>
+                            <td><a href="#" class="link" onclick="am2AccOpen('组织-三级A-付费新','5500000000016914');return false;">40030</a></td>
+                            <td><a href="#" class="link" onclick="am2AccOpen('组织-三级A-付费新','5500000000016914');return false;">详情</a></td>
+                          </tr>
+                          <tr>
+                            <td>1690065</td><td>组织-三级B-分帐-付费新</td><td>5500000000016915</td>
+                            <td><a href="#" class="link" onclick="amToast('分配小组（原型演示）');return false;">✎ 1</a></td>
+                            <td><a href="#" class="link" onclick="amToast('消耗主体（原型演示）');return false;">✎</a></td>
+                            <td><a href="#" class="link" onclick="am2AccOpen('组织-三级B-分帐-付费新','5500000000016915');return false;">81</a></td>
+                            <td><a href="#" class="link" onclick="am2AccOpen('组织-三级B-分帐-付费新','5500000000016915');return false;">详情</a></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 账户列表 抽屉 -->
+            <div id="am2-acc-overlay" class="drawer-overlay" onclick="amClose('am2-acc')"></div>
+            <div id="am2-acc" class="drawer drawer-wide am-drawer-xwide">
+              <div class="drawer-card">
+                <div class="drawer-header">
+                  <h3 class="drawer-title" id="am2-acc-title" style="font-size: 15px;">账户列表</h3>
+                  <button class="drawer-close" onclick="amClose('am2-acc')">×</button>
+                </div>
+                <div class="drawer-body">
+                  <div class="filter-bar" style="margin-bottom: 4px;">
+                    <div class="filter-bar-row">
+                      <div class="filter-combo">
+                        <select class="filter-combo-select"><option>账户ID</option><option>账户名称</option></select>
+                        <input type="text" class="filter-combo-input" placeholder="请输入ID" />
+                      </div>
+                      <select class="filter-select">
+                        <option value="">同步消耗状态</option>
+                        <option>开启</option>
+                        <option>关闭</option>
+                      </select>
+                      <select class="filter-select">
+                        <option value="">选择用户</option>
+                        <option>小A</option>
+                        <option>小B</option>
+                        <option>小C</option>
+                      </select>
+                      <div class="filter-actions">
+                        <button class="btn btn-info btn-sm" onclick="amToast('查询完成')">查询</button>
+                        <button class="btn btn-outline btn-sm" onclick="amResetFilters(this)">重置</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="am-radio-row">
+                    <label><input type="radio" name="am2-acc-radio" checked /> 开启同步消耗</label>
+                    <label><input type="radio" name="am2-acc-radio" /> 关闭同步消耗</label>
+                    <label><input type="radio" name="am2-acc-radio" /> 关停全部项目</label>
+                    <label><input type="radio" name="am2-acc-radio" /> 分配用户</label>
+                  </div>
+                  <div class="table-card">
+                    <div class="table-wrapper">
+                      <table class="data-table">
+                        <thead>
+                          <tr>
+                            <th class="checkbox-col"><input type="checkbox" onclick="amToggleAll(this,'am2-acc-cb')" /></th>
+                            <th>ID</th>
+                            <th>账户名称</th>
+                            <th>账户ID</th>
+                            <th>主体ID</th>
+                            <th>状态</th>
+                            <th>用户</th>
+                            <th>创建时间 ⇅</th>
+                            <th>操作</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr><td class="checkbox-col"><input type="checkbox" class="am2-acc-cb" /></td><td>17076468</td><td>账户-漫剧-番茄-01</td><td>6600000000000001</td><td></td><td class="am-text-danger">关闭</td><td>小A</td><td>2026-11-10 19:58:38</td><td><a href="#" class="link" onclick="amAccLog('账户-漫剧-番茄-01');return false;">操作记录</a></td></tr>
+                          <tr><td class="checkbox-col"><input type="checkbox" class="am2-acc-cb" /></td><td>17076467</td><td>账户-漫剧-番茄-02</td><td>6600000000000002</td><td></td><td class="am-text-danger">关闭</td><td>小A</td><td>2026-11-10 19:58:38</td><td><a href="#" class="link" onclick="amAccLog('账户-漫剧-番茄-02');return false;">操作记录</a></td></tr>
+                          <tr><td class="checkbox-col"><input type="checkbox" class="am2-acc-cb" /></td><td>17076466</td><td>账户-漫剧-番茄-03</td><td>6600000000000003</td><td></td><td class="am-text-danger">关闭</td><td>小A</td><td>2026-11-10 19:58:38</td><td><a href="#" class="link" onclick="amAccLog('账户-漫剧-番茄-03');return false;">操作记录</a></td></tr>
+                          <tr><td class="checkbox-col"><input type="checkbox" class="am2-acc-cb" /></td><td>17076465</td><td>账户-漫剧-番茄-04</td><td>6600000000000004</td><td></td><td class="am-text-danger">关闭</td><td>小B</td><td>2026-11-10 19:58:38</td><td><a href="#" class="link" onclick="amAccLog('账户-漫剧-番茄-04');return false;">操作记录</a></td></tr>
+                          <tr><td class="checkbox-col"><input type="checkbox" class="am2-acc-cb" /></td><td>17076464</td><td>账户-漫剧-番茄-05</td><td>6600000000000005</td><td></td><td class="am-text-danger">关闭</td><td>小B</td><td>2026-11-10 19:58:38</td><td><a href="#" class="link" onclick="amAccLog('账户-漫剧-番茄-05');return false;">操作记录</a></td></tr>
+                          <tr><td class="checkbox-col"><input type="checkbox" class="am2-acc-cb" /></td><td>17076463</td><td>账户-漫剧-番茄-06</td><td>6600000000000006</td><td></td><td class="am-text-danger">关闭</td><td>小B</td><td>2026-11-10 19:58:38</td><td><a href="#" class="link" onclick="amAccLog('账户-漫剧-番茄-06');return false;">操作记录</a></td></tr>
+                          <tr><td class="checkbox-col"><input type="checkbox" class="am2-acc-cb" /></td><td>17076462</td><td>账户-漫剧-番茄-07</td><td>6600000000000007</td><td></td><td class="am-text-danger">关闭</td><td>小C</td><td>2026-11-10 19:58:38</td><td><a href="#" class="link" onclick="amAccLog('账户-漫剧-番茄-07');return false;">操作记录</a></td></tr>
+                          <tr><td class="checkbox-col"><input type="checkbox" class="am2-acc-cb" /></td><td>17076461</td><td>账户-漫剧-番茄-08</td><td>6600000000000008</td><td></td><td class="am-text-danger">关闭</td><td>小C</td><td>2026-11-10 19:58:38</td><td><a href="#" class="link" onclick="amAccLog('账户-漫剧-番茄-08');return false;">操作记录</a></td></tr>
+                          <tr><td class="checkbox-col"><input type="checkbox" class="am2-acc-cb" /></td><td>17076460</td><td>账户-漫剧-番茄-09</td><td>6600000000000009</td><td></td><td class="am-text-danger">关闭</td><td>小C</td><td>2026-11-10 19:58:38</td><td><a href="#" class="link" onclick="amAccLog('账户-漫剧-番茄-09');return false;">操作记录</a></td></tr>
+                          <tr><td class="checkbox-col"><input type="checkbox" class="am2-acc-cb" /></td><td>17076459</td><td>账户-漫剧-番茄-10</td><td>6600000000000010</td><td></td><td class="am-text-danger">关闭</td><td>小C</td><td>2026-11-10 19:58:38</td><td><a href="#" class="link" onclick="amAccLog('账户-漫剧-番茄-10');return false;">操作记录</a></td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="pagination">
+                      <span class="pagination-info">共 <strong>40039</strong> 项</span>
+                      <div class="pagination-pages">
+                        <button class="page-btn" disabled>&lt;</button>
+                        <button class="page-btn active">1</button>
+                        <button class="page-btn">2</button>
+                        <button class="page-btn">3</button>
+                        <button class="page-btn">4</button>
+                        <button class="page-btn">5</button>
+                        <button class="page-btn">···</button>
+                        <button class="page-btn">81</button>
+                        <button class="page-btn">&gt;</button>
+                      </div>
+                      <select class="page-size-select"><option>500 条/页</option><option>10 条/页</option><option>50 条/页</option></select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SPI订阅 弹框 -->
+            <div id="am2-spi-overlay" class="modal-overlay" onclick="amClose('am2-spi')"></div>
+            <div id="am2-spi" class="modal">
+              <div class="modal-card" style="width: min(560px, calc(100vw - 40px));">
+                <div class="modal-header">
+                  <span id="am2-spi-title">SPI订阅</span>
+                  <button class="modal-close" onclick="amClose('am2-spi')">×</button>
+                </div>
+                <div class="modal-body">
+                  <div class="am-spi-line"><span class="am-label">验证码: </span>3aed041955c34090bfcd7e694b262add</div>
+                  <div class="am-spi-line"><span class="am-label">回调地址: </span>https://nodj.youmanvideo.com/api/auto/spi/callback</div>
+                  <div class="am-spi-section">投放状态推送</div>
+                  <div class="am-spi-field">
+                    <label class="am-field-label"><span class="am-req">*</span> 升级版投放状态实时推送：</label>
+                    <input type="text" class="form-input" value="1881543555945365" />
+                  </div>
+                  <div class="am-spi-field">
+                    <label class="am-field-label"><span class="am-req">*</span> 升级版项目状态实时推送：</label>
+                    <input type="text" class="form-input" value="1881543630495820" />
+                  </div>
+                  <div class="am-spi-section">三方事件推送</div>
+                  <div class="am-spi-field">
+                    <label class="am-field-label"><span class="am-req">*</span> 广告配置实时变更：</label>
+                    <input type="text" class="form-input" value="1881543571097635" />
+                  </div>
+                  <div class="am-spi-field">
+                    <label class="am-field-label"><span class="am-req">*</span> 项目配置实时变更：</label>
+                    <input type="text" class="form-input" value="188154270704953" />
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-outline" onclick="amClose('am2-spi')">取消</button>
+                  <button class="btn btn-primary" onclick="amClose('am2-spi');amToast('保存成功')">保存</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 账号管理 · 代理商应用(二级) -->
+          <div id="page-ocean-agent-app" class="page">
+            <div class="breadcrumb">
+              <a href="#" onclick="showPage('dashboard')">首页</a>
+              <span class="breadcrumb-sep">/</span>
+              <span>巨量</span>
+              <span class="breadcrumb-sep">/</span>
+              <span>账号管理</span>
+              <span class="breadcrumb-sep">/</span>
+              <span>代理商应用(二级)</span>
+            </div>
+
+            <div class="content-card">
+              <div class="filter-bar">
+                <div class="filter-bar-row">
+                  <div class="filter-combo">
+                    <select class="filter-combo-select"><option>APPID</option><option>应用名</option></select>
+                    <input type="text" class="filter-combo-input" placeholder="请输入appid或应用名称" />
+                  </div>
+                  <div class="filter-actions">
+                    <button class="btn btn-info btn-sm" onclick="amToast('查询完成')">查询</button>
+                    <button class="btn btn-primary btn-sm" onclick="amAgEdit('')">新增</button>
+                  </div>
+                  <span class="am-callback-text">回调地址: <b>https://nodj.youmanvideo.com/api/put/oceanengine/callback/agency</b></span>
+                </div>
+              </div>
+
+              <div class="table-card">
+                <div class="table-wrapper">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>APPID</th>
+                        <th>应用名</th>
+                        <th>关联广告主应用</th>
+                        <th>状态</th>
+                        <th>同步消耗账户数量</th>
+                        <th>创建时间</th>
+                        <th>修改时间</th>
+                        <th>操作</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>201</td><td>8800030000001</td>
+                        <td><span class="link">代理商应用101</span><a href="#" class="link am-edit-icon" title="编辑" onclick="amAgEdit('代理商应用101','8800030000001');return false;">✎</a></td>
+                        <td><span class="am-cb-main"><span class="link">广告主应用102</span></span><span class="am-cb-sub">APPID:8800020000002</span></td>
+                        <td><span class="tag tag-success">已授权</span></td>
+                        <td>0/0</td>
+                        <td>2026-11-10 18:35:25</td><td>2026-11-11 14:57:53</td>
+                        <td><div class="row-actions"><a href="#" class="link" onclick="amToast('已发起授权');return false;">授权</a> <a href="#" class="link" onclick="amAgEdit('代理商应用101','8800030000001');return false;">编辑</a></div></td>
+                      </tr>
+                      <tr>
+                        <td>202</td><td>8800030000002</td>
+                        <td><span class="link">代理商应用102</span><a href="#" class="link am-edit-icon" title="编辑" onclick="amAgEdit('代理商应用102','8800030000002');return false;">✎</a></td>
+                        <td><span class="am-cb-main"><span class="link">广告主应用103</span></span><span class="am-cb-sub">APPID:8800020000003</span></td>
+                        <td><span class="tag tag-success">已授权</span></td>
+                        <td>120/500</td>
+                        <td>2026-11-10 18:30:57</td><td>2026-11-10 18:49:30</td>
+                        <td><div class="row-actions"><a href="#" class="link" onclick="amToast('已发起授权');return false;">授权</a> <a href="#" class="link" onclick="amAgEdit('代理商应用102','8800030000002');return false;">编辑</a></div></td>
+                      </tr>
+                      <tr>
+                        <td>203</td><td>8800030000003</td>
+                        <td><span class="link">代理商应用103</span><a href="#" class="link am-edit-icon" title="编辑" onclick="amAgEdit('代理商应用103','8800030000003');return false;">✎</a></td>
+                        <td><span class="am-cb-main"><span class="link">广告主应用106</span></span><span class="am-cb-sub">APPID:8800020000006</span></td>
+                        <td><span class="tag tag-success">已授权</span></td>
+                        <td>35/280</td>
+                        <td>2026-09-12 11:42:03</td><td>2026-11-10 02:31:24</td>
+                        <td><div class="row-actions"><a href="#" class="link" onclick="amToast('已发起授权');return false;">授权</a> <a href="#" class="link" onclick="amAgEdit('代理商应用103','8800030000003');return false;">编辑</a></div></td>
+                      </tr>
+                      <tr>
+                        <td>204</td><td>8800030000004</td>
+                        <td><span class="link">代理商应用104</span><a href="#" class="link am-edit-icon" title="编辑" onclick="amAgEdit('代理商应用104','8800030000004');return false;">✎</a></td>
+                        <td><span class="am-cb-main"><span class="link">广告主应用104</span></span><span class="am-cb-sub">APPID:8800020000004</span></td>
+                        <td><span class="tag tag-success">已授权</span></td>
+                        <td>0/50</td>
+                        <td>2026-08-24 15:26:26</td><td>2026-11-11 10:51:25</td>
+                        <td><div class="row-actions"><a href="#" class="link" onclick="amToast('已发起授权');return false;">授权</a> <a href="#" class="link" onclick="amAgEdit('代理商应用104','8800030000004');return false;">编辑</a></div></td>
+                      </tr>
+                      <tr>
+                        <td>205</td><td>8800030000005</td>
+                        <td><span class="link">代理商应用105</span><a href="#" class="link am-edit-icon" title="编辑" onclick="amAgEdit('代理商应用105','8800030000005');return false;">✎</a></td>
+                        <td><span class="am-cb-main"><span class="link">广告主应用105</span></span><span class="am-cb-sub">APPID:8800020000005</span></td>
+                        <td><span class="tag tag-success">已授权</span></td>
+                        <td>0/0</td>
+                        <td>2026-08-19 18:51:22</td><td>2026-11-11 10:51:25</td>
+                        <td><div class="row-actions"><a href="#" class="link" onclick="amToast('已发起授权');return false;">授权</a> <a href="#" class="link" onclick="amAgEdit('代理商应用105','8800030000005');return false;">编辑</a></div></td>
+                      </tr>
+                      <tr>
+                        <td>206</td><td>8800030000006</td>
+                        <td><span class="link">代理商应用106</span><a href="#" class="link am-edit-icon" title="编辑" onclick="amAgEdit('代理商应用106','8800030000006');return false;">✎</a></td>
+                        <td><span class="am-cb-main"><span class="link">广告主应用106</span></span><span class="am-cb-sub">APPID:8800020000006</span></td>
+                        <td><span class="tag tag-success">已授权</span></td>
+                        <td>0/35</td>
+                        <td>2026-08-19 18:38:59</td><td>2026-11-11 10:51:25</td>
+                        <td><div class="row-actions"><a href="#" class="link" onclick="amToast('已发起授权');return false;">授权</a> <a href="#" class="link" onclick="amAgEdit('代理商应用106','8800030000006');return false;">编辑</a></div></td>
+                      </tr>
+                      <tr>
+                        <td>207</td><td>8800030000007</td>
+                        <td><span class="link">代理商应用107</span><a href="#" class="link am-edit-icon" title="编辑" onclick="amAgEdit('代理商应用107','8800030000007');return false;">✎</a></td>
+                        <td><span class="am-cb-main"><span class="link">广告主应用107</span></span><span class="am-cb-sub">APPID:8800020000007</span></td>
+                        <td><span class="tag tag-success">已授权</span></td>
+                        <td>0/80</td>
+                        <td>2026-08-19 10:42:41</td><td>2026-11-10 23:41:23</td>
+                        <td><div class="row-actions"><a href="#" class="link" onclick="amToast('已发起授权');return false;">授权</a> <a href="#" class="link" onclick="amAgEdit('代理商应用107','8800030000007');return false;">编辑</a></div></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="pagination">
+                  <div class="pagination-pages">
+                    <button class="page-btn" disabled>&lt;</button>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">2</button>
+                    <button class="page-btn">3</button>
+                    <button class="page-btn">4</button>
+                    <button class="page-btn">5</button>
+                    <button class="page-btn">···</button>
+                    <button class="page-btn">73</button>
+                    <button class="page-btn">&gt;</button>
+                  </div>
+                  <select class="page-size-select"><option>10 条/页</option><option>30 条/页</option><option>50 条/页</option></select>
+                </div>
+              </div>
+            </div>
+
+            <!-- 编辑 弹框 -->
+            <div id="am-ag-edit-overlay" class="modal-overlay" onclick="amClose('am-ag-edit')"></div>
+            <div id="am-ag-edit" class="modal">
+              <div class="modal-card" style="width: min(480px, calc(100vw - 40px));">
+                <div class="modal-header">
+                  <span id="am-ag-edit-title">新增应用</span>
+                  <button class="modal-close" onclick="amClose('am-ag-edit')">×</button>
+                </div>
+                <div class="modal-body">
+                  <div class="form-item">
+                    <label class="form-label"><span style="color:var(--color-error);">*</span> 应用名：</label>
+                    <input type="text" class="form-input" id="am-ag-edit-name" style="width: 100%;" />
+                  </div>
+                  <div class="form-item">
+                    <label class="form-label"><span style="color:var(--color-error);">*</span> appid：</label>
+                    <input type="text" class="form-input" id="am-ag-edit-appid" style="width: 100%;" />
+                  </div>
+                  <div class="form-item">
+                    <label class="form-label"><span style="color:var(--color-error);">*</span> secret：</label>
+                    <input type="text" class="form-input" id="am-ag-edit-secret" placeholder="请输入secret" style="width: 100%;" />
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-outline" onclick="amClose('am-ag-edit')">取消</button>
+                  <button class="btn btn-primary" onclick="amClose('am-ag-edit');amToast('保存成功')">确定</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 账号管理 · 账户 -->
+          <div id="page-ocean-account" class="page">
+            <div class="breadcrumb">
+              <a href="#" onclick="showPage('dashboard')">首页</a>
+              <span class="breadcrumb-sep">/</span>
+              <span>巨量</span>
+              <span class="breadcrumb-sep">/</span>
+              <span>账号管理</span>
+              <span class="breadcrumb-sep">/</span>
+              <span>账户</span>
+            </div>
+
+            <div class="content-card">
+              <div class="filter-bar">
+                <div class="filter-bar-row">
+                  <div class="filter-combo">
+                    <select class="filter-combo-select"><option>账户ID</option><option>账户名称</option></select>
+                    <input type="text" class="filter-combo-input" placeholder="请输入ID" />
+                  </div>
+                  <div class="filter-combo">
+                    <select class="filter-combo-select"><option>应用名称</option><option>APPID</option></select>
+                    <input type="text" class="filter-combo-input" placeholder="请输入应用名称" />
+                  </div>
+                  <input type="text" class="filter-input" style="width: 160px;" placeholder="请输入主体名称" />
+                  <select class="filter-select">
+                    <option value="">费价同步消耗状态</option>
+                    <option>开启</option>
+                    <option>关闭</option>
+                  </select>
+                  <select class="filter-select">
+                    <option value="">全域同步消耗状态</option>
+                    <option>开启</option>
+                    <option>关闭</option>
+                  </select>
+                  <select class="filter-select">
+                    <option value="">选择用户</option>
+                    <option>小A</option>
+                    <option>小B</option>
+                    <option>小C</option>
+                    <option>小D</option>
+                    <option>小E</option>
+                  </select>
+                  <select class="filter-select">
+                    <option value="">自动投放状态</option>
+                    <option>开启</option>
+                    <option>关闭</option>
+                  </select>
+                  <div class="filter-actions">
+                    <button class="btn btn-info btn-sm" onclick="amToast('查询完成')">查询</button>
+                    <button class="btn btn-outline btn-sm" onclick="amResetFilters(this)">重置</button>
+                  </div>
+                </div>
+                <div class="filter-bar-row">
+                  <button class="btn btn-primary btn-sm" onclick="amToast('认领账户（原型演示）')">认领账户</button>
+                </div>
+              </div>
+
+              <div class="filter-status-bar">
+                <span>已选 <b id="am-acc-selected">0</b> 个</span>
+                <button class="am-batch-link" disabled onclick="amAccBatch('修改账户日预算')">修改账户日预算</button>
+                <button class="am-batch-link" disabled onclick="amAccBatch('同步主体')">同步主体</button>
+                <button class="am-batch-link" disabled onclick="amAccBatch('关停全部项目')">关停全部项目</button>
+                <button class="am-batch-link" disabled onclick="amAccBatch('投放状态')">投放状态</button>
+                <button class="am-batch-link" disabled onclick="amAccBatch('同步消耗')">同步消耗</button>
+                <button class="am-batch-link" disabled onclick="amAccBatch('分配用户管理')">分配用户管理</button>
+                <button class="am-batch-link" disabled onclick="amAccBatch('全域同步消耗')">全域同步消耗</button>
+                <button class="am-batch-link" disabled onclick="amAccBatch('解除全域抖音号')">解除全域抖音号</button>
+                <button class="am-batch-link" disabled onclick="amAccBatch('停止全域账户')">停止全域账户</button>
+                <button class="am-batch-link" disabled onclick="amAccBatch('删除全域项目')">删除全域项目</button>
+              </div>
+
+              <div class="table-card">
+                <div class="table-wrapper">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th class="checkbox-col"><input type="checkbox" onclick="amToggleAll(this,'am-acc-cb',amAccUpdateSelected)" /></th>
+                        <th>账户</th>
+                        <th>所属应用</th>
+                        <th>所属三级组织</th>
+                        <th>所属主体</th>
+                        <th>自动投放状态</th>
+                        <th>全域标签</th>
+                        <th>用户</th>
+                        <th>费价同步消耗状态</th>
+                        <th>全域同步消耗状态</th>
+                        <th>操作</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="checkbox-col"><input type="checkbox" class="am-acc-cb" onclick="amAccUpdateSelected()" /></td>
+                        <td><span class="am-cb-main"><i class="am-acc-x">✕</i>账户001</span><span class="am-cb-sub red">6600000000000001</span></td>
+                        <td><span class="am-cb-main">广告主应用001</span><span class="am-cb-sub">APPID:8800010000001</span></td>
+                        <td><span class="am-cb-main">组织-三级A</span><span class="am-cb-sub red">ID: 5500000000000001</span></td>
+                        <td></td>
+                        <td class="am-text-danger">关闭</td>
+                        <td>标签A</td>
+                        <td>小A</td>
+                        <td class="am-text-danger">关闭<i class="am-info-icon">ⓘ</i></td>
+                        <td class="am-text-danger">关闭<i class="am-info-icon">ⓘ</i></td>
+                        <td><a href="#" class="link" onclick="amAccLog('账户001');return false;">操作记录</a></td>
+                      </tr>
+                      <tr>
+                        <td class="checkbox-col"><input type="checkbox" class="am-acc-cb" onclick="amAccUpdateSelected()" /></td>
+                        <td><span class="am-cb-main"><i class="am-acc-x">✕</i>账户002</span><span class="am-cb-sub red">6600000000000002</span></td>
+                        <td><span class="am-cb-main">广告主应用001</span><span class="am-cb-sub">APPID:8800010000001</span></td>
+                        <td><span class="am-cb-main">组织-三级A</span><span class="am-cb-sub red">ID: 5500000000000001</span></td>
+                        <td></td>
+                        <td class="am-text-danger">关闭</td>
+                        <td>标签A</td>
+                        <td>小A</td>
+                        <td class="am-text-danger">关闭<i class="am-info-icon">ⓘ</i></td>
+                        <td class="am-text-danger">关闭<i class="am-info-icon">ⓘ</i></td>
+                        <td><a href="#" class="link" onclick="amAccLog('账户002');return false;">操作记录</a></td>
+                      </tr>
+                      <tr>
+                        <td class="checkbox-col"><input type="checkbox" class="am-acc-cb" onclick="amAccUpdateSelected()" /></td>
+                        <td><span class="am-cb-main"><i class="am-acc-x">✕</i>账户003</span><span class="am-cb-sub red">6600000000000003</span></td>
+                        <td><span class="am-cb-main">广告主应用001</span><span class="am-cb-sub">APPID:8800010000001</span></td>
+                        <td><span class="am-cb-main">组织-三级A</span><span class="am-cb-sub red">ID: 5500000000000001</span></td>
+                        <td></td>
+                        <td class="am-text-danger">关闭</td>
+                        <td>标签A</td>
+                        <td>小B</td>
+                        <td class="am-text-danger">关闭<i class="am-info-icon">ⓘ</i></td>
+                        <td class="am-text-danger">关闭<i class="am-info-icon">ⓘ</i></td>
+                        <td><a href="#" class="link" onclick="amAccLog('账户003');return false;">操作记录</a></td>
+                      </tr>
+                      <tr>
+                        <td class="checkbox-col"><input type="checkbox" class="am-acc-cb" onclick="amAccUpdateSelected()" /></td>
+                        <td><span class="am-cb-main"><i class="am-acc-x">✕</i>账户004</span><span class="am-cb-sub red">6600000000000004</span></td>
+                        <td><span class="am-cb-main">广告主应用001</span><span class="am-cb-sub">APPID:8800010000001</span></td>
+                        <td><span class="am-cb-main">组织-三级A</span><span class="am-cb-sub red">ID: 5500000000000001</span></td>
+                        <td></td>
+                        <td class="am-text-danger">关闭</td>
+                        <td>标签A</td>
+                        <td>小B</td>
+                        <td class="am-text-danger">关闭<i class="am-info-icon">ⓘ</i></td>
+                        <td class="am-text-danger">关闭<i class="am-info-icon">ⓘ</i></td>
+                        <td><a href="#" class="link" onclick="amAccLog('账户004');return false;">操作记录</a></td>
+                      </tr>
+                      <tr>
+                        <td class="checkbox-col"><input type="checkbox" class="am-acc-cb" onclick="amAccUpdateSelected()" /></td>
+                        <td><span class="am-cb-main"><i class="am-acc-x">✕</i>账户005</span><span class="am-cb-sub red">6600000000000005</span></td>
+                        <td><span class="am-cb-main">广告主应用002</span><span class="am-cb-sub">APPID:8800010000002</span></td>
+                        <td><span class="am-cb-main">组织-三级B</span><span class="am-cb-sub red">ID: 5500000000000002</span></td>
+                        <td>示例文化传媒有限公司一分公司</td>
+                        <td class="am-text-danger">关闭</td>
+                        <td></td>
+                        <td>小C</td>
+                        <td class="am-text-danger">关闭<i class="am-info-icon">ⓘ</i></td>
+                        <td class="am-text-danger">关闭<i class="am-info-icon">ⓘ</i></td>
+                        <td><a href="#" class="link" onclick="amAccLog('账户005');return false;">操作记录</a></td>
+                      </tr>
+                      <tr>
+                        <td class="checkbox-col"><input type="checkbox" class="am-acc-cb" onclick="amAccUpdateSelected()" /></td>
+                        <td><span class="am-cb-main"><i class="am-acc-x">✕</i>账户006</span><span class="am-cb-sub red">6600000000000006</span></td>
+                        <td><span class="am-cb-main">广告主应用002</span><span class="am-cb-sub">APPID:8800010000002</span></td>
+                        <td><span class="am-cb-main">组织-三级B</span><span class="am-cb-sub red">ID: 5500000000000002</span></td>
+                        <td>示例文化传媒有限公司一分公司</td>
+                        <td class="am-text-danger">关闭</td>
+                        <td></td>
+                        <td>小D</td>
+                        <td class="am-text-danger">关闭<i class="am-info-icon">ⓘ</i></td>
+                        <td class="am-text-danger">关闭<i class="am-info-icon">ⓘ</i></td>
+                        <td><a href="#" class="link" onclick="amAccLog('账户006');return false;">操作记录</a></td>
+                      </tr>
+                      <tr>
+                        <td class="checkbox-col"><input type="checkbox" class="am-acc-cb" onclick="amAccUpdateSelected()" /></td>
+                        <td><span class="am-cb-main"><i class="am-acc-x">✕</i>账户007</span><span class="am-cb-sub red">6600000000000007</span></td>
+                        <td><span class="am-cb-main">广告主应用003</span><span class="am-cb-sub">APPID:8800010000003</span></td>
+                        <td><span class="am-cb-main">组织-三级B</span><span class="am-cb-sub red">ID: 5500000000000002</span></td>
+                        <td>示例文化传媒有限公司二分公司</td>
+                        <td class="am-text-danger">关闭</td>
+                        <td></td>
+                        <td>小E</td>
+                        <td class="am-text-danger">关闭<i class="am-info-icon">ⓘ</i></td>
+                        <td class="am-text-danger">关闭<i class="am-info-icon">ⓘ</i></td>
+                        <td><a href="#" class="link" onclick="amAccLog('账户007');return false;">操作记录</a></td>
+                      </tr>
+                      <tr>
+                        <td class="checkbox-col"><input type="checkbox" class="am-acc-cb" onclick="amAccUpdateSelected()" /></td>
+                        <td><span class="am-cb-main"><i class="am-acc-x">✕</i>账户008</span><span class="am-cb-sub red">6600000000000008</span></td>
+                        <td><span class="am-cb-main">广告主应用003</span><span class="am-cb-sub">APPID:8800010000003</span></td>
+                        <td><span class="am-cb-main">组织-三级B</span><span class="am-cb-sub red">ID: 5500000000000002</span></td>
+                        <td>示例文化传媒有限公司二分公司</td>
+                        <td class="am-text-danger">关闭</td>
+                        <td></td>
+                        <td>小E</td>
+                        <td class="am-text-danger">关闭<i class="am-info-icon">ⓘ</i></td>
+                        <td class="am-text-danger">关闭<i class="am-info-icon">ⓘ</i></td>
+                        <td><a href="#" class="link" onclick="amAccLog('账户008');return false;">操作记录</a></td>
+                      </tr>
+                      <tr>
+                        <td class="checkbox-col"><input type="checkbox" class="am-acc-cb" onclick="amAccUpdateSelected()" /></td>
+                        <td><span class="am-cb-main"><i class="am-acc-x">✕</i>账户009</span><span class="am-cb-sub red">6600000000000009</span></td>
+                        <td><span class="am-cb-main">广告主应用003</span><span class="am-cb-sub">APPID:8800010000003</span></td>
+                        <td><span class="am-cb-main">组织-三级B</span><span class="am-cb-sub red">ID: 5500000000000002</span></td>
+                        <td>示例文化传媒有限公司二分公司</td>
+                        <td class="am-text-danger">关闭</td>
+                        <td></td>
+                        <td>小E</td>
+                        <td class="am-text-danger">关闭<i class="am-info-icon">ⓘ</i></td>
+                        <td class="am-text-danger">关闭<i class="am-info-icon">ⓘ</i></td>
+                        <td><a href="#" class="link" onclick="amAccLog('账户009');return false;">操作记录</a></td>
+                      </tr>
+                      <tr>
+                        <td class="checkbox-col"><input type="checkbox" class="am-acc-cb" onclick="amAccUpdateSelected()" /></td>
+                        <td><span class="am-cb-main"><i class="am-acc-x">✕</i>账户010</span><span class="am-cb-sub red">6600000000000010</span></td>
+                        <td><span class="am-cb-main">广告主应用003</span><span class="am-cb-sub">APPID:8800010000003</span></td>
+                        <td><span class="am-cb-main">组织-三级B</span><span class="am-cb-sub red">ID: 5500000000000002</span></td>
+                        <td>示例文化传媒有限公司二分公司</td>
+                        <td class="am-text-danger">关闭</td>
+                        <td></td>
+                        <td>小E</td>
+                        <td class="am-text-danger">关闭<i class="am-info-icon">ⓘ</i></td>
+                        <td class="am-text-danger">关闭<i class="am-info-icon">ⓘ</i></td>
+                        <td><a href="#" class="link" onclick="amAccLog('账户010');return false;">操作记录</a></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="pagination">
+                  <span class="pagination-info">共 <strong>442200</strong> 项</span>
+                  <div class="pagination-pages">
+                    <button class="page-btn" disabled>&lt;</button>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">2</button>
+                    <button class="page-btn">3</button>
+                    <button class="page-btn">4</button>
+                    <button class="page-btn">5</button>
+                    <button class="page-btn">···</button>
+                    <button class="page-btn">44220</button>
+                    <button class="page-btn">&gt;</button>
+                  </div>
+                  <select class="page-size-select"><option>10 条/页</option><option>30 条/页</option><option>50 条/页</option></select>
+                  <span>跳至</span>
+                  <input type="text" class="jump-input" value="1" />
+                  <span>页</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 操作记录 抽屉 -->
+            <div id="am-acc-log-overlay" class="drawer-overlay" onclick="amClose('am-acc-log')"></div>
+            <div id="am-acc-log" class="drawer drawer-wide">
+              <div class="drawer-card">
+                <div class="drawer-header">
+                  <h3 class="drawer-title" id="am-acc-log-title" style="font-size: 15px;">操作记录</h3>
+                  <button class="drawer-close" onclick="amClose('am-acc-log')">×</button>
+                </div>
+                <div class="drawer-body">
+                  <div class="table-card">
+                    <div class="table-wrapper">
+                      <table class="data-table">
+                        <thead>
+                          <tr><th>操作者</th><th>操作内容</th><th>操作时间</th></tr>
+                        </thead>
+                        <tbody>
+                          <tr><td>系统</td><td>同步日流水检测到消耗，启用投放账户消耗同步！</td><td>2026-11-10 08:02:30</td></tr>
+                          <tr><td>系统</td><td>同步日流水检测到消耗，启用投放账户消耗同步！</td><td>2026-11-10 08:02:30</td></tr>
+                          <tr><td>系统</td><td>同步日流水检测到消耗，启用投放账户消耗同步！</td><td>2026-11-09 08:02:30</td></tr>
+                          <tr><td>系统</td><td>同步日流水检测到消耗，启用投放账户消耗同步！</td><td>2026-11-08 08:00:29</td></tr>
+                          <tr><td>系统</td><td>同步日流水检测到消耗，启用投放账户消耗同步！</td><td>2026-11-07 08:00:31</td></tr>
+                          <tr><td>系统</td><td>持续7天无消耗，暂停同步消耗！</td><td>2026-11-06 06:00:01</td></tr>
+                          <tr><td>系统</td><td>同步日流水检测到消耗，启用投放账户消耗同步！</td><td>2026-11-05 08:04:23</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="pagination">
+                      <span class="pagination-info">共 <strong>7</strong> 条</span>
+                      <div class="pagination-pages">
+                        <button class="page-btn" disabled>&lt;</button>
+                        <button class="page-btn active">1</button>
+                        <button class="page-btn" disabled>&gt;</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 账号管理 · 主体 -->
+          <div id="page-ocean-subject" class="page">
+            <div class="breadcrumb">
+              <a href="#" onclick="showPage('dashboard')">首页</a>
+              <span class="breadcrumb-sep">/</span>
+              <span>巨量</span>
+              <span class="breadcrumb-sep">/</span>
+              <span>账号管理</span>
+              <span class="breadcrumb-sep">/</span>
+              <span>主体</span>
+            </div>
+
+            <div class="content-card">
+              <div class="filter-bar">
+                <div class="filter-bar-row">
+                  <input type="text" class="filter-input" style="width: 200px;" placeholder="请输入主体名称" />
+                  <input type="text" class="filter-input" style="width: 200px;" placeholder="请输入来源" />
+                  <div class="filter-actions">
+                    <button class="btn btn-info btn-sm" onclick="amToast('查询完成')">查询</button>
+                    <button class="btn btn-outline btn-sm" onclick="amResetFilters(this)">重置</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="filter-status-bar">
+                <span>已选 <b id="am-sub-selected">0</b> 个主体</span>
+                <a href="#" class="link" onclick="amToast('导出来源（原型演示）');return false;">导出来源</a>
+                <button class="btn btn-primary btn-sm" style="margin-left: 8px;" onclick="amToast('导入主体ID（原型演示）')">导入主体ID</button>
+              </div>
+
+              <div class="table-card">
+                <div class="table-wrapper">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th class="checkbox-col"><input type="checkbox" onclick="amToggleAll(this,'am-sub-cb',amSubUpdateSelected)" /></th>
+                        <th>主体</th>
+                        <th>来源</th>
+                        <th>主体ID数量</th>
+                        <th>出价招租 ⇅</th>
+                        <th>更新人</th>
+                        <th>更新时间</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="checkbox-col"><input type="checkbox" class="am-sub-cb" onclick="amSubUpdateSelected()" /></td>
+                        <td>示例文化传媒有限公司一分公司</td>
+                        <td class="am-sub-source">来源A <a href="#" class="link" onclick="amSubEditSource(this);return false;">✎</a></td>
+                        <td>0</td><td>--</td><td>小A</td><td>2026-11-09 16:22:19</td>
+                      </tr>
+                      <tr>
+                        <td class="checkbox-col"><input type="checkbox" class="am-sub-cb" onclick="amSubUpdateSelected()" /></td>
+                        <td>示例文化传媒有限公司二分公司</td>
+                        <td class="am-sub-source">来源A <a href="#" class="link" onclick="amSubEditSource(this);return false;">✎</a></td>
+                        <td>0</td><td>--</td><td>小A</td><td>2026-11-09 16:22:10</td>
+                      </tr>
+                      <tr>
+                        <td class="checkbox-col"><input type="checkbox" class="am-sub-cb" onclick="amSubUpdateSelected()" /></td>
+                        <td>示例文化传媒有限公司三分公司</td>
+                        <td class="am-sub-source">来源A <a href="#" class="link" onclick="amSubEditSource(this);return false;">✎</a></td>
+                        <td>0</td><td>--</td><td>小A</td><td>2026-11-09 16:18:04</td>
+                      </tr>
+                      <tr>
+                        <td class="checkbox-col"><input type="checkbox" class="am-sub-cb" onclick="amSubUpdateSelected()" /></td>
+                        <td>示例文化传媒有限公司四分公司</td>
+                        <td class="am-sub-source">来源A <a href="#" class="link" onclick="amSubEditSource(this);return false;">✎</a></td>
+                        <td>0</td><td>--</td><td>小A</td><td>2026-11-09 16:17:55</td>
+                      </tr>
+                      <tr>
+                        <td class="checkbox-col"><input type="checkbox" class="am-sub-cb" onclick="amSubUpdateSelected()" /></td>
+                        <td>示例文化传媒有限公司五分公司</td>
+                        <td class="am-sub-source">来源A <a href="#" class="link" onclick="amSubEditSource(this);return false;">✎</a></td>
+                        <td>0</td><td>--</td><td>小A</td><td>2026-11-09 16:17:45</td>
+                      </tr>
+                      <tr>
+                        <td class="checkbox-col"><input type="checkbox" class="am-sub-cb" onclick="amSubUpdateSelected()" /></td>
+                        <td>示例文化传媒有限公司六分公司</td>
+                        <td class="am-sub-source">来源A <a href="#" class="link" onclick="amSubEditSource(this);return false;">✎</a></td>
+                        <td>0</td><td>--</td><td>小A</td><td>2026-11-09 16:17:22</td>
+                      </tr>
+                      <tr>
+                        <td class="checkbox-col"><input type="checkbox" class="am-sub-cb" onclick="amSubUpdateSelected()" /></td>
+                        <td>示例文化传媒有限公司七分公司</td>
+                        <td class="am-sub-source">来源A <a href="#" class="link" onclick="amSubEditSource(this);return false;">✎</a></td>
+                        <td>0</td><td>--</td><td>小B</td><td>2026-11-09 15:17:17</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="pagination">
+                  <span class="pagination-info">共 <strong>615</strong> 项</span>
+                  <div class="pagination-pages">
+                    <button class="page-btn" disabled>&lt;</button>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">2</button>
+                    <button class="page-btn">3</button>
+                    <button class="page-btn">4</button>
+                    <button class="page-btn">5</button>
+                    <button class="page-btn">···</button>
+                    <button class="page-btn">21</button>
+                    <button class="page-btn">&gt;</button>
+                  </div>
+                  <select class="page-size-select"><option>30 条/页</option><option>10 条/页</option><option>50 条/页</option></select>
+                  <span>跳至</span>
+                  <input type="text" class="jump-input" value="1" />
+                  <span>页</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 修改来源 弹框 -->
+            <div id="am-sub-src-overlay" class="modal-overlay" onclick="amClose('am-sub-src')"></div>
+            <div id="am-sub-src" class="modal">
+              <div class="modal-card" style="width: min(440px, calc(100vw - 40px));">
+                <div class="modal-header">
+                  <span id="am-sub-src-title">修改来源</span>
+                  <button class="modal-close" onclick="amClose('am-sub-src')">×</button>
+                </div>
+                <div class="modal-body">
+                  <div class="form-item">
+                    <label class="form-label">来源：</label>
+                    <input type="text" class="form-input" id="am-sub-src-input" style="width: 100%;" value="来源A" />
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-outline" onclick="amClose('am-sub-src')">取消</button>
+                  <button class="btn btn-primary" onclick="amSubSaveSource()">确定</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <script>
+            /* ===== 账号管理（RDS/广告主应用/代理商应用/账户/主体）公共交互 ===== */
+            function amToast(msg) {
+              var t = document.getElementById('am-toast');
+              if (!t) {
+                t = document.createElement('div');
+                t.id = 'am-toast';
+                t.className = 'am-toast';
+                document.body.appendChild(t);
+              }
+              t.textContent = msg;
+              t.classList.add('show');
+              clearTimeout(t._timer);
+              t._timer = setTimeout(function () { t.classList.remove('show'); }, 2200);
+            }
+            function amOpen(name) {
+              var d = document.getElementById(name);
+              var o = document.getElementById(name + '-overlay');
+              if (d) d.classList.add('open');
+              if (o) o.classList.add('open');
+            }
+            function amClose(name) {
+              var d = document.getElementById(name);
+              var o = document.getElementById(name + '-overlay');
+              if (d) d.classList.remove('open');
+              if (o) o.classList.remove('open');
+            }
+            function amResetFilters(btn) {
+              var bar = btn.closest('.filter-bar');
+              if (!bar) return;
+              bar.querySelectorAll('input').forEach(function (el) { el.value = ''; });
+              bar.querySelectorAll('select').forEach(function (el) { el.selectedIndex = 0; });
+              amToast('已重置');
+            }
+            function amToggleAll(el, cls, cb) {
+              document.querySelectorAll('.' + cls).forEach(function (c) { c.checked = el.checked; });
+              if (typeof cb === 'function') cb();
+            }
+
+            /* RDS应用(一级) */
+            function amRdsPush(orgName) {
+              document.getElementById('am-push-title').textContent = '推送账户（' + orgName + '）';
+              var ta = document.getElementById('am-push-textarea');
+              ta.value = '';
+              amPushCount();
+              amOpen('am-push');
+            }
+            function amPushCount() {
+              var ta = document.getElementById('am-push-textarea');
+              var n = ta.value.split('\n').filter(function (s) { return s.trim(); }).length;
+              document.getElementById('am-push-count').textContent = n;
+            }
+            function amPushClear() {
+              document.getElementById('am-push-textarea').value = '';
+              amPushCount();
+            }
+            function amPushSubmit() {
+              var ta = document.getElementById('am-push-textarea');
+              var n = ta.value.split('\n').filter(function (s) { return s.trim(); }).length;
+              if (n === 0) { amToast('请先输入账户ID'); return; }
+              if (n > 500) { amToast('最多支持输入500个账户ID，当前 ' + n + ' 个'); return; }
+              amClose('am-push');
+              amToast('已推送 ' + n + ' 个账户');
+            }
+            function amRdsQuery(orgName) {
+              document.getElementById('am-query-title').textContent = '查询账户（' + orgName + '）';
+              amOpen('am-query');
+            }
+
+            /* 广告主应用(一级) */
+            function am1Detail(name, appid) {
+              document.getElementById('am1-org-title').textContent = name + '(' + appid + ')';
+              amOpen('am1-org');
+            }
+            function am1Sync() { amToast('同步成功'); }
+            function am1Edit(id, name, appid) {
+              document.getElementById('am1-edit-title').textContent = id >= 0 ? '编辑应用(ID:' + id + ')' : '新增应用';
+              document.getElementById('am1-edit-name').value = name || '';
+              document.getElementById('am1-edit-appid').value = appid || '';
+              amOpen('am1-edit');
+            }
+            function am1Spi(name, appid) {
+              document.getElementById('am1-spi-title').textContent = 'SPI订阅 ' + name + '（' + appid + '）';
+              amOpen('am1-spi');
+            }
+
+            /* 广告主应用(二级) */
+            function am2Detail(name, appid) {
+              document.getElementById('am2-org-title').textContent = name + '(' + appid + ')';
+              amOpen('am2-org');
+            }
+            function am2Edit(name, appid) {
+              document.getElementById('am2-edit-title').textContent = name ? name : '新增应用';
+              document.getElementById('am2-edit-name').value = name || '';
+              document.getElementById('am2-edit-appid').value = appid || '';
+              document.getElementById('am2-edit-secret').value = '';
+              amOpen('am2-edit');
+            }
+            function am2Spi(name, appid) {
+              document.getElementById('am2-spi-title').textContent = 'SPI订阅 ' + name + '（' + appid + '）';
+              amOpen('am2-spi');
+            }
+            function am2OrgDetail(orgName, orgId) {
+              document.getElementById('am2-org3-title').textContent = orgName + '(' + orgId + ')';
+              amOpen('am2-org3');
+            }
+            function am2AccOpen(orgName, orgId) {
+              document.getElementById('am2-acc-title').textContent = orgName + '(' + orgId + ')';
+              amOpen('am2-acc');
+            }
+
+            /* 代理商应用(二级) */
+            function amAgEdit(name, appid) {
+              document.getElementById('am-ag-edit-title').textContent = name ? name : '新增应用';
+              document.getElementById('am-ag-edit-name').value = name || '';
+              document.getElementById('am-ag-edit-appid').value = appid || '';
+              document.getElementById('am-ag-edit-secret').value = '';
+              amOpen('am-ag-edit');
+            }
+
+            /* 账户 */
+            function amAccUpdateSelected() {
+              var n = document.querySelectorAll('#page-ocean-account .am-acc-cb:checked').length;
+              document.getElementById('am-acc-selected').textContent = n;
+              document.querySelectorAll('#page-ocean-account .am-batch-link').forEach(function (b) { b.disabled = n === 0; });
+            }
+            function amAccBatch(label) {
+              var n = document.querySelectorAll('#page-ocean-account .am-acc-cb:checked').length;
+              if (n === 0) { amToast('请先选择账户'); return; }
+              amToast('已对 ' + n + ' 个账户执行：' + label);
+            }
+            function amAccLog(accName) {
+              document.getElementById('am-acc-log-title').textContent = accName;
+              amOpen('am-acc-log');
+            }
+
+            /* 主体 */
+            var amSubSourceTd = null;
+            function amSubUpdateSelected() {
+              var n = document.querySelectorAll('#page-ocean-subject .am-sub-cb:checked').length;
+              document.getElementById('am-sub-selected').textContent = n;
+            }
+            function amSubEditSource(el) {
+              amSubSourceTd = el.closest('td');
+              var cur = amSubSourceTd.textContent.replace('✎', '').trim();
+              document.getElementById('am-sub-src-input').value = cur;
+              amOpen('am-sub-src');
+            }
+            function amSubSaveSource() {
+              var v = document.getElementById('am-sub-src-input').value.trim();
+              if (!v) { amToast('请输入来源'); return; }
+              if (amSubSourceTd) {
+                amSubSourceTd.innerHTML = '';
+                var span = document.createElement('span');
+                span.textContent = v;
+                amSubSourceTd.appendChild(span);
+                amSubSourceTd.appendChild(document.createTextNode(' '));
+                var a = document.createElement('a');
+                a.href = '#';
+                a.className = 'link';
+                a.textContent = '✎';
+                a.setAttribute('onclick', 'amSubEditSource(this);return false;');
+                amSubSourceTd.appendChild(a);
+              }
+              amClose('am-sub-src');
+              amToast('来源已更新');
+            }
+          </script>
+
     <!-- 全域投放 · 资源选择弹窗（抖音号 / 主体包 / 应用包 / 账户包） -->
     <div id="ai-res-picker-overlay" class="modal-overlay" onclick="closeAiResPicker()"></div>
     <div id="ai-res-picker-modal" class="modal">
@@ -9874,10 +12349,11 @@
             <div id="ntDramaScopeList">
               <div class="task-row indent">
                 <div class="task-ctrl">
-                  <select class="form-select task-w-sm">
+                  <select class="form-select task-w-sm" onchange="onDramaScopeTypeChange(this)">
                     <option>短剧标签</option>
                     <option>短剧名称</option>
                     <option>短剧ID</option>
+                    <option>短剧消耗</option>
                   </select>
                   <select class="form-select task-w-xs">
                     <option>包含</option>
@@ -10383,10 +12859,11 @@
             <div id="roi3DramaScopeList">
               <div class="task-row indent" id="roi3RowDramaScope">
                 <div class="task-ctrl">
-                  <select class="form-select task-w-sm">
+                  <select class="form-select task-w-sm" onchange="onDramaScopeTypeChange(this)">
                     <option>短剧标签</option>
                     <option>短剧名称</option>
                     <option>短剧ID</option>
+                    <option>短剧消耗</option>
                   </select>
                   <select class="form-select task-w-xs">
                     <option>包含</option>
@@ -11294,6 +13771,26 @@
         if (row) row.remove();
       }
 
+      /* 短剧范围：条件类型联动（nt / roi3 共用）。选择「短剧消耗」时，第二个下拉切换为消耗口径，值输入框隐藏 */
+      var DRAMA_CONSUME_OPTIONS = ['全部', '全域', '抖音小程序', '抖音原生AA', '抖小AA', '抖音原生付费', '抖小付费', '微小付费'];
+
+      function onDramaScopeTypeChange(sel) {
+        var ctrl = sel.closest('.task-ctrl');
+        if (!ctrl) return;
+        var sel2 = ctrl.querySelectorAll('select')[1];
+        var input = ctrl.querySelector('input.form-input');
+        if (!sel2) return;
+        if (sel.value === '短剧消耗') {
+          sel2.className = 'form-select task-w-sm';
+          sel2.innerHTML = DRAMA_CONSUME_OPTIONS.map(function (o) { return '<option>' + o + '</option>'; }).join('');
+          if (input) input.style.display = 'none';
+        } else {
+          sel2.className = 'form-select task-w-xs';
+          sel2.innerHTML = '<option>包含</option><option>不包含</option><option>等于</option>';
+          if (input) { input.style.display = ''; input.placeholder = '请选择'; }
+        }
+      }
+
       /* 短剧范围：追加一条条件 */
       function addNtDramaScope() {
         var list = document.getElementById('ntDramaScopeList');
@@ -11301,7 +13798,7 @@
         var row = document.createElement('div');
         row.className = 'task-row indent';
         row.innerHTML = '<div class="task-ctrl">'
-          + '<select class="form-select task-w-sm"><option>短剧标签</option><option>短剧名称</option><option>短剧ID</option></select>'
+          + '<select class="form-select task-w-sm" onchange="onDramaScopeTypeChange(this)"><option>短剧标签</option><option>短剧名称</option><option>短剧ID</option><option>短剧消耗</option></select>'
           + '<select class="form-select task-w-xs"><option>包含</option><option>不包含</option><option>等于</option></select>'
           + '<input type="text" class="form-input task-w-lg" placeholder="请选择" />'
           + '<button type="button" class="task-del" title="删除" onclick="removeNtDramaScope(this)">&times;</button>'
@@ -11629,7 +14126,7 @@
         var row = document.createElement('div');
         row.className = 'task-row indent';
         row.innerHTML = '<div class="task-ctrl">'
-          + '<select class="form-select task-w-sm"><option>短剧标签</option><option>短剧名称</option><option>短剧ID</option></select>'
+          + '<select class="form-select task-w-sm" onchange="onDramaScopeTypeChange(this)"><option>短剧标签</option><option>短剧名称</option><option>短剧ID</option><option>短剧消耗</option></select>'
           + '<select class="form-select task-w-xs"><option>包含</option><option>不包含</option><option>等于</option></select>'
           + '<input type="text" class="form-input task-w-lg" placeholder="请选择" />'
           + '<button type="button" class="task-del" title="删除" onclick="removeRoi3DramaScope(this)">&times;</button>'
