@@ -994,7 +994,7 @@
                         <td>
                           <div class="up-state"
                                data-err-code="40002"
-                               data-err-msg="项目提交失败：项目名称包含违禁词「逆袭」，平台审核拦截。请删除或更换该词后重新提交。"
+                               data-err-msg="项目名称包含违禁词「逆袭」，平台审核拦截。请删除或更换该词后重新提交。"
                                data-err-target="项目 任务十二-项目B-召回（ID:7455532211007788）"
                                data-err-time="2026-10-10 09:12:41 提交失败">
                             <div class="up-state-top">
@@ -1159,7 +1159,7 @@
                         <td>
                           <div class="up-state"
                                data-err-code="40105"
-                               data-err-msg="单元提交失败：绑定的抖音号授权已过期，无法获取可投放抖音号。请前往「资产管理 · 抖音号」重新授权后重试。"
+                               data-err-msg="绑定的抖音号授权已过期，无法获取可投放抖音号。请前往「资产管理 · 抖音号」重新授权后重试。"
                                data-err-target="单元 任务十二-项目B-单元1（ID:6611223344555566）"
                                data-err-time="2026-10-10 09:12:40 提交失败">
                             <div class="up-state-top">
@@ -18453,9 +18453,16 @@
         tip.style.top = top + 'px';
       }
 
-      function hideUpErrTip() {
+      /* 延迟关闭：给鼠标跨过 8px 间隙、在卡片里选中文案留出时间 */
+      var upErrHideTimer = null;
+
+      function hideUpErrTip(delay) {
         var tip = document.getElementById('upErrTip');
-        if (tip) tip.classList.remove('open');
+        if (!tip) return;
+        clearTimeout(upErrHideTimer);
+        upErrHideTimer = setTimeout(function () {
+          tip.classList.remove('open');
+        }, delay || 0);
       }
 
       /* 黑皮知识库：按错误码给出排查建议 */
@@ -19080,7 +19087,7 @@
     <script src="scripts/header-user.js?v=20260924"></script>
 
     <!-- 上传状态报错：悬浮详情卡片（body 级，避免表格横向滚动裁切） -->
-    <div id="upErrTip" class="up-err-tip"></div>
+    <div id="upErrTip" class="up-err-tip" onmouseenter="clearTimeout(upErrHideTimer)" onmouseleave="hideUpErrTip()"></div>
 
     <!-- 黑皮 · 智能问答面板 -->
     <div id="heipi-panel" class="heipi-panel">

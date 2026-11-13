@@ -5321,12 +5321,17 @@ body {
   white-space: nowrap;
 }
 
-/* 失败明细弹框内：多行完整展示 + 悬浮详情 + 问黑皮 */
+/* 失败明细弹框内：报错文案限宽 360px、最多 3 行截断（与原 .fail-detail-error 一致，不撑宽列） */
 .up-state-block {
   max-width: 100%;
 }
 
 .up-err-wrap {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  max-width: 360px;
   white-space: normal;
   word-break: break-word;
 }
@@ -5354,6 +5359,8 @@ body {
 
 .up-err-tip.open {
   display: block;
+  user-select: text;
+  -webkit-user-select: text;
 }
 
 .up-err-tip-head {
@@ -5388,6 +5395,7 @@ body {
   padding: 10px 12px;
   color: var(--color-text-secondary);
   word-break: break-word;
+  cursor: text;
 }
 
 .up-err-tip-foot {
