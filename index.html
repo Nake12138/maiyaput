@@ -991,7 +991,22 @@
                           <span class="link" onclick="drillProjectToUnit(90011)">任务十二-项目B-召回..</span>
                           <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:7455532211007788</div>
                         </td>
-                        <td><span class="tag tag-error">失败</span></td>
+                        <td>
+                          <div class="up-state"
+                               data-err-code="40002"
+                               data-err-msg="项目提交失败：项目名称包含违禁词「逆袭」，平台审核拦截。请删除或更换该词后重新提交。"
+                               data-err-target="项目 任务十二-项目B-召回（ID:7455532211007788）"
+                               data-err-time="2026-10-10 09:12:41 提交失败">
+                            <div class="up-state-top">
+                              <span class="tag tag-error">失败</span>
+                              <button type="button" class="ask-heipi-btn" onclick="askHeipi(this)"><i>✦</i>问黑皮</button>
+                            </div>
+                            <div class="up-err" onmouseenter="showUpErrTip(this)" onmouseleave="hideUpErrTip()">
+                              <i class="up-err-icon">!</i>
+                              <span class="up-err-text">项目名称包含违禁词「逆袭」，请修改后重新提交</span>
+                            </div>
+                          </div>
+                        </td>
                         <td><span class="link">2</span><div class="stat-stack"><div class="stat-row"><span class="stat-success-text">成功1</span><span class="stat-fail-text fail-clickable" onclick="openAutoFailDetail(90011, '任务十二-项目B-召回', 'unit', 1)">失败1</span></div></div></td>
                         <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAutoRow('项目',90011)">刷新</button> <button class="row-action-btn" onclick="retryAutoRow('项目',90011)">重试</button></div></td>
                         <td>稳定成本</td>
@@ -1141,7 +1156,22 @@
                           <span class="link" onclick="showAutoUnitDetail(30020)">任务十二-项目B-单元1</span>
                           <div style="font-size: 12px; color: var(--color-text-tertiary);">ID:6611223344555566</div>
                         </td><td><span class="link" title="查看素材上传详情" onclick="openUnitMaterialModal('auto', '30020')">3</span></td>
-                        <td><span class="tag tag-error">失败</span></td>
+                        <td>
+                          <div class="up-state"
+                               data-err-code="40105"
+                               data-err-msg="单元提交失败：绑定的抖音号授权已过期，无法获取可投放抖音号。请前往「资产管理 · 抖音号」重新授权后重试。"
+                               data-err-target="单元 任务十二-项目B-单元1（ID:6611223344555566）"
+                               data-err-time="2026-10-10 09:12:40 提交失败">
+                            <div class="up-state-top">
+                              <span class="tag tag-error">失败</span>
+                              <button type="button" class="ask-heipi-btn" onclick="askHeipi(this)"><i>✦</i>问黑皮</button>
+                            </div>
+                            <div class="up-err" onmouseenter="showUpErrTip(this)" onmouseleave="hideUpErrTip()">
+                              <i class="up-err-icon">!</i>
+                              <span class="up-err-text">抖音号授权已过期，请重新授权后重试</span>
+                            </div>
+                          </div>
+                        </td>
                         <td><div class="row-actions"><button class="row-action-btn" onclick="refreshAutoRow('单元',30020)">刷新</button> <button class="row-action-btn" onclick="retryAutoRow('单元',30020)">重试</button></div></td>
                         <td>剧点-番茄漫画小程序</td>
                         <td>稳定成本</td>
@@ -18399,6 +18429,163 @@
         alert('重试' + type + '：' + id);
       }
 
+      /* ===== 上传状态报错：悬浮详情 + 问黑皮快捷查询 ===== */
+      function showUpErrTip(el) {
+        var tip = document.getElementById('upErrTip');
+        var state = el.closest('.up-state');
+        if (!tip || !state) return;
+        var code = state.dataset.errCode || '';
+        var msg = state.dataset.errMsg || '';
+        var target = state.dataset.errTarget || '';
+        var time = state.dataset.errTime || '';
+        tip.innerHTML = ''
+          + '<div class="up-err-tip-head"><span class="up-err-tip-title">报错详情</span>'
+          + (code ? '<span class="up-err-tip-code">错误码 ' + code + '</span>' : '')
+          + '</div>'
+          + '<div class="up-err-tip-body">' + msg + '</div>'
+          + '<div class="up-err-tip-meta">' + [target, time].filter(Boolean).join(' · ') + '</div>'
+          + '<div class="up-err-tip-foot">点击右侧「问黑皮」可让智能助手协助定位原因</div>';
+        tip.classList.add('open');
+        var rect = el.getBoundingClientRect();
+        var tw = tip.offsetWidth;
+        var th = tip.offsetHeight;
+        var left = Math.max(12, Math.min(rect.left, window.innerWidth - tw - 12));
+        var top = rect.bottom + 8;
+        if (top + th > window.innerHeight - 12) top = Math.max(12, rect.top - th - 8);
+        tip.style.left = left + 'px';
+        tip.style.top = top + 'px';
+      }
+
+      function hideUpErrTip() {
+        var tip = document.getElementById('upErrTip');
+        if (tip) tip.classList.remove('open');
+      }
+
+      /* 黑皮知识库：按错误码给出排查建议 */
+      var HEIPI_KB = {
+        '40002': {
+          title: '项目名称命中违禁词，被平台提交拦截',
+          points: [
+            '平台审核会对项目名称做敏感词校验，「逆袭」「暴富」「最」这类夸大或违规表述会被直接拒绝。',
+            '编辑该项目，把命中的词删掉或换成中性表述后重新提交，不需要重建项目。',
+            '如果替换后仍失败，检查短剧名称与投放文案是否含同类词，名称会拼接进项目名。'
+          ],
+          tags: ['如何修改项目名称', '同错误历史处理', '转人工']
+        },
+        '40105': {
+          title: '抖音号授权过期，单元无法提交',
+          points: [
+            '该单元绑定的抖音号授权已到期，系统无法拉到可投放的抖音号，所以单元提交失败。',
+            '到「资产管理 · 抖音号」找到对应抖音号，重新授权后点该行「重试」即可。',
+            '如果抖音号仍在有效期内，先刷新看状态是否同步，再重试。'
+          ],
+          tags: ['去抖音号管理重新授权', '同错误历史处理', '转人工']
+        },
+        'default': {
+          title: '已收到报错，先按下面顺序排查',
+          points: [
+            '先看报错里的关键词：名称 / 素材 / 授权 / 预算，四类占绝大多数。',
+            '点该行「刷新」同步一次巨量侧状态，确认不是短暂接口异常。',
+            '仍未恢复时点「重试」重新提交，并保留错误码便于技术排查。'
+          ],
+          tags: ['同类错误历史处理', '查看执行日志', '转人工']
+        }
+      };
+
+      var heipiStarted = false;
+
+      function openHeipi() {
+        var panel = document.getElementById('heipi-panel');
+        if (!panel) return;
+        panel.classList.add('open');
+        if (!heipiStarted) {
+          heipiStarted = true;
+          heipiBotSay('你好，我是黑皮。把投放报错贴给我，或从表格里点「问黑皮」，我会帮你定位原因并给出处理建议。');
+        }
+      }
+
+      function closeHeipi() {
+        var panel = document.getElementById('heipi-panel');
+        if (panel) panel.classList.remove('open');
+      }
+
+      function heipiScroll() {
+        var body = document.getElementById('heipiBody');
+        if (body) body.scrollTop = body.scrollHeight;
+      }
+
+      function heipiBotSay(html) {
+        var body = document.getElementById('heipiBody');
+        if (!body) return;
+        var wrap = document.createElement('div');
+        wrap.className = 'heipi-msg bot';
+        wrap.innerHTML = '<div class="heipi-msg-avatar">黑</div><div class="heipi-bubble">' + html + '</div>';
+        body.appendChild(wrap);
+        heipiScroll();
+        return wrap;
+      }
+
+      function heipiUserSay(msg, target) {
+        var body = document.getElementById('heipiBody');
+        if (!body) return;
+        var wrap = document.createElement('div');
+        wrap.className = 'heipi-msg user';
+        var quote = target ? '<div class="heipi-quote">' + target + '</div>' : '';
+        wrap.innerHTML = '<div class="heipi-msg-avatar">我</div><div class="heipi-bubble">' + quote + msg + '</div>';
+        body.appendChild(wrap);
+        heipiScroll();
+      }
+
+      function heipiReply(code) {
+        var kb = HEIPI_KB[code] || HEIPI_KB['default'];
+        var typing = heipiBotSay('<span class="heipi-typing"><i></i><i></i><i></i></span>');
+        setTimeout(function () {
+          var html = '<div class="heipi-bubble-title">' + kb.title + '</div><ol>'
+            + kb.points.map(function (p) { return '<li>' + p + '</li>'; }).join('')
+            + '</ol>';
+          kb.tags.forEach(function (t) {
+            html += '<span class="heipi-tag">' + t + '</span>';
+          });
+          var bubble = typing.querySelector('.heipi-bubble');
+          if (bubble) bubble.innerHTML = html;
+          heipiScroll();
+        }, 650);
+      }
+
+      /* 表格报错旁的快捷查询入口：自动带入报错信息 */
+      function askHeipi(btn) {
+        var state = btn.closest('.up-state');
+        var code = state ? (state.dataset.errCode || '') : '';
+        var msg = state ? (state.dataset.errMsg || '') : '';
+        var target = state ? (state.dataset.errTarget || '') : '';
+        openHeipi();
+        heipiUserSay(msg, target);
+        var input = document.getElementById('heipiInput');
+        if (input) input.value = '';
+        heipiReply(code);
+      }
+
+      function sendHeipi() {
+        var input = document.getElementById('heipiInput');
+        if (!input) return;
+        var text = (input.value || '').trim();
+        if (!text) return;
+        openHeipi();
+        heipiUserSay(text, '');
+        input.value = '';
+        var code = '';
+        Object.keys(HEIPI_KB).forEach(function (k) {
+          if (k !== 'default' && text.indexOf(k) > -1) code = k;
+        });
+        heipiReply(code);
+      }
+
+      function heipiQuick(text) {
+        var input = document.getElementById('heipiInput');
+        if (input) input.value = text;
+        sendHeipi();
+      }
+
       function showAutoUnitDetail(id) {
         alert('查看单元详情：' + id);
       }
@@ -18784,5 +18971,30 @@
       }
     </script>
     <script src="scripts/header-user.js?v=20260924"></script>
+
+    <!-- 上传状态报错：悬浮详情卡片（body 级，避免表格横向滚动裁切） -->
+    <div id="upErrTip" class="up-err-tip"></div>
+
+    <!-- 黑皮 · 智能问答面板 -->
+    <div id="heipi-panel" class="heipi-panel">
+      <div class="heipi-head">
+        <div class="heipi-avatar">黑</div>
+        <div class="heipi-head-main">
+          <div class="heipi-name">黑皮 <span class="heipi-badge">智能问答</span></div>
+          <div class="heipi-sub">投放报错排查 · 在线</div>
+        </div>
+        <button type="button" class="heipi-close" onclick="closeHeipi()" title="关闭">&times;</button>
+      </div>
+      <div class="heipi-body" id="heipiBody"></div>
+      <div class="heipi-quick">
+        <button type="button" onclick="heipiQuick('这个报错要改哪里？')">这个报错要改哪里？</button>
+        <button type="button" onclick="heipiQuick('同类错误以前怎么处理的？')">同类错误历史处理</button>
+        <button type="button" onclick="heipiQuick('40002 是什么意思？')">40002 是什么意思</button>
+      </div>
+      <div class="heipi-input-wrap">
+        <input type="text" class="heipi-input" id="heipiInput" placeholder="粘贴报错信息或描述问题，回车发送" onkeydown="if (event.key === 'Enter') sendHeipi();" />
+        <button type="button" class="heipi-send" onclick="sendHeipi()">发送</button>
+      </div>
+    </div>
   </body>
 </html>

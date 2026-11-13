@@ -5269,3 +5269,401 @@ body {
   min-width: 0;
   padding-left: 16px;
 }
+
+/* ============================================================
+   上传状态 · 报错信息（项目 / 单元表格）
+   - 单元格内展示红色报错摘要，单行截断
+   - 悬浮显示完整报错卡片（body 级 fixed，避免表格横向滚动裁切）
+   - 旁附「问黑皮」快捷查询按钮
+   ============================================================ */
+.up-state {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-start;
+  max-width: 220px;
+}
+
+.up-state-top {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.up-err {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+  max-width: 100%;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--color-error);
+  cursor: default;
+}
+
+.up-err-icon {
+  flex: 0 0 13px;
+  width: 13px;
+  height: 13px;
+  margin-top: 1px;
+  border-radius: 50%;
+  background: var(--color-error);
+  color: #fff;
+  font-style: normal;
+  font-size: 10px;
+  line-height: 13px;
+  text-align: center;
+}
+
+.up-err-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.up-err:hover .up-err-text {
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+}
+
+/* 悬浮详情卡片 */
+.up-err-tip {
+  position: fixed;
+  z-index: 2600;
+  display: none;
+  width: 340px;
+  padding: 0;
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--color-text-primary);
+}
+
+.up-err-tip.open {
+  display: block;
+}
+
+.up-err-tip-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--color-border);
+  background: #fafbfc;
+}
+
+.up-err-tip-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.up-err-tip-code {
+  flex: none;
+  padding: 0 6px;
+  height: 18px;
+  line-height: 18px;
+  border-radius: 3px;
+  background: #fff1f0;
+  border: 1px solid #ffccc7;
+  color: var(--color-error);
+  font-size: 11px;
+}
+
+.up-err-tip-body {
+  padding: 10px 12px;
+  color: var(--color-text-secondary);
+  word-break: break-word;
+}
+
+.up-err-tip-meta {
+  padding: 0 12px 10px;
+  color: var(--color-text-tertiary);
+  font-size: 11px;
+}
+
+.up-err-tip-foot {
+  padding: 7px 12px;
+  border-top: 1px dashed var(--color-border);
+  color: var(--color-text-tertiary);
+  font-size: 11px;
+}
+
+/* 「问黑皮」快捷查询按钮 */
+.ask-heipi-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  flex: none;
+  height: 20px;
+  padding: 0 7px;
+  border: 1px solid #d6e4ff;
+  border-radius: 10px;
+  background: #f0f6ff;
+  color: #1668dc;
+  font-size: 11px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.ask-heipi-btn:hover {
+  background: #e0edff;
+  border-color: #adc6ff;
+}
+
+.ask-heipi-btn i {
+  font-style: normal;
+  font-size: 11px;
+}
+
+/* ============================================================
+   黑皮 · 智能问答面板
+   ============================================================ */
+.heipi-panel {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 2400;
+  display: none;
+  flex-direction: column;
+  width: 400px;
+  height: 560px;
+  max-height: calc(100vh - 48px);
+  background: var(--color-white);
+  border-radius: 10px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+}
+
+.heipi-panel.open {
+  display: flex;
+  animation: heipiIn 0.18s ease-out;
+}
+
+@keyframes heipiIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.heipi-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: linear-gradient(135deg, #1f2a44 0%, #2f3b58 100%);
+  color: #fff;
+}
+
+.heipi-avatar {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #fff;
+  color: #1f2a44;
+  font-size: 15px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.heipi-head-main { flex: 1; min-width: 0; }
+
+.heipi-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.heipi-badge {
+  padding: 0 5px;
+  height: 16px;
+  line-height: 16px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.16);
+  font-size: 10px;
+  font-weight: 400;
+}
+
+.heipi-sub {
+  margin-top: 2px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.heipi-close {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.heipi-close:hover { background: rgba(255, 255, 255, 0.12); color: #fff; }
+
+.heipi-body {
+  flex: 1;
+  padding: 14px;
+  overflow-y: auto;
+  background: #f7f8fa;
+}
+
+.heipi-msg { display: flex; gap: 8px; margin-bottom: 14px; }
+
+.heipi-msg.user { flex-direction: row-reverse; }
+
+.heipi-msg-avatar {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.heipi-msg.bot .heipi-msg-avatar { background: #1f2a44; color: #fff; }
+.heipi-msg.user .heipi-msg-avatar { background: #e6f0ff; color: #1668dc; }
+
+.heipi-bubble {
+  max-width: 286px;
+  padding: 9px 11px;
+  border-radius: 6px;
+  font-size: 12px;
+  line-height: 1.7;
+  word-break: break-word;
+}
+
+.heipi-msg.bot .heipi-bubble {
+  background: #fff;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+}
+
+.heipi-msg.user .heipi-bubble {
+  background: #1668dc;
+  color: #fff;
+}
+
+.heipi-quote {
+  margin-bottom: 6px;
+  padding: 6px 8px;
+  border-left: 2px solid rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 3px;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.heipi-bubble-title {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.heipi-bubble ol {
+  margin: 4px 0 0;
+  padding-left: 16px;
+}
+
+.heipi-bubble li { margin-bottom: 3px; }
+
+.heipi-tag {
+  display: inline-block;
+  margin: 6px 6px 0 0;
+  padding: 1px 6px;
+  border-radius: 3px;
+  background: #f0f6ff;
+  border: 1px solid #d6e4ff;
+  color: #1668dc;
+  font-size: 11px;
+}
+
+.heipi-typing { display: inline-flex; gap: 3px; align-items: center; height: 16px; }
+.heipi-typing i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #b8bdc7;
+  animation: heipiBlink 1s infinite ease-in-out;
+}
+.heipi-typing i:nth-child(2) { animation-delay: 0.15s; }
+.heipi-typing i:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes heipiBlink {
+  0%, 80%, 100% { opacity: 0.3; transform: translateY(0); }
+  40% { opacity: 1; transform: translateY(-2px); }
+}
+
+.heipi-quick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px 12px;
+  border-top: 1px solid var(--color-border);
+  background: #fff;
+}
+
+.heipi-quick button {
+  padding: 3px 9px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--color-text-secondary);
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.heipi-quick button:hover {
+  border-color: #adc6ff;
+  color: #1668dc;
+  background: #f7faff;
+}
+
+.heipi-input-wrap {
+  display: flex;
+  gap: 8px;
+  padding: 10px 12px 12px;
+  border-top: 1px solid var(--color-border);
+  background: #fff;
+}
+
+.heipi-input {
+  flex: 1;
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-size: 12px;
+  color: var(--color-text-primary);
+  outline: none;
+}
+
+.heipi-input:focus { border-color: #1668dc; }
+
+.heipi-send {
+  flex: none;
+  height: 32px;
+  padding: 0 14px;
+  border: none;
+  border-radius: 6px;
+  background: #1668dc;
+  color: #fff;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.heipi-send:hover { background: #0f56b3; }
