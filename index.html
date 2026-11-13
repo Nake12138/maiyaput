@@ -995,7 +995,6 @@
                           <div class="up-state"
                                data-err-code="40002"
                                data-err-msg="项目名称包含违禁词「逆袭」，平台审核拦截。请删除或更换该词后重新提交。"
-                               data-err-target="项目 任务十二-项目B-召回（ID:7455532211007788）"
                                data-err-time="2026-10-10 09:12:41 提交失败">
                             <div class="up-state-top">
                               <span class="tag tag-error">失败</span>
@@ -1160,7 +1159,6 @@
                           <div class="up-state"
                                data-err-code="40105"
                                data-err-msg="绑定的抖音号授权已过期，无法获取可投放抖音号。请前往「资产管理 · 抖音号」重新授权后重试。"
-                               data-err-target="单元 任务十二-项目B-单元1（ID:6611223344555566）"
                                data-err-time="2026-10-10 09:12:40 提交失败">
                             <div class="up-state-top">
                               <span class="tag tag-error">失败</span>
@@ -18436,11 +18434,20 @@
         if (!tip || !state) return;
         var code = state.dataset.errCode || '';
         var msg = state.dataset.errMsg || '';
+        /* 接口报错完整原文：中文说明 + 内嵌 JSON 分段展示，均保留原文可复制 */
+        var bodyHtml = '';
+        var jsonAt = msg.indexOf('{');
+        if (jsonAt > 0) {
+          bodyHtml = '<div class="up-err-tip-text">' + escapeSemiAttr(msg.slice(0, jsonAt)) + '</div>'
+            + '<div class="up-err-tip-json">' + escapeSemiAttr(msg.slice(jsonAt)) + '</div>';
+        } else {
+          bodyHtml = '<div class="up-err-tip-text">' + escapeSemiAttr(msg) + '</div>';
+        }
         tip.innerHTML = ''
           + '<div class="up-err-tip-head"><span class="up-err-tip-title">报错详情</span>'
           + (code ? '<span class="up-err-tip-code">错误码 ' + code + '</span>' : '')
           + '</div>'
-          + '<div class="up-err-tip-body">' + msg + '</div>'
+          + '<div class="up-err-tip-body">' + bodyHtml + '</div>'
           + '<div class="up-err-tip-foot">点击右侧「问黑皮」可让智能助手协助定位原因</div>';
         tip.classList.add('open');
         var rect = el.getBoundingClientRect();
@@ -18541,6 +18548,15 @@
           '多版位混投时，建议一版位一素材，避免一个素材被部分版位拒绝。'
         ],
         tags: ['查看版位素材要求', '同错误历史处理', '转人工']
+      };
+      HEIPI_KB['40000'] = {
+        title: '所选商品包含多个短剧/合集，不支持开启全自动化',
+        points: [
+          '全域自动化要求一个商品只包含 1 个短剧/合集；报错里的 JSON message 已给出具体建议。',
+          '到「商品管理」确认该账户 id 下被投放的商品，更换为仅包含 1 个短剧/合集的商品后重试。',
+          '注意：40000 是通用业务码，同样错误码可能对应不同问题，排查时以 message 内容为准；request_id 可直接提供给技术查日志。'
+        ],
+        tags: ['去商品管理更换商品', '查看执行日志', '转人工']
       };
 
       var heipiStarted = false;
@@ -18647,14 +18663,13 @@
         }, 650);
       }
 
-      /* 表格报错旁的快捷查询入口：自动带入报错信息 */
+      /* 表格报错旁的快捷查询入口：自动带入报错信息（不带项目/单元信息） */
       function askHeipi(btn) {
         var state = btn.closest('.up-state');
         var code = state ? (state.dataset.errCode || '') : '';
         var msg = state ? (state.dataset.errMsg || '') : '';
-        var target = state ? (state.dataset.errTarget || '') : '';
         openHeipi();
-        heipiUserSay(msg, target);
+        heipiUserSay(msg);
         var input = document.getElementById('heipiInput');
         if (input) input.value = '';
         heipiReply(code);
@@ -18836,7 +18851,7 @@
       /* 自动化任务 - 失败明细数据（与半自动投放共用弹框，仅数据源不同） */
       var AUTO_FAIL_DETAIL_DATA = {
         project: [
-          { name: '任务二-项目A-激活', id: '90013', parent: null, account: 'JL-MAD-IAA-二组-京服..', accountId: '5167', error: { code: 40003, message: '定向包与账户可投范围不匹配', request_id: '20261010150012C3034567890CDEF013' } }
+          { name: '任务二-项目A-激活', id: '90013', parent: null, account: 'JL-MAD-IAA-二组-京服..', accountId: '5167', error: { code: 40000, message: '项目提交失败，原因：账户id:1881069594076170，{"code":40000,"message":"所选商品包含不存在短剧/合集信息或包含多个短剧/合集信息，不支持开启全自动化，建议更换仅包含1个短剧/合集的商品","request_id":"202611131715397D7091E8463CB582432C"}' } }
         ],
         unit: [
           { name: '任务二-项目A-激活-单元01', id: '130045', parent: '任务二-项目A-激活', parentId: '90013', account: 'JL-MAD-IAA-二组-京服..', accountId: '5167', error: { code: 40001, message: 'You no longer have access to the TikTok account used in this ad. To continue editing, select a new identity and creative material or re-apply for access.', request_id: '20261010150012D4045678901DEF0124' } },
@@ -18975,13 +18990,9 @@
         } else {
           msg = err == null ? '' : String(err);
         }
-        var target = (meta && meta.label ? meta.label : '') + ' ' + (r ? r.name : '')
-          + (r && r.id ? '（ID:' + r.id + '）' : '')
-          + (code ? ' · 错误码 ' + code : '');
         return '<div class="up-state up-state-block"'
           + ' data-err-code="' + escapeSemiAttr(code) + '"'
-          + ' data-err-msg="' + escapeSemiAttr(msg) + '"'
-          + ' data-err-target="' + escapeSemiAttr(target) + '">'
+          + ' data-err-msg="' + escapeSemiAttr(msg) + '">'
           + '<div class="up-err" onmouseenter="showUpErrTip(this)" onmouseleave="hideUpErrTip()">'
           + '<i class="up-err-icon">!</i>'
           + '<span class="up-err-text up-err-wrap">' + escapeSemiAttr(msg) + '</span>'
