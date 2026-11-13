@@ -5457,7 +5457,14 @@ body {
   padding: 12px 14px;
   background: linear-gradient(135deg, #1f2a44 0%, #2f3b58 100%);
   color: #fff;
+  cursor: move;
+  user-select: none;
+  -webkit-user-select: none;
 }
+
+.heipi-head:active { cursor: grabbing; }
+
+.heipi-head .heipi-close { cursor: pointer; }
 
 .heipi-avatar {
   flex: none;

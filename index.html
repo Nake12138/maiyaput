@@ -18493,10 +18493,54 @@
       };
 
       var heipiStarted = false;
+      var heipiDragInit = false;
+
+      /* 黑皮面板拖动：按住标题栏移动，限制在视口内 */
+      function initHeipiDrag() {
+        if (heipiDragInit) return;
+        heipiDragInit = true;
+        var panel = document.getElementById('heipi-panel');
+        var head = panel ? panel.querySelector('.heipi-head') : null;
+        if (!panel || !head) return;
+        var sx = 0, sy = 0, ox = 0, oy = 0, dragging = false;
+        function onMove(e) {
+          if (!dragging) return;
+          var nx = ox + e.clientX - sx;
+          var ny = oy + e.clientY - sy;
+          nx = Math.min(Math.max(nx, 8), window.innerWidth - panel.offsetWidth - 8);
+          ny = Math.min(Math.max(ny, 8), window.innerHeight - panel.offsetHeight - 8);
+          panel.style.left = nx + 'px';
+          panel.style.top = ny + 'px';
+          panel.style.right = 'auto';
+          panel.style.bottom = 'auto';
+        }
+        function onUp() {
+          dragging = false;
+          document.removeEventListener('mousemove', onMove);
+          document.removeEventListener('mouseup', onUp);
+          document.body.style.userSelect = '';
+        }
+        head.addEventListener('mousedown', function (e) {
+          if (e.target.closest('.heipi-close')) return;
+          dragging = true;
+          var r = panel.getBoundingClientRect();
+          ox = r.left; oy = r.top;
+          sx = e.clientX; sy = e.clientY;
+          panel.style.left = ox + 'px';
+          panel.style.top = oy + 'px';
+          panel.style.right = 'auto';
+          panel.style.bottom = 'auto';
+          document.body.style.userSelect = 'none';
+          document.addEventListener('mousemove', onMove);
+          document.addEventListener('mouseup', onUp);
+          e.preventDefault();
+        });
+      }
 
       function openHeipi() {
         var panel = document.getElementById('heipi-panel');
         if (!panel) return;
+        initHeipiDrag();
         panel.classList.add('open');
         if (!heipiStarted) {
           heipiStarted = true;
