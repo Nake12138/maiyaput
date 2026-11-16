@@ -5702,3 +5702,24 @@ body {
 }
 
 .heipi-send:hover { background: #0f56b3; }
+
+/* ===== 执行记录 · 短剧列：剧名 / ID / 预估与实际可投时间 ===== */
+.ai-drama-cell { display: flex; flex-direction: column; gap: 3px; }
+.ai-drama-cell .drama-name { font-size: 13px; line-height: 1.4; }
+.ai-drama-cell .drama-id { font-size: 12px; line-height: 1.4; color: var(--color-text-tertiary); }
+
+.ai-drama-times {
+  margin-top: 3px;
+  padding-top: 5px;
+  border-top: 1px dashed var(--color-border);
+  display: grid;
+  grid-template-columns: 13px auto;
+  column-gap: 6px;
+  row-gap: 2px;
+  font-size: 12px;
+  line-height: 1.5;
+  font-variant-numeric: tabular-nums;
+}
+.ai-drama-times .t-lbl { color: var(--color-text-tertiary); }
+.ai-drama-times .t-val { white-space: nowrap; color: var(--color-text-secondary); }
+.ai-drama-times .t-val.is-real { color: var(--color-text-primary); }
