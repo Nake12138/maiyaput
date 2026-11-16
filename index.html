@@ -12642,11 +12642,12 @@
             </div>
 
             <div class="task-row">
-              <label class="task-label">任务素材去重：</label>
+              <label class="task-label"><i class="tip-icon" data-tip="账户下去重 / 不去重：保持现有逻辑。任务下素材去重：任务首次执行不去重，仍按配置投放；后续执行时判断素材是否已在该任务下投放，单元投放成功则记为已使用，单元失败直接释放名额">?</i>素材去重：</label>
               <div class="task-ctrl">
                 <div class="segmented-control" data-seg="ntMatDedup">
-                  <button class="segmented-item" type="button" data-v="on" onclick="setNtSeg(this)">开启</button>
-                  <button class="segmented-item active" type="button" data-v="off" onclick="setNtSeg(this)">关闭</button>
+                  <button class="segmented-item" type="button" data-v="account" onclick="setNtSeg(this)">账户下去重</button>
+                  <button class="segmented-item" type="button" data-v="task" onclick="setNtSeg(this)">任务下素材去重</button>
+                  <button class="segmented-item active" type="button" data-v="none" onclick="setNtSeg(this)">不去重</button>
                 </div>
               </div>
             </div>
@@ -12663,7 +12664,7 @@
               </div>
             </div>
 
-            <div class="task-row">
+            <div class="task-row" id="ntRowMatRepeatScope">
               <label class="task-label">素材重复范围：</label>
               <div class="task-ctrl">
                 <div class="segmented-control" data-seg="ntMatRepeatScope">
@@ -13848,6 +13849,7 @@
         if (key === 'ntMatDuration') showNtPanel('ntMatDurationCustom', v === 'custom');
         if (key === 'ntDays') showNtPanel('ntDaysCustom', v === 'limit');
         if (key === 'ntPeriod') showNtPanel('ntPeriodCustom', v === 'limit');
+        if (key === 'ntMatDedup') showNtPanel('ntRowMatRepeatScope', v !== 'task');
         if (key === 'ntAdType' || key === 'ntBizScene') updateNtStartEpisode();
       }
 
