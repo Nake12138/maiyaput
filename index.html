@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles/main.css?v=20261109a" />
     <link rel="stylesheet" href="styles/theme-antd.css?v=20261009a" />
+    <link rel="stylesheet" href="styles/multi-select.css" />
   </head>
   <body class="theme-antd">
         <!-- Top Bar（全宽：品牌 + 用户） -->
@@ -1520,7 +1521,7 @@
                           <th>最近一次执行时间（标准）</th>
                           <th>最近一次执行时间（全域）</th>
                           <th>创建人</th>
-                          <th>创建时间</th>
+                          <th title="即实际执行时间；副行展示短剧预估投放时间">创建时间</th>
                           <th>操作</th>
                         </tr>
                       </thead>
@@ -1540,14 +1541,8 @@
                             </div>
                           </td>
                           <td>
-                            <div class="ai-drama-cell">
-                              <span class="link drama-name" onclick="drillAiDramaToAccount('5001')">短剧1</span>
-                              <span class="drama-id">ID: 1001</span>
-                              <div class="ai-drama-times" title="预：短剧列表「预估可投时间」字段；实：实际投放时间（标准 / 全域执行时间取较早一次）">
-                                <span class="t-lbl">预</span><span class="t-val">10-20 12:00</span>
-                                <span class="t-lbl">实</span><span class="t-val is-real">10-20 10:30</span>
-                              </div>
-                            </div>
+                            <span class="link" onclick="drillAiDramaToAccount('5001')">短剧1</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 1001</div>
                           </td>
                           <td>
                             <span>任务1</span>
@@ -1559,7 +1554,10 @@
                           <td><span class="link" onclick="drillAiDramaToScope('standard', '5001')">2026-10-20 10:30:00</span></td>
                           <td><span class="link" onclick="drillAiDramaToScope('global', '5001')">2026-10-20 11:30:00</span></td>
                           <td>小C</td>
-                          <td>2026-10-20 09:00:00</td>
+                          <td>
+                            2026-10-20 09:00:00
+                            <div class="ai-created-est"><span title="预估投放时间">预</span> 2026-10-20 12:00:00</div>
+                          </td>
                           <td>
                             <div class="row-actions">
                               <!-- 日志：执行日志抽屉（按模式展示投放执行结果，失败模式支持重试）；原修改日志入口与执行日志重复，已收敛 -->
@@ -1579,14 +1577,8 @@
                             </div>
                           </td>
                           <td>
-                            <div class="ai-drama-cell">
-                              <span class="link drama-name" onclick="drillAiDramaToAccount('5003')">短剧3</span>
-                              <span class="drama-id">ID: 1003</span>
-                              <div class="ai-drama-times" title="预：短剧列表「预估可投时间」字段；实：实际投放时间（标准 / 全域执行时间取较早一次）">
-                                <span class="t-lbl">预</span><span class="t-val">10-20 08:00</span>
-                                <span class="t-lbl">实</span><span class="t-val is-real">10-20 08:10</span>
-                              </div>
-                            </div>
+                            <span class="link" onclick="drillAiDramaToAccount('5003')">短剧3</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 1003</div>
                           </td>
                           <td>
                             <span>任务2</span>
@@ -1598,7 +1590,10 @@
                           <td><span class="link" onclick="drillAiDramaToScope('standard', '5003')">2026-10-20 08:10:00</span></td>
                           <td><span class="link" onclick="drillAiDramaToScope('global', '5003')">2026-10-20 08:40:00</span></td>
                           <td>小B</td>
-                          <td>2026-10-20 08:00:00</td>
+                          <td>
+                            2026-10-20 08:00:00
+                            <div class="ai-created-est"><span title="预估投放时间">预</span> 2026-10-20 08:00:00</div>
+                          </td>
                           <td>
                             <div class="row-actions">
                               <button class="row-action-btn" onclick="openAiExecLogDrawer('短剧3', '1003', '任务2')">日志</button>
@@ -1617,14 +1612,8 @@
                             </div>
                           </td>
                           <td>
-                            <div class="ai-drama-cell">
-                              <span class="link drama-name" onclick="drillAiDramaToAccount('5004')">短剧4</span>
-                              <span class="drama-id">ID: 1004</span>
-                              <div class="ai-drama-times" title="预：短剧列表「预估可投时间」字段；实：实际投放时间（标准 / 全域执行时间取较早一次）">
-                                <span class="t-lbl">预</span><span class="t-val">10-18 20:00</span>
-                                <span class="t-lbl">实</span><span class="t-val is-real">10-20 07:30</span>
-                              </div>
-                            </div>
+                            <span class="link" onclick="drillAiDramaToAccount('5004')">短剧4</span>
+                            <div style="font-size: 12px; color: var(--color-text-tertiary);">ID: 1004</div>
                           </td>
                           <td>
                             <span>任务2</span>
@@ -1636,7 +1625,10 @@
                           <td><span class="link" onclick="drillAiDramaToScope('standard', '5004')">2026-10-20 07:30:00</span></td>
                           <td><span class="link" onclick="drillAiDramaToScope('global', '5004')">2026-10-20 07:50:00</span></td>
                           <td>小B</td>
-                          <td>2026-10-20 07:00:00</td>
+                          <td>
+                            2026-10-20 07:00:00
+                            <div class="ai-created-est">--</div>
+                          </td>
                           <td>
                             <div class="row-actions">
                               <!-- 重新投放：仅「测试中」状态展示；标准/全域均报错时系统自动选账户新增投放记录 -->
@@ -11969,6 +11961,205 @@
             </div>
           </div>
 
+
+          <!-- 推广管理 · 抖音号 -->
+          <div id="page-ocean-tiktok-account" class="page">
+            <style>
+              /* 抖音号列表页专属样式 */
+              #page-ocean-tiktok-account .dy-multi-field { width: 210px; }
+              #page-ocean-tiktok-account .dy-multi-field .ms { max-width: 210px; }
+              #page-ocean-tiktok-account .dy-multi-field .ms-trigger { height: 32px; }
+              .ms-panel .ms-option .ms-meta { white-space: nowrap; flex-shrink: 0; }
+              .ms-panel .ms-option > span:not(.ms-meta) { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+              /* 表头工具图标 */
+              .dy-table-tools { display: flex; gap: 14px; align-items: center; }
+              .dy-table-tools .dy-tool-icon {
+                width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center;
+                border: 1px solid var(--color-border, #e5e7eb); border-radius: var(--radius-sm, 4px);
+                background: #fff; color: var(--color-text-secondary, #6b7280); cursor: pointer; font-size: 14px; line-height: 1;
+              }
+              .dy-table-tools .dy-tool-icon:hover { border-color: var(--color-info, #1677ff); color: var(--color-info, #1677ff); }
+              /* 新增抖音号抽屉 - 分配小组多选区（平铺复选框 + 搜索 + 全选） */
+              #dy-add .drawer-card { width: min(480px, calc(100vw - 120px)); }
+              .dy-form-section { margin-bottom: 20px; }
+              .dy-form-section-title { font-size: 14px; font-weight: 600; color: var(--color-text-primary, #111827); margin: 0 0 14px; padding-left: 9px; border-left: 3px solid var(--color-info, #1677ff); }
+              .dy-group-picker { border: 1px solid var(--color-border, #e5e7eb); border-radius: var(--radius-sm, 4px); }
+              .dy-group-picker-head { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-bottom: 1px solid var(--color-border, #e5e7eb); background: var(--color-bg-hover, #fafafa); }
+              .dy-group-picker-head .dy-all-label { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; color: var(--color-text-primary, #111827); white-space: nowrap; cursor: pointer; }
+              .dy-group-picker-head input[type="checkbox"] { accent-color: var(--color-info, #1677ff); cursor: pointer; }
+              .dy-group-picker-search { flex: 1; height: 30px; padding: 0 10px; border: 1px solid var(--color-border, #e5e7eb); border-radius: var(--radius-sm, 4px); font-size: 13px; box-sizing: border-box; font-family: inherit; }
+              .dy-group-picker-list { max-height: 264px; overflow-y: auto; padding: 4px 0; }
+              .dy-group-opt { display: flex; align-items: center; gap: 8px; padding: 6px 12px; font-size: 13px; color: var(--color-text-primary, #111827); cursor: pointer; }
+              .dy-group-opt:hover { background: var(--color-bg-hover, #f5f5f5); }
+              .dy-group-opt input[type="checkbox"] { accent-color: var(--color-info, #1677ff); cursor: pointer; flex-shrink: 0; }
+              .dy-group-opt .dy-group-meta { margin-left: auto; color: var(--color-text-tertiary, #9ca3af); font-size: 12px; }
+              .dy-group-empty { padding: 18px; text-align: center; color: var(--color-text-tertiary, #9ca3af); font-size: 13px; }
+              .dy-hint { font-size: 12px; color: var(--color-text-tertiary, #9ca3af); margin-top: 6px; }
+            </style>
+
+            <div class="breadcrumb">
+              <a href="#" onclick="showPage('dashboard')">首页</a>
+              <span class="breadcrumb-sep">/</span>
+              <span>配置</span>
+              <span class="breadcrumb-sep">/</span>
+              <span>批量</span>
+              <span class="breadcrumb-sep">/</span>
+              <span>推广管理</span>
+              <span class="breadcrumb-sep">/</span>
+              <span>抖音号</span>
+            </div>
+
+            <div class="content-card">
+              <div class="filter-bar">
+                <div class="filter-bar-row">
+                  <div class="filter-combo">
+                    <select class="filter-combo-select"><option>抖音号</option><option>抖音号ID</option></select>
+                    <input type="text" class="filter-combo-input" placeholder="请输入抖音号" />
+                  </div>
+                  <select class="filter-select">
+                    <option value="">请选择创建人</option>
+                    <option>耀新</option><option>董冉</option><option>慎佩</option>
+                  </select>
+                  <select class="filter-select">
+                    <option value="">是否授权全域</option>
+                    <option>是</option><option>否</option>
+                  </select>
+                  <select class="filter-select">
+                    <option value="">请选择授权方式</option>
+                    <option>手动配置</option><option>自动更新</option>
+                  </select>
+                  <!-- 小组：下拉多选（本期新增筛选项） -->
+                  <div class="dy-multi-field"><div id="dy-filter-group"></div></div>
+                  <div class="filter-actions">
+                    <button class="btn btn-info btn-sm" onclick="dySearch()">查询</button>
+                    <button class="btn btn-outline btn-sm" onclick="dyReset()">重置</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="table-card">
+                <div class="table-head-bar" style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px 0;">
+                  <div></div>
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <button class="btn btn-primary btn-sm" onclick="dyOpenAdd()">新增抖音号</button>
+                    <div class="dy-table-tools">
+                      <span class="dy-tool-icon" title="设置" onclick="amToast('表格设置（原型演示）')">⚙</span>
+                      <span class="dy-tool-icon" title="刷新" onclick="amToast('已刷新（原型演示）')">⟳</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="table-wrapper">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>抖音号</th>
+                        <th>抖音号ID</th>
+                        <th>是否授权全域</th>
+                        <th>更新方式</th>
+                        <th>模板产权类型</th>
+                        <th>分配小组</th>
+                        <th>创建人</th>
+                        <th>编辑人</th>
+                        <th>编辑时间</th>
+                        <th>操作</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr><td>云里融剧</td><td>46350934906</td><td>是</td><td>手动配置</td><td>不限</td><td>投放五组三组（在职）</td><td>耀新</td><td>耀新</td><td>2026-11-17 10:25:56</td><td><a href="#" class="link" onclick="dyOpenEdit('云里融剧','46350934906');return false;">编辑</a>　<a href="#" class="link" onclick="amToast('已删除（原型演示）');return false;">删除</a></td></tr>
+                      <tr><td>胖厨康剧社</td><td>76268353700</td><td>是</td><td>自动更新</td><td>不限</td><td>投放二部三组（在职）</td><td>董冉</td><td>董冉</td><td>2026-11-16 16:43:47</td><td><a href="#" class="link" onclick="dyOpenEdit('胖厨康剧社','76268353700');return false;">编辑</a>　<a href="#" class="link" onclick="amToast('已删除（原型演示）');return false;">删除</a></td></tr>
+                      <tr><td>财鑫康剧社</td><td>51872045594</td><td>是</td><td>自动更新</td><td>不限</td><td>投放二部三组（在职）</td><td>董冉</td><td>董冉</td><td>2026-11-16 16:43:35</td><td><a href="#" class="link" onclick="dyOpenEdit('财鑫康剧社','51872045594');return false;">编辑</a>　<a href="#" class="link" onclick="amToast('已删除（原型演示）');return false;">删除</a></td></tr>
+                      <tr><td>馍馍大拇指</td><td>24037557653</td><td>是</td><td>手动配置</td><td>不限</td><td>投放五组三组（在职）</td><td>董冉</td><td>董冉</td><td>2026-11-16 16:43:10</td><td><a href="#" class="link" onclick="dyOpenEdit('馍馍大拇指','24037557653');return false;">编辑</a>　<a href="#" class="link" onclick="amToast('已删除（原型演示）');return false;">删除</a></td></tr>
+                      <tr><td>猫咔追剧场</td><td>38086477310</td><td>是</td><td>手动配置</td><td>不限</td><td>投放五组三组（在职）</td><td>慎佩</td><td>慎佩</td><td>2026-11-16 16:42:58</td><td><a href="#" class="link" onclick="dyOpenEdit('猫咔追剧场','38086477310');return false;">编辑</a>　<a href="#" class="link" onclick="amToast('已删除（原型演示）');return false;">删除</a></td></tr>
+                      <tr><td>星耀糖果剧社</td><td>46726443513</td><td>是</td><td>自动更新</td><td>不限</td><td>投放二部三组（在职）</td><td>董冉</td><td>董冉</td><td>2026-11-16 16:40:46</td><td><a href="#" class="link" onclick="dyOpenEdit('星耀糖果剧社','46726443513');return false;">编辑</a>　<a href="#" class="link" onclick="amToast('已删除（原型演示）');return false;">删除</a></td></tr>
+                      <tr><td>猎人主题剧院</td><td>94249307526</td><td>是</td><td>手动配置</td><td>不限</td><td>投放二部三组（在职）</td><td>董冉</td><td>董冉</td><td>2026-11-16 16:40:27</td><td><a href="#" class="link" onclick="dyOpenEdit('猎人主题剧院','94249307526');return false;">编辑</a>　<a href="#" class="link" onclick="amToast('已删除（原型演示）');return false;">删除</a></td></tr>
+                      <tr><td>七七剧剧场</td><td>62499622979</td><td>是</td><td>手动配置</td><td>不限</td><td>投放二部三组（在职）</td><td>慎佩</td><td>慎佩</td><td>2026-11-16 16:40:05</td><td><a href="#" class="link" onclick="dyOpenEdit('七七剧剧场','62499622979');return false;">编辑</a>　<a href="#" class="link" onclick="amToast('已删除（原型演示）');return false;">删除</a></td></tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="pagination">
+                  <span class="pagination-info">共 <strong>877</strong> 条数据</span>
+                  <div class="pagination-pages">
+                    <button class="page-btn" disabled>&lt;</button>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">2</button>
+                    <button class="page-btn">3</button>
+                    <button class="page-btn">4</button>
+                    <button class="page-btn">5</button>
+                    <button class="page-btn">···</button>
+                    <button class="page-btn">88</button>
+                    <button class="page-btn">&gt;</button>
+                  </div>
+                  <select class="page-size-select"><option>10 条/页</option><option>30 条/页</option><option>50 条/页</option></select>
+                  <span>跳至</span>
+                  <input type="text" class="jump-input" value="1" />
+                  <span>页</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 新增/编辑抖音号 抽屉 -->
+            <div id="dy-add-overlay" class="drawer-overlay" onclick="amClose('dy-add')"></div>
+            <div id="dy-add" class="drawer drawer-narrow">
+              <div class="drawer-card">
+                <div class="drawer-header">
+                  <h3 class="drawer-title" id="dy-add-title" style="font-size:16px;">新增抖音号</h3>
+                  <button class="drawer-close" onclick="amClose('dy-add')">×</button>
+                </div>
+                <div class="drawer-body">
+                  <div class="dy-form-section">
+                    <h4 class="dy-form-section-title">基本信息</h4>
+                    <div class="form-row">
+                      <div class="form-item">
+                        <label class="form-label"><span class="required-star">*</span> 抖音号名称</label>
+                        <input type="text" class="form-input" id="dyName" placeholder="请输入抖音号名称" />
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="form-item">
+                        <label class="form-label"><span class="required-star">*</span> 抖音号ID</label>
+                        <input type="text" class="form-input" id="dyId" placeholder="请输入抖音号ID" />
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="form-item">
+                        <label class="form-label"><span class="required-star">*</span> 授权方式</label>
+                        <select class="form-input" id="dyAuth">
+                          <option value="">请选择授权方式</option>
+                          <option>手动配置</option>
+                          <option>自动更新</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="form-item">
+                        <label class="form-label">是否授权全域</label>
+                        <label style="display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--color-text-primary,#111827);cursor:pointer;">
+                          <input type="checkbox" id="dyGlobal" style="accent-color:var(--color-info,#1677ff);cursor:pointer;" /> 手动配置
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="dy-form-section">
+                    <h4 class="dy-form-section-title">分配小组</h4>
+                    <div class="dy-group-picker">
+                      <div class="dy-group-picker-head">
+                        <label class="dy-all-label"><input type="checkbox" id="dyGroupAll" onclick="dyToggleAllGroup(this)" /> 全选(<span id="dyGroupAllCount">0</span>)</label>
+                        <input type="text" class="dy-group-picker-search" id="dyGroupSearch" placeholder="请输入" oninput="dyRenderGroupOpts()" />
+                      </div>
+                      <div class="dy-group-picker-list" id="dyGroupOpts"></div>
+                    </div>
+                    <div class="dy-hint">可多选；已选小组将作为该抖音号的分配小组</div>
+                  </div>
+                </div>
+                <div class="drawer-footer">
+                  <button class="btn btn-outline" onclick="amClose('dy-add')">取消</button>
+                  <button class="btn btn-primary" onclick="dySave()">保存</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- 账号管理 · 主体 -->
           <div id="page-ocean-subject" class="page">
             <div class="breadcrumb">
@@ -19194,6 +19385,135 @@
           g.style.display = (!kw || leafHit || groupName.indexOf(kw) > -1) ? '' : 'none';
           if (kw) g.classList.add('open');
         });
+      }
+    </script>
+    <script src="scripts/multi-select.js"></script>
+    <script>
+      /* ===== 推广管理 · 抖音号列表页 ===== */
+      var DY_GROUPS = [
+        { id: 'g1',  name: '投放一部一组',       meta: '在职' },
+        { id: 'g2',  name: '投放一部二组',       meta: '在职' },
+        { id: 'g3',  name: '投放一部三组',       meta: '在职' },
+        { id: 'g4',  name: '小猴剧场-广州',      meta: '在职' },
+        { id: 'g5',  name: '投放二部一组',       meta: '在职' },
+        { id: 'g6',  name: '投放二部二组',       meta: '在职' },
+        { id: 'g7',  name: '投放二部三组',       meta: '在职' },
+        { id: 'g8',  name: '投放二部四组',       meta: '在职' },
+        { id: 'g9',  name: '投放二部五组',       meta: '在职' },
+        { id: 'g10', name: '投放三组一组',       meta: '在职' },
+        { id: 'g11', name: '投放五组三组',       meta: '在职' }
+      ];
+      var dyFilterMs = null;
+
+      function dyInit() {
+        var box = document.getElementById('dy-filter-group');
+        if (!box || !window.MultiSelect) return;
+        dyFilterMs = MultiSelect.init(box, {
+          placeholder: '请选择小组',
+          countLabel: '已选：{n} 个小组',
+          searchPlaceholder: '请输入小组名称',
+          options: DY_GROUPS,
+          maxWidth: '210px'
+        });
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', dyInit);
+      } else {
+        dyInit();
+      }
+
+      /* 列表筛选：查询 / 重置 */
+      function dySearch() {
+        var n = dyFilterMs ? dyFilterMs.getSelectedIds().length : 0;
+        amToast('查询完成' + (n ? '（已选 ' + n + ' 个小组）' : '') + '（原型演示）');
+      }
+      function dyReset() {
+        var bar = document.querySelector('#page-ocean-tiktok-account .filter-bar');
+        if (bar) {
+          bar.querySelectorAll('input').forEach(function (el) { el.value = ''; });
+          bar.querySelectorAll('select').forEach(function (el) { el.selectedIndex = 0; });
+        }
+        if (dyFilterMs) dyFilterMs.clear();
+        amToast('已重置');
+      }
+
+      /* 新增 / 编辑抽屉 */
+      function dyOpenAdd() {
+        document.getElementById('dy-add-title').textContent = '新增抖音号';
+        document.getElementById('dyName').value = '';
+        document.getElementById('dyId').value = '';
+        document.getElementById('dyAuth').value = '';
+        document.getElementById('dyGlobal').checked = false;
+        document.getElementById('dyGroupSearch').value = '';
+        DY_GROUPS.forEach(function (g) { g.checked = false; });
+        dyRenderGroupOpts();
+        amOpen('dy-add');
+      }
+      function dyOpenEdit(name, id) {
+        dyOpenAdd();
+        document.getElementById('dy-add-title').textContent = '编辑抖音号';
+        document.getElementById('dyName').value = name;
+        document.getElementById('dyId').value = id;
+      }
+      function dySave() {
+        var name = document.getElementById('dyName').value.trim();
+        var id = document.getElementById('dyId').value.trim();
+        var auth = document.getElementById('dyAuth').value;
+        if (!name || !id || !auth) {
+          amToast('请填写完整必填项（抖音号名称 / 抖音号ID / 授权方式）');
+          return;
+        }
+        var picked = DY_GROUPS.filter(function (g) { return g.checked; });
+        amToast('保存成功（原型演示）' + (picked.length ? '，已分配 ' + picked.length + ' 个小组' : ''));
+        amClose('dy-add');
+      }
+
+      /* 抽屉内：分配小组平铺复选 + 搜索 + 全选 */
+      function dyRenderGroupOpts() {
+        var wrap = document.getElementById('dyGroupOpts');
+        if (!wrap) return;
+        var kw = (document.getElementById('dyGroupSearch').value || '').trim();
+        var list = DY_GROUPS.filter(function (g) {
+          return !kw || g.name.indexOf(kw) > -1 || (g.meta && g.meta.indexOf(kw) > -1);
+        });
+        if (!list.length) {
+          wrap.innerHTML = '<div class="dy-group-empty">暂无匹配小组</div>';
+        } else {
+          var self = this;
+          wrap.innerHTML = list.map(function (g) {
+            return '<label class="dy-group-opt"><input type="checkbox" data-gid="' + g.id + '"' + (g.checked ? ' checked' : '') + ' onchange="dyOnGroupCheck()" />' +
+                   '<span>' + g.name + '</span><span class="dy-group-meta">' + (g.meta || '') + '</span></label>';
+          }).join('');
+          wrap.querySelectorAll('input[type="checkbox"]').forEach(function (cb) {
+            cb.addEventListener('change', function () {
+              var g = DY_GROUPS.filter(function (x) { return x.id === cb.getAttribute('data-gid'); })[0];
+              if (g) g.checked = cb.checked;
+              dySyncGroupAll();
+            });
+          });
+        }
+        dySyncGroupAll();
+      }
+      function dyOnGroupCheck() { /* 事件由上方监听器处理，保留占位以兼容内联调用 */ }
+      function dySyncGroupAll() {
+        var total = DY_GROUPS.length;
+        var cnt = DY_GROUPS.filter(function (g) { return g.checked; }).length;
+        var all = document.getElementById('dyGroupAll');
+        var label = document.getElementById('dyGroupAllCount');
+        if (label) label.textContent = String(cnt);
+        if (all) {
+          var visible = document.querySelectorAll('#dyGroupOpts input[type="checkbox"]');
+          all.checked = cnt === total && total > 0;
+          all.indeterminate = cnt > 0 && cnt < total;
+        }
+      }
+      function dyToggleAllGroup(cb) {
+        var kw = (document.getElementById('dyGroupSearch').value || '').trim();
+        DY_GROUPS.forEach(function (g) {
+          var match = !kw || g.name.indexOf(kw) > -1 || (g.meta && g.meta.indexOf(kw) > -1);
+          if (match) g.checked = cb.checked;
+        });
+        dyRenderGroupOpts();
       }
     </script>
     <script src="scripts/header-user.js?v=20260924"></script>
