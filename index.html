@@ -7470,6 +7470,11 @@
                     <option value="project">项目投放</option>
                     <option value="batch">批量投放</option>
                   </select>
+                  <select class="filter-select" id="semiTaskStatusFilter" style="min-width: 130px;">
+                    <option value="">请选择任务状态</option>
+                    <option value="has-error">存在报错</option>
+                    <option value="no-error">无报错</option>
+                  </select>
                   <div class="filter-combo" data-filter-type="task-name">
                     <select class="filter-combo-select">
                       <option>任务名称</option>
@@ -7531,6 +7536,7 @@
                           <th>提交账户数</th>
                           <th>提交项目数</th>
                           <th>提交单元数</th>
+                          <th>任务状态</th>
                           <th>操作</th>
                           <th>创建人</th>
                           <th>定时时间</th>
@@ -7564,6 +7570,7 @@
                               </div>
                             </div>
                           </td>
+                          <td><span class="tag tag-error">存在报错</span></td>
                           <td>
                             <div class="row-actions">
                               <button class="row-action-btn" onclick="alert('刷新')">刷新</button>
@@ -7609,6 +7616,7 @@
                               </div>
                             </div>
                           </td>
+                          <td><span class="tag tag-error">存在报错</span></td>
                           <td>
                             <div class="row-actions">
                               <button class="row-action-btn" onclick="alert('刷新')">刷新</button>
