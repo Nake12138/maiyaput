@@ -1190,6 +1190,18 @@ body {
   color: var(--color-text-secondary);
 }
 
+/* 任务表单字段旁的单次/多次场景标签 */
+.task-scene-tag {
+  flex: 0 0 auto;
+  padding: 1px 8px;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 20px;
+  background: var(--color-info-bg);
+  color: var(--color-info);
+}
+
 /* ============ 操作列（全站统一规范） ============
    形态：文字链接（无边框 / 无底色），蓝 #1890ff
    间距：容器 gap 统一 16px，元素自身不留 padding / margin

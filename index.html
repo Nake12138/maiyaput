@@ -12849,8 +12849,9 @@
             </div>
 
             <div class="task-row">
-              <label class="task-label"><i class="tip-icon" data-tip="同一素材在同一单元内可重复投放的次数。选择「自定义」时按填写次数执行，不填写默认为 1">?</i>单元重复次数：</label>
+              <label class="task-label"><i class="tip-icon" data-tip="同一素材在同一单元内可重复投放的次数。选择「自定义」时按填写次数执行，不填写默认为 1">?</i>素材重复次数：</label>
               <div class="task-ctrl">
+                <span class="task-scene-tag">单轮</span>
                 <div class="segmented-control" data-seg="ntUnitRepeat">
                   <button class="segmented-item active" type="button" data-v="none" onclick="setNtSeg(this)">不限</button>
                   <button class="segmented-item" type="button" data-v="custom" onclick="setNtSeg(this)">自定义</button>
@@ -12863,6 +12864,7 @@
             <div class="task-row" id="ntRowMatRepeatScope">
               <label class="task-label">素材重复范围：</label>
               <div class="task-ctrl">
+                <span class="task-scene-tag">单轮</span>
                 <div class="segmented-control" data-seg="ntMatRepeatScope">
                   <button class="segmented-item" type="button" data-v="single" onclick="setNtSeg(this)">单个账户</button>
                   <button class="segmented-item active" type="button" data-v="all" onclick="setNtSeg(this)">全量账户</button>
@@ -12873,6 +12875,7 @@
             <div class="task-row">
               <label class="task-label"><i class="tip-icon" data-tip="针对单部剧：在任务下第一次执行时，不会进行素材去重；在后续执行时，才进行素材去重">?</i>素材去重：</label>
               <div class="task-ctrl">
+                <span class="task-scene-tag">多轮</span>
                 <div class="segmented-control" data-seg="ntMatDedup">
                   <button class="segmented-item" type="button" data-v="account" onclick="setNtSeg(this)">账户下去重</button>
                   <button class="segmented-item" type="button" data-v="task" onclick="setNtSeg(this)">任务下去重</button>
